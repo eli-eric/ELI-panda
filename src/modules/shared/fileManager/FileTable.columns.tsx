@@ -1,9 +1,5 @@
-import {
-  DocumentTextIcon,
-  LinkIcon,
-  XMarkIcon
-} from '@heroicons/react/24/outline'
 import type { ColumnDef } from '@tanstack/react-table'
+import { FileText, Link, X } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
 import { FormattedMessage } from 'react-intl'
 
@@ -150,17 +146,17 @@ export const useFileColumns = ({
           }
         },
         cell: ({ row: { original } }) => (
-          <div className="flex items-center pt-1 pb-1">
+          <div className="flex items-center py-1">
             {original.type === 'FILE' ? (
-              <DocumentTextIcon className="h-4 w-4 mr-2 text-gray-500" />
+              <FileText className="h-4 w-4 mr-2 text-muted-foreground" />
             ) : (
-              <LinkIcon className="h-4 w-4 mr-2 text-gray-500" />
+              <Link className="h-4 w-4 mr-2 text-muted-foreground" />
             )}
             <a
               href={original.url}
               target="_blank"
               rel="noreferrer"
-              className="hover:text-orange-500 cursor-pointer"
+              className="hover:text-primary cursor-pointer transition-colors"
             >
               {original.name}
             </a>
@@ -176,11 +172,11 @@ export const useFileColumns = ({
           <div className="flex flex-wrap gap-1 items-center">
             {original.tags &&
               original.tags.map((tag: string) => (
-                <Badge key={tag} className="mt-1">
+                <Badge key={tag} variant="secondary" className="mt-1">
                   {tag}
                   {hasEditRole && (
-                    <XMarkIcon
-                      className="h-4 w-4 ml-1 cursor-pointer hover:text-red-600 clickable"
+                    <X
+                      className="h-3 w-3 ml-1 cursor-pointer hover:text-destructive transition-colors"
                       onClick={() => handleRemoveTag(original, tag)}
                     />
                   )}
@@ -196,7 +192,7 @@ export const useFileColumns = ({
                     onAddTag: tag => handleAddTag(original, tag)
                   })
                 }}
-                className="text-orange-600 text-sm ml-2 hover:underline h-auto p-0"
+                className="text-primary text-sm ml-2 hover:underline h-auto p-0"
               >
                 <FormattedMessage
                   id="common.buttons.addTag"
@@ -226,10 +222,13 @@ export const useFileColumns = ({
         }
       },
       {
-        header: 'Actions',
+        header: '',
         id: 'actions',
-        size: 60,
+        size: 50,
         enableColumnFilter: false,
+        enableSorting: false,
+        enablePinning: false,
+        enableHiding: false,
         meta: {
           className: 'text-right'
         },

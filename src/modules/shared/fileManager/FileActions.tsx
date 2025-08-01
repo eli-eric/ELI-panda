@@ -1,10 +1,16 @@
-import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { useQueryClient } from '@tanstack/react-query'
+import { Edit, MoreVertical, Trash2 } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { FormattedMessage, useIntl } from 'react-intl'
 
 import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import axiosInstance from '@/core/axios/axiosInstance'
@@ -101,39 +107,45 @@ export const FileActions = ({
   if (!hasEditRole) return null
 
   return (
-    <div className="flex items-center gap-2 text-right">
-      <Button
-        variant="ghost"
-        size="sm"
-        className="text-gray-600 hover:text-orange-500"
-        onClick={() => {
-          // Open the modal via the global modal API
-          openRenameModal({
-            file,
-            onRename: newName => handleRenameFile(file, newName)
-          })
-        }}
-      >
-        <PencilIcon className="h-4 w-4 mr-1" />
-        <FormattedMessage
-          id="common.buttons.rename"
-          defaultMessage={'Rename'}
-        />
-      </Button>
-      <Button
-        variant="ghost"
-        size="sm"
-        className="text-red-600 hover:text-red-700"
-        onClick={handleDeleteWithConfirmation}
-      >
-        <TrashIcon className="h-4 w-4 mr-1" />
-        <FormattedMessage
-          id="common.buttons.delete"
-          defaultMessage={'Delete'}
-        />
-      </Button>
-      {/* Modal is now opened via openRenameModal */}
-    </div>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="ghost"
+          size="sm"
+          aria-label="File actions"
+          className="h-8 w-8 p-0"
+        >
+          <MoreVertical className="h-4 w-4 text-muted-foreground" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" sideOffset={4}>
+        <DropdownMenuItem
+          onClick={() => {
+            openRenameModal({
+              file,
+              onRename: newName => handleRenameFile(file, newName)
+            })
+          }}
+          className="cursor-pointer"
+        >
+          <Edit className="h-4 w-4 mr-2" />
+          <FormattedMessage
+            id="common.buttons.rename"
+            defaultMessage={'Rename'}
+          />
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={handleDeleteWithConfirmation}
+          className="cursor-pointer text-destructive focus:text-destructive"
+        >
+          <Trash2 className="h-4 w-4 mr-2" />
+          <FormattedMessage
+            id="common.buttons.delete"
+            defaultMessage={'Delete'}
+          />
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }
 import { useModalGlobalStore } from '@/store/useModalGlobalStore'

@@ -14,7 +14,7 @@ interface DisclosureProps {
   /**
    * The title to display on the disclosure button
    */
-  title: string
+  title: ReactNode
   /**
    * The content to display when the disclosure is open
    */
@@ -86,7 +86,7 @@ export const Disclosure = ({
           buttonClassName
         )}
       >
-        <span>{title || (isOpen ? 'Hide' : 'Show')}</span>
+        <div>{title || (isOpen ? 'Hide' : 'Show')}</div>
         {isOpen ? (
           <X className="h-4 w-4" />
         ) : (

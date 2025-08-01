@@ -1,8 +1,7 @@
-import { Switch as SwitchHUI } from '@headlessui/react'
 import { useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 
-import { cn } from '@/lib/utils'
+import { Switch as ShadcnSwitch } from '@/components/ui/switch'
 
 interface Props {
   enabled: boolean
@@ -11,23 +10,11 @@ interface Props {
 }
 
 export const Toggle = ({ enabled, onChange, className }: Props) => (
-  <SwitchHUI
+  <ShadcnSwitch
     checked={enabled}
-    onChange={onChange}
-    className={cn(
-      'relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-orange-600 focus:ring-offset-2',
-      enabled ? 'bg-orange-500' : 'bg-gray-200 dark:bg-gray-500',
-      className
-    )}
-  >
-    <span
-      aria-hidden="true"
-      className={cn(
-        'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white dark:bg-gray-800 shadow ring-0 transition duration-200 ease-in-out',
-        enabled ? 'translate-x-5' : 'translate-x-0'
-      )}
-    />
-  </SwitchHUI>
+    onCheckedChange={onChange}
+    className={className}
+  />
 )
 
 export const useToggle = (initialState = false) => {
@@ -62,29 +49,19 @@ export const Switch = ({
       defaultValue={defaultValue}
       render={({ field }) => (
         <label className="flex flex-col items-center">
-          <span className="mr-2 text-sm font-medium text-gray-900 dark:text-gray-200 pb-1">
-            {label}
-          </span>
-          <SwitchHUI
-            {...field}
-            onChange={e => {
-              field.onChange(e)
-              onChange?.(e)
+          {label && (
+            <span className="mr-2 text-sm font-medium text-gray-900 dark:text-gray-200 pb-1">
+              {label}
+            </span>
+          )}
+          <ShadcnSwitch
+            checked={field.value}
+            onCheckedChange={checked => {
+              field.onChange(checked)
+              onChange?.(checked)
             }}
-            className={cn(
-              'relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-orange-600 focus:ring-offset-2',
-              field.value ? 'bg-orange-500' : 'bg-gray-200',
-              className
-            )}
-          >
-            <span
-              aria-hidden="true"
-              className={cn(
-                'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white dark:bg-gray-800 shadow ring-0 transition duration-200 ease-in-out',
-                field.value ? 'translate-x-5' : 'translate-x-0'
-              )}
-            />
-          </SwitchHUI>
+            className={className}
+          />
         </label>
       )}
     />

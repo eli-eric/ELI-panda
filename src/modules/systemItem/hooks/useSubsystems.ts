@@ -10,6 +10,7 @@ const SUBSYSTEMS_QUERY = gql(`
     systems(where: $where) {
       uid
       name
+      systemLevel
       location {
         uid
         name

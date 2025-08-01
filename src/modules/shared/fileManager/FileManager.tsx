@@ -1,12 +1,13 @@
-import { DocumentTextIcon, LinkIcon } from '@heroicons/react/24/outline'
+import { FileText, Link, Upload } from 'lucide-react'
 import { useCallback, useMemo, useRef } from 'react'
 import { useDropzone } from 'react-dropzone'
 
-import { Button } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
 import ProgressBarComponent from '@/components/progress-bar.comp'
+import { Button } from '@/components/ui/button'
 import { Table } from '@/components/ui/table/table'
 import { message } from '@/i18n/src/messages'
+import { cn } from '@/lib/utils'
 
 import { useFileColumns } from './FileTable.columns'
 import { useFileRequests } from './hooks/useFileRequests'
@@ -82,27 +83,30 @@ const FileManager = ({
   const canUpload = hasEditRole && (allowMultiple || files.length === 0)
 
   return (
-    <div>
+    <div className="">
       <Heading
         text={messages.title}
         customText={customTitle}
         showBorder={false}
       >
         {canUpload && (
-          <div className="flex space-x-2">
+          <div className="flex gap-2">
             <Button
               onClick={handleFileUpload}
-              className="flex items-center space-x-1"
+              className="flex items-center gap-2"
+              size="sm"
             >
-              <DocumentTextIcon className="h-4 w-4" />
-              <span>Upload File</span>
+              <FileText className="h-4 w-4" />
+              Upload File
             </Button>
             <Button
               onClick={() => openLinkModal({ parentUid: uid })}
-              className="flex items-center space-x-1"
+              variant="outline"
+              className="flex items-center gap-2"
+              size="sm"
             >
-              <LinkIcon className="h-4 w-4" />
-              <span>Add Link</span>
+              <Link className="h-4 w-4" />
+              Add Link
             </Button>
             <input
               {...getInputProps()}
@@ -116,30 +120,39 @@ const FileManager = ({
       {loading.some(value => value) && <ProgressBarComponent />}
 
       {files.length > 0 && (
-        <Table
-          data={files}
-          columns={columns}
-          enableSorting={true}
-          enableFiltering={true}
-        />
+        <div className="mt-4">
+          <Table
+            data={files}
+            columns={columns}
+            enableSorting={true}
+            enableFiltering={true}
+          />
+        </div>
       )}
 
       {canUpload && (
         <div
           {...getRootProps()}
-          className={`mt-4 border-2 border-dashed rounded-md p-6 text-center ${
-            isDragActive ? 'border-orange-500 bg-orange-50' : 'border-gray-300'
-          }`}
+          className={cn(
+            'mt-4 border-2 border-dashed rounded-lg p-8 text-center transition-colors cursor-pointer',
+            isDragActive
+              ? 'border-primary bg-primary/5'
+              : 'border-muted-foreground/25 hover:border-muted-foreground/50'
+          )}
         >
-          <p className="text-gray-600">
-            Drop File to Upload or{' '}
-            <button
-              className="text-orange-600 cursor-pointer"
-              onClick={handleFileUpload}
-            >
-              Browse
-            </button>
-          </p>
+          <div className="flex flex-col items-center gap-2">
+            <Upload className="h-8 w-8 text-muted-foreground" />
+            <div className="text-sm text-muted-foreground">
+              <span>Drop files here or </span>
+              <button
+                className="text-primary hover:underline font-medium"
+                onClick={handleFileUpload}
+                type="button"
+              >
+                browse
+              </button>
+            </div>
+          </div>
         </div>
       )}
       {modals}

@@ -13,11 +13,16 @@
  * the front-end types need to be regenerated to reflect these changes.
  */
 
+import { AlertTriangle, Settings } from 'lucide-react'
 import type { FC } from 'react'
 
-import { Disclosure } from '@/components/ui'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Badge } from '@/components/ui/badge'
+import { Disclosure } from '@/components/ui/Disclosure'
+import { Separator } from '@/components/ui/separator'
 import type { ServiceItemData } from '@/hooks/useItemPropertiesData'
 import { useItemPropertiesData } from '@/hooks/useItemPropertiesData'
+import { cn } from '@/lib/utils'
 import type { FragmentType } from '@/types/gql'
 import type { CatalogueItemFragment } from '@/utils/graphql/fragments'
 
@@ -41,59 +46,117 @@ export const ItemPropertiesViewer: FC<ItemPropertiesViewerProps> = ({
     return null
   }
 
+  const title = (
+    <div className="flex items-center gap-2">
+      <Settings className="h-4 w-4 text-muted-foreground" />
+      <span>Catalogue Properties</span>
+      {hasOverriddenProperties && (
+        <Badge
+          variant="destructive"
+          className="text-[10px] px-1.5 py-0.5 h-auto"
+        >
+          Modified
+        </Badge>
+      )}
+    </div>
+  )
+
   return (
     <Disclosure
-      title="Catalogue Properties"
-      defaultOpen={true}
-      className="w-full border rounded-md dark:border-slate-700 bg-white dark:bg-slate-900"
-      buttonClassName="p-3 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors"
-      panelClassName="px-4 py-4 border-t dark:border-slate-700"
-      transparentButton={true}
+      title={title}
+      defaultOpen={false}
+      className="w-full border rounded-lg"
+      buttonClassName="p-3 text-base font-semibold"
+      panelClassName="p-4 space-y-4 shadow-md rounded-lg"
     >
       {hasOverriddenProperties && (
-        <div className="mb-3 flex items-center">
-          <span className="text-sm font-medium text-red-600 dark:text-red-400">
-            *Original catalog parameter modified by Service
-          </span>
-        </div>
+        <Alert className="py-2 mb-4">
+          <AlertTriangle className="h-3 w-3" />
+          <AlertDescription className="text-xs">
+            Some original catalog parameters have been modified by service
+          </AlertDescription>
+        </Alert>
       )}
-      {groupedProperties.map(group => (
-        <div key={group.key} className="mb-4 last:mb-0">
+
+      {groupedProperties.map((group, groupIndex) => (
+        <div key={group.key}>
           {group.name !== 'General' && (
-            <h4 className="text-sm font-medium text-slate-900 text-center dark:text-slate-100 mb-2 pb-1 border-b dark:border-slate-700">
-              {group.name}
-            </h4>
+            <div className="mb-3">
+              <h4 className="text-xs font-semibold text-foreground mb-2">
+                {group.name}
+              </h4>
+              <Separator />
+            </div>
           )}
-          <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
             {group.properties.map(property => {
-              const displayValue =
-                property.serviceValue ?? property.value ?? 'N/A'
+              const getValue = (value: any) => {
+                if (value === null || value === undefined || value === '') {
+                  return 'N/A'
+                }
+                return value
+              }
+
+              // Check both serviceValue and value for empty values before fallback
+              const rawValue = property.serviceValue || property.value
+              const displayValue = getValue(rawValue)
               const isOverridden = property.isOverridden
 
               return (
-                <li key={property.uid} className="flex flex-col space-y-1">
-                  <span className="font-medium text-sm text-slate-700 dark:text-slate-300">
-                    {property.name}
-                  </span>
-                  <span
-                    className={`text-sm ${
-                      isOverridden
-                        ? 'text-red-600 dark:text-red-400 font-medium'
-                        : 'text-slate-900 dark:text-slate-200'
-                    }`}
-                  >
-                    {displayValue} {property.unit && `(${property.unit})`}
-                  </span>
-                  {isOverridden && property.value && (
-                    <span className="text-xs text-slate-500 dark:text-slate-400 line-through">
-                      Original: {property.value}{' '}
-                      {property.unit && `(${property.unit})`}
-                    </span>
+                <div
+                  key={property.uid}
+                  className={cn(
+                    'space-y-1 p-2 rounded border transition-colors',
+                    isOverridden
+                      ? 'border-destructive/20 bg-destructive/5'
+                      : 'border-border bg-muted/20'
                   )}
-                </li>
+                >
+                  <div className="flex items-start justify-between gap-1">
+                    <span className="text-xs font-medium text-foreground leading-tight line-clamp-2">
+                      {property.name}
+                    </span>
+                    {isOverridden && (
+                      <Badge
+                        variant="destructive"
+                        className="text-[10px] px-1 py-0 h-auto leading-none"
+                      >
+                        M
+                      </Badge>
+                    )}
+                  </div>
+
+                  <div className="space-y-0.5">
+                    <div
+                      className={cn(
+                        'text-xs font-medium leading-tight',
+                        isOverridden ? 'text-destructive' : 'text-foreground'
+                      )}
+                    >
+                      {displayValue}
+                      {property.unit && (
+                        <span className="text-muted-foreground font-normal ml-1">
+                          ({property.unit})
+                        </span>
+                      )}
+                    </div>
+
+                    {isOverridden && property.value && (
+                      <div className="text-[10px] text-muted-foreground leading-tight">
+                        <span className="line-through">
+                          {property.value}
+                          {property.unit && ` (${property.unit})`}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
               )
             })}
-          </ul>
+          </div>
+          {groupIndex < groupedProperties.length - 1 && (
+            <Separator className="mt-4" />
+          )}
         </div>
       ))}
     </Disclosure>

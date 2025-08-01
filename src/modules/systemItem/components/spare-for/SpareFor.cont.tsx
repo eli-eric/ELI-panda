@@ -10,7 +10,7 @@ import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 import { PATH } from '@/types/constants/paths'
 
 import { useSystemDetail } from '../../hooks/useSystemDetail'
-import { getColorBySystemLevel, getFontBySystemLevel } from '../../utils'
+import { getFontBySystemLevel } from '../../utils'
 import { useSpareForColumns } from './SpareFor.columns'
 
 export const SparePartsFor = () => {
@@ -49,9 +49,7 @@ export const SparePartsFor = () => {
           columns={columns}
           getRowProps={({ original }) => ({
             className: cn(
-              original?.physicalItem &&
-                'font-bold text-gray-700 dark:text-gray-200',
-              getColorBySystemLevel(original?.systemLevel),
+              original?.physicalItem && 'font-bold',
               getFontBySystemLevel(original?.systemLevel)
             )
           })}
