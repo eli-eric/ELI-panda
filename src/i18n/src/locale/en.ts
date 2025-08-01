@@ -363,6 +363,10 @@ export const messages = {
       }
     },
     serviceLines: {
+      deleteModal: {
+        title: 'Warning',
+        message: 'Are you sure you want to delete {name}?'
+      },
       columns: {
         name: 'Name',
         serviceType: 'Service Type',
@@ -371,6 +375,7 @@ export const messages = {
         isDelivered: 'Delivered',
         price: 'Price'
       },
+
       header: 'Service Lines',
       wizard: {
         steps: {

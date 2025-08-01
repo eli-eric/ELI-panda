@@ -1,4 +1,5 @@
 import type { Row } from '@tanstack/react-table'
+import { Edit, MoreVertical, Trash2 } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type { FC, PropsWithChildren } from 'react'
 import { Fragment, useState } from 'react'
@@ -6,21 +7,26 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import { useIntl } from 'react-intl'
 
-import { TableDeleteButton, TableEditButton } from '@/components/Buttons'
 import { Heading } from '@/components/card/card.comp'
 import { Toggle } from '@/components/form/Switch'
-import WarningModal from '@/components/overlays/modal/warning/modal-warning.comp'
 import { Tooltip } from '@/components/Tooltip'
+import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import { FormModal } from '@/hooks/form/useFormModal'
 import usePermission from '@/hooks/usePermission'
+import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import { useOrderLine } from '@/modules/orderItem/hooks/useOrderLine'
 import type { OrderLineFormType } from '@/modules/orderItem/types/form'
 import { ROLE } from '@/types/constants/roles'
-import type { ModalButtons } from '@/types/form'
 import { createMessageValues } from '@/utils/formatters'
 
 import { useOrderLineModal } from '../form/OrderLineForm.cont'
@@ -49,64 +55,54 @@ export const ButtonsWrapperNew: FC<
   </div>
 )
 
-const messages = message.common.buttons
-
-const orderLines = message.ordersPage.orderLines
-
 export const OrderLineActionButtons = ({
   orderLine
 }: {
   orderLine: OrderLineFormType
 }) => {
-  const [openDeleteWarn, setOpenDeleteWarn] = useState(false)
-  const { formatMessage: fm } = useIntl()
+  const { formatMessage } = useIntl()
   const { deleteOrderLine, setOrderLine } = useOrderLine()
   const { openOrderLineModal } = useOrderLineModal()
-
-  const deleteButtons: ModalButtons = {
-    goNext: {
-      text: messages.continue,
-      onClick: () => {
-        deleteOrderLine(orderLine)
-        setOpenDeleteWarn(false)
-      }
-    },
-    goBack: {
-      text: messages.cancel,
-      onClick: () => {
-        setOpenDeleteWarn(false)
-      }
-    }
-  }
+  const withWarning = useWarningModal(
+    formatMessage(
+      { id: message.ordersPage.orderLines.deleteModal.message },
+      createMessageValues({ name: orderLine.name })
+    )
+  )
 
   return (
-    <Fragment>
-      <ButtonsWrapperNew position="right-1">
-        <TableEditButton
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="ghost"
+          size="sm"
+          aria-label="Order line actions"
+          className="h-8 w-8 p-0"
+        >
+          <MoreVertical className="h-4 w-4 text-muted-foreground" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" sideOffset={4}>
+        <DropdownMenuItem
           onClick={() => {
             openOrderLineModal(orderLine, data => {
               setOrderLine(data)
             })
           }}
-        />
-        <TableDeleteButton
-          onClick={() => {
-            setOpenDeleteWarn(true)
-          }}
-        />
-      </ButtonsWrapperNew>
-      <WarningModal
-        buttons={deleteButtons}
-        open={openDeleteWarn}
-        setOpen={setOpenDeleteWarn}
-        title={orderLines.deleteModal.title}
-        message={fm(
-          { id: orderLines.deleteModal.message },
-          createMessageValues({ name: orderLine.name })
-        )}
-        testid="OrderLineDelete"
-      />
-    </Fragment>
+          className="cursor-pointer"
+        >
+          <Edit className="h-4 w-4 mr-2" />
+          Edit
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => withWarning(deleteOrderLine)(orderLine)}
+          className="cursor-pointer text-destructive focus:text-destructive"
+        >
+          <Trash2 className="h-4 w-4 mr-2" />
+          Delete
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }
 
@@ -204,15 +200,16 @@ export const PrintEunButton = ({
 
   return (
     <Tooltip content={'Print eun'}>
-      <button
-        className="hover:underline"
+      <Button
         type="button"
+        variant={'link'}
+        className="cursor-pointer"
         onClick={() => {
           submit()
         }}
       >
         <span>{orderLine.eun}</span>
-      </button>
+      </Button>
     </Tooltip>
   )
 }

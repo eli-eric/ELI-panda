@@ -7,6 +7,7 @@ import { useIntl } from 'react-intl'
 
 import { NewTabLink } from '@/components/decorators'
 import { Tooltip } from '@/components/Tooltip'
+import { Button } from '@/components/ui/button'
 import { message } from '@/i18n/src/messages'
 import useOrderDetail from '@/modules/orderItem/hooks/useOrderDetail'
 import type { OrderLineFormType } from '@/modules/orderItem/types/form'
@@ -29,15 +30,24 @@ const useOrderLinesColumns = () => {
   const columns = useMemo((): ColumnDef<OrderLineFormType, any>[] => {
     const cols: ColumnDef<OrderLineFormType, any>[] = [
       {
+        id: 'actions',
+        header: '',
+        cell: ({ row: { original } }) =>
+          !disabledEdit ? (
+            <OrderLineActionButtons orderLine={original} />
+          ) : null,
+        size: 50,
+        enableSorting: false,
+        enablePinning: false,
+        enableColumnFilter: false,
+        enableHiding: false
+      },
+      {
         header: formatMessage({ id: messages.name }),
         accessorKey: 'name',
-        cell: ({ getValue, row: { original } }) => (
-          <>
-            <div className="pr-12">{getValue()}</div>
-            {!disabledEdit && <OrderLineActionButtons orderLine={original} />}
-          </>
+        cell: ({ getValue }) => (
+          <div className="whitespace-nowrap">{getValue()}</div>
         ),
-        meta: { className: 'relative whitespace-nowrap' },
         size: 340,
         footer: ({ table: { getRowCount } }) => (
           <span>Total: {getRowCount()} line(s)</span>
@@ -136,7 +146,9 @@ const useOrderLinesColumns = () => {
             href={PATH.SYSTEM + '/' + original.system?.uid}
             target="_blank"
           >
-            <span>{getValue()?.split('-')[0]}</span>
+            <Button type="button" variant="link" className="cursor-pointer">
+              <span>{getValue()?.split('-')[0]}</span>
+            </Button>
           </Link>
         )
       },

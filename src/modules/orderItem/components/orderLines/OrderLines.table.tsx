@@ -68,9 +68,10 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
             className: cn(
               orderLine?.isDelivered
                 ? index % 2 === 0
-                  ? 'bg-green-200 dark:bg-green-800 '
-                  : 'bg-green-100 dark:bg-green-700 '
-                : ''
+                  ? 'text-lime-600 dark:text-lime-300 '
+                  : 'text-lime-600 dark:text-lime-300 '
+                : '',
+              'font-bold'
             )
           })}
         />

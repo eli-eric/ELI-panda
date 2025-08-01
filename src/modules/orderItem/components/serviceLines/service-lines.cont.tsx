@@ -4,6 +4,7 @@ import { useFormContext, useWatch } from 'react-hook-form'
 import { Heading } from '@/components/layout/Heading'
 import { Table } from '@/components/ui/table/table'
 import { message } from '@/i18n/src/messages'
+import { cn } from '@/lib/utils'
 
 import type { ServiceLine } from '../../types/form'
 import { useServiceLinesColumns } from './service-lines.columns'
@@ -49,11 +50,14 @@ export const ServiceLinesContainer = ({
           enablePinning: true,
           rowClassName: 'group/row',
           getRowProps: ({ isDelivered }, index: number) => ({
-            className: isDelivered
-              ? index % 2 === 0
-                ? 'bg-green-200 dark:bg-green-800'
-                : 'bg-green-100 dark:bg-green-700'
-              : undefined
+            className: cn(
+              isDelivered
+                ? index % 2 === 0
+                  ? 'text-lime-600 dark:text-lime-300 '
+                  : 'text-lime-600 dark:text-lime-300 '
+                : '',
+              'font-bold'
+            )
           })
         }}
       />
