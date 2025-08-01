@@ -60,7 +60,8 @@ const CatalogueItemContainer = ({
   const { submit, loading } = useItemSubmit({
     setvalue: setValue,
     imageRef: imageRef,
-    saveAndExit
+    saveAndExit,
+    reset
   })
 
   useEffect(() => {

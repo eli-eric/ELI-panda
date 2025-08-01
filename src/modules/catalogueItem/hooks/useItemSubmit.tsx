@@ -16,11 +16,13 @@ import { useCatalogueItem } from './useItem'
 export const useItemSubmit = ({
   setvalue,
   imageRef,
-  saveAndExit
+  saveAndExit,
+  reset
 }: {
   setvalue: UseFormSetValue<any>
   imageRef?: MutableRefObject<ImageGalleryRef | undefined>
   saveAndExit?: boolean
+  reset?: (data?: any) => void
 }) => {
   const { query, replace } = useRouter()
   const uid = query.uid as string | undefined
@@ -43,6 +45,11 @@ export const useItemSubmit = ({
       queryClient.invalidateQueries({ queryKey: ['catalogueItems'] })
 
       setvalue('lastUpdateTime', catalogueItem.data?.lastUpdateTime)
+      
+      // Reset form with new data from API response to prevent reverting to old defaultValues
+      if (reset && catalogueItem.data) {
+        reset(catalogueItem.data)
+      }
 
       imageRef?.current?.submit(catalogueItem.data?.uid, () => {
         if (saveAndExit) {
