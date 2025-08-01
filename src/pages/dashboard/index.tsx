@@ -6,6 +6,7 @@ import {
   LayoutGrid,
   Library,
   LifeBuoy,
+  Link,
   ShoppingCart,
   Table,
   Users
@@ -18,7 +19,7 @@ import { message } from 'src/i18n/src/messages'
 
 import { Tile, TileContainer } from '@/components/card/tile.comp'
 import { ReleasesContainer } from '@/components/Releases.cont'
-import { Card, CardContent } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { VersionControl } from '@/components/version/VersionControl'
 import { useAccessControl } from '@/hooks/useAccessControl'
 import { CatalogueStatisticsContainer } from '@/modules/catalogueItem/components/statistics/CatalogueStatistics.cont'
@@ -119,25 +120,29 @@ const DashboardPage: NextPage = (): JSX.Element => {
               <h1 className="text-2xl font-semibold text-foreground mb-2">
                 {intl.formatMessage({ id: messages.head })}
               </h1>
-              <p className="text-muted-foreground">
-                Quick navigation to all system modules
-              </p>
             </div>
 
-            <TileContainer>
-              {tiles.map(tile => (
-                <Tile
-                  key={tile.link}
-                  name={tile.name}
-                  Icon={tile.Icon}
-                  link={tile.link}
-                  role={tile.role}
-                />
-              ))}
-            </TileContainer>
-            <CatalogueStatisticsContainer />
-
             <div className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center gap-2">
+                    <Link className="size-6 text-primary" />
+                    <CardTitle>Quick navigation to all modules</CardTitle>
+                  </div>
+                </CardHeader>
+                <TileContainer>
+                  {tiles.map(tile => (
+                    <Tile
+                      key={tile.link}
+                      name={tile.name}
+                      Icon={tile.Icon}
+                      link={tile.link}
+                      role={tile.role}
+                    />
+                  ))}
+                </TileContainer>
+              </Card>
+              <CatalogueStatisticsContainer />
               <Card>
                 <CardContent>
                   <FileManager
