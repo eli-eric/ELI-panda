@@ -27,7 +27,7 @@ export const useItemSubmit = ({
   const { query, replace } = useRouter()
   const uid = query.uid as string | undefined
 
-  const { queryKey } = useCatalogueItem()
+  const { queryKey, refetch } = useCatalogueItem()
 
   const queryClient = useQueryClient()
 
@@ -42,10 +42,10 @@ export const useItemSubmit = ({
       if (uid) {
         queryClient.setQueryData(queryKey, catalogueItem.data)
       }
-      queryClient.invalidateQueries({ queryKey: ['catalogueItems'] })
+      queryClient.invalidateQueries({ queryKey: ['catalogueItems', queryKey] })
 
       setvalue('lastUpdateTime', catalogueItem.data?.lastUpdateTime)
-      
+
       // Reset form with new data from API response to prevent reverting to old defaultValues
       if (reset && catalogueItem.data) {
         reset(catalogueItem.data)
@@ -61,6 +61,7 @@ export const useItemSubmit = ({
         }
         toast.success('Item saved')
       })
+      refetch()
     },
     onError: (error: AxiosError) => {
       if (error.response?.status === 409) {
