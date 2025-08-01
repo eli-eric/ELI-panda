@@ -60,7 +60,6 @@ const Combobox = ({
   position = 'bottom',
   codebookResponse,
   showAddButton = false,
-  onClickIcon,
   onSelect
 }: ComboboxPropsT) => {
   const { control, setValue } = useFormContext()
@@ -133,13 +132,15 @@ const Combobox = ({
                     variant="outline"
                     role="combobox"
                     aria-expanded={open}
+                    onClick={() => {
+                      setOpen(!open)
+                    }}
                     className={cn(
                       'flex-1 justify-between',
                       !field.value && 'text-muted-foreground',
                       error && 'border-destructive'
                     )}
                     disabled={disabled}
-                    onClick={onClickIcon}
                   >
                     {field.value?.name ||
                       (placeholder ? fm({ id: placeholder }) : null) ||

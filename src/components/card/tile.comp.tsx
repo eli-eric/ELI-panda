@@ -17,10 +17,10 @@ interface CardProps {
 
 export const Tile = ({ name, link, Icon, legacyBehavior, role }: CardProps) => {
   const CardWrapper = ({ children }: { children: React.ReactNode }) => (
-    <Card 
+    <Card
       className={cn(
         'group cursor-pointer transition-all duration-300 ease-out hover:shadow-md',
-        'border-border/50 hover:border-border bg-card hover:bg-accent/5',
+        'hover:border-border hover:bg-accent/5 border-border',
         'min-h-[120px] sm:min-h-[140px] md:min-h-[160px] flex flex-col'
       )}
       data-testid={`tile-${name}`}
