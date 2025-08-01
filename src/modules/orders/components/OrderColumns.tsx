@@ -23,7 +23,10 @@ const LinkNameCell = ({
 }: CellContext<Order, any> & { isReadOnly: boolean }) => (
   <div className="flex items-center w-full">
     <div className="flex items-center flex-1 min-w-0">
-      <Button variant={'link'} className="cursor-pointer text-ellipsis">
+      <Button
+        variant={'link'}
+        className="cursor-pointer text-ellipsis text-inherit hover:underline"
+      >
         <Tooltip content={getValue()}>
           <Link
             href={PATH.ORDER + '/' + original.uid}
@@ -118,7 +121,7 @@ export const useOrderColumns = ({ isReadOnly }: Props) => {
           <Fragment>
             {getValue() && (
               <Tooltip content={getValue()}>
-                <InformationCircleIcon className="h-5 w-5 pr- shrink-0" />
+                <InformationCircleIcon className="h-5 w-5 shrink-0" />
               </Tooltip>
             )}
           </Fragment>

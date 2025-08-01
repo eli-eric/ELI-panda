@@ -1,7 +1,9 @@
 import Link from 'next/link'
 import type { FC } from 'react'
 
-import { LinkDecorator } from './LinkDecorator.comp'
+import { cn } from '@/lib/utils'
+
+import { Button } from '../ui/button'
 
 interface NewTabLinkProps {
   href: string
@@ -10,8 +12,8 @@ interface NewTabLinkProps {
 }
 export const NewTabLink: FC<NewTabLinkProps> = ({ href, value, className }) => (
   <Link href={href} target="_blank">
-    <LinkDecorator className={className}>
+    <Button variant={'link'} className={cn('cursor-pointer', className)}>
       <span>{value}</span>
-    </LinkDecorator>
+    </Button>
   </Link>
 )

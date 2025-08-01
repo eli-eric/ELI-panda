@@ -7,7 +7,7 @@ export const getColorClassStatus = (
   deliveryStatus: DELIVERY_STATUS
 ) => {
   if (!orderStatus || !deliveryStatus) {
-    return 'bg-white dark:bg-gray-800/60'
+    return ''
   }
   const statusMappingColor = [
     {
@@ -19,7 +19,7 @@ export const getColorClassStatus = (
         ORDER_STATUS.ORDERED,
         DELIVERY_STATUS.COMPLETE
       ],
-      colorClass: 'bg-lime-200 dark:bg-lime-800/60'
+      colorClass: 'text-purple-800 dark:text-purple-200'
     },
     {
       statuses: [
@@ -30,19 +30,19 @@ export const getColorClassStatus = (
         ORDER_STATUS.ORDERED,
         DELIVERY_STATUS.PARTIAL
       ],
-      colorClass: 'bg-amber-200 dark:bg-amber-900/60'
+      colorClass: 'text-orange-800 dark:text-orange-200'
     },
     {
       statuses: [ORDER_STATUS.ORDERED, DELIVERY_STATUS.NONE],
-      colorClass: 'bg-yellow-200 dark:bg-yellow-900/60'
+      colorClass: 'text-red-800 dark:text-red-200'
     },
     {
       statuses: [ORDER_STATUS.PLANNED, DELIVERY_STATUS.NONE],
-      colorClass: 'bg-blue-100 dark:bg-blue-900/60'
+      colorClass: 'text-blue-800 dark:text-blue-200'
     },
     {
       statuses: [ORDER_STATUS.ORDER_COMPLETED, DELIVERY_STATUS.COMPLETE],
-      colorClass: 'bg-lime-400 dark:bg-green-800/60'
+      colorClass: 'text-lime-600 dark:text-lime-200'
     }
     // Add more mappings as needed
   ]

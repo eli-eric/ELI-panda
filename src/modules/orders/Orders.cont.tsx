@@ -53,7 +53,10 @@ const OrdersContainer = () => {
             table,
             settings: tableSettings,
             getRowProps: ({ original: { orderStatus, deliveryStatus } }) => ({
-              className: cn(getColorClassStatus(orderStatus, deliveryStatus))
+              className: cn(
+                getColorClassStatus(orderStatus, deliveryStatus),
+                'font-bold'
+              )
             }),
             columns,
             tableId,

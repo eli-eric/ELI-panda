@@ -18,27 +18,37 @@ import {
 } from './components/service-lines.actions'
 const messages = message.ordersPage.serviceLines.columns
 
+//TODO: NA akci isDelivered se duplikuji service lines, need to fix this!!!!!!!!!!!!!
+
 export const useServiceLinesColumns = () => {
   const { formatMessage } = useIntl()
   const { disabledEdit } = useOrderDetail()
   const columns = useMemo((): ColumnDef<ServiceLine, any>[] => {
     const cols: ColumnDef<ServiceLine, any>[] = [
       {
+        id: 'actions',
+        header: '',
+        cell: ({ row: { original } }) =>
+          !disabledEdit ? (
+            <ServiceLineActionButtons serviceLine={original} />
+          ) : null,
+        size: 50,
+        enableSorting: false,
+        enablePinning: false,
+        enableColumnFilter: false,
+        enableHiding: false
+      },
+      {
         header: formatMessage({ id: messages.name }),
         accessorKey: 'name',
-        cell: ({ getValue, row: { original } }) => (
-          <div className="flex items-center ">
+        cell: ({ getValue }) => (
+          <div className="flex items-center">
             <span title={getValue()} className="truncate">
               {getValue()}
             </span>
-            {!disabledEdit && (
-              <div className="absolute right-0">
-                <ServiceLineActionButtons serviceLine={original} />
-              </div>
-            )}
           </div>
         ),
-        meta: { sticky: true, className: 'sm:pr-16 relative' },
+        meta: { sticky: true },
         size: 340,
         footer: ({ table: { getRowCount } }) => (
           <span>Total: {getRowCount()} line(s)</span>
