@@ -26,7 +26,7 @@ import { RelatedItemsContainer } from './components/related-items/RelatedItems.c
 import { CatalogueStatisticsContainer } from './components/statistics/CatalogueStatistics.cont'
 import { useCatalogueItem } from './hooks/useItem'
 import { useItemSubmit } from './hooks/useItemSubmit'
-import type { CatalogueItem, CatalogueItemDetail } from './types/responses'
+import type { CatalogueItem } from './types/responses'
 
 const MemoizedGallery = memo(ImageGallery)
 
@@ -78,33 +78,33 @@ const CatalogueItemContainer = ({
 
   const onSubmit = (catalogueItem: CatalogueForm) => {
     console.log('Submit data raw:', catalogueItem)
-    
+
     // extract from catalogueItem hasImageGalleryChanges
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { hasImageGalleryChanges, ...rest } = catalogueItem
-    
+
     // Convert details object with UID keys back to details array for API
     const details = rest.details ? Object.values(rest.details) : []
-    
+
     const finalData = { ...rest, details }
     console.log('Submit data processed:', finalData)
-    
+
     setSaveAndExit(false)
     submit(finalData as CatalogueItem)
   }
   const onSubmitAndExit = (catalogueItem: CatalogueForm) => {
     console.log('SubmitAndExit data raw:', catalogueItem)
-    
+
     // extract from catalogueItem hasImageGalleryChanges
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { hasImageGalleryChanges, ...rest } = catalogueItem
-    
+
     // Convert details object with UID keys back to details array for API
     const details = rest.details ? Object.values(rest.details) : []
-    
+
     const finalData = { ...rest, details }
     console.log('SubmitAndExit data processed:', finalData)
-    
+
     setSaveAndExit(true)
     submit(finalData as CatalogueItem)
   }
@@ -119,20 +119,20 @@ const CatalogueItemContainer = ({
         loading={loading}
         editRole={ROLE.CATALOGUE_EDIT}
         onSubmit={formMethods.handleSubmit(
-          (data) => {
+          data => {
             console.log('handleSubmit SUCCESS:', data)
             onSubmit(data)
           },
-          (errors) => {
+          errors => {
             console.log('handleSubmit ERRORS:', errors)
           }
         )}
         onSubmitAndExit={formMethods.handleSubmit(
-          (data) => {
+          data => {
             console.log('handleSubmitAndExit SUCCESS:', data)
             onSubmitAndExit(data)
           },
-          (errors) => {
+          errors => {
             console.log('handleSubmitAndExit ERRORS:', errors)
           }
         )}
@@ -142,10 +142,9 @@ const CatalogueItemContainer = ({
           <MemoizedGallery
             ref={imageRef}
             config={{ itemCategory: FILE_TYPE.CATALOGUE, itemId: String(uid) }}
-            className="relative h-full max-h-56 mt-6 pl-6 "
             hasEditRole={!disabledEdit}
           />
-          <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0 col-span-2">
+          <div className="col-span-2">
             <DefaultItemForm />
           </div>
         </div>
@@ -154,9 +153,9 @@ const CatalogueItemContainer = ({
         {uid && <RelatedItemsContainer />}
         {uid && <CatalogueOrders />}
         {uid && (
-          <CatalogueStatisticsContainer 
-            catalogueItemUid={uid} 
-            variant="page" 
+          <CatalogueStatisticsContainer
+            catalogueItemUid={uid}
+            variant="page"
             className="mt-6"
           />
         )}

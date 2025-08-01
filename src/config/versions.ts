@@ -56,7 +56,22 @@ export const versionsData: VersionData = {
             "Redesigned ItemPropertiesViewer with modern shadcn/ui components and compact layout",
             "Added collapsible functionality to ItemPropertiesViewer for optional viewing",
             "Improved empty value handling for null, undefined, and empty string properties",
-            "Enhanced Disclosure component to support ReactNode titles for rich content"
+            "Enhanced Disclosure component to support ReactNode titles for rich content",
+            "Completely redesigned ImageManager components with modern shadcn/ui carousel system",
+            "Replaced HeadlessUI Tab system with responsive carousel for image navigation",
+            "Added interactive thumbnail navigation for multi-image galleries",
+            "Implemented compact design with improved button styling and space efficiency",
+            "Fixed content overflow issues and improved responsive behavior",
+            "Implemented compact design with smaller thumbnails and buttons for space efficiency",
+            "Fixed carousel navigation button positioning to prevent clipping",
+            "Optimized aspect ratio from 4:3 to 3:2 for better space utilization",
+            "Implemented overlay button positioning to eliminate unnecessary vertical space",
+            "Reduced component padding and spacing by 50% for ultra-compact design",
+            "Positioned action buttons as floating overlay on image bottom for space efficiency",
+            "Moved action buttons to top header bar to eliminate all unnecessary vertical space",
+            "Removed Card wrapper component for minimal design footprint",
+            "Positioned thumbnails directly adjacent to main image with separator",
+            "Achieved maximum space efficiency with zero padding design"
           ]
         },
         {
