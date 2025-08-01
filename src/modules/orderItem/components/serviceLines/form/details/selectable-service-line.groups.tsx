@@ -25,22 +25,18 @@ export const SelectableServiceLineGroups = ({
   }, [groupDetails, allowedDetails])
 
   const groups = useMemo(() => {
-    const groups = details?.map(item => item.propertyGroup)
-    return [...new Set(groups)]
+    if (!details) return []
+    const groupNames = details.map(item => item.propertyGroup)
+    return [...new Set(groupNames)].sort()
   }, [details])
 
   const groupMap = useMemo(() => {
     const map = new Map<string, any[]>()
     groups?.forEach(group => {
-      const groupDetails = details
-        ?.filter(detail => detail.propertyGroup === group)
-        .map(detail => ({
-          property: detail.property,
-          value: detail.value,
-          propertyGroup: detail.propertyGroup
-        }))
-
-      map.set(group, sortBy(groupDetails, ['property.name']))
+      const groupDetails = details?.filter(detail => detail.propertyGroup === group)
+      if (groupDetails) {
+        map.set(group, sortBy(groupDetails, ['property.name']))
+      }
     })
     return map
   }, [details, groups])

@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from 'react'
 
+import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
 import { useServiceLine } from '@/modules/orderItem/hooks/useServiceLine'
 import type { ServiceLineFormType } from '@/modules/orderItem/types/form'
 import { FormWizard } from '@/modules/shared/form/wizardV2/wizard-form.cont'
@@ -25,16 +26,24 @@ export const ServiceLineWizard = ({ setOpen }: Props) => {
     (data: ServiceLineFormType, reset: () => void) => {
       const { items, details, selectedProperties, ...rest } = data
 
+      // Convert details object with UID keys back to array (similar to catalogueItem)  
+      const detailsArray = details && typeof details === 'object' && !Array.isArray(details)
+        ? Object.values(details) as CatalogueItemDetail[]
+        : Array.isArray(details) 
+          ? details 
+          : []
+
       // Filter details based on selected properties
       const filteredDetails =
-        Array.isArray(details) && Array.isArray(selectedProperties)
-          ? details.filter(detail =>
+        Array.isArray(detailsArray) && Array.isArray(selectedProperties)
+          ? detailsArray.filter(detail =>
               selectedProperties.includes(detail.property.uid)
             )
           : []
 
       if (items && items.length > 0) {
         items.forEach(item => {
+          console.log('Selected item:', item, filteredDetails)
           setServiceLine({
             ...rest,
             price: Number(rest.price),
