@@ -46,7 +46,13 @@ export const versionsData: VersionData = {
             "Converted inline table action buttons to dropdown menus for OrderLines and ServiceLines",
             "Replaced similar order status colors with distinct color palette for better visibility",
             "Enhanced table row colorization with text coloring instead of background highlighting",
-            "Improved table design consistency across all data tables"
+            "Improved table design consistency across all data tables",
+            "Migrated Switch and Toggle components from HeadlessUI to shadcn/ui",
+            "Maintained backward compatibility for all existing Switch/Toggle component usage",
+            "Modernized FileManager components with shadcn/ui design system",
+            "Converted FileManager action buttons to space-efficient dropdown menus",
+            "Updated FileManager icons from Heroicons to Lucide React for consistency",
+            "Enhanced drag & drop upload area with modern visual feedback and styling"
           ]
         },
         {
