@@ -1,6 +1,6 @@
 import { SystemLevel } from '@/types/gql/graphql'
 
-export const getColorBySystemLevel = (level?: SystemLevel, index?: number) => {
+export const getColorBySystemLevel = (level?: SystemLevel, _index?: number) => {
   switch (level) {
     default:
       return ''
@@ -21,7 +21,6 @@ export const getBorderBySystemLevel = (level?: SystemLevel) => {
 }
 
 export const getFontBySystemLevel = (level?: SystemLevel) => {
-  console.log('getFontBySystemLevel', level)
   switch (level) {
     case SystemLevel.KeySystems:
       return 'text-orange-600 dark:text-orange-300'

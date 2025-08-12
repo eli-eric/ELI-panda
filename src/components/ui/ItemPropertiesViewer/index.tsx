@@ -64,13 +64,13 @@ export const ItemPropertiesViewer: FC<ItemPropertiesViewerProps> = ({
   return (
     <Disclosure
       title={title}
-      defaultOpen={false}
+      defaultOpen={true}
       className="w-full border rounded-lg"
-      buttonClassName="p-3 text-base font-semibold"
-      panelClassName="p-4 space-y-4 shadow-md rounded-lg"
+      buttonClassName="p-2 text-sm font-semibold"
+      panelClassName="p-2 space-y-2 shadow-md rounded-lg"
     >
       {hasOverriddenProperties && (
-        <Alert className="py-2 mb-4">
+        <Alert className="py-1.5 mb-2">
           <AlertTriangle className="h-3 w-3" />
           <AlertDescription className="text-xs">
             Some original catalog parameters have been modified by service
@@ -81,14 +81,14 @@ export const ItemPropertiesViewer: FC<ItemPropertiesViewerProps> = ({
       {groupedProperties.map((group, groupIndex) => (
         <div key={group.key}>
           {group.name !== 'General' && (
-            <div className="mb-3">
-              <h4 className="text-xs font-semibold text-foreground mb-2">
+            <div className="mb-1.5">
+              <h4 className="text-xs font-semibold text-foreground mb-1">
                 {group.name}
               </h4>
               <Separator />
             </div>
           )}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
+          <div className="flex flex-wrap gap-1">
             {group.properties.map(property => {
               const getValue = (value: any) => {
                 if (value === null || value === undefined || value === '') {
@@ -106,20 +106,21 @@ export const ItemPropertiesViewer: FC<ItemPropertiesViewerProps> = ({
                 <div
                   key={property.uid}
                   className={cn(
-                    'space-y-1 p-2 rounded border transition-colors',
+                    'flex-shrink-0 p-1.5 rounded border transition-colors min-w-[120px] max-w-[200px]',
                     isOverridden
                       ? 'border-destructive/20 bg-destructive/5'
                       : 'border-border bg-muted/20'
                   )}
+                  title={`${property.name}: ${displayValue}${property.unit ? ` (${property.unit})` : ''}`}
                 >
-                  <div className="flex items-start justify-between gap-1">
-                    <span className="text-xs font-medium text-foreground leading-tight line-clamp-2">
+                  <div className="flex items-start justify-between gap-0.5 mb-1">
+                    <span className="text-[10px] font-medium text-foreground leading-tight whitespace-nowrap truncate flex-1">
                       {property.name}
                     </span>
                     {isOverridden && (
                       <Badge
                         variant="destructive"
-                        className="text-[10px] px-1 py-0 h-auto leading-none"
+                        className="text-[8px] px-0.5 py-0 h-3 leading-none flex-shrink-0"
                       >
                         M
                       </Badge>
@@ -129,20 +130,20 @@ export const ItemPropertiesViewer: FC<ItemPropertiesViewerProps> = ({
                   <div className="space-y-0.5">
                     <div
                       className={cn(
-                        'text-xs font-medium leading-tight',
+                        'text-[10px] font-medium leading-tight line-clamp-2',
                         isOverridden ? 'text-destructive' : 'text-foreground'
                       )}
                     >
                       {displayValue}
                       {property.unit && (
-                        <span className="text-muted-foreground font-normal ml-1">
+                        <span className="text-muted-foreground font-normal ml-0.5 text-[9px]">
                           ({property.unit})
                         </span>
                       )}
                     </div>
 
                     {isOverridden && property.value && (
-                      <div className="text-[10px] text-muted-foreground leading-tight">
+                      <div className="text-[9px] text-muted-foreground leading-tight line-clamp-1">
                         <span className="line-through">
                           {property.value}
                           {property.unit && ` (${property.unit})`}
@@ -155,7 +156,7 @@ export const ItemPropertiesViewer: FC<ItemPropertiesViewerProps> = ({
             })}
           </div>
           {groupIndex < groupedProperties.length - 1 && (
-            <Separator className="mt-4" />
+            <Separator className="mt-2" />
           )}
         </div>
       ))}

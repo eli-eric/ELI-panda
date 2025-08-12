@@ -36,10 +36,7 @@ export function TableFooter<T extends object>({
       )}
     >
       {table.getFooterGroups().map(footerGroup => (
-        <tr
-          key={footerGroup.id}
-          className="border-t border-border"
-        >
+        <tr key={footerGroup.id} className="border-t border-border">
           {footerGroup.headers.map((header, headerIndex) => {
             // Get width from column definition if available
             const width = header.column.getSize()

@@ -32,11 +32,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 The codebase is currently migrating from HeadlessUI to shadcn/ui + Radix UI components:
 
 ### Current State
+
 - **New components**: Use shadcn/ui components (Dialog, Sheet, Button, Card, etc.)
 - **Legacy components**: Some HeadlessUI components still exist but are being phased out
 - **Forms**: Mix of Yup validation (legacy) and Zod validation (new features)
 
 ### Migration Guidelines
+
 - **Prefer shadcn/ui**: Always use shadcn/ui components for new features
 - **Replace when editing**: When modifying existing components, replace HeadlessUI with shadcn/ui equivalents
 - **Modal system**: Use the global modal system with shadcn/ui Dialog and Sheet components
@@ -48,6 +50,7 @@ The codebase is currently migrating from HeadlessUI to shadcn/ui + Radix UI comp
 This is a Next.js 14 application serving as the frontend for ELI PANDA (oPerations And maiNtenance DAtabase), a maintenance management system for scientific facilities.
 
 ### Core Technologies
+
 - **Frontend**: Next.js 14 with React 19, TypeScript
 - **Architecture**: Hybrid - Page Router (main) + App Router (new features)
 - **Styling**: Tailwind CSS v4 with shadcn/ui components (migrating from HeadlessUI)
@@ -83,6 +86,7 @@ This is a Next.js 14 application serving as the frontend for ELI PANDA (oPeratio
 The application uses a centralized modal system with `ModalProvider` and `useModalGlobalStore` for managing overlays.
 
 ### Modal Types Available
+
 - **Sheet**: Side panel modal (mobile-first, responsive width)
 - **Dialog1**: Primary modal dialog
 - **Dialog2**: Secondary modal dialog (for nested modals)

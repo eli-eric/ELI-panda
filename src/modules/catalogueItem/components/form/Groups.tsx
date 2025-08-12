@@ -7,7 +7,7 @@ import { Heading } from '@/components/layout/Heading'
 
 import useGroupDetails from '../../hooks/useGroupDetails'
 import { useCatalogueItem } from '../../hooks/useItem'
-import type { CatalogueItem, CatalogueItemDetail } from '../../types/responses'
+import type { CatalogueItemDetail } from '../../types/responses'
 import GroupProperty from './GroupProperty'
 
 const Groups = () => {

@@ -60,31 +60,31 @@ const SystemTypeEditContainer: FC = () => {
           </CardHeader>
           <CardContent className="pt-0 flex-1 min-h-0">
             <ScrollArea className="h-full">
-            {isLoadingGroups ? (
-              <div className="space-y-1 w-full">
-                {Array.from({ length: 4 }).map((_, i) => (
-                  <div key={i} className="p-3">
-                    <Skeleton className="h-5 w-full" />
-                  </div>
-                ))}
-              </div>
-            ) : !systemTypeGroups?.length ? (
-              <div className="text-center py-8 text-muted-foreground">
-                No groups found. Create your first group to get started.
-              </div>
-            ) : (
-              <div className="space-y-1">
-                {systemTypeGroups.map(item => (
-                  <SystemTypeGroup
-                    key={item.uid}
-                    systemTypeGroup={item}
-                    selectedGroup={selectedGroup}
-                    setSelectedGroup={setSelectedGroup}
-                    refetch={refetchGroups}
-                  />
-                ))}
-              </div>
-            )}
+              {isLoadingGroups ? (
+                <div className="space-y-1 w-full">
+                  {Array.from({ length: 4 }).map((_, i) => (
+                    <div key={i} className="p-3">
+                      <Skeleton className="h-5 w-full" />
+                    </div>
+                  ))}
+                </div>
+              ) : !systemTypeGroups?.length ? (
+                <div className="text-center py-8 text-muted-foreground">
+                  No groups found. Create your first group to get started.
+                </div>
+              ) : (
+                <div className="space-y-1">
+                  {systemTypeGroups.map(item => (
+                    <SystemTypeGroup
+                      key={item.uid}
+                      systemTypeGroup={item}
+                      selectedGroup={selectedGroup}
+                      setSelectedGroup={setSelectedGroup}
+                      refetch={refetchGroups}
+                    />
+                  ))}
+                </div>
+              )}
             </ScrollArea>
           </CardContent>
         </Card>
@@ -111,35 +111,36 @@ const SystemTypeEditContainer: FC = () => {
           </CardHeader>
           <CardContent className="pt-0 flex-1 min-h-0">
             <ScrollArea className="h-full">
-            {!selectedGroup ? (
-              <div className="text-center py-8 text-muted-foreground">
-                Select a group from the left panel to view system types.
-              </div>
-            ) : isLoadingTypes ? (
-              <div className="space-y-1">
-                {Array.from({ length: 3 }).map((_, i) => (
-                  <div key={i} className="p-3 w-full">
-                    <Skeleton className="h-5 w-3/4 mb-2" />
-                    <Skeleton className="h-4 w-1/2" />
-                  </div>
-                ))}
-              </div>
-            ) : !systemTypes?.length ? (
-              <div className="text-center py-8 text-muted-foreground">
-                No system types found in this group. Add the first system type.
-              </div>
-            ) : (
-              <div className="space-y-1">
-                {systemTypes.map(item => (
-                  <SystemTypeItem
-                    groupUid={selectedGroup}
-                    key={item.uid}
-                    systemType={item}
-                    refetch={refetchSystemTypes}
-                  />
-                ))}
-              </div>
-            )}
+              {!selectedGroup ? (
+                <div className="text-center py-8 text-muted-foreground">
+                  Select a group from the left panel to view system types.
+                </div>
+              ) : isLoadingTypes ? (
+                <div className="space-y-1">
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <div key={i} className="p-3 w-full">
+                      <Skeleton className="h-5 w-3/4 mb-2" />
+                      <Skeleton className="h-4 w-1/2" />
+                    </div>
+                  ))}
+                </div>
+              ) : !systemTypes?.length ? (
+                <div className="text-center py-8 text-muted-foreground">
+                  No system types found in this group. Add the first system
+                  type.
+                </div>
+              ) : (
+                <div className="space-y-1">
+                  {systemTypes.map(item => (
+                    <SystemTypeItem
+                      groupUid={selectedGroup}
+                      key={item.uid}
+                      systemType={item}
+                      refetch={refetchSystemTypes}
+                    />
+                  ))}
+                </div>
+              )}
             </ScrollArea>
           </CardContent>
         </Card>

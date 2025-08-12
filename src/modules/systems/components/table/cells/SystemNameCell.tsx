@@ -4,10 +4,14 @@ import {
   ChevronRightIcon
 } from '@heroicons/react/24/outline'
 import type { CellContext } from '@tanstack/react-table'
+import { Edit } from 'lucide-react'
+import Link from 'next/link'
 import { useDrag } from 'react-dnd'
 
 import { Tooltip } from '@/components/Tooltip'
+import { Button } from '@/components/ui/button'
 import { cn, truncateString } from '@/lib/utils'
+import { PATH } from '@/types/constants/paths'
 import type { EndpointProps } from '@/utils/getEndpoints'
 
 import { SystemActionButtons } from './SystemActionButtons'
@@ -58,7 +62,10 @@ export const SystemNameCell = ({
       style={{
         paddingLeft: `${row.depth * 1.01}rem`
       }}
-      className={cn(isDragging && 'text-orange-500', 'flex items-center w-full')}
+      className={cn(
+        isDragging && 'text-orange-500',
+        'flex items-center w-full group'
+      )}
     >
       <div className="flex items-center flex-1 min-w-0" ref={dragRef}>
         <div
@@ -105,7 +112,20 @@ export const SystemNameCell = ({
           </Tooltip>
         </div>
       </div>
-      <div className="flex-shrink-0 ml-2">
+      <div className="flex-shrink-0 ml-2 flex items-center">
+        {!hideButtons && (
+          <Tooltip content={canEdit ? 'Edit System' : 'View System'}>
+            <Link href={PATH.SYSTEM + '/' + original.uid}>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 mr-1 hover:text-primary text-muted-foreground"
+              >
+                <Edit className="h-4 w-4" />
+              </Button>
+            </Link>
+          </Tooltip>
+        )}
         <SystemActionButtons
           original={original}
           canEdit={canEdit}

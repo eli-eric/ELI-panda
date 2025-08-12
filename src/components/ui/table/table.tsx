@@ -153,7 +153,12 @@ export function Table<T extends object>({
 
   return (
     // Main container - sets the width constraint on the table
-    <div className={cn('rounded-md border border-border overflow-hidden', filteredClassName)}>
+    <div
+      className={cn(
+        'rounded-md border border-border overflow-hidden',
+        filteredClassName
+      )}
+    >
       {/* Container with fixed height if specified */}
       <div
         className="w-full rounded-md"

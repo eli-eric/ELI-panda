@@ -29,9 +29,7 @@ export function TableBody<T extends object>({
             key={`skeleton-row-${rowIndex}`}
             className={cn(
               'border-b border-border last:border-0',
-              rowIndex % 2 === 0
-                ? 'bg-background'
-                : 'bg-muted/50',
+              rowIndex % 2 === 0 ? 'bg-background' : 'bg-muted/50',
               rowClassName
             )}
           >
@@ -103,9 +101,7 @@ export function TableBody<T extends object>({
 
         // Determine row background color
         const defaultBgClass =
-          rowIndex % 2 === 0
-            ? 'bg-background'
-            : 'bg-muted/50'
+          rowIndex % 2 === 0 ? 'bg-background' : 'bg-muted/50'
 
         return (
           <tr
@@ -177,12 +173,8 @@ export function TableBody<T extends object>({
                     'p-2 px-4',
                     // Apply both backdrop-blur and background color for better compatibility
                     // Add border styles for pinned columns
-                    isPinned === 'left'
-                      ? 'border-r border-border/50'
-                      : '',
-                    isPinned === 'right'
-                      ? 'border-l border-border/50'
-                      : '',
+                    isPinned === 'left' ? 'border-r border-border/50' : '',
+                    isPinned === 'right' ? 'border-l border-border/50' : '',
                     // Zajistíme, aby se obsah buněk mohl správně zalamovat
                     'whitespace-normal break-words',
                     cell.column.columnDef.meta?.className

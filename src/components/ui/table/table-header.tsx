@@ -41,10 +41,7 @@ export function TableHeader<T extends object>({
         }
 
         return (
-          <tr
-            key={headerGroup.id}
-            className="border-b border-border"
-          >
+          <tr key={headerGroup.id} className="border-b border-border">
             {visibleHeaders.map((header, headerIndex) => {
               // Check if this is a group header (has subcolumns)
               const isGroupHeader = header.column.columns?.length > 0
@@ -110,9 +107,7 @@ export function TableHeader<T extends object>({
                     'hover:bg-accent',
                     'whitespace-nowrap',
                     // Apply sticky styles directly to th elements when sticky header is enabled
-                    isSticky
-                      ? 'sticky top-0 bg-muted/50 z-10'
-                      : '',
+                    isSticky ? 'sticky top-0 bg-muted/50 z-10' : '',
                     // Add shadow when sticky to visually separate from content
                     isSticky ? 'shadow-sm' : '',
                     // Add border and background styles for pinned columns
