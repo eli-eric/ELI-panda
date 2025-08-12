@@ -1,15 +1,9 @@
-import { Fragment, Suspense, useCallback, useState } from 'react'
+import { Fragment, useCallback, useState } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { toast } from 'react-hot-toast'
 
 import ErrorPage from '@/components/error/ErrorPage'
-import ProgressBarComponent from '@/components/progress-bar.comp'
-import { Card as CardUI, CardContent } from '@/components/ui/card'
-import usePermission from '@/hooks/usePermission'
-import { FILE_TYPE } from '@/modules/shared/fileManager/types'
-import { ROLE } from '@/types/constants/roles'
 
-import FileManager from '../shared/fileManager/FileManager'
 import { SystemForm } from './components/form/SystemForm.cont'
 import { SparePartsFor } from './components/spare-for/SpareFor.cont'
 import { SparePartsContainer } from './components/spare-parts/SpareParts.cont'
@@ -20,7 +14,6 @@ interface Props {
 }
 
 export const SystemItemContainer = ({ uid }: Props) => {
-  const hasEditRole = usePermission([ROLE.SYSTEM_EDIT])
   const [errorState, setErrorState] = useState<Error | null>(null)
 
   const handleError = useCallback((error: Error) => {
@@ -37,43 +30,23 @@ export const SystemItemContainer = ({ uid }: Props) => {
   return (
     <div className="h-screen overflow-auto">
       <ErrorBoundary FallbackComponent={ErrorPage} onError={handleError}>
-        <SystemForm>
+        <SystemForm
+          subsystemsComponent={
+            uid ? (
+              <ErrorBoundary fallback={<ErrorPage />}>
+                <SubSystemsContainer />
+              </ErrorBoundary>
+            ) : null
+          }
+        >
           {uid && (
             <Fragment>
-              <CardUI>
-                <CardContent className="space-y-6">
-                  <ErrorBoundary fallback={<ErrorPage />}>
-                    <SparePartsContainer />
-                  </ErrorBoundary>
-                </CardContent>
-              </CardUI>
-              <CardUI>
-                <CardContent className="space-y-6">
-                  <ErrorBoundary fallback={<ErrorPage />}>
-                    <SubSystemsContainer />
-                  </ErrorBoundary>
-                </CardContent>
-              </CardUI>
-              <CardUI>
-                <CardContent className="space-y-6">
-                  <ErrorBoundary fallback={<ErrorPage />}>
-                    <SparePartsFor />
-                  </ErrorBoundary>
-                </CardContent>
-              </CardUI>
-              <CardUI>
-                <CardContent>
-                  <ErrorBoundary fallback={<ErrorPage />}>
-                    <Suspense fallback={<ProgressBarComponent />}>
-                      <FileManager
-                        itemType={FILE_TYPE.SYSTEM}
-                        uid={uid}
-                        hasEditRole={hasEditRole}
-                      />
-                    </Suspense>
-                  </ErrorBoundary>
-                </CardContent>
-              </CardUI>
+              <ErrorBoundary fallback={<ErrorPage />}>
+                <SparePartsContainer />
+              </ErrorBoundary>
+              <ErrorBoundary fallback={<ErrorPage />}>
+                <SparePartsFor />
+              </ErrorBoundary>
             </Fragment>
           )}
         </SystemForm>

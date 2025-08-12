@@ -1,11 +1,10 @@
-import { ClockIcon } from '@heroicons/react/24/outline'
+import { Clock } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import toast from 'react-hot-toast'
 
-import { Button } from '@/components/Buttons'
-import { Button as UIButton } from '@/components/ui/button'
+import { Button } from '@/components/ui/button'
 import { message } from '@/i18n/src/messages'
 import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import { queryFetcher } from '@/utils/fetcher'
@@ -48,9 +47,9 @@ const HistoryModalContent = ({ uid }: { uid: string }) => {
     <div className="space-y-4">
       <HistoryFeeds history={data} />
       <div className="flex justify-end">
-        <UIButton onClick={() => closeModal('dialog1')}>
+        <Button onClick={() => closeModal('dialog1')}>
           {messages.close}
-        </UIButton>
+        </Button>
       </div>
     </div>
   )
@@ -61,8 +60,12 @@ export const ShowHistoryButton = () => {
   const { uid } = router.query as { uid: string }
 
   return (
-    <Button type="button" onClick={() => openHistoryModal(uid)}>
-      <ClockIcon className="w-4 h-4" />
+    <Button
+      variant="outline"
+      size="sm"
+      onClick={() => openHistoryModal(uid)}
+    >
+      <Clock className="h-4 w-4" />
     </Button>
   )
 }
