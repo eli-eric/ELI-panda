@@ -4,7 +4,6 @@ import { FormattedMessage } from 'react-intl'
 import { Button } from '@/components/Buttons'
 import { Tooltip } from '@/components/Tooltip'
 import { message } from '@/i18n/src/messages'
-import { useFilters } from '@/modules/shared/table/pandaTable/hooks/useFilters'
 import { useSparesStore } from '@/modules/systemsSpareParts/store/useSparesStore'
 import useTableStateStore from '@/store/useTableStateStore'
 import { PATH } from '@/types/constants/paths'
@@ -19,9 +18,7 @@ export const AssignSparePartButton = () => {
   const router = useRouter()
   const { setSelectedUidForSystem } = useSparesStore()
 
-  const [, setColumnFilters] = useFilters('spare-parts', false, false)
-
-  const { setSearch } = useTableStateStore()
+  const { setSearch, setColumnFilter } = useTableStateStore()
 
   const handleAssignSparePart = () => {
     const parentTechnologicalUnit = systemDetail?.parentPath
@@ -74,7 +71,7 @@ export const AssignSparePartButton = () => {
           }
         ]
 
-    setColumnFilters(filters)
+    setColumnFilter('spare-parts', filters)
     setSearch('for-system', systemDetail?.uid)
     setSelectedUidForSystem(systemDetail?.uid)
     router.push(PATH.SPARE_PARTS)
