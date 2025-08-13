@@ -1,14 +1,17 @@
 import { useFormContext, useWatch } from 'react-hook-form'
 
-import Combobox from '@/components/form/Combobox'
-import { Input, TextArea } from '@/components/form/inputs'
-import Listbox from '@/components/form/Listbox'
-import { SelectLocationCombo } from '@/modules/shared/form/location/SelectLocation.combo'
-import { SystemTypeComboBox } from '@/modules/shared/form/systemType/SelectSystemType.combo'
 import { useSystemItemStore } from '@/modules/systemItem/store/useSystemItemStore'
 import { SystemLevel } from '@/types/gql/graphql'
 
 import useSystemFormFields from '../SystemForm.fields'
+import {
+  InlineEditCombobox,
+  InlineEditInput,
+  InlineEditListbox,
+  InlineEditLocation,
+  InlineEditSystemType,
+  InlineEditTextArea
+} from './inline-edit'
 import { PersonnelSection } from './PersonnelSection'
 import { SystemCodeButton } from './SystemCodeGenerate.button'
 
@@ -33,16 +36,16 @@ export const SystemMainForm = () => {
       {/* Basic Information */}
       <div className="space-y-3">
         <div className="space-y-3">
-          <Input {...fields.name} className="text-base font-medium" />
-          <SystemTypeComboBox systemTypeField={fields.systemType} />
-          <Listbox
+          <InlineEditInput {...fields.name} />
+          <InlineEditSystemType {...fields.systemType} />
+          <InlineEditListbox
             {...fields.systemLevel}
             customOptions={systemLevels}
             defaultValue={systemLevel || SystemLevel.SubsystemsAndParts}
           />
           <div className="flex gap-2 items-end">
             <div className="flex-1">
-              <Input {...fields.systemCode} defaultValue="" />
+              <InlineEditInput {...fields.systemCode} />
             </div>
             <div className="flex-shrink-0">
               <SystemCodeButton />
@@ -50,7 +53,7 @@ export const SystemMainForm = () => {
           </div>
           {/* Key System Attribute */}
           {systemLevel === SystemLevel.KeySystems && (
-            <Listbox {...fields.attribute} />
+            <InlineEditListbox {...fields.attribute} />
           )}
         </div>
       </div>
@@ -58,15 +61,12 @@ export const SystemMainForm = () => {
       {/* Location & Team */}
       <div className="space-y-3">
         <div className="space-y-3">
-          <SelectLocationCombo
-            locationField={fields.location}
-            disabled={fields.location.disabled}
-          />
+          <InlineEditLocation {...fields.location} />
           <div className="w-full overflow-hidden">
-            <Combobox {...fields.zone} />
+            <InlineEditCombobox {...fields.zone} />
           </div>
-          <Combobox {...fields.team} limit={50} />
-          <Combobox {...fields.responsible} />
+          <InlineEditCombobox {...fields.team} limit={50} />
+          <InlineEditCombobox {...fields.responsible} />
         </div>
       </div>
 
@@ -92,7 +92,7 @@ export const SystemMainForm = () => {
 
       {/* Description */}
       <div className="space-y-3">
-        <TextArea {...fields.description} rows={3} className="w-full" />
+        <InlineEditTextArea {...fields.description} rows={3} />
       </div>
     </div>
   )

@@ -1,6 +1,8 @@
+import { Eraser, Wand2 } from 'lucide-react'
 import { useRouter } from 'next/router'
 
 import { Button } from '@/components/Buttons'
+import { Tooltip } from '@/components/Tooltip'
 import { useSystemCodeClear } from '@/modules/systemItem/hooks/useSystemCodeClear'
 import { useSystemCodeGenerate } from '@/modules/systemItem/hooks/useSystemCodeGenerate'
 
@@ -27,23 +29,32 @@ export const SystemCodeButton = () => {
   }
 
   return (
-    <div className="flex w-full">
-      <Button
-        loading={loading || pending}
-        disabled={disabled}
-        onClick={handleGenerate}
-        className="mr-2 mt-4 flex justify-center"
-      >
-        Generate
-      </Button>
-      <Button
-        disabled={disabled}
-        loading={loading || pending}
-        onClick={handleClear}
-        className="mt-4 flex justify-center"
-      >
-        Release
-      </Button>
+    <div className="flex items-center gap-2">
+      <Tooltip content="Generate system code">
+        <Button
+          size="icon"
+          aria-label="Generate system code"
+          loading={loading || pending}
+          disabled={disabled}
+          onClick={handleGenerate}
+          className="flex items-center size-[26px]"
+        >
+          <Wand2 className="h-3.5 w-3.5" />
+        </Button>
+      </Tooltip>
+      <Tooltip content="Release system code">
+        <Button
+          size="icon"
+          variant="outline"
+          aria-label="Release system code"
+          disabled={disabled || !uid}
+          loading={loading || pending}
+          onClick={handleClear}
+          className="flex items-center size-[26px] border text-red-600 hover:text-red-700 hover:border-red-600"
+        >
+          <Eraser className="h-3.5 w-3.5" />
+        </Button>
+      </Tooltip>
     </div>
   )
 }

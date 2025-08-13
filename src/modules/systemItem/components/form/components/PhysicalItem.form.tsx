@@ -2,8 +2,6 @@ import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 
 import ErrorPage from '@/components/error/ErrorPage'
-import { Input, TextArea } from '@/components/form/inputs'
-import Listbox from '@/components/form/Listbox'
 import { Paragraph } from '@/components/layout/Paragraph'
 import ProgressBarComponent from '@/components/progress-bar.comp'
 import { DetailParameter } from '@/components/ui/detail-parameter'
@@ -17,6 +15,11 @@ import { useSystemDetail } from '@/modules/systemItem/hooks/useSystemDetail'
 import { ROLE } from '@/types/constants/roles'
 
 import useSystemFormFields from '../SystemForm.fields'
+import {
+  InlineEditInput,
+  InlineEditListbox,
+  InlineEditTextArea
+} from './inline-edit'
 import { ItemProperties } from './ItemProperties'
 import { OrderInformation } from './orderInfo/OrderInformation'
 
@@ -49,7 +52,7 @@ export const PhysicalItemForm = ({ uid }: { uid: string }) => {
           <Paragraph>{description}</Paragraph>
         </div>
       )}
-      <Input {...fields.serialNumber} />
+      <InlineEditInput {...fields.serialNumber} />
 
       <ItemPropertiesViewer
         catalogueItem={physicalItem?.catalogueItem}
@@ -58,10 +61,10 @@ export const PhysicalItemForm = ({ uid }: { uid: string }) => {
 
       <ItemProperties properties={properties} />
 
-      <Listbox {...fields.itemUsage} />
-      <Listbox {...fields.itemConditionStatus} />
+      <InlineEditListbox {...fields.itemUsage} />
+      <InlineEditListbox {...fields.itemConditionStatus} />
 
-      <TextArea {...fields.itemNotes} />
+      <InlineEditTextArea {...fields.itemNotes} />
 
       {systemDetail?.physicalItem && (
         <OrderInformation physicalItem={systemDetail.physicalItem} />

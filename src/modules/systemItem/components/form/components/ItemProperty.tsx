@@ -1,13 +1,13 @@
 import React from 'react'
 import { useFormContext } from 'react-hook-form'
 
-import { Input } from '@/components/form/inputs'
-import Listbox from '@/components/form/Listbox'
 import { RangeInput } from '@/components/form/RangeInput'
 import usePermission from '@/hooks/usePermission'
 import { PROPERTY_TYPE } from '@/types/catalogue/constants'
 import { ROLE } from '@/types/constants/roles'
 import type { PhysicalItemProperty } from '@/types/responses/systems'
+
+import { InlineEditInput, InlineEditListbox } from './inline-edit'
 
 interface Props {
   detail: PhysicalItemProperty
@@ -27,50 +27,40 @@ export const ItemProperty = ({ detail, index }: Props) => {
   switch (detail.property.type.uid) {
     case PROPERTY_TYPE.TEXT:
       return (
-        <Input
+        <InlineEditInput
           name={`physicalItem.properties.${index}.value`}
           unit={detail.property.unit?.name}
           label={detail.property.name}
           disabled={disabled}
-          rounded={'rounded-md'}
-          defaultValue={detail.property.defaultValue}
         />
       )
     case PROPERTY_TYPE.NUMBER:
       return (
-        <Input
+        <InlineEditInput
           name={`physicalItem.properties.${index}.value`}
           unit={detail.property.unit?.name}
           label={detail.property.name}
           disabled={disabled}
-          rounded={'rounded-md'}
           type={'number'}
-          defaultValue={detail.property.defaultValue}
         />
       )
     case PROPERTY_TYPE.BOOLEAN:
       return (
-        <Listbox
+        <InlineEditListbox
           name={`physicalItem.properties.${index}.value`}
           disabled={disabled}
-          unit={detail.property.unit?.name}
-          customLabel={detail.property.name}
-          rounded={'rounded-md'}
+          label={detail.property.name}
           customOptions={['true', 'false']}
-          defaultValue={detail.property.defaultValue}
         />
       )
     case PROPERTY_TYPE.LIST:
       return (
-        <Listbox
+        <InlineEditListbox
           name={`physicalItem.properties.${index}.value`}
           allowEmptyOption={true}
-          unit={detail.property.unit?.name}
           disabled={disabled}
-          customLabel={detail.property.name}
-          rounded={'rounded-md'}
+          label={detail.property.name}
           customOptions={detail.property.listOfValues}
-          defaultValue={detail.property.defaultValue}
         />
       )
     case PROPERTY_TYPE.RANGE: {
@@ -88,11 +78,10 @@ export const ItemProperty = ({ detail, index }: Props) => {
     }
     default: {
       return (
-        <Input
+        <InlineEditInput
           name={`physicalItem.properties.${index}.value`}
           disabled={disabled}
           label={detail.property.name}
-          rounded={'rounded-md'}
         />
       )
     }
