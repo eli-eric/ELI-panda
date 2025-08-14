@@ -1,4 +1,4 @@
-import { Edit, X, Check } from 'lucide-react'
+import { Edit } from 'lucide-react'
 import * as React from 'react'
 import { useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
@@ -54,18 +54,27 @@ export const InlineEditTextArea = ({
             handleSave()
           }
         }
+        const baseClasses = cn(
+          'flex justify-between items-center gap-2 text-xs px-2 py-1 rounded-md transition-all duration-200 border group w-full min-w-0',
+          isEditing
+            ? 'border-primary bg-background'
+            : disabled
+              ? 'border-muted/40 bg-muted/20 cursor-not-allowed'
+              : 'border-dashed border-primary/40 hover:border-primary/60 cursor-pointer hover:bg-primary/5'
+        )
 
         const displayValue = field.value || 'N/A'
-        const shortValue = displayValue.length > 100 
-          ? `${displayValue.substring(0, 100)}...` 
-          : displayValue
+        const shortValue =
+          displayValue.length > 100
+            ? `${displayValue.substring(0, 100)}...`
+            : displayValue
 
         if (isEditing) {
           return (
             <div className="w-full">
               <Textarea
                 value={editValue}
-                onChange={(e) => setEditValue(e.target.value)}
+                onChange={e => setEditValue(e.target.value)}
                 onKeyDown={handleKeyDown}
                 onBlur={() => {
                   field.onChange(editValue)
@@ -81,9 +90,9 @@ export const InlineEditTextArea = ({
         }
 
         return (
-          <div 
+          <div
             className={cn(
-              'space-y-1 p-2 rounded-md border border-dashed border-primary/40 hover:border-primary/60 cursor-pointer hover:bg-primary/5 transition-all duration-200 group'
+              'space-y-1 p-2 rounded-md border border-dashed border-primary hover:border-primary/60 cursor-pointer hover:bg-primary/5 transition-all duration-200 group'
             )}
             onClick={handleStartEdit}
           >
@@ -95,15 +104,15 @@ export const InlineEditTextArea = ({
             </div>
             <div className="text-sm text-foreground whitespace-pre-wrap break-words">
               {shortValue === 'N/A' ? (
-                <span className="text-muted-foreground italic">Click to add {label?.toLowerCase()}</span>
+                <span className="text-muted-foreground italic">
+                  Click to add {label?.toLowerCase()}
+                </span>
               ) : (
                 shortValue
               )}
             </div>
             {error && (
-              <div className="text-xs text-destructive">
-                {error.message}
-              </div>
+              <div className="text-xs text-destructive">{error.message}</div>
             )}
           </div>
         )

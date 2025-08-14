@@ -4,7 +4,6 @@ import Combobox from '@/components/form/Combobox'
 import DateInput from '@/components/form/DatePicker'
 import { Input, TextArea } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
-import { Col, Grid } from '@/components/grid/Grid'
 import {
   Card as CardUI,
   CardContent,
@@ -21,7 +20,7 @@ const OrderFormComponent = () => {
   const uid = useRouter().query.uid as string
 
   return (
-    <CardUI className="mx-auto max-w-7xl px-4 py-4 sm:px-6 md:px-8 mt-4">
+    <CardUI className="w-full px-4 py-4 sm:px-6 md:px-8 mt-4">
       <CardHeader>
         <CardTitle>{uid ? 'Edit Order' : 'New Order'}</CardTitle>
         <CardDescription>
@@ -31,56 +30,30 @@ const OrderFormComponent = () => {
         </CardDescription>
       </CardHeader>
 
-      <CardContent className="space-y-8">
-        {/* Basic Information */}
-        <Grid>
-          <Col lg={8}>
-            <Input {...fields.name} className="w-full" />
-          </Col>
-          <Col lg={4}>
-            <DateInput {...fields.orderDate} className="w-full" />
-          </Col>
-          <Col lg={6}>
-            <Combobox
-              {...fields.supplier}
-              showAddButton={true}
-              className="w-full"
-            />
-          </Col>
-          <Col lg={6}>
-            <Listbox {...fields.procurementResponsible} className="w-full" />
-          </Col>
-          <Col lg={6}>
-            <Combobox {...fields.requestor} className="w-full" />
-          </Col>
-          <Col lg={6}>
-            <Listbox {...fields.orderStatus} className="w-full" />
-          </Col>
-        </Grid>
+      <CardContent className="space-y-4">
+        {/* Basic Information - stacked */}
+        <Input {...fields.name} className="w-full" />
+        <DateInput {...fields.orderDate} className="w-full" />
+        <Combobox
+          {...fields.supplier}
+          showAddButton={true}
+          className="w-full"
+        />
+        <Listbox {...fields.procurementResponsible} className="w-full" />
+        <Combobox {...fields.requestor} className="w-full" />
+        <Listbox {...fields.orderStatus} className="w-full" />
 
         <Separator />
 
-        {/* Order Details */}
-        <Grid>
-          <Col lg={4}>
-            <Input {...fields.requestNumber} className="w-full" />
-          </Col>
-          <Col lg={4}>
-            <Input {...fields.orderNumber} className="w-full" />
-          </Col>
-          <Col lg={4}>
-            <Input {...fields.contractNumber} className="w-full" />
-          </Col>
-        </Grid>
+        {/* Order Details - stacked */}
+        <Input {...fields.requestNumber} className="w-full" />
+        <Input {...fields.orderNumber} className="w-full" />
+        <Input {...fields.contractNumber} className="w-full" />
 
         <Separator />
 
-        {/* Additional Information */}
-        <Grid>
-          <Col lg={12}>
-            <TextArea {...fields.notes} className="w-full" />
-          </Col>
-        </Grid>
+        {/* Additional Information - stacked */}
+        <TextArea {...fields.notes} className="w-full" />
       </CardContent>
     </CardUI>
   )

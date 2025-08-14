@@ -392,23 +392,6 @@ export const SystemForm: FC<SystemFormProps> = ({
             {/* Left column - Images and System Details */}
             <div className="space-y-6">
               {/* Images Card */}
-              <MemoizedSystemGallery
-                ref={systemImageRef}
-                setValue={formMethods.setValue}
-                config={{
-                  itemCategory: FILE_TYPE.SYSTEM,
-                  itemId: uid ? String(uid) : 'new',
-                  additionalParams: catalogueItem?.uid
-                    ? {
-                        itemCategory: FILE_TYPE.CATALOGUE,
-                        itemId: catalogueItem?.uid
-                      }
-                    : undefined
-                }}
-                className="w-full order-1"
-                disabled={blockedEdit}
-                hasEditRole={hasEditRole}
-              />
 
               {/* System Details Card */}
               <Card
@@ -424,6 +407,23 @@ export const SystemForm: FC<SystemFormProps> = ({
                   </div>
                 </CardHeader>
                 <CardContent>
+                  <MemoizedSystemGallery
+                    ref={systemImageRef}
+                    setValue={formMethods.setValue}
+                    config={{
+                      itemCategory: FILE_TYPE.SYSTEM,
+                      itemId: uid ? String(uid) : 'new',
+                      additionalParams: catalogueItem?.uid
+                        ? {
+                            itemCategory: FILE_TYPE.CATALOGUE,
+                            itemId: catalogueItem?.uid
+                          }
+                        : undefined
+                    }}
+                    className="w-full mb-2"
+                    disabled={blockedEdit}
+                    hasEditRole={hasEditRole}
+                  />
                   <SystemMainForm />
                   {/* Files Card */}
                   {uid && (

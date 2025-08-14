@@ -214,6 +214,27 @@ export const PrintEunButton = ({
   )
 }
 
+export const useOrderLineActions = () => {
+  const { deleteOrderLine, setOrderLine } = useOrderLine()
+  const { openOrderLineModal } = useOrderLineModal()
+  const { formatMessage } = useIntl()
+
+  const openEditModal = (orderLine: OrderLineFormType) => {
+    openOrderLineModal(orderLine, data => {
+      setOrderLine(data)
+    })
+  }
+
+  const handleDelete = (orderLine: OrderLineFormType) => {
+    deleteOrderLine(orderLine)
+  }
+
+  return {
+    openEditModal,
+    handleDelete
+  }
+}
+
 export const PriceFooter = ({ rows }: { rows: Row<OrderLineFormType>[] }) => {
   const total = rows.reduce(
     (sum, { original: { price } }) => sum + (price || 0),

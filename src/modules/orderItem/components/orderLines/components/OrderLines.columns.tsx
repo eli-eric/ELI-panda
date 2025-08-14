@@ -1,5 +1,6 @@
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import type { ColumnDef } from '@tanstack/react-table'
+import { Edit, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Fragment, useMemo } from 'react'
@@ -8,20 +9,65 @@ import { useIntl } from 'react-intl'
 import { NewTabLink } from '@/components/decorators'
 import { Tooltip } from '@/components/Tooltip'
 import { Button } from '@/components/ui/button'
+import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
+import { useOrderLine } from '@/modules/orderItem/hooks/useOrderLine'
 import useOrderDetail from '@/modules/orderItem/hooks/useOrderDetail'
 import type { OrderLineFormType } from '@/modules/orderItem/types/form'
 import { PATH } from '@/types/constants/paths'
+import { createMessageValues } from '@/utils/formatters'
 
 import { DeliveredAllButton } from './deliver-all.button'
 import {
   OrderisDeliveredAction,
-  OrderLineActionButtons,
   PriceFooter,
-  PrintEunButton
+  PrintEunButton,
+  useOrderLineActions
 } from './OrderLine.actions'
 
 const messages = message.ordersPage.orderLines.orderLinesTable.header
+
+const OrderLineActionButtons = ({ orderLine }: { orderLine: OrderLineFormType }) => {
+  const { formatMessage } = useIntl()
+  const { deleteOrderLine } = useOrderLine()
+  const { openEditModal } = useOrderLineActions()
+  
+  const withWarning = useWarningModal(
+    formatMessage(
+      { id: message.ordersPage.orderLines.deleteModal.message },
+      createMessageValues({ name: orderLine.name })
+    )
+  )
+
+  const handleDelete = () => {
+    withWarning(deleteOrderLine)(orderLine)
+  }
+
+  return (
+    <div className="flex items-center gap-1">
+      <Tooltip content="Edit order line">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => openEditModal(orderLine)}
+          className="h-8 w-8 p-0 hover:bg-accent"
+        >
+          <Edit className="h-4 w-4" />
+        </Button>
+      </Tooltip>
+      <Tooltip content="Delete order line">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={handleDelete}
+          className="h-8 w-8 p-0 hover:bg-accent hover:text-destructive"
+        >
+          <Trash2 className="h-4 w-4" />
+        </Button>
+      </Tooltip>
+    </div>
+  )
+}
 
 const useOrderLinesColumns = () => {
   const uid = useRouter().query.uid as string
@@ -36,7 +82,7 @@ const useOrderLinesColumns = () => {
           !disabledEdit ? (
             <OrderLineActionButtons orderLine={original} />
           ) : null,
-        size: 50,
+        size: 100,
         enableSorting: false,
         enablePinning: false,
         enableColumnFilter: false,

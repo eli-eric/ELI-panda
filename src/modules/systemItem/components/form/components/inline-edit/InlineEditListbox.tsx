@@ -137,7 +137,8 @@ export const InlineEditListbox = ({
               <div className="text-right max-w-[60%] flex-1 min-w-0 overflow-hidden">
                 <span className="block w-full truncate text-foreground">
                   {(() => {
-                    if (!field.value) return allowEmptyOption ? emptyOption : 'N/A'
+                    if (!field.value)
+                      return allowEmptyOption ? emptyOption : 'N/A'
                     return typeof field.value === 'string'
                       ? field.value
                       : field.value?.name || 'N/A'

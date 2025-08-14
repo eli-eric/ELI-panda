@@ -63,7 +63,7 @@ export const InlineEditInput = ({
             ? 'border-primary bg-background'
             : disabled
               ? 'border-muted/40 bg-muted/20 cursor-not-allowed'
-              : 'border-dashed border-primary/40 hover:border-primary/60 cursor-pointer hover:bg-primary/5'
+              : 'border-dashed border-primary hover:border-primary/60 cursor-pointer hover:bg-primary/5'
         )
 
         if (isEditing) {
@@ -97,7 +97,11 @@ export const InlineEditInput = ({
         }
 
         return (
-          <div className={baseClasses} onClick={!disabled ? handleStartEdit : undefined} aria-disabled={disabled}>
+          <div
+            className={baseClasses}
+            onClick={!disabled ? handleStartEdit : undefined}
+            aria-disabled={disabled}
+          >
             <span className="font-medium text-muted-foreground flex items-center gap-1">
               {label}:
               <Edit className="size-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-primary/70" />

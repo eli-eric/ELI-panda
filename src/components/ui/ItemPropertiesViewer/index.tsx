@@ -13,10 +13,9 @@
  * the front-end types need to be regenerated to reflect these changes.
  */
 
-import { AlertTriangle, Settings } from 'lucide-react'
+import { Settings } from 'lucide-react'
 import type { FC } from 'react'
 
-import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
 import { Disclosure } from '@/components/ui/Disclosure'
 import { Separator } from '@/components/ui/separator'
@@ -69,15 +68,6 @@ export const ItemPropertiesViewer: FC<ItemPropertiesViewerProps> = ({
       buttonClassName="p-2 text-sm font-semibold"
       panelClassName="p-2 space-y-2 shadow-md rounded-lg"
     >
-      {hasOverriddenProperties && (
-        <Alert className="py-1.5 mb-2">
-          <AlertTriangle className="h-3 w-3" />
-          <AlertDescription className="text-xs">
-            Some original catalog parameters have been modified by service
-          </AlertDescription>
-        </Alert>
-      )}
-
       {groupedProperties.map((group, groupIndex) => (
         <div key={group.key}>
           {group.name !== 'General' && (

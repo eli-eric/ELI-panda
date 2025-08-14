@@ -229,6 +229,122 @@ export const PriceFooter = ({ rows }: { rows: Row<ServiceLine>[] }) => {
   )
 }
 
+export const useServiceLineActions = () => {
+  const { deleteServiceLine, setServiceLine } = useServiceLine()
+  const fields = useServiceLineFields()
+  const { openModal, closeModal } = useModalGlobalStore()
+  const formMethods = useForm<ServiceLine>()
+  const { formatMessage } = useIntl()
+
+  const submit = (data: ServiceLine) => {
+    setServiceLine({
+      ...data,
+      details: Array.isArray(data.details) ? data.details : []
+    })
+    closeModal('dialog1')
+  }
+
+  const openEditModal = (serviceLine: ServiceLine) => {
+    // Set form values
+    formMethods.setValue('uuid', serviceLine.uuid)
+    formMethods.setValue('uid', serviceLine.uid)
+    formMethods.setValue('name', serviceLine.name)
+    formMethods.setValue('price', serviceLine.price)
+    formMethods.setValue('currency', serviceLine.currency)
+    formMethods.setValue('serviceType', serviceLine.serviceType)
+    formMethods.setValue('notes', serviceLine.notes)
+    formMethods.setValue('item', serviceLine.item)
+    formMethods.setValue('eun', serviceLine.eun)
+    formMethods.setValue('isDelivered', serviceLine.isDelivered)
+    formMethods.setValue(
+      'details',
+      Array.isArray(serviceLine.details) ? serviceLine.details : []
+    )
+
+    openModal('dialog1', {
+      component: ({ onSubmit }) => {
+        const details = formMethods.watch('details') ?? []
+
+        // Transform details array into a Map grouped by propertyGroup with sorted properties
+        const detailsMap = Array.isArray(details)
+          ? details.reduce((map, detail) => {
+              if (!detail?.propertyGroup) return map
+              const group = detail.propertyGroup
+              if (!map.has(group)) {
+                map.set(group, [])
+              }
+              map.get(group)?.push(detail)
+              return map
+            }, new Map<string, CatalogueItemDetail[]>())
+          : new Map<string, CatalogueItemDetail[]>()
+
+        // Sort properties within each group
+        detailsMap.forEach((properties, group) => {
+          detailsMap.set(group, sortBy(properties, ['property.name']))
+        })
+
+        return (
+          <Form formMethods={formMethods}>
+            <>
+              <Grid>
+                <Col sm={12}>
+                  <Input {...fields.name} />
+                </Col>
+                <Col md={8} sm={12}>
+                  <Listbox {...fields.serviceType} disabled />
+                </Col>
+                <Col md={4} sm={12}>
+                  <InputAmountCurrency
+                    amountName={fields.price.name}
+                    label={fields.price.name}
+                    currencyName={fields.currency.name}
+                  />
+                </Col>
+                <Col sm={12}>
+                  <TextArea {...fields.notes} />
+                </Col>
+              </Grid>
+              <DetailPropertiesList groupMap={detailsMap} disabled={false} />
+            </>
+            <div className="flex justify-end gap-2 pt-4 border-t">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  formMethods.reset()
+                  closeModal('dialog1')
+                }}
+              >
+                Cancel
+              </Button>
+              <Button type="button" onClick={onSubmit}>
+                Update Service Line
+              </Button>
+            </div>
+          </Form>
+        )
+      },
+      props: {
+        title: 'Edit Service Line',
+        size: 'l'
+      },
+      onSubmit: () => {
+        formMethods.handleSubmit(submit)()
+        formMethods.reset()
+      }
+    })
+  }
+
+  const handleDelete = (serviceLine: ServiceLine) => {
+    deleteServiceLine(serviceLine.uuid)
+  }
+
+  return {
+    openEditModal,
+    handleDelete
+  }
+}
+
 export const DeliveredAllButton = () => {
   const { handleDelivery, isPending } = useServiceDeliveryAll()
 
