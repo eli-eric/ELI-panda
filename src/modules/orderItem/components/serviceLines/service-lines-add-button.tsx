@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 
 import { PlusButton } from '@/components/Buttons'
+import { Tooltip } from '@/components/Tooltip'
 import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
 import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import useTableStateStore from '@/store/useTableStateStore'
@@ -71,12 +72,12 @@ export const ServiceLinesAddButton = () => {
   }
 
   return (
-    <div className="flex items-center mr-2">
+    <Tooltip content="Add Service Line">
       <PlusButton
         type="button"
         onClick={handleOpenAddServiceLine}
         className="mb-2"
       />
-    </div>
+    </Tooltip>
   )
 }

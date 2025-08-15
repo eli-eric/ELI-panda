@@ -3,6 +3,7 @@ import { useFormContext, useWatch } from 'react-hook-form'
 
 import { PlusButton } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
+import { Tooltip } from '@/components/Tooltip'
 import { Table } from '@/components/ui/table/table'
 import { message } from '@/i18n/src/messages'
 
@@ -36,7 +37,7 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
   const handleOpenOrderLineForm = () => {
     openOrderLineModal(undefined, data => {
       const quantity = data.quantity || 1
-      
+
       // Vytvoříme tolik kopií order line, kolik je zadáno v quantity
       for (let i = 0; i < quantity; i++) {
         const orderLineToAdd = {
@@ -54,13 +55,13 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
     <Fragment>
       <Heading text={messages.orderLines} showBorder={false}>
         {!disabledEdit && (
-          <div className="flex items-center mr-2">
+          <Tooltip content="Add new order line">
             <PlusButton
               type="button"
               onClick={handleOpenOrderLineForm}
               className="mb-2"
             />
-          </div>
+          </Tooltip>
         )}
       </Heading>
       <div className="w-full overflow-hidden">
