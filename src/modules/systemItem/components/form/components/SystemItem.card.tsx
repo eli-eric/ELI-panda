@@ -1,14 +1,6 @@
-import { Package } from 'lucide-react'
 import Link from 'next/link'
 import { useFormContext, useWatch } from 'react-hook-form'
 
-import { LinkDecorator } from '@/components/decorators'
-import {
-  Card as CardUI,
-  CardContent,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card'
 import { ItemAssignButton } from '@/modules/shared/form/itemAssign/item-assign.button'
 import { ItemMoveButton } from '@/modules/shared/form/itemMoving/item-move.button'
 import { PATH } from '@/types/constants/paths'

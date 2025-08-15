@@ -1,8 +1,8 @@
 import { Wrench } from 'lucide-react'
 import { useFormContext, useWatch } from 'react-hook-form'
 
-import { Table } from '@/components/ui/table'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Table } from '@/components/ui/table'
 import { cn } from '@/lib/utils'
 
 import { useSystemDetail } from '../../hooks/useSystemDetail'

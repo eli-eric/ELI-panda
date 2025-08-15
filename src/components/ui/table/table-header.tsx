@@ -110,12 +110,12 @@ export function TableHeader<T extends object>({
                     isSticky ? 'sticky top-0 bg-muted/50 z-10' : '',
                     // Add shadow when sticky to visually separate from content
                     isSticky ? 'shadow-sm' : '',
-                    // Add border and background styles for pinned columns
+                    // Add border and backdrop-blur with overlay for pinned columns
                     isPinned === 'left'
-                      ? 'border-r border-border bg-muted/50'
+                      ? 'border-r border-border backdrop-blur-sm before:absolute before:inset-0 before:bg-background/30 before:pointer-events-none before:z-[-1] relative'
                       : '',
                     isPinned === 'right'
-                      ? 'border-l border-border bg-muted/50'
+                      ? 'border-l border-border backdrop-blur-sm before:absolute before:inset-0 before:bg-background/30 before:pointer-events-none before:z-[-1] relative'
                       : '',
                     isPinned && 'z-30',
                     // Use meta className from column definition

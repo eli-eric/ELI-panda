@@ -1,10 +1,10 @@
 import { useCallback } from 'react'
 import { useFormContext } from 'react-hook-form'
 
+import { useLocationSelectionModal } from '@/modules/shared/form/location/hooks/useLocationSelectionModal'
 import type { FieldProps } from '@/types/form'
 import type { CodebookType } from '@/types/responses/codebook'
 
-import { useLocationSelectionModal } from '@/modules/shared/form/location/hooks/useLocationSelectionModal'
 import { InlineEditModalSelect } from './InlineEditModalSelect'
 
 interface InlineEditLocationProps extends FieldProps {

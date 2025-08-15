@@ -83,10 +83,7 @@ export function TableFooter<T extends object>({
               position: isPinned ? 'sticky' : undefined,
               left: isPinned === 'left' ? `${leftOffset}px` : undefined,
               right: isPinned === 'right' ? `${rightOffset}px` : undefined,
-              zIndex: isPinned ? 21 : 20,
-              background: 'inherit',
-              opacity: 0.9,
-              backdropFilter: 'blur(4px)'
+              zIndex: isPinned ? 21 : 20
             }
 
             return (
@@ -96,12 +93,12 @@ export function TableFooter<T extends object>({
                 className={cn(
                   'px-4 py-2 text-left font-medium text-muted-foreground',
                   'whitespace-nowrap',
-                  // Add border and background styles for pinned columns
+                  // Add border and backdrop-blur with overlay for pinned columns  
                   isPinned === 'left'
-                    ? 'border-r border-border bg-muted/50'
+                    ? 'border-r border-border backdrop-blur-sm before:absolute before:inset-0 before:bg-background/30 before:pointer-events-none before:z-[-1] relative'
                     : '',
                   isPinned === 'right'
-                    ? 'border-l border-border bg-muted/50'
+                    ? 'border-l border-border backdrop-blur-sm before:absolute before:inset-0 before:bg-background/30 before:pointer-events-none before:z-[-1] relative'
                     : ''
                 )}
                 style={style}

@@ -2,13 +2,12 @@ import { ExternalLink } from 'lucide-react'
 import Link from 'next/link'
 import { type FC } from 'react'
 
-import { Disclosure } from '@/components/ui/Disclosure'
 import { Badge } from '@/components/ui/badge'
+import { Disclosure } from '@/components/ui/Disclosure'
 import { cn } from '@/lib/utils'
 import { PATH } from '@/types/constants/paths'
 import type { FragmentType } from '@/types/gql'
 import { useFragment } from '@/types/gql'
-import { formatDate } from '@/utils/formatters'
 import { PhysicalItemFragment } from '@/utils/graphql/fragments'
 
 interface OrderInformationProps {

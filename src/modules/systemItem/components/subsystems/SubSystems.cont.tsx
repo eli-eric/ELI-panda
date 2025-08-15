@@ -2,8 +2,8 @@ import { Network } from 'lucide-react'
 import Link from 'next/link'
 
 import { PlusButton } from '@/components/Buttons'
-import { Table } from '@/components/ui/table'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Table } from '@/components/ui/table'
 import { cn } from '@/lib/utils'
 import { PATH } from '@/types/constants/paths'
 

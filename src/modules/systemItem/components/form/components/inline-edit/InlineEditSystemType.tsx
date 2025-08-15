@@ -5,11 +5,11 @@ import { toast } from 'react-hot-toast'
 
 import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
 import { openCodebookTreeModalGraphql } from '@/components/form/shared/CodebookTreeModalGraphql'
+import { useSystemTypeGroups } from '@/modules/shared/form/systemType/hooks/useSystemTypeGroups'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps, Option } from '@/types/form'
 import { highlightText } from '@/utils'
 
-import { useSystemTypeGroups } from '@/modules/shared/form/systemType/hooks/useSystemTypeGroups'
 import { InlineEditModalSelect } from './InlineEditModalSelect'
 
 interface InlineEditSystemTypeProps extends FieldProps {
