@@ -17,22 +17,23 @@ import useOrderLineFormFields from '../form/OrderLineForm.fields'
 const orderLineFormSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   catalogueNumber: z.string().min(1, 'Catalogue number is required'),
-  price: z.preprocess(
-    (val) => {
-      if (val === '' || val === null || val === undefined) return null
-      const num = Number(val)
-      return isNaN(num) ? null : num
-    },
-    z.number().nullable().optional()
-  ),
-  quantity: z.preprocess(
-    (val) => {
-      if (val === '' || val === null || val === undefined) return null
-      const num = Number(val)
-      return isNaN(num) ? null : num
-    },
-    z.number().max(100).nullable().optional()
-  ),
+  price: z.preprocess(val => {
+    if (val === '' || val === null || val === undefined) return null
+    const num = Number(val)
+    return isNaN(num) ? null : num
+  }, z.number().nullable().optional()),
+  quantity: z.preprocess(val => {
+    if (val === '' || val === null || val === undefined) return null
+    const num = Number(val)
+    return isNaN(num) ? null : num
+  }, z.number().max(100).nullable().optional()),
+  system: z
+    .object({
+      uid: z.string().optional(),
+      name: z.string().optional()
+    })
+    .nullable()
+    .refine(val => val !== null && val !== undefined, { message: 'Parent system is required' }),
   serialNumbers: z.string().nullable().optional()
 })
 
@@ -117,7 +118,8 @@ export const OrderLineEditSheet = ({
 
               <div className="space-y-4">
                 <SelectSystemComboBox
-                  selectSystemField={{ ...formFields.system, disabled: true }}
+                  selectSystemField={{ ...formFields.system }}
+                  disabled={true}
                 />
 
                 <SelectLocationCombo locationField={formFields.location} />

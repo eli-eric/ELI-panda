@@ -31,7 +31,10 @@ const orderLineFormSchema = z.object({
     },
     z.number().max(100).nullable().optional()
   ),
-  // system: z.object({}).nullable().required('Parent system is required field.'),
+  system: z.object({
+    uid: z.string().optional(),
+    name: z.string().optional()
+  }).nullable().refine(val => val !== null && val !== undefined, { message: 'Parent system is required' }),
   serialNumbers: z.string().nullable().optional()
 })
 

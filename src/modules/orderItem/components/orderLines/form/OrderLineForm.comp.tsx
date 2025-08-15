@@ -17,14 +17,12 @@ const messages = message.ordersPage.orderLines
 interface OrderLineFormComponentProps {
   catalogueItem?: CatalogueItem
   orderLine?: OrderLineFormType
-  enabled?: boolean
 }
 
 export const OrderLineFormComponent = ({
-  orderLine,
-  enabled = true
+  orderLine
 }: OrderLineFormComponentProps) => {
-  const { Toggle } = useToggle(false)
+  const { Toggle, enabled, toggle } = useToggle(false)
   const formFields = useOrderLineFormFields(enabled)
 
   return (
@@ -33,7 +31,7 @@ export const OrderLineFormComponent = ({
         <Divider text={messages.formHeadings.itemInfo}>
           {!orderLine?.uid && (
             <Col sm={1}>
-              <Toggle enabled={enabled} onChange={() => {}} />
+              <Toggle enabled={enabled} onChange={toggle} />
             </Col>
           )}
         </Divider>

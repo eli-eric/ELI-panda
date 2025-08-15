@@ -1,18 +1,19 @@
-import { useState } from 'react'
+import { useCallback } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import { ModalSelect } from '@/components/form/ModalSelect'
-import { cn } from '@/lib/utils'
-import { SystemsTable } from '@/modules/systems/components/table/Systems.table'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps, Option } from '@/types/form'
 import type { CodebookType } from '@/types/responses/codebook'
 
+import { useSystemSelectionModal } from './hooks/useSystemSelectionModal'
+
 export const SelectSystemComboBox = ({
   selectSystemField,
   className,
+  disabled,
   onChange,
+  onSelect,
   isFilter = false
 }: {
   selectSystemField: FieldProps & {
@@ -20,62 +21,36 @@ export const SelectSystemComboBox = ({
     codebook?: CODEBOOK | undefined
   }
   className?: string
+  disabled?: boolean
   onChange?: (value?: any) => void
+  onSelect?: (item?: CodebookType | null) => void
   isFilter?: boolean
 }) => {
-  const [selectedSystem, setSelectedSystem] = useState<CodebookType | null>(
-    null
-  )
-  const { setValue } = useFormContext()
-  const { openModal, closeModal } = useModalGlobalStore()
+  const formContext = useFormContext()
+  const { openSystemModal } = useSystemSelectionModal()
 
-  const openSystemSelectModal = () => {
-    setSelectedSystem(null)
-    openModal('dialog2', {
-      component: () => (
-        <SystemsTable
-          tableId={'systemSelect'}
-          hideButtons={true}
-          className={'overflow-y-auto relative h-[423px]'}
-          settings={{
-            enableRowSelection: true
-          }}
-          getRowProps={row => ({
-            onClick: () => {
-              setSelectedSystem({
-                name: row.original.name,
-                uid: row.original.uid
-              })
-            },
-            className: cn(
-              selectedSystem?.uid === row.original.uid
-                ? 'bg-orange-200 hover:bg-orange-200 dark:bg-orange-600 dark:hover:bg-orange-600'
-                : '',
-              'cursor-pointer'
-            )
-          })}
-        />
-      ),
-      props: {
-        title: 'Select System',
-        size: 'l'
-      },
-      onSubmit: () => {
-        if (selectedSystem) {
-          setValue(selectSystemField.name, selectedSystem)
-          onChange?.(selectedSystem)
-          closeModal('dialog1')
-        }
+  const handleSystemSelect = useCallback(
+    (value: CodebookType | null) => {
+      if (formContext && selectSystemField.name) {
+        formContext.setValue(selectSystemField.name, value)
       }
-    })
+      onChange?.(value)
+      onSelect?.(value)
+    },
+    [formContext, selectSystemField.name, onChange, onSelect]
+  )
+
+  const handleOpenModal = () => {
+    openSystemModal(handleSystemSelect)
   }
 
   return (
     <ModalSelect
       {...selectSystemField}
-      className={className}
       onChange={onChange}
-      onClick={openSystemSelectModal}
+      className={className}
+      disabled={disabled}
+      onClick={handleOpenModal}
       isFilter={isFilter}
     />
   )
