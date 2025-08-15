@@ -1,31 +1,25 @@
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import type { ColumnDef } from '@tanstack/react-table'
-import { Edit, Trash2 } from 'lucide-react'
 import { Fragment, useMemo } from 'react'
 import { useIntl } from 'react-intl'
 
 import { NewTabLink } from '@/components/decorators'
 import { Tooltip } from '@/components/Tooltip'
-import { Button } from '@/components/ui/button'
 import { DeliveryStatusBadge } from '@/components/ui/delivery-status-badge'
-import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 import type { ServiceLine } from '@/modules/orderItem/types/form'
 import { PATH } from '@/types/constants/paths'
-import { createMessageValues } from '@/utils/formatters'
 
-import useOrderDetail from '../../hooks/useOrderDetail'
-import { useServiceLine } from '../../hooks/useServiceLine'
 import {
   DeliveredAllButton,
   PriceFooter,
   ServiceDeliveryAction,
   ServiceLineActionButtons as ServiceLineActions
 } from '../../actions'
+import useOrderDetail from '../../hooks/useOrderDetail'
 const messages = message.ordersPage.serviceLines.columns
 
 //TODO: NA akci isDelivered se duplikuji service lines, need to fix this!!!!!!!!!!!!!
-
 
 export const useServiceLinesColumns = () => {
   const { formatMessage } = useIntl()
@@ -44,7 +38,6 @@ export const useServiceLinesColumns = () => {
         },
         size: 160,
         meta: {
-          filter: { enableColumnFilter: false, type: 'boolean' },
           sticky: 'left'
         },
         cell: ({ getValue, row: { original } }) => (
@@ -148,9 +141,7 @@ export const useServiceLinesColumns = () => {
           enableReorder: false
         },
         cell: ({ row: { original } }) =>
-          !disabledEdit ? (
-            <ServiceLineActions serviceLine={original} />
-          ) : null,
+          !disabledEdit ? <ServiceLineActions serviceLine={original} /> : null,
         size: 100,
         enableSorting: false,
         enablePinning: false,

@@ -29,8 +29,8 @@ import type { OrderLineFormType } from '@/modules/orderItem/types/form'
 import { ROLE } from '@/types/constants/roles'
 import { createMessageValues } from '@/utils/formatters'
 
-import { useOrderLineEditSheet } from '../../components/orderLines/hooks/useOrderLineEditSheet'
 import { OrderIsDeliveryForm } from '../../components/orderLines/components/OrderIsDeliveryForm'
+import { useOrderLineEditSheet } from '../../components/orderLines/hooks/useOrderLineEditSheet'
 
 // Custom buttons wrapper designed to better fit the table design
 type OrderLineButtonsWrapperProps = {
@@ -214,7 +214,7 @@ export const PrintEunButton = ({
   )
 }
 
-export const PriceFooter = ({ rows }: { rows: Row<OrderLineFormType>[] }) => {
+export const PriceFooter = ({ rows }: { rows: Row<any>[] }) => {
   const total = rows.reduce(
     (sum, { original: { price } }) => sum + (price || 0),
     0

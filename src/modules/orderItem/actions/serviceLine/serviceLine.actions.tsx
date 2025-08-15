@@ -1,19 +1,12 @@
 import { CheckCircleIcon } from '@heroicons/react/24/outline'
 import type { Row } from '@tanstack/react-table'
-import { Edit, MoreVertical, Trash2 } from 'lucide-react'
+import { Edit, Trash2 } from 'lucide-react'
 import { Fragment } from 'react'
-import { useForm } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 
 import { Button } from '@/components/Buttons'
 import { Toggle } from '@/components/form/Switch'
 import { Tooltip } from '@/components/Tooltip'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu'
 import usePermission from '@/hooks/usePermission'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
@@ -35,7 +28,6 @@ export const ServiceLineActionButtons = ({
   const { formatMessage } = useIntl()
   const { deleteServiceLine, setServiceLine } = useServiceLine()
   const { openModal, closeModal } = useModalGlobalStore()
-  const formMethods = useForm<ServiceLine>()
   const withWarning = useWarningModal(
     formatMessage(
       { id: message.ordersPage.serviceLines.deleteModal.message },
@@ -72,31 +64,28 @@ export const ServiceLineActionButtons = ({
   }
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+    <div className="flex items-center gap-1">
+      <Tooltip content="Edit service line">
         <Button
           variant="ghost"
           size="sm"
-          aria-label="Service line actions"
-          className="h-8 w-8 p-0"
+          onClick={openEditSheet}
+          className="h-8 w-8 p-0 hover:bg-accent"
         >
-          <MoreVertical className="h-4 w-4 text-muted-foreground" />
+          <Edit className="h-4 w-4" />
         </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" sideOffset={4}>
-        <DropdownMenuItem onClick={openEditSheet} className="cursor-pointer">
-          <Edit className="h-4 w-4 mr-2" />
-          Edit
-        </DropdownMenuItem>
-        <DropdownMenuItem
+      </Tooltip>
+      <Tooltip content="Delete service line">
+        <Button
+          variant="ghost"
+          size="sm"
           onClick={() => withWarning(deleteServiceLine)(serviceLine.uuid)}
-          className="cursor-pointer text-destructive focus:text-destructive"
+          className="h-8 w-8 p-0 hover:bg-accent hover:text-destructive"
         >
-          <Trash2 className="h-4 w-4 mr-2" />
-          Delete
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+          <Trash2 className="h-4 w-4" />
+        </Button>
+      </Tooltip>
+    </div>
   )
 }
 

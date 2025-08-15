@@ -1,7 +1,7 @@
-import { yupResolver } from '@hookform/resolvers/yup'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useCallback, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { number, object, string } from 'yup'
+import { z } from 'zod'
 
 import { Form } from '@/components/form/Form'
 import { Button } from '@/components/ui/button'
@@ -12,19 +12,27 @@ import type { CatalogueItem } from '@/types/responses/catalogue'
 
 import { OrderLineFormComponent } from './OrderLineForm.comp'
 
-const orderLineFormSchema = object({
-  name: string().required(),
-  catalogueNumber: string().required(),
-  price: number()
-    .transform(value => (Number.isNaN(value) ? null : value))
-    .nullable(),
-  quantity: number()
-    .nullable()
-    .max(100)
-    .notRequired()
-    .transform(value => (Number.isNaN(value) ? null : value)),
-  // system: object().nullable().required('Parent system is required field.'),
-  serialNumbers: string().nullable()
+const orderLineFormSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  catalogueNumber: z.string().min(1, 'Catalogue number is required'),
+  price: z.preprocess(
+    (val) => {
+      if (val === '' || val === null || val === undefined) return null
+      const num = Number(val)
+      return isNaN(num) ? null : num
+    },
+    z.number().nullable().optional()
+  ),
+  quantity: z.preprocess(
+    (val) => {
+      if (val === '' || val === null || val === undefined) return null
+      const num = Number(val)
+      return isNaN(num) ? null : num
+    },
+    z.number().max(100).nullable().optional()
+  ),
+  // system: z.object({}).nullable().required('Parent system is required field.'),
+  serialNumbers: z.string().nullable().optional()
 })
 
 // Hook for opening OrderLine modal
@@ -60,7 +68,7 @@ const OrderLineModalContent = ({
   )
   const formMethods = useForm<OrderLineFormType>({
     defaultValues: defaultValues,
-    resolver: yupResolver(orderLineFormSchema) as any
+    resolver: zodResolver(orderLineFormSchema)
   })
 
   // Function to handle catalogue item selection - directly set form values

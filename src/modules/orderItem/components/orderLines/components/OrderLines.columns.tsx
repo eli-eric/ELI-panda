@@ -15,16 +15,16 @@ import { message } from '@/i18n/src/messages'
 import useOrderDetail from '@/modules/orderItem/hooks/useOrderDetail'
 import { useOrderLine } from '@/modules/orderItem/hooks/useOrderLine'
 import type { OrderLineFormType } from '@/modules/orderItem/types/form'
-import { useOrderLineEditSheet } from '../hooks/useOrderLineEditSheet'
 import { PATH } from '@/types/constants/paths'
 import { createMessageValues } from '@/utils/formatters'
 
-import { DeliveredAllButton } from './deliver-all.button'
 import {
   OrderisDeliveredAction,
   PriceFooter,
   PrintEunButton
 } from '../../../actions'
+import { useOrderLineEditSheet } from '../hooks/useOrderLineEditSheet'
+import { DeliveredAllButton } from './deliver-all.button'
 
 const messages = message.ordersPage.orderLines.orderLinesTable.header
 
@@ -54,9 +54,11 @@ const OrderLineActionButtons = ({
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => openEditSheet(orderLine, (data) => {
-            setOrderLine(data)
-          })}
+          onClick={() =>
+            openEditSheet(orderLine, data => {
+              setOrderLine(data)
+            })
+          }
           className="h-8 w-8 p-0 hover:bg-accent"
         >
           <Edit className="h-4 w-4" />
@@ -107,7 +109,6 @@ const useOrderLinesColumns = () => {
         enablePinning: false,
         enableColumnFilter: false,
         meta: {
-          filter: { enableColumnFilter: false, type: 'boolean' },
           sticky: 'left'
         },
         footer: ({ table: { getRowCount } }) => (
