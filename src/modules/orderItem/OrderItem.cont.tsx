@@ -8,6 +8,7 @@ import ErrorPage from '@/components/error/ErrorPage'
 import { Form } from '@/components/form/Form'
 import { HeaderWithButtons } from '@/components/header/HeaderWithButtons'
 import ProgressBarComponent from '@/components/progress-bar.comp'
+import { ScrollArea } from '@/components/ui/scroll-area'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 import { FILE_TYPE } from '@/modules/shared/fileManager/types'
@@ -152,20 +153,22 @@ export const OrderItemContainer = () => {
           </div>
 
           {/* Right: Tables + Files (2/3) */}
-          <div className="lg:col-span-2 space-y-6">
-            <MemoizedOrderLinesTable disabledEdit={disabledEdit} />
-            <MemoizedServiceLinesContainer disabledEdit={disabledEdit} />
-            {uid && (
-              <ErrorBoundary fallback={<ErrorPage />}>
-                <Suspense fallback={<ProgressBarComponent />}>
-                  <MemoizedFileManager
-                    itemType={FILE_TYPE.ORDER}
-                    uid={uid}
-                    hasEditRole={!disabledEdit}
-                  />
-                </Suspense>
-              </ErrorBoundary>
-            )}
+          <div className="lg:col-span-2 h-[calc(100vh-8rem)] overflow-y-auto overflow-x-hidden">
+            <div className="space-y-6 pr-2">
+              <MemoizedOrderLinesTable disabledEdit={disabledEdit} />
+              <MemoizedServiceLinesContainer disabledEdit={disabledEdit} />
+              {uid && (
+                <ErrorBoundary fallback={<ErrorPage />}>
+                  <Suspense fallback={<ProgressBarComponent />}>
+                    <MemoizedFileManager
+                      itemType={FILE_TYPE.ORDER}
+                      uid={uid}
+                      hasEditRole={!disabledEdit}
+                    />
+                  </Suspense>
+                </ErrorBoundary>
+              )}
+            </div>
           </div>
         </div>
       </div>
