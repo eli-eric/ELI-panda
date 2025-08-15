@@ -12,7 +12,7 @@ import { PATH } from '@/types/constants/paths'
 
 import {
   DeliveredAllButton,
-  PriceFooter,
+  ServiceLinePriceFooter,
   ServiceDeliveryAction,
   ServiceLineActionButtons as ServiceLineActions
 } from '../../actions'
@@ -131,7 +131,7 @@ export const useServiceLinesColumns = () => {
             <span className="font-medium ">{original.currency}</span>
           </span>
         ),
-        footer: props => <PriceFooter rows={props.table.getRowModel().rows} />
+        footer: props => <ServiceLinePriceFooter rows={props.table.getRowModel().rows} />
       },
       {
         id: 'actions',

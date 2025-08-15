@@ -1,4 +1,4 @@
-import { zodResolver } from '@hookform/resolvers/zod'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { memo, Suspense, useCallback, useMemo } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { useForm } from 'react-hook-form'
@@ -65,7 +65,7 @@ export const OrderItemContainer = () => {
   )
 
   const formMethods = useForm<OrderDetailFormType>({
-    resolver: zodResolver(schema),
+    resolver: yupResolver(schema) as any,
     defaultValues
   })
 

@@ -23,7 +23,8 @@ const useOrderLineFormFields = (enabled: boolean) =>
     system: {
       name: 'system',
       label: form.systemName.label,
-      rounded: 'rounded-md'
+      rounded: 'rounded-md',
+      required: true
     },
     price: {
       name: 'price',

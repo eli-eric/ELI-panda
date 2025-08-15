@@ -1,7 +1,7 @@
-import { zodResolver } from '@hookform/resolvers/zod'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { useCallback, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import * as yup from 'yup'
 
 import { Form } from '@/components/form/Form'
 import { Button } from '@/components/ui/button'
@@ -12,30 +12,13 @@ import type { CatalogueItem } from '@/types/responses/catalogue'
 
 import { OrderLineFormComponent } from './OrderLineForm.comp'
 
-const orderLineFormSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  catalogueNumber: z.string().min(1, 'Catalogue number is required'),
-  price: z.preprocess(
-    (val) => {
-      if (val === '' || val === null || val === undefined) return null
-      const num = Number(val)
-      return isNaN(num) ? null : num
-    },
-    z.number().nullable().optional()
-  ),
-  quantity: z.preprocess(
-    (val) => {
-      if (val === '' || val === null || val === undefined) return null
-      const num = Number(val)
-      return isNaN(num) ? null : num
-    },
-    z.number().max(100).nullable().optional()
-  ),
-  system: z.object({
-    uid: z.string().optional(),
-    name: z.string().optional()
-  }).nullable().refine(val => val !== null && val !== undefined, { message: 'Parent system is required' }),
-  serialNumbers: z.string().nullable().optional()
+const orderLineFormSchema = yup.object({
+  name: yup.string().required('Name is required'),
+  catalogueNumber: yup.string().required('Catalogue number is required'),
+  price: yup.number().nullable().optional(),
+  quantity: yup.number().max(100).nullable().optional(),
+  system: yup.object().nullable().required('Parent system is required'),
+  serialNumbers: yup.string().nullable().optional()
 })
 
 // Hook for opening OrderLine modal
@@ -71,7 +54,7 @@ const OrderLineModalContent = ({
   )
   const formMethods = useForm<OrderLineFormType>({
     defaultValues: defaultValues,
-    resolver: zodResolver(orderLineFormSchema)
+    resolver: yupResolver(orderLineFormSchema) as any
   })
 
   // Function to handle catalogue item selection - directly set form values

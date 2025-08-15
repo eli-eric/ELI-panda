@@ -1,7 +1,7 @@
-import { zodResolver } from '@hookform/resolvers/zod'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import * as yup from 'yup'
 
 import { Form } from '@/components/form/Form'
 import { Input, TextArea } from '@/components/form/inputs'
@@ -14,27 +14,13 @@ import { SelectSystemComboBox } from '@/modules/shared/form/systemSelect/SelectS
 
 import useOrderLineFormFields from '../form/OrderLineForm.fields'
 
-const orderLineFormSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  catalogueNumber: z.string().min(1, 'Catalogue number is required'),
-  price: z.preprocess(val => {
-    if (val === '' || val === null || val === undefined) return null
-    const num = Number(val)
-    return isNaN(num) ? null : num
-  }, z.number().nullable().optional()),
-  quantity: z.preprocess(val => {
-    if (val === '' || val === null || val === undefined) return null
-    const num = Number(val)
-    return isNaN(num) ? null : num
-  }, z.number().max(100).nullable().optional()),
-  system: z
-    .object({
-      uid: z.string().optional(),
-      name: z.string().optional()
-    })
-    .nullable()
-    .refine(val => val !== null && val !== undefined, { message: 'Parent system is required' }),
-  serialNumbers: z.string().nullable().optional()
+const orderLineFormSchema = yup.object({
+  name: yup.string().required('Name is required'),
+  catalogueNumber: yup.string().required('Catalogue number is required'),
+  price: yup.number().nullable().optional(),
+  quantity: yup.number().max(100).nullable().optional(),
+  system: yup.object().nullable().required('Parent system is required'),
+  serialNumbers: yup.string().nullable().optional()
 })
 
 interface OrderLineEditSheetProps {
@@ -74,7 +60,7 @@ export const OrderLineEditSheet = ({
   )
 
   const formMethods = useForm<OrderLineFormType>({
-    resolver: zodResolver(orderLineFormSchema),
+    resolver: yupResolver(orderLineFormSchema) as any,
     defaultValues
   })
 
