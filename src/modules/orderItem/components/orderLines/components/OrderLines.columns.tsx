@@ -15,6 +15,7 @@ import { message } from '@/i18n/src/messages'
 import useOrderDetail from '@/modules/orderItem/hooks/useOrderDetail'
 import { useOrderLine } from '@/modules/orderItem/hooks/useOrderLine'
 import type { OrderLineFormType } from '@/modules/orderItem/types/form'
+import { useOrderLineEditSheet } from '../hooks/useOrderLineEditSheet'
 import { PATH } from '@/types/constants/paths'
 import { createMessageValues } from '@/utils/formatters'
 
@@ -22,9 +23,8 @@ import { DeliveredAllButton } from './deliver-all.button'
 import {
   OrderisDeliveredAction,
   PriceFooter,
-  PrintEunButton,
-  useOrderLineActions
-} from './OrderLine.actions'
+  PrintEunButton
+} from '../../../actions'
 
 const messages = message.ordersPage.orderLines.orderLinesTable.header
 
@@ -34,8 +34,8 @@ const OrderLineActionButtons = ({
   orderLine: OrderLineFormType
 }) => {
   const { formatMessage } = useIntl()
-  const { deleteOrderLine } = useOrderLine()
-  const { openEditModal } = useOrderLineActions()
+  const { deleteOrderLine, setOrderLine } = useOrderLine()
+  const { openEditSheet } = useOrderLineEditSheet()
 
   const withWarning = useWarningModal(
     formatMessage(
@@ -54,7 +54,9 @@ const OrderLineActionButtons = ({
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => openEditModal(orderLine)}
+          onClick={() => openEditSheet(orderLine, (data) => {
+            setOrderLine(data)
+          })}
           className="h-8 w-8 p-0 hover:bg-accent"
         >
           <Edit className="h-4 w-4" />

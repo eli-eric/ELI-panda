@@ -19,58 +19,13 @@ import { useServiceLine } from '../../hooks/useServiceLine'
 import {
   DeliveredAllButton,
   PriceFooter,
-  ServiceDeliveryAction
-} from './components/service-lines.actions'
-import { useServiceLineActions } from './components/service-lines.actions'
+  ServiceDeliveryAction,
+  ServiceLineActionButtons as ServiceLineActions
+} from '../../actions'
 const messages = message.ordersPage.serviceLines.columns
 
 //TODO: NA akci isDelivered se duplikuji service lines, need to fix this!!!!!!!!!!!!!
 
-const ServiceLineActionButtons = ({
-  serviceLine
-}: {
-  serviceLine: ServiceLine
-}) => {
-  const { formatMessage } = useIntl()
-  const { deleteServiceLine } = useServiceLine()
-  const { openEditModal } = useServiceLineActions()
-
-  const withWarning = useWarningModal(
-    formatMessage(
-      { id: message.ordersPage.serviceLines.deleteModal.message },
-      createMessageValues({ name: serviceLine.name })
-    )
-  )
-
-  const handleDelete = () => {
-    withWarning(deleteServiceLine)(serviceLine.uuid)
-  }
-
-  return (
-    <div className="flex items-center gap-1">
-      <Tooltip content="Edit service line">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => openEditModal(serviceLine)}
-          className="h-8 w-8 p-0 hover:bg-accent"
-        >
-          <Edit className="h-4 w-4" />
-        </Button>
-      </Tooltip>
-      <Tooltip content="Delete service line">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={handleDelete}
-          className="h-8 w-8 p-0 hover:bg-accent hover:text-destructive"
-        >
-          <Trash2 className="h-4 w-4" />
-        </Button>
-      </Tooltip>
-    </div>
-  )
-}
 
 export const useServiceLinesColumns = () => {
   const { formatMessage } = useIntl()
@@ -194,7 +149,7 @@ export const useServiceLinesColumns = () => {
         },
         cell: ({ row: { original } }) =>
           !disabledEdit ? (
-            <ServiceLineActionButtons serviceLine={original} />
+            <ServiceLineActions serviceLine={original} />
           ) : null,
         size: 100,
         enableSorting: false,
