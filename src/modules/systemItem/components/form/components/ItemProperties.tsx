@@ -17,7 +17,7 @@ export const ItemProperties = ({ properties }: ItemPropertiesProps) => {
   const title = (
     <div className="flex items-center gap-2">
       <ListCollapse className="h-4 w-4 text-muted-foreground" />
-      <span>Physical Item Properties</span>
+      <span>Catalogue Properties</span>
     </div>
   )
 
@@ -26,8 +26,8 @@ export const ItemProperties = ({ properties }: ItemPropertiesProps) => {
       title={title}
       defaultOpen={false}
       className="w-full border rounded-lg"
-      buttonClassName="p-2 text-sm font-semibold"
-      panelClassName="p-2 space-y-2 shadow-md rounded-lg"
+      buttonClassName="p-3 text-base font-semibold"
+      panelClassName="p-4 space-y-4 shadow-md rounded-lg"
     >
       <Grid className="w-full">
         {properties.map((property, index) => (

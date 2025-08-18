@@ -1,7 +1,7 @@
-import { Wrench } from 'lucide-react'
+import { Fragment } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Heading } from '@/components/layout/Heading'
 import { Table } from '@/components/ui/table'
 import { cn } from '@/lib/utils'
 
@@ -28,59 +28,45 @@ export const SparePartsContainer = () => {
     name: 'minimalSpareParstCount'
   })
 
-  const hasData =
-    systemDetail?.sparePartsConnection.edges &&
-    systemDetail.sparePartsConnection.edges.length > 0
-
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Wrench className="size-6 text-primary" />
-            <CardTitle className="flex items-center gap-2">
-              Spare Parts
-              <div className="flex items-center gap-2">
-                <span
-                  className={cn(
-                    'text-sm font-medium',
-                    minSparePartsCount
-                      ? (sparePartsCoverageSum || 0) < minSparePartsCount
-                        ? 'text-destructive'
-                        : 'text-green-600'
-                      : 'text-muted-foreground'
-                  )}
-                >
-                  {systemDetail?.sparePartsCoverageSum?.toFixed(2) || '0'} /{' '}
-                  {minSparePartsCount || '0'}
-                </span>
-                <SetMinimalSparesButton />
-              </div>
-            </CardTitle>
+    <Fragment>
+      <Heading
+        className="mt-4"
+        customText="Spare Parts"
+        showBorder={false}
+        titleNode={
+          <div className="flex w-[300px] ml-4 items-center">
+            <h3
+              className={cn(
+                'font-medium whitespace-nowrap mr-4',
+                minSparePartsCount
+                  ? sparePartsCoverageSum || 0 < minSparePartsCount
+                    ? 'text-red-500 dark:text-red-500'
+                    : 'text-green-500 dark:text-green-500'
+                  : 'text-gray-500 dark:text-gray-300'
+              )}
+            >
+              {`Available ${systemDetail?.sparePartsCoverageSum?.toFixed(2) || '0'} out of ${minSparePartsCount || '0'} required`}
+            </h3>
+            <SetMinimalSparesButton />
           </div>
-          <AssignSparePartButton />
-        </div>
-      </CardHeader>
-      <CardContent>
-        <div className="border border-border rounded-lg">
-          {hasData ? (
-            <Table<any>
-              columns={columns}
-              getRowProps={({ original }, index) => ({
-                className: cn(
-                  original?.physicalItem && 'font-bold',
-                  getFontBySystemLevel(original?.systemLevel)
-                )
-              })}
-              data={systemDetail?.sparePartsConnection.edges}
-            />
-          ) : (
-            <div className="text-center py-8 text-muted-foreground">
-              No spare parts assigned yet
-            </div>
-          )}
-        </div>
-      </CardContent>
-    </Card>
+        }
+      >
+        <AssignSparePartButton />
+      </Heading>
+      {systemDetail?.sparePartsConnection.edges &&
+        systemDetail.sparePartsConnection.edges.length > 0 && (
+          <Table<any>
+            columns={columns}
+            getRowProps={({ original }, index) => ({
+              className: cn(
+                original?.physicalItem && 'font-bold',
+                getFontBySystemLevel(original?.systemLevel)
+              )
+            })}
+            data={systemDetail?.sparePartsConnection.edges}
+          />
+        )}
+    </Fragment>
   )
 }

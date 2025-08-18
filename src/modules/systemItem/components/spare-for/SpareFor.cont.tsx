@@ -1,9 +1,9 @@
-import { Target } from 'lucide-react'
 import { useRouter } from 'next/router'
+import { Fragment } from 'react'
 
 import { PlusButton } from '@/components/Buttons'
+import { Heading } from '@/components/layout/Heading'
 import { Tooltip } from '@/components/Tooltip'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import { cn } from '@/lib/utils'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
@@ -39,43 +39,26 @@ export const SparePartsFor = () => {
     )
   }
 
-  const hasData =
-    systemDetail?.sparePartsFor && systemDetail.sparePartsFor.length > 0
-
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Target className="size-6 text-primary" />
-            <CardTitle>Designated Spare Part For</CardTitle>
-          </div>
-          <AssignSparePartButton />
-        </div>
-      </CardHeader>
-      <CardContent>
-        <div className="border border-border rounded-lg">
-          {hasData ? (
-            <PandaTable
-              columns={columns}
-              getRowProps={({ original }) => ({
-                className: cn(
-                  original?.physicalItem && 'font-bold',
-                  getFontBySystemLevel(original?.systemLevel)
-                )
-              })}
-              tableId={tableId}
-              settings={{ enableColumnReordering: false }}
-              className="relative overflow-x-auto mb-0 pb-0"
-              data={systemDetail?.sparePartsFor || []}
-            />
-          ) : (
-            <div className="text-center py-8 text-muted-foreground">
-              This system is not designated as a spare part for any other systems
-            </div>
-          )}
-        </div>
-      </CardContent>
-    </Card>
+    <Fragment>
+      <Heading customText="Designated spare part for">
+        <AssignSparePartButton />
+      </Heading>
+      {systemDetail?.sparePartsFor && systemDetail.sparePartsFor.length > 0 && (
+        <PandaTable
+          columns={columns}
+          getRowProps={({ original }) => ({
+            className: cn(
+              original?.physicalItem && 'font-bold',
+              getFontBySystemLevel(original?.systemLevel)
+            )
+          })}
+          tableId={tableId}
+          settings={{ enableColumnReordering: false }}
+          className={'relative overflow-x-auto mb-0 pb-0'}
+          data={systemDetail?.sparePartsFor || []}
+        />
+      )}
+    </Fragment>
   )
 }
