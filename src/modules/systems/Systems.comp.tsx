@@ -3,7 +3,6 @@ import type { FC } from 'react'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 import { cn } from '@/lib/utils'
 
-import { getFontBySystemLevel } from '../systemItem/utils'
 import { SystemsTable } from './components/table/Systems.table'
 
 interface Props {
@@ -40,7 +39,6 @@ export const SystemsComponent: FC<Props> = ({
         className={'relative overflow-scroll scrollbar-style'}
         getRowProps={({ original }) => ({
           className: cn(
-            getFontBySystemLevel(original?.systemLevel),
             original?.physicalItem && 'font-bold',
             original?.statistics?.sp_coverage != null &&
               original.statistics.sp_coverage < 1 &&

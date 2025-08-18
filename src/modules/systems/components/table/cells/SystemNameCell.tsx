@@ -9,8 +9,10 @@ import Link from 'next/link'
 import { useDrag } from 'react-dnd'
 
 import { Tooltip } from '@/components/Tooltip'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { cn, truncateString } from '@/lib/utils'
+import { getBadgeVariantBySystemLevel } from '@/modules/systemItem/utils'
 import { PATH } from '@/types/constants/paths'
 import type { EndpointProps } from '@/utils/getEndpoints'
 
@@ -48,7 +50,7 @@ export const SystemNameCell = ({
     type: 'system'
   })
 
-  const value = truncateString(getValue(), 33)
+  const value = truncateString(getValue(), 48)
 
   const handleExpand = () => {
     if (!row.getIsExpanded()) {
@@ -90,24 +92,32 @@ export const SystemNameCell = ({
               .join(' > ')}
           >
             <div>
-              {original.hasSubsystems ? (
-                <div className="flex items-center group-hover/expand:text-gray-400 cursor-pointer">
-                  {row.getIsExpanded() ? (
-                    <ChevronDownIcon className="w-4 h-4" />
-                  ) : (
-                    <ChevronRightIcon className="w-4 h-4" />
-                  )}
-                  <span className="pl-1">
-                    <span>{value}</span>
-                  </span>
-                </div>
-              ) : (
-                <div className="flex items-center">
-                  <span className="pl-5">
-                    <span>{value}</span>
-                  </span>
-                </div>
-              )}
+              <Badge
+                variant="outline"
+                className={cn(
+                  'flex items-center h-7 min-w-0',
+                  original.hasSubsystems
+                    ? 'gap-1 group-hover/expand:opacity-80 cursor-pointer px-2'
+                    : 'px-3',
+                  getBadgeVariantBySystemLevel(original.systemLevel)
+                )}
+              >
+                {original.hasSubsystems ? (
+                  <>
+                    {row.getIsExpanded() ? (
+                      <ChevronDownIcon className="w-4 h-4 shrink-0" />
+                    ) : (
+                      <ChevronRightIcon className="w-4 h-4 shrink-0" />
+                    )}
+                    <span className="truncate">{value}</span>
+                  </>
+                ) : (
+                  <>
+                    <div className="w-4 h-4 shrink-0" />
+                    <span className="truncate">{value}</span>
+                  </>
+                )}
+              </Badge>
             </div>
           </Tooltip>
         </div>
