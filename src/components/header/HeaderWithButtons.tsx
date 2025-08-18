@@ -1,8 +1,8 @@
+import { ArrowLeft, Save } from 'lucide-react'
 import { useRouter } from 'next/router'
-import { Fragment, useRef } from 'react'
+import { useRef } from 'react'
 
-import { BackButton, Button } from '@/components/Buttons'
-import Card from '@/components/layout/Card'
+import { Button } from '@/components/ui/button'
 import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
 import type { ROLE } from '@/types/constants/roles'
@@ -14,6 +14,7 @@ interface Props {
   editRole: ROLE
   customElement?: React.ReactNode
   isFormInvalid?: boolean
+  title?: string
 }
 const messages = message.common.buttons
 
@@ -23,7 +24,8 @@ export const HeaderWithButtons = ({
   onSubmitAndExit,
   editRole,
   customElement,
-  isFormInvalid = false
+  isFormInvalid = false,
+  title
 }: Props) => {
   const disabledEdit = usePermission([editRole])
   const { back } = useRouter()
@@ -55,42 +57,90 @@ export const HeaderWithButtons = ({
   }
 
   return (
-    <div className="sticky top-0 z-20 flex h-16 shrink-0 bg-background">
-      <Card className="flex flex-1 justify-between">
-        <div className="flex items-center mr-2">
-          <BackButton
-            className="mr-2"
-            type="button"
-            disabled={loading}
-            onClick={onBack}
-          />
-          {disabledEdit && (
-            <Fragment>
-              <Button
-                onClick={handleSubmitAndExit}
-                disabled={loading || isFormInvalid}
-                type="button"
-                text={messages.saveAndExit}
-              />
-              <Button
-                className="ml-2"
-                onClick={handleSubmit}
-                disabled={loading || isFormInvalid}
-                type="button"
-                text={messages.save}
-              />
-            </Fragment>
-          )}
-          {loading && (
+    <div className="border-b bg-background sticky top-0 z-10">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-3">
+        {/* Desktop header - with title */}
+        <div className="hidden sm:flex items-center gap-3 min-w-0">
+          <div className="flex items-center gap-2 min-w-0 flex-1">
+            {title && (
+              <h1 className="text-lg sm:text-xl font-semibold truncate">
+                {title}
+              </h1>
+            )}
+          </div>
+          <div className="flex items-center gap-2 flex-shrink-0">
             <Button
-              className="ml-2 bg-inherit border-none shadow-none"
-              loading={loading}
-              text={'Saving...'}
-            />
-          )}
+              variant="outline"
+              size="sm"
+              onClick={onBack}
+              disabled={loading}
+              className="flex items-center gap-1.5"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              <span className="hidden lg:inline">Back</span>
+            </Button>
+            {customElement && (
+              <>
+                <div className="h-4 w-px bg-border" />
+                {customElement}
+                <div className="h-4 w-px bg-border" />
+              </>
+            )}
+            {disabledEdit && (
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleSubmit}
+                  disabled={loading || isFormInvalid}
+                >
+                  Save
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={handleSubmitAndExit}
+                  disabled={loading || isFormInvalid}
+                >
+                  Save and Exit
+                </Button>
+              </div>
+            )}
+          </div>
         </div>
-        {customElement}
-      </Card>
+
+        {/* Mobile header - only buttons */}
+        <div className="flex sm:hidden items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={onBack} disabled={loading}>
+              <ArrowLeft className="h-4 w-4" />
+            </Button>
+          </div>
+          <div className="flex items-center gap-2">
+            {customElement}
+            {disabledEdit && (
+              <>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleSubmit}
+                  disabled={loading || isFormInvalid}
+                  title="Save"
+                >
+                  <Save className="h-4 w-4" />
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={handleSubmitAndExit}
+                  disabled={loading || isFormInvalid}
+                  title="Save and Exit"
+                >
+                  <Save className="h-4 w-4" />
+                </Button>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

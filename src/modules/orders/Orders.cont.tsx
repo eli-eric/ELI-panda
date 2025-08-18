@@ -2,7 +2,6 @@ import { useEffect } from 'react'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
-import { cn } from '@/lib/utils'
 import type { Order } from '@/types/responses/orders'
 
 import { FilterBadges } from '../shared/form/FilterBadges'
@@ -14,7 +13,6 @@ import { SearchBar } from '../shared/table/SearchBar'
 import { HeaderButtons } from './components/HeaderButtons'
 import { useOrderColumns } from './components/OrderColumns'
 import { useOrders } from './hooks/useOrders'
-import { getColorClassStatus } from './utils/getColorClassStatus'
 
 const OrdersContainer = () => {
   const { orderList, loading, error } = useOrders()
@@ -52,11 +50,8 @@ const OrdersContainer = () => {
           {...{
             table,
             settings: tableSettings,
-            getRowProps: ({ original: { orderStatus, deliveryStatus } }) => ({
-              className: cn(
-                getColorClassStatus(orderStatus, deliveryStatus),
-                'font-bold'
-              )
+            getRowProps: () => ({
+              className: 'font-bold'
             }),
             columns,
             tableId,

@@ -29,9 +29,7 @@ export function TableBody<T extends object>({
             key={`skeleton-row-${rowIndex}`}
             className={cn(
               'border-b border-border last:border-0',
-              rowIndex % 2 === 0
-                ? 'bg-background'
-                : 'bg-muted/50',
+              rowIndex % 2 === 0 ? 'bg-background' : 'bg-muted/50',
               rowClassName
             )}
           >
@@ -103,9 +101,7 @@ export function TableBody<T extends object>({
 
         // Determine row background color
         const defaultBgClass =
-          rowIndex % 2 === 0
-            ? 'bg-background'
-            : 'bg-muted/50'
+          rowIndex % 2 === 0 ? 'bg-background' : 'bg-muted/50'
 
         return (
           <tr
@@ -163,9 +159,6 @@ export function TableBody<T extends object>({
                 position: isPinned ? 'sticky' : undefined,
                 left: isPinned === 'left' ? `${leftOffset}px` : undefined,
                 right: isPinned === 'right' ? `${rightOffset}px` : undefined,
-                background: 'inherit',
-                opacity: 0.9,
-                backdropFilter: 'blur(4px)',
                 zIndex: isPinned ? 21 : 20
               }
 
@@ -175,15 +168,14 @@ export function TableBody<T extends object>({
                   style={style}
                   className={cn(
                     'p-2 px-4',
-                    // Apply both backdrop-blur and background color for better compatibility
-                    // Add border styles for pinned columns
-                    isPinned === 'left'
-                      ? 'border-r border-border/50'
+                    // Add backdrop-blur and overlay for pinned columns using ::before
+                    isPinned === 'left' 
+                      ? 'border-r border-border backdrop-blur-sm before:absolute before:inset-0 before:bg-background/20 before:pointer-events-none before:z-[-1] relative' 
                       : '',
-                    isPinned === 'right'
-                      ? 'border-l border-border/50'
+                    isPinned === 'right' 
+                      ? 'border-l border-border backdrop-blur-sm before:absolute before:inset-0 before:bg-background/20 before:pointer-events-none before:z-[-1] relative' 
                       : '',
-                    // Zajistíme, aby se obsah buněk mohl správně zalamovat
+                    // Allow text wrapping for all columns with defined width
                     'whitespace-normal break-words',
                     cell.column.columnDef.meta?.className
                   )}

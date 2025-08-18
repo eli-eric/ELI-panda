@@ -62,9 +62,7 @@ export const TableRowDNDComponent: FC<Props> = ({
       className={cn(
         'min-h-[49px]',
         'flex border-t border-border group',
-        virtualRow.index % 2 === 0
-          ? 'bg-background'
-          : 'bg-muted/50',
+        virtualRow.index % 2 === 0 ? 'bg-background' : 'bg-muted/50',
         'group hover:bg-accent text-muted-foreground z-0',
         className,
         isHoveringDrop ? 'bg-primary/20' : ''

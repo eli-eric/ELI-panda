@@ -1,5 +1,6 @@
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import type { ColumnDef } from '@tanstack/react-table'
+import { Edit, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Fragment, useMemo } from 'react'
@@ -8,20 +9,74 @@ import { useIntl } from 'react-intl'
 import { NewTabLink } from '@/components/decorators'
 import { Tooltip } from '@/components/Tooltip'
 import { Button } from '@/components/ui/button'
+import { DeliveryStatusBadge } from '@/components/ui/delivery-status-badge'
+import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 import useOrderDetail from '@/modules/orderItem/hooks/useOrderDetail'
+import { useOrderLine } from '@/modules/orderItem/hooks/useOrderLine'
 import type { OrderLineFormType } from '@/modules/orderItem/types/form'
 import { PATH } from '@/types/constants/paths'
+import { createMessageValues } from '@/utils/formatters'
 
-import { DeliveredAllButton } from './deliver-all.button'
 import {
   OrderisDeliveredAction,
-  OrderLineActionButtons,
   PriceFooter,
   PrintEunButton
-} from './OrderLine.actions'
+} from '../../../actions'
+import { useOrderLineEditSheet } from '../hooks/useOrderLineEditSheet'
+import { DeliveredAllButton } from './deliver-all.button'
 
 const messages = message.ordersPage.orderLines.orderLinesTable.header
+
+const OrderLineActionButtons = ({
+  orderLine
+}: {
+  orderLine: OrderLineFormType
+}) => {
+  const { formatMessage } = useIntl()
+  const { deleteOrderLine, setOrderLine } = useOrderLine()
+  const { openEditSheet } = useOrderLineEditSheet()
+
+  const withWarning = useWarningModal(
+    formatMessage(
+      { id: message.ordersPage.orderLines.deleteModal.message },
+      createMessageValues({ name: orderLine.name })
+    )
+  )
+
+  const handleDelete = () => {
+    withWarning(deleteOrderLine)(orderLine)
+  }
+
+  return (
+    <div className="flex items-center gap-1">
+      <Tooltip content="Edit order line">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() =>
+            openEditSheet(orderLine, data => {
+              setOrderLine(data)
+            })
+          }
+          className="h-8 w-8 p-0 hover:bg-accent"
+        >
+          <Edit className="h-4 w-4" />
+        </Button>
+      </Tooltip>
+      <Tooltip content="Delete order line">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={handleDelete}
+          className="h-8 w-8 p-0 hover:bg-accent hover:text-destructive"
+        >
+          <Trash2 className="h-4 w-4" />
+        </Button>
+      </Tooltip>
+    </div>
+  )
+}
 
 const useOrderLinesColumns = () => {
   const uid = useRouter().query.uid as string
@@ -30,33 +85,48 @@ const useOrderLinesColumns = () => {
   const columns = useMemo((): ColumnDef<OrderLineFormType, any>[] => {
     const cols: ColumnDef<OrderLineFormType, any>[] = [
       {
-        id: 'actions',
-        header: '',
-        cell: ({ row: { original } }) =>
-          !disabledEdit ? (
-            <OrderLineActionButtons orderLine={original} />
+        header: () => {
+          return (
+            <div className="flex items-center justify-between px-2 w-full">
+              <span>Status</span>
+              <DeliveredAllButton />
+            </div>
+          )
+        },
+        accessorKey: 'isDelivered',
+        cell: ({ getValue, row: { original } }) =>
+          uid ? (
+            <div className="flex items-center gap-2">
+              <DeliveryStatusBadge isDelivered={getValue() || false} />
+              <OrderisDeliveredAction
+                orderLine={original}
+                checked={getValue()}
+              />
+            </div>
           ) : null,
-        size: 50,
+        size: 160,
         enableSorting: false,
         enablePinning: false,
         enableColumnFilter: false,
-        enableHiding: false
-      },
-      {
-        header: formatMessage({ id: messages.name }),
-        accessorKey: 'name',
-        cell: ({ getValue }) => (
-          <div className="whitespace-nowrap">{getValue()}</div>
-        ),
-        size: 340,
+        meta: {
+          sticky: 'left'
+        },
         footer: ({ table: { getRowCount } }) => (
           <span>Total: {getRowCount()} line(s)</span>
         )
       },
       {
+        header: formatMessage({ id: messages.name }),
+        accessorKey: 'name',
+        enablePinning: true,
+        cell: ({ getValue }) => <div className="break-words">{getValue()}</div>,
+        size: 280
+      },
+      {
         header: formatMessage({ id: messages.catalogueNumber }),
         accessorKey: 'catalogueNumber',
-        size: 240,
+        size: 180,
+        enablePinning: false,
         cell: ({ getValue, row: { original } }) => (
           <NewTabLink
             href={PATH.CATALOGUE_ITEM + '/' + original.catalogueUid}
@@ -67,42 +137,22 @@ const useOrderLinesColumns = () => {
       {
         header: formatMessage({ id: messages.serialNumber }),
         accessorKey: 'serialNumber',
+        enablePinning: false,
         size: 220
       },
       {
         header: formatMessage({ id: messages.eun }),
         accessorKey: 'eun',
+        enablePinning: false,
         cell: ({ row: { original } }) => (
           <PrintEunButton orderLine={original} />
         ),
         size: 150
       },
       {
-        header: () => {
-          return (
-            <div className="flex items-center justify-between px-2 w-full">
-              <DeliveredAllButton />
-            </div>
-          )
-        },
-        accessorKey: 'isDelivered',
-        cell: ({ getValue, row: { original } }) =>
-          uid ? (
-            <div className="flex justify-center w-full">
-              <OrderisDeliveredAction
-                orderLine={original}
-                checked={getValue()}
-              />
-            </div>
-          ) : null,
-        size: 80,
-        enableSorting: false,
-        enablePinning: false,
-        enableColumnFilter: false
-      },
-      {
         header: formatMessage({ id: messages.notes }),
         accessorKey: 'notes',
+        enablePinning: false,
         cell: ({ getValue }) => (
           <Fragment>
             {getValue() && (
@@ -120,6 +170,7 @@ const useOrderLinesColumns = () => {
       {
         header: formatMessage({ id: messages.price }),
         accessorKey: 'price',
+        enablePinning: false,
         cell: ({ getValue, row: { original } }) => (
           <span className="whitespace-nowrap">
             {getValue()}{' '}
@@ -134,12 +185,14 @@ const useOrderLinesColumns = () => {
         header: formatMessage({ id: messages.itemUsage }),
         accessorFn: row => row.itemUsage?.name,
         cell: ({ getValue }) => <span>{getValue()}</span>,
-        size: 240
+        size: 240,
+        enablePinning: false
       },
       {
         header: formatMessage({ id: messages.system }),
         accessorFn: row => row.system?.name,
         size: 240,
+        enablePinning: false,
         cell: ({ getValue, row: { original } }) => (
           <Link
             className="link"
@@ -156,11 +209,13 @@ const useOrderLinesColumns = () => {
         header: formatMessage({ id: messages.location }),
         accessorFn: row => row.location?.name,
         cell: ({ getValue }) => <span>{getValue()?.split(' - ')[0]}</span>,
-        size: 240
+        size: 240,
+        enablePinning: false
       },
       {
         header: formatMessage({ id: messages.service }),
         accessorFn: row => row.serviceItemName,
+        enablePinning: false,
         size: 240,
         cell: ({ getValue, row: { original } }) => (
           <Link
@@ -171,6 +226,22 @@ const useOrderLinesColumns = () => {
             <span>{getValue()?.split('-')[0]}</span>
           </Link>
         )
+      },
+      {
+        id: 'actions',
+        header: '',
+        cell: ({ row: { original } }) =>
+          !disabledEdit ? (
+            <OrderLineActionButtons orderLine={original} />
+          ) : null,
+        size: 100,
+        meta: {
+          sticky: 'right'
+        },
+        enableSorting: false,
+        enablePinning: false,
+        enableColumnFilter: false,
+        enableHiding: false
       }
     ]
     return cols

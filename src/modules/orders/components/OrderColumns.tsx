@@ -5,13 +5,15 @@ import { Fragment, useMemo } from 'react'
 import { FormattedDate, useIntl } from 'react-intl'
 
 import { Tooltip } from '@/components/Tooltip'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { message } from '@/i18n/src/messages'
-import { truncateString } from '@/lib/utils'
+import { cn, truncateString } from '@/lib/utils'
 import { PATH } from '@/types/constants/paths'
 import type { Order } from '@/types/responses/orders'
 
 import { DeliveryStatusMapping } from '../types'
+import { getBadgeVariantByOrderStatus } from '../utils/getColorClassStatus'
 import TableActions from './TableActions'
 
 const messages = message.ordersPage.ordersTable.header
@@ -23,19 +25,22 @@ const LinkNameCell = ({
 }: CellContext<Order, any> & { isReadOnly: boolean }) => (
   <div className="flex items-center w-full">
     <div className="flex items-center flex-1 min-w-0">
-      <Button
-        variant={'link'}
-        className="cursor-pointer text-ellipsis text-inherit hover:underline"
+      <Badge
+        variant="outline"
+        className={cn(
+          'h-7 px-3 hover:opacity-80 flex items-center min-w-0 max-w-full',
+          getBadgeVariantByOrderStatus(original.orderStatus, original.deliveryStatus)
+        )}
       >
         <Tooltip content={getValue()}>
           <Link
             href={PATH.ORDER + '/' + original.uid}
-            className="flex items-center cursor-pointer text-ellipsis"
+            className="cursor-pointer text-inherit hover:underline truncate block min-w-0"
           >
-            {truncateString(getValue(), 50)}
+            {getValue()}
           </Link>
         </Tooltip>
-      </Button>
+      </Badge>
     </div>
     {!isReadOnly && (
       <div className="flex-shrink-0 ml-2">

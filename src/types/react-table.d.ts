@@ -5,7 +5,7 @@ import type { CodebookType } from '@/types/responses/codebook'
 declare module '@tanstack/table-core' {
   //eslint-disable-next-line
   interface ColumnMeta<TData extends RowData, TValue> {
-    sticky?: boolean
+    sticky?: boolean | 'left' | 'right'
     pin?: 'left' | 'right'
     className?: string
     headerClassName?: string

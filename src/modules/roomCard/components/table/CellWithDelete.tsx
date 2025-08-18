@@ -3,7 +3,6 @@ import { useFieldArray, useFormContext } from 'react-hook-form'
 
 import { TableDeleteButton } from '@/components/Buttons'
 import usePermission from '@/hooks/usePermission'
-import { ButtonsWrapperNew } from '@/modules/orderItem/components/orderLines/components/OrderLine.actions'
 import { ROLE } from '@/types/constants/roles'
 
 interface Props extends CellContext<any, any> {
@@ -37,9 +36,9 @@ export const CellWithDelete = ({
   return (
     <div className="flex items-center">
       {editPersmission && (
-        <ButtonsWrapperNew position="right-1">
+        <div className="relative right-1">
           <TableDeleteButton onClick={onDeleteClick} />
-        </ButtonsWrapperNew>
+        </div>
       )}
       <span>{getValue()}</span>
     </div>

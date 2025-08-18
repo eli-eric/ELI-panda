@@ -25,10 +25,10 @@ const DetailParameter = ({
   ...props
 }: DetailParameterProps) => {
   const baseClasses = cn(
-    'flex justify-between text-xs px-2 py-1 rounded-md transition-all duration-200 border border-transparent group',
+    'flex justify-between text-xs px-2 py-1 rounded-md transition-all duration-200 border group',
     href
-      ? 'hover:bg-link/5 hover:border-link/20 cursor-pointer'
-      : 'hover:bg-accent hover:border-border'
+      ? 'border-transparent hover:bg-link/5 hover:border-link/20 cursor-pointer'
+      : 'border-transparent hover:bg-accent hover:border-border bg-muted/20'
   )
 
   const content = (

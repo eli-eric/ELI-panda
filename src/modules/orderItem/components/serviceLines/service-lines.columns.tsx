@@ -5,17 +5,18 @@ import { useIntl } from 'react-intl'
 
 import { NewTabLink } from '@/components/decorators'
 import { Tooltip } from '@/components/Tooltip'
+import { DeliveryStatusBadge } from '@/components/ui/delivery-status-badge'
 import { message } from '@/i18n/src/messages'
 import type { ServiceLine } from '@/modules/orderItem/types/form'
 import { PATH } from '@/types/constants/paths'
 
-import useOrderDetail from '../../hooks/useOrderDetail'
 import {
   DeliveredAllButton,
-  PriceFooter,
+  ServiceLinePriceFooter,
   ServiceDeliveryAction,
-  ServiceLineActionButtons
-} from './components/service-lines.actions'
+  ServiceLineActionButtons as ServiceLineActions
+} from '../../actions'
+import useOrderDetail from '../../hooks/useOrderDetail'
 const messages = message.ordersPage.serviceLines.columns
 
 //TODO: NA akci isDelivered se duplikuji service lines, need to fix this!!!!!!!!!!!!!
@@ -26,79 +27,81 @@ export const useServiceLinesColumns = () => {
   const columns = useMemo((): ColumnDef<ServiceLine, any>[] => {
     const cols: ColumnDef<ServiceLine, any>[] = [
       {
-        id: 'actions',
-        header: '',
-        cell: ({ row: { original } }) =>
-          !disabledEdit ? (
-            <ServiceLineActionButtons serviceLine={original} />
-          ) : null,
-        size: 50,
-        enableSorting: false,
-        enablePinning: false,
-        enableColumnFilter: false,
-        enableHiding: false
-      },
-      {
-        header: formatMessage({ id: messages.name }),
-        accessorKey: 'name',
-        cell: ({ getValue }) => (
-          <div className="flex items-center">
-            <span title={getValue()} className="truncate">
-              {getValue()}
-            </span>
+        accessorKey: 'isDelivered',
+        header: () => {
+          return (
+            <div className="flex items-center justify-between px-2 w-full">
+              <span>Status</span>
+              <DeliveredAllButton />
+            </div>
+          )
+        },
+        size: 160,
+        meta: {
+          sticky: 'left'
+        },
+        cell: ({ getValue, row: { original } }) => (
+          <div className="flex items-center gap-2">
+            <DeliveryStatusBadge isDelivered={getValue() || false} />
+            <ServiceDeliveryAction
+              serviceLine={original}
+              checked={getValue()}
+            />
           </div>
         ),
-        meta: { sticky: true },
-        size: 340,
+        enablePinning: false,
+        enableSorting: false,
+        enableColumnFilter: false,
         footer: ({ table: { getRowCount } }) => (
           <span>Total: {getRowCount()} line(s)</span>
         )
       },
       {
+        header: formatMessage({ id: messages.name }),
+        accessorKey: 'name',
+        cell: ({ getValue }) => (
+          <div
+            className="overflow-hidden text-ellipsis whitespace-nowrap"
+            title={getValue()}
+          >
+            {getValue()}
+          </div>
+        ),
+        enablePinning: false,
+        size: 280
+      },
+      {
         header: formatMessage({ id: messages.serviceType }),
         accessorFn: ({ serviceType }) => serviceType.name,
         size: 240,
+        enablePinning: false,
         cell: ({ getValue, row: { original } }) => (
-          <NewTabLink
-            href={PATH.SERVICE + '/' + original.serviceType.uid}
-            value={getValue()}
-          />
+          <div className="relative z-10">
+            <NewTabLink
+              href={PATH.SERVICE + '/' + original.serviceType.uid}
+              value={getValue()}
+            />
+          </div>
         )
       },
       {
         header: 'Item',
         accessorFn: ({ item }) => item.name,
         size: 340,
+        enablePinning: false,
         cell: ({ getValue, row: { original } }) => (
-          <NewTabLink
-            href={PATH.SYSTEM_ITEM + '/' + original.item.uid}
-            value={getValue()}
-          />
+          <div className="relative z-10">
+            <NewTabLink
+              href={PATH.SYSTEM_ITEM + '/' + original.item.uid}
+              value={getValue()}
+            />
+          </div>
         )
       },
       {
         header: 'EUN',
-        accessorKey: 'eun'
-      },
-      {
-        accessorKey: 'isDelivered',
-        header: () => {
-          return (
-            <div className="flex items-center justify-between px-2 w-full">
-              <DeliveredAllButton />
-            </div>
-          )
-        },
-        size: 90,
-        enablePinning: false,
-        meta: {
-          filter: { enableColumnFilter: false, type: 'boolean' }
-        },
-        cell: ({ getValue, row: { original } }) => (
-          <ServiceDeliveryAction serviceLine={original} checked={getValue()} />
-        ),
-        enableSorting: false,
-        enableColumnFilter: false
+        accessorKey: 'eun',
+        enablePinning: false
       },
       {
         header: formatMessage({ id: messages.notes }),
@@ -114,19 +117,36 @@ export const useServiceLinesColumns = () => {
         ),
         id: 'notes',
         size: 120,
+        enablePinning: false,
         enableSorting: false,
         enableColumnFilter: false
       },
       {
         header: formatMessage({ id: messages.price }),
         accessorKey: 'price',
+        enablePinning: false,
         cell: ({ getValue, row: { original } }) => (
           <span className="whitespace-nowrap">
             {getValue()}{' '}
             <span className="font-medium ">{original.currency}</span>
           </span>
         ),
-        footer: props => <PriceFooter rows={props.table.getRowModel().rows} />
+        footer: props => <ServiceLinePriceFooter rows={props.table.getRowModel().rows} />
+      },
+      {
+        id: 'actions',
+        header: '',
+        meta: {
+          sticky: 'right',
+          enableReorder: false
+        },
+        cell: ({ row: { original } }) =>
+          !disabledEdit ? <ServiceLineActions serviceLine={original} /> : null,
+        size: 100,
+        enableSorting: false,
+        enablePinning: false,
+        enableColumnFilter: false,
+        enableHiding: false
       }
     ]
     return cols

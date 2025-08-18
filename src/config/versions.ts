@@ -18,152 +18,154 @@ export interface VersionData {
 }
 
 export const versionsData: VersionData = {
-  currentVersion: "2.0.0",
+  currentVersion: '2.0.0',
   releases: [
     {
-      version: "2.0.0",
-      date: "2025-07-31",
-      title: "Major UI Migration - shadcn/ui",
-      description: "Complete migration from HeadlessUI to shadcn/ui components with improved design system",
-      type: "major",
+      version: '2.0.0',
+      date: '2025-07-31',
+      title: 'Major UI Migration - shadcn/ui',
+      description:
+        'Complete migration from HeadlessUI to shadcn/ui components with improved design system',
+      type: 'major',
       changes: [
         {
-          category: "UI Components",
+          category: 'UI Components',
           items: [
-            "Migrated all modal components to shadcn/ui Dialog and Sheet",
-            "Redesigned dashboard with modern card-based navigation tiles",
-            "Updated form components to use shadcn/ui inputs and selects",
-            "Implemented new sidebar with shadcn/ui components",
-            "Replaced legacy buttons with shadcn/ui Button variants",
-            "Refactored table components with shadcn/ui design system",
-            "Replaced HeadlessUI dropdowns with shadcn/ui Select and DropdownMenu",
-            "Updated table icons from Heroicons to Lucide React",
-            "Unified table color scheme with CSS variables for dark/light mode",
-            "Redesigned statistics component with modern dashboard-style layout",
-            "Replaced table-based statistics with interactive cards and progress bars",
-            "Added facility selector dropdown for statistics filtering",
-            "Implemented color-coded progress visualization for each statistic category",
-            "Converted inline table action buttons to dropdown menus for OrderLines and ServiceLines",
-            "Replaced similar order status colors with distinct color palette for better visibility",
-            "Enhanced table row colorization with text coloring instead of background highlighting",
-            "Improved table design consistency across all data tables",
-            "Migrated Switch and Toggle components from HeadlessUI to shadcn/ui",
-            "Maintained backward compatibility for all existing Switch/Toggle component usage",
-            "Modernized FileManager components with shadcn/ui design system",
-            "Converted FileManager action buttons to space-efficient dropdown menus",
-            "Updated FileManager icons from Heroicons to Lucide React for consistency",
-            "Enhanced drag & drop upload area with modern visual feedback and styling",
-            "Redesigned ItemPropertiesViewer with modern shadcn/ui components and compact layout",
-            "Added collapsible functionality to ItemPropertiesViewer for optional viewing",
-            "Improved empty value handling for null, undefined, and empty string properties",
-            "Enhanced Disclosure component to support ReactNode titles for rich content",
-            "Completely redesigned ImageManager components with modern shadcn/ui carousel system",
-            "Replaced HeadlessUI Tab system with responsive carousel for image navigation",
-            "Added interactive thumbnail navigation for multi-image galleries",
-            "Implemented compact design with improved button styling and space efficiency",
-            "Fixed content overflow issues and improved responsive behavior",
-            "Implemented compact design with smaller thumbnails and buttons for space efficiency",
-            "Fixed carousel navigation button positioning to prevent clipping",
-            "Optimized aspect ratio from 4:3 to 3:2 for better space utilization",
-            "Implemented overlay button positioning to eliminate unnecessary vertical space",
-            "Reduced component padding and spacing by 50% for ultra-compact design",
-            "Positioned action buttons as floating overlay on image bottom for space efficiency",
-            "Moved action buttons to top header bar to eliminate all unnecessary vertical space",
-            "Removed Card wrapper component for minimal design footprint",
-            "Positioned thumbnails directly adjacent to main image with separator",
-            "Achieved maximum space efficiency with zero padding design"
+            'Migrated all modal components to shadcn/ui Dialog and Sheet',
+            'Redesigned dashboard with modern card-based navigation tiles',
+            'Updated form components to use shadcn/ui inputs and selects',
+            'Implemented new sidebar with shadcn/ui components',
+            'Replaced legacy buttons with shadcn/ui Button variants',
+            'Refactored table components with shadcn/ui design system',
+            'Replaced HeadlessUI dropdowns with shadcn/ui Select and DropdownMenu',
+            'Updated table icons from Heroicons to Lucide React',
+            'Unified table color scheme with CSS variables for dark/light mode',
+            'Redesigned statistics component with modern dashboard-style layout',
+            'Replaced table-based statistics with interactive cards and progress bars',
+            'Added facility selector dropdown for statistics filtering',
+            'Implemented color-coded progress visualization for each statistic category',
+            'Converted inline table action buttons to dropdown menus for OrderLines and ServiceLines',
+            'Replaced similar order status colors with distinct color palette for better visibility',
+            'Enhanced table row colorization with text coloring instead of background highlighting',
+            'Improved table design consistency across all data tables',
+            'Migrated Switch and Toggle components from HeadlessUI to shadcn/ui',
+            'Maintained backward compatibility for all existing Switch/Toggle component usage',
+            'Modernized FileManager components with shadcn/ui design system',
+            'Converted FileManager action buttons to space-efficient dropdown menus',
+            'Updated FileManager icons from Heroicons to Lucide React for consistency',
+            'Enhanced drag & drop upload area with modern visual feedback and styling',
+            'Redesigned ItemPropertiesViewer with modern shadcn/ui components and compact layout',
+            'Added collapsible functionality to ItemPropertiesViewer for optional viewing',
+            'Improved empty value handling for null, undefined, and empty string properties',
+            'Enhanced Disclosure component to support ReactNode titles for rich content',
+            'Completely redesigned ImageManager components with modern shadcn/ui carousel system',
+            'Replaced HeadlessUI Tab system with responsive carousel for image navigation',
+            'Added interactive thumbnail navigation for multi-image galleries',
+            'Implemented compact design with improved button styling and space efficiency',
+            'Fixed content overflow issues and improved responsive behavior',
+            'Implemented compact design with smaller thumbnails and buttons for space efficiency',
+            'Fixed carousel navigation button positioning to prevent clipping',
+            'Optimized aspect ratio from 4:3 to 3:2 for better space utilization',
+            'Implemented overlay button positioning to eliminate unnecessary vertical space',
+            'Reduced component padding and spacing by 50% for ultra-compact design',
+            'Positioned action buttons as floating overlay on image bottom for space efficiency',
+            'Moved action buttons to top header bar to eliminate all unnecessary vertical space',
+            'Removed Card wrapper component for minimal design footprint',
+            'Positioned thumbnails directly adjacent to main image with separator',
+            'Achieved maximum space efficiency with zero padding design'
           ]
         },
         {
-          category: "User Experience",
+          category: 'User Experience',
           items: [
-            "Improved mobile responsiveness across all components",
-            "Enhanced hover effects and transitions",
-            "Better visual hierarchy with consistent spacing",
-            "Optimized touch targets for mobile devices"
+            'Improved mobile responsiveness across all components',
+            'Enhanced hover effects and transitions',
+            'Better visual hierarchy with consistent spacing',
+            'Optimized touch targets for mobile devices'
           ]
         },
         {
-          category: "Architecture",
+          category: 'Architecture',
           items: [
-            "Implemented global modal system for nested modals",
-            "Refactored modal hooks for better state management",
-            "Improved component organization and reusability"
+            'Implemented global modal system for nested modals',
+            'Refactored modal hooks for better state management',
+            'Improved component organization and reusability'
           ]
         }
       ]
     },
     {
-      version: "1.9.5",
-      date: "2025-07-30",
-      title: "Modal System Improvements",
-      description: "Enhanced modal components and fixed various UI issues",
-      type: "minor",
+      version: '1.9.5',
+      date: '2025-07-30',
+      title: 'Modal System Improvements',
+      description: 'Enhanced modal components and fixed various UI issues',
+      type: 'minor',
       changes: [
         {
-          category: "Bug Fixes",
+          category: 'Bug Fixes',
           items: [
-            "Fixed service lines modal layout issues",
-            "Resolved form component design inconsistencies",
-            "Fixed catalogue breadcrumb navigation"
+            'Fixed service lines modal layout issues',
+            'Resolved form component design inconsistencies',
+            'Fixed catalogue breadcrumb navigation'
           ]
         },
         {
-          category: "Features",
+          category: 'Features',
           items: [
-            "Redesigned catalogue actions interface",
-            "Improved search bar functionality",
-            "Enhanced filter button tooltips"
+            'Redesigned catalogue actions interface',
+            'Improved search bar functionality',
+            'Enhanced filter button tooltips'
           ]
         }
       ]
     },
     {
-      version: "1.9.0",
-      date: "2025-07-28",
-      title: "Location Management Update",
-      description: "Improvements to location modals and room card management",
-      type: "minor",
+      version: '1.9.0',
+      date: '2025-07-28',
+      title: 'Location Management Update',
+      description: 'Improvements to location modals and room card management',
+      type: 'minor',
       changes: [
         {
-          category: "Features",
+          category: 'Features',
           items: [
-            "Enhanced location modal with better UX",
-            "Improved room card location combo selection",
-            "Updated order line edit functionality"
+            'Enhanced location modal with better UX',
+            'Improved room card location combo selection',
+            'Updated order line edit functionality'
           ]
         },
         {
-          category: "Bug Fixes",
+          category: 'Bug Fixes',
           items: [
-            "Fixed location modal layout issues",
-            "Resolved modal system conflicts",
-            "Fixed order line form hook conflicts"
+            'Fixed location modal layout issues',
+            'Resolved modal system conflicts',
+            'Fixed order line form hook conflicts'
           ]
         }
       ]
     },
     {
-      version: "1.8.5",
-      date: "2025-07-24",
-      title: "Modal System Refactor",
-      description: "Major refactoring of modal components and global modal provider",
-      type: "minor",
+      version: '1.8.5',
+      date: '2025-07-24',
+      title: 'Modal System Refactor',
+      description:
+        'Major refactoring of modal components and global modal provider',
+      type: 'minor',
       changes: [
         {
-          category: "Architecture",
+          category: 'Architecture',
           items: [
-            "Implemented global modal provider for nested modals",
-            "Refactored modal components architecture",
-            "Enhanced modal hook system"
+            'Implemented global modal provider for nested modals',
+            'Refactored modal components architecture',
+            'Enhanced modal hook system'
           ]
         },
         {
-          category: "Bug Fixes",
+          category: 'Bug Fixes',
           items: [
-            "Fixed build issues with modal components",
-            "Resolved file modal functionality",
-            "Fixed category edit modal design"
+            'Fixed build issues with modal components',
+            'Resolved file modal functionality',
+            'Fixed category edit modal design'
           ]
         }
       ]

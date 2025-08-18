@@ -62,7 +62,9 @@ export const CatalogueStatisticsSimple = ({
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" size="sm" className="gap-2">
                     <Building2 className="h-4 w-4" />
-                    {selectedFacility === 'all' ? 'All Facilities' : selectedFacility}
+                    {selectedFacility === 'all'
+                      ? 'All Facilities'
+                      : selectedFacility}
                     <ChevronDown className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
@@ -90,12 +92,12 @@ export const CatalogueStatisticsSimple = ({
           </div>
         </div>
       </CardHeader>
-      
+
       <CardContent>
         <div className="text-sm text-muted-foreground mb-4">
           Found {itemStatistics.length} facilities
         </div>
-        
+
         {/* Debug Info */}
         <div className="space-y-2">
           <h4 className="text-sm font-medium">Debug Info:</h4>

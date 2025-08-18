@@ -2,7 +2,8 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronsLeft,
-  ChevronsRight} from 'lucide-react'
+  ChevronsRight
+} from 'lucide-react'
 import React from 'react'
 
 import { cn } from '@/lib/utils'
@@ -89,9 +90,7 @@ export function TablePagination<T extends object>({
       </div>
 
       <div className="flex items-center gap-2">
-        <span className="text-sm text-foreground">
-          Rows per page
-        </span>
+        <span className="text-sm text-foreground">Rows per page</span>
         <PageSizeDropdown
           value={table.getState().pagination.pageSize}
           onChange={value => table.setPageSize(value)}

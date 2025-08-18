@@ -1,6 +1,7 @@
+import { Share } from 'lucide-react'
 import type { FC } from 'react'
 
-import { GraphTreeButton, TableGraphTreeButton } from '@/components/Buttons'
+import { Button } from '@/components/ui/button'
 
 import { openGraphModal } from './GraphModal'
 
@@ -13,7 +14,15 @@ export const GraphModalButton: FC<Props> = ({ uid }) => {
     return null
   }
 
-  return <GraphTreeButton onClick={() => openGraphModal(uid)} />
+  return (
+    <Button
+      variant="outline"
+      size="sm"
+      onClick={() => openGraphModal(uid)}
+    >
+      <Share className="h-4 w-4" />
+    </Button>
+  )
 }
 
 export const GraphModalTableButton: FC<Props> = ({ uid }) => {
@@ -21,5 +30,14 @@ export const GraphModalTableButton: FC<Props> = ({ uid }) => {
     return null
   }
 
-  return <TableGraphTreeButton onClick={() => openGraphModal(uid)} />
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      className="ml-2 h-8 w-8 hover:text-orange-500"
+      onClick={() => openGraphModal(uid)}
+    >
+      <Share className="h-4 w-4" />
+    </Button>
+  )
 }

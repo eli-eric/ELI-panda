@@ -1,5 +1,6 @@
 import {
   type ColumnFiltersState,
+  type ColumnPinningState,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
@@ -51,18 +52,49 @@ export function Table<T extends object>({
   // Filtering state
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
-  // Reset to first page when filters change
-  useEffect(() => {
-    if (enablePagination) {
-      setPagination(prev => ({ ...prev, pageIndex: 0 }))
-    }
-  }, [columnFilters, enablePagination])
+  // Column pinning state
+  const [columnPinning, setColumnPinning] = useState<ColumnPinningState>({})
 
   // Pagination state
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: defaultPageSize
   })
+
+  // Initialize column pinning from column meta
+  useEffect(() => {
+    if (!enablePinning) return
+
+    const leftPinned: string[] = []
+    const rightPinned: string[] = []
+
+    columns.forEach((column: any) => {
+      const columnId = column.accessorKey || column.id
+      if (columnId && column.meta?.sticky === 'right') {
+        rightPinned.push(columnId)
+      } else if (columnId && column.meta?.sticky === 'left') {
+        leftPinned.push(columnId)
+      }
+    })
+
+    // Always set the pinning state, even if empty arrays
+    setColumnPinning({
+      left: leftPinned,
+      right: rightPinned
+    })
+    
+    // Debug log (remove in production)
+    // if (rightPinned.length > 0 || leftPinned.length > 0) {
+    //   console.log('Column pinning set:', { left: leftPinned, right: rightPinned })
+    // }
+  }, [columns, enablePinning])
+
+  // Reset to first page when filters change (but not when data changes)
+  useEffect(() => {
+    if (enablePagination) {
+      setPagination(prev => ({ ...prev, pageIndex: 0 }))
+    }
+  }, [columnFilters, enablePagination])
 
   // Apply column-specific filter functions
   const columnsWithFiltering = React.useMemo(() => {
@@ -82,11 +114,13 @@ export function Table<T extends object>({
     state: {
       sorting,
       pagination,
-      columnFilters
+      columnFilters,
+      columnPinning
     },
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onPaginationChange: setPagination,
+    onColumnPinningChange: setColumnPinning,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: enableSorting ? getSortedRowModel() : undefined,
     getFilteredRowModel: enableFiltering ? getFilteredRowModel() : undefined,
@@ -116,7 +150,7 @@ export function Table<T extends object>({
       enableColumnFilter: enableFiltering,
       filterFn: 'fuzzy' // Default filter function
     },
-    autoResetPageIndex: true // Reset page index when filters change
+    autoResetPageIndex: false // Prevent automatic page reset when data changes
   })
 
   // If there's no data and not loading, show empty message
@@ -153,7 +187,12 @@ export function Table<T extends object>({
 
   return (
     // Main container - sets the width constraint on the table
-    <div className={cn('rounded-md border border-border overflow-hidden', filteredClassName)}>
+    <div
+      className={cn(
+        'rounded-md border border-border overflow-hidden',
+        filteredClassName
+      )}
+    >
       {/* Container with fixed height if specified */}
       <div
         className="w-full rounded-md"
@@ -174,7 +213,7 @@ export function Table<T extends object>({
           }
         >
           {/* The table itself - use table-fixed to respect column sizes */}
-          <table className="w-full min-w-full caption-bottom text-sm ">
+          <table className="w-full min-w-full caption-bottom text-sm table-fixed">
             <TableHeader
               table={table}
               enableSorting={enableSorting}

@@ -71,7 +71,10 @@ export const VersionControl = () => {
               Track changes and improvements to the application
             </CardDescription>
           </div>
-          <Badge variant="outline" className="text-xs sm:text-sm font-mono self-start sm:self-center flex-shrink-0">
+          <Badge
+            variant="outline"
+            className="text-xs sm:text-sm font-mono self-start sm:self-center flex-shrink-0"
+          >
             v{versionsData.currentVersion}
           </Badge>
         </div>
@@ -96,7 +99,9 @@ export const VersionControl = () => {
                           v{release.version}
                         </Badge>
                         <div className="text-left min-w-0 flex-1">
-                          <div className="font-semibold text-sm sm:text-base break-words">{release.title}</div>
+                          <div className="font-semibold text-sm sm:text-base break-words">
+                            {release.title}
+                          </div>
                           <div className="text-xs sm:text-sm text-muted-foreground mt-1 break-words">
                             {release.description}
                           </div>
@@ -115,7 +120,9 @@ export const VersionControl = () => {
                 {release.changes.map((change, index) => (
                   <div key={index} className="space-y-2">
                     <div className="flex items-center gap-2 font-medium text-xs sm:text-sm">
-                      <span className="flex-shrink-0">{getCategoryIcon(change.category)}</span>
+                      <span className="flex-shrink-0">
+                        {getCategoryIcon(change.category)}
+                      </span>
                       <span className="truncate">{change.category}</span>
                     </div>
                     <ul className="space-y-1 pl-4 sm:pl-6">

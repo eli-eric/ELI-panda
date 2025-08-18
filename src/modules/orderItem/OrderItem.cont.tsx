@@ -7,8 +7,8 @@ import { useIntl } from 'react-intl'
 import ErrorPage from '@/components/error/ErrorPage'
 import { Form } from '@/components/form/Form'
 import { HeaderWithButtons } from '@/components/header/HeaderWithButtons'
-import Card from '@/components/layout/Card'
 import ProgressBarComponent from '@/components/progress-bar.comp'
+import { ScrollArea } from '@/components/ui/scroll-area'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 import { FILE_TYPE } from '@/modules/shared/fileManager/types'
@@ -142,23 +142,36 @@ export const OrderItemContainer = () => {
         editRole={ROLE.ORDERS_EDIT}
         onSubmit={formMethods.handleSubmit(onSubmit)}
         onSubmitAndExit={formMethods.handleSubmit(onSubmitAndExit)}
+        title={uid ? `Order ${orderDetail?.name || uid}` : 'Create New Order'}
       />
-      <MemoizedOrderFormComponent />
-      <Card className="flex flex-col justify-between">
-        <MemoizedOrderLinesTable disabledEdit={disabledEdit} />
-        <MemoizedServiceLinesContainer disabledEdit={disabledEdit} />
-        {uid && (
-          <ErrorBoundary fallback={<ErrorPage />}>
-            <Suspense fallback={<ProgressBarComponent />}>
-              <MemoizedFileManager
-                itemType={FILE_TYPE.ORDER}
-                uid={uid}
-                hasEditRole={!disabledEdit}
-              />
-            </Suspense>
-          </ErrorBoundary>
-        )}
-      </Card>
+
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Left: Form card (1/3) */}
+          <div className="lg:col-span-1">
+            <MemoizedOrderFormComponent />
+          </div>
+
+          {/* Right: Tables + Files (2/3) */}
+          <div className="lg:col-span-2 h-[calc(100vh-8rem)] overflow-y-auto overflow-x-hidden">
+            <div className="space-y-6 pr-2">
+              <MemoizedOrderLinesTable disabledEdit={disabledEdit} />
+              <MemoizedServiceLinesContainer disabledEdit={disabledEdit} />
+              {uid && (
+                <ErrorBoundary fallback={<ErrorPage />}>
+                  <Suspense fallback={<ProgressBarComponent />}>
+                    <MemoizedFileManager
+                      itemType={FILE_TYPE.ORDER}
+                      uid={uid}
+                      hasEditRole={!disabledEdit}
+                    />
+                  </Suspense>
+                </ErrorBoundary>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
     </Form>
   )
 }

@@ -29,8 +29,8 @@ import type { OrderLineFormType } from '@/modules/orderItem/types/form'
 import { ROLE } from '@/types/constants/roles'
 import { createMessageValues } from '@/utils/formatters'
 
-import { useOrderLineModal } from '../form/OrderLineForm.cont'
-import { OrderIsDeliveryForm } from './OrderIsDeliveryForm'
+import { OrderIsDeliveryForm } from '../../components/orderLines/components/OrderIsDeliveryForm'
+import { useOrderLineEditSheet } from '../../components/orderLines/hooks/useOrderLineEditSheet'
 
 // Custom buttons wrapper designed to better fit the table design
 type OrderLineButtonsWrapperProps = {
@@ -62,7 +62,7 @@ export const OrderLineActionButtons = ({
 }) => {
   const { formatMessage } = useIntl()
   const { deleteOrderLine, setOrderLine } = useOrderLine()
-  const { openOrderLineModal } = useOrderLineModal()
+  const { openEditSheet } = useOrderLineEditSheet()
   const withWarning = useWarningModal(
     formatMessage(
       { id: message.ordersPage.orderLines.deleteModal.message },
@@ -85,7 +85,7 @@ export const OrderLineActionButtons = ({
       <DropdownMenuContent align="end" sideOffset={4}>
         <DropdownMenuItem
           onClick={() => {
-            openOrderLineModal(orderLine, data => {
+            openEditSheet(orderLine, data => {
               setOrderLine(data)
             })
           }}
@@ -214,7 +214,7 @@ export const PrintEunButton = ({
   )
 }
 
-export const PriceFooter = ({ rows }: { rows: Row<OrderLineFormType>[] }) => {
+export const PriceFooter = ({ rows }: { rows: Row<any>[] }) => {
   const total = rows.reduce(
     (sum, { original: { price } }) => sum + (price || 0),
     0

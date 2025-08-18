@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useCallback, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { number, object, string } from 'yup'
+import * as yup from 'yup'
 
 import { Form } from '@/components/form/Form'
 import { Button } from '@/components/ui/button'
@@ -12,19 +12,13 @@ import type { CatalogueItem } from '@/types/responses/catalogue'
 
 import { OrderLineFormComponent } from './OrderLineForm.comp'
 
-const orderLineFormSchema = object({
-  name: string().required(),
-  catalogueNumber: string().required(),
-  price: number()
-    .transform(value => (Number.isNaN(value) ? null : value))
-    .nullable(),
-  quantity: number()
-    .nullable()
-    .max(100)
-    .notRequired()
-    .transform(value => (Number.isNaN(value) ? null : value)),
-  // system: object().nullable().required('Parent system is required field.'),
-  serialNumbers: string().nullable()
+const orderLineFormSchema = yup.object({
+  name: yup.string().required('Name is required'),
+  catalogueNumber: yup.string().required('Catalogue number is required'),
+  price: yup.number().nullable().optional(),
+  quantity: yup.number().max(100).nullable().optional(),
+  system: yup.object().nullable().required('Parent system is required'),
+  serialNumbers: yup.string().nullable().optional()
 })
 
 // Hook for opening OrderLine modal
