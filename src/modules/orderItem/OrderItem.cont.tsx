@@ -132,7 +132,7 @@ export const OrderItemContainer = () => {
   // Komponenty renderujeme s React.memo
   return (
     <Form
-      className="h-screen"
+      className="min-[1200px]:h-screen min-[1200px]:overflow-hidden"
       formMethods={formMethods}
       enableLeaveWarning={true}
     >
@@ -152,7 +152,7 @@ export const OrderItemContainer = () => {
           </div>
 
           {/* Right: Tables + Files (2/3) */}
-          <div className="lg:col-span-3 py-4 sm:py-6 h-[calc(100vh-8rem)] min-[1200px]:overflow-y-auto min-[1200px]:overflow-x-hidden">
+          <div className="lg:col-span-3 py-4 sm:py-6 min-[1200px]:h-[calc(100vh-8rem)] min-[1200px]:overflow-y-auto min-[1200px]:overflow-x-hidden">
             <div className="space-y-6 pr-2">
               <MemoizedOrderLinesTable disabledEdit={disabledEdit} />
               <MemoizedServiceLinesContainer disabledEdit={disabledEdit} />

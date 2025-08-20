@@ -22,9 +22,7 @@ export const NewLayout: FC<PropsWithChildren> = ({ children }) => {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <SidebarInset className="flex flex-col overflow-x-hidden overflow-y-auto">
-        {children}
-      </SidebarInset>
+      <SidebarInset className="overflow-hidden">{children}</SidebarInset>
     </SidebarProvider>
   )
 }
