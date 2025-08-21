@@ -261,7 +261,15 @@ function SidebarTrigger({
   onClick,
   ...props
 }: React.ComponentProps<typeof Button>) {
-  const { toggleSidebar } = useSidebar()
+  // Bezpečná kontrola contextu
+  const context = React.useContext(SidebarContext)
+  
+  // Pokud není context dostupný (např. během SSR), nerender nic
+  if (!context) {
+    return null
+  }
+  
+  const { toggleSidebar } = context
 
   return (
     <Button
