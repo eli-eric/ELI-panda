@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { useRef } from 'react'
 
 import { Button } from '@/components/ui/button'
+import { SidebarTrigger } from '@/components/ui/sidebar'
 import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
 import type { ROLE } from '@/types/constants/roles'
@@ -58,9 +59,10 @@ export const HeaderWithButtons = ({
 
   return (
     <div className="border-b bg-background sticky top-0 z-10">
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-3">
+      <div className="w-full px-4 py-2">
         {/* Desktop header - with title */}
-        <div className="hidden sm:flex items-center gap-3 min-w-0">
+        <div className="hidden sm:flex items-center gap-4">
+          <SidebarTrigger />
           <div className="flex items-center gap-2 min-w-0 flex-1">
             {title && (
               <h1 className="text-lg sm:text-xl font-semibold truncate">
@@ -111,6 +113,7 @@ export const HeaderWithButtons = ({
         {/* Mobile header - only buttons */}
         <div className="flex sm:hidden items-center justify-between">
           <div className="flex items-center gap-2">
+            <SidebarTrigger />
             <Button variant="outline" size="sm" onClick={onBack} disabled={loading}>
               <ArrowLeft className="h-4 w-4" />
             </Button>

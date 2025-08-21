@@ -6,9 +6,8 @@ import { FormattedDate, useIntl } from 'react-intl'
 
 import { Tooltip } from '@/components/Tooltip'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 import { message } from '@/i18n/src/messages'
-import { cn, truncateString } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 import { PATH } from '@/types/constants/paths'
 import type { Order } from '@/types/responses/orders'
 
@@ -29,7 +28,10 @@ const LinkNameCell = ({
         variant="outline"
         className={cn(
           'h-7 px-3 hover:opacity-80 flex items-center min-w-0 max-w-full',
-          getBadgeVariantByOrderStatus(original.orderStatus, original.deliveryStatus)
+          getBadgeVariantByOrderStatus(
+            original.orderStatus,
+            original.deliveryStatus
+          )
         )}
       >
         <Tooltip content={getValue()}>

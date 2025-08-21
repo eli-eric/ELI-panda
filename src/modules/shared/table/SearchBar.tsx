@@ -5,6 +5,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { PlusButton, RefreshButton } from '@/components/Buttons'
 import { Tooltip } from '@/components/Tooltip'
 import { Input } from '@/components/ui/input'
+import { SidebarTrigger } from '@/components/ui/sidebar'
 import usePermission from '@/hooks/usePermission'
 import useTableStateStore from '@/store/useTableStateStore'
 import type { ROLE } from '@/types/constants/roles'
@@ -65,6 +66,7 @@ export const SearchBar = ({
       className="sticky top-0 z-10 bg-background border-b px-4 py-2"
     >
       <div className="flex items-center gap-4">
+        <SidebarTrigger />
         {left && (
           <div className="flex items-center gap-2 flex-shrink-0">{left}</div>
         )}

@@ -75,7 +75,7 @@ export const SystemNameCell = ({
             'flex items-center py-1',
             original.hasSubsystems && 'group/expand cursor-pointer'
           )}
-          onClick={handleExpand}
+          onClick={original.hasSubsystems ? handleExpand : undefined}
           ref={previewRef}
         >
           {enableDragAndDrop && (
@@ -91,31 +91,37 @@ export const SystemNameCell = ({
               ?.map(v => v.name)
               .join(' > ')}
           >
-            <Badge
-              variant="outline"
-              className={cn(
-                'flex items-center h-7 max-w-full overflow-hidden justify-start',
-                original.hasSubsystems
-                  ? 'gap-1 group-hover/expand:opacity-80 cursor-pointer px-2'
-                  : 'px-3',
-                getBadgeVariantBySystemLevel(original.systemLevel)
-              )}
-            >
-              {original.hasSubsystems ? (
-                <>
-                  {row.getIsExpanded() ? (
-                    <ChevronDownIcon className="w-4 h-4 shrink-0" />
-                  ) : (
-                    <ChevronRightIcon className="w-4 h-4 shrink-0" />
-                  )}
-                  <span className="truncate min-w-0">{value}</span>
-                </>
-              ) : (
-                <>
-                  <span className="truncate min-w-0">{value}</span>
-                </>
-              )}
-            </Badge>
+            {!original.hasSubsystems ? (
+              <Badge
+                variant="outline"
+                className={cn(
+                  'flex items-center h-7 max-w-full overflow-hidden justify-start px-3 hover:opacity-80',
+                  getBadgeVariantBySystemLevel(original.systemLevel)
+                )}
+              >
+                <Link
+                  href={PATH.SYSTEM + '/' + original.uid}
+                  className="cursor-pointer text-inherit hover:underline truncate block min-w-0"
+                >
+                  {value}
+                </Link>
+              </Badge>
+            ) : (
+              <Badge
+                variant="outline"
+                className={cn(
+                  'flex items-center h-7 max-w-full overflow-hidden justify-start gap-1 group-hover/expand:opacity-80 cursor-pointer px-2',
+                  getBadgeVariantBySystemLevel(original.systemLevel)
+                )}
+              >
+                {row.getIsExpanded() ? (
+                  <ChevronDownIcon className="w-4 h-4 shrink-0" />
+                ) : (
+                  <ChevronRightIcon className="w-4 h-4 shrink-0" />
+                )}
+                <span className="truncate min-w-0">{value}</span>
+              </Badge>
+            )}
           </Tooltip>
         </div>
       </div>
