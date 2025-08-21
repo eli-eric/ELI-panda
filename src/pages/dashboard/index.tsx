@@ -18,6 +18,7 @@ import { useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 
 import { Tile, TileContainer } from '@/components/card/tile.comp'
+import { DashboardHeader } from '@/components/header/DashboardHeader'
 import { ReleasesContainer } from '@/components/Releases.cont'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { VersionControl } from '@/components/version/VersionControl'
@@ -114,14 +115,9 @@ const DashboardPage: NextPage = (): JSX.Element => {
         <meta name="description" content="...." />
       </Head>
       <main className="flex-1 min-h-0 w-full">
+        <DashboardHeader title={intl.formatMessage({ id: messages.head })} />
         <div className="mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 py-6">
           <div className="space-y-8">
-            <div>
-              <h1 className="text-2xl font-semibold text-foreground mb-2">
-                {intl.formatMessage({ id: messages.head })}
-              </h1>
-            </div>
-
             <div className="space-y-6">
               <Card>
                 <CardHeader>
