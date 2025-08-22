@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-import type { DialogSize } from '@/components/ui/dialog'
+import type { ModalSize } from '@/components/ui/dialog'
 
 export type ModalSlotType = 'sheet' | 'dialog1' | 'dialog2'
 
@@ -10,7 +10,7 @@ export interface ModalSlot {
   props?: Record<string, any> & {
     title?: string
     description?: string
-    size?: DialogSize
+    size?: ModalSize
   }
   onSubmit?: (...args: any[]) => void
   onClose?: () => void

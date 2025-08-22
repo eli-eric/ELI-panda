@@ -48,9 +48,11 @@ function DialogOverlay({
   )
 }
 
-type DialogSize = 'm' | 'l' | 'xl'
+export type ModalSize = 's' | 'm' | 'l' | 'xl'
+type DialogSize = ModalSize
 
 const dialogSizeVariants = {
+  s: 'sm:max-w-sm md:max-w-md',
   m: 'sm:max-w-md md:max-w-lg',
   l: 'sm:max-w-lg md:max-w-2xl lg:max-w-4xl',
   xl: 'sm:max-w-xl md:max-w-4xl lg:max-w-6xl xl:max-w-7xl'
@@ -153,5 +155,5 @@ export {
   DialogPortal,
   DialogTitle,
   DialogTrigger,
-  type DialogSize
+  type ModalSize
 }

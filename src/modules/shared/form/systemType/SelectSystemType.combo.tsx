@@ -1,16 +1,12 @@
-import type { ColumnDef } from '@tanstack/react-table'
-import { Fragment, useMemo } from 'react'
+import { Fragment, useCallback } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { toast } from 'react-hot-toast'
 
 import { ModalSelect } from '@/components/form/ModalSelect'
-import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
-import { openCodebookTreeModalGraphql } from '@/components/form/shared/CodebookTreeModalGraphql'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps, Option } from '@/types/form'
-import { highlightText } from '@/utils'
+import type { CodebookType } from '@/types/responses/codebook'
 
-import { useSystemTypeGroups } from './hooks/useSystemTypeGroups'
+import { useSystemTypeSelectionModal } from './hooks/useSystemTypeSelectionModal'
 
 export const SystemTypeComboBox = ({
   systemTypeField,
@@ -28,65 +24,22 @@ export const SystemTypeComboBox = ({
   onChange?: (value?: any) => void
   isFilter?: boolean
 }) => {
-  const { systemTypeGroups, filter, loading, error } = useSystemTypeGroups()
-
   const formContext = useFormContext()
   const setValue = formContext?.setValue
+  const { openSystemTypeModal } = useSystemTypeSelectionModal()
 
-  const onValueChange = (value?: any) => {
-    if (setValue) {
-      setValue(systemTypeField.name, value)
-    }
-    onChange?.(value)
-  }
-
-  if (error) {
-    toast.error('Failed to load system types')
-  }
-
-  const additionalColumn: ColumnDef<Codebooktree, string> = useMemo(
-    () => ({
-      header: 'Code',
-      accessorKey: 'code',
-      filterFn: 'fuzzy',
-      cell: ({ getValue }) =>
-        highlightText(getValue() || '', (filter?.code as string) || ''),
-      meta: {
-        filter: {
-          type: 'string',
-          enableColumnFilter: true
-        }
+  const handleSystemTypeChange = useCallback(
+    (value: CodebookType | null) => {
+      if (setValue) {
+        setValue(systemTypeField.name, value)
       }
-    }),
-    [filter.code]
+      onChange?.(value)
+    },
+    [setValue, systemTypeField.name, onChange]
   )
 
-  const treeData = useMemo(() => {
-    if (!systemTypeGroups) return []
-    return systemTypeGroups?.map(group => ({
-      name: group.name,
-      uid: group.uid,
-      isExpandable: group?.systemTypes?.length > 0,
-      children: group.systemTypes.map(systemType => ({
-        name: systemType.name,
-        code: systemType.code,
-        uid: systemType.uid
-      }))
-    }))
-  }, [systemTypeGroups])
-
   const handleOpenDialog = () => {
-    openCodebookTreeModalGraphql({
-      tableId: 'systemType-tree',
-      onSelect: onValueChange,
-      data: treeData,
-      additionalColumn,
-      enableFiltering: true,
-      manualFiltering: false,
-      loading,
-      selectParent: false,
-      name: systemTypeField.name
-    })
+    openSystemTypeModal(handleSystemTypeChange)
   }
 
   return (

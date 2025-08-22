@@ -12,6 +12,7 @@ import { Tooltip } from '@/components/Tooltip'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { useSystemEdit } from '@/modules/shared/system/system-edit/useSystemEdit'
 import { getBadgeVariantBySystemLevel } from '@/modules/systemItem/utils'
 import { PATH } from '@/types/constants/paths'
 import type { EndpointProps } from '@/utils/getEndpoints'
@@ -41,6 +42,7 @@ export const SystemNameCell = ({
 }: SystemNameCellProps) => {
   const { original } = row
   const { sparesIn, sparesOut } = original
+  const openEdit = useSystemEdit({ uid: original.uid })
 
   const [{ isDragging }, dragRef, previewRef] = useDrag({
     collect: monitor => ({
@@ -128,15 +130,14 @@ export const SystemNameCell = ({
       <div className="flex-shrink-0 ml-2 flex items-center">
         {!hideButtons && (
           <Tooltip content={canEdit ? 'Edit System' : 'View System'}>
-            <Link href={PATH.SYSTEM + '/' + original.uid}>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-8 w-8 p-0  transition-opacity duration-200 mr-1 hover:text-primary text-muted-foreground"
-              >
-                <Edit className="h-4 w-4" />
-              </Button>
-            </Link>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={openEdit}
+              className="h-8 w-8 p-0  transition-opacity duration-200 mr-1 hover:text-primary text-muted-foreground"
+            >
+              <Edit className="h-4 w-4" />
+            </Button>
           </Tooltip>
         )}
         <SystemActionButtons

@@ -4,7 +4,7 @@ import ProgressBarComponent from '@/components/progress-bar.comp'
 import { useItemPropertiesData } from '@/hooks/useItemPropertiesData'
 import { FILE_TYPE } from '@/modules/shared/fileManager/types'
 import { ImageGallery } from '@/modules/shared/imageManager/ImageGallery'
-import { useDeviceInfo } from '@/modules/systemItem/hooks/useDeviceInfo'
+import { useSuspenseSystemDetail } from '@/modules/systemItem/hooks/useSuspenseSystemDetail'
 
 import { ItemPropertiesSection } from './sections/ItemPropertiesSection.comp'
 import { NotFound } from './sections/NotFound'
@@ -22,7 +22,7 @@ type Props = {
 
 export const SystemDetailInfo: FC<Props> = ({ alias, uid }) => {
   const { loading, error, systemDetail, physicalItem, catalogueItem } =
-    useDeviceInfo({
+    useSuspenseSystemDetail({
       code: alias,
       uid
     })
