@@ -1,7 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import bcrypt from 'bcryptjs-react'
-import { useFieldArray, useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
 import { ROLE } from '@/types/constants/roles'
 import type { GetRolesQuery, UserCreateInput } from '@/types/gql/graphql'
@@ -25,24 +26,21 @@ export const NewUserContainer = ({ roles }: Props) => {
   ]
   const defaultAssignedRoles = roles?.filter(role =>
     defaultRoles.includes(role.code as ROLE)
-  )
+  ) || []
+
+  const [selectedRoles, setSelectedRoles] = useState<GetRolesQuery['roles']>(defaultAssignedRoles)
 
   const formMethods = useForm<UserCreateFormType>({
     resolver: yupResolver(userFormSchema),
     defaultValues: {
-      isEnabled: true,
-      roles: defaultAssignedRoles
+      isEnabled: true
     }
   })
 
-  const { fields, append, remove } = useFieldArray({
-    control: formMethods.control,
-    name: 'roles'
-  })
+  const { createUser, loading } = useUserCreate()
 
-  const [createUser] = useUserCreate()
-
-  const onSubmit = (data: UserCreateFormType) => {
+  const onSubmit = (data: UserCreateFormType, submittedSelectedRoles: GetRolesQuery['roles'] = []) => {
+    const rolesToUse = submittedSelectedRoles.length > 0 ? submittedSelectedRoles : selectedRoles
     const dataToSend: UserCreateInput[] = [
       {
         email: data.email,
@@ -50,7 +48,7 @@ export const NewUserContainer = ({ roles }: Props) => {
         lastName: data.lastName,
         isEnabled: data.isEnabled,
         passwordHash: bcrypt.hashSync(data.password, 12),
-        roles: { connect: fields?.map(role => whereN(role.uid)) },
+        roles: { connect: rolesToUse.map(role => whereN(role.uid)) },
         facility: { connect: whereC(data.facility.uid) },
         username: data.email,
         passwordToChange: true,
@@ -63,18 +61,15 @@ export const NewUserContainer = ({ roles }: Props) => {
   }
 
   const addRole = (selectedRole?: CodebookType) => {
-    if (fields?.find(role => role.uid === selectedRole?.uid)) {
+    if (selectedRole && !selectedRoles.find(role => role.uid === selectedRole.uid)) {
+      setSelectedRoles(prev => [...prev, selectedRole as GetRolesQuery['roles'][0]])
+    } else {
       toast.error('Role already exists!')
-      return
-    }
-    if (selectedRole) {
-      append({ uid: selectedRole.uid, name: selectedRole.name })
     }
   }
 
   const removeRole = (uid: string) => {
-    const roleIndex = fields.findIndex(role => role.uid === uid)
-    remove(roleIndex)
+    setSelectedRoles(prev => prev.filter(role => role.uid !== uid))
   }
 
   return (
@@ -86,7 +81,9 @@ export const NewUserContainer = ({ roles }: Props) => {
         addRole,
         removeRole,
         roles,
-        assignedRoles: defaultAssignedRoles
+        assignedRoles: selectedRoles,
+        loading,
+        selectedRoles
       }}
     />
   )

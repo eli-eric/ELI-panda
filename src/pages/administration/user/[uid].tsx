@@ -9,7 +9,6 @@ import { useUserDetail } from '@/modules/administration/user/hooks/useUserDetail
 import type { UserQueryQuery } from '@/types/gql/graphql'
 
 interface Props {
-  key?: string
   userUid?: string
 }
 
@@ -46,8 +45,7 @@ const EditUserPage: NextPage = ({ userUid }: Props): React.ReactElement => {
 }
 
 EditUserPage.getInitialProps = ({ query }) => ({
-  key: query.uid,
-  userUid: query.uid
+  userUid: query.uid as string
 })
 
 export default EditUserPage

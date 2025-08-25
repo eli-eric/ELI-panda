@@ -1,8 +1,6 @@
 import { Form } from '@/components/form/Form'
+import { HeaderWithButtons } from '@/components/header/HeaderWithButtons'
 import Card from '@/components/layout/Card'
-import { PageHead } from '@/components/layout/PageHead'
-import { PageHeaderButtons } from '@/components/layout/PageHead.buttons'
-import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 import type { GetRolesQuery } from '@/types/gql/graphql'
 import type { CodebookType } from '@/types/responses/codebook'
@@ -12,12 +10,14 @@ import { UserRoles } from './UserRoles'
 
 interface Props {
   formMethods: any
-  onSubmit: (data: any) => void
+  onSubmit: (data: any, selectedRoles?: GetRolesQuery['roles']) => void
   addRole: (role: CodebookType) => void
   removeRole: (uid: string) => void
   assignedRoles?: GetRolesQuery['roles']
   title: string
   roles: GetRolesQuery['roles']
+  loading?: boolean
+  selectedRoles?: GetRolesQuery['roles']
 }
 
 export const UserComponent = ({
@@ -27,7 +27,9 @@ export const UserComponent = ({
   removeRole,
   assignedRoles,
   title,
-  roles
+  roles,
+  loading = false,
+  selectedRoles
 }: Props) => (
   <div>
     <Form
@@ -36,27 +38,29 @@ export const UserComponent = ({
         enableLeaveWarning: true
       }}
     >
-      <PageHead>
-        <h1 className="text-2xl font-semibold dark:text-gray-200">{title}</h1>
-        <PageHeaderButtons
-          {...{
-            onSubmit: () => {
-              formMethods.handleSubmit(onSubmit)()
-            },
-            role: ROLE.ADMIN,
-            exitTo: PATH.ADMIN_USERS
-          }}
-        />
-      </PageHead>
-      <Card>
-        <UserForm />
-      </Card>
+      <HeaderWithButtons
+        title={title}
+        loading={loading}
+        onSubmit={() => {
+          formMethods.handleSubmit((data: any) => onSubmit(data, selectedRoles))()
+        }}
+        editRole={ROLE.ADMIN}
+        isFormInvalid={!formMethods.formState.isValid}
+      />
+      <div className="p-4">
+        <Card>
+          <UserForm />
+        </Card>
+      </div>
     </Form>
-    <UserRoles
-      addRole={addRole}
-      removeRole={removeRole}
-      assignedRoles={assignedRoles}
-      roles={roles}
-    />
+    <div className="p-4">
+      <UserRoles
+        key={`roles-${assignedRoles?.map(r => r.uid).join('-')}`}
+        addRole={addRole}
+        removeRole={removeRole}
+        assignedRoles={assignedRoles}
+        roles={roles}
+      />
+    </div>
   </div>
 )

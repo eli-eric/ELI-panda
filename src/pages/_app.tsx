@@ -8,6 +8,7 @@ import { lazy, Suspense, useEffect, useState } from 'react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { Toaster } from 'react-hot-toast'
+import { Toaster as SonnerToaster } from '@/components/ui/sonner'
 import { IntlProvider } from 'react-intl'
 import { messages } from 'src/i18n/src'
 
@@ -53,6 +54,7 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
               >
                 {t => <Notification t={t} />}
               </Toaster>
+              <SonnerToaster />
               <DndProvider backend={HTML5Backend}>
                 <NewLayout>{<Component {...pageProps} />}</NewLayout>
                 <Suspense fallback={null}>

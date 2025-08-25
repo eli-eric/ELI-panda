@@ -1,8 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import bcrypt from 'bcryptjs-react'
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
+import { toast } from 'sonner'
 
 import { EditUserContext } from '@/pages/administration/user/[uid]'
 import type { GetRolesQuery, UserUpdateInput } from '@/types/gql/graphql'
@@ -21,6 +21,7 @@ type Props = {
 
 export const EditUserContainer = ({ userUid, roles }: Props) => {
   const { userDetail, refetch } = useContext(EditUserContext)
+  const [selectedRoles, setSelectedRoles] = useState<GetRolesQuery['roles']>(userDetail?.roles || [])
 
   const formMethods = useForm<UserUpdateFormType>({
     defaultValues: {
@@ -42,13 +43,50 @@ export const EditUserContainer = ({ userUid, roles }: Props) => {
     resolver: yupResolver(userUpdateFormSchema)
   })
 
+  useEffect(() => {
+    if (userDetail?.roles) {
+      setSelectedRoles(userDetail.roles)
+    }
+  }, [userDetail?.roles])
+
+  useEffect(() => {
+    if (userDetail) {
+      formMethods.reset({
+        email: userDetail.email,
+        firstName: userDetail.firstName,
+        lastName: userDetail.lastName,
+        isEnabled: userDetail.isEnabled,
+        facility: {
+          uid: userDetail.facility?.code,
+          name: userDetail.facility?.name
+        },
+        employee: userDetail.employee
+          ? {
+              uid: userDetail.employee.uid,
+              name: userDetail.employee.fullName as string
+            }
+          : undefined
+      })
+    }
+  }, [userDetail, formMethods])
+
   const onSuccess = () => {
     refetch()
   }
 
-  const { updateUser } = useUserUpdate(onSuccess)
+  const { updateUser, loading } = useUserUpdate(onSuccess)
 
-  const onSubmit = (data: UserUpdateFormType) => {
+  const onSubmit = (data: UserUpdateFormType, selectedRoles: GetRolesQuery['roles'] = []) => {
+    // Get current user roles UIDs
+    const currentRoleUids = userDetail?.roles?.map(role => role.uid) || []
+    // Get selected roles UIDs  
+    const selectedRoleUids = selectedRoles.map(role => role.uid)
+    
+    // Find roles to connect (new roles that user didn't have before)
+    const rolesToConnect = selectedRoles.filter(role => !currentRoleUids.includes(role.uid))
+    // Find roles to disconnect (old roles that user no longer has selected)
+    const rolesToDisconnect = userDetail?.roles?.filter(role => !selectedRoleUids.includes(role.uid)) || []
+
     const dataToSend: UserUpdateInput = {
       email: data.email,
       firstName: data.firstName,
@@ -64,6 +102,15 @@ export const EditUserContainer = ({ userUid, roles }: Props) => {
       },
       username: data.email
     }
+
+    // Only add roles if there are changes
+    if (rolesToConnect.length > 0 || rolesToDisconnect.length > 0) {
+      dataToSend.roles = [{
+        connect: rolesToConnect.map(role => whereN(role.uid)),
+        disconnect: rolesToDisconnect.map(role => whereN(role.uid))
+      }]
+    }
+
     if (data.password) {
       dataToSend.passwordHash = bcrypt.hashSync(data.password, 12)
     }
@@ -72,33 +119,15 @@ export const EditUserContainer = ({ userUid, roles }: Props) => {
   }
 
   const addRole = (selectedRole?: CodebookType) => {
-    if (userDetail?.roles?.find(role => role.uid === selectedRole?.uid)) {
+    if (selectedRole && !selectedRoles.find(role => role.uid === selectedRole.uid)) {
+      setSelectedRoles(prev => [...prev, selectedRole as GetRolesQuery['roles'][0]])
+    } else {
       toast.error('Role already exists!')
-      return
     }
-    updateUser({
-      where: { uid: userUid },
-      update: {
-        roles: [
-          {
-            connect: [whereN(selectedRole?.uid)]
-          }
-        ]
-      }
-    })
   }
 
   const removeRole = (roleUid: string) => {
-    updateUser({
-      where: { uid: userUid },
-      update: {
-        roles: [
-          {
-            disconnect: [whereN(roleUid)]
-          }
-        ]
-      }
-    })
+    setSelectedRoles(prev => prev.filter(role => role.uid !== roleUid))
   }
 
   return (
@@ -109,8 +138,10 @@ export const EditUserContainer = ({ userUid, roles }: Props) => {
         onSubmit,
         addRole,
         removeRole,
-        assignedRoles: userDetail?.roles,
-        roles
+        assignedRoles: selectedRoles,
+        roles,
+        loading,
+        selectedRoles
       }}
     />
   )
