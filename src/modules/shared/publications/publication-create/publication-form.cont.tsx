@@ -27,6 +27,7 @@ import { ROLE } from '@/types/constants/roles'
 
 import FileManager from '../../fileManager/FileManager'
 import { FILE_TYPE } from '../../fileManager/types'
+import { ModalHeaderWithButtons } from '../components/modal-buttons.comp'
 import { PublicationFreeFormComponent } from '../components/publication-freeform.comp'
 
 const messages = message.publication
@@ -82,7 +83,7 @@ export const PublicationFormContainer: FC<Props> = ({
     })
   })
 
-  const onSubmitAndExit = formMethods.handleSubmit(data => {
+  const onExit = formMethods.handleSubmit(data => {
     mutate(formatFormData(data), {
       onSuccess: () => {
         router.push(PATH.PUBLICATIONS)
@@ -93,7 +94,11 @@ export const PublicationFormContainer: FC<Props> = ({
 
   return (
     <Form formMethods={formMethods} enableLeaveWarning={true}>
-      <button onClick={onSubmit}>Save</button>
+      <ModalHeaderWithButtons
+        editRole={ROLE.PUBLICATIONS_EDIT}
+        onSubmit={onSubmit}
+        onExit={onExit}
+      />
       <PublicationFreeFormComponent />
       <Card>
         <FileManager
