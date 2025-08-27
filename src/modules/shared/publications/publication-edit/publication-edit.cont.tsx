@@ -9,14 +9,18 @@ import { PATH } from '@/types/constants/paths'
 
 import { PublicationFormContainer } from '../publication-create/publication-form.cont'
 
-export const PublicationEditContainer = () => {
+type Props = {
+  uid: string
+}
+
+export const PublicationEditContainer = ({ uid }: Props) => {
   const {
     data: publication,
     isLoading,
     isError,
     error,
     refetch
-  } = usePublication()
+  } = usePublication(uid)
 
   useEffect(() => {
     if (isError) {

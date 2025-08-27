@@ -23,8 +23,8 @@ export const ActionButtons: FC<Props> = ({ uid }) => {
 
   const onEditCLick = () =>
     openModal('sheet', {
-      component: PublicationEditContainer
-      //onClose/OnSubmit
+      component: PublicationEditContainer,
+      props: { uid },
     })
 
   const canEdit = useAccessControl(ROLE.PUBLICATIONS_EDIT)()
