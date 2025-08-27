@@ -14,10 +14,18 @@ export const usePublicationColumns = () => {
   const columns = useMemo(
     (): ColumnDef<Publication, any>[] => [
       {
+        id: 'action',
+        header: 'Actions',
+        size: 100,
+        meta: { sticky: true },
+        cell: ({ row: { original } }) => {
+          return <ActionButtons uid={original?.uid || ''} />
+        }
+      },
+      {
         id: 'mediaType',
         header: 'Media Type',
         accessorFn: row => MEDIA_TYPE_MAP[row.mediaType],
-        meta: { sticky: true },
         size: 200
       },
       {
@@ -25,9 +33,7 @@ export const usePublicationColumns = () => {
         header: 'Code',
         accessorFn: row => row.code,
         size: 200,
-        meta: {
-          sticky: true
-        },
+
         cell: ({ getValue, row: { original } }) => {
           return (
             <div className="relative w-full h-full flex items-center">
@@ -36,7 +42,6 @@ export const usePublicationColumns = () => {
                   <div>{getValue()}</div>
                 </LinkDecorator>
               </Link>
-              <ActionButtons uid={original?.uid || ''} />
             </div>
           )
         }
