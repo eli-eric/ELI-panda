@@ -2,10 +2,11 @@ import { useRouter } from 'next/router'
 import type { FC } from 'react'
 
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
-import { PATH } from '@/types/constants/paths'
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import { ROLE } from '@/types/constants/roles'
 
 import type { Publication } from '../publication/types/responses'
+import { PublicationFormContainer } from '../shared/publications/publication-create/publication-form.cont'
 import { Pagination } from '../shared/table/Pagination'
 import { usePandaTable } from '../shared/table/pandaTable/hooks/usePandaTable'
 import type { PandaTableSettings } from '../shared/table/pandaTable/PandaTable'
@@ -37,9 +38,12 @@ export const PublicationsContainer: FC = () => {
     settings: tableSettings
   })
 
-  const handleAdd = () => {
-    router.push(PATH.PUBLICATION)
-  }
+  const { openModal } = useModalGlobalStore()
+
+  const handleAdd = () =>
+    openModal('sheet', {
+      component: PublicationFormContainer
+    })
 
   const handleRefresh = () => {
     refetch()

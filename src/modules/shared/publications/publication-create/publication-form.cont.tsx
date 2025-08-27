@@ -93,6 +93,7 @@ export const PublicationFormContainer: FC<Props> = ({
 
   return (
     <Form formMethods={formMethods} enableLeaveWarning={true}>
+      <button onClick={onSubmit}>Save</button>
       <PublicationFreeFormComponent />
       <Card>
         <FileManager
