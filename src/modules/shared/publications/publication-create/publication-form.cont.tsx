@@ -1,6 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useQueryClient } from '@tanstack/react-query'
-import { useRouter } from 'next/router'
 import { type FC } from 'react'
 import { useForm } from 'react-hook-form'
 import { FormattedMessage } from 'react-intl'
@@ -22,7 +21,7 @@ import {
   formatFormData,
   formatPublication
 } from '@/modules/publication/utils/formatters'
-import { PATH } from '@/types/constants/paths'
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import { ROLE } from '@/types/constants/roles'
 
 import FileManager from '../../fileManager/FileManager'
@@ -41,8 +40,6 @@ export const PublicationFormContainer: FC<Props> = ({
   publication,
   refetch
 }) => {
-  const router = useRouter()
-
   const hasEditRole = useAccessControl(ROLE.PUBLICATIONS_EDIT)()
 
   const { mediaType } = useMediaTypeStore()
@@ -67,6 +64,7 @@ export const PublicationFormContainer: FC<Props> = ({
   })
 
   const { mutate } = usePublicationMutation()
+  const { closeModal } = useModalGlobalStore()
 
   const onSuccessfulSubmit = () => {
     queryClient.invalidateQueries({ queryKey: [publicationsTableId] })
@@ -76,21 +74,15 @@ export const PublicationFormContainer: FC<Props> = ({
   const onSubmit = formMethods.handleSubmit(data => {
     const formattedData = formatFormData(data)
     mutate(formattedData, {
-      onSuccess: ({ data }) => {
-        router.push(PATH.PUBLICATION + '/' + data.uid)
+      onSuccess: () => {
         onSuccessfulSubmit()
       }
     })
   })
 
-  const onExit = formMethods.handleSubmit(data => {
-    mutate(formatFormData(data), {
-      onSuccess: () => {
-        router.push(PATH.PUBLICATIONS)
-        onSuccessfulSubmit()
-      }
-    })
-  })
+  const onExit = () => {
+    closeModal('sheet')
+  }
 
   return (
     <Form formMethods={formMethods} enableLeaveWarning={true}>
