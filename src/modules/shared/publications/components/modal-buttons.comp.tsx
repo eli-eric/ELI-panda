@@ -42,25 +42,34 @@ export const ModalHeaderWithButtons = ({
 
   return (
     <div className="border-b bg-background sticky top-0 z-10">
-      {disabledEdit && (
-        <div className="flex gap-2 py-2 flex-row-reverse">
-          <Button
-            size="sm"
-            onClick={handleSubmit}
-            disabled={loading || !isFormDirty}
-          >
-            Save
-          </Button>
-          <Button
-            size="sm"
-            onClick={handleExit}
-            disabled={loading}
-            variant="outline"
-          >
-            Exit
-          </Button>
+      <div className="flex justify-between items-center py-2">
+        <div>
+          {isFormDirty && (
+            <span className="text-muted-foreground text-sm">
+              You have unsaved changes
+            </span>
+          )}
         </div>
-      )}
+        {disabledEdit && (
+          <div className="flex gap-2">
+            <Button
+              size="sm"
+              onClick={handleSubmit}
+              disabled={loading || !isFormDirty}
+            >
+              Save
+            </Button>
+            <Button
+              size="sm"
+              onClick={handleExit}
+              disabled={loading}
+              variant="outline"
+            >
+              Exit
+            </Button>
+          </div>
+        )}
+      </div>
     </div>
   )
 }
