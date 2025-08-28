@@ -2,6 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useQueryClient } from '@tanstack/react-query'
 import { type FC } from 'react'
 import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import { FormattedMessage } from 'react-intl'
 
 import { Form } from '@/components/form/Form'
@@ -69,6 +70,8 @@ export const PublicationFormContainer: FC<Props> = ({
   const onSuccessfulSubmit = () => {
     queryClient.invalidateQueries({ queryKey: [publicationsTableId] })
     refetch?.()
+    toast.success('Publication was succesfuly saved')
+    closeModal('sheet')
   }
 
   const onSubmit = formMethods.handleSubmit(data => {

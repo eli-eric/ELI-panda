@@ -32,7 +32,7 @@ export const PublicationFreeFormComponent = () => {
   }
 
   return (
-    <Card className="py-6">
+    <Card className="py-6 flex flex-col gap-2">
       <RadioSelect
         disabled={disabled}
         name={'mediaType'}

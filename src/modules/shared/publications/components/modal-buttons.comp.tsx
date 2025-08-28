@@ -54,15 +54,15 @@ export const ModalHeaderWithButtons = ({
           <div className="flex items-center gap-2 flex-shrink-0">
             {disabledEdit && (
               <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleSubmit}
-                  disabled={loading}
-                >
+                <Button size="sm" onClick={handleSubmit} disabled={loading}>
                   Save
                 </Button>
-                <Button size="sm" onClick={handleExit} disabled={loading}>
+                <Button
+                  size="sm"
+                  onClick={handleExit}
+                  disabled={loading}
+                  variant="outline"
+                >
                   Exit
                 </Button>
               </div>
