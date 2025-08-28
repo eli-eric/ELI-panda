@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   swcMinify: true,
-  reactStrictMode: false,
+  reactStrictMode: true,
   output: 'standalone',
   images: {
     remotePatterns: [
