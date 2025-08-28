@@ -1,25 +1,20 @@
-import { useRouter } from 'next/router'
-
+import { useSystemCreateSheet } from '@/modules/shared/system/system-create/useSystemCreateSheet'
 import { SearchBarButtonsComponent } from '@/modules/shared/table/SearchBar'
-import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
 import { ExportCsvButton } from './ExportCsvButton'
 import { SystemFilterButtonContainer } from './filters/SystemsFilterButton.cont'
 
 export const SearchBarButtons = () => {
-  const router = useRouter()
+  const openCreateSheet = useSystemCreateSheet({})
 
   const handleRefresh = () => {
     //TODO: refetch()???
   }
-  const handleAdd = () => {
-    router.push(PATH.SYSTEM)
-  }
 
   return (
     <SearchBarButtonsComponent
-      handleAdd={handleAdd}
+      handleAdd={openCreateSheet}
       handleRefresh={handleRefresh}
       editRole={ROLE.SYSTEM_EDIT}
     >

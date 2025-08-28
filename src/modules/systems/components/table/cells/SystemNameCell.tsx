@@ -12,7 +12,7 @@ import { Tooltip } from '@/components/Tooltip'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { useSystemEdit } from '@/modules/shared/system/system-edit/useSystemEdit'
+import { useSystemEditSheet } from '@/modules/shared/system/system-edit/useSystemEditSheet'
 import { getBadgeVariantBySystemLevel } from '@/modules/systemItem/utils'
 import { PATH } from '@/types/constants/paths'
 import type { EndpointProps } from '@/utils/getEndpoints'
@@ -42,7 +42,7 @@ export const SystemNameCell = ({
 }: SystemNameCellProps) => {
   const { original } = row
   const { sparesIn, sparesOut } = original
-  const openEdit = useSystemEdit({ uid: original.uid })
+  const openEdit = useSystemEditSheet({ uid: original.uid })
 
   const [{ isDragging }, dragRef, previewRef] = useDrag({
     collect: monitor => ({

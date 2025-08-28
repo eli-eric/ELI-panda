@@ -3,11 +3,14 @@ import { Suspense } from 'react'
 import { SystemEditForm } from './components/system-edit.form'
 import { SystemEditSkeleton } from './components/system-edit.skeleton'
 
-export const SystemEditContainer = ({ uid }: { uid: string }) => {
+export const SystemEditContainer = ({ uid, onSubmit }: { uid: string }) => {
   console.log('SystemEditContainer', uid)
   return (
     <Suspense fallback={<SystemEditSkeleton />}>
+
+    <Form formMethods={formMethods}>
       <SystemEditForm uid={uid} />
+    </Form>
     </Suspense>
   )
 }
