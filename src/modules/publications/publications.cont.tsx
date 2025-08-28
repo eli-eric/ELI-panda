@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router'
 import type { FC } from 'react'
 
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
@@ -18,7 +17,6 @@ import { usePublicationColumns } from './publications.columns'
 
 export const PublicationsContainer: FC = () => {
   const tableId = 'publications'
-  const router = useRouter()
 
   const columns = usePublicationColumns()
   const { data, refetch } = usePublications(tableId)
@@ -42,7 +40,8 @@ export const PublicationsContainer: FC = () => {
 
   const handleAdd = () =>
     openModal('sheet', {
-      component: PublicationFormContainer
+      component: PublicationFormContainer,
+      props: { title: 'Create publication' }
     })
 
   const handleRefresh = () => {

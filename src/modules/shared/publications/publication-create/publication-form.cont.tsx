@@ -1,9 +1,9 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { type FC } from 'react'
 import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
 import { FormattedMessage } from 'react-intl'
+import { toast } from 'sonner'
 
 import { Form } from '@/components/form/Form'
 import Card from '@/components/layout/Card'
@@ -14,7 +14,6 @@ import {
   validationSchemePeerReviewed
 } from '@/modules/publication//form/scheme'
 import { useMediaTypeStore } from '@/modules/publication/hooks/useMediaTypeStore'
-import { usePublicationMutation } from '@/modules/publication/hooks/usePublicationMutation'
 import { MEDIA_TYPE_CODE } from '@/modules/publication/types/constants'
 import type { PublicationForm } from '@/modules/publication/types/form'
 import type { Publication } from '@/modules/publication/types/responses'
@@ -24,6 +23,7 @@ import {
 } from '@/modules/publication/utils/formatters'
 import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import { ROLE } from '@/types/constants/roles'
+import { queryMutate } from '@/utils/fetcher'
 
 import FileManager from '../../fileManager/FileManager'
 import { FILE_TYPE } from '../../fileManager/types'
@@ -64,21 +64,38 @@ export const PublicationFormContainer: FC<Props> = ({
     )
   })
 
-  const { mutate } = usePublicationMutation()
+  const {
+    formState: { isDirty }
+  } = formMethods
+
+  const { mutate } = useMutation({
+    mutationKey: publication?.uid
+      ? ['publication', publication?.uid]
+      : ['create-publication'],
+    mutationFn: queryMutate<Publication, Publication>(
+      'publication',
+      publication?.uid ? 'put' : 'post',
+      publication?.uid
+    ),
+    onError: (error: any) => {
+      toast.error(`Error: ${error.response?.data?.message}`)
+    }
+  })
   const { closeModal } = useModalGlobalStore()
 
-  const onSuccessfulSubmit = () => {
+  const onSuccessfulSubmit = (publication: Publication) => {
     queryClient.invalidateQueries({ queryKey: [publicationsTableId] })
     refetch?.()
     toast.success('Publication was succesfuly saved')
-    closeModal('sheet')
+    formMethods.reset(formatPublication(publication))
   }
 
   const onSubmit = formMethods.handleSubmit(data => {
     const formattedData = formatFormData(data)
     mutate(formattedData, {
-      onSuccess: () => {
-        onSuccessfulSubmit()
+      onSuccess: data => {
+        data.data
+        onSuccessfulSubmit(data.data)
       }
     })
   })
@@ -88,11 +105,12 @@ export const PublicationFormContainer: FC<Props> = ({
   }
 
   return (
-    <Form formMethods={formMethods} enableLeaveWarning={true}>
+    <Form formMethods={formMethods}>
       <ModalHeaderWithButtons
         editRole={ROLE.PUBLICATIONS_EDIT}
         onSubmit={onSubmit}
         onExit={onExit}
+        isFormDirty={isDirty}
       />
       <PublicationFreeFormComponent />
       <Card>
