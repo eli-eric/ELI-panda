@@ -8,6 +8,7 @@ import { usePublication } from '@/modules/publication/hooks/usePublication'
 import { PATH } from '@/types/constants/paths'
 
 import { PublicationFormContainer } from '../publication-create/publication-form.cont'
+import PublicationSkeleton from '../components/publication-skeleton.comp'
 
 type Props = {
   uid: string
@@ -37,7 +38,7 @@ export const PublicationEditContainer = ({ uid }: Props) => {
   }
 
   if (isLoading) {
-    return <LoaderComponent />
+    return <PublicationSkeleton />
   }
 
   return (
