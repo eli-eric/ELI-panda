@@ -2,6 +2,8 @@ import { z } from 'zod'
 
 import { SystemLevel } from '@/types/gql/graphql'
 
+const systemLevels = Object.values(SystemLevel) as [string, ...string[]]
+
 const codebookSchema = z.object({
   uid: z.string(),
   name: z.string(),
@@ -12,8 +14,8 @@ const codebookSchema = z.object({
 export const systemCreateSchema = z.object({
   name: z.string().trim().min(1, 'Name is required'),
   systemType: codebookSchema.optional().nullable(),
-  systemLevel: z.nativeEnum(SystemLevel, {
-    error: 'System level is required'
+  systemLevel: z.enum(systemLevels, {
+    message: 'System level is required'
   }),
   location: codebookSchema.optional().nullable(),
   zone: codebookSchema.optional().nullable(),
