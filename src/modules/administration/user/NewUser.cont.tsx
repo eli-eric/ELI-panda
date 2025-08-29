@@ -1,4 +1,4 @@
-import { yupResolver } from '@hookform/resolvers/yup'
+import { zodResolver } from '@hookform/resolvers/zod'
 import bcrypt from 'bcryptjs-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -31,7 +31,7 @@ export const NewUserContainer = ({ roles }: Props) => {
   const [selectedRoles, setSelectedRoles] = useState<GetRolesQuery['roles']>(defaultAssignedRoles)
 
   const formMethods = useForm<UserCreateFormType>({
-    resolver: yupResolver(userFormSchema),
+    resolver: zodResolver(userFormSchema),
     defaultValues: {
       isEnabled: true
     }

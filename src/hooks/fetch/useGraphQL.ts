@@ -4,6 +4,7 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
+  UseSuspenseQueryOptions,
   UseSuspenseQueryResult
 } from '@tanstack/react-query'
 import {
@@ -54,14 +55,19 @@ export function useGraphQL<TResult, TVariables extends Variables>(
 export function useSuspenseGraphQL<TResult, TVariables extends Variables>(
   document: TypedDocumentNode<TResult, TVariables>,
   options?: Omit<
-    UseQueryOptions<TResult, Error, TResult, any[]>,
+    UseSuspenseQueryOptions<TResult, Error, TResult, any[]>,
     'queryKey' | 'queryFn'
   > & {
     variables?: TVariables
     customQueryKey?: unknown[]
   }
 ): UseSuspenseQueryResult<TResult, Error> {
-  const adjustedOptions: UseQueryOptions<TResult, Error, TResult, any[]> = {
+  const adjustedOptions: UseSuspenseQueryOptions<
+    TResult,
+    Error,
+    TResult,
+    any[]
+  > = {
     ...options,
     queryFn: async () => {
       return typedGraphQLRequest<TResult, TVariables>(

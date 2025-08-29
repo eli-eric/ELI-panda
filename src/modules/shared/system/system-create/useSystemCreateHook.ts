@@ -5,6 +5,7 @@ import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
 import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import { gql } from '@/types/gql'
+import type { SystemLevel } from '@/types/gql/graphql'
 import { Actions } from '@/types/gql/graphql'
 import { connectN, whereC } from '@/utils/graphql/mutations'
 
@@ -38,7 +39,7 @@ export const useSystemCreateHook = () => {
             description: systemForm.description || null,
             attribute: connectN(systemForm?.attribute?.uid),
             systemCode: systemForm.systemCode || null,
-            systemLevel: systemForm.systemLevel,
+            systemLevel: systemForm.systemLevel as SystemLevel,
             systemType: connectN(systemForm?.systemType?.uid),
             location: connectN(systemForm?.location?.uid),
             zone: connectN(systemForm?.zone?.uid),
@@ -61,11 +62,18 @@ export const useSystemCreateHook = () => {
         }
       })
     },
-    [session?.user?.facilityCode, session?.user?.uid, create, refetch, closeModal]
+    [
+      session?.user?.facilityCode,
+      session?.user?.uid,
+      create,
+      refetch,
+      closeModal
+    ]
   )
 
-  return { 
-    createSystem, 
-    loading: isPending 
+  return {
+    createSystem,
+    loading: isPending
   }
 }
+

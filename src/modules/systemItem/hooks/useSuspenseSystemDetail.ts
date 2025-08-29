@@ -33,7 +33,6 @@ export const useSuspenseSystemDetail = ({ code, uid }: SearchPatterns) => {
           systemCode: code
         }
       },
-      enabled: !!uid || !!code,
       refetchOnMount: 'always',
       refetchOnReconnect: 'always'
     }

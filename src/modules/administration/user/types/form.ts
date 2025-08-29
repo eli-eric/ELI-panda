@@ -1,24 +1,9 @@
+import type { z } from 'zod'
+
 import type { CodebookType } from '@/types/responses/codebook'
 
-export type UserCreateFormType = {
-  email: string
-  facility: CodebookType
-  firstName: string
-  isEnabled: boolean
-  lastName: string
-  password: string
-  employee?: CodebookType | null
-  confirmPassword: string
-  roles: CodebookType[]
-}
+import { userFormSchema, userUpdateFormSchema } from '../components/form/User.schema'
 
-export type UserUpdateFormType = {
-  email: string
-  facility: CodebookType
-  firstName: string
-  isEnabled: boolean
-  employee?: CodebookType | null
-  lastName: string
-  password?: string
-  confirmPassword?: string
-}
+export type UserCreateFormType = z.infer<typeof userFormSchema>
+
+export type UserUpdateFormType = z.infer<typeof userUpdateFormSchema>

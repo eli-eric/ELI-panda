@@ -6,7 +6,7 @@ import { ExportCsvButton } from './ExportCsvButton'
 import { SystemFilterButtonContainer } from './filters/SystemsFilterButton.cont'
 
 export const SearchBarButtons = () => {
-  const openCreateSheet = useSystemCreateSheet({})
+  const openCreateSheet = useSystemCreateSheet()
 
   const handleRefresh = () => {
     //TODO: refetch()???
