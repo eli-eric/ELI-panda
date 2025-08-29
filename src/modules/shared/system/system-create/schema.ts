@@ -11,9 +11,9 @@ const codebookSchema = z.object({
 
 export const systemCreateSchema = z.object({
   name: z.string().trim().min(1, 'Name is required'),
-  stemType: codebookSchema.optional().nullable(),
+  systemType: codebookSchema.optional().nullable(),
   systemLevel: z.nativeEnum(SystemLevel, {
-    required_error: 'System level is required'
+    error: 'System level is required'
   }),
   location: codebookSchema.optional().nullable(),
   zone: codebookSchema.optional().nullable(),
@@ -23,4 +23,3 @@ export const systemCreateSchema = z.object({
 })
 
 export type SystemCreateFormData = z.infer<typeof systemCreateSchema>
-
