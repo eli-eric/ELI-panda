@@ -1,14 +1,13 @@
 import { useEffect } from 'react'
-import toast from 'react-hot-toast'
+import { toast } from 'sonner'
 
 import ErrorPage from '@/components/error/ErrorPage'
-import LoaderComponent from '@/components/loader.comp'
 import RecordNotFound from '@/components/pages/record-not-found.comp'
 import { usePublication } from '@/modules/publication/hooks/usePublication'
-import { PATH } from '@/types/constants/paths'
 
-import { PublicationFormContainer } from '../publication-create/publication-form.cont'
 import PublicationSkeleton from '../components/publication-skeleton.comp'
+import { PublicationFormContainer } from '../publication-create/publication-form.cont'
+import { usePublicationEditSheet } from './usePublicationEditSheet'
 
 type Props = {
   uid: string
@@ -23,6 +22,8 @@ export const PublicationEditContainer = ({ uid }: Props) => {
     refetch
   } = usePublication(uid)
 
+  const [, closeModal] = usePublicationEditSheet(uid)
+
   useEffect(() => {
     if (isError) {
       toast.error('Something went wrong')
@@ -30,7 +31,7 @@ export const PublicationEditContainer = ({ uid }: Props) => {
   }, [isError])
 
   if (error?.response?.status === 404) {
-    return <RecordNotFound returnUrl={PATH.PUBLICATIONS} />
+    return <RecordNotFound onClick={closeModal} />
   }
 
   if (isError) {

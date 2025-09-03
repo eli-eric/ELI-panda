@@ -5,8 +5,7 @@ import { Tooltip } from '@/components/Tooltip'
 import { Button } from '@/components/ui/button'
 import { useAccessControl } from '@/hooks/useAccessControl'
 import useWarningModal from '@/hooks/useWarningModal'
-import { PublicationEditContainer } from '@/modules/shared/publications/publication-edit/publication-edit.cont'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { usePublicationEditSheet } from '@/modules/shared/publications/publication-edit/usePublicationEditSheet'
 import { ROLE } from '@/types/constants/roles'
 
 import { usePublicationDelete } from '../hooks/usePublicationDelete'
@@ -19,13 +18,7 @@ export const ActionButtons: FC<Props> = ({ uid }) => {
 
   const withWarning = useWarningModal()
 
-  const { openModal } = useModalGlobalStore()
-
-  const onEditCLick = () =>
-    openModal('sheet', {
-      component: PublicationEditContainer,
-      props: { uid, title: 'Edit publication' }
-    })
+  const [openEdit] = usePublicationEditSheet(uid)
 
   const canEdit = useAccessControl(ROLE.PUBLICATIONS_EDIT)()
 
@@ -39,7 +32,7 @@ export const ActionButtons: FC<Props> = ({ uid }) => {
         <Button
           variant="ghost"
           size="sm"
-          onClick={onEditCLick}
+          onClick={openEdit}
           className="h-8 w-8 p-0 hover:bg-accent"
         >
           <Edit className="h-4 w-4" />
