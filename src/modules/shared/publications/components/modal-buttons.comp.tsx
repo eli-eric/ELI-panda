@@ -13,7 +13,7 @@ interface Props {
   customElement?: React.ReactNode
 }
 
-export const ModalHeaderWithButtons = ({
+export const SheetFormButtons = ({
   onSubmit,
   onExit,
   editRole,

@@ -27,7 +27,7 @@ import { queryMutate } from '@/utils/fetcher'
 
 import FileManager from '../../fileManager/FileManager'
 import { FILE_TYPE } from '../../fileManager/types'
-import { ModalHeaderWithButtons } from '../components/modal-buttons.comp'
+import { SheetFormButtons } from '../components/modal-buttons.comp'
 import { PublicationFreeFormComponent } from '../components/publication-freeform.comp'
 
 const messages = message.publication
@@ -68,7 +68,7 @@ export const PublicationFormContainer: FC<Props> = ({
     formState: { isDirty }
   } = formMethods
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationKey: publication?.uid
       ? ['publication', publication?.uid]
       : ['create-publication'],
@@ -106,14 +106,14 @@ export const PublicationFormContainer: FC<Props> = ({
 
   return (
     <Form formMethods={formMethods}>
-      <ModalHeaderWithButtons
+      <SheetFormButtons
         editRole={ROLE.PUBLICATIONS_EDIT}
+        loading={isPending}
         onSubmit={onSubmit}
         onExit={onExit}
         isFormDirty={isDirty}
       />
       <PublicationFreeFormComponent />
-      <Card>
         <FileManager
           customTitle="Publication PDF file"
           allowMultiple={false}
@@ -126,7 +126,6 @@ export const PublicationFormContainer: FC<Props> = ({
             <FormattedMessage id={messages.pdfFileMessage} />
           </h1>
         )}
-      </Card>
     </Form>
   )
 }

@@ -1,7 +1,6 @@
 import { Input, TextArea } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
 import { RadioSelect } from '@/components/form/radio-select.comp'
-import Card from '@/components/layout/Card'
 import { useAccessControl } from '@/hooks/useAccessControl'
 import { DepartmentsComponent } from '@/modules/publication/components/departments.comp'
 import { PublishingCountryListbox } from '@/modules/publication/components/publishing-country.listbox'
@@ -32,7 +31,7 @@ export const PublicationFreeFormComponent = () => {
   }
 
   return (
-    <Card className="py-6 flex flex-col gap-2">
+    <div className="py-6 flex flex-col gap-2">
       <RadioSelect
         disabled={disabled}
         name={'mediaType'}
@@ -78,6 +77,6 @@ export const PublicationFreeFormComponent = () => {
       <PublishingCountryListbox />
       <Input {...fields.language} defaultValue={'English'} disabled={true} />
       <TextArea {...fields.note} />
-    </Card>
+    </div>
   )
 }
