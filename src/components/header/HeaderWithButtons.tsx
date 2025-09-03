@@ -114,7 +114,12 @@ export const HeaderWithButtons = ({
         <div className="flex sm:hidden items-center justify-between">
           <div className="flex items-center gap-2">
             <SidebarTrigger />
-            <Button variant="outline" size="sm" onClick={onBack} disabled={loading}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onBack}
+              disabled={loading}
+            >
               <ArrowLeft className="h-4 w-4" />
             </Button>
           </div>

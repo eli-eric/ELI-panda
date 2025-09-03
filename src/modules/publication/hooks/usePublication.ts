@@ -7,11 +7,12 @@ import { queryFetcher } from '@/utils/fetcher'
 
 import type { Publication } from '../types/responses'
 
-export const usePublication = () => {
+export const usePublication = (uid?: string) => {
   const router = useRouter()
-  const uid = router.query.uid as string
+  const publicationUid = uid ? uid : (router.query.uid as string)
   return useQuery<Publication, AxiosError, Publication, QueryFetcherKey>({
-    queryKey: ['publication', { uid }],
-    queryFn: queryFetcher<Publication>('publication')
+    queryKey: ['publication', { uid: publicationUid }],
+    queryFn: queryFetcher<Publication>('publication'),
+    enabled: !!publicationUid,
   })
 }
