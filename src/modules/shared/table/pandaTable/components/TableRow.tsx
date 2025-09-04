@@ -77,7 +77,7 @@ const TableRowOnDrop = ({ getRowProps, row, index }: Props) => {
 
   return (
     <tr
-      ref={dropsettings && dropRef}
+      ref={dropsettings && (dropRef as any)}
       id={id}
       {...rest}
       className={cn(

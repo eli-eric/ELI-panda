@@ -81,7 +81,7 @@ export const ColumnHeader: FC<ColumnHeader> = ({
 
   return (
     <th
-      ref={dropRef}
+      ref={dropRef as any}
       colSpan={header.colSpan}
       style={
         {
@@ -101,7 +101,7 @@ export const ColumnHeader: FC<ColumnHeader> = ({
       )}
     >
       <div
-        ref={previewRef}
+        ref={previewRef as any}
         {...{
           className: cn(
             'flex items-center justify-between pl-3',
@@ -133,7 +133,7 @@ export const ColumnHeader: FC<ColumnHeader> = ({
           {enableColumnReordering &&
             header?.column?.columnDef?.meta?.enableReorder !== false && (
               <button
-                ref={dragRef}
+                ref={dragRef as any}
                 className={cn(header.getContext() && 'pl-2')}
               >
                 <ArrowsRightLeftIcon className="w-6 h-6" />

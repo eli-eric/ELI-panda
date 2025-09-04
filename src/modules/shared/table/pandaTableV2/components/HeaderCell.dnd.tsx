@@ -77,7 +77,7 @@ export const HeaderCellDNDComponent: FC<Props> = ({
 
   return (
     <th
-      ref={dropRef}
+      ref={dropRef as any}
       className={cn(
         'border-r outline-offset-0 border-border',
         'whitespace-nowrap p-2 text-left bg-background font-semibold text-foreground',
@@ -100,7 +100,7 @@ export const HeaderCellDNDComponent: FC<Props> = ({
       }
     >
       <div
-        ref={previewRef}
+        ref={previewRef as any}
         className={cn(
           'h-full w-full flex justify-between',
           header.column.getCanSort() ? 'cursor-pointer select-none' : ''
@@ -119,7 +119,7 @@ export const HeaderCellDNDComponent: FC<Props> = ({
           }[header.column.getIsSorted() as string] ?? null}
           {!isSticky && (
             <button
-              ref={dragRef}
+              ref={dragRef as any}
               className={cn(
                 'ml-1 p-1 hover:bg-accent rounded transition-colors',
                 header.getContext() && 'opacity-50 hover:opacity-100'
