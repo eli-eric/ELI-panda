@@ -1,7 +1,7 @@
 import { type ColumnDef } from '@tanstack/react-table'
 import { useEffect, useMemo, useState } from 'react'
-import { FormattedMessage } from 'react-intl'
 import { toast } from 'react-hot-toast'
+import { FormattedMessage } from 'react-intl'
 
 import { ExpandableNameCell } from '@/components/form/shared/ExpandableNameCell'
 import { Button } from '@/components/ui/button'

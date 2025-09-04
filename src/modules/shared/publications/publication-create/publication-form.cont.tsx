@@ -1,4 +1,4 @@
-import { yupResolver } from '@hookform/resolvers/yup'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { type FC } from 'react'
 import { useForm } from 'react-hook-form'
@@ -6,13 +6,12 @@ import { FormattedMessage } from 'react-intl'
 import { toast } from 'sonner'
 
 import { Form } from '@/components/form/Form'
-import Card from '@/components/layout/Card'
 import { useAccessControl } from '@/hooks/useAccessControl'
 import { message } from '@/i18n/src/messages'
 import {
-  validationSchemeOther,
-  validationSchemePeerReviewed
-} from '@/modules/publication//form/scheme'
+  publicationOtherSchema,
+  publicationPeerReviewedSchema
+} from '@/modules/publication/form/scheme'
 import { useMediaTypeStore } from '@/modules/publication/hooks/useMediaTypeStore'
 import { MEDIA_TYPE_CODE } from '@/modules/publication/types/constants'
 import type { PublicationForm } from '@/modules/publication/types/form'
@@ -29,6 +28,8 @@ import FileManager from '../../fileManager/FileManager'
 import { FILE_TYPE } from '../../fileManager/types'
 import { SheetFormButtons } from '../components/modal-buttons.comp'
 import { PublicationFreeFormComponent } from '../components/publication-freeform.comp'
+import { usePublicationEditSheet } from '../publication-edit/usePublicationEditSheet'
+import { set } from 'lodash'
 
 const messages = message.publication
 
@@ -52,15 +53,15 @@ export const PublicationFormContainer: FC<Props> = ({
   const defaultValues = publication
     ? formatPublication(publication)
     : ({
-        authorsDepartments: [{ department: null, authorsCount: '' }]
+        authorsDepartments: [{ department: null, authorsCount: 0 }]
       } as unknown as PublicationForm)
 
   const formMethods = useForm<any>({
     defaultValues: publication ? formatPublication(publication) : defaultValues,
-    resolver: yupResolver(
+    resolver: zodResolver(
       mediaType === MEDIA_TYPE_CODE.PeerReviewedArticle
-        ? validationSchemePeerReviewed
-        : validationSchemeOther
+        ? publicationPeerReviewedSchema
+        : publicationOtherSchema
     )
   })
 
@@ -82,6 +83,7 @@ export const PublicationFormContainer: FC<Props> = ({
     }
   })
   const { closeModal } = useModalGlobalStore()
+  const [openEdit] = usePublicationEditSheet(publication?.uid as string)
 
   const onSuccessfulSubmit = (publication: Publication) => {
     queryClient.invalidateQueries({ queryKey: [publicationsTableId] })
@@ -114,18 +116,18 @@ export const PublicationFormContainer: FC<Props> = ({
         isFormDirty={isDirty}
       />
       <PublicationFreeFormComponent />
-        <FileManager
-          customTitle="Publication PDF file"
-          allowMultiple={false}
-          hasEditRole={publication ? hasEditRole : false}
-          itemType={FILE_TYPE.PUBLICATION}
-          uid={publication?.uid as string}
-        />
-        {!publication && (
-          <h1 className="text-sm text-gray-600 pl-3">
-            <FormattedMessage id={messages.pdfFileMessage} />
-          </h1>
-        )}
+      <FileManager
+        customTitle="Publication PDF file"
+        allowMultiple={false}
+        hasEditRole={publication ? hasEditRole : false}
+        itemType={FILE_TYPE.PUBLICATION}
+        uid={publication?.uid as string}
+      />
+      {!publication && (
+        <h1 className="text-sm text-gray-600 pl-3">
+          <FormattedMessage id={messages.pdfFileMessage} />
+        </h1>
+      )}
     </Form>
   )
 }

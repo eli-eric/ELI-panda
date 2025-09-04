@@ -1,6 +1,7 @@
+import type { FC } from 'react'
+
 import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
-import { FC } from 'react'
 
 interface Props {
   className?: string

@@ -1,8 +1,8 @@
 import { type FC } from 'react'
 
+import Card from '@/components/layout/Card'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
-import Card from '@/components/layout/Card'
 import type { GetRolesQuery } from '@/types/gql/graphql'
 import type { CodebookType } from '@/types/responses/codebook'
 
