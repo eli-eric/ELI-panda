@@ -5,7 +5,6 @@ import { useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { SidebarTrigger } from '@/components/ui/sidebar'
 import usePermission from '@/hooks/usePermission'
-import { message } from '@/i18n/src/messages'
 import type { ROLE } from '@/types/constants/roles'
 
 interface Props {
@@ -17,7 +16,6 @@ interface Props {
   isFormInvalid?: boolean
   title?: string
 }
-const messages = message.common.buttons
 
 export const HeaderWithButtons = ({
   loading,
@@ -29,7 +27,7 @@ export const HeaderWithButtons = ({
   title
 }: Props) => {
   const disabledEdit = usePermission([editRole])
-  const { back } = useRouter()
+  const { back      } = useRouter()
   const DEBOUNCE_TIME = 1500
   const lastSubmitTimeRef = useRef<number>(0)
 

@@ -23,13 +23,7 @@ export const formatPublication = (
   }
 
   const formattedPublication: PublicationForm = {
-    ...publication,
-    allAuthorsCount: publication.allAuthorsCount.toString(),
-    eliAuthorsCount: publication.eliAuthorsCount.toString(),
-    volume: publication.volume.toString(),
-    issue: publication.issue?.toString(),
-    pagesCount: publication.pagesCount.toString(),
-    impactFactor: publication.impactFactor?.toString()
+    ...publication
   }
   return formattedPublication
 }

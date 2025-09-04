@@ -22,7 +22,7 @@ type SearchPatterns = {
   uid?: string
 }
 
-export const useDeviceInfo = ({ code, uid }: SearchPatterns) => {
+export const useSuspenseSystemDetail = ({ code, uid }: SearchPatterns) => {
   const { data, error, isLoading, refetch, status } = useSuspenseGraphQL(
     systemDetailQuery,
     {
@@ -33,7 +33,6 @@ export const useDeviceInfo = ({ code, uid }: SearchPatterns) => {
           systemCode: code
         }
       },
-      enabled: !!uid || !!code,
       refetchOnMount: 'always',
       refetchOnReconnect: 'always'
     }

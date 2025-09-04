@@ -45,7 +45,10 @@ const ModalSheet: React.FC<{
     >
       <SheetPortal>
         <SheetOverlay />
-        <SheetContent className="w-full sm:w-[400px] lg:w-[600px] xl:w-[800px] !max-w-none overflow-y-auto px-2 sm:px-4 lg:px-6">
+        <SheetContent 
+          size={slot.props?.size || 'l'} 
+          className="!max-w-none overflow-y-auto px-2 sm:px-4 lg:px-6"
+        >
           <SheetHeader>
             <SheetTitle>{slot.props?.title || 'Modal'}</SheetTitle>
             {slot.props?.description && (

@@ -68,6 +68,7 @@ const DateInput = ({
                 <Button
                   variant="outline"
                   disabled={disabled}
+                  onClick={() => setOpen(!open)}
                   className={cn(
                     'w-full justify-between font-normal',
                     !startDate && 'text-muted-foreground',

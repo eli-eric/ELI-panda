@@ -26,13 +26,14 @@ export const DepartmentsComponent = () => {
 
   useEffect(() => {
     const eliAuthorsCountSum = authorsDepartments.reduce((acc, curr) => {
-      return Number(acc) + Number(curr['authorsCount'])
+      const authorsCount = curr['authorsCount'] || 0
+      return Number(acc) + Number(authorsCount)
     }, 0)
     setValue('eliAuthorsCount', eliAuthorsCountSum)
   }, [authorsDepartments, setValue])
 
   const handleAppend = () => {
-    append({ department: null, authorsCount: '' })
+    append({ department: null, authorsCount: 0 })
   }
 
   const handleRemove = (index: number) => {

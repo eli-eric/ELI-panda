@@ -1,20 +1,19 @@
 import { type ColumnDef } from '@tanstack/react-table'
 import { useEffect, useMemo, useState } from 'react'
-import { useFormContext } from 'react-hook-form'
+import { toast } from 'react-hot-toast'
 import { FormattedMessage } from 'react-intl'
 
+import { ExpandableNameCell } from '@/components/form/shared/ExpandableNameCell'
 import { Button } from '@/components/ui/button'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import { PandaTableControlled } from '@/modules/shared/table/pandaTable/PandaTableCotrolled'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import useTableStateStore from '@/store/useTableStateStore'
 import type { CodebookType } from '@/types/responses/codebook'
+import { highlightText } from '@/utils'
 
-import { ExpandableNameCell } from './ExpandableNameCell'
-
-const messages = message.common.buttons
+import { useSystemTypeGroups } from '../hooks/useSystemTypeGroups'
 
 export type Codebooktree = {
   name: string
@@ -24,72 +23,58 @@ export type Codebooktree = {
   isExpandable?: boolean
 }
 
-interface CodebookTreeModalProps {
+interface SystemTypeModalProps {
   loading?: boolean
   enableFiltering?: boolean
-  data?: Codebooktree[]
-  name?: string
-  fetchChildren?: (uid: string) => void
-  additionalColumn?: ColumnDef<Codebooktree, string>
   tableId?: string
   selectParent?: boolean
   manualFiltering?: boolean
-  customSetValue?: (value?: Codebooktree) => void
-  onSelect?: (item?: CodebookType | null) => void
-}
-
-/**
- * Opens the CodebookTreeModalGraphql as a Dialog via the global modal system.
- * Usage: openCodebookTreeModalGraphql({ ...props })
- */
-export function openCodebookTreeModalGraphql(props: CodebookTreeModalProps) {
-  if (typeof window === 'undefined') return // Prevent SSR execution
-
-  const { openModal } = useModalGlobalStore.getState()
-  openModal('dialog2', {
-    component: CodebookTreeModalGraphqlContent,
-    props,
-    onClose:
-      typeof props.onSelect === 'function'
-        ? () => {
-            props.onSelect?.(undefined)
-          }
-        : undefined
-  })
+  onSelect: (item: CodebookType | null) => void
 }
 
 // The actual modal content, rendered by the global modal system
-export function CodebookTreeModalGraphqlContent(
-  props: CodebookTreeModalProps & {
+export function SystemTypeModalContent(
+  props: SystemTypeModalProps & {
     onClose?: () => void
   }
 ) {
   const {
-    data,
-    name,
-    fetchChildren,
-    additionalColumn,
-    enableFiltering,
-    loading = false,
-    tableId = 'codebook-tree',
-    selectParent = true,
-    manualFiltering,
-    customSetValue,
+    tableId = 'system-type-tree',
     onSelect,
-    onClose
+    onClose,
+    selectParent = false,
+    manualFiltering = false,
+    enableFiltering = true
   } = props
 
-  const [item, setItem] = useState<Codebooktree | undefined>(undefined)
+  const { systemTypeGroups, filter, loading, error } = useSystemTypeGroups()
+
+  const [item, setItem] = useState<Codebooktree | null>(null)
   const { instances } = useTableStateStore()
-  const filter = useMemo(
+  const tableFilter = useMemo(
     () => instances[tableId]?.columnFilter,
     [instances, tableId]
   )
-  const filterName = filter?.find(item => item.id === 'name')?.value as string
+  const filterName = tableFilter?.find(item => item.id === 'name')?.value as string
+  const filterCode = tableFilter?.find(item => item.id === 'code')?.value as string
 
-  // Use optional chaining for formContext to handle case when there's no FormProvider
-  const formContext = useFormContext()
-  const setValue = formContext?.setValue
+  if (error) {
+    toast.error('Failed to load system types')
+  }
+
+  const treeData = useMemo(() => {
+    if (!systemTypeGroups) return []
+    return systemTypeGroups?.map(group => ({
+      name: group.name,
+      uid: group.uid,
+      isExpandable: group?.systemTypes?.length > 0,
+      children: group.systemTypes.map(systemType => ({
+        name: systemType.name,
+        code: systemType.code,
+        uid: systemType.uid
+      }))
+    }))
+  }, [systemTypeGroups])
 
   const columns = useMemo((): ColumnDef<Codebooktree, any>[] => {
     const columns: ColumnDef<Codebooktree, string>[] = [
@@ -104,19 +89,30 @@ export function CodebookTreeModalGraphqlContent(
           : undefined,
         cell: ({ row, getValue }) => (
           <ExpandableNameCell
-            {...{ row, getValue, fetchChildren, filterName }}
+            {...{ row, getValue, filterName }}
           />
         )
+      },
+      {
+        header: 'Code',
+        accessorKey: 'code',
+        id: 'code',
+        filterFn: 'fuzzy',
+        cell: ({ getValue }) =>
+          highlightText(getValue() || '', (filterCode as string) || ''),
+        meta: enableFiltering
+          ? { filter: { type: 'string', enableColumnFilter: true } }
+          : undefined
       }
     ]
-    if (additionalColumn) columns.push(additionalColumn)
+
     return columns
-  }, [fetchChildren, additionalColumn, enableFiltering, filterName])
+  }, [enableFiltering, filterName, filterCode])
 
   const table = usePandaTable<Codebooktree>({
     tableId,
     columns,
-    data,
+    data: treeData,
     settings: {
       enableRowSelection: true,
       enableFiltering: enableFiltering,
@@ -128,25 +124,24 @@ export function CodebookTreeModalGraphqlContent(
   const { toggleAllRowsExpanded } = table
 
   useEffect(() => {
-    if (filter && filter?.length > 0) {
+    if (tableFilter && tableFilter?.length > 0) {
       toggleAllRowsExpanded(true)
     }
-    if (!filter || filter.length === 0) {
+    if (!tableFilter || tableFilter.length === 0) {
       toggleAllRowsExpanded(false)
     }
     return () => {
-      setItem(undefined)
+      setItem(null)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filter])
+  }, [tableFilter])
 
-  // Instead of ModalButtons, use a simple footer with actions
   return (
     <div>
       <div className={cn('max-h-[300px]', loading && ' opacity-70')}>
         <PandaTableControlled
           tableId={tableId}
-          data={data}
+          data={treeData}
           table={table}
           loading={loading}
           settings={{
@@ -164,9 +159,7 @@ export function CodebookTreeModalGraphqlContent(
                   uid: row.original.uid,
                   name:
                     row.original.name +
-                    (row.original.code && !customSetValue
-                      ? ` (${row.original.code})`
-                      : ''),
+                    (row.original.code ? ` (${row.original.code})` : ''),
                   code: row.original?.code
                 })
               }
@@ -175,9 +168,7 @@ export function CodebookTreeModalGraphqlContent(
                   uid: row.original.uid,
                   name:
                     row.original.name +
-                    (row.original.code && !customSetValue
-                      ? ` (${row.original.code})`
-                      : ''),
+                    (row.original.code ? ` (${row.original.code})` : ''),
                   code: row.original?.code
                 })
               }
@@ -193,8 +184,9 @@ export function CodebookTreeModalGraphqlContent(
       <div className="flex justify-end gap-2 mt-4">
         <Button
           type="button"
+          variant={'outline'}
           onClick={() => {
-            if (onClose) onClose()
+            onClose?.()
           }}
         >
           <FormattedMessage id={message.common.buttons.close} />
@@ -203,13 +195,8 @@ export function CodebookTreeModalGraphqlContent(
           type="button"
           disabled={!item}
           onClick={() => {
-            if (customSetValue) {
-              customSetValue(item)
-            } else if (name && setValue) {
-              setValue(name, item)
-            }
-            onSelect && onSelect(item)
-            if (onClose) onClose()
+            onSelect(item)
+            onClose?.()
           }}
         >
           <FormattedMessage id={message.common.buttons.continue} />

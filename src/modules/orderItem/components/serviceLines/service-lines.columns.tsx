@@ -12,10 +12,9 @@ import { PATH } from '@/types/constants/paths'
 
 import {
   DeliveredAllButton,
-  ServiceLinePriceFooter,
   ServiceDeliveryAction,
-  ServiceLineActionButtons as ServiceLineActions
-} from '../../actions'
+  ServiceLineActionButtons as ServiceLineActions,
+  ServiceLinePriceFooter} from '../../actions'
 import useOrderDetail from '../../hooks/useOrderDetail'
 const messages = message.ordersPage.serviceLines.columns
 
