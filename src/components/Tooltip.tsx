@@ -1,13 +1,15 @@
-type Props = {
-  content?: string
-  children: React.ReactNode
-}
 import {
   Tooltip as TP,
   TooltipContent,
   TooltipTrigger
 } from '@/components/ui/tooltip'
-export const Tooltip = ({ children, content }: Props) =>
+
+type Props = {
+  content?: string
+  children: React.ReactNode
+}
+
+export const Tooltip: React.FC<Props> = ({ children, content }) =>
   content ? (
     <TP>
       <TooltipTrigger asChild>{children}</TooltipTrigger>
