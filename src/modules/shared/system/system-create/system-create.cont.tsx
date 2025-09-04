@@ -3,7 +3,9 @@ import type { FC } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { Form } from '@/components/form/Form'
-import { ModalHeaderButtons } from '@/components/header/modal-header.buttons'
+import { SheetFormButtons } from '@/components/sheet-form-buttons'
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { ROLE } from '@/types/constants/roles'
 import { SystemLevel } from '@/types/gql/graphql'
 
 import { SystemDetailSection } from '../system-edit/components/sections/system-detail.section'
@@ -26,15 +28,30 @@ export const SystemCreateContainer: FC = () => {
     }
   })
 
+  const {
+    formState: { isDirty }
+  } = formMethods
+
   const { createSystem, loading } = useSystemCreateHook()
+  const { closeModal } = useModalGlobalStore()
 
   const onSubmit = (data: SystemCreateFormData) => {
     createSystem(data)
   }
 
+  const onExit = () => {
+    closeModal('sheet')
+  }
+
   return (
     <Form formMethods={formMethods} onSubmit={onSubmit}>
-      <ModalHeaderButtons isFetching={loading} />
+      <SheetFormButtons
+        editRole={ROLE.SYSTEM_EDIT}
+        loading={loading}
+        onSubmit={formMethods.handleSubmit(onSubmit)}
+        onExit={onExit}
+        isFormDirty={isDirty}
+      />
 
       <SystemDetailSection />
     </Form>

@@ -6,6 +6,7 @@ import { FormattedMessage } from 'react-intl'
 import { toast } from 'sonner'
 
 import { Form } from '@/components/form/Form'
+import { SheetFormButtons } from '@/components/sheet-form-buttons'
 import { useAccessControl } from '@/hooks/useAccessControl'
 import { message } from '@/i18n/src/messages'
 import {
@@ -26,10 +27,8 @@ import { queryMutate } from '@/utils/fetcher'
 
 import FileManager from '../../fileManager/FileManager'
 import { FILE_TYPE } from '../../fileManager/types'
-import { SheetFormButtons } from '../components/modal-buttons.comp'
 import { PublicationFreeFormComponent } from '../components/publication-freeform.comp'
 import { usePublicationEditSheet } from '../publication-edit/usePublicationEditSheet'
-import { set } from 'lodash'
 
 const messages = message.publication
 
