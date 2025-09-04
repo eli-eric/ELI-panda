@@ -50,7 +50,7 @@ const CatalogueItemContainer = ({
 
   const { catalogueCategory } = useCategory(catalogueCategoryUid)
 
-  const imageRef = useRef<ImageGalleryRef>()
+  const imageRef = useRef<ImageGalleryRef | undefined>(undefined)
   const formMethods = useForm<any>({
     resolver: yupResolver(schema),
     defaultValues: { ...item }

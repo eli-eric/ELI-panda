@@ -77,7 +77,7 @@ export const TableRowDNDComponent: FC<Props> = ({
       }}
       {...rest}
     >
-      <div className="flex" ref={dropRef}>
+      <div className="flex" ref={dropRef as any}>
         {virtualPaddingLeft ? (
           //fake empty column to the left for virtualization scroll padding
           <td style={{ display: 'flex', width: virtualPaddingLeft }} />

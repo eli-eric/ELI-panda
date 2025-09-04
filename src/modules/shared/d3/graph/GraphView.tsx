@@ -27,7 +27,7 @@ const GraphView: FC<PropsWithChildren<Props>> = ({
   renderStats,
   renderFilter
 }) => {
-  const svgRef = useRef<SVGSVGElement | null>(null)
+  const svgRef = useRef<SVGSVGElement>(null!)
   const circleRadius = 10
 
   const [openStats, setOpenStats] = useState(false)

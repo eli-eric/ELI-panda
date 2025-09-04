@@ -66,7 +66,7 @@ export const SystemForm: FC<PropsWithChildren> = ({ children }) => {
   const router = useRouter()
   const uid = router.query.uid as string | undefined
 
-  const systemImageRef = useRef<ImageGalleryRef>()
+  const systemImageRef = useRef<ImageGalleryRef | undefined>(undefined)
 
   const { updateSystem, loading } = useSystemUpdate(
     systemImageRef,

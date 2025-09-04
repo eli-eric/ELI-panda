@@ -71,14 +71,14 @@ export const SystemNameCell = ({
         'flex items-center w-full group'
       )}
     >
-      <div className="flex-1 min-w-0 overflow-hidden" ref={dragRef}>
+      <div className="flex-1 min-w-0 overflow-hidden" ref={dragRef as any}>
         <div
           className={cn(
             'flex items-center py-1',
             original.hasSubsystems && 'group/expand cursor-pointer'
           )}
           onClick={original.hasSubsystems ? handleExpand : undefined}
-          ref={previewRef}
+          ref={previewRef as any}
         >
           {enableDragAndDrop && (
             <button className="mr-2 shrink-0">
