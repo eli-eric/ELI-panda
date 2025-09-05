@@ -1,17 +1,19 @@
-import React from 'react'
+import React, { useCallback } from 'react'
+import { useFormContext } from 'react-hook-form'
 
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps } from '@/types/form'
+import type { CodebookType } from '@/types/responses/codebook'
 
 import { ModalSelect } from './ModalSelect'
-import { openCodebookTreeModal } from './shared/CodebookTreeModal'
+import { useCodebookTreeModal } from './shared/hooks/useCodebookTreeModal'
 
 type ComboboxPropsT = FieldProps &
   React.InputHTMLAttributes<HTMLInputElement> & {
     codebook?: CODEBOOK
     isObject?: boolean
     position?: 'top' | 'bottom'
-    onSelect?: (item?: any) => void
+    onSelect?: (item?: CodebookType | null) => void
     isFilter?: boolean
   }
 
@@ -25,6 +27,26 @@ export const ComboboxTree = ({
   onSelect,
   isFilter
 }: ComboboxPropsT) => {
+  const { setValue } = useFormContext()
+  const { openCodebookTreeModal } = useCodebookTreeModal()
+
+  const handleCodebookSelect = useCallback(
+    (value?: CodebookType | null | undefined) => {
+      console.log('Selected value:', value)
+      setValue(name, value)
+      onSelect?.(value)
+    },
+    [setValue, name, onSelect]
+  )
+
+  const handleOpenModal = () => {
+    openCodebookTreeModal({
+      codebook,
+      name,
+      onSubmit: handleCodebookSelect
+    })
+  }
+
   return (
     <ModalSelect
       name={name}
@@ -34,13 +56,7 @@ export const ComboboxTree = ({
       disabled={disabled}
       placeholder={placeholder}
       label={label}
-      onClick={() => {
-        openCodebookTreeModal({
-          codebook,
-          name,
-          onSubmit: onSelect
-        })
-      }}
+      onClick={handleOpenModal}
     />
   )
 }
