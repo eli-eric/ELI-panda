@@ -1,5 +1,5 @@
 import { Disclosure, DisclosureButton } from '@headlessui/react'
-import { MinusIcon, PlusIcon } from '@heroicons/react/20/solid'
+import { Minus, Plus } from 'lucide-react'
 import { Fragment } from 'react'
 
 import { cn } from '@/lib/utils'
@@ -27,12 +27,12 @@ const DisclosureComponent = ({ title, children, defaultOpen }: Props) => (
               </span>
               <span className="ml-6 flex items-center">
                 {open ? (
-                  <MinusIcon
+                  <Minus
                     className="block h-6 w-6 text-orange-400 group-hover:text-orange-500"
                     aria-hidden="true"
                   />
                 ) : (
-                  <PlusIcon
+                  <Plus
                     className="block h-6 w-6 text-gray-400 group-hover:text-gray-500"
                     aria-hidden="true"
                   />

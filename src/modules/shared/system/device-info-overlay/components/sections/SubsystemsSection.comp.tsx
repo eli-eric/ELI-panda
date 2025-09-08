@@ -1,9 +1,4 @@
 import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  EllipsisHorizontalIcon
-} from '@heroicons/react/24/solid'
-import {
   type ColumnDef,
   getCoreRowModel,
   getFilteredRowModel,
@@ -13,6 +8,7 @@ import {
   type SortingState,
   useReactTable
 } from '@tanstack/react-table'
+import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react'
 import { ExternalLink } from 'lucide-react'
 import { type FC, useMemo, useState } from 'react'
 
@@ -176,7 +172,7 @@ export const SubsystemsSection: FC<SubsystemsSectionProps> = ({
               disabled={!table.getCanPreviousPage()}
               className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed text-gray-700 dark:text-gray-300"
             >
-              <ChevronLeftIcon className="h-4 w-4" />
+              <ChevronLeft className="h-4 w-4" />
             </button>
 
             <div className="flex items-center space-x-1">
@@ -204,7 +200,7 @@ export const SubsystemsSection: FC<SubsystemsSectionProps> = ({
                   page === currentPage + 2
                 ) {
                   return (
-                    <EllipsisHorizontalIcon
+                    <MoreHorizontal
                       key={page}
                       className="h-4 w-4 text-gray-400 dark:text-gray-500"
                     />
@@ -219,7 +215,7 @@ export const SubsystemsSection: FC<SubsystemsSectionProps> = ({
               disabled={!table.getCanNextPage()}
               className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed text-gray-700 dark:text-gray-300"
             >
-              <ChevronRightIcon className="h-4 w-4" />
+              <ChevronRight className="h-4 w-4" />
             </button>
           </div>
         </div>

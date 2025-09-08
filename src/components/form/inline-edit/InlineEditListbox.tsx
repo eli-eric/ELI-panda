@@ -120,7 +120,7 @@ export const InlineEditListbox = ({
       name={name}
       control={control}
       defaultValue={defaultValue}
-      render={({ field, fieldState: { error } }) => {
+      render={({ field }) => {
         const currentValue = (() => {
           if (!field.value) return allowEmptyOption ? '__empty__' : ''
           return typeof field.value === 'string'

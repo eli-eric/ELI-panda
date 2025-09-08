@@ -47,7 +47,7 @@ export function SystemTypeModalContent(
     enableFiltering = true
   } = props
 
-  const { systemTypeGroups, filter, loading, error } = useSystemTypeGroups()
+  const { systemTypeGroups, loading, error } = useSystemTypeGroups()
 
   const [item, setItem] = useState<Codebooktree | null>(null)
   const { instances } = useTableStateStore()
@@ -55,8 +55,10 @@ export function SystemTypeModalContent(
     () => instances[tableId]?.columnFilter,
     [instances, tableId]
   )
-  const filterName = tableFilter?.find(item => item.id === 'name')?.value as string
-  const filterCode = tableFilter?.find(item => item.id === 'code')?.value as string
+  const filterName = tableFilter?.find(item => item.id === 'name')
+    ?.value as string
+  const filterCode = tableFilter?.find(item => item.id === 'code')
+    ?.value as string
 
   if (error) {
     toast.error('Failed to load system types')
@@ -88,9 +90,7 @@ export function SystemTypeModalContent(
           ? { filter: { type: 'string', enableColumnFilter: true } }
           : undefined,
         cell: ({ row, getValue }) => (
-          <ExpandableNameCell
-            {...{ row, getValue, filterName }}
-          />
+          <ExpandableNameCell {...{ row, getValue, filterName }} />
         )
       },
       {

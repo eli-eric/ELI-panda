@@ -169,11 +169,11 @@ export function TableBody<T extends object>({
                   className={cn(
                     'p-2 px-4',
                     // Add backdrop-blur and overlay for pinned columns using ::before
-                    isPinned === 'left' 
-                      ? 'border-r border-border backdrop-blur-sm before:absolute before:inset-0 before:bg-background/20 before:pointer-events-none before:z-[-1] relative' 
+                    isPinned === 'left'
+                      ? 'border-r border-border backdrop-blur-sm before:absolute before:inset-0 before:bg-background/20 before:pointer-events-none before:z-[-1] relative'
                       : '',
-                    isPinned === 'right' 
-                      ? 'border-l border-border backdrop-blur-sm before:absolute before:inset-0 before:bg-background/20 before:pointer-events-none before:z-[-1] relative' 
+                    isPinned === 'right'
+                      ? 'border-l border-border backdrop-blur-sm before:absolute before:inset-0 before:bg-background/20 before:pointer-events-none before:z-[-1] relative'
                       : '',
                     // Allow text wrapping for all columns with defined width
                     'whitespace-normal break-words',

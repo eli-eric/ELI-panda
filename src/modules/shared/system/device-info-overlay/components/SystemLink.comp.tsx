@@ -1,4 +1,4 @@
-import { LinkIcon } from '@heroicons/react/24/outline'
+import { ExternalLink } from 'lucide-react'
 import { type FC, type ReactNode } from 'react'
 
 import { cn } from '@/lib/utils'
@@ -55,13 +55,7 @@ export const SystemLink: FC<SystemLinkProps> = ({
       {icon && <span className="shrink-0">{icon}</span>}
       <span>{children}</span>
       {external && (
-        <LinkIcon
-          className="w-3 h-3 opacity-60"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-        />
+        <ExternalLink className="w-3 h-3 opacity-60" aria-hidden="true" />
       )}
     </>
   )

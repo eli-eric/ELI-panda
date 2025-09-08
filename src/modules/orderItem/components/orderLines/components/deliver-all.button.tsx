@@ -1,4 +1,4 @@
-import { CheckCircleIcon } from '@heroicons/react/24/outline'
+import { CheckCircle } from 'lucide-react'
 
 import { Button } from '@/components/Buttons'
 import { Tooltip } from '@/components/Tooltip'
@@ -21,7 +21,7 @@ export const DeliveredAllButton = () => {
         className="flex justify-center items-center p-1 h-7 min-h-0 w-7"
         onClick={handleClick}
       >
-        <CheckCircleIcon className="h-5 w-5" />
+        <CheckCircle className="h-5 w-5" />
       </Button>
     </Tooltip>
   )

@@ -9,12 +9,15 @@ interface NewTabLinkProps {
   className?: string
 }
 export const NewTabLink: FC<NewTabLinkProps> = ({ href, value, className }) => (
-  <Link 
-    href={href} 
+  <Link
+    href={href}
     target="_blank"
     rel="noopener noreferrer"
-    onClick={(e) => e.stopPropagation()}
-    className={cn('text-primary hover:text-primary/80 underline cursor-pointer', className)}
+    onClick={e => e.stopPropagation()}
+    className={cn(
+      'text-primary hover:text-primary/80 underline cursor-pointer',
+      className
+    )}
   >
     {value}
   </Link>

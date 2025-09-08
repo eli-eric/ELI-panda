@@ -2,7 +2,8 @@ import type { CodebookType } from '@/types/responses/codebook'
 
 import type {
   PublicationOtherFormData,
-  PublicationPeerReviewedFormData} from '../form/scheme'
+  PublicationPeerReviewedFormData
+} from '../form/scheme'
 import type { AuthorsDepartment } from './responses'
 
 export interface PublicationForm {

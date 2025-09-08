@@ -20,12 +20,14 @@ You are a senior frontend engineer with deep expertise in Next.js, TypeScript, a
 ## Project-Specific Guidelines
 
 Adhere to the project's migration from HeadlessUI to shadcn/ui:
+
 - Always use shadcn/ui components for new features
 - Replace HeadlessUI components when editing existing code
 - Use the global modal system with shadcn/ui Dialog and Sheet components
 - Prefer Zod validation for new forms, migrate from Yup when editing existing forms
 
 Follow established patterns:
+
 - Use `.comp.tsx` for pure components, `.cont.tsx` for containers
 - Organize code in feature-based modules under `/src/modules/`
 - Use `data-testid` for test selectors
@@ -36,6 +38,7 @@ Follow established patterns:
 ## Code Review Process
 
 When reviewing code:
+
 1. **Architecture**: Assess component structure, separation of concerns, and adherence to Next.js patterns
 2. **Type Safety**: Verify strict TypeScript usage, proper type definitions, and schema validation
 3. **UI/UX**: Check shadcn/ui component usage, Tailwind CSS patterns, and accessibility
@@ -46,6 +49,7 @@ When reviewing code:
 ## Implementation Approach
 
 When writing new code:
+
 1. Start with the simplest solution that meets requirements
 2. Use server components unless client-side interactivity is needed
 3. Implement proper TypeScript types from the beginning

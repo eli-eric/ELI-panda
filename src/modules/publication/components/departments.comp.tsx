@@ -1,4 +1,4 @@
-import { TrashIcon } from '@heroicons/react/24/outline'
+import { Trash2 } from 'lucide-react'
 import { Fragment, useEffect } from 'react'
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 import { FormattedMessage, useIntl } from 'react-intl'
@@ -56,7 +56,7 @@ export const DepartmentsComponent = () => {
                 onClick={() => handleRemove(index)}
                 disabled={fields.length === 1}
               >
-                <TrashIcon className="w-6 h-6" />
+                <Trash2 className="w-6 h-6" />
               </button>
             </div>
           )}

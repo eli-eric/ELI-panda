@@ -24,11 +24,11 @@ export const NewUserContainer = ({ roles }: Props) => {
     ROLE.SYSTEMS_VIEW,
     ROLE.ROOM_CARD_VIEW
   ]
-  const defaultAssignedRoles = roles?.filter(role =>
-    defaultRoles.includes(role.code as ROLE)
-  ) || []
+  const defaultAssignedRoles =
+    roles?.filter(role => defaultRoles.includes(role.code as ROLE)) || []
 
-  const [selectedRoles, setSelectedRoles] = useState<GetRolesQuery['roles']>(defaultAssignedRoles)
+  const [selectedRoles, setSelectedRoles] =
+    useState<GetRolesQuery['roles']>(defaultAssignedRoles)
 
   const formMethods = useForm<UserCreateFormType>({
     resolver: zodResolver(userFormSchema),
@@ -39,8 +39,12 @@ export const NewUserContainer = ({ roles }: Props) => {
 
   const { createUser, loading } = useUserCreate()
 
-  const onSubmit = (data: UserCreateFormType, submittedSelectedRoles: GetRolesQuery['roles'] = []) => {
-    const rolesToUse = submittedSelectedRoles.length > 0 ? submittedSelectedRoles : selectedRoles
+  const onSubmit = (
+    data: UserCreateFormType,
+    submittedSelectedRoles: GetRolesQuery['roles'] = []
+  ) => {
+    const rolesToUse =
+      submittedSelectedRoles.length > 0 ? submittedSelectedRoles : selectedRoles
     const dataToSend: UserCreateInput[] = [
       {
         email: data.email,
@@ -61,8 +65,14 @@ export const NewUserContainer = ({ roles }: Props) => {
   }
 
   const addRole = (selectedRole?: CodebookType) => {
-    if (selectedRole && !selectedRoles.find(role => role.uid === selectedRole.uid)) {
-      setSelectedRoles(prev => [...prev, selectedRole as GetRolesQuery['roles'][0]])
+    if (
+      selectedRole &&
+      !selectedRoles.find(role => role.uid === selectedRole.uid)
+    ) {
+      setSelectedRoles(prev => [
+        ...prev,
+        selectedRole as GetRolesQuery['roles'][0]
+      ])
     } else {
       toast.error('Role already exists!')
     }

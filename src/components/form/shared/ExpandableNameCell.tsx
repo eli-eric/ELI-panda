@@ -1,5 +1,5 @@
-import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import type { Row } from '@tanstack/react-table'
+import { ChevronDown, ChevronRight } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 import { highlightText } from '@/utils'
@@ -40,9 +40,9 @@ export const ExpandableNameCell = ({
       >
         <button>
           {row.getIsExpanded() ? (
-            <ChevronDownIcon className="w-4 h-4" />
+            <ChevronDown className="w-4 h-4" />
           ) : (
-            <ChevronRightIcon className="w-4 h-4" />
+            <ChevronRight className="w-4 h-4" />
           )}
         </button>
 

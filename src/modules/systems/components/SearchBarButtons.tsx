@@ -8,13 +8,17 @@ import { SystemFilterButtonContainer } from './filters/SystemsFilterButton.cont'
 export const SearchBarButtons = () => {
   const openCreateSheet = useSystemCreateSheet()
 
+  const handleOpenDialog = () => {
+    openCreateSheet()
+  }
+
   const handleRefresh = () => {
     //TODO: refetch()???
   }
 
   return (
     <SearchBarButtonsComponent
-      handleAdd={openCreateSheet}
+      handleAdd={handleOpenDialog}
       handleRefresh={handleRefresh}
       editRole={ROLE.SYSTEM_EDIT}
     >

@@ -1,7 +1,6 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import type { ColumnDef, Table } from '@tanstack/react-table'
 import { startTransition, useEffect, useMemo, useRef, useState } from 'react'
-import { useFormContext } from 'react-hook-form'
 import { FormattedMessage } from 'react-intl'
 
 import { Button } from '@/components/Buttons'
@@ -9,14 +8,11 @@ import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import { useFilters } from '@/modules/shared/table/pandaTable/hooks/useFilters'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import useTableStateStore from '@/store/useTableStateStore'
 import type { CodebookType } from '@/types/responses/codebook'
 import { queryFetcher } from '@/utils/fetcher'
 
 import { ExpandableNameCell } from './ExpandableNameCell'
-
-const messages = message.common.buttons
 
 type Codebooktree = {
   name: string
@@ -32,39 +28,18 @@ interface CodebookTreeModalProps {
   onSubmit?: (item?: any) => void
 }
 
-/**
- * Opens the CodebookTreeModal as a Dialog via the global modal system.
- * Usage: openCodebookTreeModal({ ...props })
- */
-export function openCodebookTreeModal(
-  props: Omit<CodebookTreeModalProps, 'open' | 'setOpen'>
-) {
-  if (typeof window === 'undefined') return // Prevent SSR execution
-
-  const { openModal } = useModalGlobalStore.getState()
-  openModal('dialog1', {
-    component: CodebookTreeModalContent,
-    props,
-    onClose:
-      typeof props.onSubmit === 'function'
-        ? () => {
-            props.onSubmit?.(undefined)
-          }
-        : undefined
-  })
-}
-
 // The actual modal content, rendered by the global modal system
 export function CodebookTreeModalContent(
-  props: Omit<CodebookTreeModalProps, 'open' | 'setOpen'> & {
+  props: Omit<CodebookTreeModalProps, 'open' | 'setOpen' | 'onSubmit'> & {
     onClose?: () => void
+    onSelect?: (item?: any) => void
+    title?: string
   }
 ) {
-  const { codebook, name, onSubmit, onClose } = props
+  const { codebook, onSelect, onClose } = props
 
   const tableId = 'codebook'
   const [item, setItem] = useState<CodebookType | undefined>(undefined)
-  const { setValue } = useFormContext()
   const { reset } = useTableStateStore()
   const [filterState] = useFilters(tableId, false, false)
   const search = filterState[0]?.value as string
@@ -114,7 +89,7 @@ export function CodebookTreeModalContent(
   )
 
   return (
-    <div className="max-h-[300px]">
+    <div className="flex flex-col h-[300px] pt-4">
       <PandaTable
         ref={tableRef}
         tableId={tableId}
@@ -128,7 +103,7 @@ export function CodebookTreeModalContent(
           manualFiltering: true
         }}
         className={
-          'relative overflow-y-auto h-[300px] border-l border-b border-gray-400'
+          'relative overflow-y-auto flex-1 border-l border-b border-gray-400'
         }
         getRowProps={row => ({
           onClick: () => {
@@ -142,9 +117,10 @@ export function CodebookTreeModalContent(
           )
         })}
       />
-      <div className="flex justify-end gap-2 mt-4">
+      <div className="flex justify-end gap-2 mt-6 flex-shrink-0">
         <Button
           type="button"
+          variant="outline"
           onClick={() => {
             if (onClose) onClose()
           }}
@@ -155,8 +131,7 @@ export function CodebookTreeModalContent(
           type="button"
           disabled={!item}
           onClick={() => {
-            onSubmit && onSubmit(item)
-            setValue(name, item)
+            onSelect?.(item)
             if (onClose) onClose()
             setItem(undefined)
             reset(tableId)

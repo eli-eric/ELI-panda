@@ -1,9 +1,5 @@
 import { Listbox as HUIListbox } from '@headlessui/react'
-import {
-  CheckIcon,
-  ChevronDownIcon,
-  XMarkIcon
-} from '@heroicons/react/20/solid'
+import { Check, ChevronDown, X } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 
 import { useCodebook } from '@/hooks/fetch/useCodebook'
@@ -72,15 +68,12 @@ export const DefferedListbox = ({
               onClick={handleClear}
               className="absolute mr-7 inset-y-0 right-0 flex items-center rounded-r-md px-1 focus:outline-none cursor-pointer text-gray-200  hover:text-red-500"
             >
-              <XMarkIcon className="h-4 w-4" aria-hidden="true" />
+              <X className="h-4 w-4" aria-hidden="true" />
             </div>
           )}
           <div className="absolute inset-y-0 right-0 flex items-center pr-2">
             {unit && <span className="text-gray-400 sm:text-sm">{unit}</span>}
-            <ChevronDownIcon
-              className="h-4 w-4 text-gray-500"
-              aria-hidden="true"
-            />
+            <ChevronDown className="h-4 w-4 text-gray-500" aria-hidden="true" />
           </div>
         </HUIListbox.Button>
       </div>
@@ -130,12 +123,7 @@ export const DefferedListbox = ({
                           active ? 'text-white' : 'text-orange-500'
                         )}
                       >
-                        <CheckIcon
-                          className="h-4 w-4
-
-"
-                          aria-hidden="true"
-                        />
+                        <Check className="h-4 w-4" aria-hidden="true" />
                       </span>
                     )}
                   </>

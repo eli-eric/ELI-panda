@@ -84,4 +84,3 @@ export const TitleCell: FC<TitleCellProps> = ({
     </div>
   )
 }
-

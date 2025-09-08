@@ -18,7 +18,6 @@ interface Props {
 const CatalogueTableSelect = ({ setItem, selectedItem }: Props) => {
   const tableId = 'catalogueItemsModal'
 
-  console.log('CatalogueTableSelect: rendering with tableId:', selectedItem)
   const { catalogueItems, loading } = useCatalogueItems(tableId)
   const { catalogueCategories } = useCategoryList()
 
@@ -54,7 +53,6 @@ const CatalogueTableSelect = ({ setItem, selectedItem }: Props) => {
                 : ''
             ),
             onClick: () => {
-              console.log('CatalogueTableSelect: item clicked:', row.original)
               setItem(row.original)
             }
           })}

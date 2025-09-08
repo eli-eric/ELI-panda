@@ -15,11 +15,7 @@ export const GraphModalButton: FC<Props> = ({ uid }) => {
   }
 
   return (
-    <Button
-      variant="outline"
-      size="sm"
-      onClick={() => openGraphModal(uid)}
-    >
+    <Button variant="outline" size="sm" onClick={() => openGraphModal(uid)}>
       <Share className="h-4 w-4" />
     </Button>
   )

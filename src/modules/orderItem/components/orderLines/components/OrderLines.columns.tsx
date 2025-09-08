@@ -1,5 +1,5 @@
-import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import type { ColumnDef } from '@tanstack/react-table'
+import { Info } from 'lucide-react'
 import { Edit, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -157,7 +157,7 @@ const useOrderLinesColumns = () => {
           <Fragment>
             {getValue() && (
               <Tooltip content={getValue()}>
-                <InformationCircleIcon className="h-6 w-6 shrink-0" />
+                <Info className="h-6 w-6 shrink-0" />
               </Tooltip>
             )}
           </Fragment>

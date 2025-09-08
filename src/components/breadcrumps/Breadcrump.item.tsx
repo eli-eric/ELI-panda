@@ -1,4 +1,4 @@
-import { ChevronRightIcon } from '@heroicons/react/20/solid'
+import { ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 
 import { cn } from '@/lib/utils'
@@ -27,7 +27,7 @@ export const BreadcrumpItem = ({
     return (
       <li key={name} className="flex">
         <div className="flex items-center whitespace-nowrap">
-          <ChevronRightIcon
+          <ChevronRight
             className="h-4 w-4 shrink-0 text-gray-400"
             aria-hidden="true"
           />
@@ -48,7 +48,7 @@ export const BreadcrumpItem = ({
     <li key={name} className="flex">
       <div className="flex items-center whitespace-nowrap">
         {!noIcon && (
-          <ChevronRightIcon
+          <ChevronRight
             className="h-4 w-4 shrink-0 text-gray-400"
             aria-hidden="true"
           />

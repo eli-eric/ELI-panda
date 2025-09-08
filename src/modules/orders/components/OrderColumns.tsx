@@ -1,5 +1,5 @@
-import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import type { CellContext, ColumnDef } from '@tanstack/react-table'
+import { Info } from 'lucide-react'
 import Link from 'next/link'
 import { Fragment, useMemo } from 'react'
 import { FormattedDate, useIntl } from 'react-intl'
@@ -128,7 +128,7 @@ export const useOrderColumns = ({ isReadOnly }: Props) => {
           <Fragment>
             {getValue() && (
               <Tooltip content={getValue()}>
-                <InformationCircleIcon className="h-5 w-5 shrink-0" />
+                <Info className="h-5 w-5 shrink-0" />
               </Tooltip>
             )}
           </Fragment>

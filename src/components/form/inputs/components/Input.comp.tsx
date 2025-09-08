@@ -1,4 +1,4 @@
-import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
+import { Eye, EyeOff } from 'lucide-react'
 import React, { useEffect, useId, useState } from 'react'
 import { Controller, useWatch } from 'react-hook-form'
 import { useFormContext } from 'react-hook-form'
@@ -96,7 +96,7 @@ export const Input = ({
               <div className="absolute inset-y-0 right-0 cursor-pointer flex items-center pr-3">
                 {showPassword ? (
                   <Tooltip content="Hide password">
-                    <EyeIcon
+                    <EyeOff
                       data-testid="toggle-password-visibility"
                       aria-label="Show password"
                       role="button"
@@ -106,7 +106,7 @@ export const Input = ({
                   </Tooltip>
                 ) : (
                   <Tooltip content="Show password">
-                    <EyeSlashIcon
+                    <Eye
                       data-testid="toggle-password-visibility"
                       role="button"
                       aria-label="Hide password"

@@ -1,4 +1,4 @@
-import { TableCellsIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Table2, X } from 'lucide-react'
 import React from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 
@@ -78,10 +78,10 @@ export const ModalSelect = ({
                       className="p-0.5 hover:bg-accent rounded-sm cursor-pointer"
                       aria-label="Clear selection"
                     >
-                      <XMarkIcon className="h-3 w-3" />
+                      <X className="h-3 w-3" />
                     </div>
                   )}
-                  <TableCellsIcon className="h-4 w-4 opacity-50" />
+                  <Table2 className="h-4 w-4 opacity-50" />
                 </div>
               </Button>
             </div>

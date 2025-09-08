@@ -1,4 +1,4 @@
-import { LinkIcon } from '@heroicons/react/24/outline'
+import { ExternalLink } from 'lucide-react'
 import Link from 'next/link'
 import { type FC } from 'react'
 
@@ -118,7 +118,7 @@ export const OrderInformationSection: FC<OrderInformationSectionProps> = ({
                 <span className="font-medium text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors truncate">
                   {data.name}
                 </span>
-                <LinkIcon className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-blue-500 dark:text-blue-400 shrink-0" />
+                <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-blue-500 dark:text-blue-400 shrink-0" />
               </div>
 
               {/* Second line: Type and Status badges with date */}

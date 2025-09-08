@@ -1,4 +1,4 @@
-import { XMarkIcon } from '@heroicons/react/24/outline'
+import { X } from 'lucide-react'
 import { useQueryState } from 'next-usequerystate'
 import { useCallback, useMemo, useState } from 'react'
 
@@ -65,7 +65,7 @@ const CatalogueContainer = () => {
               categoryQuery ? (
                 <Badge>
                   <span>{'category'}</span>
-                  <XMarkIcon
+                  <X
                     className="h-4 w-4 ml-1 cursor-pointer hover:text-red-600"
                     onClick={() => {
                       setCategoryQuery(null)
@@ -80,10 +80,7 @@ const CatalogueContainer = () => {
       <CatalogueBreadcrumbs setCategoryFilter={setCategoryFilter} />
       <CategoryListContainer
         setCategoryFilter={setCategoryFilter}
-        onChange={open => {
-          console.log('setOpen', open)
-          setOpen(open)
-        }}
+        onChange={setOpen}
       />
       <TableLayoutContainer deps={[open, catalogueItems, catalogueCategories]}>
         <CatalogueTable

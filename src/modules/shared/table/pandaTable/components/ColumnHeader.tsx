@@ -1,6 +1,6 @@
-import { ArrowsRightLeftIcon } from '@heroicons/react/24/outline'
 import type { ColumnOrderState, Header, Table } from '@tanstack/react-table'
 import { flexRender } from '@tanstack/react-table'
+import { ArrowUpDown } from 'lucide-react'
 import React, { type FC, useContext } from 'react'
 import { useDrag, useDrop } from 'react-dnd'
 
@@ -136,7 +136,7 @@ export const ColumnHeader: FC<ColumnHeader> = ({
                 ref={dragRef as any}
                 className={cn(header.getContext() && 'pl-2')}
               >
-                <ArrowsRightLeftIcon className="w-6 h-6" />
+                <ArrowUpDown className="w-6 h-6" />
               </button>
             )}
         </div>

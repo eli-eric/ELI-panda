@@ -42,7 +42,9 @@ export const UserComponent = ({
         title={title}
         loading={loading}
         onSubmit={() => {
-          formMethods.handleSubmit((data: any) => onSubmit(data, selectedRoles))()
+          formMethods.handleSubmit((data: any) =>
+            onSubmit(data, selectedRoles)
+          )()
         }}
         editRole={ROLE.ADMIN}
         isFormInvalid={!formMethods.formState.isValid}

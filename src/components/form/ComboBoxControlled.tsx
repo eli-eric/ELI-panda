@@ -10,8 +10,8 @@ import type { CodebookFilter, CodebookType } from '@/types/responses/codebook'
 
 import { ComboboxOption } from './components/ComboboxOption'
 import { FormXMarkIcon } from './components/FormXMarkIcon'
-import { ChevronDown } from './Icons'
-import { openCodebookTreeModal } from './shared/CodebookTreeModal'
+import { ChevronDownIcon } from './Icons'
+import { useCodebookTreeModal } from './shared/hooks/useCodebookTreeModal'
 
 type ComboboxPropsT = FieldProps &
   React.InputHTMLAttributes<HTMLInputElement> & {
@@ -47,6 +47,7 @@ export const ComboboxTreeControlled = ({
   isFilter
 }: ComboboxPropsT) => {
   const { formatMessage: fm } = useIntl()
+  const { openCodebookTreeModal } = useCodebookTreeModal()
   const [query, setQuery] = useState<string>('')
   const codebookResponseData = useMemo(
     () => ({ data: codebookResponse, metadata: undefined }),
@@ -64,6 +65,9 @@ export const ComboboxTreeControlled = ({
     setQuery('')
     onChange(null)
   }
+
+  const displayLabel = customLabel || label
+  const modalTitle = displayLabel ? fm({ id: displayLabel }) : 'Select Item'
 
   return (
     <HUICombobox
@@ -106,11 +110,12 @@ export const ComboboxTreeControlled = ({
             openCodebookTreeModal({
               codebook,
               name,
+              title: modalTitle,
               onSubmit: onChange
             })
           }}
         >
-          <ChevronDown />
+          <ChevronDownIcon />
         </button>
       </div>
       {options?.data && options.data.length > 0 && (

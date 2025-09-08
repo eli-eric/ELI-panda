@@ -27,8 +27,6 @@ const Group = ({
   moveUp,
   lenght
 }: groupProps) => {
-  const { control } = useFormContext<CategoryFormType>()
-
   const handleRemoveGroup = () => {
     remove(index)
   }

@@ -1,6 +1,6 @@
 import { Combobox } from '@headlessui/react'
 
-import { ChevronDown } from '../Icons'
+import { ChevronDownIcon } from '../Icons'
 
 interface Props {
   onClick?: () => void
@@ -12,6 +12,6 @@ export const ComboboxButton = ({ onClick }: Props) => (
       onClick && onClick()
     }}
   >
-    <ChevronDown />
+    <ChevronDownIcon />
   </Combobox.Button>
 )

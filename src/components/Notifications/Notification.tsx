@@ -1,9 +1,5 @@
 import { Transition } from '@headlessui/react'
-import {
-  CheckCircleIcon,
-  ExclamationTriangleIcon,
-  XMarkIcon
-} from '@heroicons/react/24/outline'
+import { AlertTriangle, CheckCircle, X } from 'lucide-react'
 import { Fragment, useState } from 'react'
 import { resolveValue, type Toast, toast } from 'react-hot-toast'
 
@@ -41,13 +37,13 @@ export const Notification = ({ t }: Props) => {
               <div className="flex items-start">
                 <div className="shrink-0">
                   {t.type === 'error' && (
-                    <ExclamationTriangleIcon
+                    <AlertTriangle
                       className="h-6 w-6 text-red-400 dark:text-black"
                       aria-hidden="true"
                     />
                   )}
                   {t.type === 'success' && (
-                    <CheckCircleIcon
+                    <CheckCircle
                       className="h-6 w-6 text-green-400"
                       aria-hidden="true"
                     />
@@ -69,12 +65,7 @@ export const Notification = ({ t }: Props) => {
                     }}
                   >
                     <span className="sr-only">Close</span>
-                    <XMarkIcon
-                      className="h-4 w-4
-
-"
-                      aria-hidden="true"
-                    />
+                    <X className="h-4 w-4" aria-hidden="true" />
                   </button>
                 </div>
               </div>

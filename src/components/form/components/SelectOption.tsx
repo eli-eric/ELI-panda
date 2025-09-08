@@ -1,4 +1,4 @@
-import { CheckIcon } from '@heroicons/react/24/outline'
+import { Check } from 'lucide-react'
 
 import { Tooltip } from '@/components/Tooltip'
 import { cn } from '@/lib/utils'
@@ -25,7 +25,7 @@ export const SelectOption = ({ item, selected, active }: Props) => (
             active ? 'text-white' : 'text-orange-500'
           )}
         >
-          <CheckIcon className="h-4 w-4" aria-hidden="true" />
+          <Check className="h-4 w-4" aria-hidden="true" />
         </span>
       </Tooltip>
     )}

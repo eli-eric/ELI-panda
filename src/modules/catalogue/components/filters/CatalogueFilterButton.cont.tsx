@@ -1,5 +1,4 @@
-import { FunnelIcon as FunnelIconEmpty } from '@heroicons/react/24/outline'
-import { FunnelIcon as FunnelIconFull } from '@heroicons/react/24/solid'
+import { Filter } from 'lucide-react'
 import { useQueryState } from 'next-usequerystate'
 import { Fragment, startTransition, useEffect, useMemo, useState } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
@@ -102,11 +101,10 @@ export const CatalogueFilterButtonContainer = ({
         }
       >
         <Button size="sm" variant="outline" onClick={() => setOpen(true)}>
-          {storeFilters.length > 0 || categoryQuery ? (
-            <FunnelIconFull className="h-4 w-4" aria-hidden="true" />
-          ) : (
-            <FunnelIconEmpty className="h-4 w-4" aria-hidden="true" />
-          )}
+          <Filter
+            className={`h-4 w-4 ${storeFilters.length > 0 || categoryQuery ? 'fill-current' : ''}`}
+            aria-hidden="true"
+          />
         </Button>
       </Tooltip>
       <SlideOver

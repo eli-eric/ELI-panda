@@ -19,6 +19,7 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { openGraphModal } from '@/modules/shared/system/GraphModal'
+import { useSystemCreateSheet } from '@/modules/shared/system/system-create/useSystemCreateSheet'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 import { useSystemDelete } from '@/modules/systems/hooks/useSystemDelete'
 import { useSparePartsColumns } from '@/modules/systemsSpareParts/components/SpareParts.columns'
@@ -96,6 +97,7 @@ export const SystemActionButtons = ({
   })
 
   const { openModal } = useModalGlobalStore()
+  const openSystemCreateSheet = useSystemCreateSheet()
 
   const handleDelete = () => {
     deleteSystem()
@@ -184,17 +186,13 @@ export const SystemActionButtons = ({
           <DropdownMenuSeparator />
 
           <DropdownMenuItem asChild>
-            <Link
-              href={{
-                pathname: PATH.SYSTEM,
-                query: { parentUid: original.uid }
-              }}
-              target="_blank"
-              className="flex items-center cursor-pointer"
+            <button
+              onClick={() => openSystemCreateSheet(original.uid)}
+              className="flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 px-2 py-1 rounded transition-colors"
             >
               <Plus className="h-4 w-4 mr-2" />
               Add Subsystem
-            </Link>
+            </button>
           </DropdownMenuItem>
 
           {canEdit && (

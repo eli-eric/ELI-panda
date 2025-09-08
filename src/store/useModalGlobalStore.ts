@@ -41,7 +41,7 @@ const initialSlot = (priority: number): ModalSlot => ({
   priority
 })
 
-export const useModalGlobalStore = create<ModalGlobalState>((set, get) => ({
+export const useModalGlobalStore = create<ModalGlobalState>((set) => ({
   sheet: initialSlot(0),
   dialog1: initialSlot(1),
   dialog2: initialSlot(2),
@@ -66,7 +66,7 @@ export const useModalGlobalStore = create<ModalGlobalState>((set, get) => ({
     }))
   },
 
-  bringToFront: slot => {
+  bringToFront: () => {
     // For now, just a placeholder. Overlay order logic can be implemented here if needed.
     // Could swap priorities or manage a stack if more complex overlaying is needed.
   },

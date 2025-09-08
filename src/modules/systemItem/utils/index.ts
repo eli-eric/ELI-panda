@@ -1,6 +1,6 @@
 import { SystemLevel } from '@/types/gql/graphql'
 
-export const getColorBySystemLevel = (level?: SystemLevel, _index?: number) => {
+export const getColorBySystemLevel = (level?: SystemLevel) => {
   switch (level) {
     default:
       return ''

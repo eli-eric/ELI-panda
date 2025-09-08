@@ -1,9 +1,5 @@
-import {
-  ArrowsRightLeftIcon,
-  ChevronDownIcon,
-  ChevronRightIcon
-} from '@heroicons/react/24/outline'
 import type { CellContext } from '@tanstack/react-table'
+import { ArrowUpDown, ChevronDown, ChevronRight } from 'lucide-react'
 import { Edit } from 'lucide-react'
 import Link from 'next/link'
 import { useDrag } from 'react-dnd'
@@ -82,7 +78,7 @@ export const SystemNameCell = ({
         >
           {enableDragAndDrop && (
             <button className="mr-2 shrink-0">
-              <ArrowsRightLeftIcon className="w-5 h-5" />
+              <ArrowUpDown className="w-5 h-5" />
             </button>
           )}
           <Tooltip
@@ -117,9 +113,9 @@ export const SystemNameCell = ({
                 )}
               >
                 {row.getIsExpanded() ? (
-                  <ChevronDownIcon className="w-4 h-4 shrink-0" />
+                  <ChevronDown className="w-4 h-4 shrink-0" />
                 ) : (
-                  <ChevronRightIcon className="w-4 h-4 shrink-0" />
+                  <ChevronRight className="w-4 h-4 shrink-0" />
                 )}
                 <span className="truncate min-w-0">{value}</span>
               </Badge>

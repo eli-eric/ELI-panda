@@ -1,4 +1,4 @@
-import { PlusIcon } from '@heroicons/react/24/outline'
+import { Plus } from 'lucide-react'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 
 import { Button } from '@/components/Buttons'
@@ -50,7 +50,7 @@ export const PhysicalItemPropertyList = ({ name }: Props) => {
         ))}
       </ul>
       <Button onClick={handleAddProp}>
-        <PlusIcon className="h-4 w-4" aria-hidden="true" />
+        <Plus className="h-4 w-4" aria-hidden="true" />
       </Button>
     </div>
   )

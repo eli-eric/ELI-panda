@@ -1,4 +1,4 @@
-import { UserGroupIcon } from '@heroicons/react/24/outline'
+import { Users } from 'lucide-react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 
@@ -10,9 +10,7 @@ const Links = [
   {
     name: 'Users',
     link: PATH.ADMIN_USERS,
-    Icon: () => (
-      <UserGroupIcon className="mx-auto h-24 w-324 shrink-0 rounded-full" />
-    ),
+    Icon: () => <Users className="mx-auto h-24 w-24 shrink-0 rounded-full" />,
     role: ROLE.ADMIN
   }
 ]

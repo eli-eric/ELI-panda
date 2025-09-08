@@ -1,5 +1,5 @@
-import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import type { ColumnDef } from '@tanstack/react-table'
+import { Info } from 'lucide-react'
 import { Fragment, useMemo } from 'react'
 import { useIntl } from 'react-intl'
 
@@ -14,7 +14,8 @@ import {
   DeliveredAllButton,
   ServiceDeliveryAction,
   ServiceLineActionButtons as ServiceLineActions,
-  ServiceLinePriceFooter} from '../../actions'
+  ServiceLinePriceFooter
+} from '../../actions'
 import useOrderDetail from '../../hooks/useOrderDetail'
 const messages = message.ordersPage.serviceLines.columns
 
@@ -109,7 +110,7 @@ export const useServiceLinesColumns = () => {
           <Fragment>
             {getValue() && (
               <Tooltip content={getValue()}>
-                <InformationCircleIcon className="h-6 w-6 shrink-0" />
+                <Info className="h-6 w-6 shrink-0" />
               </Tooltip>
             )}
           </Fragment>
@@ -130,7 +131,9 @@ export const useServiceLinesColumns = () => {
             <span className="font-medium ">{original.currency}</span>
           </span>
         ),
-        footer: props => <ServiceLinePriceFooter rows={props.table.getRowModel().rows} />
+        footer: props => (
+          <ServiceLinePriceFooter rows={props.table.getRowModel().rows} />
+        )
       },
       {
         id: 'actions',

@@ -15,11 +15,11 @@ const UPDATE_USER = gql(`
 
 export const useUserUpdate = (onSuccess: () => void) => {
   const { mutate, isPending } = useGraphQLMutation(UPDATE_USER, {
-    onSuccess: (data) => {
+    onSuccess: () => {
       toast.success('User updated successfully')
       onSuccess()
     },
-    onError: (error) => {
+    onError: error => {
       toast.error(`Failed to update user: ${error.message}`)
     }
   })

@@ -1,5 +1,5 @@
-import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import type { CellContext } from '@tanstack/react-table'
+import { Info } from 'lucide-react'
 import { Fragment } from 'react'
 
 import { Tooltip } from '@/components/Tooltip'
@@ -11,7 +11,7 @@ export const DescriptionCell = ({
   <Fragment>
     {getValue() && (
       <Tooltip content={getValue()}>
-        <InformationCircleIcon className="h-6 w-6 shrink-0" />
+        <Info className="h-6 w-6 shrink-0" />
       </Tooltip>
     )}
   </Fragment>

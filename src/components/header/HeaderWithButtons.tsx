@@ -27,7 +27,7 @@ export const HeaderWithButtons = ({
   title
 }: Props) => {
   const disabledEdit = usePermission([editRole])
-  const { back      } = useRouter()
+  const { back } = useRouter()
   const DEBOUNCE_TIME = 1500
   const lastSubmitTimeRef = useRef<number>(0)
 

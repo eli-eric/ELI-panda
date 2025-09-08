@@ -1,5 +1,5 @@
-import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import type { ColumnDef } from '@tanstack/react-table'
+import { Info } from 'lucide-react'
 import { Fragment, useMemo } from 'react'
 
 import { Tooltip } from '@/components/Tooltip'
@@ -62,7 +62,7 @@ export const useSparePartsColumns = ({ tableId }: SystemsColumnsProps) => {
           <Fragment>
             {getValue() && (
               <Tooltip content={getValue()}>
-                <InformationCircleIcon className="h-5 w-5 pr- shrink-0" />
+                <Info className="h-5 w-5 pr- shrink-0" />
               </Tooltip>
             )}
           </Fragment>

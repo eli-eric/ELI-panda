@@ -1,5 +1,5 @@
 import { Dialog, Transition } from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
+import { X } from 'lucide-react'
 import type { FC, PropsWithChildren } from 'react'
 import { Fragment } from 'react'
 
@@ -105,10 +105,7 @@ export const SlideOver: FC<PropsWithChildren<Props>> = ({
                             >
                               <span className="absolute -inset-2.5" />
                               <span className="sr-only">Close panel</span>
-                              <XMarkIcon
-                                className="h-6 w-6"
-                                aria-hidden="true"
-                              />
+                              <X className="h-6 w-6" aria-hidden="true" />
                             </button>
                           </div>
                         </div>

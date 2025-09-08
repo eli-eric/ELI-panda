@@ -68,9 +68,6 @@ export const SelectableDetailPropertiesList = ({
           <div className="px-4 sm:px-6">
             <div className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
               {properties.map(property => {
-                const globalIndex = allProperties.findIndex(
-                  p => p.property.property.uid === property.property.uid
-                )
                 return (
                   <SelectableGroupProperty
                     key={property.property.uid}

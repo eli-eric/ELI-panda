@@ -3,19 +3,18 @@ import * as React from 'react'
 
 import { Badge, type BadgeProps } from './badge'
 
-interface DeliveryStatusBadgeProps 
+interface DeliveryStatusBadgeProps
   extends Omit<BadgeProps, 'variant' | 'children'> {
   isDelivered: boolean
 }
 
-function DeliveryStatusBadge({ 
-  isDelivered, 
-  className,
-  ...props 
+function DeliveryStatusBadge({
+  isDelivered,
+  ...props
 }: DeliveryStatusBadgeProps) {
   if (isDelivered) {
     return (
-      <Badge 
+      <Badge
         variant="default"
         className="bg-green-500 hover:bg-green-600 text-white border-green-500"
         {...props}
@@ -27,7 +26,7 @@ function DeliveryStatusBadge({
   }
 
   return (
-    <Badge 
+    <Badge
       variant="secondary"
       className="bg-muted text-muted-foreground border-muted"
       {...props}

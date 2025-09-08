@@ -14,7 +14,6 @@ import type { CodebookType } from '@/types/responses/codebook'
 
 import { ExpandableNameCell } from './ExpandableNameCell'
 
-const messages = message.common.buttons
 
 export type Codebooktree = {
   name: string

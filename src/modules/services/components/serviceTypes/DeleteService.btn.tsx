@@ -1,4 +1,4 @@
-import { TrashIcon } from '@heroicons/react/24/outline'
+import { Trash2 } from 'lucide-react'
 
 import { Button } from '@/components/Buttons'
 import useWarningModal from '@/hooks/useWarningModal'
@@ -28,7 +28,7 @@ export const DeleteServiceButton = ({ uid, name }: Props) => {
       onClick={handleClick}
       className="rounded-full bg-red-700 text-gray-200 hover:bg-red-800"
     >
-      <TrashIcon className="h-3 w-3" aria-hidden="true" />
+      <Trash2 className="h-3 w-3" aria-hidden="true" />
     </Button>
   )
 }

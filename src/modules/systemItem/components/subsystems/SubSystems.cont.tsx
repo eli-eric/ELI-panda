@@ -38,7 +38,7 @@ export const SubSystemsContainer = () => {
         enableFiltering
         enablePagination
         className={'relative overflow-x-auto mb-0 pb-0'}
-        getRowProps={({ physicalItem, systemLevel, sp_coverage }, index) => ({
+        getRowProps={({ physicalItem, systemLevel, sp_coverage }) => ({
           className: cn(
             physicalItem && 'font-bold',
             getFontBySystemLevel(systemLevel || undefined),
