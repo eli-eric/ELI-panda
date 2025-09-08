@@ -117,7 +117,11 @@ export const ServiceDeliveryAction = ({
   )
 }
 
-export const ServiceLinePriceFooter = ({ rows }: { rows: Row<ServiceLine>[] }) => {
+export const ServiceLinePriceFooter = ({
+  rows
+}: {
+  rows: Row<ServiceLine>[]
+}) => {
   const total = rows.reduce(
     (sum, { original: { price } }) => sum + (price || 0),
     0
@@ -145,7 +149,7 @@ export const DeliveredAllButton = () => {
   const handleClick = () => {
     handleDelivery()
   }
-  
+
   return (
     <Tooltip content="Mark All as Delivered">
       <Button

@@ -40,8 +40,8 @@ export const SystemsComponent: FC<Props> = ({
           className: cn(
             original?.physicalItem && 'font-bold',
             original?.statistics?.sp_coverage != null &&
-            original.statistics.sp_coverage < 1 &&
-            'text-red-500 dark:text-red-500 font-bold'
+              original.statistics.sp_coverage < 1 &&
+              'text-red-500 dark:text-red-500 font-bold'
           ),
           dropsettings
         })}

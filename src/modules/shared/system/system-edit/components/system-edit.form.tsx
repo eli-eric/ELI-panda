@@ -9,7 +9,6 @@ import { PhysicalItemSection } from './sections/physical-item.sections'
 import { SystemDetailSection } from './sections/system-detail.section'
 
 export const SystemEditForm = ({ uid }: { uid: string }) => {
-  console.log('SystemEditForm', uid)
   const { systemDetail } = useSuspenseSystemDetail({ uid: uid })
 
   const {

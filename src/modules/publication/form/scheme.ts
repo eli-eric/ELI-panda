@@ -85,7 +85,9 @@ export const publicationOtherSchema = z.object({
   })
 })
 
-export type PublicationPeerReviewedFormData = z.infer<typeof publicationPeerReviewedSchema>
+export type PublicationPeerReviewedFormData = z.infer<
+  typeof publicationPeerReviewedSchema
+>
 export type PublicationOtherFormData = z.infer<typeof publicationOtherSchema>
 
 // For backward compatibility with existing code

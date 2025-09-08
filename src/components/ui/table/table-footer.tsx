@@ -93,7 +93,7 @@ export function TableFooter<T extends object>({
                 className={cn(
                   'px-4 py-2 text-left font-medium text-muted-foreground',
                   'whitespace-nowrap',
-                  // Add border and backdrop-blur with overlay for pinned columns  
+                  // Add border and backdrop-blur with overlay for pinned columns
                   isPinned === 'left'
                     ? 'border-r border-border backdrop-blur-sm before:absolute before:inset-0 before:bg-background/30 before:pointer-events-none before:z-[-1] relative'
                     : '',

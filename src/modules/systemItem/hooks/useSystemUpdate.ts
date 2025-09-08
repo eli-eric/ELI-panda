@@ -125,8 +125,6 @@ export const useSystemUpdate = (
     systemDetailMutation,
     {
       onError: error => {
-        // eslint-disable-next-line no-console
-        console.log('Error:', error)
         showErrorToast(
           intl,
           message.systemsPage.systemDetail.updateModal.onError,

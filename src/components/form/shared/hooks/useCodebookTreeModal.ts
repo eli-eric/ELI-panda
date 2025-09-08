@@ -33,4 +33,3 @@ export const useCodebookTreeModal = () => {
 
   return { openCodebookTreeModal }
 }
-

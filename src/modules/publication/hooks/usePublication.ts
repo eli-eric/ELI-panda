@@ -13,6 +13,6 @@ export const usePublication = (uid?: string) => {
   return useQuery<Publication, AxiosError, Publication, QueryFetcherKey>({
     queryKey: ['publication', { uid: publicationUid }],
     queryFn: queryFetcher<Publication>('publication'),
-    enabled: !!publicationUid,
+    enabled: !!publicationUid
   })
 }

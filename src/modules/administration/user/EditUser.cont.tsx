@@ -21,7 +21,9 @@ type Props = {
 
 export const EditUserContainer = ({ userUid, roles }: Props) => {
   const { userDetail, refetch } = useContext(EditUserContext)
-  const [selectedRoles, setSelectedRoles] = useState<GetRolesQuery['roles']>(userDetail?.roles || [])
+  const [selectedRoles, setSelectedRoles] = useState<GetRolesQuery['roles']>(
+    userDetail?.roles || []
+  )
 
   const formMethods = useForm<UserUpdateFormType>({
     defaultValues: {
@@ -76,16 +78,23 @@ export const EditUserContainer = ({ userUid, roles }: Props) => {
 
   const { updateUser, loading } = useUserUpdate(onSuccess)
 
-  const onSubmit = (data: UserUpdateFormType, selectedRoles: GetRolesQuery['roles'] = []) => {
+  const onSubmit = (
+    data: UserUpdateFormType,
+    selectedRoles: GetRolesQuery['roles'] = []
+  ) => {
     // Get current user roles UIDs
     const currentRoleUids = userDetail?.roles?.map(role => role.uid) || []
-    // Get selected roles UIDs  
+    // Get selected roles UIDs
     const selectedRoleUids = selectedRoles.map(role => role.uid)
-    
+
     // Find roles to connect (new roles that user didn't have before)
-    const rolesToConnect = selectedRoles.filter(role => !currentRoleUids.includes(role.uid))
+    const rolesToConnect = selectedRoles.filter(
+      role => !currentRoleUids.includes(role.uid)
+    )
     // Find roles to disconnect (old roles that user no longer has selected)
-    const rolesToDisconnect = userDetail?.roles?.filter(role => !selectedRoleUids.includes(role.uid)) || []
+    const rolesToDisconnect =
+      userDetail?.roles?.filter(role => !selectedRoleUids.includes(role.uid)) ||
+      []
 
     const dataToSend: UserUpdateInput = {
       email: data.email,
@@ -105,10 +114,12 @@ export const EditUserContainer = ({ userUid, roles }: Props) => {
 
     // Only add roles if there are changes
     if (rolesToConnect.length > 0 || rolesToDisconnect.length > 0) {
-      dataToSend.roles = [{
-        connect: rolesToConnect.map(role => whereN(role.uid)),
-        disconnect: rolesToDisconnect.map(role => whereN(role.uid))
-      }]
+      dataToSend.roles = [
+        {
+          connect: rolesToConnect.map(role => whereN(role.uid)),
+          disconnect: rolesToDisconnect.map(role => whereN(role.uid))
+        }
+      ]
     }
 
     if (data.password) {
@@ -119,8 +130,14 @@ export const EditUserContainer = ({ userUid, roles }: Props) => {
   }
 
   const addRole = (selectedRole?: CodebookType) => {
-    if (selectedRole && !selectedRoles.find(role => role.uid === selectedRole.uid)) {
-      setSelectedRoles(prev => [...prev, selectedRole as GetRolesQuery['roles'][0]])
+    if (
+      selectedRole &&
+      !selectedRoles.find(role => role.uid === selectedRole.uid)
+    ) {
+      setSelectedRoles(prev => [
+        ...prev,
+        selectedRole as GetRolesQuery['roles'][0]
+      ])
     } else {
       toast.error('Role already exists!')
     }

@@ -80,10 +80,7 @@ const CatalogueContainer = () => {
       <CatalogueBreadcrumbs setCategoryFilter={setCategoryFilter} />
       <CategoryListContainer
         setCategoryFilter={setCategoryFilter}
-        onChange={open => {
-          console.log('setOpen', open)
-          setOpen(open)
-        }}
+        onChange={setOpen}
       />
       <TableLayoutContainer deps={[open, catalogueItems, catalogueCategories]}>
         <CatalogueTable

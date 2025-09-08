@@ -49,7 +49,9 @@ export const UserProfileCard = () => {
           </dt>
           <dd className="mt-1 flex text-sm text-gray-900 dark:text-gray-200 sm:col-span-2 sm:mt-0">
             <div className="gap-1 flex overflow-visible  flex-wrap">
-              {user?.roles.map(role => <Badge key={role}>{role}</Badge>)}
+              {user?.roles.map(role => (
+                <Badge key={role}>{role}</Badge>
+              ))}
             </div>
           </dd>
         </div>

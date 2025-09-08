@@ -45,8 +45,8 @@ const ModalSheet: React.FC<{
     >
       <SheetPortal>
         <SheetOverlay />
-        <SheetContent 
-          size={slot.props?.size || 'l'} 
+        <SheetContent
+          size={slot.props?.size || 'l'}
           className="!max-w-none overflow-y-auto px-2 sm:px-4 lg:px-6"
         >
           <SheetHeader>

@@ -1,5 +1,5 @@
 import { sortBy } from 'lodash'
-import { useCallback,useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { Button } from '@/components/Buttons'
@@ -41,14 +41,17 @@ export const ServiceLineEditSheet: React.FC<ServiceLineEditSheetProps> = ({
     }
   })
 
-  const handleSubmit = useCallback((data: ServiceLine) => {
-    const dataToSave = {
-      ...data,
-      details: Array.isArray(data.details) ? data.details : []
-    }
-    // Call the onSubmit prop which comes from modal store
-    onSubmit?.(dataToSave)
-  }, [onSubmit])
+  const handleSubmit = useCallback(
+    (data: ServiceLine) => {
+      const dataToSave = {
+        ...data,
+        details: Array.isArray(data.details) ? data.details : []
+      }
+      // Call the onSubmit prop which comes from modal store
+      onSubmit?.(dataToSave)
+    },
+    [onSubmit]
+  )
 
   const handleCancel = useCallback(() => {
     formMethods.reset()
@@ -86,18 +89,18 @@ export const ServiceLineEditSheet: React.FC<ServiceLineEditSheetProps> = ({
             {/* Basic Information */}
             <div className="space-y-4">
               <h3 className="text-lg font-medium">Basic Information</h3>
-              
+
               <div className="space-y-4">
                 <Input {...fields.name} />
-                
+
                 <Listbox {...fields.serviceType} disabled />
-                
+
                 <InputAmountCurrency
                   amountName={fields.price.name}
                   label={fields.price.label}
                   currencyName={fields.currency.name}
                 />
-                
+
                 <TextArea {...fields.notes} />
               </div>
             </div>
@@ -116,15 +119,11 @@ export const ServiceLineEditSheet: React.FC<ServiceLineEditSheetProps> = ({
       {/* Footer Actions */}
       <div className="border-t bg-background p-6">
         <div className="flex justify-end gap-3">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={handleCancel}
-          >
+          <Button type="button" variant="outline" onClick={handleCancel}>
             Cancel
           </Button>
-          <Button 
-            type="button" 
+          <Button
+            type="button"
             onClick={formMethods.handleSubmit(handleSubmit)}
           >
             Update Service Line

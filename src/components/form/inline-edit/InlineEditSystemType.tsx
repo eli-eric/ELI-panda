@@ -22,7 +22,6 @@ export const InlineEditSystemType = ({
 
   const handleSystemTypeChange = useCallback(
     (value: CodebookType | null) => {
-      console.log('Selected system type:', value)
       formContext.setValue(name, value)
       onChange?.(value)
     },

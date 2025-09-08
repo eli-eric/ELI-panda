@@ -14,7 +14,8 @@ import {
   DeliveredAllButton,
   ServiceDeliveryAction,
   ServiceLineActionButtons as ServiceLineActions,
-  ServiceLinePriceFooter} from '../../actions'
+  ServiceLinePriceFooter
+} from '../../actions'
 import useOrderDetail from '../../hooks/useOrderDetail'
 const messages = message.ordersPage.serviceLines.columns
 
@@ -130,7 +131,9 @@ export const useServiceLinesColumns = () => {
             <span className="font-medium ">{original.currency}</span>
           </span>
         ),
-        footer: props => <ServiceLinePriceFooter rows={props.table.getRowModel().rows} />
+        footer: props => (
+          <ServiceLinePriceFooter rows={props.table.getRowModel().rows} />
+        )
       },
       {
         id: 'actions',

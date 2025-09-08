@@ -56,7 +56,6 @@ const CatalogueItemContainer = ({
     defaultValues: { ...item }
   })
   const { reset, setValue, formState } = formMethods
-  console.log('Form state:', formState)
   const { submit, loading } = useItemSubmit({
     setvalue: setValue,
     imageRef: imageRef,
@@ -77,8 +76,6 @@ const CatalogueItemContainer = ({
   }, [catalogueCategory])
 
   const onSubmit = (catalogueItem: CatalogueForm) => {
-    console.log('Submit data raw:', catalogueItem)
-
     // extract from catalogueItem hasImageGalleryChanges
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { hasImageGalleryChanges, ...rest } = catalogueItem
@@ -87,14 +84,11 @@ const CatalogueItemContainer = ({
     const details = rest.details ? Object.values(rest.details) : []
 
     const finalData = { ...rest, details }
-    console.log('Submit data processed:', finalData)
 
     setSaveAndExit(false)
     submit(finalData as CatalogueItem)
   }
   const onSubmitAndExit = (catalogueItem: CatalogueForm) => {
-    console.log('SubmitAndExit data raw:', catalogueItem)
-
     // extract from catalogueItem hasImageGalleryChanges
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { hasImageGalleryChanges, ...rest } = catalogueItem
@@ -103,8 +97,6 @@ const CatalogueItemContainer = ({
     const details = rest.details ? Object.values(rest.details) : []
 
     const finalData = { ...rest, details }
-    console.log('SubmitAndExit data processed:', finalData)
-
     setSaveAndExit(true)
     submit(finalData as CatalogueItem)
   }
@@ -118,24 +110,12 @@ const CatalogueItemContainer = ({
       <HeaderWithButtons
         loading={loading}
         editRole={ROLE.CATALOGUE_EDIT}
-        onSubmit={formMethods.handleSubmit(
-          data => {
-            console.log('handleSubmit SUCCESS:', data)
-            onSubmit(data)
-          },
-          errors => {
-            console.log('handleSubmit ERRORS:', errors)
-          }
-        )}
-        onSubmitAndExit={formMethods.handleSubmit(
-          data => {
-            console.log('handleSubmitAndExit SUCCESS:', data)
-            onSubmitAndExit(data)
-          },
-          errors => {
-            console.log('handleSubmitAndExit ERRORS:', errors)
-          }
-        )}
+        onSubmit={formMethods.handleSubmit(data => {
+          onSubmit(data)
+        })}
+        onSubmitAndExit={formMethods.handleSubmit(data => {
+          onSubmitAndExit(data)
+        })}
       />
       <Card className="flex flex-col justify-between pb-5">
         <div className="lg:grid lg:grid-cols-3 lg:items-start lg:gap-x-8 pb-3">

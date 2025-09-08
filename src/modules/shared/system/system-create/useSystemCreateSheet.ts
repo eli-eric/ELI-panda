@@ -8,8 +8,8 @@ export const useSystemCreateSheet = () => {
   return () => {
     openModal('sheet', {
       component: SystemCreateContainer,
-      props: { 
-        size: 'l', 
+      props: {
+        size: 'l',
         title: 'Create System',
         description: 'Create a new system in the database'
       }

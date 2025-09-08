@@ -24,18 +24,20 @@ export const UserRoles: FC<Props> = ({
       <div className="pb-2 font-bold dark:text-gray-200">Roles</div>
       <ul className="" role="list">
         {roles?.map(role => {
-          const isAssigned = assignedRoles?.some(assignedRole => assignedRole.uid === role.uid)
+          const isAssigned = assignedRoles?.some(
+            assignedRole => assignedRole.uid === role.uid
+          )
           return (
             <li key={role.uid} className="py-1">
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id={`role-${role.uid}`}
                   checked={isAssigned}
-                  onCheckedChange={(checked) => {
+                  onCheckedChange={checked => {
                     checked ? addRole(role) : removeRole(role.uid)
                   }}
                 />
-                <Label 
+                <Label
                   htmlFor={`role-${role.uid}`}
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >

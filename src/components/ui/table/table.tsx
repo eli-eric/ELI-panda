@@ -82,7 +82,7 @@ export function Table<T extends object>({
       left: leftPinned,
       right: rightPinned
     })
-    
+
     // Debug log (remove in production)
     // if (rightPinned.length > 0 || leftPinned.length > 0) {
     //   console.log('Column pinning set:', { left: leftPinned, right: rightPinned })
