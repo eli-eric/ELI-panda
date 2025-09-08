@@ -21,6 +21,7 @@ export const systemCreateSchema = z.object({
   zone: codebookSchema.optional().nullable(),
   systemCode: z.string().optional().nullable(),
   attribute: codebookSchema.optional().nullable(),
+  responsible: codebookSchema.optional().nullable(),
   description: z.string().optional().nullable()
 })
 
