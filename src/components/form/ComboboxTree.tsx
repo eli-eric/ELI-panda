@@ -15,6 +15,8 @@ type ComboboxPropsT = FieldProps &
     position?: 'top' | 'bottom'
     onSelect?: (item?: CodebookType | null) => void
     isFilter?: boolean
+    customLabel?: string
+    modalTitle?: string
   }
 
 export const ComboboxTree = ({
@@ -25,24 +27,29 @@ export const ComboboxTree = ({
   disabled,
   className,
   onSelect,
-  isFilter
+  isFilter,
+  customLabel,
+  modalTitle
 }: ComboboxPropsT) => {
   const { setValue } = useFormContext()
   const { openCodebookTreeModal } = useCodebookTreeModal()
 
   const handleCodebookSelect = useCallback(
     (value?: CodebookType | null | undefined) => {
-      console.log('Selected value:', value)
       setValue(name, value)
       onSelect?.(value)
     },
     [setValue, name, onSelect]
   )
 
+  const displayLabel = customLabel || label
+  const displayTitle = modalTitle || displayLabel || 'Select Item'
+
   const handleOpenModal = () => {
     openCodebookTreeModal({
       codebook,
       name,
+      title: displayTitle,
       onSubmit: handleCodebookSelect
     })
   }
@@ -55,7 +62,7 @@ export const ComboboxTree = ({
       className={className}
       disabled={disabled}
       placeholder={placeholder}
-      label={label}
+      label={displayLabel}
       onClick={handleOpenModal}
     />
   )

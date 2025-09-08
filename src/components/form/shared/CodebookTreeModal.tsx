@@ -32,10 +32,11 @@ interface CodebookTreeModalProps {
 export function CodebookTreeModalContent(
   props: Omit<CodebookTreeModalProps, 'open' | 'setOpen' | 'onSubmit'> & {
     onClose?: () => void
-    onSubmit?: (item?: any) => void
+    onSelect?: (item?: any) => void
+    title?: string
   }
 ) {
-  const { codebook, onSubmit, onClose } = props
+  const { codebook, onSelect, onClose } = props
 
   const tableId = 'codebook'
   const [item, setItem] = useState<CodebookType | undefined>(undefined)
@@ -88,7 +89,7 @@ export function CodebookTreeModalContent(
   )
 
   return (
-    <div className="flex flex-col h-[300px]">
+    <div className="flex flex-col h-[300px] pt-4">
       <PandaTable
         ref={tableRef}
         tableId={tableId}
@@ -106,7 +107,6 @@ export function CodebookTreeModalContent(
         }
         getRowProps={row => ({
           onClick: () => {
-            console.log('Row clicked:', row.original)
             setItem({ uid: row.original.uid, name: row.original.name })
           },
           className: cn(
@@ -117,9 +117,10 @@ export function CodebookTreeModalContent(
           )
         })}
       />
-      <div className="flex justify-end gap-2 flex-shrink-0">
+      <div className="flex justify-end gap-2 mt-6 flex-shrink-0">
         <Button
           type="button"
+          variant="outline"
           onClick={() => {
             if (onClose) onClose()
           }}
@@ -130,9 +131,7 @@ export function CodebookTreeModalContent(
           type="button"
           disabled={!item}
           onClick={() => {
-            console.log('Selected item:', item)
-            console.log('onSubmit function:', onSubmit)
-            onSubmit?.(item)
+            onSelect?.(item)
             if (onClose) onClose()
             setItem(undefined)
             reset(tableId)

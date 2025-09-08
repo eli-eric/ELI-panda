@@ -10,10 +10,12 @@ export const useCodebookTreeModal = () => {
   const openCodebookTreeModal = ({
     codebook,
     name,
+    title,
     onSubmit
   }: {
     codebook?: CODEBOOK
     name: string
+    title?: string
     onSubmit?: (item?: CodebookType | null) => void
   }) => {
     if (typeof window === 'undefined') return // Prevent SSR execution
@@ -21,10 +23,11 @@ export const useCodebookTreeModal = () => {
     openModal('dialog1', {
       component: CodebookTreeModalContent,
       props: {
+        title,
         codebook,
-        name
-      },
-      onSubmit: onSubmit
+        name,
+        onSelect: onSubmit
+      }
     })
   }
 
