@@ -1,9 +1,5 @@
 import { Combobox as HUICombobox } from '@headlessui/react'
-import {
-  CheckIcon,
-  ChevronDownIcon,
-  XMarkIcon
-} from '@heroicons/react/20/solid'
+import { Check, ChevronDown, X } from 'lucide-react'
 import React, { useDeferredValue, useEffect, useState } from 'react'
 
 import { useCodebook } from '@/hooks/fetch/useCodebook'
@@ -77,14 +73,11 @@ export const DefferedCombobox = ({
             onClick={handleClear}
             className="absolute mr-7 inset-y-0 right-0 flex items-center rounded-r-md px-1 focus:outline-none cursor-pointer text-gray-200  hover:text-red-500"
           >
-            <XMarkIcon className="h-4 w-4" aria-hidden="true" />
+            <X className="h-4 w-4" aria-hidden="true" />
           </div>
         )}
         <HUICombobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
-          <ChevronDownIcon
-            className="h-4 w-4text-gray-500"
-            aria-hidden="true"
-          />
+          <ChevronDown className="h-4 w-4 text-gray-500" aria-hidden="true" />
         </HUICombobox.Button>
       </div>
 
@@ -128,7 +121,7 @@ export const DefferedCombobox = ({
                           active ? 'text-white' : 'text-orange-500'
                         )}
                       >
-                        <CheckIcon className="h-4 w-4" aria-hidden="true" />
+                        <Check className="h-4 w-4" aria-hidden="true" />
                       </span>
                     )}
                   </>

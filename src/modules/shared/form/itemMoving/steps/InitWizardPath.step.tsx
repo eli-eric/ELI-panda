@@ -1,4 +1,4 @@
-import { FolderPlusIcon, RectangleGroupIcon } from '@heroicons/react/24/outline'
+import { FolderPlus, LayoutGrid } from 'lucide-react'
 import { type FC } from 'react'
 import { FormattedMessage } from 'react-intl'
 
@@ -56,14 +56,14 @@ export const InitWizardPath: FC = () => {
         </p>
         <div className="flex space-x-10 items-center">
           <InitWizardButton onClick={goToParentSystem}>
-            <FolderPlusIcon className="w-12 h-12 mx-auto text-gray-400 dark:text-gray-300" />
+            <FolderPlus className="w-12 h-12 mx-auto text-gray-400 dark:text-gray-300" />
             <span className="mt-2 block text-sm font-semibold text-gray-900 dark:text-gray-200">
               <FormattedMessage id={messages.createNewSystem} />
             </span>
           </InitWizardButton>
           <h3 className="text-gray-900 dark:text-gray-200 text-md">OR</h3>
           <InitWizardButton onClick={goToDestinationSystem}>
-            <RectangleGroupIcon className="w-12 h-12 mx-auto text-gray-400 dark:text-gray-300" />
+            <LayoutGrid className="w-12 h-12 mx-auto text-gray-400 dark:text-gray-300" />
             <span className="mt-2 block text-sm font-semibold text-gray-900 dark:text-gray-200">
               <FormattedMessage id={messages.destionationSystem} />
             </span>

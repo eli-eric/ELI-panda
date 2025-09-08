@@ -1,4 +1,4 @@
-import { HomeIcon } from '@heroicons/react/24/outline'
+import { Home } from 'lucide-react'
 import Link from 'next/link'
 
 import { cn } from '@/lib/utils'
@@ -20,7 +20,7 @@ export const BreadcrumpContainer = ({ testId, homeLink, children }: Props) => (
                 href={{ pathname: homeLink }}
                 className="text-gray-400 hover:text-gray-500 dark:text-gray-200 dark:hover:text-orange-600"
               >
-                <HomeIcon className="h-4 w-4 shrink-0" />
+                <Home className="h-4 w-4 shrink-0" />
               </Link>
             </div>
           </li>

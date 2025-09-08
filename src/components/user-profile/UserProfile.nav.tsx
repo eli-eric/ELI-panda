@@ -1,8 +1,4 @@
-import {
-  FingerPrintIcon,
-  UserCircleIcon,
-  UsersIcon
-} from '@heroicons/react/24/outline'
+import { Fingerprint, UserCircle, Users } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
@@ -10,9 +6,9 @@ import { cn } from '@/lib/utils'
 import { PATH } from '@/types/constants/paths'
 
 const userProfileNavigation = [
-  { name: 'General', href: PATH.PROFILE_GENERAL, icon: UserCircleIcon },
-  { name: 'Security', href: PATH.PROFILE_SECURITY, icon: FingerPrintIcon },
-  { name: 'Team members', href: PATH.PROFILE_TEAM, icon: UsersIcon }
+  { name: 'General', href: PATH.PROFILE_GENERAL, icon: UserCircle },
+  { name: 'Security', href: PATH.PROFILE_SECURITY, icon: Fingerprint },
+  { name: 'Team members', href: PATH.PROFILE_TEAM, icon: Users }
 ]
 
 export const UserProfileNav = () => {

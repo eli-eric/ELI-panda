@@ -1,5 +1,5 @@
-import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import type { ColumnDef } from '@tanstack/react-table'
+import { Info } from 'lucide-react'
 import { Fragment, useMemo } from 'react'
 import { useIntl } from 'react-intl'
 
@@ -110,7 +110,7 @@ export const useServiceLinesColumns = () => {
           <Fragment>
             {getValue() && (
               <Tooltip content={getValue()}>
-                <InformationCircleIcon className="h-6 w-6 shrink-0" />
+                <Info className="h-6 w-6 shrink-0" />
               </Tooltip>
             )}
           </Fragment>

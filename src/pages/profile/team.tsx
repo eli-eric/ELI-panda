@@ -1,4 +1,4 @@
-import { CogIcon } from '@heroicons/react/24/outline'
+import { Settings } from 'lucide-react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { Fragment } from 'react'
@@ -23,11 +23,8 @@ const ProfileTeamPage: NextPage = (): JSX.Element => {
         subTitle={messages.team.subTitle}
       >
         {/* under construction page with heroicon */}
-        <CogIcon
+        <Settings
           className="mx-auto h-16 w-16 text-gray-400"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
           aria-hidden="true"
         />
 

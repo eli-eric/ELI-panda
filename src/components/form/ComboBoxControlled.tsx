@@ -10,7 +10,7 @@ import type { CodebookFilter, CodebookType } from '@/types/responses/codebook'
 
 import { ComboboxOption } from './components/ComboboxOption'
 import { FormXMarkIcon } from './components/FormXMarkIcon'
-import { ChevronDown } from './Icons'
+import { ChevronDownIcon } from './Icons'
 import { useCodebookTreeModal } from './shared/hooks/useCodebookTreeModal'
 
 type ComboboxPropsT = FieldProps &
@@ -115,7 +115,7 @@ export const ComboboxTreeControlled = ({
             })
           }}
         >
-          <ChevronDown />
+          <ChevronDownIcon />
         </button>
       </div>
       {options?.data && options.data.length > 0 && (

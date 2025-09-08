@@ -19,7 +19,6 @@
     "@as-integrations/next": "^3.0.0",
     "@faker-js/faker": "^8.3.1",
     "@headlessui/react": "^2.2.0",
-    "@heroicons/react": "^2.0.13",
     "@hookform/error-message": "^2.0.1",
     "@hookform/resolvers": "^5.2.1",
     "@neo4j/graphql": "^4.4.2",

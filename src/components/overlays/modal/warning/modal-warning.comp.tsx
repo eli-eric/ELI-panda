@@ -1,4 +1,4 @@
-import { ExclamationTriangleIcon } from '@heroicons/react/20/solid'
+import { AlertTriangle } from 'lucide-react'
 import type { Dispatch, SetStateAction } from 'react'
 import { FormattedMessage } from 'react-intl'
 
@@ -36,7 +36,7 @@ const WarningModal = ({
       <DialogHeader>
         <DialogTitle>
           <span className="flex items-center gap-2">
-            <ExclamationTriangleIcon className="h-6 w-6 text-red-600" />
+            <AlertTriangle className="h-6 w-6 text-red-600" />
             <FormattedMessage id={title} />
           </span>
         </DialogTitle>

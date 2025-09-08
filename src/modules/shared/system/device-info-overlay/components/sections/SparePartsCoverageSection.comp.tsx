@@ -1,4 +1,4 @@
-import { LinkIcon } from '@heroicons/react/24/outline'
+import { ExternalLink } from 'lucide-react'
 import { type FC } from 'react'
 
 import { Button } from '@/components/Buttons'
@@ -85,7 +85,7 @@ export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
                       <span className="font-medium text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors truncate">
                         {name}
                       </span>
-                      <LinkIcon className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-blue-500 dark:text-blue-400 shrink-0" />
+                      <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-blue-500 dark:text-blue-400 shrink-0" />
                     </div>
                     <div className="flex items-center space-x-1">
                       <Tooltip content="Use this spare part">
@@ -130,7 +130,7 @@ export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
                   <span className="font-medium text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors truncate">
                     {name}
                   </span>
-                  <LinkIcon className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-blue-500 dark:text-blue-400 shrink-0" />
+                  <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-blue-500 dark:text-blue-400 shrink-0" />
                 </div>
               </button>
             )

@@ -1,5 +1,5 @@
-import { CheckCircleIcon } from '@heroicons/react/24/outline'
 import type { Row } from '@tanstack/react-table'
+import { CheckCircle } from 'lucide-react'
 import { Edit, Trash2 } from 'lucide-react'
 import { Fragment } from 'react'
 import { useIntl } from 'react-intl'
@@ -157,7 +157,7 @@ export const DeliveredAllButton = () => {
         className="flex justify-center items-center p-1 h-7 min-h-0 w-7"
         onClick={handleClick}
       >
-        <CheckCircleIcon className="h-5 w-5" />
+        <CheckCircle className="h-5 w-5" />
       </Button>
     </Tooltip>
   )

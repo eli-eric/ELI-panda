@@ -1,5 +1,5 @@
-import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import type { ColumnDef, Row } from '@tanstack/react-table'
+import { Info } from 'lucide-react'
 import type { HTMLProps } from 'react'
 import { Fragment, useMemo } from 'react'
 
@@ -174,7 +174,7 @@ export const useMoveSystemsColumns = ({ tableId }: SystemsColumnsProps) => {
           <Fragment>
             {getValue() && (
               <Tooltip content={getValue()}>
-                <InformationCircleIcon className="h-5 w-5 pr- shrink-0" />
+                <Info className="h-5 w-5 pr- shrink-0" />
               </Tooltip>
             )}
           </Fragment>
@@ -274,7 +274,7 @@ export const useMoveSystemsColumns = ({ tableId }: SystemsColumnsProps) => {
           <Fragment>
             {getValue() && (
               <Tooltip content={getValue()}>
-                <InformationCircleIcon className="h-6 w-6 shrink-0" />
+                <Info className="h-6 w-6 shrink-0" />
               </Tooltip>
             )}
           </Fragment>

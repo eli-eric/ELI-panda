@@ -1,4 +1,4 @@
-import { TrashIcon } from '@heroicons/react/24/outline'
+import { Trash2 } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import type { UseFormReset } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
@@ -195,7 +195,7 @@ export const FilterSaveSettings = ({
           disabled={!savedFilter}
           className="pb-2"
         >
-          <TrashIcon className="h-5 w-5" aria-hidden="true" />
+          <Trash2 className="h-5 w-5" aria-hidden="true" />
         </Button>
         <Listbox name="savedFilter" codebookResponse={filters} position="top" />
         <Button onClick={applyFilter} disabled={!savedFilter} className="pb-2">

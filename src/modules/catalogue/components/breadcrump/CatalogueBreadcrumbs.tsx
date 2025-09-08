@@ -1,4 +1,4 @@
-import { HomeIcon } from '@heroicons/react/24/outline'
+import { Home } from 'lucide-react'
 import { Fragment } from 'react'
 
 import {
@@ -29,7 +29,7 @@ export const CatalogueBreadcrumbs = ({
             className="text-gray-400 hover:text-gray-500 dark:text-gray-200 dark:hover:text-orange-600"
             onClick={() => setCategoryFilter(null)}
           >
-            <HomeIcon className="h-4 w-4 shrink-0" />
+            <Home className="h-4 w-4 shrink-0" />
           </button>
         </BreadcrumbItem>
         {catalogueCategory?.parentPath[0]?.uid &&

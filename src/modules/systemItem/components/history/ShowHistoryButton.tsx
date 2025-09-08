@@ -1,5 +1,5 @@
-import { ClockIcon } from '@heroicons/react/24/outline'
 import { useQuery } from '@tanstack/react-query'
+import { Clock } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import toast from 'react-hot-toast'
@@ -62,7 +62,7 @@ export const ShowHistoryButton = () => {
 
   return (
     <Button type="button" onClick={() => openHistoryModal(uid)}>
-      <ClockIcon className="w-4 h-4" />
+      <Clock className="w-4 h-4" />
     </Button>
   )
 }
