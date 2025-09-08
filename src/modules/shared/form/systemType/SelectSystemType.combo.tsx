@@ -11,7 +11,6 @@ import { useSystemTypeSelectionModal } from './hooks/useSystemTypeSelectionModal
 export const SystemTypeComboBox = ({
   systemTypeField,
   className,
-  clickIcon,
   onChange,
   isFilter
 }: {

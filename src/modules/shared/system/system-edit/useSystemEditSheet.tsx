@@ -9,8 +9,8 @@ export const useSystemEditSheet = ({ uid }: { uid: string }) => {
     openModal('sheet', {
       component: SystemEditContainer,
       props: { uid, size: 'l', title: 'Edit System' },
-      onSubmit: (data: any) => {
-        console.log('Submit System Edit', data)
+      onSubmit: () => {
+        // Handle system edit submission
       }
     })
   }

@@ -9,6 +9,7 @@ type Props = {
   children: React.ReactNode
 }
 
+// eslint-disable-next-line react/prop-types
 export const Tooltip: React.FC<Props> = ({ children, content }) =>
   content ? (
     <TP>

@@ -58,7 +58,7 @@ export const SparePartsContainer = () => {
         systemDetail.sparePartsConnection.edges.length > 0 && (
           <Table<any>
             columns={columns}
-            getRowProps={({ original }, index) => ({
+            getRowProps={({ original }) => ({
               className: cn(
                 original?.physicalItem && 'font-bold',
                 getFontBySystemLevel(original?.systemLevel)

@@ -47,7 +47,7 @@ export function SystemTypeModalContent(
     enableFiltering = true
   } = props
 
-  const { systemTypeGroups, filter, loading, error } = useSystemTypeGroups()
+  const { systemTypeGroups, loading, error } = useSystemTypeGroups()
 
   const [item, setItem] = useState<Codebooktree | null>(null)
   const { instances } = useTableStateStore()

@@ -222,9 +222,11 @@ export const FormModal = <T extends FieldValues>({
     } else {
       closeModal('dialog1')
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     open
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // Intentionally excluding other dependencies as this effect should only run when 'open' changes
+    // Adding other dependencies would cause issues with modal management and re-renders
   ])
 
   // Return null since the modal is handled by the global system

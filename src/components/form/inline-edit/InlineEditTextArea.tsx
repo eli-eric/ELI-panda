@@ -54,14 +54,6 @@ export const InlineEditTextArea = ({
             handleSave()
           }
         }
-        const baseClasses = cn(
-          'flex justify-between items-center gap-2 text-xs px-2 py-1 rounded-md transition-all duration-200 border group w-full min-w-0',
-          isEditing
-            ? 'border-primary bg-background'
-            : disabled
-              ? 'border-muted/40 bg-muted/20 cursor-not-allowed'
-              : 'border-dashed border-primary/40 hover:border-primary/60 cursor-pointer hover:bg-primary/5'
-        )
 
         const displayValue = field.value || 'N/A'
         const shortValue =

@@ -92,7 +92,7 @@ export const InlineEditCombobox = ({
     <Controller
       name={name}
       control={control}
-      render={({ field, fieldState: { error } }) => {
+      render={({ field }) => {
         if (disabled) {
           return (
             <div className={baseClasses} aria-disabled={true}>

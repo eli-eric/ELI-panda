@@ -55,7 +55,7 @@ const CatalogueItemContainer = ({
     resolver: yupResolver(schema),
     defaultValues: { ...item }
   })
-  const { reset, setValue, formState } = formMethods
+  const { reset, setValue } = formMethods
   const { submit, loading } = useItemSubmit({
     setvalue: setValue,
     imageRef: imageRef,

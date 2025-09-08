@@ -10,7 +10,6 @@ interface DeliveryStatusBadgeProps
 
 function DeliveryStatusBadge({
   isDelivered,
-  className,
   ...props
 }: DeliveryStatusBadgeProps) {
   if (isDelivered) {

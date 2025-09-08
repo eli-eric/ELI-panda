@@ -7,7 +7,7 @@ import useFormNotification from '@/hooks/form/useFormNotification'
 interface Props<T extends FieldValues> {
   onSubmit?: (data: T) => void
   children: React.ReactNode
-  formMethods: UseFormReturn<T, any>
+  formMethods: UseFormReturn<T, any, any>
 
   enableLeaveWarning?: boolean
   className?: string

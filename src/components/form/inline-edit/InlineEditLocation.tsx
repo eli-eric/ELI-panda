@@ -17,7 +17,6 @@ export const InlineEditLocation = ({
   name,
   label,
   disabled,
-  className,
   onSelect,
   locationField
 }: InlineEditLocationProps) => {

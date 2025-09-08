@@ -28,7 +28,6 @@ import { queryMutate } from '@/utils/fetcher'
 import FileManager from '../../fileManager/FileManager'
 import { FILE_TYPE } from '../../fileManager/types'
 import { PublicationFreeFormComponent } from '../components/publication-freeform.comp'
-import { usePublicationEditSheet } from '../publication-edit/usePublicationEditSheet'
 
 const messages = message.publication
 
@@ -82,7 +81,6 @@ export const PublicationFormContainer: FC<Props> = ({
     }
   })
   const { closeModal } = useModalGlobalStore()
-  const [openEdit] = usePublicationEditSheet(publication?.uid as string)
 
   const onSuccessfulSubmit = (publication: Publication) => {
     queryClient.invalidateQueries({ queryKey: [publicationsTableId] })

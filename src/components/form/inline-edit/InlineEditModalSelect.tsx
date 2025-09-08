@@ -16,7 +16,6 @@ export const InlineEditModalSelect = ({
   name,
   label,
   disabled,
-  placeholder = 'Click to select',
   onClick,
   onClear,
   defaultValue = null
