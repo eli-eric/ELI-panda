@@ -130,15 +130,11 @@ export const SystemCreateContainer: FC = () => {
           hasEditRole={true}
         />
         {parentPath.length > 0 && (
-          <CardUI>
-            <CardContent className="pt-4">
-              <SystemHierarchy
-                parentPath={parentPath}
-                currentSystemName={systemName || 'New System'}
-                currentSystemLevel={systemLevel}
-              />
-            </CardContent>
-          </CardUI>
+          <SystemHierarchy
+            parentPath={parentPath}
+            currentSystemName={systemName || 'New System'}
+            currentSystemLevel={systemLevel}
+          />
         )}
 
         <SystemDetailSection />
