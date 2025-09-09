@@ -91,18 +91,16 @@ export const SystemNameCell = ({
           >
             {!original.hasSubsystems ? (
               <Badge
+                onClick={openEdit}
                 variant="outline"
                 className={cn(
                   'flex items-center h-7 max-w-full overflow-hidden justify-start px-3 hover:opacity-80',
                   getBadgeVariantBySystemLevel(original.systemLevel)
                 )}
               >
-                <Link
-                  href={PATH.SYSTEM + '/' + original.uid}
-                  className="cursor-pointer text-inherit hover:underline truncate block min-w-0"
-                >
+                <span className="cursor-pointer text-inherit hover:underline truncate block min-w-0">
                   {value}
-                </Link>
+                </span>
               </Badge>
             ) : (
               <Badge
