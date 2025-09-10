@@ -6,13 +6,13 @@ import { useIntl } from 'react-intl'
 import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
 import { message } from '@/i18n/src/messages'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
-import { useSystems } from '@/modules/systems/hooks/useSystems'
-import { addSubsystem } from '@/modules/systems/utils'
 import { 
   showErrorToast, 
   showSuccessToast, 
   validateSystemForm as validateForm
 } from '@/modules/systemItem/utils/hookHelpers'
+import { useSystems } from '@/modules/systems/hooks/useSystems'
+import { addSubsystem } from '@/modules/systems/utils'
 import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import { gql } from '@/types/gql'
 import type { SystemLevel } from '@/types/gql/graphql'

@@ -1,16 +1,15 @@
 import type { CellContext } from '@tanstack/react-table'
 import { ArrowUpDown, ChevronDown, ChevronRight } from 'lucide-react'
 import { Edit } from 'lucide-react'
-import Link from 'next/link'
 import { useDrag } from 'react-dnd'
 
 import { Tooltip } from '@/components/Tooltip'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { useSystemStore } from '@/modules/shared/system/device-info-overlay/store/useShowDeviceStore'
 import { useSystemEditSheet } from '@/modules/shared/system/system-edit/useSystemEditSheet'
 import { getBadgeVariantBySystemLevel } from '@/modules/systemItem/utils'
-import { PATH } from '@/types/constants/paths'
 import type { EndpointProps } from '@/utils/getEndpoints'
 
 import { SystemActionButtons } from './SystemActionButtons'
@@ -38,7 +37,8 @@ export const SystemNameCell = ({
 }: SystemNameCellProps) => {
   const { original } = row
   const { sparesIn, sparesOut } = original
-  const openEdit = useSystemEditSheet({ uid: original.uid })
+  const { setUID } = useSystemStore()
+  const openEdit = useSystemEditSheet(original.uid)
 
   const [{ isDragging }, dragRef, previewRef] = useDrag({
     collect: monitor => ({
@@ -55,6 +55,11 @@ export const SystemNameCell = ({
       setUid?.(original.uid)
     }
     row.toggleExpanded()
+  }
+
+  const handleOpenEdit = () => {
+    setUID(original.uid)
+    openEdit()
   }
 
   return (
@@ -91,7 +96,7 @@ export const SystemNameCell = ({
           >
             {!original.hasSubsystems ? (
               <Badge
-                onClick={openEdit}
+                onClick={handleOpenEdit}
                 variant="outline"
                 className={cn(
                   'flex items-center h-7 max-w-full overflow-hidden justify-start px-3 hover:opacity-80',
@@ -127,7 +132,7 @@ export const SystemNameCell = ({
             <Button
               variant="ghost"
               size="sm"
-              onClick={openEdit}
+              onClick={handleOpenEdit}
               className="h-8 w-8 p-0  transition-opacity duration-200 mr-1 hover:text-primary text-muted-foreground"
             >
               <Edit className="h-4 w-4" />

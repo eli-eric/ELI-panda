@@ -1,5 +1,4 @@
 import { useMutation as useQueryMutation } from '@tanstack/react-query'
-import { useRouter } from 'next/router'
 import { type MutableRefObject, useState } from 'react'
 import { useIntl } from 'react-intl'
 
@@ -10,9 +9,11 @@ import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { BASE_URL } from '@/types/constants/common'
 import { gql } from '@/types/gql'
 import type { PhysicalItemProperty } from '@/types/responses/systems'
-import { navigateBack } from '@/utils'
 import { connectAndDisconnectNode, whereN } from '@/utils/graphql/mutations'
 
+import { useRecalculate } from '../../../../systemItem/hooks/useRecalculate'
+import { useSystemDetail } from '../../../../systemItem/hooks/useSystemDetail'
+import { makeSystemInputBody } from '../../../../systemItem/hooks/utils'
 import { useSystemItemStore } from '../../../../systemItem/store/useSystemItemStore'
 import type { SystemDetailFormType } from '../../../../systemItem/types/form'
 import {
@@ -20,9 +21,6 @@ import {
   showErrorToast,
   showSuccessToast
 } from '../../../../systemItem/utils/hookHelpers'
-import { useRecalculate } from '../../../../systemItem/hooks/useRecalculate'
-import { useSystemDetail } from '../../../../systemItem/hooks/useSystemDetail'
-import { makeSystemInputBody } from '../../../../systemItem/hooks/utils'
 
 // Identical to useSystemUpdate, but can be further customized for sheet edit if needed
 const systemDetailMutation = gql(`

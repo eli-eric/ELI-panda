@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form'
 
 import { Form } from '@/components/form/Form'
 import { SheetFormButtons } from '@/components/sheet-form-buttons'
-import { Card as CardUI, CardContent } from '@/components/ui/card'
 import { FILE_TYPE } from '@/modules/shared/fileManager/types'
 import { ImageGallery } from '@/modules/shared/imageManager/ImageGallery'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'

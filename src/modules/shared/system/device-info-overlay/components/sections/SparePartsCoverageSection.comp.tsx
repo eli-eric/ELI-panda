@@ -5,7 +5,7 @@ import { Button } from '@/components/Buttons'
 import { Tooltip } from '@/components/Tooltip'
 import { Disclosure } from '@/components/ui'
 import { Badge } from '@/components/ui/badge'
-import { useShowDeviceStore } from '@/modules/shared/system/device-info-overlay/store/useShowDeviceStore'
+import { useSystemStore } from '@/modules/shared/system/device-info-overlay/store/useShowDeviceStore'
 import { IconCell } from '@/modules/systems/components/table/cells/IconCell'
 import type { ITEM_USAGE } from '@/modules/systems/types/constants'
 
@@ -13,12 +13,22 @@ import { SystemDetailParameter } from '../system-detail-parameter.comp'
 
 interface SparePartsCoverageSectionProps {
   systemDetail: any
+  withDirtyProtection?: <T extends any[]>(callback: (...args: T) => void) => (...args: T) => void
 }
 
 export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
-  systemDetail
+  systemDetail,
+  withDirtyProtection
 }) => {
-  const { setUID } = useShowDeviceStore()
+  const { setUID } = useSystemStore()
+
+  const handleSystemRedirect = (uid: string) => {
+    if (withDirtyProtection) {
+      withDirtyProtection(() => setUID(uid))()
+    } else {
+      setUID(uid)
+    }
+  }
 
   if (!systemDetail) return null
 
@@ -68,7 +78,7 @@ export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
                 return (
                   <button
                     key={index}
-                    onClick={() => setUID(node.uid)}
+                    onClick={() => handleSystemRedirect(node.uid)}
                     className="flex justify-between text-xs px-2 py-1 rounded-md transition-all duration-200 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-200 dark:hover:border-blue-700 border border-transparent cursor-pointer group w-full"
                   >
                     <div className="flex items-center space-x-2 flex-1 min-w-0">
@@ -118,7 +128,7 @@ export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
             return (
               <button
                 key={index}
-                onClick={() => setUID(uid)}
+                onClick={() => handleSystemRedirect(uid)}
                 className="flex justify-between text-xs px-2 py-1 rounded-md transition-all duration-200 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-200 dark:hover:border-blue-700 border border-transparent cursor-pointer group w-full"
               >
                 <div className="flex items-center space-x-2 flex-1 min-w-0">

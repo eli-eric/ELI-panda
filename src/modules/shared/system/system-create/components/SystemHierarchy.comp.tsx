@@ -1,6 +1,8 @@
 import { type FC, Fragment } from 'react'
+
 import { Disclosure } from '@/components/ui'
 import { cn } from '@/lib/utils'
+import { useSystemStore } from '@/modules/shared/system/device-info-overlay/store/useShowDeviceStore'
 import type { SystemLevel } from '@/types/gql/graphql'
 
 interface SystemHierarchyProps {
@@ -12,14 +14,26 @@ interface SystemHierarchyProps {
   currentSystemName?: string | null
   currentSystemLevel?: SystemLevel | null
   className?: string
+  withDirtyProtection?: <T extends any[]>(callback: (...args: T) => void) => (...args: T) => void
 }
 
 export const SystemHierarchy: FC<SystemHierarchyProps> = ({
   parentPath,
   currentSystemName,
   currentSystemLevel,
-  className
+  className,
+  withDirtyProtection
 }) => {
+  const { setUID } = useSystemStore()
+
+  const handleSystemRedirect = (uid: string) => {
+    if (withDirtyProtection) {
+      withDirtyProtection(() => setUID(uid))()
+    } else {
+      setUID(uid)
+    }
+  }
+
   if (!parentPath || parentPath.length === 0) {
     return null
   }
@@ -40,18 +54,34 @@ export const SystemHierarchy: FC<SystemHierarchyProps> = ({
         <div className="flex flex-wrap items-center gap-1">
           {parentPath.map((parent, index) => (
             <Fragment key={parent?.uid || index}>
-              <span
-                className={cn(
-                  'px-2 py-1 rounded text-xs font-medium',
-                  'bg-gray-100 dark:bg-gray-600 text-gray-900 dark:text-gray-200',
-                  parent.systemLevel === 'KEY_SYSTEMS' &&
-                    'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300',
-                  parent.systemLevel === 'TECHNOLOGY_UNIT' &&
-                    'bg-lime-100 dark:bg-lime-900/30 text-lime-700 dark:text-lime-300'
-                )}
-              >
-                {parent?.name || 'Unknown'}
-              </span>
+              {parent?.uid ? (
+                <button
+                  onClick={() => handleSystemRedirect(parent.uid!)}
+                  className={cn(
+                    'px-2 py-1 rounded text-xs font-medium cursor-pointer hover:opacity-80 transition-opacity',
+                    'bg-gray-100 dark:bg-gray-600 text-gray-900 dark:text-gray-200',
+                    parent.systemLevel === 'KEY_SYSTEMS' &&
+                      'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300',
+                    parent.systemLevel === 'TECHNOLOGY_UNIT' &&
+                      'bg-lime-100 dark:bg-lime-900/30 text-lime-700 dark:text-lime-300'
+                  )}
+                >
+                  {parent?.name || 'Unknown'}
+                </button>
+              ) : (
+                <span
+                  className={cn(
+                    'px-2 py-1 rounded text-xs font-medium',
+                    'bg-gray-100 dark:bg-gray-600 text-gray-900 dark:text-gray-200',
+                    parent.systemLevel === 'KEY_SYSTEMS' &&
+                      'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300',
+                    parent.systemLevel === 'TECHNOLOGY_UNIT' &&
+                      'bg-lime-100 dark:bg-lime-900/30 text-lime-700 dark:text-lime-300'
+                  )}
+                >
+                  {parent?.name || 'Unknown'}
+                </span>
+              )}
               {index < parentPath.length - 1 && (
                 <span className="text-gray-400 mx-1">→</span>
               )}

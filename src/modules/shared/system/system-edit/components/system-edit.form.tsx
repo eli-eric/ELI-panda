@@ -1,25 +1,27 @@
-import { FILE_TYPE } from '@/modules/shared/fileManager/types'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
 import { memo, useRef } from 'react'
+import { useForm } from 'react-hook-form'
 
 import { Form } from '@/components/form/Form'
 import { SheetFormButtons } from '@/components/sheet-form-buttons'
-import { ROLE } from '@/types/constants/roles'
-import { SystemLevel } from '@/types/gql/graphql'
+import { useFormDirtyProtection } from '@/hooks/useFormDirtyProtection'
+import { useItemPropertiesData } from '@/hooks/useItemPropertiesData'
+import { FILE_TYPE } from '@/modules/shared/fileManager/types'
 import { ImageGallery } from '@/modules/shared/imageManager/ImageGallery'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
-import { useSuspenseSystemDetail } from '@/modules/systemItem/hooks/useSuspenseSystemDetail'
 import { useSystemSheetUpdate } from '@/modules/shared/system/system-edit/hooks/useSystemSheetUpdate'
-import { SystemDetailSection } from './sections/system-detail.section'
-import { PhysicalItemSheetSection } from './sections/PhysicalItemSheetSection.comp'
-import { SystemHierarchy } from '../../system-create/components/SystemHierarchy.comp'
-import { systemCreateSchema } from '../../system-create/schema'
+import { useSuspenseSystemDetail } from '@/modules/systemItem/hooks/useSuspenseSystemDetail'
+import { ROLE } from '@/types/constants/roles'
+import type { SystemLevel } from '@/types/gql/graphql'
+
 import { ItemPropertiesSection } from '../../device-info-overlay/components/sections/ItemPropertiesSection.comp'
 import { OrderInformationSection } from '../../device-info-overlay/components/sections/OrderInformationSection.comp'
 import { SparePartsCoverageSection } from '../../device-info-overlay/components/sections/SparePartsCoverageSection.comp'
 import { SubsystemsSection } from '../../device-info-overlay/components/sections/SubsystemsSection.comp'
-import { useItemPropertiesData } from '@/hooks/useItemPropertiesData'
+import { SystemHierarchy } from '../../system-create/components/SystemHierarchy.comp'
+import { systemCreateSchema } from '../../system-create/schema'
+import { PhysicalItemSheetSection } from './sections/PhysicalItemSheetSection.comp'
+import { SystemDetailSection } from './sections/system-detail.section'
 
 const MemoizedImageGallery = memo(ImageGallery)
 
@@ -75,6 +77,8 @@ export const SystemEditForm = ({ uid }: { uid: string }) => {
     physicalItemUid: physicalItem?.uid
   })
 
+  const { withDirtyProtection } = useFormDirtyProtection(formMethods)
+
   const onSubmit = (data: any) => {
     updateSystem(data, true)
   }
@@ -96,6 +100,7 @@ export const SystemEditForm = ({ uid }: { uid: string }) => {
           currentSystemLevel={
             systemDetail?.systemLevel || ('OTHER' as SystemLevel)
           }
+          withDirtyProtection={withDirtyProtection}
         />
       )}
       <MemoizedImageGallery
@@ -131,9 +136,17 @@ export const SystemEditForm = ({ uid }: { uid: string }) => {
       {systemDetail &&
         (systemDetail?.sparePartsFor?.length > 0 ||
           systemDetail?.sparePartsConnection?.edges?.length > 0) && (
-          <SparePartsCoverageSection systemDetail={systemDetail} />
+          <SparePartsCoverageSection 
+            systemDetail={systemDetail} 
+            withDirtyProtection={withDirtyProtection}
+          />
         )}
-      {systemDetail && <SubsystemsSection systemDetail={systemDetail} />}
+      {systemDetail && (
+        <SubsystemsSection 
+          systemDetail={systemDetail} 
+          withDirtyProtection={withDirtyProtection}
+        />
+      )}
     </Form>
   )
 }

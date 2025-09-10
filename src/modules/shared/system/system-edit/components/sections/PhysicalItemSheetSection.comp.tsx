@@ -1,12 +1,12 @@
-import { Disclosure } from '@/components/ui'
+import type { FC } from 'react'
+import { useFormContext } from 'react-hook-form'
+
 import { InlineEditInput } from '@/components/form/inline-edit/InlineEditInput'
 import { InlineEditListbox } from '@/components/form/inline-edit/InlineEditListbox'
 import { InlineEditTextArea } from '@/components/form/inline-edit/InlineEditTextArea'
-
+import { Disclosure } from '@/components/ui'
 import { SystemDetailParameter } from '@/modules/shared/system/device-info-overlay/components/system-detail-parameter.comp'
 import { PATH } from '@/types/constants/paths'
-import { useFormContext } from 'react-hook-form'
-import type { FC } from 'react'
 
 interface PhysicalItemSheetSectionProps {
   physicalItem: any
