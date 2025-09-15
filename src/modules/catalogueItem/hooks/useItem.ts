@@ -5,7 +5,7 @@ import { useMemo } from 'react'
 import type { QueryFetcherKey } from '@/utils/fetcher'
 import { queryFetcher } from '@/utils/fetcher'
 
-import type { CatalogueItem } from '../types/responses'
+import type { CatalogueFormData } from '../components/form/ItemForm.schema'
 
 export const useCatalogueItem = () => {
   const router = useRouter()
@@ -19,7 +19,7 @@ export const useCatalogueItem = () => {
     refetch
   } = useQuery({
     queryKey,
-    queryFn: queryFetcher<CatalogueItem>('catalogueItem'),
+    queryFn: queryFetcher<CatalogueFormData>('catalogueItem'),
     enabled: !!catalogueUid
   })
 

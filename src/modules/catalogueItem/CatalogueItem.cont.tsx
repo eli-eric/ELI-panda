@@ -1,4 +1,4 @@
-import { yupResolver } from '@hookform/resolvers/yup'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { memo, useEffect, useRef, useState } from 'react'
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
@@ -20,7 +20,10 @@ import type { ImageGalleryRef } from '../shared/imageManager/types'
 import useCatalogueFormFields from './components/form/CatalogueForm.fields'
 import DefaultItemForm from './components/form/DefaultItemForm'
 import Groups from './components/form/Groups'
-import { schema } from './components/form/ItemForm.schema'
+import {
+  catalogoueSchema,
+  type CatalogueFormData
+} from './components/form/ItemForm.schema'
 import { CatalogueOrders } from './components/orders/CatalogueOrders'
 import { RelatedItemsContainer } from './components/related-items/RelatedItems.cont'
 import { CatalogueStatisticsContainer } from './components/statistics/CatalogueStatistics.cont'
@@ -30,7 +33,7 @@ import type { CatalogueItem } from './types/responses'
 
 const MemoizedGallery = memo(ImageGallery)
 
-interface CatalogueForm extends CatalogueItem {
+interface CatalogueForm extends CatalogueFormData {
   hasImageGalleryChanges?: boolean
 }
 
@@ -50,9 +53,9 @@ const CatalogueItemContainer = ({
 
   const { catalogueCategory } = useCategory(catalogueCategoryUid)
 
-  const imageRef = useRef<ImageGalleryRef | undefined>(undefined)
-  const formMethods = useForm<any>({
-    resolver: yupResolver(schema),
+  const imageRef = useRef<ImageGalleryRef>()
+  const formMethods = useForm<CatalogueFormData>({
+    resolver: zodResolver(catalogoueSchema),
     defaultValues: { ...item }
   })
   const { reset, setValue } = formMethods
