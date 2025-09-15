@@ -19,7 +19,8 @@ export const catalogoueSchema = z.object({
   categoryName: z.string().optional(),
   supplier: codebookSchema.nullable().optional(),
   manufacturerUrl: z.string().optional(),
-  details: z.record(z.string(), z.any()).nullable().optional()
+  details: z.record(z.string(), z.any()).nullable().optional(),
+  lastUpdateTime: z.string().optional()
 })
 
 export type CatalogueFormData = z.infer<typeof catalogoueSchema>
