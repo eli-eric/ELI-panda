@@ -15,15 +15,29 @@ const initialParams: WarningModalParams = {
 
 type WarningModalStore = {
   params: WarningModalParams
+  exec?: { callback?: Function; callbackArgs?: any[] }
+  setExec: (exec: { callback?: Function; callbackArgs?: any[] }) => void
+  clearExec: () => void
   patchParams: (params: {}) => void
   resetParams: () => void
 }
 
 export const useWarningModalStore = create<WarningModalStore>(set => ({
   params: initialParams,
-  patchParams: (newParams: object) =>
+  exec: undefined,
+  setExec: exec =>
+    set(state => ({
+      ...state,
+      exec
+    })),
+  clearExec: () => set(state => ({ ...state, exec: undefined })),
+  patchParams: (newParams: object) => {
+    console.log('useWarningModalStore.patchParams', newParams)
     set(state => ({
       params: { ...state.params, ...newParams }
-    })),
+    }))
+  },
   resetParams: () => set({ params: initialParams })
+  // debug
+  // Note: resetParams is a simple setter; we log in components/hooks where needed
 }))

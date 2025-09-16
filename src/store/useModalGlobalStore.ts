@@ -15,6 +15,7 @@ export interface ModalSlot {
   onSubmit?: (...args: any[]) => void
   onClose?: () => void
   parentTriggerFn?: (...args: any[]) => void
+  onCloseAttempt?: () => boolean // Returns false to prevent closing, true to allow
   priority: number // 0 = Sheet, 1 = Dialog1, 2 = Dialog2
 }
 
@@ -38,6 +39,7 @@ const initialSlot = (priority: number): ModalSlot => ({
   onSubmit: undefined,
   onClose: undefined,
   parentTriggerFn: undefined,
+  onCloseAttempt: undefined,
   priority
 })
 

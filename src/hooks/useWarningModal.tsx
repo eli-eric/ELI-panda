@@ -4,44 +4,49 @@ import { shallow } from 'zustand/shallow'
 import { useWarningModalStore } from '@/store/useWarningModalStore'
 
 const useWarningModal = (globalMessage?: string) => {
-  const [execData, setExecData] = useState({
-    callback: undefined as Function | undefined,
-    callbackArgs: undefined as any[] | undefined
-  })
-
-  const [params, patchParams, resetParams] = useWarningModalStore(
-    state => [state.params, state.patchParams, state.resetParams],
-    shallow
-  )
+  const [params, patchParams, resetParams, exec, setExec, clearExec] =
+    useWarningModalStore(
+      state => [
+        state.params,
+        state.patchParams,
+        state.resetParams,
+        state.exec,
+        state.setExec,
+        state.clearExec
+      ],
+      shallow
+    )
 
   const { isOpen, isConfirmed } = params
 
-  const { callback, callbackArgs } = execData
-
   useEffect(() => {
     startTransition(() => {
-      if (callback && callbackArgs && isConfirmed) {
+      console.log('useWarningModal effect', { isConfirmed, hasExec: !!exec })
+      if (exec && exec.callback && isConfirmed) {
+        console.log('useWarningModal: executing exec.callback', exec)
         try {
-          callback(...callbackArgs)
+          exec.callback(...(exec.callbackArgs || []))
+          clearExec()
           resetParams()
         } catch (err) {
           patchParams({ error: String(err) })
         }
       }
     })
-  }, [isConfirmed, callback, callbackArgs, resetParams, patchParams])
+  }, [isConfirmed, exec, clearExec, resetParams, patchParams])
 
-  //Cancel execution on close
+  // Cancel execution on close when not confirmed
   useEffect(() => {
     startTransition(() => {
-      if (!isOpen && callbackArgs) {
-        setExecData({
-          callback: undefined,
-          callbackArgs: undefined
-        })
+      if (!isOpen && exec && !isConfirmed) {
+        console.log(
+          'useWarningModal: clearing exec because modal closed without confirmation'
+        )
+        clearExec()
       }
+      // If confirmed, do not clear here, let the isConfirmed effect handle it
     })
-  }, [callback, callbackArgs, isOpen])
+  }, [exec, isOpen, isConfirmed, clearExec])
 
   const withWarningModal = useCallback(
     <T extends any[], R>(
@@ -55,8 +60,15 @@ const useWarningModal = (globalMessage?: string) => {
           error: '',
           message: message ?? globalMessage ?? 'Are you sure?'
         }
+        console.log(
+          'withWarningModal: opening warning modal, callback:',
+          callback,
+          'args:',
+          callbackArgs
+        )
         patchParams(newParams)
-        setExecData({ callback, callbackArgs })
+        setExec({ callback, callbackArgs })
+        console.log('withWarningModal: exec set in store')
       },
     [globalMessage, patchParams]
   )

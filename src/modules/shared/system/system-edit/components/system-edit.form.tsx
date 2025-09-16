@@ -1,11 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { memo, useRef } from 'react'
+import { memo, useRef, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { Form } from '@/components/form/Form'
 import { SheetFormButtons } from '@/components/sheet-form-buttons'
 import { useFormDirtyProtection } from '@/hooks/useFormDirtyProtection'
 import { useItemPropertiesData } from '@/hooks/useItemPropertiesData'
+import { useModalFormStateStore } from '@/store/useModalFormStateStore'
 import { FILE_TYPE } from '@/modules/shared/fileManager/types'
 import { ImageGallery } from '@/modules/shared/imageManager/ImageGallery'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
@@ -25,7 +26,13 @@ import { SystemDetailSection } from './sections/system-detail.section'
 
 const MemoizedImageGallery = memo(ImageGallery)
 
-export const SystemEditForm = ({ uid }: { uid: string }) => {
+export const SystemEditForm = ({
+  uid,
+  onClose
+}: {
+  uid: string
+  onClose?: () => void
+}) => {
   const { systemDetail, physicalItem, catalogueItem } = useSuspenseSystemDetail(
     { uid }
   )
@@ -78,6 +85,20 @@ export const SystemEditForm = ({ uid }: { uid: string }) => {
   })
 
   const { withDirtyProtection } = useFormDirtyProtection(formMethods)
+  const { setIsDirty, reset } = useModalFormStateStore()
+
+  // Sync form dirty state with global modal store
+  useEffect(() => {
+    console.log('Form dirty state changed:', formMethods.formState.isDirty)
+    setIsDirty(formMethods.formState.isDirty)
+  }, [formMethods.formState.isDirty, setIsDirty])
+
+  // Reset on component unmount
+  useEffect(() => {
+    return () => {
+      reset()
+    }
+  }, [reset])
 
   const onSubmit = (data: any) => {
     updateSystem(data, true)
@@ -89,6 +110,7 @@ export const SystemEditForm = ({ uid }: { uid: string }) => {
         editRole={ROLE.SYSTEM_EDIT}
         loading={loading}
         onSubmit={formMethods.handleSubmit(onSubmit)}
+        onExit={onClose}
         isFormDirty={formMethods.formState.isDirty}
       />
       {parentPath && parentPath.length > 0 && (
@@ -136,14 +158,14 @@ export const SystemEditForm = ({ uid }: { uid: string }) => {
       {systemDetail &&
         (systemDetail?.sparePartsFor?.length > 0 ||
           systemDetail?.sparePartsConnection?.edges?.length > 0) && (
-          <SparePartsCoverageSection 
-            systemDetail={systemDetail} 
+          <SparePartsCoverageSection
+            systemDetail={systemDetail}
             withDirtyProtection={withDirtyProtection}
           />
         )}
       {systemDetail && (
-        <SubsystemsSection 
-          systemDetail={systemDetail} 
+        <SubsystemsSection
+          systemDetail={systemDetail}
           withDirtyProtection={withDirtyProtection}
         />
       )}

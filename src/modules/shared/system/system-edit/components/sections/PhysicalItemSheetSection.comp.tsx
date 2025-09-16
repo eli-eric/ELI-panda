@@ -40,13 +40,13 @@ export const PhysicalItemSheetSection: FC<PhysicalItemSheetSectionProps> = ({
         <InlineEditListbox
           name="physicalItem.itemUsage"
           label="Item Usage"
-          codebook={"ITEM_USAGE" as any}
+          codebook={'ITEM_USAGE' as any}
         />
         {/* Condition Status (inline edit) */}
         <InlineEditListbox
           name="physicalItem.conditionStatus"
           label="Condition Status"
-          codebook={"ITEM_CONDITION_STATUS" as any}
+          codebook={'ITEM_CONDITION_STATUS' as any}
         />
         {/* Notes (inline edit) */}
         <InlineEditTextArea
@@ -59,10 +59,16 @@ export const PhysicalItemSheetSection: FC<PhysicalItemSheetSectionProps> = ({
           <SystemDetailParameter title="EUN" value={physicalItem.eun} />
         )}
         {physicalItem.serialNumber && (
-          <SystemDetailParameter title="Serial Number" value={physicalItem.serialNumber} />
+          <SystemDetailParameter
+            title="Serial Number"
+            value={physicalItem.serialNumber}
+          />
         )}
         {physicalItem.itemUsage?.name && (
-          <SystemDetailParameter title="Item Usage" value={physicalItem.itemUsage.name} />
+          <SystemDetailParameter
+            title="Item Usage"
+            value={physicalItem.itemUsage.name}
+          />
         )}
         {catalogueItem?.catalogueNumber && (
           <SystemDetailParameter
@@ -79,10 +85,16 @@ export const PhysicalItemSheetSection: FC<PhysicalItemSheetSectionProps> = ({
           />
         )}
         {catalogueItem?.supplier?.name && (
-          <SystemDetailParameter title="Supplier" value={catalogueItem.supplier.name} />
+          <SystemDetailParameter
+            title="Supplier"
+            value={catalogueItem.supplier.name}
+          />
         )}
         {physicalItem.conditionStatus?.name && (
-          <SystemDetailParameter title="Condition Status" value={physicalItem.conditionStatus.name} />
+          <SystemDetailParameter
+            title="Condition Status"
+            value={physicalItem.conditionStatus.name}
+          />
         )}
       </div>
     </Disclosure>

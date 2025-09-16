@@ -17,7 +17,10 @@ export const WarningModal = () => {
     goNext: {
       text: messages.buttons.continue,
       loading: false,
-      onClick: () => patchParams({ isConfirmed: true })
+      onClick: () => {
+        console.log('WarningModal: continue clicked')
+        patchParams({ isConfirmed: true })
+      }
     },
     goBack: {
       text: messages.buttons.cancel,
