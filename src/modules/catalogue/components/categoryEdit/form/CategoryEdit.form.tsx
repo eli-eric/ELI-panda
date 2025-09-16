@@ -27,6 +27,7 @@ interface Props {
 const CategoryEditForm = ({
   uid,
   onSubmit,
+  children,
   systemType,
   categoryDetail,
   imageRef
@@ -56,6 +57,10 @@ const CategoryEditForm = ({
         }}
       />
       <div className="space-y-6">
+        {/* Action Buttons */}
+        {children}
+
+        {/* Basic Information */}
         <Card>
           <CardHeader>
             <CardTitle>Basic Information</CardTitle>
@@ -84,8 +89,6 @@ const CategoryEditForm = ({
             <PhysicalItemProperties />
           </CardContent>
         </Card>
-
-        {/* Action Buttons */}
       </div>
     </Form>
   )

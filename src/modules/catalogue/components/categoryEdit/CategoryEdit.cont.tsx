@@ -7,7 +7,6 @@ import { Button } from '@/components/Buttons'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
-import { message } from '@/i18n/src/messages'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import type { CodebookType } from '@/types/responses/codebook'
@@ -20,7 +19,6 @@ import { formatData } from '../../utils'
 import CategoryEditForm from './form/CategoryEdit.form'
 import type { CategoryFormType } from './types'
 
-const { buttons } = message.common
 interface Props {
   setOpen: Dispatch<SetStateAction<boolean>>
   parentUID?: string
@@ -139,13 +137,55 @@ const CategoryEditContainer = ({ setOpen, parentUID, uid }: Props) => {
 
   return (
     <div>
-      <CategoryEditForm
-        onSubmit={onSubmit}
-        uid={uid}
-        imageRef={imageRef}
-        categoryDetail={categoryDetail as CategoryFormType}
-        systemType={catalogueCategory?.systemType as CodebookType}
-      ></CategoryEditForm>
+      {categoryDetail && (
+        <CategoryEditForm
+          onSubmit={onSubmit}
+          uid={uid}
+          imageRef={imageRef}
+          categoryDetail={categoryDetail as CategoryFormType}
+          systemType={catalogueCategory?.systemType as CodebookType}
+        >
+          {/*<div className="flex flex-col sm:flex-row sm:justify-end gap-3 pt-4 border-t mt-6">
+            <Button
+              type="button"
+              onClick={() => {
+                setOpen(false)
+              }}
+              disabled={loading}
+              variant="outline"
+              className="order-2 sm:order-1"
+            >
+              <FormattedMessage id={buttons.cancel} />
+            </Button>
+            <Button
+              type="submit"
+              loading={loading || loadingSubmit}
+              className="order-1 sm:order-2"
+            >
+              <FormattedMessage id={buttons.save} />
+            </Button>
+          </div>*/}
+          <div className="flex sticky top-0 z-10 items-end justify-end mb-2">
+            <div className="flex gap-2 pb-2">
+              <Button size="sm" type="submit" disabled={loading}>
+                Save
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => {
+                  {
+                    setOpen(false)
+                  }
+                }}
+                loading={loading || loadingSubmit}
+              >
+                Exit
+              </Button>
+            </div>
+          </div>
+        </CategoryEditForm>
+      )}
     </div>
   )
 }
