@@ -1,7 +1,7 @@
 import { Plus, Trash2 } from 'lucide-react'
 import { startTransition, useEffect } from 'react'
-import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 import type { FieldArrayPath } from 'react-hook-form'
+import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 
 import { Input } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'

@@ -41,6 +41,9 @@ const CategoryEditForm = ({
   return (
     <Form formMethods={formMethods} onSubmit={onSubmit}>
       <div className="space-y-6">
+        {/* Action Buttons */}
+        {children}
+
         {/* Basic Information */}
         <Card>
           <CardHeader>
@@ -70,9 +73,6 @@ const CategoryEditForm = ({
             <PhysicalItemProperties />
           </CardContent>
         </Card>
-
-        {/* Action Buttons */}
-        {children}
       </div>
     </Form>
   )
