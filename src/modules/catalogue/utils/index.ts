@@ -1,7 +1,7 @@
 import type { CategoryFormType } from '../components/categoryEdit/types'
 
-export const formatData = (data: CategoryFormType, parentUID) =>
-  data.groups && data.groups.length !== 0
+export const formatData = (data: CategoryFormType, parentUID) => {
+  return data.groups && data.groups.length !== 0
     ? {
         ...data,
         parentPath: data.parentUID ? data.parentUID : parentUID,
@@ -11,7 +11,7 @@ export const formatData = (data: CategoryFormType, parentUID) =>
             prop.listOfValues && prop.listOfValues.length !== 0
               ? {
                   ...prop,
-                  listOfValues: prop.listOfValues.map(value => value.value)
+                  listOfValues: prop.listOfValues.map(value => value)
                 }
               : { ...prop }
           )
@@ -20,7 +20,7 @@ export const formatData = (data: CategoryFormType, parentUID) =>
           prop.listOfValues && prop.listOfValues.length !== 0
             ? {
                 ...prop,
-                listOfValues: prop.listOfValues.map(value => value.value)
+                listOfValues: prop.listOfValues.map(value => value)
               }
             : { ...prop }
         )
@@ -37,8 +37,9 @@ export const formatData = (data: CategoryFormType, parentUID) =>
           prop.listOfValues && prop.listOfValues.length !== 0
             ? {
                 ...prop,
-                listOfValues: prop.listOfValues.map(value => value.value)
+                listOfValues: prop.listOfValues.map(value => value)
               }
             : { ...prop }
         )
       }
+}
