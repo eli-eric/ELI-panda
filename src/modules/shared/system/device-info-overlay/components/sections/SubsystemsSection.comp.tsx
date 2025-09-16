@@ -15,7 +15,7 @@ import { type FC, useMemo, useState } from 'react'
 import { Disclosure } from '@/components/ui'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
-import { useShowDeviceStore } from '@/modules/shared/system/device-info-overlay/store/useShowDeviceStore'
+import { useSystemStore } from '@/modules/shared/system/device-info-overlay/store/useShowDeviceStore'
 import { fuzzyFilter } from '@/modules/shared/table/pandaTable/utils'
 import type { TableSystem } from '@/modules/systemItem/components/subsystems/types'
 import { IconCell } from '@/modules/systems/components/table/cells/IconCell'
@@ -24,18 +24,28 @@ import type { SystemLevel } from '@/types/gql/graphql'
 
 interface SubsystemsSectionProps {
   systemDetail: any
+  withDirtyProtection?: <T extends any[]>(callback: (...args: T) => void) => (...args: T) => void
 }
 
 export const SubsystemsSection: FC<SubsystemsSectionProps> = ({
-  systemDetail
+  systemDetail,
+  withDirtyProtection
 }) => {
-  const { setUID } = useShowDeviceStore()
+  const { setUID } = useSystemStore()
   const [sorting, setSorting] = useState<SortingState>([])
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10
   })
   const [globalFilter, setGlobalFilter] = useState('')
+
+  const handleSystemRedirect = (uid: string) => {
+    if (withDirtyProtection) {
+      withDirtyProtection(() => setUID(uid))()
+    } else {
+      setUID(uid)
+    }
+  }
 
   const columns = useMemo((): ColumnDef<TableSystem, any>[] => {
     return [
@@ -118,7 +128,7 @@ export const SubsystemsSection: FC<SubsystemsSectionProps> = ({
           return (
             <button
               key={uid}
-              onClick={() => setUID(uid)}
+              onClick={() => handleSystemRedirect(uid)}
               className="flex justify-between text-xs px-2 py-1 rounded-md transition-all duration-200 hover:bg-link/5 hover:border-link/20 border border-transparent cursor-pointer group w-full"
             >
               <div className="flex items-center space-x-2 flex-1 min-w-0">

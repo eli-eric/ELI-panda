@@ -15,30 +15,5 @@ export const useCategoryDetail = (uid?: string) => {
     enabled: !!uid
   })
 
-  const categoryDetail = useMemo(() => {
-    return data?.groups && data.groups.length !== 0
-      ? {
-          ...data,
-          groups: data.groups?.map(group => ({
-            ...group,
-            properties: group.properties.map(property => ({
-              ...property,
-              listOfValues: property.listOfValues?.map(value => ({
-                value: value
-              }))
-            }))
-          })),
-          physicalItemProperties: data.physicalItemProperties?.map(
-            property => ({
-              ...property,
-              listOfValues: property.listOfValues?.map(value => ({
-                value: value
-              }))
-            })
-          )
-        }
-      : { ...data }
-  }, [data])
-
-  return { categoryDetail, isLoading, error, refetch, queryKey }
+  return { categoryDetail: data, isLoading, error, refetch, queryKey }
 }

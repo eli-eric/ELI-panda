@@ -1,6 +1,7 @@
 import { Plus, Trash2 } from 'lucide-react'
 import { startTransition, useEffect } from 'react'
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
+import type { FieldArrayPath } from 'react-hook-form'
 
 import { Input } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
@@ -27,11 +28,7 @@ const ValueItem = ({ removeValue, index, name }) => {
 
   return (
     <div className="flex gap-2 mb-2">
-      <Input
-        name={`${name}.value`}
-        placeholder="Enter value"
-        className="flex-1"
-      />
+      <Input name={`${name}`} placeholder="Enter value" className="flex-1" />
       <Button
         type="button"
         variant="outline"
@@ -66,16 +63,20 @@ const PropertyItem = ({
   lenght
 }: Props) => {
   const { watch, control, unregister } = useFormContext<CategoryFormType>()
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove } = useFieldArray<
+    CategoryFormType,
+    FieldArrayPath<CategoryFormType>
+  >({
     control,
-    name: `${name}.listOfValues`
+    // name needs to be a FieldArrayPath for the form type; cast to satisfy TS
+    name: `${name}.listOfValues` as FieldArrayPath<CategoryFormType>
   })
 
   const handleRemoveProp = () => {
     removeProp(index)
   }
   const handleAddValue = () => {
-    append({ value: '' })
+    append('' as any)
   }
   const type = useWatch({ control, name: `${name}.type` })
   const propertyName = useWatch({ control, name: `${name}.name` })
@@ -105,7 +106,7 @@ const PropertyItem = ({
             name={`${name}.defaultValue`}
             allowEmptyOption={true}
             emptyOption="Select default value"
-            customOptions={[...listOfValues.map(value => value.value)]}
+            customOptions={listOfValues}
           />
         )
       case PROPERTY_TYPE.BOOLEAN:

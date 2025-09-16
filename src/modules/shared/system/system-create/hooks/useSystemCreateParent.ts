@@ -1,5 +1,6 @@
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
 import { gql } from '@/types/gql'
+
 import { useSystemCreateParentStore } from '../store/useSystemCreateParentStore'
 
 const systemDetailQuery = gql(`

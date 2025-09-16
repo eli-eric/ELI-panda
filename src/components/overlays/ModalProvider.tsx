@@ -1,4 +1,5 @@
 import React from 'react'
+import { XIcon } from 'lucide-react'
 
 import {
   Dialog,
@@ -12,7 +13,6 @@ import {
 } from '@/components/ui/dialog'
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetDescription,
   SheetHeader,
@@ -33,22 +33,52 @@ const ModalSheet: React.FC<{
   // Always render, but only show content when there's a component
   const Component = slot.component
 
+  // Centralized close handler with dirty protection
+  const handleClose = React.useCallback(() => {
+    // Check if closing should be prevented
+    if (slot.onCloseAttempt && !slot.onCloseAttempt()) {
+      return // Prevent closing
+    }
+    if (slot.onClose) slot.onClose()
+    closeModal('sheet')
+  }, [slot, closeModal])
+
+  // ESC key handler
+  React.useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && slot.isOpen && !!Component) {
+        handleClose()
+      }
+    }
+    document.addEventListener('keydown', handleEsc)
+    return () => document.removeEventListener('keydown', handleEsc)
+  }, [handleClose, slot.isOpen, Component])
+
   return (
     <Sheet
       open={slot.isOpen && !!Component}
       onOpenChange={open => {
         if (!open) {
-          if (slot.onClose) slot.onClose()
-          closeModal('sheet')
+          handleClose()
         }
       }}
     >
       <SheetPortal>
-        <SheetOverlay />
+        {/* Custom overlay with protected close */}
+        <SheetOverlay onClick={handleClose} />
         <SheetContent
           size={slot.props?.size || 'l'}
           className="!max-w-none overflow-y-auto px-2 sm:px-4 lg:px-6"
         >
+          {/* Custom X button with protected close */}
+          <button
+            onClick={handleClose}
+            className="ring-offset-background focus:ring-ring data-[state=open]:bg-secondary absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none z-10"
+          >
+            <XIcon className="size-4" />
+            <span className="sr-only">Close</span>
+          </button>
+          
           <SheetHeader>
             <SheetTitle>{slot.props?.title || 'Modal'}</SheetTitle>
             {slot.props?.description && (
@@ -59,13 +89,10 @@ const ModalSheet: React.FC<{
             <Component
               {...slot.props}
               onSubmit={slot.onSubmit}
-              onClose={() => closeModal('sheet')}
+              onClose={handleClose}
               parentTriggerFn={slot.parentTriggerFn}
             />
           )}
-          <SheetClose asChild>
-            <button aria-label="Close" />
-          </SheetClose>
         </SheetContent>
       </SheetPortal>
     </Sheet>
@@ -79,6 +106,10 @@ const ModalDialog: React.FC<{
 }> = ({ slot, closeModal, type }) => {
   const handleOpenChange = (open: boolean) => {
     if (!open) {
+      // Check if closing should be prevented
+      if (slot.onCloseAttempt && !slot.onCloseAttempt()) {
+        return // Prevent closing
+      }
       if (slot.onClose) slot.onClose()
       closeModal(type)
     }
