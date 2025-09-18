@@ -18,6 +18,7 @@ export const WarningModal = () => {
       text: messages.buttons.continue,
       loading: false,
       onClick: () => {
+        // eslint-disable-next-line no-console
         console.log('WarningModal: continue clicked')
         patchParams({ isConfirmed: true })
       }

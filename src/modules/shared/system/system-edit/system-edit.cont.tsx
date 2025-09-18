@@ -4,9 +4,11 @@ import { useSystemStore } from '../device-info-overlay/store/useShowDeviceStore'
 import { SystemEditForm } from './components/system-edit.form'
 import { SystemEditSkeleton } from './components/system-edit.skeleton'
 
-export const SystemEditContainer = ({ uid: propUid }: { uid?: string } = {}) => {
+export const SystemEditContainer = ({
+  uid: propUid
+}: { uid?: string } = {}) => {
   const { uid: storeUid } = useSystemStore()
-  
+
   // Use prop UID as fallback for backward compatibility
   const uid = storeUid || propUid
 

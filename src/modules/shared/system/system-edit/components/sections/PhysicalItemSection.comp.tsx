@@ -1,23 +1,24 @@
 import type { FC } from 'react'
-import { useFormContext } from 'react-hook-form'
 
 import { InlineEditInput } from '@/components/form/inline-edit/InlineEditInput'
 import { InlineEditListbox } from '@/components/form/inline-edit/InlineEditListbox'
 import { InlineEditTextArea } from '@/components/form/inline-edit/InlineEditTextArea'
 import { Disclosure } from '@/components/ui'
 import { SystemDetailParameter } from '@/modules/shared/system/device-info-overlay/components/system-detail-parameter.comp'
+import useSystemEditFormFields from '@/modules/systemItem/components/form/SystemForm.fields'
 import { PATH } from '@/types/constants/paths'
+import { encodeURIWithStringify } from '@/utils'
 
 interface PhysicalItemSheetSectionProps {
   physicalItem: any
   catalogueItem: any
 }
 
-export const PhysicalItemSheetSection: FC<PhysicalItemSheetSectionProps> = ({
+export const PhysicalItemSection: FC<PhysicalItemSheetSectionProps> = ({
   physicalItem,
   catalogueItem
 }) => {
-  const { control } = useFormContext()
+  const fields = useSystemEditFormFields()
   if (!physicalItem) return null
 
   return (
@@ -31,44 +32,16 @@ export const PhysicalItemSheetSection: FC<PhysicalItemSheetSectionProps> = ({
     >
       <div className="grid grid-cols-1 gap-2 text-sm">
         {/* Serial Number (inline edit) */}
-        <InlineEditInput
-          name="physicalItem.serialNumber"
-          label="Serial Number"
-          placeholder="Enter serial number"
-        />
+        <InlineEditInput {...fields.serialNumber} />
         {/* Item Usage (inline edit) */}
-        <InlineEditListbox
-          name="physicalItem.itemUsage"
-          label="Item Usage"
-          codebook={'ITEM_USAGE' as any}
-        />
+        <InlineEditListbox {...fields.itemUsage} />
         {/* Condition Status (inline edit) */}
-        <InlineEditListbox
-          name="physicalItem.conditionStatus"
-          label="Condition Status"
-          codebook={'ITEM_CONDITION_STATUS' as any}
-        />
+        <InlineEditListbox {...fields.itemConditionStatus} />
         {/* Notes (inline edit) */}
-        <InlineEditTextArea
-          name="physicalItem.notes"
-          label="Notes"
-          placeholder="Enter notes"
-        />
+        <InlineEditTextArea {...fields.itemNotes} />
         {/* Read-only fields (styled as in device info overlay) */}
         {physicalItem.eun && (
           <SystemDetailParameter title="EUN" value={physicalItem.eun} />
-        )}
-        {physicalItem.serialNumber && (
-          <SystemDetailParameter
-            title="Serial Number"
-            value={physicalItem.serialNumber}
-          />
-        )}
-        {physicalItem.itemUsage?.name && (
-          <SystemDetailParameter
-            title="Item Usage"
-            value={physicalItem.itemUsage.name}
-          />
         )}
         {catalogueItem?.catalogueNumber && (
           <SystemDetailParameter
@@ -81,7 +54,7 @@ export const PhysicalItemSheetSection: FC<PhysicalItemSheetSectionProps> = ({
           <SystemDetailParameter
             title="Category"
             value={catalogueItem.catalogueCategory.name}
-            href={`${PATH.CATALOGUE}?page=1&category=${encodeURIComponent(JSON.stringify({ uid: catalogueItem.catalogueCategory.uid, name: catalogueItem.catalogueCategory.name }))}`}
+            href={`${PATH.CATALOGUE}?page=1&category=${encodeURIWithStringify({ uid: catalogueItem.catalogueCategory.uid, name: catalogueItem.catalogueCategory.name })}`}
           />
         )}
         {catalogueItem?.supplier?.name && (

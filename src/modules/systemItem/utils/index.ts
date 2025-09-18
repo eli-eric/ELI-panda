@@ -2,6 +2,12 @@ import { SystemLevel } from '@/types/gql/graphql'
 
 export const getColorBySystemLevel = (level?: SystemLevel) => {
   switch (level) {
+    case SystemLevel.KeySystems:
+      return 'border-orange-600 dark:border-orange-300 backend border-1'
+    case SystemLevel.SubsystemsAndParts:
+      return 'border-sky-600 dark:border-sky-300 backend border-1'
+    case SystemLevel.TechnologyUnit:
+      return 'border-lime-600 dark:border-lime-300 backend border-1'
     default:
       return ''
   }

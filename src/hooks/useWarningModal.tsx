@@ -1,4 +1,4 @@
-import { startTransition, useCallback, useEffect, useState } from 'react'
+import { startTransition, useCallback, useEffect } from 'react'
 import { shallow } from 'zustand/shallow'
 
 import { useWarningModalStore } from '@/store/useWarningModalStore'

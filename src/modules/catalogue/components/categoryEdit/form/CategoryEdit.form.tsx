@@ -2,8 +2,11 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 
 import { Form } from '@/components/form/Form'
+import { SheetFormButtons } from '@/components/sheet-form-buttons'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { ROLE } from '@/types/constants/roles'
 import type { CodebookType } from '@/types/responses/codebook'
 
 import type { CategoryFormType } from '../types'
@@ -15,7 +18,7 @@ import { PhysicalItemProperties } from './components/PhysicalItemProperties'
 interface Props {
   uid?: string
   onSubmit: (data: CategoryFormType) => void
-  children: React.ReactNode
+  children?: React.ReactNode
   systemType?: CodebookType
   categoryDetail: CategoryFormType
   imageRef?: React.MutableRefObject<ImageGalleryRef | null>
@@ -24,7 +27,6 @@ interface Props {
 const CategoryEditForm = ({
   uid,
   onSubmit,
-  children,
   systemType,
   categoryDetail,
   imageRef
@@ -38,10 +40,22 @@ const CategoryEditForm = ({
     resolver: yupResolver(categoryValidationschema)
   })
 
+  const { handleSubmit } = formMethods
+  const { closeModal } = useModalGlobalStore()
+
   return (
-    <Form formMethods={formMethods} onSubmit={onSubmit}>
+    <Form formMethods={formMethods}>
+      <SheetFormButtons
+        editRole={ROLE.CATALOGUE_EDIT}
+        isFormDirty={formMethods.formState.isDirty}
+        onSubmit={handleSubmit(onSubmit)}
+        onExit={() => {
+          {
+            closeModal('sheet')
+          }
+        }}
+      />
       <div className="space-y-6">
-        {/* Basic Information */}
         <Card>
           <CardHeader>
             <CardTitle>Basic Information</CardTitle>
@@ -72,7 +86,6 @@ const CategoryEditForm = ({
         </Card>
 
         {/* Action Buttons */}
-        {children}
       </div>
     </Form>
   )

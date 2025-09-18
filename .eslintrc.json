@@ -7,7 +7,7 @@
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended",
-    "plugin:@tanstack/eslint-plugin-query/recommended",
+    "plugin:@tanstack/query/recommended",
     "prettier"
   ],
   "plugins": [
@@ -52,7 +52,15 @@
     "prettier/prettier": "off",
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "warn",
-    "no-case-declarations": "off"
+    "no-case-declarations": "off",
+    "react/jsx-no-literals": [
+      "warn",
+      {
+        "noStrings": true,
+        "allowedStrings": [" ", ":", ",", ".", "-", "+", "(", ")", "/", "\\", "?", "!", "&"],
+        "ignoreProps": true
+      }
+    ]
   },
   "overrides": [
     {
