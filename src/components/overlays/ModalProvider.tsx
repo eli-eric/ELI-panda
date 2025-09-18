@@ -1,5 +1,5 @@
-import React from 'react'
 import { XIcon } from 'lucide-react'
+import React from 'react'
 
 import {
   Dialog,

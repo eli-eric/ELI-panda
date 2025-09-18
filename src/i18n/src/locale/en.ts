@@ -251,6 +251,17 @@ export const messages = {
         reloadPage: 'Would reload page, but staying to see payload'
       }
     },
+    systemActions: {
+      ariaLabel: 'System actions',
+      viewDetail: 'View Detail',
+      showGraph: 'Show Graph',
+      showSpareParts: 'Show Spare Parts ({count})',
+      showSparePartsFor: 'Show Spare Parts For ({count})',
+      addSubsystem: 'Add Subsystem',
+      deleteSystem: 'Delete System',
+      sparePartsModalTitle: 'Spare Parts:',
+      sparePartsForModalTitle: 'Spare Part for Systems:'
+    },
     itemDetail: {
       eun: 'Eun',
       serialNumber: 'Serial Number',

@@ -8,7 +8,7 @@ interface ImagePlaceHolderProps {
 export const ImagePlaceHolder = ({ className }: ImagePlaceHolderProps) => (
   <div
     className={cn(
-      'w-full max-w-full border rounded-md overflow-hidden',
+      'w-full max-w-full border rounded-md overflow-hidden h-24',
       className
     )}
   >

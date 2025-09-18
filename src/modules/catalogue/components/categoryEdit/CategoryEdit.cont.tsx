@@ -2,7 +2,6 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { type Dispatch, type SetStateAction, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
-import { FormattedMessage } from 'react-intl'
 
 import { Button } from '@/components/Buttons'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -10,6 +9,7 @@ import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import { message } from '@/i18n/src/messages'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import type { CodebookType } from '@/types/responses/codebook'
 
 import { useCatalogueItems } from '../../hooks/useCatalogueItems'
@@ -46,6 +46,7 @@ const CategoryEditContainer = ({ setOpen, parentUID, uid }: Props) => {
   } = useCategoryDetail(uid)
   const [loadingSubmit, setLoadingSubmit] = useState(false)
   const queryClient = useQueryClient()
+  const { closeModal } = useModalGlobalStore()
 
   const { refetch } = useCategoryList()
 
@@ -56,10 +57,9 @@ const CategoryEditContainer = ({ setOpen, parentUID, uid }: Props) => {
       imageRef.current?.submit(data.uid, () => {
         refetch()
         refetchItems()
-        setOpen(false)
         toast.success(`Category ${data.name} saved`)
         setLoadingSubmit(false)
-
+        closeModal('sheet')
         queryClient.invalidateQueries({ queryKey })
       })
     },
@@ -139,36 +139,13 @@ const CategoryEditContainer = ({ setOpen, parentUID, uid }: Props) => {
 
   return (
     <div>
-      {categoryDetail && (
-        <CategoryEditForm
-          onSubmit={onSubmit}
-          uid={uid}
-          imageRef={imageRef}
-          categoryDetail={categoryDetail as CategoryFormType}
-          systemType={catalogueCategory?.systemType as CodebookType}
-        >
-          <div className="flex flex-col sm:flex-row sm:justify-end gap-3 pt-4 border-t mt-6">
-            <Button
-              type="button"
-              onClick={() => {
-                setOpen(false)
-              }}
-              disabled={loading}
-              variant="outline"
-              className="order-2 sm:order-1"
-            >
-              <FormattedMessage id={buttons.cancel} />
-            </Button>
-            <Button
-              type="submit"
-              loading={loading || loadingSubmit}
-              className="order-1 sm:order-2"
-            >
-              <FormattedMessage id={buttons.save} />
-            </Button>
-          </div>
-        </CategoryEditForm>
-      )}
+      <CategoryEditForm
+        onSubmit={onSubmit}
+        uid={uid}
+        imageRef={imageRef}
+        categoryDetail={categoryDetail as CategoryFormType}
+        systemType={catalogueCategory?.systemType as CodebookType}
+      ></CategoryEditForm>
     </div>
   )
 }

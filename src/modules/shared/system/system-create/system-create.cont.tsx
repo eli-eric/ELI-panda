@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 
 import { Form } from '@/components/form/Form'
 import { SheetFormButtons } from '@/components/sheet-form-buttons'
+import { Skeleton } from '@/components/ui/skeleton'
 import { FILE_TYPE } from '@/modules/shared/fileManager/types'
 import { ImageGallery } from '@/modules/shared/imageManager/ImageGallery'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
@@ -27,12 +28,6 @@ export const SystemCreateContainer: FC = () => {
     loading: parentLoading
   } = useSystemCreateParent()
 
-  console.log('🎯 SystemCreateContainer rendered with:', {
-    parentSystem,
-    parentPath,
-    parentLoading
-  })
-
   const systemImageRef = useRef<ImageGalleryRef | undefined>(undefined)
 
   const formMethods = useForm<SystemCreateFormData>({
@@ -41,7 +36,7 @@ export const SystemCreateContainer: FC = () => {
     defaultValues: {
       name: '',
       systemType: null,
-      systemLevel: SystemLevel.KeySystems,
+      systemLevel: SystemLevel.SubsystemsAndParts,
       location: null,
       zone: null,
       systemCode: null,
@@ -128,6 +123,7 @@ export const SystemCreateContainer: FC = () => {
           className="w-full"
           hasEditRole={true}
         />
+        {parentLoading && <Skeleton className="h-6 w-full" />}
         {parentPath.length > 0 && (
           <SystemHierarchy
             parentPath={parentPath}

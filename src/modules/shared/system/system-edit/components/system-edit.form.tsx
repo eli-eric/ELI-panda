@@ -1,19 +1,19 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { memo, useRef, useEffect } from 'react'
+import { memo, useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { Form } from '@/components/form/Form'
 import { SheetFormButtons } from '@/components/sheet-form-buttons'
 import { useFormDirtyProtection } from '@/hooks/useFormDirtyProtection'
 import { useItemPropertiesData } from '@/hooks/useItemPropertiesData'
-import { useModalFormStateStore } from '@/store/useModalFormStateStore'
 import { FILE_TYPE } from '@/modules/shared/fileManager/types'
 import { ImageGallery } from '@/modules/shared/imageManager/ImageGallery'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { useSystemSheetUpdate } from '@/modules/shared/system/system-edit/hooks/useSystemSheetUpdate'
 import { useSuspenseSystemDetail } from '@/modules/systemItem/hooks/useSuspenseSystemDetail'
+import { useModalFormStateStore } from '@/store/useModalFormStateStore'
 import { ROLE } from '@/types/constants/roles'
-import type { SystemLevel } from '@/types/gql/graphql'
+import { SystemLevel } from '@/types/gql/graphql'
 
 import { ItemPropertiesSection } from '../../device-info-overlay/components/sections/ItemPropertiesSection.comp'
 import { OrderInformationSection } from '../../device-info-overlay/components/sections/OrderInformationSection.comp'
@@ -21,7 +21,7 @@ import { SparePartsCoverageSection } from '../../device-info-overlay/components/
 import { SubsystemsSection } from '../../device-info-overlay/components/sections/SubsystemsSection.comp'
 import { SystemHierarchy } from '../../system-create/components/SystemHierarchy.comp'
 import { systemCreateSchema } from '../../system-create/schema'
-import { PhysicalItemSheetSection } from './sections/PhysicalItemSheetSection.comp'
+import { PhysicalItemSection } from './sections/PhysicalItemSection.comp'
 import { SystemDetailSection } from './sections/system-detail.section'
 
 const MemoizedImageGallery = memo(ImageGallery)
@@ -74,7 +74,7 @@ export const SystemEditForm = ({
             code: systemDetail?.location?.code
           }
         : undefined,
-      systemLevel: systemDetail?.systemLevel
+      systemLevel: systemDetail?.systemLevel || SystemLevel.SubsystemsAndParts
     }
   })
 
@@ -89,29 +89,32 @@ export const SystemEditForm = ({
 
   // Sync form dirty state with global modal store
   useEffect(() => {
-    console.log('Form dirty state changed:', formMethods.formState.isDirty)
     setIsDirty(formMethods.formState.isDirty)
-  }, [formMethods.formState.isDirty, setIsDirty])
-
-  // Reset on component unmount
-  useEffect(() => {
-    return () => {
-      reset()
-    }
-  }, [reset])
+    return reset
+  }, [reset, formMethods.formState.isDirty, setIsDirty])
 
   const onSubmit = (data: any) => {
     updateSystem(data, true)
   }
 
   return (
-    <Form formMethods={formMethods} onSubmit={onSubmit} className="space-y-4">
+    <Form formMethods={formMethods} className="space-y-4">
       <SheetFormButtons
         editRole={ROLE.SYSTEM_EDIT}
         loading={loading}
         onSubmit={formMethods.handleSubmit(onSubmit)}
         onExit={onClose}
         isFormDirty={formMethods.formState.isDirty}
+      />
+      <MemoizedImageGallery
+        ref={systemImageRef}
+        setValue={formMethods.setValue}
+        config={{
+          itemCategory: FILE_TYPE.SYSTEM,
+          itemId: uid
+        }}
+        className="w-full"
+        hasEditRole={true}
       />
       {parentPath && parentPath.length > 0 && (
         <SystemHierarchy
@@ -125,19 +128,9 @@ export const SystemEditForm = ({
           withDirtyProtection={withDirtyProtection}
         />
       )}
-      <MemoizedImageGallery
-        ref={systemImageRef}
-        setValue={formMethods.setValue}
-        config={{
-          itemCategory: FILE_TYPE.SYSTEM,
-          itemId: uid
-        }}
-        className="w-full"
-        hasEditRole={true}
-      />
       <SystemDetailSection />
       {physicalItem && (
-        <PhysicalItemSheetSection
+        <PhysicalItemSection
           physicalItem={physicalItem}
           catalogueItem={catalogueItem}
         />

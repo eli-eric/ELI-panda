@@ -8,6 +8,7 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { Fragment } from 'react'
+import { FormattedMessage } from 'react-intl'
 
 import { Heading } from '@/components/layout/Heading'
 import { Button } from '@/components/ui/button'
@@ -18,6 +19,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
+import { message } from '@/i18n/src/messages'
 import { openGraphModal } from '@/modules/shared/system/GraphModal'
 import { useSystemCreateSheet } from '@/modules/shared/system/system-create/useSystemCreateSheet'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
@@ -31,6 +33,8 @@ import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import { PATH } from '@/types/constants/paths'
 import type { SystemDetail } from '@/types/responses/systems'
 import type { EndpointProps } from '@/utils/getEndpoints'
+
+const messages = message.systemsPage.systemActions
 
 interface Props {
   hideButtons?: boolean
@@ -47,7 +51,7 @@ const SparePartsModal = ({ uid }: { uid: string }) => {
   const sparePartsColumns = useSparePartsColumns({ tableId: 'sparePartsModal' })
   return (
     <Fragment>
-      <Heading customText="Spare Parts:" />
+      <Heading key={messages.sparePartsModalTitle} />
       <PandaTable
         {...{
           tableId: 'sparePartsModal',
@@ -68,7 +72,7 @@ const SparePartsForModal = ({ uid }: { uid: string }) => {
   })
   return (
     <Fragment>
-      <Heading customText="Spare Part for Systems:" />
+      <Heading text={messages.sparePartsForModalTitle} />
       <PandaTable
         {...{
           tableId: 'sparePartsForModal',
@@ -136,7 +140,7 @@ export const SystemActionButtons = ({
           <Button
             variant="ghost"
             size="sm"
-            aria-label="System actions"
+            aria-label={messages.ariaLabel}
             className="h-8 w-8 p-0"
           >
             <MoreVertical className="h-4 w-4 text-muted-foreground" />
@@ -150,7 +154,7 @@ export const SystemActionButtons = ({
               className="flex items-center cursor-pointer"
             >
               <Edit className="h-4 w-4 mr-2" />
-              {canEdit ? 'Edit System' : 'View System'}
+              <FormattedMessage id={messages.viewDetail} />
             </Link>
           </DropdownMenuItem>
 
@@ -159,7 +163,7 @@ export const SystemActionButtons = ({
             className="cursor-pointer"
           >
             <Network className="h-4 w-4 mr-2" />
-            Show Graph
+            <FormattedMessage id={messages.showGraph} />
           </DropdownMenuItem>
 
           {/* Spare Parts Options */}
@@ -169,7 +173,10 @@ export const SystemActionButtons = ({
               className="cursor-pointer"
             >
               <Settings className="h-4 w-4 mr-2" />
-              Show Spare Parts ({sparesIn})
+              <FormattedMessage
+                id={messages.showSpareParts}
+                values={{ count: sparesIn }}
+              />
             </DropdownMenuItem>
           )}
 
@@ -179,19 +186,20 @@ export const SystemActionButtons = ({
               className="cursor-pointer"
             >
               <Settings className="h-4 w-4 mr-2" />
-              Show Spare Parts For ({sparesOut})
+              <FormattedMessage
+                id={messages.showSparePartsFor}
+                values={{ count: sparesOut }}
+              />
             </DropdownMenuItem>
           )}
-
           <DropdownMenuSeparator />
-
           <DropdownMenuItem asChild>
             <button
               onClick={() => openSystemCreateSheet(original.uid)}
               className="flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 px-2 py-1 rounded transition-colors"
             >
               <Plus className="h-4 w-4 mr-2" />
-              Add Subsystem
+              <FormattedMessage id={messages.addSubsystem} />
             </button>
           </DropdownMenuItem>
 
@@ -201,7 +209,7 @@ export const SystemActionButtons = ({
               className="cursor-pointer text-destructive focus:text-destructive"
             >
               <Trash2 className="h-4 w-4 mr-2" />
-              Delete System
+              <FormattedMessage id={messages.deleteSystem} />
             </DropdownMenuItem>
           )}
         </DropdownMenuContent>

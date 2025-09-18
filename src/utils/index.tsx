@@ -82,3 +82,7 @@ export function truncateString(str?: string, length = 30) {
     return str
   }
 }
+
+export function encodeURIWithStringify(data: any): string {
+  return encodeURIComponent(JSON.stringify(data))
+}

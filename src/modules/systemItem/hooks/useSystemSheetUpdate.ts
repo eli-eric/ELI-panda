@@ -1,5 +1,4 @@
 import { useMutation as useQueryMutation } from '@tanstack/react-query'
-import { useRouter } from 'next/router'
 import { type MutableRefObject, useState } from 'react'
 import { useIntl } from 'react-intl'
 
@@ -10,7 +9,6 @@ import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { BASE_URL } from '@/types/constants/common'
 import { gql } from '@/types/gql'
 import type { PhysicalItemProperty } from '@/types/responses/systems'
-import { navigateBack } from '@/utils'
 import { connectAndDisconnectNode, whereN } from '@/utils/graphql/mutations'
 
 import { useSystemItemStore } from '../store/useSystemItemStore'
