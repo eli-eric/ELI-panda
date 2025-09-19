@@ -1,4 +1,4 @@
-import { yupResolver } from '@hookform/resolvers/yup'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -11,8 +11,10 @@ import { useModalFormStateStore } from '@/store/useModalFormStateStore'
 import { ROLE } from '@/types/constants/roles'
 import type { CodebookType } from '@/types/responses/codebook'
 
-import type { CategoryFormType } from '../types'
-import { categoryValidationschema } from './CategoryEditForm.schema'
+import {
+  type CategoryFormType,
+  categoryValidationSchema
+} from './CategoryEditForm.schema'
 import GroupList from './components/GroupList'
 import Main from './components/Main'
 import { PhysicalItemProperties } from './components/PhysicalItemProperties'
@@ -42,7 +44,7 @@ const CategoryEditForm = ({
           systemType
         }
       : categoryDetail,
-    resolver: yupResolver(categoryValidationschema),
+    resolver: zodResolver(categoryValidationSchema),
     mode: 'onChange'
   })
 

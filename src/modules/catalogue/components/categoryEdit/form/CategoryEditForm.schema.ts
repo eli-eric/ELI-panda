@@ -1,55 +1,37 @@
-import * as yup from 'yup'
+import { z } from 'zod'
 
-import type { CodebookType } from '@/types/responses/codebook'
+const codebookTypeSchema = z.object({
+  uid: z.string(),
+  name: z.string(),
+  code: z.string().optional(),
+}).passthrough()
 
-import type { CategoryFormType } from '../types'
+const propertySchema = z.object({
+  uid: z.string().optional(),
+  name: z.string().min(1, "Property Name can't be empty"),
+  type: codebookTypeSchema.nullable(),
+  unit: codebookTypeSchema.nullable(),
+  defaultValue: z.string().nullable().optional(),
+  listOfValues: z.array(z.string().min(1, "Value can't be empty")).optional(),
+})
 
-export const categoryValidationschema: yup.ObjectSchema<CategoryFormType> = yup
-  .object()
-  .shape({
-    name: yup.string().required("Name can't be empty"),
-    systemType: yup.mixed<CodebookType>().nullable(),
-    groups: yup
-      .array()
-      .of(
-        yup.object().shape({
-          uid: yup.string(),
-          name: yup.string().required("Group Name can't be empty"),
-          properties: yup
-            .array()
-            .of(
-              yup.object().shape({
-                uid: yup.string(),
-                name: yup.string().required("Property Name can't be empty"),
-                type: yup.mixed<CodebookType>().nullable(),
-                unit: yup.mixed<CodebookType>().nullable(),
-                defaultValue: yup.string().nullable().notRequired(),
-                listOfValues: yup
-                  .array()
-                  .of(yup.string().required("Value can't be empty"))
-              })
-            )
-            .required("Properties can't be empty")
-        })
-      )
-      .nullable(),
-    parentUID: yup.string(),
-    uid: yup.string(),
-    code: yup.string().required("Code can't be empty"),
-    image: yup.string(),
-    physicalItemProperties: yup
-      .array()
-      .of(
-        yup.object().shape({
-          uid: yup.string(),
-          name: yup.string().required("Property Name can't be empty"),
-          type: yup.mixed<CodebookType>().nullable(),
-          unit: yup.mixed<CodebookType>().nullable(),
-          defaultValue: yup.string().nullable().notRequired(),
-          listOfValues: yup
-            .array()
-            .of(yup.string().required("Value can't be empty"))
-        })
-      )
-      .required("Properties can't be empty")
-  })
+const groupSchema = z.object({
+  uid: z.string().optional(),
+  name: z.string().min(1, "Group Name can't be empty"),
+  properties: z.array(propertySchema).min(1, "Properties can't be empty"),
+})
+
+export const categoryValidationSchema = z.object({
+  name: z.string().min(1, "Name can't be empty"),
+  systemType: codebookTypeSchema.nullable(),
+  groups: z.array(groupSchema).nullable(),
+  parentUID: z.string().optional(),
+  uid: z.string().optional(),
+  code: z.string().min(1, "Code can't be empty"),
+  image: z.string().optional(),
+  physicalItemProperties: z
+    .array(propertySchema)
+    .min(1, "Properties can't be empty"),
+})
+
+export type CategoryFormType = z.infer<typeof categoryValidationSchema>

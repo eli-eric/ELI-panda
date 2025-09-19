@@ -18,7 +18,7 @@ import { useCategoryDetail } from '../../hooks/useCategoryDetail'
 import { useCategoryList } from '../../hooks/useCategoryList'
 import { formatData } from '../../utils'
 import CategoryEditForm from './form/CategoryEdit.form'
-import type { CategoryFormType } from './types'
+import type { CategoryFormType } from './form/CategoryEditForm.schema'
 
 interface Props {
   setOpen: Dispatch<SetStateAction<boolean>>
