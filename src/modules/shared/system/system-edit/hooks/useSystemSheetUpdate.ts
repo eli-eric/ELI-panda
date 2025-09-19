@@ -1,18 +1,19 @@
 import { useMutation as useQueryMutation } from '@tanstack/react-query'
-import { type MutableRefObject, useState } from 'react'
+import { type MutableRefObject } from 'react'
 import { useIntl } from 'react-intl'
 
 import axiosInstance from '@/core/axios/axiosInstance'
 import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
 import { message } from '@/i18n/src/messages'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
+import { useSuspenseSystemDetail } from '@/modules/systemItem/hooks/useSuspenseSystemDetail'
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import { BASE_URL } from '@/types/constants/common'
 import { gql } from '@/types/gql'
 import type { PhysicalItemProperty } from '@/types/responses/systems'
 import { connectAndDisconnectNode, whereN } from '@/utils/graphql/mutations'
 
 import { useRecalculate } from '../../../../systemItem/hooks/useRecalculate'
-import { useSystemDetail } from '../../../../systemItem/hooks/useSystemDetail'
 import { makeSystemInputBody } from '../../../../systemItem/hooks/utils'
 import { useSystemItemStore } from '../../../../systemItem/store/useSystemItemStore'
 import type { SystemDetailFormType } from '../../../../systemItem/types/form'
@@ -92,21 +93,8 @@ export const useSystemSheetUpdate = ({
 }: UseSystemSheetUpdateProps) => {
   const intl = useIntl()
   const { mutate: mutateProperties } = usePropertiesUpdate(physicalItemUid)
-  const { systemDetail, refetch, physicalItem } = useSystemDetail()
-
-  const [saveAndExit, setSaveAndExit] = useState(false)
-
-  const onFinish = () => {
-    setSelectedPhysicalSystem(undefined)
-    refetch()
-    showSuccessToast(
-      intl,
-      message.systemsPage.systemDetail.updateModal.onSuccess
-    )
-  }
-
-  const [recalculate] = useRecalculate({
-    onSuccess: onFinish
+  const { systemDetail, refetch, physicalItem } = useSuspenseSystemDetail({
+    uid
   })
 
   const {
@@ -115,10 +103,24 @@ export const useSystemSheetUpdate = ({
     clear: clearStore
   } = useSystemItemStore()
 
+  const onFinish = () => {
+    setSelectedPhysicalSystem(undefined)
+    showSuccessToast(
+      intl,
+      message.systemsPage.systemDetail.updateModal.onSuccess
+    )
+  }
+  const { closeModal } = useModalGlobalStore()
+
+  const [recalculate] = useRecalculate({
+    onSuccess: onFinish
+  })
   const onCompleted = ({ updateSystems: { systems } }) => {
     const responseUid = systems[0].uid
     imageRef?.current?.submit(responseUid, () => {
       recalculate(null)
+      closeModal('sheet')
+      refetch()
     })
   }
 
@@ -135,12 +137,7 @@ export const useSystemSheetUpdate = ({
     }
   )
 
-  function updateSystemQuery(
-    systemForm: SystemDetailFormType,
-    saveAndExit: boolean
-  ) {
-    setSaveAndExit(saveAndExit)
-
+  function updateSystemQuery(systemForm: SystemDetailFormType) {
     // Get latest data directly from the store to avoid stale closure values
     const storeData = useSystemItemStore.getState()
     const {

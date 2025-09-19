@@ -94,7 +94,7 @@ export const SystemEditForm = ({
   }, [reset, formMethods.formState.isDirty, setIsDirty])
 
   const onSubmit = (data: any) => {
-    updateSystem(data, true)
+    updateSystem(data)
   }
 
   return (

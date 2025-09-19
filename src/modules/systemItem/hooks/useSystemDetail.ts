@@ -34,7 +34,7 @@ export const useSystemDetail = (
 
   const { system: systemEndpoint } = useEndpoint({ uid })
 
-  const { data, error, isLoading, refetch, status } = useGraphQL(
+  const { data, error, isLoading, refetch, status, isRefetching } = useGraphQL(
     systemDetailQuery,
     {
       variables: {
@@ -81,7 +81,7 @@ export const useSystemDetail = (
     systemDetail,
     physicalItem,
     catalogueItem,
-    loading: isLoading,
+    loading: isLoading || isRefetching,
     error,
     refetch,
     systemEndpoint
