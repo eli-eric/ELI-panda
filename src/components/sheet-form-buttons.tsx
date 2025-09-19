@@ -1,3 +1,4 @@
+import { Loader2 } from 'lucide-react'
 import { useRef } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -11,6 +12,9 @@ interface Props {
   loading?: boolean
   isFormDirty?: boolean
   customElement?: React.ReactNode
+  saveLabel?: string
+  exitLabel?: string
+  loadingText?: string
 }
 
 export const SheetFormButtons = ({
@@ -18,7 +22,10 @@ export const SheetFormButtons = ({
   onExit,
   editRole,
   loading,
-  isFormDirty
+  isFormDirty,
+  saveLabel = 'Save',
+  exitLabel = 'Exit',
+  loadingText
 }: Props) => {
   const disabledEdit = usePermission([editRole])
   const DEBOUNCE_TIME = 1500
@@ -40,11 +47,19 @@ export const SheetFormButtons = ({
     onExit?.()
   }
 
+  const currentLoadingText = loadingText || (loading ? 'Processing...' : '')
+
   return (
     <div className="border-b bg-background sticky top-0 z-10">
       <div className="flex justify-between items-center py-2">
         <div>
-          {isFormDirty && (
+          {loading && currentLoadingText && (
+            <span className="text-muted-foreground text-sm flex items-center gap-2">
+              <Loader2 className="size-3 animate-spin" />
+              {currentLoadingText}
+            </span>
+          )}
+          {!loading && isFormDirty && (
             <span className="text-muted-foreground text-sm">
               You have unsaved changes
             </span>
@@ -57,7 +72,10 @@ export const SheetFormButtons = ({
               onClick={handleSubmit}
               disabled={loading || !isFormDirty}
             >
-              Save
+              {loading && (
+                <Loader2 className="size-3 animate-spin mr-2" />
+              )}
+              {saveLabel}
             </Button>
             <Button
               size="sm"
@@ -65,7 +83,10 @@ export const SheetFormButtons = ({
               disabled={loading}
               variant="outline"
             >
-              Exit
+              {loading && (
+                <Loader2 className="size-3 animate-spin mr-2" />
+              )}
+              {exitLabel}
             </Button>
           </div>
         )}

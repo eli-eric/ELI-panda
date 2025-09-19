@@ -54,6 +54,8 @@ const CategoryEditForm = ({
             closeModal('sheet')
           }
         }}
+        saveLabel="Save Category"
+        loadingText="Saving category..."
       />
       <div className="space-y-6">
         <Card>

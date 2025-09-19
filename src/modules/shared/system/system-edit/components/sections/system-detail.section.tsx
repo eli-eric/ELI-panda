@@ -8,6 +8,7 @@ import {
   InlineEditSystemType,
   InlineEditTextArea
 } from '@/components/form/inline-edit'
+import { InlineEditInputWithActions } from '@/components/form/inline-edit/InlineEditInputWithActions'
 import { Disclosure } from '@/components/ui'
 import { cn } from '@/lib/utils'
 import useSystemEditFormFields from '@/modules/systemItem/components/form/SystemForm.fields'
@@ -16,6 +17,8 @@ import {
   getFontBySystemLevel
 } from '@/modules/systemItem/utils'
 import { SystemLevel } from '@/types/gql/graphql'
+
+import { SystemCodeActions } from '../SystemCodeActions'
 
 export const SystemDetailSection = () => {
   const fields = useSystemEditFormFields()
@@ -40,8 +43,10 @@ export const SystemDetailSection = () => {
       <div className="flex flex-col p-2 gap-y-2">
         <InlineEditInput {...fields.name} />
         <InlineEditSystemType {...fields.systemType} />
-        {/* FIXME: System Code (inline edit) need ad generate and delete buttons */}
-        <InlineEditInput {...fields.systemCode} />
+        <InlineEditInputWithActions
+          {...fields.systemCode}
+          actions={<SystemCodeActions />}
+        />
         <InlineEditListbox
           {...fields.systemLevel}
           customOptions={systemLevels}

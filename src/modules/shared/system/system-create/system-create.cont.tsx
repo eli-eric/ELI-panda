@@ -110,6 +110,8 @@ export const SystemCreateContainer: FC = () => {
         onSubmit={formMethods.handleSubmit(onSubmit)}
         onExit={onExit}
         isFormDirty={isDirty}
+        saveLabel="Create System"
+        loadingText="Creating system..."
       />
 
       <div className="space-y-4">
