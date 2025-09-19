@@ -146,32 +146,9 @@ const CategoryEditContainer = ({ setOpen, parentUID, uid }: Props) => {
           imageRef={imageRef}
           categoryDetail={categoryDetail as CategoryFormType}
           systemType={catalogueCategory?.systemType as CodebookType}
-        >
-          {withDirtyProtection => (
-            <div className="border-b bg-background flex sticky top-0 z-10 items-center justify-between">
-              <span className="text-muted-foreground text-sm pl-6">
-                You have unsaved changes
-              </span>
-              {disabledEdit && (
-                <div className="flex gap-2 py-2">
-                  <Button size="sm" type="submit" disabled={loading}>
-                    Save
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={withDirtyProtection(() => {
-                      setOpen(false)
-                    })}
-                    loading={loading || loadingSubmit}
-                  >
-                    Exit
-                  </Button>
-                </div>
-              )}
-            </div>
-          )}
-        </CategoryEditForm>
+          onExit={() => setOpen(false)}
+          loading={loading || loadingSubmit}
+        />
       )}
     </div>
   )

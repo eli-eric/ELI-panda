@@ -3,10 +3,12 @@ import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { Form } from '@/components/form/Form'
+import { SheetFormButtons } from '@/components/sheet-form-buttons'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useFormDirtyProtection } from '@/hooks/useFormDirtyProtection'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { useModalFormStateStore } from '@/store/useModalFormStateStore'
+import { ROLE } from '@/types/constants/roles'
 import type { CodebookType } from '@/types/responses/codebook'
 
 import type { CategoryFormType } from '../types'
@@ -18,21 +20,21 @@ import { PhysicalItemProperties } from './components/PhysicalItemProperties'
 interface Props {
   uid?: string
   onSubmit: (data: CategoryFormType) => void
-  children: (
-    withDirtyProtection: (callback: () => void) => () => void
-  ) => React.ReactNode
+  onExit: () => void
   systemType?: CodebookType
   categoryDetail: CategoryFormType
   imageRef?: React.MutableRefObject<ImageGalleryRef | null>
+  loading?: boolean
 }
 
 const CategoryEditForm = ({
   uid,
   onSubmit,
-  children,
+  onExit,
   systemType,
   categoryDetail,
-  imageRef
+  imageRef,
+  loading
 }: Props) => {
   const formMethods = useForm<CategoryFormType>({
     defaultValues: !uid
@@ -44,6 +46,7 @@ const CategoryEditForm = ({
     mode: 'onChange'
   })
 
+  const { handleSubmit } = formMethods
   const { withDirtyProtection } = useFormDirtyProtection(formMethods)
   const { setIsDirty, reset } = useModalFormStateStore()
 
@@ -58,10 +61,15 @@ const CategoryEditForm = ({
   }, [reset])
 
   return (
-    <Form formMethods={formMethods} onSubmit={onSubmit}>
+    <Form formMethods={formMethods}>
       <div className="space-y-6">
-        {/* Action Buttons */}
-        {children(withDirtyProtection)}
+        <SheetFormButtons
+          onSubmit={handleSubmit(onSubmit)}
+          onExit={withDirtyProtection(() => onExit())}
+          editRole={ROLE.CATALOGUE_EDIT}
+          loading={loading}
+          isFormDirty={formMethods.formState.isDirty}
+        />
 
         {/* Basic Information */}
         <Card>
