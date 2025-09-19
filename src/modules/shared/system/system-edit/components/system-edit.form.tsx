@@ -105,6 +105,8 @@ export const SystemEditForm = ({
         onSubmit={formMethods.handleSubmit(onSubmit)}
         onExit={onClose}
         isFormDirty={formMethods.formState.isDirty}
+        saveLabel="Save System"
+        loadingText="Saving system..."
       />
       <MemoizedImageGallery
         ref={systemImageRef}

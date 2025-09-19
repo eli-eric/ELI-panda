@@ -111,6 +111,8 @@ export const PublicationFormContainer: FC<Props> = ({
         onSubmit={onSubmit}
         onExit={onExit}
         isFormDirty={isDirty}
+        saveLabel={publication ? "Save Publication" : "Create Publication"}
+        loadingText={publication ? "Saving publication..." : "Creating publication..."}
       />
       <PublicationFreeFormComponent />
       <FileManager
