@@ -32,9 +32,6 @@ export const useSystemEditSheet = (directUid?: string) => {
       component: SystemEditContainer,
       props: { uid, size: 'l', title: 'Edit System' },
       onCloseAttempt,
-      onSubmit: () => {
-        // Handle system edit submission
-      },
       onClose: () => {
         resetFormState()
       }
