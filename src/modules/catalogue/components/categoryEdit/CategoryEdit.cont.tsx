@@ -7,8 +7,9 @@ import { Button } from '@/components/Buttons'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
+import usePermission from '@/hooks/usePermission'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { ROLE } from '@/types/constants/roles'
 import type { CodebookType } from '@/types/responses/codebook'
 
 import { useCatalogueItems } from '../../hooks/useCatalogueItems'
@@ -33,6 +34,7 @@ const CategoryEditContainer = ({ setOpen, parentUID, uid }: Props) => {
   const { refetch: refetchItems } = useCatalogueItems()
 
   const imageRef = useRef<ImageGalleryRef>(null)
+  const disabledEdit = usePermission([ROLE.CATALOGUE_EDIT])
 
   const { catalogueCategory } = useCategory()
   const {
@@ -44,7 +46,6 @@ const CategoryEditContainer = ({ setOpen, parentUID, uid }: Props) => {
   } = useCategoryDetail(uid)
   const [loadingSubmit, setLoadingSubmit] = useState(false)
   const queryClient = useQueryClient()
-  const { closeModal } = useModalGlobalStore()
 
   const { refetch } = useCategoryList()
 
@@ -55,9 +56,10 @@ const CategoryEditContainer = ({ setOpen, parentUID, uid }: Props) => {
       imageRef.current?.submit(data.uid, () => {
         refetch()
         refetchItems()
+        setOpen(false)
         toast.success(`Category ${data.name} saved`)
         setLoadingSubmit(false)
-        closeModal('sheet')
+
         queryClient.invalidateQueries({ queryKey })
       })
     },
@@ -145,45 +147,30 @@ const CategoryEditContainer = ({ setOpen, parentUID, uid }: Props) => {
           categoryDetail={categoryDetail as CategoryFormType}
           systemType={catalogueCategory?.systemType as CodebookType}
         >
-          {/*<div className="flex flex-col sm:flex-row sm:justify-end gap-3 pt-4 border-t mt-6">
-            <Button
-              type="button"
-              onClick={() => {
-                setOpen(false)
-              }}
-              disabled={loading}
-              variant="outline"
-              className="order-2 sm:order-1"
-            >
-              <FormattedMessage id={buttons.cancel} />
-            </Button>
-            <Button
-              type="submit"
-              loading={loading || loadingSubmit}
-              className="order-1 sm:order-2"
-            >
-              <FormattedMessage id={buttons.save} />
-            </Button>
-          </div>*/}
-          <div className="flex sticky top-0 z-10 items-end justify-end mb-2">
-            <div className="flex gap-2 pb-2">
-              <Button size="sm" type="submit" disabled={loading}>
-                Save
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => {
-                  {
-                    setOpen(false)
-                  }
-                }}
-                loading={loading || loadingSubmit}
-              >
-                Exit
-              </Button>
+          {withDirtyProtection => (
+            <div className="border-b bg-background flex sticky top-0 z-10 items-center justify-between">
+              <span className="text-muted-foreground text-sm pl-6">
+                You have unsaved changes
+              </span>
+              {disabledEdit && (
+                <div className="flex gap-2 py-2">
+                  <Button size="sm" type="submit" disabled={loading}>
+                    Save
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={withDirtyProtection(() => {
+                      setOpen(false)
+                    })}
+                    loading={loading || loadingSubmit}
+                  >
+                    Exit
+                  </Button>
+                </div>
+              )}
             </div>
-          </div>
+          )}
         </CategoryEditForm>
       )}
     </div>
