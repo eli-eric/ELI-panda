@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
-import { FormModal } from '@/hooks/form/useFormModal'
+import { FormModal } from '@/components/form/FormModal'
 import usePermission from '@/hooks/usePermission'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'

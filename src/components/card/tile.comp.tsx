@@ -11,11 +11,10 @@ interface CardProps {
   name: string
   link?: string
   Icon: () => JSX.Element
-  legacyBehavior?: boolean
   role: ROLE
 }
 
-export const Tile = ({ name, link, Icon, legacyBehavior, role }: CardProps) => {
+export const Tile = ({ name, link, Icon, role }: CardProps) => {
   const CardWrapper = ({ children }: { children: React.ReactNode }) => (
     <Card
       className={cn(
@@ -45,12 +44,7 @@ export const Tile = ({ name, link, Icon, legacyBehavior, role }: CardProps) => {
   return (
     <AccessControl roles={role}>
       {link ? (
-        <Link
-          href={link}
-          legacyBehavior={legacyBehavior}
-          target={legacyBehavior ? '_blank' : undefined}
-          className="block"
-        >
+        <Link href={link} target="_blank" className="block">
           <CardWrapper>{cardContent}</CardWrapper>
         </Link>
       ) : (
