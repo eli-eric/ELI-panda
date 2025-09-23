@@ -9,6 +9,7 @@ import type { ServiceLineFormType } from '@/modules/orderItem/types/form'
 import { useServiceType } from '@/modules/services/hooks/useServiceType'
 import type { WizardStepConfig } from '@/modules/shared/form/wizardV2/types'
 import { useFilters } from '@/modules/shared/table/pandaTable/hooks/useFilters'
+import useTableStateStore from '@/store/useTableStateStore'
 import type { CodebookType } from '@/types/responses/codebook'
 
 import { SelectableServiceLineDetails } from '../details/selectable-service-line.details'
@@ -106,6 +107,13 @@ export const useServiceLineSteps = () => {
     )
   }, [data])
 
+  // Validační funkce pro kontrolu výběru systémů
+  const validateSelectedSystems = useCallback(() => {
+    const { instances } = useTableStateStore.getState()
+    const rowSelection = instances[tableId]?.rowSelection || {}
+    return Object.keys(rowSelection).length > 0
+  }, [tableId])
+
   // Memoizujeme celou strukturu kroků
   const steps = useMemo<WizardStepConfig<ServiceLineFormType>[]>(() => {
     return [
@@ -149,7 +157,8 @@ export const useServiceLineSteps = () => {
       {
         id: 'items',
         title: fm({ id: messages.steps.step3.title }),
-        component: <ItemsSelectTable />
+        component: <ItemsSelectTable />,
+        validation: validateSelectedSystems
       }
     ]
   }, [
@@ -162,7 +171,8 @@ export const useServiceLineSteps = () => {
     serviceTypeComponent,
     priceComponent,
     serviceLineDetailsComponent,
-    shouldShowDetails
+    shouldShowDetails,
+    validateSelectedSystems
   ])
 
   return steps

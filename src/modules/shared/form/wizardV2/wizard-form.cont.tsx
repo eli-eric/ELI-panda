@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import type {
   DefaultValues,
   FieldValues,
@@ -7,7 +7,7 @@ import type {
 } from 'react-hook-form'
 import { FormProvider, useForm } from 'react-hook-form'
 
-import { Button } from '@/components/Buttons'
+import { Button } from '@/components/ui/button'
 
 import FormStep from './components/form-step'
 import { StepIndicator } from './components/step-indicator'
@@ -34,24 +34,33 @@ export const FormWizard = <T extends Record<string, any>>({
   const currentStep = steps[currentStepIndex]
   const isLastStep = currentStepIndex === steps.length - 1
 
-  const isCurrentStepValid = () => {
-    const currentFields = steps[currentStepIndex].fields
-    if (!currentFields) {
-      return true
+  const isCurrentStepValid = useMemo(() => {
+    const currentFields = currentStep.fields
+
+    // Kontrola fields (existující logika)
+    if (currentFields) {
+      const fieldsValid = currentFields.every(field => {
+        if (!field.field.required) {
+          return true
+        }
+        const fieldValue = watch(field.field.name as Path<T>)
+        if (Array.isArray(fieldValue)) {
+          return fieldValue.length > 0
+        }
+        return (
+          fieldValue !== undefined && fieldValue !== null && fieldValue !== ''
+        )
+      })
+      if (!fieldsValid) return false
     }
-    return currentFields.every(field => {
-      if (!field.field.required) {
-        return true
-      }
-      const fieldValue = watch(field.field.name as Path<T>)
-      if (Array.isArray(fieldValue)) {
-        return fieldValue.length > 0
-      }
-      return (
-        fieldValue !== undefined && fieldValue !== null && fieldValue !== ''
-      )
-    })
-  }
+
+    // Kontrola custom validation
+    if (currentStep.validation) {
+      return currentStep.validation(getValues())
+    }
+
+    return true
+  }, [currentStep, getValues, watch])
 
   const handleNext = async () => {
     const currentData = getValues()
@@ -124,6 +133,7 @@ export const FormWizard = <T extends Record<string, any>>({
             {currentStepIndex > 0 ? (
               <Button
                 type="button"
+                variant="outline"
                 onClick={handleBack}
                 disabled={isProcessing}
               >
@@ -133,10 +143,9 @@ export const FormWizard = <T extends Record<string, any>>({
               <div />
             )}
             <Button
-              variant={isLastStep ? 'secondary' : 'default'}
               type="button"
               onClick={handleNext}
-              disabled={!isCurrentStepValid() || isProcessing}
+              disabled={!isCurrentStepValid || isProcessing}
             >
               {isProcessing ? 'Processing...' : isLastStep ? 'Submit' : 'Next'}
             </Button>
