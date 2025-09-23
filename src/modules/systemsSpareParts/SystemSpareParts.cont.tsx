@@ -107,6 +107,10 @@ export const SystemsSparePartsContainer = () => {
   const [recalculate2] = useRecalculate({ tableId: tableId2 })
 
   const saveRelations = () => {
+    if (loading) {
+      return
+    }
+
     assignSpareParts(
       {
         fromSystemIds: table1SelectedUids,
@@ -129,6 +133,11 @@ export const SystemsSparePartsContainer = () => {
   }
 
   const handleAssignSpareParts = () => {
+    // Prevent multiple calls while mutation is already running
+    if (loading) {
+      return
+    }
+
     const isSameSystemType =
       getSelectedRowModel().flatRows.every(
         system =>

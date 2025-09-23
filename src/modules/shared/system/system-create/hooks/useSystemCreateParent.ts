@@ -32,7 +32,6 @@ const systemDetailQuery = gql(`
 
 export const useSystemCreateParent = (uid?: string) => {
   const { parentUid } = useSystemCreateParentStore()
-  console.log('🔍 useSystemCreateParent called with UID:', parentUid)
 
   const { data, error, isLoading, refetch } = useGraphQL(systemDetailQuery, {
     variables: {
@@ -40,8 +39,6 @@ export const useSystemCreateParent = (uid?: string) => {
     },
     enabled: !!parentUid || !!uid
   })
-
-  console.log('📥 GraphQL hook result:', { data, error, isLoading })
 
   const getParentPath = () => {
     const parentPathRaw = data?.systems[0]?.parentPath || []
