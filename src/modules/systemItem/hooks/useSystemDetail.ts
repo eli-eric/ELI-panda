@@ -48,8 +48,8 @@ export const useSystemDetail = (
         }
       },
       enabled: !!uid || !!searchPatterns?.alias || !!searchPatterns?.itemUid,
-      refetchOnMount: 'always',
-      refetchOnReconnect: 'always'
+      refetchOnMount: true,
+      refetchOnReconnect: true
     }
   )
 
@@ -65,7 +65,7 @@ export const useSystemDetail = (
       onSuccess?.(data)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [error, status, data])
+  }, [error, status])
 
   const systemDetail = useFragment(SystemDetailFragment, data?.systems[0])
   const physicalItem = useFragment(
@@ -81,7 +81,7 @@ export const useSystemDetail = (
     systemDetail,
     physicalItem,
     catalogueItem,
-    loading: isLoading || isRefetching,
+    loading: isLoading,
     error,
     refetch,
     systemEndpoint
