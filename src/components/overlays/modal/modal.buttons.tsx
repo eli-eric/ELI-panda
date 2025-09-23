@@ -16,7 +16,7 @@ const ModalButtonsComponent = ({ testid, buttons, className }: Props) => (
     {buttons && (
       <div
         className={cn(
-          `mt-5 sm:mt-6 sm:flex sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3`,
+          `mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3`,
           className
         )}
       >
@@ -24,6 +24,7 @@ const ModalButtonsComponent = ({ testid, buttons, className }: Props) => (
           <Button
             {...buttons.goBack}
             type={buttons.goBack?.type || 'button'}
+            variant="outline"
             testid={`${testid}-${buttons.goBack.testid}`}
             className="inline-flex w-full justify-center sm:mt-0 sm:text-sm text-gray-700 dark:text-gray-200"
           />

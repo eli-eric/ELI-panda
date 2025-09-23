@@ -13,6 +13,7 @@ import {
   getFontBySystemLevel
 } from '@/modules/systemItem/utils'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import type { ModalButtons } from '@/types/form'
 import type { SystemDetail } from '@/types/responses/systems'
 
@@ -30,6 +31,7 @@ export const SelectItemStep: FC = () => {
   const { setSelectedSystem, selectedSystem } = useModalWizardStore()
 
   const { goNext, goBack, updateFormData } = useWizardStore()
+  const { closeModal } = useModalGlobalStore()
 
   const { systems } = useSystems(tableId)
 
@@ -45,10 +47,10 @@ export const SelectItemStep: FC = () => {
       }
     },
     goBack: {
-      text: messages.back,
+      text: messages.close,
       onClick: () => {
-        goBack()
         setSelectedSystem(null)
+        closeModal('dialog1')
       }
     }
   }

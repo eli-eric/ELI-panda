@@ -15,7 +15,7 @@ export function openItemAssignModal() {
     component: () => <ItemAssignModalContent />,
     props: {
       title: 'Assign Item',
-      size: 'l' as const
+      size: 'xl' as const
     }
   })
 }
