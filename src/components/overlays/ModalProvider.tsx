@@ -78,9 +78,11 @@ const ModalSheet: React.FC<{
             <XIcon className="size-4" />
             <span className="sr-only">Close</span>
           </button>
-          
+
           <SheetHeader>
-            <SheetTitle>{slot.props?.title || 'Modal'}</SheetTitle>
+            {slot.props?.title && (
+              <SheetTitle>{slot.props?.title || 'Modal'}</SheetTitle>
+            )}
             {slot.props?.description && (
               <SheetDescription>{slot.props.description}</SheetDescription>
             )}
@@ -123,8 +125,10 @@ const ModalDialog: React.FC<{
       <DialogPortal>
         <DialogOverlay />
         <DialogContent size={slot.props?.size || 'l'}>
-          <DialogHeader>
-            <DialogTitle>{slot.props?.title || 'Dialog'}</DialogTitle>
+          <DialogHeader className="pb-2">
+            {slot.props?.title && (
+              <DialogTitle>{slot.props?.title || 'Dialog'}</DialogTitle>
+            )}
             {slot.props?.description && (
               <DialogDescription>{slot.props.description}</DialogDescription>
             )}
