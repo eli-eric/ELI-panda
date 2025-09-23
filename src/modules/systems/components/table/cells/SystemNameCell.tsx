@@ -1,5 +1,5 @@
 import type { CellContext } from '@tanstack/react-table'
-import { ArrowUpDown, ChevronDown, ChevronRight } from 'lucide-react'
+import { ChevronDown, ChevronRight, GripVertical } from 'lucide-react'
 import { Edit } from 'lucide-react'
 import { useDrag } from 'react-dnd'
 
@@ -82,8 +82,8 @@ export const SystemNameCell = ({
           ref={previewRef as any}
         >
           {enableDragAndDrop && (
-            <button className="mr-2 shrink-0">
-              <ArrowUpDown className="w-5 h-5" />
+            <button className="mr-2 shrink-0 text-muted-foreground hover:text-foreground transition-colors cursor-grab active:cursor-grabbing">
+              <GripVertical className="w-5 h-5" />
             </button>
           )}
           <Tooltip
