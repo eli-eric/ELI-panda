@@ -2,12 +2,10 @@ import type { Row } from '@tanstack/react-table'
 import { Edit, MoreVertical, Trash2 } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type { FC, PropsWithChildren } from 'react'
-import { Fragment, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { Fragment } from 'react'
 import { toast } from 'react-hot-toast'
 import { useIntl } from 'react-intl'
 
-import { Heading } from '@/components/card/card.comp'
 import { Toggle } from '@/components/form/Switch'
 import { Tooltip } from '@/components/Tooltip'
 import { Button } from '@/components/ui/button'
@@ -19,17 +17,17 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
-import { FormModal } from '@/components/form/FormModal'
 import usePermission from '@/hooks/usePermission'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import { useOrderLine } from '@/modules/orderItem/hooks/useOrderLine'
 import type { OrderLineFormType } from '@/modules/orderItem/types/form'
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import { ROLE } from '@/types/constants/roles'
 import { createMessageValues } from '@/utils/formatters'
 
-import { OrderIsDeliveryForm } from '../../components/orderLines/components/OrderIsDeliveryForm'
+import { OrderIsDeliveryModal } from '../../components/orderLines/components/OrderIsDeliveryModal'
 import { useOrderLineEditSheet } from '../../components/orderLines/hooks/useOrderLineEditSheet'
 
 // Custom buttons wrapper designed to better fit the table design
@@ -123,10 +121,7 @@ export const OrderisDeliveredAction = ({
   })
   const hasRole = usePermission([ROLE.ORDERS_DELIVERY_EDIT, ROLE.ORDERS_EDIT])
   const { setOrderLine } = useOrderLine()
-
-  const formMethods = useForm<OrderLineFormType>({
-    defaultValues: { serialNumber: orderLine?.serialNumber || '' }
-  })
+  const { openModal } = useModalGlobalStore()
 
   const { submit } = useSubmit<OrderLineFormType>({
     endpoint: orderLineDelivery,
@@ -145,10 +140,26 @@ export const OrderisDeliveredAction = ({
     }
   })
 
-  const [open, setOpen] = useState(false)
-
   const handleCheck = () => {
-    !orderLine.isDelivered ? setOpen(true) : submit({ isDelivered: !checked })
+    if (!orderLine.isDelivered) {
+      openModal('dialog1', {
+        component: OrderIsDeliveryModal,
+        props: {
+          title: 'Fill missing Serial Number',
+          size: 'm',
+          orderLine
+        },
+        onSubmit: (data: any) => {
+          submit({
+            serialNumber: data?.serialNumber,
+            isDelivered: !checked,
+            eun: data?.eun || undefined
+          })
+        }
+      })
+    } else {
+      submit({ isDelivered: !checked })
+    }
   }
 
   return (
@@ -162,27 +173,6 @@ export const OrderisDeliveredAction = ({
           )}
         </Fragment>
       )}
-      <FormModal
-        open={open}
-        setOpen={setOpen}
-        renderOutsideForm={
-          <Heading
-            text={fm({
-              id: message.ordersPage.orderLines.missingSerialNumber.title
-            })}
-          />
-        }
-        onSubmit={data => {
-          submit({
-            serialNumber: data?.serialNumber,
-            isDelivered: !checked,
-            eun: data?.eun || undefined
-          })
-        }}
-        formMethods={formMethods}
-      >
-        <OrderIsDeliveryForm />
-      </FormModal>
     </div>
   )
 }

@@ -115,7 +115,21 @@ export const FormModal = <T extends FieldValues>({
   description,
   size = 'l'
 }: FormModalProps<T>) => {
-  // This is a legacy component - just return null for now
-  // Components should migrate to using FormModalContent directly
-  return null
+  // Only render modal content when open
+  if (!open) return null
+
+  return (
+    <FormModalContent
+      formMethods={formMethods}
+      onSubmit={onSubmit}
+      error={error}
+      renderOutsideForm={renderOutsideForm}
+      loading={loading}
+      className={className}
+      disableSubmit={disableSubmit}
+      onClose={() => setOpen(false)}
+    >
+      {children}
+    </FormModalContent>
+  )
 }
