@@ -20,7 +20,7 @@ import { OrderInformationSection } from '../../device-info-overlay/components/se
 import { SparePartsCoverageSection } from '../../device-info-overlay/components/sections/SparePartsCoverageSection.comp'
 import { SubsystemsSection } from '../../device-info-overlay/components/sections/SubsystemsSection.comp'
 import { SystemHierarchy } from '../../system-create/components/SystemHierarchy.comp'
-import { systemCreateSchema } from '../../system-create/schema'
+import { systemUpdateSchema } from '../../system-create/schema'
 import { PhysicalItemSection } from './sections/PhysicalItemSection.comp'
 import { SystemDetailSection } from './sections/system-detail.section'
 
@@ -45,37 +45,49 @@ export const SystemEditForm = ({
       serviceItems
     })
 
+  const defaultValues = {
+    ...systemDetail,
+    physicalItem: physicalItem ? {
+      ...physicalItem,
+      conditionStatus: physicalItem.conditionStatus,
+      itemUsage: physicalItem.itemUsage,
+      notes: physicalItem.notes,
+      serialNumber: physicalItem.serialNumber
+    } : undefined,
+    responsible:
+      systemDetail?.responsible && systemDetail?.responsible?.fullName
+        ? {
+            uid: systemDetail?.responsible?.uid,
+            name: systemDetail?.responsible?.fullName
+          }
+        : undefined,
+    zone: systemDetail?.zone
+      ? {
+          uid: systemDetail?.zone?.uid,
+          name: systemDetail?.zone?.name as string
+        }
+      : undefined,
+    location: systemDetail?.location
+      ? {
+          uid: systemDetail?.location?.uid,
+          name:
+            systemDetail?.location?.name +
+            ' (' +
+            systemDetail?.location?.code +
+            ')',
+          code: systemDetail?.location?.code
+        }
+      : undefined,
+    systemLevel: systemDetail?.systemLevel || SystemLevel.SubsystemsAndParts
+  }
+
+  console.log('DEBUG: defaultValues:', defaultValues)
+  console.log('DEBUG: defaultValues.physicalItem:', defaultValues.physicalItem)
+
   const formMethods = useForm<any>({
-    resolver: zodResolver(systemCreateSchema),
+    resolver: zodResolver(systemUpdateSchema),
     mode: 'onSubmit',
-    defaultValues: {
-      ...systemDetail,
-      responsible:
-        systemDetail?.responsible && systemDetail?.responsible?.fullName
-          ? {
-              uid: systemDetail?.responsible?.uid,
-              name: systemDetail?.responsible?.fullName
-            }
-          : undefined,
-      zone: systemDetail?.zone
-        ? {
-            uid: systemDetail?.zone?.uid,
-            name: systemDetail?.zone?.name as string
-          }
-        : undefined,
-      location: systemDetail?.location
-        ? {
-            uid: systemDetail?.location?.uid,
-            name:
-              systemDetail?.location?.name +
-              ' (' +
-              systemDetail?.location?.code +
-              ')',
-            code: systemDetail?.location?.code
-          }
-        : undefined,
-      systemLevel: systemDetail?.systemLevel || SystemLevel.SubsystemsAndParts
-    }
+    defaultValues
   })
 
   const { updateSystem, loading } = useSystemSheetUpdate({
@@ -94,6 +106,8 @@ export const SystemEditForm = ({
   }, [reset, formMethods.formState.isDirty, setIsDirty])
 
   const onSubmit = (data: any) => {
+    console.log('DEBUG: onSubmit data:', data)
+    console.log('DEBUG: onSubmit data.physicalItem:', data.physicalItem)
     updateSystem(data)
   }
 
