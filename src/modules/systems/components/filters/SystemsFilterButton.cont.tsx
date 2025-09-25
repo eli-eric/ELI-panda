@@ -1,118 +1,49 @@
 import { Filter } from 'lucide-react'
-import { Fragment, useEffect, useMemo, useState } from 'react'
+import { Fragment } from 'react'
 
 import { Button } from '@/components/Buttons'
-import { Form } from '@/components/form/Form'
-import type { SlideOverButtons } from '@/components/overlays/slideover/SlideOver'
-import { SlideOver } from '@/components/overlays/slideover/SlideOver'
 import { Tooltip } from '@/components/Tooltip'
-import { useFormFilter, useFormFilterState } from '@/hooks/form/useFormFilters'
-import { FilterSaveSettings } from '@/modules/shared/filters/FilterSaveSettings'
-import { useFormControlStore } from '@/store/useFormControlStore'
-import type { CodebookType } from '@/types/responses/codebook'
+import { useFormFilterState } from '@/hooks/form/useFormFilters'
 
-import { useMinMaxPrice } from '../../hooks/useMinMaxPrice'
-import { SystemsFilterForm } from './form/SystemsFilter.form'
+import { useSystemsFilterSheet } from './hooks/useSystemsFilterSheet'
 
-type SystemFilterType = {
-  name: string
-  systemLevel: string[]
-  systemCode: string
-  systemType: CodebookType | null
-  zone: CodebookType | null
-  location: CodebookType | null
-  responsible: CodebookType | null
-  description: string
-  importance: CodebookType | null
-  itemUsage: string[]
-  eun: string
-  order: string
-  serialNumber: string
-  catalogueName: string
-  catalogueNumber: string
-  category: CodebookType | null
-  catalogueDescription: string
-  supplier: CodebookType | null
-  price: [number | undefined, number | undefined]
-  parentSystem: CodebookType | null
-}
 
 export type DisabledFields = {
   [key: string]: boolean
 }
+
 interface Props {
   tableId?: string
   enableQueryURL?: boolean
-  panelSlide?: 'left' | 'right'
+  panelSlide?: 'left' | 'right' // Legacy prop, now maps to side
+  side?: 'top' | 'right' | 'bottom' | 'left' // New prop for sheet positioning
   disabledFields?: DisabledFields
 }
+
 export const SystemFilterButtonContainer = ({
-  panelSlide,
   tableId = 'systems',
   enableQueryURL = true,
-  disabledFields
+  disabledFields,
+  panelSlide,
+  side
 }: Props) => {
-  const [open, setOpen] = useState(false)
-  const { minMaxPrice } = useMinMaxPrice()
+  const openFilterSheet = useSystemsFilterSheet()
 
-  const defValues = useMemo<SystemFilterType>(
-    () => ({
-      name: '',
-      systemLevel: [],
-      systemCode: '',
-      systemType: null,
-      zone: null,
-      location: null,
-      responsible: null,
-      description: '',
-      importance: null,
-      itemUsage: [],
-      eun: '',
-      order: '',
-      serialNumber: '',
-      catalogueName: '',
-      catalogueNumber: '',
-      category: null,
-      catalogueDescription: '',
-      supplier: null,
-      parentSystem: null,
-      price: [minMaxPrice?.min, minMaxPrice?.max]
-    }),
-    [minMaxPrice]
-  )
-  const formMethods = useFormFilter<SystemFilterType>({
-    tableId,
-    defValues,
-    enableQueryURL: enableQueryURL
-  })
-
-  const { storeFilters, setColumnFilters } = useFormFilterState({
+  const { storeFilters } = useFormFilterState({
     tableId,
     enableQueryUrl: enableQueryURL
   })
-  const { reset, watch } = formMethods
 
-  const { toggleDeleteCustom } = useFormControlStore()
+  const handleOpenFilters = () => {
+    // Support both new 'side' prop and legacy 'panelSlide' prop
+    const sheetSide = side || (panelSlide === 'left' ? 'left' : 'left') // Default to left as requested
 
-  const category = watch('category')
-
-  //set custom field to delete from state and form
-  useEffect(() => {
-    if (!category) {
-      toggleDeleteCustom()
-    }
-  }, [category, toggleDeleteCustom])
-
-  const buttons: SlideOverButtons = {
-    goNext: {
-      type: 'button',
-      className: 'w-full justify-center',
-      text: 'Clear filters',
-      onClick: () => {
-        reset(defValues, { keepValues: false })
-        setColumnFilters([])
-      }
-    }
+    openFilterSheet({
+      tableId,
+      enableQueryURL,
+      disabledFields,
+      side: sheetSide
+    })
   }
 
   return (
@@ -121,7 +52,7 @@ export const SystemFilterButtonContainer = ({
         content={storeFilters.length > 0 ? 'Filters Applied' : 'Open Filters'}
       >
         <div>
-          <Button size="sm" variant="outline" onClick={() => setOpen(true)}>
+          <Button size="sm" variant="outline" onClick={handleOpenFilters}>
             <Filter
               className={`h-4 w-4 ${storeFilters.length > 0 ? 'fill-current' : ''}`}
               aria-hidden="true"
@@ -129,32 +60,6 @@ export const SystemFilterButtonContainer = ({
           </Button>
         </div>
       </Tooltip>
-      <SlideOver
-        RenderSettings={
-          <FilterSaveSettings
-            tableId={tableId}
-            enableQueryURL={enableQueryURL}
-            resetForm={formMethods.reset}
-            defaulFormValues={defValues}
-          />
-        }
-        panelTitle="System Filters"
-        panelSlide={panelSlide}
-        open={open}
-        setOpen={setOpen}
-        buttons={buttons}
-      >
-        <Form
-          className="flex flex-col h-full justify-between"
-          formMethods={formMethods}
-        >
-          <SystemsFilterForm
-            tableId={tableId}
-            enableQueryUrl={enableQueryURL}
-            disabledFields={disabledFields}
-          />
-        </Form>
-      </SlideOver>
     </Fragment>
   )
 }

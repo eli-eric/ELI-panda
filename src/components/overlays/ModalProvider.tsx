@@ -68,6 +68,7 @@ const ModalSheet: React.FC<{
         <SheetOverlay onClick={handleClose} />
         <SheetContent
           size={slot.props?.size || 'l'}
+          side={slot.props?.side || 'right'}
           className="!max-w-none overflow-y-auto px-2 sm:px-4 lg:px-6"
         >
           {/* Custom X button with protected close */}

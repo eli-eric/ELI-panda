@@ -11,6 +11,7 @@ export interface ModalSlot {
     title?: string
     description?: string
     size?: ModalSize
+    side?: 'top' | 'right' | 'bottom' | 'left' // For sheet positioning
   }
   onSubmit?: (...args: any[]) => void
   onClose?: () => void
