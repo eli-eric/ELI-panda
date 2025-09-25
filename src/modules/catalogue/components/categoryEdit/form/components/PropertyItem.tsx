@@ -81,8 +81,6 @@ const PropertyItem = ({
   const type = useWatch({ control, name: `${name}.type` })
   const propertyName = useWatch({ control, name: `${name}.name` })
 
-  //eslint-disable-next-line
-  const listOfValues = watch(`${name}.listOfValues`) || []
 
   /* const getDefaultOption = (name, disabled = false) => ({
     value: '',
@@ -92,21 +90,26 @@ const PropertyItem = ({
 
   useEffect(() => {
     startTransition(() => {
-      if (type?.uid !== PROPERTY_TYPE.LIST && listOfValues.length !== 0) {
+      if (type?.uid !== PROPERTY_TYPE.LIST && fields.length !== 0) {
         unregister(`${name}.listOfValues`)
       }
     })
-  }, [type, unregister, name, listOfValues])
+  }, [type, unregister, name, fields.length])
 
   const getDefaultField = (type?: PROPERTY_TYPE | string) => {
     switch (type) {
       case PROPERTY_TYPE.LIST:
+        const currentListValues = fields.map((field, index) => {
+          const fieldValue = watch(`${name}.listOfValues.${index}`)
+          return fieldValue || ''
+        }).filter(value => value.trim() !== '')
+
         return (
           <Listbox
             name={`${name}.defaultValue`}
             allowEmptyOption={true}
             emptyOption="Select default value"
-            customOptions={listOfValues}
+            customOptions={currentListValues}
           />
         )
       case PROPERTY_TYPE.BOOLEAN:

@@ -1,6 +1,6 @@
 export const defaultBoolOptions = [
-  { value: 1, name: 'true' },
-  { value: 0, name: 'false' }
+  { uid: '1', name: 'true' },
+  { uid: '0', name: 'false' }
 ]
 
 export enum PROPERTY_TYPE {
