@@ -1,95 +1,43 @@
 import { Filter } from 'lucide-react'
 import { useQueryState } from 'next-usequerystate'
-import { Fragment, startTransition, useEffect, useMemo, useState } from 'react'
+import { Fragment } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
-import { useIsFirstRender } from 'usehooks-ts'
 
 import { Button } from '@/components/Buttons'
-import { Form } from '@/components/form/Form'
-import type { SlideOverButtons } from '@/components/overlays/slideover/SlideOver'
-import { SlideOver } from '@/components/overlays/slideover/SlideOver'
 import { Tooltip } from '@/components/Tooltip'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
-import type { CatalogueItemForm } from '@/modules/catalogueItem/types/responses'
-import { FilterSaveSettings } from '@/modules/shared/filters/FilterSaveSettings'
-import { useCategoryProperties } from '@/modules/systems/hooks/useCategoryProperties'
-import { useFormControlStore } from '@/store/useFormControlStore'
-import type { CodebookType } from '@/types/responses/codebook'
 
-import { CatalogueFilterForm } from './form/CatalogueFilter.form'
+import { useCatalogueFilterSheet } from './hooks/useCatalogueFilterSheet'
 
 interface CatalogueFilterButtonContainerProps {
   filterFormMethods: UseFormReturn<any, any, any>
+  tableId?: string
+  enableQueryURL?: boolean
+  side?: 'top' | 'right' | 'bottom' | 'left'
 }
 
 export const CatalogueFilterButtonContainer = ({
-  filterFormMethods
+  filterFormMethods,
+  tableId = 'catalogueItems',
+  enableQueryURL = true,
+  side = 'left'
 }: CatalogueFilterButtonContainerProps) => {
-  const [open, setOpen] = useState(false)
-  const tableId = 'catalogueItems'
+  const openFilterSheet = useCatalogueFilterSheet()
   const [categoryQuery] = useQueryState('category', { history: 'push' })
-  const category: CodebookType | null = categoryQuery
-    ? JSON.parse(categoryQuery)
-    : null
 
-  const defValues = useMemo<CatalogueItemForm>(
-    () => ({
-      name: '',
-      category: null,
-      catalogueNumber: '',
-      manufacturerUrl: '',
-      supplier: null,
-      description: ''
-    }),
-    []
-  )
-  const { reset } = filterFormMethods
-
-  const { storeFilters, setColumnFilters } = useFormFilterState({
+  const { storeFilters } = useFormFilterState({
     tableId,
-    enableQueryUrl: true
+    enableQueryUrl: enableQueryURL
   })
 
-  const onClear = () => {
-    reset(defValues, { keepValues: false })
+  const handleOpenFilters = () => {
+    openFilterSheet({
+      tableId,
+      enableQueryURL,
+      side,
+      filterFormMethods
+    })
   }
-
-  const buttons: SlideOverButtons = {
-    goNext: {
-      type: 'button',
-      className: 'w-full justify-center',
-      text: 'Clear filters',
-      onClick: () => {
-        onClear()
-        setColumnFilters([])
-      }
-    }
-  }
-  const { toggleDeleteCustom, customFieldIdToSync } = useFormControlStore()
-
-  const { catalogueCategoryProperties } = useCategoryProperties(category?.uid)
-  const isFirstRender = useIsFirstRender()
-
-  useEffect(() => {
-    if (
-      catalogueCategoryProperties?.filter(prop =>
-        customFieldIdToSync.has(prop.property.uid)
-      ).length === 0
-    ) {
-      startTransition(() => {
-        toggleDeleteCustom()
-      })
-    }
-    // eslint-disable-next-line
-  }, [catalogueCategoryProperties, toggleDeleteCustom, isFirstRender])
-
-  useEffect(() => {
-    if (!catalogueCategoryProperties && !category) {
-      startTransition(() => {
-        toggleDeleteCustom()
-      })
-    }
-  }, [catalogueCategoryProperties, category, toggleDeleteCustom, isFirstRender])
 
   return (
     <Fragment>
@@ -100,34 +48,15 @@ export const CatalogueFilterButtonContainer = ({
             : 'Open Filters'
         }
       >
-        <Button size="sm" variant="outline" onClick={() => setOpen(true)}>
-          <Filter
-            className={`h-4 w-4 ${storeFilters.length > 0 || categoryQuery ? 'fill-current' : ''}`}
-            aria-hidden="true"
-          />
-        </Button>
+        <div>
+          <Button size="sm" variant="outline" onClick={handleOpenFilters}>
+            <Filter
+              className={`h-4 w-4 ${storeFilters.length > 0 || categoryQuery ? 'fill-current' : ''}`}
+              aria-hidden="true"
+            />
+          </Button>
+        </div>
       </Tooltip>
-      <SlideOver
-        RenderSettings={
-          <FilterSaveSettings
-            tableId={tableId}
-            enableQueryURL={true}
-            resetForm={reset}
-            defaulFormValues={defValues}
-          />
-        }
-        panelTitle="Catalogue Filters"
-        open={open}
-        setOpen={setOpen}
-        buttons={buttons}
-      >
-        <Form formMethods={filterFormMethods}>
-          <CatalogueFilterForm
-            tableId={tableId}
-            catalogueCategoryProperties={catalogueCategoryProperties}
-          />
-        </Form>
-      </SlideOver>
     </Fragment>
   )
 }
