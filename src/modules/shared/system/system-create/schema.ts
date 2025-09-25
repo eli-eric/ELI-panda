@@ -11,13 +11,16 @@ const codebookSchema = z.object({
   code: z.string().optional()
 })
 
-const physicalItemSchema = z.object({
-  uid: z.string().optional(),
-  notes: z.string().optional().nullable(),
-  serialNumber: z.string().optional().nullable(),
-  conditionStatus: codebookSchema.optional().nullable(),
-  itemUsage: codebookSchema.optional().nullable()
-}).optional().nullable()
+const physicalItemSchema = z
+  .object({
+    uid: z.string().optional(),
+    notes: z.string().optional().nullable(),
+    serialNumber: z.string().optional().nullable(),
+    conditionStatus: codebookSchema.optional().nullable(),
+    itemUsage: codebookSchema.optional().nullable()
+  })
+  .optional()
+  .nullable()
 
 export const systemCreateSchema = z.object({
   name: z.string().trim().min(1, 'Name is required'),
@@ -30,8 +33,7 @@ export const systemCreateSchema = z.object({
   systemCode: z.string().optional().nullable(),
   attribute: codebookSchema.optional().nullable(),
   responsible: codebookSchema.optional().nullable(),
-  description: z.string().optional().nullable(),
-  physicalItem: physicalItemSchema
+  description: z.string().optional().nullable()
 })
 
 // Schema for system updates - includes all fields that can be updated
@@ -51,15 +53,7 @@ export const systemUpdateSchema = z.object({
   minimalSpareParstCount: z.number().optional().nullable(),
   operators: z.array(codebookSchema).optional().nullable(),
   maintainedBy: z.array(codebookSchema).optional().nullable(),
-  physicalItem: z.object({
-    uid: z.string().optional(),
-    notes: z.string().optional().nullable(),
-    serialNumber: z.string().optional().nullable(),
-    conditionStatus: codebookSchema.optional().nullable(),
-    itemUsage: codebookSchema.optional().nullable(),
-    eun: z.string().optional().nullable(),
-    name: z.string().optional()
-  }).optional().nullable()
+  physicalItem: physicalItemSchema
 })
 
 export type SystemCreateFormData = z.infer<typeof systemCreateSchema>

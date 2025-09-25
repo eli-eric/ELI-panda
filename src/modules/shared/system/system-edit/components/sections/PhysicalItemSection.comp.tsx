@@ -63,12 +63,6 @@ export const PhysicalItemSection: FC<PhysicalItemSheetSectionProps> = ({
             value={catalogueItem.supplier.name}
           />
         )}
-        {physicalItem.conditionStatus?.name && (
-          <SystemDetailParameter
-            title="Condition Status"
-            value={physicalItem.conditionStatus.name}
-          />
-        )}
       </div>
     </Disclosure>
   )
