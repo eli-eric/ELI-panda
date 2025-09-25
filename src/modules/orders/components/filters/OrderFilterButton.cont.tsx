@@ -1,109 +1,51 @@
 import { Filter } from 'lucide-react'
-import { Fragment, useMemo, useState } from 'react'
+import { Fragment } from 'react'
 
 import { Button } from '@/components/Buttons'
-import { Form } from '@/components/form/Form'
-import type { SlideOverButtons } from '@/components/overlays/slideover/SlideOver'
-import { SlideOver } from '@/components/overlays/slideover/SlideOver'
 import { Tooltip } from '@/components/Tooltip'
-import { useFormFilter, useFormFilterState } from '@/hooks/form/useFormFilters'
-import { FilterSaveSettings } from '@/modules/shared/filters/FilterSaveSettings'
+import { useFormFilterState } from '@/hooks/form/useFormFilters'
 
-import { OrdersFilter } from './OrdersFilter'
+import { useOrdersFilterSheet } from './hooks/useOrdersFilterSheet'
 
-type OrderFilterType = {
-  name: string
-  orderNumber: string
-  requestNumber: string
-  contractNumber: string
-  supplier: string
-  requestor: string
-  procurementResponsible: string
-  orderStatus: string[]
-  notes: string
-  orderDate: string
-  lastUpdateTime: string
-  lastUpdateBy: string
+interface Props {
+  tableId?: string
+  enableQueryURL?: boolean
+  side?: 'top' | 'right' | 'bottom' | 'left'
 }
 
-export const OrderFilterButton = () => {
-  const [open, setOpen] = useState(false)
-  const tableId = 'orders'
+export const OrderFilterButton = ({
+  tableId = 'orders',
+  enableQueryURL = true,
+  side = 'left'
+}: Props) => {
+  const openFilterSheet = useOrdersFilterSheet()
 
-  const defValues = useMemo<OrderFilterType>(
-    () => ({
-      name: '',
-      orderNumber: '',
-      requestNumber: '',
-      contractNumber: '',
-      supplier: '',
-      requestor: '',
-      procurementResponsible: '',
-      orderStatus: [],
-      notes: '',
-      orderDate: '',
-      lastUpdateTime: '',
-      lastUpdateBy: ''
-    }),
-    []
-  )
-  const formMethods = useFormFilter<OrderFilterType>({
+  const { storeFilters } = useFormFilterState({
     tableId,
-    defValues,
-    enableQueryURL: true
+    enableQueryUrl: enableQueryURL
   })
 
-  const { storeFilters, setColumnFilters } = useFormFilterState({
-    tableId,
-    enableQueryUrl: true
-  })
-  const { reset } = formMethods
-
-  const onClear = () => {
-    reset(defValues, { keepValues: false })
-  }
-
-  const buttons: SlideOverButtons = {
-    goNext: {
-      type: 'button',
-      className: 'w-full justify-center',
-      text: 'Clear filters',
-      onClick: () => {
-        onClear()
-        setColumnFilters([])
-      }
-    }
+  const handleOpenFilters = () => {
+    openFilterSheet({
+      tableId,
+      enableQueryURL,
+      side
+    })
   }
   return (
     <Fragment>
       <Tooltip
         content={storeFilters.length > 0 ? 'Filters Applied' : 'Open Filters'}
       >
-        <Button size="sm" variant="outline" onClick={() => setOpen(true)}>
-          <Filter
-            className={`h-4 w-4 ${storeFilters.length > 0 ? 'fill-current' : ''}`}
-            aria-hidden="true"
-          />
-        </Button>
+        <div>
+          <Button size="sm" variant="outline" onClick={handleOpenFilters}>
+            <Filter
+              className={`h-4 w-4 ${storeFilters.length > 0 ? 'fill-current' : ''}`}
+              aria-hidden="true"
+            />
+          </Button>
+        </div>
       </Tooltip>
-      <SlideOver
-        RenderSettings={
-          <FilterSaveSettings
-            tableId={tableId}
-            enableQueryURL={true}
-            resetForm={formMethods.reset}
-            defaulFormValues={defValues}
-          />
-        }
-        panelTitle="Orders Filters"
-        open={open}
-        setOpen={setOpen}
-        buttons={buttons}
-      >
-        <Form formMethods={formMethods}>
-          <OrdersFilter />
-        </Form>
-      </SlideOver>
     </Fragment>
   )
 }
