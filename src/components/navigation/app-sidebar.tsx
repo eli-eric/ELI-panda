@@ -36,13 +36,13 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
           className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground cursor-pointer"
           onClick={() => toggleSidebar()}
         >
-          <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-orange-foreground">
+          <div className="relative flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-orange-foreground">
             <Image
               src="/logo192.png"
               alt="Panda"
-              width={32}
-              height={32}
-              className="rounded-lg"
+              fill
+              className="rounded-lg object-contain"
+              sizes="32px"
             />
           </div>
           <div className="grid flex-1 text-left text-sm leading-tight">
