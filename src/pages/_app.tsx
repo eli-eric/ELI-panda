@@ -41,9 +41,12 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
     setStoredTheme()
   }, [setStoredTheme])
 
+  // Extract key from pageProps if it exists to avoid React warning
+  const { key, ...componentProps } = pageProps as any
+
   return (
     <QueryClientProvider client={queryClient}>
-      <HydrationBoundary state={pageProps.dehydratedState}>
+      <HydrationBoundary state={componentProps.dehydratedState}>
         <SessionProvider session={session} refetchOnWindowFocus={false}>
           <IntlProvider locale={'en'} messages={messages.en}>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
@@ -56,7 +59,7 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
               </Toaster>
               <SonnerToaster />
               <DndProvider backend={HTML5Backend}>
-                <NewLayout>{<Component {...pageProps} />}</NewLayout>
+                <NewLayout>{<Component {...componentProps} key={key} />}</NewLayout>
                 <Suspense fallback={null}>
                   <ModalProvider />
                 </Suspense>
