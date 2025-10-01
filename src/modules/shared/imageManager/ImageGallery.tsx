@@ -214,6 +214,7 @@ export const ImageGallery = forwardRef(
                               src={image.url}
                               alt={image.name}
                               fill
+                              unoptimized
                               className="object-contain"
                               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             />
@@ -248,6 +249,7 @@ export const ImageGallery = forwardRef(
                         <Image
                           src={image.url}
                           alt={image.name}
+                          unoptimized
                           fill
                           className="object-cover"
                           sizes="24px"

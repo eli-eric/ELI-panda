@@ -63,6 +63,7 @@ export const useSystemsColumns = ({
               >
                 <Image
                   src={getValue() || FALLBACK_IMAGE.url}
+                  unoptimized
                   alt="img"
                   width={50}
                   height={50}

@@ -56,6 +56,7 @@ export const useCatalogueItemsColumns = ({
             return (
               <Image
                 src={getValue()}
+                unoptimized
                 alt="img"
                 width={50}
                 height={50}
@@ -66,6 +67,7 @@ export const useCatalogueItemsColumns = ({
           return (
             <Image
               src={FALLBACK_IMAGE.url}
+              unoptimized
               alt="img"
               width={50}
               height={50}

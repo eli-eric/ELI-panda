@@ -57,6 +57,7 @@ export const ImageTabList = ({
                   'rounded-full size-5',
                   selected && 'border-2 border-orange-500 size-6'
                 )}
+                unoptimized
                 src={obj.url}
                 alt={obj.name}
                 width={20}

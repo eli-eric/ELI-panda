@@ -33,6 +33,7 @@ export const ImageTabPanels = ({
           <Image
             width={400}
             height={400}
+            unoptimized
             className="object-contain rounded-b-md max-h-56 min-h-56 p-px"
             src={obj.url}
             alt={obj.name}

@@ -1,10 +1,12 @@
 import Jimp from 'jimp'
 import { getToken } from 'next-auth/jwt'
 
+import logger from '@/server/logger'
 import s3Client, { config } from '@/server/s3client'
 
 import { listObjectsWithMetadata } from '../api/list-files'
 import { getPathInfo, sanitizeS3Key } from '../utils/path-utils'
+import { safeGetObject, safeStatObject } from '../utils/s3-error-utils'
 import { streamToBuffer } from '../utils/stream-utils'
 import { saveUrlsToNode } from './node-service'
 
@@ -12,8 +14,17 @@ const { bucket } = config
 
 export const resizeImageAndUpload = async (prefix: string, name: string) => {
   try {
-    const fileStream = await s3Client.getObject(bucket, name)
-    const originalFileMeta = await s3Client.statObject(bucket, name)
+    const fileStream = await safeGetObject(s3Client, bucket, name)
+    if (!fileStream) {
+      logger.warn(`Cannot resize image - source file not found: ${name}`)
+      return
+    }
+
+    const originalFileMeta = await safeStatObject(s3Client, bucket, name)
+    if (!originalFileMeta) {
+      logger.warn(`Cannot get metadata for image: ${name}`)
+      return
+    }
     const buffer = await streamToBuffer(fileStream)
 
     if (originalFileMeta.metaData['content-type'] === 'image/webp') {
