@@ -2,19 +2,39 @@ import moment from 'moment'
 import React from 'react'
 
 /* formmaters for i18n messages */
+let formatterCounter = 0
+
 export const messageFormatters = {
-  medium: (chunks: string) => <span className="font-medium">{chunks}</span>,
-  small: (chunks: string) => <span className="text-xs">{chunks}</span>,
-  strong: (chunks: string) => <span className="font-bold">{chunks}</span>,
-  underline: (chunks: string) => <span className="underline">{chunks}</span>,
-  label: (chunks: string) => (
-    <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
-      {chunks}
-    </span>
-  ),
-  p: (chunks: string) => (
-    <p className="text-gray-500 dark:text-gray-200">{chunks}</p>
-  )
+  medium: (chunks: React.ReactNode) => {
+    const key = `medium-${formatterCounter++}`
+    return <span key={key} className="font-medium">{chunks}</span>
+  },
+  small: (chunks: React.ReactNode) => {
+    const key = `small-${formatterCounter++}`
+    return <span key={key} className="text-xs">{chunks}</span>
+  },
+  strong: (chunks: React.ReactNode) => {
+    const key = `strong-${formatterCounter++}`
+    return <span key={key} className="font-bold">{chunks}</span>
+  },
+  underline: (chunks: React.ReactNode) => {
+    const key = `underline-${formatterCounter++}`
+    return <span key={key} className="underline">{chunks}</span>
+  },
+  label: (chunks: React.ReactNode) => {
+    const key = `label-${formatterCounter++}`
+    return (
+      <span key={key} className="text-sm font-medium text-gray-700 dark:text-gray-200">
+        {chunks}
+      </span>
+    )
+  },
+  p: (chunks: React.ReactNode) => {
+    const key = `p-${formatterCounter++}`
+    return (
+      <p key={key} className="text-gray-500 dark:text-gray-200">{chunks}</p>
+    )
+  }
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

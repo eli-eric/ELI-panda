@@ -64,7 +64,7 @@ const CatalogueContainer = () => {
             additionalBadge={
               categoryQuery ? (
                 <Badge>
-                  <span>{'category'}</span>
+                  <span>Category</span>
                   <X
                     className="h-4 w-4 ml-1 cursor-pointer hover:text-red-600"
                     onClick={() => {
