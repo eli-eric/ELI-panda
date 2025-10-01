@@ -193,6 +193,7 @@ export const messages = {
           },
           eun: { label: 'Eun', placeholder: 'Eun' },
           price: { label: 'Price', placeholder: 'Price' },
+          currency: { label: 'Currency' },
           procurementStatus: {
             label: 'Procurement Status',
             placeholder: 'Procurement Status'

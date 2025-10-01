@@ -47,13 +47,15 @@ export const SystemEditForm = ({
 
   const defaultValues = {
     ...systemDetail,
-    physicalItem: physicalItem ? {
-      ...physicalItem,
-      conditionStatus: physicalItem.conditionStatus,
-      itemUsage: physicalItem.itemUsage,
-      notes: physicalItem.notes,
-      serialNumber: physicalItem.serialNumber
-    } : undefined,
+    physicalItem: physicalItem
+      ? {
+          ...physicalItem,
+          conditionStatus: physicalItem.conditionStatus,
+          itemUsage: physicalItem.itemUsage,
+          notes: physicalItem.notes,
+          serialNumber: physicalItem.serialNumber
+        }
+      : undefined,
     responsible:
       systemDetail?.responsible && systemDetail?.responsible?.fullName
         ? {
@@ -81,9 +83,6 @@ export const SystemEditForm = ({
     systemLevel: systemDetail?.systemLevel || SystemLevel.SubsystemsAndParts
   }
 
-  console.log('DEBUG: defaultValues:', defaultValues)
-  console.log('DEBUG: defaultValues.physicalItem:', defaultValues.physicalItem)
-
   const formMethods = useForm<any>({
     resolver: zodResolver(systemUpdateSchema),
     mode: 'onSubmit',
@@ -105,18 +104,12 @@ export const SystemEditForm = ({
     return reset
   }, [reset, formMethods.formState.isDirty, setIsDirty])
 
-  const onSubmit = (data: any) => {
-    console.log('DEBUG: onSubmit data:', data)
-    console.log('DEBUG: onSubmit data.physicalItem:', data.physicalItem)
-    updateSystem(data)
-  }
-
   return (
     <Form formMethods={formMethods} className="space-y-4">
       <SheetFormButtons
         editRole={ROLE.SYSTEM_EDIT}
         loading={loading}
-        onSubmit={formMethods.handleSubmit(onSubmit)}
+        onSubmit={formMethods.handleSubmit(updateSystem)}
         onExit={onClose}
         isFormDirty={formMethods.formState.isDirty}
         saveLabel="Save System"
