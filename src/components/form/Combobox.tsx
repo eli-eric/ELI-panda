@@ -122,7 +122,7 @@ const Combobox = ({
         render={({ field, fieldState: { error } }) => (
           <div className={cn('space-y-1 w-full', className)}>
             {(label || customLabel) && (
-              <Label>{customLabel ? customLabel : fm({ id: label })}</Label>
+              <Label>{customLabel ? customLabel : label}</Label>
             )}
 
             <div className="flex gap-2">
@@ -143,7 +143,7 @@ const Combobox = ({
                     disabled={disabled}
                   >
                     {field.value?.name ||
-                      (placeholder ? fm({ id: placeholder }) : null) ||
+                      placeholder ||
                       'Select option...'}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
@@ -157,7 +157,7 @@ const Combobox = ({
                 >
                   <Command>
                     <CommandInput
-                      placeholder={`Search ${label ? fm({ id: label }) : 'items'}...`}
+                      placeholder={`Search ${label || customLabel || 'items'}...`}
                       value={query}
                       onValueChange={setQuery}
                     />
