@@ -1,5 +1,6 @@
 import { Calendar, Code, Settings, Wrench } from 'lucide-react'
 import { useState } from 'react'
+import { useIntl } from 'react-intl'
 
 import { Badge } from '@/components/ui/badge'
 import {
@@ -15,6 +16,7 @@ import {
   CollapsibleTrigger
 } from '@/components/ui/collapsible'
 import { versionsData } from '@/config/versions'
+import { message } from '@/i18n/src/messages'
 
 const getCategoryIcon = (category: string) => {
   switch (category.toLowerCase()) {
@@ -46,6 +48,7 @@ const getVersionBadgeVariant = (type: string) => {
 }
 
 export const VersionControl = () => {
+  const { formatMessage: fm } = useIntl()
   const [expandedVersions, setExpandedVersions] = useState<string[]>([
     versionsData.releases[0]?.version
   ])
@@ -65,17 +68,20 @@ export const VersionControl = () => {
           <div className="min-w-0 flex-1">
             <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
               <Calendar className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
-              <span className="truncate">Version History</span>
+              <span className="truncate">
+                {fm({ id: message.common.ui.versionHistory })}
+              </span>
             </CardTitle>
             <CardDescription className="text-xs sm:text-sm mt-1">
-              Track changes and improvements to the application
+              {fm({ id: message.common.ui.versionHistoryDescription })}
             </CardDescription>
           </div>
           <Badge
             variant="outline"
             className="text-xs sm:text-sm font-mono self-start sm:self-center flex-shrink-0"
           >
-            v{versionsData.currentVersion}
+            {fm({ id: message.common.ui.versionPrefix })}
+            {versionsData.currentVersion}
           </Badge>
         </div>
       </CardHeader>
@@ -96,7 +102,8 @@ export const VersionControl = () => {
                           variant={getVersionBadgeVariant(release.type)}
                           className="font-mono text-xs flex-shrink-0 mt-0.5"
                         >
-                          v{release.version}
+                          {fm({ id: message.common.ui.versionPrefix })}
+                          {release.version}
                         </Badge>
                         <div className="text-left min-w-0 flex-1">
                           <div className="font-semibold text-sm sm:text-base break-words">

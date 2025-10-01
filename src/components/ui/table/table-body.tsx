@@ -1,6 +1,8 @@
 import { flexRender } from '@tanstack/react-table'
 import React from 'react'
+import { useIntl } from 'react-intl'
 
+import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 
 import type { TableBodyProps } from './types'
@@ -17,6 +19,7 @@ export function TableBody<T extends object>({
   getRowProps,
   skipEmptyMessage
 }: TableBodyProps<T>) {
+  const { formatMessage: fm } = useIntl()
   // Check if there are any rows to display
   const rows = loading ? [] : table.getRowModel().rows
 
@@ -84,7 +87,7 @@ export function TableBody<T extends object>({
             colSpan={columns.length}
             className="p-6 text-center text-muted-foreground"
           >
-            No data available
+            {fm({ id: message.common.ui.noDataAvailable })}
           </td>
         </tr>
       </tbody>

@@ -111,7 +111,7 @@ export function FilterDropdown({
                 applyFilter()
               }}
             >
-              Apply
+              {fm({ id: message.common.ui.apply })}
             </Button>
           </div>
         </div>

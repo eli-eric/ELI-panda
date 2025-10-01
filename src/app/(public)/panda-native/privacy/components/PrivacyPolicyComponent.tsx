@@ -1,10 +1,14 @@
+import { useIntl } from 'react-intl'
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
+import { message } from '@/i18n/src/messages'
 
 import { privacyPolicyConfig } from '../config/privacy-policy'
 
 export default function PrivacyPolicyComponent() {
   const { appName, organization, lastUpdated, sections } = privacyPolicyConfig
+  const { formatMessage: fm } = useIntl()
 
   return (
     <div className="container max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
@@ -14,7 +18,7 @@ export default function PrivacyPolicyComponent() {
           {sections.introduction.title}
         </h1>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Internal application for {organization}
+          {fm({ id: message.common.ui.internalApplicationFor })} {organization}
         </p>
       </div>
 
@@ -96,10 +100,10 @@ export default function PrivacyPolicyComponent() {
       <Separator className="my-8" />
       <div className="text-center space-y-2">
         <p className="text-sm font-medium text-foreground">
-          {appName} | {organization}
+          {appName} {fm({ id: message.common.ui.separator })} {organization}
         </p>
         <p className="text-sm text-muted-foreground">
-          Last updated:{' '}
+          {fm({ id: message.common.ui.lastUpdated })}{' '}
           {new Date(lastUpdated).toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'long',

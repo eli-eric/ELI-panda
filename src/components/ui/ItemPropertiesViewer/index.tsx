@@ -15,12 +15,14 @@
 
 import { Settings } from 'lucide-react'
 import type { FC } from 'react'
+import { useIntl } from 'react-intl'
 
 import { Badge } from '@/components/ui/badge'
 import { Disclosure } from '@/components/ui/Disclosure'
 import { Separator } from '@/components/ui/separator'
 import type { ServiceItemData } from '@/hooks/useItemPropertiesData'
 import { useItemPropertiesData } from '@/hooks/useItemPropertiesData'
+import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import type { FragmentType } from '@/types/gql'
 import type { CatalogueItemFragment } from '@/utils/graphql/fragments'
@@ -35,6 +37,7 @@ export const ItemPropertiesViewer: FC<ItemPropertiesViewerProps> = ({
   catalogueItem,
   serviceItems
 }) => {
+  const { formatMessage: fm } = useIntl()
   const { groupedProperties, hasOverriddenProperties, hasProperties } =
     useItemPropertiesData({
       catalogueItem,
@@ -48,13 +51,13 @@ export const ItemPropertiesViewer: FC<ItemPropertiesViewerProps> = ({
   const title = (
     <div className="flex items-center gap-2">
       <Settings className="h-4 w-4 text-muted-foreground" />
-      <span>Catalogue Properties</span>
+      <span>{fm({ id: message.common.ui.catalogueProperties })}</span>
       {hasOverriddenProperties && (
         <Badge
           variant="destructive"
           className="text-[10px] px-1.5 py-0.5 h-auto"
         >
-          Modified
+          {fm({ id: message.common.ui.modified })}
         </Badge>
       )}
     </div>
@@ -112,7 +115,7 @@ export const ItemPropertiesViewer: FC<ItemPropertiesViewerProps> = ({
                         variant="destructive"
                         className="text-[8px] px-0.5 py-0 h-3 leading-none flex-shrink-0"
                       >
-                        M
+                        {fm({ id: message.common.ui.modifiedShort })}
                       </Badge>
                     )}
                   </div>

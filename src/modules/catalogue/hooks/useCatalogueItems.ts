@@ -1,8 +1,10 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import toast from 'react-hot-toast'
+import { useIntl } from 'react-intl'
 
 import useQueryManager from '@/hooks/useQueryManager'
+import { message } from '@/i18n/src/messages'
 import type { CatalogueItemsResponse } from '@/types/responses/catalogue'
 import type { QueryFetcherKey } from '@/utils/fetcher'
 import { queryFetcher } from '@/utils/fetcher'
@@ -23,11 +25,17 @@ export const useCatalogueItems = (tableId = 'catalogueItems') => {
     refetchOnMount: true
   })
 
+  const { formatMessage: fm } = useIntl()
   useEffect(() => {
     if (error) {
-      toast.error('Error fetching catalogue items: ' + error.message)
+      toast.error(
+        fm(
+          { id: message.catalogue.items.errorFetching },
+          { reason: error.message }
+        )
+      )
     }
-  }, [error])
+  }, [error, fm])
 
   const queryClient = useQueryClient()
   const refetch = () =>

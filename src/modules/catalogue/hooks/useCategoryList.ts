@@ -1,7 +1,9 @@
 import { useEffect } from 'react'
 import { toast } from 'react-hot-toast'
+import { useIntl } from 'react-intl'
 
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
+import { message } from '@/i18n/src/messages'
 import { gql } from '@/types/gql'
 
 import { useCategoryUid } from './useCategoryUid'
@@ -35,11 +37,12 @@ export const useCategoryList = () => {
     }
   })
 
+  const { formatMessage: fm } = useIntl()
   useEffect(() => {
     if (error) {
-      toast.error('Failed to fetch categories')
+      toast.error(fm({ id: message.catalogue.category.failedToLoadList }))
     }
-  }, [error])
+  }, [error, fm])
 
   return {
     catalogueCategories: data?.catalogueCategories,

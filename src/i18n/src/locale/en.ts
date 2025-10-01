@@ -3,6 +3,7 @@ export const messages = {
     buttons: {
       close: 'Close',
       next: 'Next',
+      previous: 'Previous',
       back: 'Back',
       finish: 'Finish',
       saveAndExit: 'Save and Exit',
@@ -15,7 +16,9 @@ export const messages = {
       exit: 'Exit',
       return: 'Return',
       logOut: 'Log out',
-      delete: 'Delete'
+      delete: 'Delete',
+      copy: 'Copy',
+      generate: 'Gen'
     },
     custom404: {
       title: '404',
@@ -38,6 +41,7 @@ export const messages = {
     },
     ui: {
       appName: 'Panda',
+      separator: '|',
       total: 'Total:',
       active: 'Active:',
       inactive: 'Inactive:',
@@ -49,11 +53,30 @@ export const messages = {
       closePanel: 'Close panel',
       selectOption: 'Select option...',
       noItemsFound: 'No items found.',
+      noDataAvailable: 'No data available',
+      page: 'Page',
+      of: 'of',
+      rowsPerPage: 'Rows per page',
       search: 'Search',
       modified: 'Modified',
+      modifiedShort: 'M',
+      previousSlide: 'Previous slide',
+      nextSlide: 'Next slide',
+      sidebar: 'Sidebar',
+      sidebarDescription: 'Displays the mobile sidebar.',
+      toggleSidebar: 'Toggle Sidebar',
+      versionHistory: 'Version History',
+      versionHistoryDescription:
+        'Track changes and improvements to the application',
+      versionPrefix: 'v',
+      currentPassword: 'Current password',
+      newPassword: 'New password',
+      confirmNewPassword: 'Confirm new password',
+      updatePassword: 'Update Password',
       lastUpdated: 'Last updated:',
       fixedBugs: 'Fixed bugs:',
       newFeatures: 'New features:',
+      latestVersion: '- Latest version',
       internalApplicationFor: 'Internal application for',
       catalogueProperties: 'Catalogue Properties',
       showLoadingState: 'Show Loading State',
@@ -125,6 +148,12 @@ export const messages = {
   authPage: {
     head: 'ELI Panda - Sign In',
     title: 'Sign in to ELI - PANDA',
+    chooseFacility: 'Choose your ELI facility to sign in',
+    facilities: {
+      alps: 'ELI - ALPS',
+      beamlines: 'ELI - BEAMLINES',
+      np: 'ELI - NP'
+    },
     form: {
       userName: 'User Name',
       password: 'Password',
@@ -203,7 +232,8 @@ export const messages = {
       heading: 'System Not Found',
       message: 'No system found with code',
       mayNotExist: 'The system may not exist or may have been deleted.',
-      tryChecking: 'Try checking the system code or contact your administrator if you believe this is an error.'
+      tryChecking:
+        'Try checking the system code or contact your administrator if you believe this is an error.'
     },
     systemDetail: {
       form: {
@@ -751,5 +781,31 @@ export const messages = {
   servicesPage: {
     title: 'Manage Services',
     addNewService: 'Add New Service'
+  },
+  catalogue: {
+    category: {
+      copy: 'Copy Category',
+      delete: 'Delete Category',
+      addNew: 'Add New Category',
+      saved: 'Category {name} saved',
+      errorSaving: 'Error saving category',
+      confirmDelete: 'Are you sure you want to remove this Category?',
+      confirmCopy: 'Are you sure you want to copy this Category?',
+      editCopied: 'Edit Copied Category',
+      save: 'Save Category',
+      saving: 'Saving category...',
+      basicInformation: 'Basic Information',
+      propertyGroups: 'Property Groups',
+      physicalProperties: 'Physical Properties',
+      errorLoading: 'Error Loading Category',
+      failedToLoadDetails: 'Failed to load category details',
+      retry: 'Retry',
+      deleted: 'Category deleted successfully',
+      failedToLoadList: 'Failed to fetch categories',
+      errorFetching: 'Error fetching category: {reason}'
+    },
+    items: {
+      errorFetching: 'Error fetching catalogue items: {reason}'
+    }
   }
 }

@@ -2,6 +2,7 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { type Dispatch, type SetStateAction, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
+import { useIntl } from 'react-intl'
 
 import { Button } from '@/components/Buttons'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -20,7 +21,6 @@ import { formatData } from '../../utils'
 import CategoryEditForm from './form/CategoryEdit.form'
 import type { CategoryFormType } from './types'
 
-const { buttons } = message.common
 interface Props {
   setOpen: Dispatch<SetStateAction<boolean>>
   parentUID?: string
@@ -28,6 +28,7 @@ interface Props {
 }
 
 const CategoryEditContainer = ({ setOpen, parentUID, uid }: Props) => {
+  const { formatMessage: fm } = useIntl()
   const { catalogueCategoryEdit } = useEndpoint({
     uid
   })
@@ -44,27 +45,29 @@ const CategoryEditContainer = ({ setOpen, parentUID, uid }: Props) => {
     refetch: refetchCategoryDetail,
     queryKey
   } = useCategoryDetail(uid)
-  const [loadingSubmit, setLoadingSubmit] = useState(false)
+  const [loadingSubmit, setLoadingSubmit] = useState(false) // TODO: consider removal if not needed when integrating loading state elsewhere
   const queryClient = useQueryClient()
   const { closeModal } = useModalGlobalStore()
 
   const { refetch } = useCategoryList()
 
-  const { submit, loading } = useSubmit<{ uid: string; name: string }>({
+  const { submit } = useSubmit<{ uid: string; name: string }>({
     endpoint: catalogueCategoryEdit,
     method: uid ? 'put' : 'post',
     onSuccess: data => {
       imageRef.current?.submit(data.uid, () => {
         refetch()
         refetchItems()
-        toast.success(`Category ${data.name} saved`)
+        toast.success(
+          fm({ id: message.catalogue.category.saved }, { name: data.name })
+        )
         setLoadingSubmit(false)
         closeModal('sheet')
         queryClient.invalidateQueries({ queryKey })
       })
     },
     onError: () => {
-      toast.error('Error saving category')
+      toast.error(fm({ id: message.catalogue.category.errorSaving }))
     }
   })
   const onSubmit = (data: CategoryFormType) => {
@@ -118,19 +121,21 @@ const CategoryEditContainer = ({ setOpen, parentUID, uid }: Props) => {
     return (
       <div className="p-6 text-center">
         <div className="text-red-600 mb-4">
-          <h3 className="text-lg font-semibold mb-2">Error Loading Category</h3>
+          <h3 className="text-lg font-semibold mb-2">
+            {fm({ id: message.catalogue.category.errorLoading })}
+          </h3>
           <p className="text-sm">
             {error instanceof Error
               ? error.message
-              : 'Failed to load category details'}
+              : fm({ id: message.catalogue.category.failedToLoadDetails })}
           </p>
         </div>
         <div className="flex gap-2 justify-center">
           <Button variant="outline" onClick={() => refetchCategoryDetail()}>
-            Retry
+            {fm({ id: message.catalogue.category.retry })}
           </Button>
           <Button variant="outline" onClick={() => setOpen(false)}>
-            Close
+            {fm({ id: message.common.buttons.close })}
           </Button>
         </div>
       </div>

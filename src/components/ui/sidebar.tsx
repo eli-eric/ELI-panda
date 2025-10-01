@@ -7,6 +7,7 @@ import type { VariantProps } from 'class-variance-authority'
 import { cva } from 'class-variance-authority'
 import { PanelLeftIcon } from 'lucide-react'
 import * as React from 'react'
+import { useIntl } from 'react-intl'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -26,6 +27,7 @@ import {
   TooltipTrigger
 } from '@/components/ui/tooltip'
 import { useIsMobile } from '@/hooks/use-mobile'
+import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 
 const SIDEBAR_COOKIE_NAME = 'sidebar_state'
@@ -166,6 +168,7 @@ function Sidebar({
   variant?: 'sidebar' | 'floating' | 'inset'
   collapsible?: 'offcanvas' | 'icon' | 'none'
 }) {
+  const { formatMessage: fm } = useIntl()
   const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
 
   if (collapsible === 'none') {
@@ -199,8 +202,10 @@ function Sidebar({
           side={side}
         >
           <SheetHeader className="sr-only">
-            <SheetTitle>Sidebar</SheetTitle>
-            <SheetDescription>Displays the mobile sidebar.</SheetDescription>
+            <SheetTitle>{fm({ id: message.common.ui.sidebar })}</SheetTitle>
+            <SheetDescription>
+              {fm({ id: message.common.ui.sidebarDescription })}
+            </SheetDescription>
           </SheetHeader>
           <div className="flex h-full w-full flex-col">{children}</div>
         </SheetContent>
@@ -261,6 +266,7 @@ function SidebarTrigger({
   onClick,
   ...props
 }: React.ComponentProps<typeof Button>) {
+  const { formatMessage: fm } = useIntl()
   // Bezpečná kontrola contextu
   const context = React.useContext(SidebarContext)
 
@@ -285,7 +291,9 @@ function SidebarTrigger({
       {...props}
     >
       <PanelLeftIcon />
-      <span className="sr-only">Toggle Sidebar</span>
+      <span className="sr-only">
+        {fm({ id: message.common.ui.toggleSidebar })}
+      </span>
     </Button>
   )
 }
