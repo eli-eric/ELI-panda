@@ -1,9 +1,12 @@
 import { Controller, useFormContext } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 
+import { message } from '@/i18n/src/messages'
 import type { FieldProps } from '@/types/form'
 
 type InputAmountProps = FieldProps & React.InputHTMLAttributes<HTMLInputElement>
 export const InputCurrency = ({ name }: InputAmountProps) => {
+  const { formatMessage: fm } = useIntl()
   const currencyOptions = ['EUR', 'USD', 'CZK', 'HUF', 'RON', 'GBP']
   const { control } = useFormContext()
 
@@ -15,7 +18,7 @@ export const InputCurrency = ({ name }: InputAmountProps) => {
       render={({ field }) => (
         <div className="absolute inset-y-0 right-0 flex items-center">
           <label htmlFor="currency" className="sr-only">
-            Currency
+            {fm({ id: message.common.ui.currency })}
           </label>
           <select
             {...field}

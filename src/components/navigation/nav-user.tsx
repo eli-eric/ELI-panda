@@ -3,6 +3,7 @@
 import { BadgeCheck, ChevronsUpDown, CircleHelp } from 'lucide-react'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
+import { useIntl } from 'react-intl'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
@@ -20,6 +21,7 @@ import {
   SidebarMenuItem,
   useSidebar
 } from '@/components/ui/sidebar'
+import { message } from '@/i18n/src/messages'
 import { PATH, SUPPORT } from '@/types/constants/paths'
 
 import { DarkModeSwitch } from './darkmode-switch'
@@ -28,6 +30,7 @@ import { LogoutButton } from './logout-button'
 export function NavUser() {
   const { data: session } = useSession()
   const { isMobile } = useSidebar()
+  const { formatMessage: fm } = useIntl()
   const user = session?.user
 
   return (
@@ -44,7 +47,9 @@ export function NavUser() {
                   src={user?.image || undefined}
                   alt={user?.fullName}
                 />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                <AvatarFallback className="rounded-lg">
+                  {user?.name?.substring(0, 2).toUpperCase() || 'CN'}
+                </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">{user?.name}</span>
@@ -66,7 +71,9 @@ export function NavUser() {
                     src={user?.image || undefined}
                     alt={user?.fullName}
                   />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  <AvatarFallback className="rounded-lg">
+                    {user?.name?.substring(0, 2).toUpperCase() || 'CN'}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">{user?.name}</span>
@@ -81,7 +88,7 @@ export function NavUser() {
               <DropdownMenuItem asChild>
                 <Link href={SUPPORT} target="_blank">
                   <CircleHelp />
-                  Support
+                  {fm({ id: message.layout.support })}
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
@@ -89,7 +96,7 @@ export function NavUser() {
               <DropdownMenuItem asChild>
                 <Link href={PATH.PROFILE_GENERAL}>
                   <BadgeCheck />
-                  Profile
+                  {fm({ id: message.layout.userMenu.profile })}
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>

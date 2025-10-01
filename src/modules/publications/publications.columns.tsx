@@ -1,20 +1,24 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import Link from 'next/link'
 import { useMemo } from 'react'
+import { useIntl } from 'react-intl'
 
 import { ShortCell } from '@/components/table/short-cell'
 import { Button } from '@/components/ui/button'
+import { message } from '@/i18n/src/messages'
 
 import { MEDIA_TYPE_MAP } from '../publication/types/constants'
 import type { Publication } from '../publication/types/responses'
 import { TitleCell } from './components/TitleCell'
 
 export const usePublicationColumns = () => {
+  const { formatMessage: fm } = useIntl()
+
   const columns = useMemo(
     (): ColumnDef<Publication, any>[] => [
       {
         id: 'title',
-        header: 'Title',
+        header: fm({ id: message.publicationsPage.columns.title }),
         accessorFn: row => row.title,
         size: 375,
         meta: { sticky: true },

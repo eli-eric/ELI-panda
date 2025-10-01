@@ -2,6 +2,7 @@ import type { CellContext } from '@tanstack/react-table'
 import { Edit, MoreVertical, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 import type { FC } from 'react'
+import { useIntl } from 'react-intl'
 
 import { Tooltip } from '@/components/Tooltip'
 import { Button } from '@/components/ui/button'
@@ -13,6 +14,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { useAccessControl } from '@/hooks/useAccessControl'
 import useWarningModal from '@/hooks/useWarningModal'
+import { message } from '@/i18n/src/messages'
 import { usePublicationEditSheet } from '@/modules/shared/publications/publication-edit/usePublicationEditSheet'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
@@ -29,6 +31,7 @@ export const TitleCell: FC<TitleCellProps> = ({
     original: { uid }
   }
 }) => {
+  const { formatMessage: fm } = useIntl()
   const title = getValue()
   const deletePublication = usePublicationDelete(uid as string)
   const withWarning = useWarningModal()
@@ -55,7 +58,7 @@ export const TitleCell: FC<TitleCellProps> = ({
         <DropdownMenuContent align="start" sideOffset={4}>
           <DropdownMenuItem onClick={openEdit}>
             <Edit className="size-4" />
-            Edit Publication
+            {fm({ id: message.publicationsPage.actions.editPublication })}
           </DropdownMenuItem>
           {canEdit && (
             <DropdownMenuItem
@@ -63,7 +66,7 @@ export const TitleCell: FC<TitleCellProps> = ({
               className="text-destructive"
             >
               <Trash2 className="size-4" />
-              Delete Publication
+              {fm({ id: message.publicationsPage.actions.deletePublication })}
             </DropdownMenuItem>
           )}
         </DropdownMenuContent>

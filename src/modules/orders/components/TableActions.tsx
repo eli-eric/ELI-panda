@@ -85,7 +85,7 @@ export const TableActions = ({ order }: Props) => {
             className="cursor-pointer text-destructive focus:text-destructive"
           >
             <Trash2 className="h-4 w-4 mr-2" />
-            Delete Order
+            {formatMessage({ id: message.common.ui.deleteOrder })}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

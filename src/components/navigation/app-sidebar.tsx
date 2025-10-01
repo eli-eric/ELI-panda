@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import * as React from 'react'
+import { useIntl } from 'react-intl'
 
 import {
   Sidebar,
@@ -12,6 +13,7 @@ import {
   SidebarRail,
   useSidebar
 } from '@/components/ui/sidebar'
+import { message } from '@/i18n/src/messages'
 import { NAV_ITEMS, OTHERS_NAV_ITEMS } from '@/lib/navigation/config'
 
 import { NavMain } from './nav-main'
@@ -27,6 +29,7 @@ interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {}
 
 export function AppSidebar({ ...props }: AppSidebarProps) {
   const { toggleSidebar } = useSidebar()
+  const { formatMessage: fm } = useIntl()
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -39,14 +42,16 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
           <div className="relative flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-orange-foreground">
             <Image
               src="/logo192.png"
-              alt="Panda"
+              alt={fm({ id: message.common.ui.appName })}
               fill
               className="rounded-lg object-contain"
               sizes="32px"
             />
           </div>
           <div className="grid flex-1 text-left text-sm leading-tight">
-            <span className="truncate font-semibold">Panda</span>
+            <span className="truncate font-semibold">
+              {fm({ id: message.common.ui.appName })}
+            </span>
           </div>
         </SidebarMenuButton>
       </SidebarHeader>

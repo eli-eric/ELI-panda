@@ -11,7 +11,11 @@ export const messages = {
       save: 'Save',
       home: 'Go Home',
       addNew: 'Add new item',
-      ok: 'OK'
+      ok: 'OK',
+      exit: 'Exit',
+      return: 'Return',
+      logOut: 'Log out',
+      delete: 'Delete'
     },
     custom404: {
       title: '404',
@@ -19,10 +23,63 @@ export const messages = {
       message:
         'Please check the URL in the address bar and try again.Probably you have no permission.'
     },
+    recordNotFound: {
+      title: '404',
+      heading: 'Record Not Found',
+      message: 'Sorry, the record you are looking for does not exist.'
+    },
     property: {
       description: 'Description'
     },
     warning: 'Warning',
+    errors: {
+      somethingWentWrong: 'Something went wrong!',
+      noResults: 'No results'
+    },
+    ui: {
+      appName: 'Panda',
+      total: 'Total:',
+      active: 'Active:',
+      inactive: 'Inactive:',
+      users: 'users',
+      percentActive: '% active',
+      version: 'Version',
+      clickToAdd: 'Click to add',
+      clearSelection: 'Clear selection',
+      closePanel: 'Close panel',
+      selectOption: 'Select option...',
+      noItemsFound: 'No items found.',
+      search: 'Search',
+      modified: 'Modified',
+      lastUpdated: 'Last updated:',
+      fixedBugs: 'Fixed bugs:',
+      newFeatures: 'New features:',
+      internalApplicationFor: 'Internal application for',
+      catalogueProperties: 'Catalogue Properties',
+      showLoadingState: 'Show Loading State',
+      loadSmallDataset: 'Load Small Dataset (4 rows)',
+      currency: 'Currency',
+      category: 'Category',
+      clearFilters: 'Clear filters',
+      delivered: 'Delivered',
+      pending: 'Pending',
+      deleteOrder: 'Delete Order',
+      filter: 'Filter',
+      clear: 'Clear',
+      apply: 'Apply'
+    },
+    navigation: {
+      modules: 'Modules',
+      administration: 'Administration'
+    },
+    imageGallery: {
+      upload: 'Upload',
+      uploadAnImage: 'Upload an image',
+      delete: 'Delete',
+      noImagesAvailable: 'No images available',
+      pngJpgInfo: 'PNG, JPG up to 10MB',
+      confirmDelete: 'Are you sure you want to delete'
+    },
     fileManager: {
       deleteModal: {
         title: 'Warning',
@@ -33,7 +90,9 @@ export const messages = {
       leaveWarning: {
         title: 'Warning',
         text: 'You have unsaved changes. Are you sure you want to leave?'
-      }
+      },
+      unsavedChanges: 'You have unsaved changes',
+      notAvailable: 'N/A'
     },
     files: { title: 'Files' },
     noResults: 'No options.'
@@ -140,6 +199,12 @@ export const messages = {
   },
   systemsPage: {
     head: 'ELI Panda - Systems',
+    notFound: {
+      heading: 'System Not Found',
+      message: 'No system found with code',
+      mayNotExist: 'The system may not exist or may have been deleted.',
+      tryChecking: 'Try checking the system code or contact your administrator if you believe this is an error.'
+    },
     systemDetail: {
       form: {
         criticalSpCoverage: {
@@ -638,5 +703,53 @@ export const messages = {
   },
   layoutPage: {
     head: 'ELI Panda - Layout'
+  },
+  publicationsPage: {
+    columns: {
+      title: 'Title',
+      code: 'Code',
+      mediaType: 'Media Type',
+      experimentalSystem: 'Experimental System',
+      userCall: 'User Call',
+      userExperiment: 'User Experiment',
+      doi: 'DOI',
+      webLink: 'Web Link',
+      openAccessType: 'Open Access Type',
+      authors: 'Authors',
+      authorsCount: 'Authors Count',
+      eliAuthors: 'ELI Authors',
+      eliAuthorsCount: 'ELI Authors Count',
+      journalTitle: 'Journal Title',
+      volume: 'Volume',
+      issue: 'Issue',
+      pages: 'Pages',
+      pagesCount: 'Pages Count',
+      citeAs: 'Cite As',
+      impactFactor: 'Impact Factor',
+      quartilBasis: 'Quartil Basis',
+      quartil: 'Quartil',
+      yearOfPublication: 'Year Of Publication',
+      dateOfPublication: 'Date Of Publication',
+      abstract: 'Abstract',
+      keywords: 'Keywords',
+      oecdFord: 'OECD Ford',
+      grant: 'Grant',
+      wosNumber: 'WOS Number',
+      issn: 'ISSN',
+      eissn: 'E-ISSN',
+      eidScopus: 'EID Scopus',
+      publishingCountry: 'Publishing Country',
+      language: 'Language',
+      note: 'Note',
+      clickHere: 'Click here'
+    },
+    actions: {
+      editPublication: 'Edit Publication',
+      deletePublication: 'Delete Publication'
+    }
+  },
+  servicesPage: {
+    title: 'Manage Services',
+    addNewService: 'Add New Service'
   }
 }

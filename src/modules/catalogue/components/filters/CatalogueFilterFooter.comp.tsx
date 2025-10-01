@@ -1,7 +1,9 @@
 import type { UseFormReset } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 
 import { Button } from '@/components/Buttons'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
+import { message } from '@/i18n/src/messages'
 import { FilterSaveSettings } from '@/modules/shared/filters/FilterSaveSettings'
 
 interface CatalogueFilterFooterProps {
@@ -17,6 +19,7 @@ export const CatalogueFilterFooter = ({
   resetForm,
   defaultFormValues
 }: CatalogueFilterFooterProps) => {
+  const { formatMessage: fm } = useIntl()
   const { setColumnFilters } = useFormFilterState({
     tableId,
     enableQueryUrl: enableQueryURL
@@ -40,7 +43,7 @@ export const CatalogueFilterFooter = ({
         className="w-full justify-center"
         onClick={handleClearFilters}
       >
-        Clear filters
+        {fm({ id: message.common.ui.clearFilters })}
       </Button>
     </div>
   )

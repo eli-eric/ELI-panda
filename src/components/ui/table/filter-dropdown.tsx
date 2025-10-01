@@ -1,5 +1,6 @@
 import { Filter } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
+import { useIntl } from 'react-intl'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -8,6 +9,7 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
+import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 
 interface FilterDropdownProps {
@@ -21,6 +23,7 @@ export function FilterDropdown({
   onFilterChange,
   currentFilter
 }: FilterDropdownProps) {
+  const { formatMessage: fm } = useIntl()
   const [filterValue, setFilterValue] = useState(currentFilter || '')
 
   // Update the filter value when the prop changes
@@ -78,7 +81,7 @@ export function FilterDropdown({
       <DropdownMenuContent align="end" className="w-56">
         <div className="px-3 py-2">
           <p className="text-sm font-medium text-foreground mb-2">
-            Filter {column.columnDef.header}
+            {fm({ id: message.common.ui.filter })} {column.columnDef.header}
           </p>
           <Input
             type="text"
@@ -99,7 +102,7 @@ export function FilterDropdown({
                 clearFilter()
               }}
             >
-              Clear
+              {fm({ id: message.common.ui.clear })}
             </Button>
             <Button
               size="sm"

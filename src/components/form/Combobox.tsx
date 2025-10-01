@@ -189,7 +189,7 @@ const Combobox = ({
                             onSelect={() => handleClear(field)}
                             className="text-muted-foreground"
                           >
-                            Clear selection
+                            {fm({ id: message.common.ui.clearSelection })}
                           </CommandItem>
                         )}
                       </CommandGroup>

@@ -1,5 +1,8 @@
 import { Check, Clock } from 'lucide-react'
 import * as React from 'react'
+import { useIntl } from 'react-intl'
+
+import { message } from '@/i18n/src/messages'
 
 import { Badge, type BadgeProps } from './badge'
 
@@ -12,6 +15,8 @@ function DeliveryStatusBadge({
   isDelivered,
   ...props
 }: DeliveryStatusBadgeProps) {
+  const { formatMessage: fm } = useIntl()
+
   if (isDelivered) {
     return (
       <Badge
@@ -20,7 +25,7 @@ function DeliveryStatusBadge({
         {...props}
       >
         <Check className="h-3 w-3" />
-        Delivered
+        {fm({ id: message.common.ui.delivered })}
       </Badge>
     )
   }
@@ -32,7 +37,7 @@ function DeliveryStatusBadge({
       {...props}
     >
       <Clock className="h-3 w-3" />
-      Pending
+      {fm({ id: message.common.ui.pending })}
     </Badge>
   )
 }

@@ -1,10 +1,12 @@
 import { ArrowLeft, Save } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { useRef } from 'react'
+import { useIntl } from 'react-intl'
 
 import { Button } from '@/components/ui/button'
 import { SidebarTrigger } from '@/components/ui/sidebar'
 import usePermission from '@/hooks/usePermission'
+import { message } from '@/i18n/src/messages'
 import type { ROLE } from '@/types/constants/roles'
 
 interface Props {
@@ -28,6 +30,7 @@ export const HeaderWithButtons = ({
 }: Props) => {
   const disabledEdit = usePermission([editRole])
   const { back } = useRouter()
+  const { formatMessage: fm } = useIntl()
   const DEBOUNCE_TIME = 1500
   const lastSubmitTimeRef = useRef<number>(0)
 
@@ -77,7 +80,9 @@ export const HeaderWithButtons = ({
               className="flex items-center gap-1.5"
             >
               <ArrowLeft className="h-4 w-4" />
-              <span className="hidden lg:inline">Back</span>
+              <span className="hidden lg:inline">
+                {fm({ id: message.common.buttons.back })}
+              </span>
             </Button>
             {customElement && (
               <>
@@ -94,14 +99,14 @@ export const HeaderWithButtons = ({
                   onClick={handleSubmit}
                   disabled={loading || isFormInvalid}
                 >
-                  Save
+                  {fm({ id: message.common.buttons.save })}
                 </Button>
                 <Button
                   size="sm"
                   onClick={handleSubmitAndExit}
                   disabled={loading || isFormInvalid}
                 >
-                  Save and Exit
+                  {fm({ id: message.common.buttons.saveAndExit })}
                 </Button>
               </div>
             )}

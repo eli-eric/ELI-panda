@@ -2,6 +2,7 @@ import { Check, ChevronsUpDown } from 'lucide-react'
 import * as React from 'react'
 import { useMemo, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 
 import {
   Command,
@@ -17,6 +18,7 @@ import {
   PopoverTrigger
 } from '@/components/ui/popover'
 import { useCodebook } from '@/hooks/fetch/useCodebook'
+import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps } from '@/types/form'
@@ -42,6 +44,7 @@ export const InlineEditCombobox = ({
   hasClientFilter = false,
   onSelect
 }: InlineEditComboboxProps) => {
+  const { formatMessage: fm } = useIntl()
   const { control } = useFormContext()
   const [isEditing, setIsEditing] = useState(false)
   const [query, setQuery] = useState('')
@@ -101,7 +104,7 @@ export const InlineEditCombobox = ({
               </span>
               <div className="text-right max-w-[60%] flex-1 min-w-0 overflow-hidden">
                 <span className="block w-full truncate text-foreground">
-                  {field.value?.name || 'N/A'}
+                  {field.value?.name || fm({ id: message.common.form.notAvailable })}
                 </span>
               </div>
             </div>
@@ -130,7 +133,7 @@ export const InlineEditCombobox = ({
                 </span>
                 <div className="text-right max-w-[60%] flex items-center gap-1 flex-1 min-w-0 overflow-hidden">
                   <span className="block w-full truncate text-foreground">
-                    {field.value?.name || 'N/A'}
+                    {field.value?.name || fm({ id: message.common.form.notAvailable })}
                   </span>
                   <ChevronsUpDown className="size-3 text-muted-foreground" />
                 </div>
@@ -142,12 +145,12 @@ export const InlineEditCombobox = ({
             >
               <Command>
                 <CommandInput
-                  placeholder={`Search ${label?.toLowerCase() || 'items'}...`}
+                  placeholder={`${fm({ id: message.common.ui.search })} ${label?.toLowerCase() || 'items'}...`}
                   value={query}
                   onValueChange={setQuery}
                 />
                 <CommandList>
-                  <CommandEmpty>No items found.</CommandEmpty>
+                  <CommandEmpty>{fm({ id: message.common.ui.noItemsFound })}</CommandEmpty>
                   <CommandGroup>
                     {options?.data?.map(item => (
                       <CommandItem
