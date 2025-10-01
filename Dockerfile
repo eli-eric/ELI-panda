@@ -32,8 +32,8 @@ ENV NEO4J_PASSWORD="${NEO4J_PASSWORD}"
 ENV AZURE_AD_BEAMLINES_CLIENT_ID="${AZURE_AD_BEAMLINES_CLIENT_ID}"
 ENV AZURE_AD_BEAMLINES_CLIENT_SECRET="${AZURE_AD_BEAMLINES_CLIENT_SECRET}"
 ENV AZURE_AD_BEAMLINES_TENANT_ID="${AZURE_AD_BEAMLINES_TENANT_ID}"
-ENV NEXT_SHARP_PATH=/tmp/node_modules/sharp
 
+RUN env
 
 # This will do the trick, use the corresponding env file for each environment.
 # COPY .env.production.sample .env.production
@@ -54,10 +54,11 @@ ENV NEO4J_PASSWORD="${NEO4J_PASSWORD}"
 ENV AZURE_AD_BEAMLINES_CLIENT_ID="${AZURE_AD_BEAMLINES_CLIENT_ID}"
 ENV AZURE_AD_BEAMLINES_CLIENT_SECRET="${AZURE_AD_BEAMLINES_CLIENT_SECRET}"
 ENV AZURE_AD_BEAMLINES_TENANT_ID="${AZURE_AD_BEAMLINES_TENANT_ID}"
-ENV NEXT_SHARP_PATH=/tmp/node_modules/sharp
 
 RUN env
 
+# Install sharp dependencies for alpine
+RUN apk add --no-cache libc6-compat
 
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001
@@ -69,6 +70,9 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+# Install sharp in the production image with the correct platform binaries
+COPY --from=builder /app/package.json ./package.json
+RUN yarn add sharp --ignore-scripts --prefer-offline
 
 USER nextjs
 
