@@ -22,6 +22,7 @@ ESLint pravidlo `react/jsx-no-literals` zakazuje hardcoded stringy v JSX kompone
 ## 📁 Struktura i18n systému
 
 ### Hlavní soubory
+
 - **Překlady:** `/src/i18n/src/locale/en.ts`
 - **Message paths:** `/src/i18n/src/messages.ts` (automaticky generováno)
 - **Import v komponentě:** `import { message } from '@/i18n/src/messages'`
@@ -72,6 +73,7 @@ yarn build 2>&1 | grep "file.tsx" -A 2
 ```
 
 **Příklad output:**
+
 ```
 ./src/components/ui/button.tsx
 88:10  Warning: Strings not allowed in JSX files: "Delete Order"  react/jsx-no-literals
@@ -81,13 +83,13 @@ yarn build 2>&1 | grep "file.tsx" -A 2
 
 **Pravidla pro umístění:**
 
-| Typ textu | Umístění v en.ts | Příklad |
-|-----------|------------------|---------|
-| Globální tlačítka | `common.buttons.*` | `save`, `cancel`, `delete` |
-| UI elementy | `common.ui.*` | `filter`, `search`, `pending` |
-| Formuláře | `common.form.*` | `required`, `optional`, `unsavedChanges` |
-| Galerie | `common.imageGallery.*` | `upload`, `delete` |
-| Moduly | `<module>Page.*` | `systemsPage.title` |
+| Typ textu         | Umístění v en.ts        | Příklad                                  |
+| ----------------- | ----------------------- | ---------------------------------------- |
+| Globální tlačítka | `common.buttons.*`      | `save`, `cancel`, `delete`               |
+| UI elementy       | `common.ui.*`           | `filter`, `search`, `pending`            |
+| Formuláře         | `common.form.*`         | `required`, `optional`, `unsavedChanges` |
+| Galerie           | `common.imageGallery.*` | `upload`, `delete`                       |
+| Moduly            | `<module>Page.*`        | `systemsPage.title`                      |
 
 **Příklad přidání překladu:**
 
@@ -97,7 +99,7 @@ export const messages = {
   common: {
     ui: {
       // ... existující
-      deleteOrder: 'Delete Order',  // ← NOVÝ překlad
+      deleteOrder: 'Delete Order', // ← NOVÝ překlad
       confirmDelete: 'Are you sure?'
     }
   }
@@ -240,6 +242,7 @@ const deleteMessage = fm(
 ### Příklad 1: Jednoduchá komponenta
 
 **PŘED:**
+
 ```typescript
 export const MyButton = () => {
   return (
@@ -251,6 +254,7 @@ export const MyButton = () => {
 ```
 
 **PO:**
+
 ```typescript
 import { useIntl } from 'react-intl'
 import { message } from '@/i18n/src/messages'
@@ -269,6 +273,7 @@ export const MyButton = () => {
 ### Příklad 2: Komponenta s více stringy
 
 **PŘED:**
+
 ```typescript
 export const FilterFooter = ({ onClear }) => {
   return (
@@ -282,6 +287,7 @@ export const FilterFooter = ({ onClear }) => {
 ```
 
 **PO:**
+
 ```typescript
 import { useIntl } from 'react-intl'
 import { message } from '@/i18n/src/messages'
@@ -306,6 +312,7 @@ export const FilterFooter = ({ onClear }) => {
 ### Příklad 3: Badge s podmínkou
 
 **PŘED:**
+
 ```typescript
 export const StatusBadge = ({ isActive }) => {
   return (
@@ -317,6 +324,7 @@ export const StatusBadge = ({ isActive }) => {
 ```
 
 **PO:**
+
 ```typescript
 import { useIntl } from 'react-intl'
 import { message } from '@/i18n/src/messages'
@@ -380,101 +388,111 @@ export const StatusBadge = ({ isActive }) => {
 ## 🔍 Často používané překlady (již existují v en.ts)
 
 ### Buttons
+
 ```typescript
-message.common.buttons.save          // "Save"
-message.common.buttons.cancel        // "Cancel"
-message.common.buttons.delete        // "Delete"
-message.common.buttons.exit          // "Exit"
-message.common.buttons.back          // "Back"
-message.common.buttons.saveAndExit   // "Save and Exit"
-message.common.buttons.continue      // "Continue"
-message.common.buttons.ok            // "OK"
-message.common.buttons.addNew        // "Add new item"
-message.common.buttons.return        // "Return"
-message.common.buttons.logOut        // "Log out"
+message.common.buttons.save // "Save"
+message.common.buttons.cancel // "Cancel"
+message.common.buttons.delete // "Delete"
+message.common.buttons.exit // "Exit"
+message.common.buttons.back // "Back"
+message.common.buttons.saveAndExit // "Save and Exit"
+message.common.buttons.continue // "Continue"
+message.common.buttons.ok // "OK"
+message.common.buttons.addNew // "Add new item"
+message.common.buttons.return // "Return"
+message.common.buttons.logOut // "Log out"
 ```
 
 ### UI Elements
+
 ```typescript
-message.common.ui.clearFilters       // "Clear filters"
-message.common.ui.clearSelection     // "Clear selection"
-message.common.ui.search             // "Search"
-message.common.ui.filter             // "Filter"
-message.common.ui.clear              // "Clear"
-message.common.ui.apply              // "Apply"
-message.common.ui.currency           // "Currency"
-message.common.ui.category           // "Category"
-message.common.ui.delivered          // "Delivered"
-message.common.ui.pending            // "Pending"
-message.common.ui.deleteOrder        // "Delete Order"
-message.common.ui.modified           // "Modified"
-message.common.ui.total              // "Total:"
-message.common.ui.active             // "Active:"
-message.common.ui.inactive           // "Inactive:"
-message.common.ui.clickToAdd         // "Click to add"
-message.common.ui.noItemsFound       // "No items found."
+message.common.ui.clearFilters // "Clear filters"
+message.common.ui.clearSelection // "Clear selection"
+message.common.ui.search // "Search"
+message.common.ui.filter // "Filter"
+message.common.ui.clear // "Clear"
+message.common.ui.apply // "Apply"
+message.common.ui.currency // "Currency"
+message.common.ui.category // "Category"
+message.common.ui.delivered // "Delivered"
+message.common.ui.pending // "Pending"
+message.common.ui.deleteOrder // "Delete Order"
+message.common.ui.modified // "Modified"
+message.common.ui.total // "Total:"
+message.common.ui.active // "Active:"
+message.common.ui.inactive // "Inactive:"
+message.common.ui.clickToAdd // "Click to add"
+message.common.ui.noItemsFound // "No items found."
 ```
 
 ### Forms
+
 ```typescript
-message.common.form.notAvailable     // "N/A"
-message.common.form.unsavedChanges   // "You have unsaved changes"
-message.common.form.yes              // "Yes"
-message.common.form.no               // "No"
-message.common.form.optional         // "Optional"
-message.common.form.required         // "Required"
+message.common.form.notAvailable // "N/A"
+message.common.form.unsavedChanges // "You have unsaved changes"
+message.common.form.yes // "Yes"
+message.common.form.no // "No"
+message.common.form.optional // "Optional"
+message.common.form.required // "Required"
 ```
 
 ### Image Gallery
+
 ```typescript
-message.common.imageGallery.upload            // "Upload"
-message.common.imageGallery.uploadAnImage     // "Upload an image"
-message.common.imageGallery.delete            // "Delete"
+message.common.imageGallery.upload // "Upload"
+message.common.imageGallery.uploadAnImage // "Upload an image"
+message.common.imageGallery.delete // "Delete"
 message.common.imageGallery.noImagesAvailable // "No images available"
-message.common.imageGallery.pngJpgInfo        // "PNG, JPG up to 10MB"
-message.common.imageGallery.confirmDelete     // "Are you sure you want to delete"
+message.common.imageGallery.pngJpgInfo // "PNG, JPG up to 10MB"
+message.common.imageGallery.confirmDelete // "Are you sure you want to delete"
 ```
 
 ### Errors
+
 ```typescript
-message.common.errors.somethingWentWrong  // "Something went wrong!"
-message.common.errors.noResults           // "No results"
+message.common.errors.somethingWentWrong // "Something went wrong!"
+message.common.errors.noResults // "No results"
 ```
 
 ### Record Not Found
+
 ```typescript
-message.common.recordNotFound.title    // "404"
-message.common.recordNotFound.heading  // "Record Not Found"
-message.common.recordNotFound.message  // "Sorry, the record you are looking for does not exist."
+message.common.recordNotFound.title // "404"
+message.common.recordNotFound.heading // "Record Not Found"
+message.common.recordNotFound.message // "Sorry, the record you are looking for does not exist."
 ```
 
 ### Page-specific
+
 ```typescript
 // Systems
-message.systemsPage.notFound.heading        // "System Not Found"
-message.systemsPage.notFound.message        // "No system found with code"
+message.systemsPage.notFound.heading // "System Not Found"
+message.systemsPage.notFound.message // "No system found with code"
 
 // Publications
-message.publicationsPage.actions.editPublication    // "Edit Publication"
-message.publicationsPage.actions.deletePublication  // "Delete Publication"
-message.publicationsPage.columns.title              // "Title"
-message.publicationsPage.columns.code               // "Code"
+message.publicationsPage.actions.editPublication // "Edit Publication"
+message.publicationsPage.actions.deletePublication // "Delete Publication"
+message.publicationsPage.columns.title // "Title"
+message.publicationsPage.columns.code // "Code"
 // ... mnoho dalších column headers
 
 // Services
-message.servicesPage.title           // "Manage Services"
-message.servicesPage.addNewService   // "Add New Service"
+message.servicesPage.title // "Manage Services"
+message.servicesPage.addNewService // "Add New Service"
 ```
 
 ## 💡 Tipy pro efektivitu
 
 ### 1. Seskupuj podobné soubory
+
 Opravuj všechny filter footers najednou, všechny table komponenty najednou, atd. Ušetříš čas díky podobným patterns.
 
 ### 2. Začni s jednoduchými soubory
+
 Soubory s 1-3 stringy jsou rychlé na opravu a dávají okamžitý pokrok.
 
 ### 3. Používej grep pro rychlé hledání
+
 ```bash
 # Najdi všechny výskyty konkrétního textu
 grep -rn "Delete Order" src/
@@ -484,13 +502,17 @@ yarn build 2>&1 | grep "Delete Order"
 ```
 
 ### 4. Batch changes
+
 Oprav několik souborů před spuštěním build checku - šetří čas.
 
 ### 5. Kontroluj context
+
 Ujisti se, že rozumíš kontextu - některé stringy by mohly být konstanta nebo enum, ne překlad.
 
 ### 6. Dokumentuj nové sekce
+
 Když přidáváš novou sekci do en.ts, přidej komentář vysvětlující účel:
+
 ```typescript
 // Orders module - table actions and modals
 ordersPage: {
@@ -543,29 +565,34 @@ git commit -m "fix: replace hardcoded strings with i18n in table-pagination"
 
 ## 🎯 Očekávané výsledky po dokončení priorit
 
-| Priorita | Odhadovaný pokles varování | Zbývající varování |
-|----------|----------------------------|-------------------|
-| Po vysoké prioritě | -40 | ~164 |
-| Po střední prioritě | -60 | ~104 |
-| Po nízké prioritě | -80 | ~24 |
+| Priorita            | Odhadovaný pokles varování | Zbývající varování |
+| ------------------- | -------------------------- | ------------------ |
+| Po vysoké prioritě  | -40                        | ~164               |
+| Po střední prioritě | -60                        | ~104               |
+| Po nízké prioritě   | -80                        | ~24                |
 
 **Cílový stav:** < 50 varování (většinou v málo používaných nebo legacy částech)
 
 ## 📚 Použité zdroje a nástroje
 
 ### ESLint pravidlo
+
 ```json
 {
   "rules": {
-    "react/jsx-no-literals": ["warn", {
-      "noStrings": true,
-      "ignoreProps": true
-    }]
+    "react/jsx-no-literals": [
+      "warn",
+      {
+        "noStrings": true,
+        "ignoreProps": true
+      }
+    ]
   }
 }
 ```
 
 ### React-intl dokumentace
+
 - [React Intl API](https://formatjs.io/docs/react-intl/api/)
 - [Message formatting](https://formatjs.io/docs/core-concepts/icu-syntax/)
 
@@ -637,6 +664,7 @@ Začni s jednoduchými soubory (1-3 stringy) pro rychlý pokrok.
 <summary>Klikni pro zobrazení seznamu opravených souborů</summary>
 
 ### Navigation (5)
+
 - `src/components/navigation/app-sidebar.tsx`
 - `src/components/navigation/logout-button.tsx`
 - `src/components/navigation/nav-main.tsx`
@@ -644,22 +672,26 @@ Začni s jednoduchými soubory (1-3 stringy) pro rychlý pokrok.
 - `src/components/navigation/nav-user.tsx`
 
 ### Common UI (4)
+
 - `src/components/empty-section/EmptyResults.tsx`
 - `src/components/error/ErrorPage.tsx`
 - `src/components/pages/record-not-found.comp.tsx`
 - `src/components/Notifications/Notification.tsx`
 
 ### Headers/Buttons (3)
+
 - `src/components/header/HeaderWithButtons.tsx`
 - `src/components/header/modal-header.buttons.tsx`
 - `src/components/layout/PageHead.buttons.tsx`
 
 ### Overlays (3)
+
 - `src/components/overlays/ModalProvider.tsx`
 - `src/components/overlays/slideover/SlideOver.tsx`
 - `src/components/sheet-form-buttons.tsx`
 
 ### Forms (5)
+
 - `src/components/form/ImagePlaceHolder.tsx`
 - `src/components/form/inline-edit/InlineEditCombobox.tsx`
 - `src/components/form/inline-edit/InlineEditTextArea.tsx`
@@ -667,10 +699,12 @@ Začni s jednoduchými soubory (1-3 stringy) pro rychlý pokrok.
 - `src/components/form/inputs/components/InputCurrency.comp.tsx`
 
 ### Shared Modules (2)
+
 - `src/modules/shared/imageManager/ImageGallery.tsx`
 - `src/modules/shared/system/device-info-overlay/components/sections/NotFound.tsx`
 
 ### Feature Modules (6)
+
 - `src/modules/catalogue/components/filters/CatalogueFilterFooter.comp.tsx`
 - `src/modules/orders/components/filters/OrdersFilterFooter.comp.tsx`
 - `src/modules/systems/components/filters/SystemsFilterFooter.comp.tsx`
@@ -679,6 +713,7 @@ Začni s jednoduchými soubory (1-3 stringy) pro rychlý pokrok.
 - `src/modules/orders/components/TableActions.tsx`
 
 ### UI Components (3)
+
 - `src/components/ui/delivery-status-badge.tsx`
 - `src/components/ui/table/filter-dropdown.tsx`
 - ~~`src/components/ui/TableExample.tsx`~~ (smazáno - test file)
@@ -692,6 +727,7 @@ Začni s jednoduchými soubory (1-3 stringy) pro rychlý pokrok.
 ## 📞 Kontakt a podpora
 
 Pokud narazíš na problémy:
+
 1. Zkontroluj že máš správně naimportovaný `useIntl` a `message`
 2. Ověř že překlad existuje v en.ts
 3. Spusť `yarn build` pro aktuální seznam varování

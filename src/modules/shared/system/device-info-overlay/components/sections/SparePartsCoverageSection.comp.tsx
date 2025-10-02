@@ -15,7 +15,9 @@ import { SystemDetailParameter } from '../system-detail-parameter.comp'
 
 interface SparePartsCoverageSectionProps {
   systemDetail: any
-  withDirtyProtection?: <T extends any[]>(callback: (...args: T) => void) => (...args: T) => void
+  withDirtyProtection?: <T extends any[]>(
+    callback: (...args: T) => void
+  ) => (...args: T) => void
 }
 
 export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({

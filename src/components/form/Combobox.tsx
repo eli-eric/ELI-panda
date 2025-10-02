@@ -142,9 +142,7 @@ const Combobox = ({
                     )}
                     disabled={disabled}
                   >
-                    {field.value?.name ||
-                      placeholder ||
-                      'Select option...'}
+                    {field.value?.name || placeholder || 'Select option...'}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
                 </PopoverTrigger>

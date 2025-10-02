@@ -7,24 +7,43 @@ let formatterCounter = 0
 export const messageFormatters = {
   medium: (chunks: React.ReactNode) => {
     const key = `medium-${formatterCounter++}`
-    return <span key={key} className="font-medium">{chunks}</span>
+    return (
+      <span key={key} className="font-medium">
+        {chunks}
+      </span>
+    )
   },
   small: (chunks: React.ReactNode) => {
     const key = `small-${formatterCounter++}`
-    return <span key={key} className="text-xs">{chunks}</span>
+    return (
+      <span key={key} className="text-xs">
+        {chunks}
+      </span>
+    )
   },
   strong: (chunks: React.ReactNode) => {
     const key = `strong-${formatterCounter++}`
-    return <span key={key} className="font-bold">{chunks}</span>
+    return (
+      <span key={key} className="font-bold">
+        {chunks}
+      </span>
+    )
   },
   underline: (chunks: React.ReactNode) => {
     const key = `underline-${formatterCounter++}`
-    return <span key={key} className="underline">{chunks}</span>
+    return (
+      <span key={key} className="underline">
+        {chunks}
+      </span>
+    )
   },
   label: (chunks: React.ReactNode) => {
     const key = `label-${formatterCounter++}`
     return (
-      <span key={key} className="text-sm font-medium text-gray-700 dark:text-gray-200">
+      <span
+        key={key}
+        className="text-sm font-medium text-gray-700 dark:text-gray-200"
+      >
         {chunks}
       </span>
     )
@@ -32,7 +51,9 @@ export const messageFormatters = {
   p: (chunks: React.ReactNode) => {
     const key = `p-${formatterCounter++}`
     return (
-      <p key={key} className="text-gray-500 dark:text-gray-200">{chunks}</p>
+      <p key={key} className="text-gray-500 dark:text-gray-200">
+        {chunks}
+      </p>
     )
   }
 }

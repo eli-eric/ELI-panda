@@ -89,7 +89,10 @@ const Listbox = ({
     if (customOptions) {
       targetOptions.push(
         ...customOptions.map(item =>
-          typeof item === 'object' && item !== null && 'uid' in item && 'name' in item
+          typeof item === 'object' &&
+          item !== null &&
+          'uid' in item &&
+          'name' in item
             ? item
             : { uid: item, name: item }
         )

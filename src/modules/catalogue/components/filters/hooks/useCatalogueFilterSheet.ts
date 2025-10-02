@@ -16,7 +16,12 @@ export const useCatalogueFilterSheet = () => {
   const { openModal } = useModalGlobalStore()
 
   const openFilterSheet = useCallback(
-    ({ tableId = 'catalogueItems', enableQueryURL = true, side = 'left', filterFormMethods }: UseCatalogueFilterSheetProps) => {
+    ({
+      tableId = 'catalogueItems',
+      enableQueryURL = true,
+      side = 'left',
+      filterFormMethods
+    }: UseCatalogueFilterSheetProps) => {
       openModal('sheet', {
         component: CatalogueFilterSheet,
         props: {

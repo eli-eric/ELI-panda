@@ -58,7 +58,8 @@ export const InlineEditTextArea = ({
           }
         }
 
-        const displayValue = field.value || fm({ id: message.common.form.notAvailable })
+        const displayValue =
+          field.value || fm({ id: message.common.form.notAvailable })
         const shortValue =
           displayValue.length > 100
             ? `${displayValue.substring(0, 100)}...`
@@ -100,7 +101,8 @@ export const InlineEditTextArea = ({
             <div className="text-sm text-foreground whitespace-pre-wrap break-words">
               {shortValue === fm({ id: message.common.form.notAvailable }) ? (
                 <span className="text-muted-foreground italic">
-                  {fm({ id: message.common.ui.clickToAdd })} {label?.toLowerCase()}
+                  {fm({ id: message.common.ui.clickToAdd })}{' '}
+                  {label?.toLowerCase()}
                 </span>
               ) : (
                 shortValue

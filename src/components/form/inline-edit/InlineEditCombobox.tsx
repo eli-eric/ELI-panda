@@ -104,7 +104,8 @@ export const InlineEditCombobox = ({
               </span>
               <div className="text-right max-w-[60%] flex-1 min-w-0 overflow-hidden">
                 <span className="block w-full truncate text-foreground">
-                  {field.value?.name || fm({ id: message.common.form.notAvailable })}
+                  {field.value?.name ||
+                    fm({ id: message.common.form.notAvailable })}
                 </span>
               </div>
             </div>
@@ -133,7 +134,8 @@ export const InlineEditCombobox = ({
                 </span>
                 <div className="text-right max-w-[60%] flex items-center gap-1 flex-1 min-w-0 overflow-hidden">
                   <span className="block w-full truncate text-foreground">
-                    {field.value?.name || fm({ id: message.common.form.notAvailable })}
+                    {field.value?.name ||
+                      fm({ id: message.common.form.notAvailable })}
                   </span>
                   <ChevronsUpDown className="size-3 text-muted-foreground" />
                 </div>
@@ -150,7 +152,9 @@ export const InlineEditCombobox = ({
                   onValueChange={setQuery}
                 />
                 <CommandList>
-                  <CommandEmpty>{fm({ id: message.common.ui.noItemsFound })}</CommandEmpty>
+                  <CommandEmpty>
+                    {fm({ id: message.common.ui.noItemsFound })}
+                  </CommandEmpty>
                   <CommandGroup>
                     {options?.data?.map(item => (
                       <CommandItem

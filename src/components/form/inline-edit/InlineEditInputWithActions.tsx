@@ -94,9 +94,7 @@ export const InlineEditInputWithActions = ({
                   )}
                 </div>
                 {actions && (
-                  <div className="flex items-center gap-1">
-                    {actions}
-                  </div>
+                  <div className="flex items-center gap-1">{actions}</div>
                 )}
               </div>
             </div>
@@ -122,7 +120,9 @@ export const InlineEditInputWithActions = ({
                   {field.value || 'N/A'} {unit && `[${unit}]`}
                 </span>
                 {error && (
-                  <div className="text-xs text-destructive">{error.message}</div>
+                  <div className="text-xs text-destructive">
+                    {error.message}
+                  </div>
                 )}
               </div>
             </div>

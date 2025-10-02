@@ -14,7 +14,11 @@ export const useOrdersFilterSheet = () => {
   const { openModal } = useModalGlobalStore()
 
   const openFilterSheet = useCallback(
-    ({ tableId = 'orders', enableQueryURL = true, side = 'left' }: UseOrdersFilterSheetProps = {}) => {
+    ({
+      tableId = 'orders',
+      enableQueryURL = true,
+      side = 'left'
+    }: UseOrdersFilterSheetProps = {}) => {
       openModal('sheet', {
         component: OrdersFilterSheet,
         props: {

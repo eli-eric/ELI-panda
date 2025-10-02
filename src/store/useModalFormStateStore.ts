@@ -6,7 +6,7 @@ interface ModalFormState {
   reset: () => void
 }
 
-export const useModalFormStateStore = create<ModalFormState>((set) => ({
+export const useModalFormStateStore = create<ModalFormState>(set => ({
   isDirty: false,
   setIsDirty: (dirty: boolean) => set({ isDirty: dirty }),
   reset: () => set({ isDirty: false })

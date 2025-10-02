@@ -1,4 +1,4 @@
-import { AlertCircle,ChevronDown } from 'lucide-react'
+import { AlertCircle, ChevronDown } from 'lucide-react'
 
 export const ValidationIcon = () => (
   <div

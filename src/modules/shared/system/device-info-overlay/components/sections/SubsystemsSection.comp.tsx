@@ -26,7 +26,9 @@ import type { SystemLevel } from '@/types/gql/graphql'
 
 interface SubsystemsSectionProps {
   systemDetail: any
-  withDirtyProtection?: <T extends any[]>(callback: (...args: T) => void) => (...args: T) => void
+  withDirtyProtection?: <T extends any[]>(
+    callback: (...args: T) => void
+  ) => (...args: T) => void
 }
 
 export const SubsystemsSection: FC<SubsystemsSectionProps> = ({
@@ -114,7 +116,9 @@ export const SubsystemsSection: FC<SubsystemsSectionProps> = ({
       <div className="mb-3">
         <input
           type="text"
-          placeholder={fm({ id: message.common.systemOverlay.filterSubsystems })}
+          placeholder={fm({
+            id: message.common.systemOverlay.filterSubsystems
+          })}
           value={globalFilter}
           onChange={e => setGlobalFilter(e.target.value)}
           className="w-full px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"

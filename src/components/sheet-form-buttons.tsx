@@ -75,9 +75,7 @@ export const SheetFormButtons = ({
               onClick={handleSubmit}
               disabled={loading || !isFormDirty}
             >
-              {loading && (
-                <Loader2 className="size-3 animate-spin mr-2" />
-              )}
+              {loading && <Loader2 className="size-3 animate-spin mr-2" />}
               {saveLabel}
             </Button>
             <Button
@@ -86,9 +84,7 @@ export const SheetFormButtons = ({
               disabled={loading}
               variant="outline"
             >
-              {loading && (
-                <Loader2 className="size-3 animate-spin mr-2" />
-              )}
+              {loading && <Loader2 className="size-3 animate-spin mr-2" />}
               {exitLabel}
             </Button>
           </div>

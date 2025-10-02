@@ -44,7 +44,7 @@ const initialSlot = (priority: number): ModalSlot => ({
   priority
 })
 
-export const useModalGlobalStore = create<ModalGlobalState>((set) => ({
+export const useModalGlobalStore = create<ModalGlobalState>(set => ({
   sheet: initialSlot(0),
   dialog1: initialSlot(1),
   dialog2: initialSlot(2),

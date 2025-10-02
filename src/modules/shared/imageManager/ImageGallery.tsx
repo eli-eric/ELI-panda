@@ -279,7 +279,9 @@ export const ImageGallery = forwardRef(
                   <p className="text-xs font-medium text-foreground">
                     {hasEditRole
                       ? fm({ id: message.common.imageGallery.uploadAnImage })
-                      : fm({ id: message.common.imageGallery.noImagesAvailable })}
+                      : fm({
+                          id: message.common.imageGallery.noImagesAvailable
+                        })}
                   </p>
                   {hasEditRole && (
                     <p className="text-xs text-muted-foreground opacity-75">

@@ -16,7 +16,12 @@ export const useSystemsFilterSheet = () => {
   const { openModal } = useModalGlobalStore()
 
   const openFilterSheet = useCallback(
-    ({ tableId = 'systems', enableQueryURL = true, disabledFields, side = 'left' }: UseSystemsFilterSheetProps = {}) => {
+    ({
+      tableId = 'systems',
+      enableQueryURL = true,
+      disabledFields,
+      side = 'left'
+    }: UseSystemsFilterSheetProps = {}) => {
       openModal('sheet', {
         component: SystemsFilterSheet,
         props: {
