@@ -254,6 +254,31 @@ export const messages = {
       movedItemFrom: 'moved item from',
       sparePartsAvailable: 'Available {available} out of {required} required'
     },
+    systemsMultiMove: {
+      moveSystemsHere: 'Move Systems here'
+    },
+    systemsMoving: {
+      targetSystem: 'Target System:'
+    },
+    systemsSpareParts: {
+      assignSpareParts: 'Assign Spare Parts'
+    },
+    pages: {
+      administration: 'Administration',
+      adminSection: 'Admin Section',
+      quickNavigation: 'Quick navigation to all modules',
+      underConstruction: 'Under construction',
+      underConstructionMessage:
+        'This page is under construction. Please check back later.',
+      reports: 'Reports',
+      loading: 'Loading...',
+      systemNotFound: 'System not found',
+      systemNotFoundMessage:
+        'The system by alias was not found. Please check the URL and try again.',
+      systemsOverview: 'Systems Overview',
+      systemsMoving: 'Systems Moving',
+      spareParts: 'Spare Parts'
+    },
     table: {
       category: 'Category'
     },

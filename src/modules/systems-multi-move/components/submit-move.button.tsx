@@ -1,11 +1,15 @@
+import { useIntl } from 'react-intl'
+
 import { Button } from '@/components/Buttons'
 import { Tooltip } from '@/components/Tooltip'
+import { message } from '@/i18n/src/messages'
 import { useRowSelection } from '@/modules/shared/table/pandaTable/hooks/useRowSelection'
 
 import { useMoveSubmit } from '../hooks/useMoveSubmit'
 import { useSystemsMoveStore } from '../store/useSystemsMoveStore'
 
 export const SubmitMoveButton = () => {
+  const { formatMessage: fm } = useIntl()
   const {
     movingSystems,
     destinationSystem,
@@ -43,7 +47,7 @@ export const SubmitMoveButton = () => {
       <Tooltip content="Please select the systems you want to move before proceeding.">
         <div>
           <Button loading={false} disabled>
-            Move Systems here
+            {fm({ id: message.common.systemsMultiMove.moveSystemsHere })}
           </Button>
         </div>
       </Tooltip>
@@ -51,7 +55,7 @@ export const SubmitMoveButton = () => {
   }
   return (
     <Button loading={false} onClick={submit}>
-      Move Systems here
+      {fm({ id: message.common.systemsMultiMove.moveSystemsHere })}
     </Button>
   )
 }

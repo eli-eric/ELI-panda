@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import type { FC } from 'react'
+import { useIntl } from 'react-intl'
 
+import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import { PATH } from '@/types/constants/paths'
 import { formatDate } from '@/utils/formatters'
@@ -13,8 +15,14 @@ interface Props {
 }
 
 export const HistoryFeeds: FC<Props> = ({ history }) => {
+  const { formatMessage: fm } = useIntl()
+
   if (!history || history.length === 0) {
-    return <p className="text-gray-500 dark:text-gray-400">No history found</p>
+    return (
+      <p className="text-gray-500 dark:text-gray-400">
+        {fm({ id: message.common.systemItem.noHistoryFound })}
+      </p>
+    )
   }
 
   return (
@@ -36,6 +44,8 @@ interface HistoryFeedItemProps {
 }
 
 const HistoryFeedItem: FC<HistoryFeedItemProps> = ({ historyItem, isLast }) => {
+  const { formatMessage: fm } = useIntl()
+
   return (
     <li className="relative flex gap-x-4 pr-2">
       <div
@@ -53,7 +63,7 @@ const HistoryFeedItem: FC<HistoryFeedItemProps> = ({ historyItem, isLast }) => {
         <span className="font-medium text-gray-900 dark:text-gray-200">
           {historyItem.changedBy}
         </span>{' '}
-        {renderHistoryMessage(historyItem)}
+        {renderHistoryMessage(historyItem, fm)}
       </p>
       <time
         dateTime={historyItem.changedAt}
@@ -65,7 +75,7 @@ const HistoryFeedItem: FC<HistoryFeedItemProps> = ({ historyItem, isLast }) => {
   )
 }
 
-function renderHistoryMessage(historyItem: HistoryResponse) {
+function renderHistoryMessage(historyItem: HistoryResponse, fm: any) {
   const { historyType, action, detail } = historyItem
 
   switch (historyType) {
@@ -74,7 +84,7 @@ function renderHistoryMessage(historyItem: HistoryResponse) {
     case HISTORY_TYPE.ITEM:
       return (
         <>
-          moved Item to{' '}
+          {fm({ id: message.common.systemItem.movedItemTo })}{' '}
           <Link
             href={`${PATH.SYSTEM}/${detail.systemUid}`}
             target="_blank"
@@ -88,7 +98,7 @@ function renderHistoryMessage(historyItem: HistoryResponse) {
       if (detail.direction === 'IN') {
         return (
           <>
-            moved the{' '}
+            {fm({ id: message.common.systemItem.movedThe })}{' '}
             <Link
               href={`${PATH.SYSTEM}/${detail.systemUid}`}
               target="_blank"
@@ -96,13 +106,13 @@ function renderHistoryMessage(historyItem: HistoryResponse) {
             >
               {detail.systemName}
             </Link>{' '}
-            from under that system
+            {fm({ id: message.common.systemItem.fromUnderThatSystem })}
           </>
         )
       } else {
         return (
           <>
-            this system was moved from{' '}
+            {fm({ id: message.common.systemItem.thisSystemWasMovedFrom })}{' '}
             <Link
               href={`${PATH.SYSTEM}/${detail.systemUid}`}
               target="_blank"
@@ -117,7 +127,7 @@ function renderHistoryMessage(historyItem: HistoryResponse) {
       if (detail.direction === 'IN') {
         return (
           <>
-            moved item from{' '}
+            {fm({ id: message.common.systemItem.movedItemFrom })}{' '}
             <Link
               href={`${PATH.SYSTEM}/${detail.systemUid}`}
               target="_blank"
@@ -130,7 +140,7 @@ function renderHistoryMessage(historyItem: HistoryResponse) {
       } else {
         return (
           <>
-            moved item to{' '}
+            {fm({ id: message.common.systemItem.movedItemTo })}{' '}
             <Link
               href={`${PATH.SYSTEM}/${detail.systemUid}`}
               target="_blank"
