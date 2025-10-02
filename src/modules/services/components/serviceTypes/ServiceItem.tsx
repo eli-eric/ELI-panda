@@ -1,6 +1,8 @@
 import Link from 'next/link'
+import { useIntl } from 'react-intl'
 
 import usePermission from '@/hooks/usePermission'
+import { message } from '@/i18n/src/messages'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
@@ -11,8 +13,9 @@ interface ServiceItemProps {
   service: ServiceTypeResponse
 }
 
-export function ServiceItem({ service }: ServiceItemProps) {
-  const hasEditRole = usePermission([ROLE.SERVICE_EDIT])
+export const ServiceItem = ({ service }: ServiceItemProps) => {
+  const { formatMessage: fm } = useIntl()
+  const canEdit = usePermission([ROLE.SERVICE_EDIT])
   return (
     <li>
       <Link href={PATH.SERVICE + '/' + service.uid}>
@@ -24,14 +27,14 @@ export function ServiceItem({ service }: ServiceItemProps) {
                   {service.name}
                 </p>
                 <p className="ml-2 shrink-0 font-normal text-sm text-gray-500">
-                  in {service.category?.name}
+                  {fm({ id: message.common.services.in })} {service.category?.name}
                 </p>
               </div>
               <div className="mt-2">
                 <p className="text-sm text-gray-500">{service.description}</p>
               </div>
             </div>
-            {hasEditRole && (
+            {canEdit && (
               <div className="flex items-center space-x-2">
                 <DeleteServiceButton uid={service.uid} name={service.name} />
               </div>

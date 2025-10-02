@@ -1,7 +1,9 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
+import { useIntl } from 'react-intl'
 
 import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
+import { message } from '@/i18n/src/messages'
 import { ROLE } from '@/types/constants/roles'
 import type { Employee, HallContactPerson, Team } from '@/types/gql/graphql'
 import { formatPhoneNumber } from '@/utils/formatters'
@@ -20,6 +22,7 @@ export type RoomCardProperties = {
 }
 
 export const useRoomCardsColumns = () => {
+  const { formatMessage: fm } = useIntl()
   const {
     setDeleteHallContact,
     setDisconnectDeptContact,
@@ -34,7 +37,7 @@ export const useRoomCardsColumns = () => {
         header: () => {
           return (
             <div className="flex items-center justify-between px-2 w-full">
-              <span>Contact - Hall</span>
+              <span>{fm({ id: message.common.roomCard.contactHall })}</span>
               <ContactHallButton />
             </div>
           )
@@ -75,7 +78,7 @@ export const useRoomCardsColumns = () => {
         ]
       }
     ],
-    [setDeleteHallContact]
+    [fm, setDeleteHallContact]
   )
 
   const columnsContactDept = useMemo(
@@ -84,7 +87,7 @@ export const useRoomCardsColumns = () => {
         header: () => {
           return (
             <div className="flex items-center justify-between px-2 w-full">
-              <span>Contact - Dept.</span>
+              <span>{fm({ id: message.common.roomCard.contactDept })}</span>
               <HeaderAddButton
                 setEmployee={setNewDeptContact}
                 editPersmissionRole={ROLE.ROOM_CARD_EDIT}
@@ -124,7 +127,7 @@ export const useRoomCardsColumns = () => {
         ]
       }
     ],
-    [setDisconnectDeptContact, setNewDeptContact]
+    [fm, setDisconnectDeptContact, setNewDeptContact]
   )
 
   const columnsTeam = useMemo(
@@ -133,7 +136,7 @@ export const useRoomCardsColumns = () => {
         header: () => {
           return (
             <div className="flex items-center justify-between px-2 w-full">
-              <span>Team</span>
+              <span>{fm({ id: message.common.roomCard.team })}</span>
               <TeamButton />
             </div>
           )
@@ -149,7 +152,7 @@ export const useRoomCardsColumns = () => {
         )
       }
     ],
-    [setDisconnectTeam]
+    [fm, setDisconnectTeam]
   )
 
   const columnsCleanRooms = useMemo(

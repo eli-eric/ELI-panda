@@ -183,6 +183,22 @@ export const messages = {
     publications: {
       clickHere: 'Click here'
     },
+    roomCard: {
+      contactHall: 'Contact - Hall',
+      contactDept: 'Contact - Dept.',
+      team: 'Team'
+    },
+    roomCards: {
+      locationFormat: '{name} ({code})'
+    },
+    services: {
+      in: 'in'
+    },
+    catalogue: {
+      ellipsis: '...',
+      showStatistics: 'Show Statistics',
+      deleteItem: 'Delete Item'
+    },
     table: {
       category: 'Category'
     },
