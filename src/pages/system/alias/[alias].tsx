@@ -4,18 +4,15 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import { Fragment } from 'react'
-import { FormattedMessage, useIntl } from 'react-intl'
-import { message } from 'src/i18n/src/messages'
+import { FormattedMessage } from 'react-intl'
 
 import { Button } from '@/components/Buttons'
 import EliLogoComponent from '@/components/eli-logo.comp'
 import ErrorPage from '@/components/error/ErrorPage'
 import LoaderComponent from '@/components/loader.comp'
+import { messages } from '@/i18n/src/locale/en'
 import { useSystemDetail } from '@/modules/systemItem/hooks/useSystemDetail'
 import { PATH } from '@/types/constants/paths'
-
-const messages = message.systemItem
-const { common } = message
 
 interface Props {
   key?: string
@@ -23,14 +20,13 @@ interface Props {
 }
 
 const SystemAliasRedirectPage: NextPage = ({ alias }: Props) => {
-  const intl = useIntl()
-  const { push } = useRouter()
+  const router = useRouter()
   const { status } = useSession()
 
   const { loading, error, systemDetail } = useSystemDetail({ alias }, data => {
     const uid = data?.systems[0]?.uid
     if (uid) {
-      push(PATH.SYSTEM + '/' + uid)
+      router.push(PATH.SYSTEM + '/' + uid)
     }
   })
 
@@ -45,7 +41,9 @@ const SystemAliasRedirectPage: NextPage = ({ alias }: Props) => {
   return (
     <Fragment>
       <Head>
-        <title>{intl.formatMessage({ id: messages.head })}</title>
+        <title>
+          <FormattedMessage id={messages.common.pages.systemNotFound} />
+        </title>
         <meta name="description" content="...." />
       </Head>
       {!systemDetail ? (
@@ -58,16 +56,19 @@ const SystemAliasRedirectPage: NextPage = ({ alias }: Props) => {
             </div>
             <main className="sm:flex">
               <p className="text-4xl font-bold tracking-tight text-orange-500 sm:text-5xl">
-                <FormattedMessage id={common.custom404.title} />
+                <FormattedMessage id={messages.common.recordNotFound.title} />
               </p>
               <div className="sm:ml-6">
                 <div className="sm:border-l sm:border-gray-200 sm:pl-6">
                   <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-200 sm:text-5xl">
-                    System not found
+                    <FormattedMessage
+                      id={messages.common.pages.systemNotFound}
+                    />
                   </h1>
                   <p className="mt-1 text-base text-gray-500">
-                    The system by alias was not found. Please check the URL and
-                    try again.
+                    <FormattedMessage
+                      id={messages.common.pages.systemNotFoundMessage}
+                    />
                   </p>
                 </div>
                 <div className="mt-10 flex space-x-3 sm:border-l sm:border-transparent sm:pl-6">
@@ -77,7 +78,7 @@ const SystemAliasRedirectPage: NextPage = ({ alias }: Props) => {
                     }
                   >
                     <Button>
-                      <FormattedMessage id={common.buttons.home} />
+                      <FormattedMessage id={messages.common.buttons.home} />
                     </Button>
                   </Link>
                 </div>

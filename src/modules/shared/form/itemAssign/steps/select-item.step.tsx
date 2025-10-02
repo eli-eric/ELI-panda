@@ -30,7 +30,7 @@ export const SelectItemStep: FC = () => {
 
   const { setSelectedSystem, selectedSystem } = useModalWizardStore()
 
-  const { goNext, goBack, updateFormData } = useWizardStore()
+  const { goNext, updateFormData } = useWizardStore()
   const { closeModal } = useModalGlobalStore()
 
   const { systems } = useSystems(tableId)

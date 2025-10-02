@@ -6,9 +6,9 @@ import { useIntl } from 'react-intl'
 import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
 import { message } from '@/i18n/src/messages'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
-import { 
-  showErrorToast, 
-  showSuccessToast, 
+import {
+  showErrorToast,
+  showSuccessToast,
   validateSystemForm as validateForm
 } from '@/modules/systemItem/utils/hookHelpers'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
@@ -65,7 +65,7 @@ export const useSystemCreate = (
         message.systemsPage.systemDetail.createModal.onSuccess,
         { name: body.name }
       )
-      
+
       handleCacheUpdate(body)
       closeModal('sheet')
       clear()
@@ -91,7 +91,7 @@ export const useSystemCreate = (
           message.systemsPage.systemDetail.createModal.onSuccessWithImageError,
           { name: body.name }
         )
-        
+
         handleCacheUpdate(body)
         closeModal('sheet')
         clear()
@@ -151,11 +151,7 @@ export const useSystemCreate = (
         ]
       }
     },
-    [
-      parentUid,
-      session?.user?.facilityCode,
-      session?.user?.uid
-    ]
+    [parentUid, session?.user?.facilityCode, session?.user?.uid]
   )
 
   const { mutate: create, isPending } = useGraphQLMutation(
@@ -187,7 +183,6 @@ export const useSystemCreate = (
           }
         })
       } catch (error: any) {
-        console.error('Error creating system:', error)
         showErrorToast(
           intl,
           message.systemsPage.systemDetail.createModal.onCreateError,
@@ -198,8 +193,8 @@ export const useSystemCreate = (
     [intl, validateSystemForm, buildPayload, create, onCompleted]
   )
 
-  return { 
-    createSystem, 
-    loading: isPending 
+  return {
+    createSystem,
+    loading: isPending
   }
 }

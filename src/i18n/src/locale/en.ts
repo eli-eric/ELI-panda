@@ -266,6 +266,9 @@ export const messages = {
     pages: {
       administration: 'Administration',
       adminSection: 'Admin Section',
+      dashboard: 'Dashboard',
+      profile: 'Profile',
+      service: 'Service',
       quickNavigation: 'Quick navigation to all modules',
       underConstruction: 'Under construction',
       underConstructionMessage:

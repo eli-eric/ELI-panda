@@ -1,4 +1,5 @@
 import { sortBy } from 'lodash'
+import type { FC } from 'react'
 import { useCallback, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useIntl } from 'react-intl'
@@ -21,7 +22,7 @@ interface ServiceLineEditSheetProps {
   onClose?: () => void
 }
 
-export const ServiceLineEditSheet: React.FC<ServiceLineEditSheetProps> = ({
+export const ServiceLineEditSheet: FC<ServiceLineEditSheetProps> = ({
   serviceLine,
   onSubmit,
   onClose
@@ -44,6 +45,8 @@ export const ServiceLineEditSheet: React.FC<ServiceLineEditSheetProps> = ({
     }
   })
 
+  const { watch } = formMethods
+
   const handleSubmit = useCallback(
     (data: ServiceLine) => {
       const dataToSave = {
@@ -62,7 +65,7 @@ export const ServiceLineEditSheet: React.FC<ServiceLineEditSheetProps> = ({
   }, [formMethods, onClose])
 
   // Transform details for properties list - memoized to prevent infinite loops
-  const details = formMethods.watch('details') ?? []
+  const details = useMemo(() => watch('details') ?? [], [watch])
   const detailsMap = useMemo(() => {
     const map = Array.isArray(details)
       ? details.reduce((map, detail) => {

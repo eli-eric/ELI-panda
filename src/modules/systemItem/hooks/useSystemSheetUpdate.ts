@@ -1,5 +1,5 @@
 import { useMutation as useQueryMutation } from '@tanstack/react-query'
-import { type MutableRefObject, useState } from 'react'
+import { type MutableRefObject } from 'react'
 import { useIntl } from 'react-intl'
 
 import axiosInstance from '@/core/axios/axiosInstance'
@@ -94,8 +94,6 @@ export const useSystemSheetUpdate = ({
   const { mutate: mutateProperties } = usePropertiesUpdate(physicalItemUid)
   const { systemDetail, refetch, physicalItem } = useSystemDetail()
 
-  const [saveAndExit, setSaveAndExit] = useState(false)
-
   const onFinish = () => {
     setSelectedPhysicalSystem(undefined)
     refetch()
@@ -135,12 +133,7 @@ export const useSystemSheetUpdate = ({
     }
   )
 
-  function updateSystemQuery(
-    systemForm: SystemDetailFormType,
-    saveAndExit: boolean
-  ) {
-    setSaveAndExit(saveAndExit)
-
+  function updateSystemQuery(systemForm: SystemDetailFormType) {
     // Get latest data directly from the store to avoid stale closure values
     const storeData = useSystemItemStore.getState()
     const {
