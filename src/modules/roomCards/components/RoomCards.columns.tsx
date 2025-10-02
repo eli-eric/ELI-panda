@@ -33,9 +33,7 @@ export const useRoomCardsColumns = () => {
         cell: ({ getValue }) => (
           <div>
             {getValue()?.map(location => (
-              <Badge
-                key={location.code}
-              >
+              <Badge key={location.code}>
                 {fm(
                   { id: message.common.roomCards.locationFormat },
                   { name: location.name, code: location.code }

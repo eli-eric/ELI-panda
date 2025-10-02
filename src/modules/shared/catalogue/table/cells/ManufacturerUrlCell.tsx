@@ -11,14 +11,15 @@ export const ManufacturerUrl = ({
   getValue
 }: CellContext<CatalogueItem, any>) => {
   const { formatMessage: fm } = useIntl()
-  
+
   return (
     <Fragment>
       {getValue() && (
         <Link href={getValue()} passHref legacyBehavior>
           <a target="_blank">
             <LinkDecorator>
-              {getValue().substring(0, 25) + fm({ id: message.common.catalogue.ellipsis })}
+              {getValue().substring(0, 25) +
+                fm({ id: message.common.catalogue.ellipsis })}
             </LinkDecorator>
           </a>
         </Link>

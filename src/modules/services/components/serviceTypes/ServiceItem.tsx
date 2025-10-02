@@ -27,7 +27,8 @@ export const ServiceItem = ({ service }: ServiceItemProps) => {
                   {service.name}
                 </p>
                 <p className="ml-2 shrink-0 font-normal text-sm text-gray-500">
-                  {fm({ id: message.common.services.in })} {service.category?.name}
+                  {fm({ id: message.common.services.in })}{' '}
+                  {service.category?.name}
                 </p>
               </div>
               <div className="mt-2">
