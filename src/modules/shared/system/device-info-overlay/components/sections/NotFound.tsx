@@ -27,7 +27,10 @@ export const NotFound = ({ code }: { code: string }) => {
         {fm({ id: message.systemsPage.notFound.heading })}
       </h3>
       <p className="text-sm text-gray-500 dark:text-gray-400 mb-4 max-w-sm">
-        {fm({ id: message.systemsPage.notFound.message })} &quot;{code}&quot;.{' '}
+        {fm({ id: message.systemsPage.notFound.message })}{' '}
+        {fm({ id: message.common.systemOverlay.notFoundQuote })}
+        {code}
+        {fm({ id: message.common.systemOverlay.notFoundQuote })}.{' '}
         {fm({ id: message.systemsPage.notFound.mayNotExist })}
       </p>
       <div className="text-xs text-gray-400 dark:text-gray-500">

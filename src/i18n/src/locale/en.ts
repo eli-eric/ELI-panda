@@ -18,7 +18,9 @@ export const messages = {
       logOut: 'Log out',
       delete: 'Delete',
       copy: 'Copy',
-      generate: 'Gen'
+      generate: 'Gen',
+      edit: 'Edit',
+      addTag: 'Add Tag',
     },
     custom404: {
       title: '404',
@@ -89,7 +91,23 @@ export const messages = {
       deleteOrder: 'Delete Order',
       filter: 'Filter',
       clear: 'Clear',
-      apply: 'Apply'
+      apply: 'Apply',
+      loading: 'Loading...',
+      items: 'items',
+      facilities: 'facilities',
+      found: 'Found',
+      debugInfo: 'Debug Info:',
+      physicalItemsStatistics: 'Physical Items Statistics',
+      noStatisticsAvailable: 'No statistics available',
+      allFacilities: 'All Facilities',
+      addRelatedItem: 'Add Related Item',
+      adding: 'Adding...',
+      ofTotalPercent: '% of total',
+      facilitiesOverview: 'Facilities Overview',
+      noStatisticsAvailableForItem: 'No statistics available for this item',
+      itemsCount: '{count} items',
+      foundFacilities: 'Found {count} facilities',
+      status: 'Status'
     },
     navigation: {
       modules: 'Modules',
@@ -102,6 +120,27 @@ export const messages = {
       noImagesAvailable: 'No images available',
       pngJpgInfo: 'PNG, JPG up to 10MB',
       confirmDelete: 'Are you sure you want to delete'
+    },
+    files: {
+      title: 'Files',
+      uploadFile: 'Upload File',
+      addLink: 'Add Link',
+      dropFilesHereOr: 'Drop files here or',
+      browse: 'browse',
+      tagName: 'Tag Name',
+      addTagTitle: 'Add Tag',
+      createLinkTitle: 'Create Link',
+      linkUrl: 'Link URL',
+      linkUrlPlaceholder: 'Paste or type URL here',
+      linkName: 'Link Name',
+      linkNamePlaceholder: 'Enter a name for this link',
+      name: 'Name',
+      tags: 'Tags',
+      size: 'Size',
+      dash: '—',
+      fileSizeMb: '{value} MB',
+      fileSizeKb: '{value} KB',
+      actions: 'Actions'
     },
     fileManager: {
       deleteModal: {
@@ -117,7 +156,35 @@ export const messages = {
       unsavedChanges: 'You have unsaved changes',
       notAvailable: 'N/A'
     },
-    files: { title: 'Files' },
+    systemOverlay: {
+      order: 'Order:',
+      serviceProperties: 'Service Properties:',
+      spareParts: 'Spare Parts:',
+      relatedSystems: 'Related Systems:',
+      showingSubsystems: 'Showing {shown} of {total} subsystems',
+      coveragePercent: '{percent}%',
+      hierarchyArrow: '→',
+      failedToLoad: 'Failed to load system information',
+      viewServiceDetails: 'View Service Details',
+      useSpare: 'Use Spare',
+      designatedSparePart: 'Designated spare part for:',
+      originalCatalogParameter: '*Original catalog parameter modified by Service',
+      jobPosition: ' ({position})',
+      notFoundQuote: '"',
+      showing: 'Showing',
+      of: 'of',
+      subsystems: 'subsystems',
+      subsystem: 'Subsystem',
+      filterSubsystems: 'Filter subsystems...',
+      systemHierarchy: 'System Hierarchy',
+      location: 'Location:'
+    },
+    publications: {
+      clickHere: 'Click here'
+    },
+    table: {
+      category: 'Category'
+    },
     noResults: 'No options.'
   },
   layout: {
@@ -470,9 +537,24 @@ export const messages = {
       }
     },
     serviceLines: {
+      update: 'Update Service Line',
+      properties: 'Properties',
       deleteModal: {
         title: 'Warning',
         message: 'Are you sure you want to delete {name}?'
+      },
+      titles: {
+        edit: 'Edit Service Line'
+      },
+      tooltips: {
+        editServiceLine: 'Edit service line',
+        deleteServiceLine: 'Delete service line',
+        markAllAsDelivered: 'Mark All as Delivered'
+      },
+      selectable: {
+        checkedIncluded: 'Checked properties will be included in the service line',
+        uncheckedExcluded: 'Unchecked properties will be disabled and excluded from the service line',
+        error: 'Something went wrong'
       },
       columns: {
         name: 'Name',
@@ -484,6 +566,7 @@ export const messages = {
       },
 
       header: 'Service Lines',
+      totalLines: 'Total: {count} line(s)',
       wizard: {
         steps: {
           step1: {
@@ -551,6 +634,12 @@ export const messages = {
         'Order lines or Service lines is missing are you sure you want to continue?'
     },
     orderLines: {
+      update: 'Update Order Line',
+      titles: {
+        add: 'Add Order Line',
+        edit: 'Edit Order Line'
+      },
+      actionsMenuAriaLabel: 'Order line actions',
       formHeadings: {
         itemInfo: 'Item Info',
         systemInfo: 'System Info'
@@ -588,6 +677,7 @@ export const messages = {
           service: 'Last Service'
         }
       },
+      totalLines: 'Total: {count} line(s)',
       deleteModal: {
         title: 'Warning',
         message: 'Are you sure you want to delete <medium>{name}</medium>?'
@@ -595,7 +685,9 @@ export const messages = {
       missingSerialNumber: {
         title: 'Warning',
         message: 'Serial number is missing, please fill it.'
-      }
+      },
+      eunPrintedSuccessfully: 'EUN {eun} printed successfully',
+      printEunTooltip: 'Print EUN'
     }
   },
   codebooksPage: {
@@ -792,6 +884,7 @@ export const messages = {
       confirmDelete: 'Are you sure you want to remove this Category?',
       confirmCopy: 'Are you sure you want to copy this Category?',
       editCopied: 'Edit Copied Category',
+      editCategory: 'Edit Category',
       save: 'Save Category',
       saving: 'Saving category...',
       basicInformation: 'Basic Information',
@@ -802,7 +895,27 @@ export const messages = {
       retry: 'Retry',
       deleted: 'Category deleted successfully',
       failedToLoadList: 'Failed to fetch categories',
-      errorFetching: 'Error fetching category: {reason}'
+      errorFetching: 'Error fetching category: {reason}',
+      groupName: 'Group name',
+      groupAdd: 'Add Group',
+      groupProperties: 'Group properties',
+      physicalItemPropertiesTitle: 'Physical Item Properties',
+      propertyName: 'Property name',
+      propertyType: 'Property type',
+      propertyUnit: 'Unit',
+      propertyDefaultValue: 'Default value',
+      propertyRemove: 'Remove property',
+      propertyListOfValues: 'List of Values:',
+      propertyAdd: 'Add Property',
+      propertyAddValue: 'Add Value',
+      propertyEnterValue: 'Enter value',
+      propertyAddTooltip: 'Add value to property: {name}',
+      propertyAddToGroupTooltip: 'Add property to group: {name}',
+      unnamedProperty: 'Unnamed Property',
+      unnamedGroup: 'Unnamed Group',
+      selectDefaultValue: 'Select default value',
+      selectType: 'Select type',
+      selectUnit: 'Select unit'
     },
     items: {
       errorFetching: 'Error fetching catalogue items: {reason}'

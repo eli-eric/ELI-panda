@@ -2,12 +2,14 @@ import { Plus, Trash2 } from 'lucide-react'
 import { startTransition, useEffect } from 'react'
 import type { FieldArrayPath } from 'react-hook-form'
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 
 import { Input } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
 import { Tooltip } from '@/components/Tooltip'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import { message } from '@/i18n/src/messages'
 import {
   defaultBoolOptions,
   PROPERTY_INPUT_TYPE,
@@ -22,13 +24,18 @@ import MoveButtons from './MoveButtons'
 
 //eslint-disable-next-line
 const ValueItem = ({ removeValue, index, name }) => {
+  const { formatMessage: fm } = useIntl()
   const handleRemoveValue = () => {
     removeValue(index)
   }
 
   return (
     <div className="flex gap-2 mb-2">
-      <Input name={`${name}`} placeholder="Enter value" className="flex-1" />
+      <Input
+        name={`${name}`}
+        placeholder={fm({ id: message.catalogue.category.propertyEnterValue })}
+        className="flex-1"
+      />
       <Button
         type="button"
         variant="outline"
@@ -63,6 +70,7 @@ const PropertyItem = ({
   lenght
 }: Props) => {
   const { watch, control, unregister } = useFormContext<CategoryFormType>()
+  const { formatMessage: fm } = useIntl()
   const { fields, append, remove } = useFieldArray<
     CategoryFormType,
     FieldArrayPath<CategoryFormType>
@@ -81,7 +89,6 @@ const PropertyItem = ({
   const type = useWatch({ control, name: `${name}.type` })
   const propertyName = useWatch({ control, name: `${name}.name` })
 
-
   /* const getDefaultOption = (name, disabled = false) => ({
     value: '',
     name,
@@ -99,16 +106,20 @@ const PropertyItem = ({
   const getDefaultField = (type?: PROPERTY_TYPE | string) => {
     switch (type) {
       case PROPERTY_TYPE.LIST:
-        const currentListValues = fields.map((field, index) => {
-          const fieldValue = watch(`${name}.listOfValues.${index}`)
-          return fieldValue || ''
-        }).filter(value => value.trim() !== '')
+        const currentListValues = fields
+          .map((field, index) => {
+            const fieldValue = watch(`${name}.listOfValues.${index}`)
+            return fieldValue || ''
+          })
+          .filter(value => value.trim() !== '')
 
         return (
           <Listbox
             name={`${name}.defaultValue`}
             allowEmptyOption={true}
-            emptyOption="Select default value"
+            emptyOption={fm({
+              id: message.catalogue.category.selectDefaultValue
+            })}
             customOptions={currentListValues}
           />
         )
@@ -117,7 +128,9 @@ const PropertyItem = ({
           <Listbox
             name={`${name}.defaultValue`}
             allowEmptyOption={true}
-            emptyOption="Select default value"
+            emptyOption={fm({
+              id: message.catalogue.category.selectDefaultValue
+            })}
             customOptions={[...defaultBoolOptions]}
           />
         )
@@ -128,7 +141,9 @@ const PropertyItem = ({
           <Input
             name={`${name}.defaultValue`}
             type={type && PROPERTY_INPUT_TYPE[type]}
-            placeholder="Default value"
+            placeholder={fm({
+              id: message.catalogue.category.propertyDefaultValue
+            })}
             disabled={!type}
           />
         )
@@ -151,22 +166,26 @@ const PropertyItem = ({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-muted-foreground">
-                  Property name
+                  {fm({ id: message.catalogue.category.propertyName })}
                 </label>
                 <Input
                   name={`${name}.name`}
-                  placeholder="Enter property name"
+                  placeholder={fm({
+                    id: message.catalogue.category.propertyName
+                  })}
                 />
               </div>
 
               <div className="space-y-2">
                 <label className="text-sm font-medium text-muted-foreground">
-                  Property type
+                  {fm({ id: message.catalogue.category.propertyType })}
                 </label>
                 <Listbox
                   name={`${name}.type`}
                   optionsSize={'sm'}
-                  emptyOption="Select type"
+                  emptyOption={fm({
+                    id: message.catalogue.category.selectType
+                  })}
                   allowEmptyOption={false}
                   codebook={CODEBOOK.CATALOGUE_PROPERTY_TYPE}
                 />
@@ -174,12 +193,14 @@ const PropertyItem = ({
 
               <div className="space-y-2">
                 <label className="text-sm font-medium text-muted-foreground">
-                  Unit
+                  {fm({ id: message.catalogue.category.propertyUnit })}
                 </label>
                 <Listbox
                   name={`${name}.unit`}
                   optionsSize={'sm'}
-                  emptyOption="Select unit"
+                  emptyOption={fm({
+                    id: message.catalogue.category.selectUnit
+                  })}
                   allowEmptyOption={true}
                   codebook={CODEBOOK.UNIT}
                 />
@@ -187,7 +208,7 @@ const PropertyItem = ({
 
               <div className="space-y-2">
                 <label className="text-sm font-medium text-muted-foreground">
-                  Default value
+                  {fm({ id: message.catalogue.category.propertyDefaultValue })}
                 </label>
                 {getDefaultField(type?.uid)}
               </div>
@@ -203,7 +224,7 @@ const PropertyItem = ({
                 className="text-destructive hover:text-destructive-foreground hover:bg-destructive"
               >
                 <Trash2 className="h-4 w-4 mr-2" />
-                Remove property
+                {fm({ id: message.catalogue.category.propertyRemove })}
               </Button>
             </div>
 
@@ -211,7 +232,7 @@ const PropertyItem = ({
             {type?.uid === PROPERTY_TYPE.LIST && (
               <div className="border-t pt-4">
                 <h4 className="text-sm font-medium mb-3 text-muted-foreground">
-                  List of Values:
+                  {fm({ id: message.catalogue.category.propertyListOfValues })}
                 </h4>
                 <div className="space-y-2">
                   {fields.map((field, index) => (
@@ -223,7 +244,14 @@ const PropertyItem = ({
                     />
                   ))}
                   <Tooltip
-                    content={`Add value to property: ${propertyName || 'Unnamed Property'}`}
+                    content={fm(
+                      { id: message.catalogue.category.propertyAddTooltip },
+                      {
+                        name:
+                          propertyName ||
+                          fm({ id: message.catalogue.category.unnamedProperty })
+                      }
+                    )}
                   >
                     <Button
                       type="button"
@@ -233,7 +261,7 @@ const PropertyItem = ({
                       className="w-full border-dashed"
                     >
                       <Plus className="h-4 w-4 mr-2" />
-                      Add Value
+                      {fm({ id: message.catalogue.category.propertyAddValue })}
                     </Button>
                   </Tooltip>
                 </div>

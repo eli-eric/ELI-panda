@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -10,6 +10,7 @@ import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import { useLinkCreate } from './hooks/useLinks'
 
 const buttons = message.common.buttons
+const filesMsg = message.common.files
 
 export function LinkModalContent({
   parentUid,
@@ -20,6 +21,7 @@ export function LinkModalContent({
 }) {
   const [linkValue, setLinkValue] = useState('')
   const [linkName, setLinkName] = useState('')
+  const { formatMessage: fm } = useIntl()
 
   const { mutate: linkCreate } = useLinkCreate({ parentUid })
 
@@ -33,21 +35,25 @@ export function LinkModalContent({
   return (
     <div className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="link-url">Link URL</Label>
+        <Label htmlFor="link-url">
+          <FormattedMessage id={filesMsg.linkUrl} />
+        </Label>
         <Input
           id="link-url"
           type="text"
-          placeholder="Paste or type URL here"
+          placeholder={fm({ id: filesMsg.linkUrlPlaceholder })}
           value={linkValue}
           onChange={e => setLinkValue(e.target.value)}
         />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="link-name">Link Name</Label>
+        <Label htmlFor="link-name">
+          <FormattedMessage id={filesMsg.linkName} />
+        </Label>
         <Input
           id="link-name"
           type="text"
-          placeholder="Enter a name for this link"
+          placeholder={fm({ id: filesMsg.linkNamePlaceholder })}
           value={linkName}
           onChange={e => setLinkName(e.target.value)}
         />
@@ -74,7 +80,7 @@ export function openLinkModal({ parentUid }: { parentUid?: string }) {
   const { openModal } = useModalGlobalStore.getState()
   openModal('dialog1', {
     component: LinkModalContent,
-    props: { parentUid, title: 'Create Link' },
+    props: { parentUid, title: message.common.files.createLinkTitle },
     onClose: undefined
   })
 }

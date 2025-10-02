@@ -1,6 +1,7 @@
-import { FileText, Link, Upload } from 'lucide-react'
 import { useCallback, useMemo, useRef } from 'react'
 import { useDropzone } from 'react-dropzone'
+import { useIntl } from 'react-intl'
+import { FileText, Link, Upload } from 'lucide-react'
 
 import { Heading } from '@/components/layout/Heading'
 import ProgressBarComponent from '@/components/progress-bar.comp'
@@ -33,6 +34,7 @@ const FileManager = ({
   customTitle,
   allowMultiple = true
 }: FileManagerProps) => {
+  const { formatMessage: fm } = useIntl()
   const { data: filesData } = useFiles({ itemType, uid })
   const { data: linksData } = useLinks({ uid })
   // No local state needed for openLinkModal; use global modal API
@@ -97,7 +99,7 @@ const FileManager = ({
               size="sm"
             >
               <FileText className="h-4 w-4" />
-              Upload File
+              {fm({ id: message.common.files.uploadFile })}
             </Button>
             <Button
               onClick={() => openLinkModal({ parentUid: uid })}
@@ -106,7 +108,7 @@ const FileManager = ({
               size="sm"
             >
               <Link className="h-4 w-4" />
-              Add Link
+              {fm({ id: message.common.files.addLink })}
             </Button>
             <input
               {...getInputProps()}
@@ -143,13 +145,13 @@ const FileManager = ({
           <div className="flex flex-col items-center gap-2">
             <Upload className="h-8 w-8 text-muted-foreground" />
             <div className="text-sm text-muted-foreground">
-              <span>Drop files here or </span>
+              <span>{fm({ id: message.common.files.dropFilesHereOr })} </span>
               <button
                 className="text-primary hover:underline font-medium"
                 onClick={handleFileUpload}
                 type="button"
               >
-                browse
+                {fm({ id: message.common.files.browse })}
               </button>
             </div>
           </div>

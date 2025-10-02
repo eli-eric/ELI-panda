@@ -1,6 +1,8 @@
 import { type FC, Fragment } from 'react'
+import { useIntl } from 'react-intl'
 
 import { Disclosure } from '@/components/ui'
+import { message } from '@/i18n/src/messages'
 import { PATH } from '@/types/constants/paths'
 
 import { SystemDetailParameter } from '../system-detail-parameter.comp'
@@ -13,6 +15,8 @@ interface ServiceItemsSectionProps {
 export const ServiceItemsSection: FC<ServiceItemsSectionProps> = ({
   serviceItems
 }) => {
+  const { formatMessage: fm } = useIntl()
+  
   if (serviceItems.length === 0) return null
 
   return (
@@ -36,7 +40,7 @@ export const ServiceItemsSection: FC<ServiceItemsSectionProps> = ({
               <div className="grid grid-cols-1 gap-2 text-sm">
                 <div className="flex justify-between items-center">
                   <span className="text-xs font-medium text-gray-600 dark:text-gray-400">
-                    Order:
+                    {fm({ id: message.common.systemOverlay.order })}
                   </span>
                   <SystemLink
                     href={`/orders/${serviceItem.order.uid}`}
@@ -66,7 +70,7 @@ export const ServiceItemsSection: FC<ServiceItemsSectionProps> = ({
             {serviceItemProperties.length > 0 && (
               <div className="pt-2">
                 <p className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-2">
-                  Service Properties:
+                  {fm({ id: message.common.systemOverlay.serviceProperties })}
                 </p>
                 <div className="grid grid-cols-1 gap-2">
                   {serviceItemProperties.map(edge => {
@@ -107,7 +111,7 @@ export const ServiceItemsSection: FC<ServiceItemsSectionProps> = ({
                 variant="button"
                 className="w-full justify-center text-sm py-2"
               >
-                View Service Details
+                {fm({ id: message.common.systemOverlay.viewServiceDetails })}
               </SystemLink>
             </div>
           </Disclosure>

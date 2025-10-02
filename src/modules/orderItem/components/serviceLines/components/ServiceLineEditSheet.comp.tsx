@@ -1,12 +1,14 @@
 import { sortBy } from 'lodash'
 import { useCallback, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 
 import { Button } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
 import { Input, TextArea } from '@/components/form/inputs'
 import { InputAmountCurrency } from '@/components/form/inputs/components/InputAmountCurrency.comp'
 import Listbox from '@/components/form/Listbox'
+import { message } from '@/i18n/src/messages'
 import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
 import type { ServiceLine } from '@/modules/orderItem/types/form'
 
@@ -25,6 +27,7 @@ export const ServiceLineEditSheet: React.FC<ServiceLineEditSheetProps> = ({
   onClose
 }) => {
   const fields = useServiceLineFields()
+  const { formatMessage: fm } = useIntl()
   const formMethods = useForm<ServiceLine>({
     defaultValues: {
       uuid: serviceLine.uuid,
@@ -88,7 +91,12 @@ export const ServiceLineEditSheet: React.FC<ServiceLineEditSheetProps> = ({
           <div className="space-y-6">
             {/* Basic Information */}
             <div className="space-y-4">
-              <h3 className="text-lg font-medium">Basic Information</h3>
+              <h3 className="text-lg font-medium">
+                {fm({
+                  id: 'ordersPage.serviceLines.wizard.steps.step1.title',
+                  defaultMessage: 'Basic Information'
+                })}
+              </h3>
 
               <div className="space-y-4">
                 <Input {...fields.name} />
@@ -108,7 +116,12 @@ export const ServiceLineEditSheet: React.FC<ServiceLineEditSheetProps> = ({
             {/* Details Properties */}
             {detailsMap.size > 0 && (
               <div className="space-y-4">
-                <h3 className="text-lg font-medium">Properties</h3>
+                <h3 className="text-lg font-medium">
+                  {fm({
+                    id: 'ordersPage.serviceLines.properties',
+                    defaultMessage: 'Properties'
+                  })}
+                </h3>
                 <DetailPropertiesList groupMap={detailsMap} disabled={false} />
               </div>
             )}
@@ -120,13 +133,16 @@ export const ServiceLineEditSheet: React.FC<ServiceLineEditSheetProps> = ({
       <div className="border-t bg-background p-6">
         <div className="flex justify-end gap-3">
           <Button type="button" variant="outline" onClick={handleCancel}>
-            Cancel
+            {fm({ id: message.common.buttons.cancel })}
           </Button>
           <Button
             type="button"
             onClick={formMethods.handleSubmit(handleSubmit)}
           >
-            Update Service Line
+            {fm({
+              id: 'ordersPage.serviceLines.update',
+              defaultMessage: 'Update Service Line'
+            })}
           </Button>
         </div>
       </div>

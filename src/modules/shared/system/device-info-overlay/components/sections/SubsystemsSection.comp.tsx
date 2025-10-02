@@ -11,9 +11,11 @@ import {
 import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react'
 import { ExternalLink } from 'lucide-react'
 import { type FC, useMemo, useState } from 'react'
+import { useIntl } from 'react-intl'
 
 import { Disclosure } from '@/components/ui'
 import { Badge } from '@/components/ui/badge'
+import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import { useSystemStore } from '@/modules/shared/system/device-info-overlay/store/useShowDeviceStore'
 import { fuzzyFilter } from '@/modules/shared/table/pandaTable/utils'
@@ -31,6 +33,7 @@ export const SubsystemsSection: FC<SubsystemsSectionProps> = ({
   systemDetail,
   withDirtyProtection
 }) => {
+  const { formatMessage: fm } = useIntl()
   const { setUID } = useSystemStore()
   const [sorting, setSorting] = useState<SortingState>([])
   const [pagination, setPagination] = useState<PaginationState>({
@@ -52,11 +55,11 @@ export const SubsystemsSection: FC<SubsystemsSectionProps> = ({
       {
         id: 'subsystem',
         accessorFn: row => row.name,
-        header: 'Subsystem',
+        header: fm({ id: message.common.systemOverlay.subsystem }),
         cell: ({ row }) => row.original
       }
     ]
-  }, [])
+  }, [fm])
 
   const table = useReactTable({
     data: systemDetail?.subSystems || [],
@@ -111,7 +114,7 @@ export const SubsystemsSection: FC<SubsystemsSectionProps> = ({
       <div className="mb-3">
         <input
           type="text"
-          placeholder="Filter subsystems..."
+          placeholder={fm({ id: message.common.systemOverlay.filterSubsystems })}
           value={globalFilter}
           onChange={e => setGlobalFilter(e.target.value)}
           className="w-full px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -159,7 +162,10 @@ export const SubsystemsSection: FC<SubsystemsSectionProps> = ({
                         : 'bg-green-100 dark:bg-green-600 text-green-800 dark:text-green-100'
                     }`}
                   >
-                    {`${(sp_coverage * 100).toFixed(1)}%`}
+                    {fm(
+                      { id: message.common.systemOverlay.coveragePercent },
+                      { percent: (sp_coverage * 100).toFixed(1) }
+                    )}
                   </Badge>
                 </div>
               )}
@@ -172,8 +178,13 @@ export const SubsystemsSection: FC<SubsystemsSectionProps> = ({
       {totalPages > 1 && (
         <div className="flex items-center justify-between pt-2 border-t border-gray-200 dark:border-gray-700">
           <div className="text-xs text-gray-500 dark:text-gray-400">
-            Showing {table.getRowModel().rows.length} of{' '}
-            {table.getFilteredRowModel().rows.length} subsystems
+            {fm(
+              { id: message.common.systemOverlay.showingSubsystems },
+              {
+                shown: table.getRowModel().rows.length,
+                total: table.getFilteredRowModel().rows.length
+              }
+            )}
           </div>
 
           <div className="flex items-center space-x-2">

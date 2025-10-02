@@ -1,6 +1,7 @@
 import { X } from 'lucide-react'
 import { useQueryState } from 'next-usequerystate'
 import { useCallback, useMemo, useState } from 'react'
+import { useIntl } from 'react-intl'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
@@ -52,6 +53,7 @@ const CatalogueContainer = () => {
     },
     [setCategoryQuery]
   )
+  const { formatMessage: fm } = useIntl()
 
   return (
     <div className="w-max-full flex flex-col">
@@ -64,7 +66,12 @@ const CatalogueContainer = () => {
             additionalBadge={
               categoryQuery ? (
                 <Badge>
-                  <span>Category</span>
+                  <span>
+                    {fm({
+                      id: 'common.table.category',
+                      defaultMessage: 'Category'
+                    })}
+                  </span>
                   <X
                     className="h-4 w-4 ml-1 cursor-pointer hover:text-red-600"
                     onClick={() => {

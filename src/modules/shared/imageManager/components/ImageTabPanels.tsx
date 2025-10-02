@@ -1,8 +1,10 @@
 import { TabPanel, TabPanels } from '@headlessui/react'
 import Image from 'next/image'
 import type { InputHTMLAttributes } from 'react'
+import { useIntl } from 'react-intl'
 
 import { ImageIcon } from '@/components/SvgIcons'
+import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 
 import type { FileItem } from '../../fileManager/types'
@@ -19,8 +21,10 @@ export const ImageTabPanels = ({
   getRootProps,
   open,
   canEdit = false
-}: ImageTabPanelsProps) => (
-  <TabPanels
+}: ImageTabPanelsProps) => {
+  const { formatMessage: fm } = useIntl()
+  return (
+    <TabPanels
     {...getRootProps()}
     className={cn(
       'h-full flex rounded-b-md border border-t-0 border-gray-300 justify-center',
@@ -54,12 +58,13 @@ export const ImageTabPanels = ({
           <div className=" text-sm text-gray-600 dark:text-gray-200">
             <ImageIcon />
             <div className="relative  rounded-md font-medium text-orange-500">
-              <span>Upload an image</span>
+              <span>{fm({ id: message.common.imageGallery.uploadAnImage })}</span>
             </div>
           </div>
-          <p className="text-xs text-gray-500">PNG, JPG up to 10MB</p>
+          <p className="text-xs text-gray-500">{fm({ id: message.common.imageGallery.pngJpgInfo })}</p>
         </div>
       </TabPanel>
     )}
   </TabPanels>
-)
+  )
+}

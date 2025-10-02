@@ -1,6 +1,6 @@
 'use client'
 import { useQueryClient } from '@tanstack/react-query'
-import { type Dispatch, type SetStateAction, useRef, useState } from 'react'
+import { type Dispatch, type SetStateAction, useRef } from 'react'
 import toast from 'react-hot-toast'
 import { useIntl } from 'react-intl'
 
@@ -45,7 +45,7 @@ const CategoryEditContainer = ({ setOpen, parentUID, uid }: Props) => {
     refetch: refetchCategoryDetail,
     queryKey
   } = useCategoryDetail(uid)
-  const [loadingSubmit, setLoadingSubmit] = useState(false) // TODO: consider removal if not needed when integrating loading state elsewhere
+  // removed unused loadingSubmit state (was previously set but not used for UI)
   const queryClient = useQueryClient()
   const { closeModal } = useModalGlobalStore()
 
@@ -61,7 +61,6 @@ const CategoryEditContainer = ({ setOpen, parentUID, uid }: Props) => {
         toast.success(
           fm({ id: message.catalogue.category.saved }, { name: data.name })
         )
-        setLoadingSubmit(false)
         closeModal('sheet')
         queryClient.invalidateQueries({ queryKey })
       })
@@ -71,7 +70,6 @@ const CategoryEditContainer = ({ setOpen, parentUID, uid }: Props) => {
     }
   })
   const onSubmit = (data: CategoryFormType) => {
-    setLoadingSubmit(true)
     submit(formatData(data, parentUID))
   }
 

@@ -1,3 +1,4 @@
+'use client'
 import { useIntl } from 'react-intl'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'

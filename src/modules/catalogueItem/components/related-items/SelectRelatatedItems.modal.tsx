@@ -1,8 +1,10 @@
 import { useRouter } from 'next/router'
 import { type FC, useState } from 'react'
 import toast from 'react-hot-toast'
+import { useIntl } from 'react-intl'
 
 import { Button } from '@/components/ui/button'
+import { message } from '@/i18n/src/messages'
 import CatalogueTableSelect from '@/modules/shared/catalogue/table/CatalogueTableSelect'
 import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import type { CatalogueItem } from '@/types/responses/catalogue'
@@ -27,6 +29,7 @@ export function openSelectRelatedItemsModal() {
   })
 }
 export const SelectRelatatedItemsModalContent: FC = () => {
+  const { formatMessage: fm } = useIntl()
   const [selectedItem, setSelectedItem] = useState<CatalogueItem | undefined>()
   const { createRelatedItem, loading } = useCreateRelatedItem()
   const { refetch } = useRelatedItems()
@@ -79,10 +82,12 @@ export const SelectRelatatedItemsModalContent: FC = () => {
       />
       <div className="flex justify-end gap-2">
         <Button variant="outline" onClick={() => closeModal('dialog1')}>
-          Cancel
+          {fm({ id: message.common.buttons.cancel })}
         </Button>
         <Button onClick={handleSubmit} disabled={!selectedItem || loading}>
-          {loading ? 'Adding...' : 'Add Related Item'}
+          {loading
+            ? fm({ id: message.common.ui.adding })
+            : fm({ id: message.common.ui.addRelatedItem })}
         </Button>
       </div>
     </div>

@@ -50,7 +50,7 @@ const OrderLineActionButtons = ({
 
   return (
     <div className="flex items-center gap-1">
-      <Tooltip content="Edit order line">
+  <Tooltip content={formatMessage({ id: message.ordersPage.orderLines.update })}>
         <Button
           variant="ghost"
           size="sm"
@@ -64,7 +64,7 @@ const OrderLineActionButtons = ({
           <Edit className="h-4 w-4" />
         </Button>
       </Tooltip>
-      <Tooltip content="Delete order line">
+  <Tooltip content={formatMessage({ id: message.ordersPage.deleteModal.message })}>
         <Button
           variant="ghost"
           size="sm"
@@ -88,7 +88,7 @@ const useOrderLinesColumns = () => {
         header: () => {
           return (
             <div className="flex items-center justify-between px-2 w-full">
-              <span>Status</span>
+              <span>{formatMessage({ id: message.common.ui.status })}</span>
               <DeliveredAllButton />
             </div>
           )
@@ -112,7 +112,12 @@ const useOrderLinesColumns = () => {
           sticky: 'left'
         },
         footer: ({ table: { getRowCount } }) => (
-          <span>Total: {getRowCount()} line(s)</span>
+          <span>
+            {formatMessage(
+              { id: message.ordersPage.orderLines.totalLines },
+              { count: getRowCount() }
+            )}
+          </span>
         )
       },
       {

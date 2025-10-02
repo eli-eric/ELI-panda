@@ -67,7 +67,7 @@ export const usePublicationColumns = () => {
         cell: ({ getValue }) => (
           <Link href={getValue() || ''} target="_blank">
             <Button variant="link" className="cursor-pointer">
-              Click here
+              {fm({ id: message.common.publications.clickHere })}
             </Button>
           </Link>
         )
@@ -250,7 +250,7 @@ export const usePublicationColumns = () => {
         )
       }
     ],
-    []
+    [fm]
   )
 
   return columns

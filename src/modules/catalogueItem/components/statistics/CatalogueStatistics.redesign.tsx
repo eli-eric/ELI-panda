@@ -11,6 +11,7 @@ import {
   Wrench
 } from 'lucide-react'
 import { useState } from 'react'
+import { useIntl } from 'react-intl'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -27,6 +28,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
+import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 
 import { useItemsAggregate } from '../../hooks/useItemsAggregate'
@@ -56,6 +58,7 @@ const StatisticsCard = ({
   variant = 'page',
   progressColor
 }: StatisticsCardProps) => {
+  const { formatMessage: fm } = useIntl()
   const percentage = total ? Math.round((value / total) * 100) : 0
   const isCompact = variant === 'compact'
   const isMobile = variant === 'modal' // In modals, assume mobile-like behavior
@@ -131,7 +134,10 @@ const StatisticsCard = ({
                 isMobile ? 'text-xs' : 'text-xs'
               )}
             >
-              <span>{percentage}% of total</span>
+              <span>
+                {percentage}
+                {fm({ id: message.common.ui.ofTotalPercent })}
+              </span>
               <span className="font-mono">
                 {value}/{total}
               </span>
@@ -200,6 +206,7 @@ export const CatalogueStatisticsRedesign = ({
   variant = 'page',
   className
 }: CatalogueStatisticsProps) => {
+  const { formatMessage: fm } = useIntl()
   const { itemStatistics, loading } = useItemsAggregate(catalogueItemUid)
   const [selectedFacility, setSelectedFacility] = useState<string>('all')
 
@@ -209,7 +216,9 @@ export const CatalogueStatisticsRedesign = ({
         <CardHeader>
           <div className="flex items-center gap-2">
             <BarChart3 className="h-5 w-5" />
-            <CardTitle>Physical Items Statistics</CardTitle>
+            <CardTitle>
+              {fm({ id: message.common.ui.physicalItemsStatistics })}
+            </CardTitle>
           </div>
         </CardHeader>
         <CardContent>
@@ -229,10 +238,12 @@ export const CatalogueStatisticsRedesign = ({
         <CardHeader>
           <div className="flex items-center gap-2">
             <BarChart3 className="h-5 w-5" />
-            <CardTitle>Physical Items Statistics</CardTitle>
+            <CardTitle>
+              {fm({ id: message.common.ui.physicalItemsStatistics })}
+            </CardTitle>
           </div>
           <CardDescription>
-            No statistics available for this item
+            {fm({ id: message.common.ui.noStatisticsAvailableForItem })}
           </CardDescription>
         </CardHeader>
       </Card>
@@ -310,7 +321,7 @@ export const CatalogueStatisticsRedesign = ({
                   isCompact ? 'text-sm' : 'text-base sm:text-lg'
                 )}
               >
-                Physical Items Statistics
+                {fm({ id: message.common.ui.physicalItemsStatistics })}
               </CardTitle>
             </div>
             {/* Items badge - always visible */}
@@ -348,7 +359,7 @@ export const CatalogueStatisticsRedesign = ({
                         <Building2 className="h-4 w-4" />
                         <span className="truncate max-w-[120px] sm:max-w-none">
                           {selectedFacility === 'all'
-                            ? 'All Facilities'
+                            ? fm({ id: message.common.ui.allFacilities })
                             : selectedFacility}
                         </span>
                       </div>
@@ -361,7 +372,7 @@ export const CatalogueStatisticsRedesign = ({
                       className={cn(selectedFacility === 'all' && 'bg-accent')}
                     >
                       <Package className="h-4 w-4 mr-2" />
-                      All Facilities
+                      {fm({ id: message.common.ui.allFacilities })}
                     </DropdownMenuItem>
                     {itemStatistics.map(facility => (
                       <DropdownMenuItem
@@ -413,7 +424,7 @@ export const CatalogueStatisticsRedesign = ({
             <div className="pt-4 border-t">
               <h4 className="text-sm font-medium mb-3 flex items-center gap-2">
                 <Building2 className="h-4 w-4" />
-                Facilities Overview
+                {fm({ id: message.common.ui.facilitiesOverview })}
               </h4>
               <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
                 {itemStatistics.map((facility, index) => (

@@ -1,7 +1,7 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { FileText, Link, X } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -16,6 +16,7 @@ import { useLinkUpdate } from './hooks/useLinks'
 import type { FileItemExtended } from './types'
 
 const buttons = message.common.buttons
+const filesMsg = message.common.files
 
 export function TagModalContent({
   onAddTag,
@@ -28,7 +29,9 @@ export function TagModalContent({
   return (
     <div>
       <div className="space-y-2">
-        <Label htmlFor="tag-name">Tag Name</Label>
+        <Label htmlFor="tag-name">
+          <FormattedMessage id={filesMsg.tagName} />
+        </Label>
         <Input
           id="tag-name"
           type="text"
@@ -71,7 +74,7 @@ function openTagModal({
   const { openModal } = useModalGlobalStore.getState()
   openModal('dialog1', {
     component: TagModalContent,
-    props: { file, onAddTag, title: 'Add Tag' },
+  props: { file, onAddTag, title: message.common.files.addTagTitle },
     onClose: undefined
   })
 }
@@ -91,6 +94,7 @@ export const useFileColumns = ({
   uid,
   onFileDeleted
 }: FileColumnsProps) => {
+  const { formatMessage: fm } = useIntl()
   const { mutate: updateLink } = useLinkUpdate({ parentUid: uid })
 
   const handleAddTag = useCallback(
@@ -135,7 +139,7 @@ export const useFileColumns = ({
   const columns = useMemo<ColumnDef<FileItemExtended>[]>(() => {
     const cols: ColumnDef<FileItemExtended>[] = [
       {
-        header: 'Name',
+  header: () => <FormattedMessage id={filesMsg.name} />,
         accessorKey: 'name',
         filterFn: fuzzyFilter,
         size: 300,
@@ -164,7 +168,7 @@ export const useFileColumns = ({
         )
       },
       {
-        header: 'Tags',
+  header: () => <FormattedMessage id={filesMsg.tags} />,
         accessorKey: 'tags',
         filterFn: fuzzyFilter,
         size: 200,
@@ -204,7 +208,7 @@ export const useFileColumns = ({
         )
       },
       {
-        header: 'Size',
+  header: () => <FormattedMessage id={filesMsg.size} />,
         accessorKey: 'size',
         size: 50,
         enableColumnFilter: false,
@@ -212,11 +216,16 @@ export const useFileColumns = ({
           className: 'text-right'
         },
         cell: ({ getValue, row: { original } }) => {
-          if (original.type === 'LINK') return '—'
+          if (original.type === 'LINK') return fm({ id: filesMsg.dash })
 
           const size = Math.round(getValue<number>() / 1000)
           const sizeString =
-            size > 1000 ? `${Math.round(size / 1000)} MB` : `${size} KB`
+            size > 1000
+              ? fm(
+                  { id: filesMsg.fileSizeMb },
+                  { value: Math.round(size / 1000) }
+                )
+              : fm({ id: filesMsg.fileSizeKb }, { value: size })
 
           return <span>{sizeString}</span>
         }

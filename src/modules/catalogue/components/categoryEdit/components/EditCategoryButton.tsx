@@ -1,5 +1,8 @@
 import { Edit } from 'lucide-react'
 import type { FC } from 'react'
+import { useIntl } from 'react-intl'
+
+import { message } from '@/i18n/src/messages'
 
 import CategoryEditContainer from '../CategoryEdit.cont'
 
@@ -33,6 +36,7 @@ export const EditCategoryButton: FC<EditCategoryProps> = ({
   uid,
   parentUID
 }) => {
+  const { formatMessage: fm } = useIntl()
   const openEditCategorySheet = e => {
     e.stopPropagation()
     if (typeof window === 'undefined') return // Prevent SSR execution
@@ -43,7 +47,9 @@ export const EditCategoryButton: FC<EditCategoryProps> = ({
       props: {
         uid,
         parentUID,
-        title: uid ? 'Edit Category' : 'Add New Category'
+        title: uid
+          ? fm({ id: message.catalogue.category.editCategory })
+          : fm({ id: message.catalogue.category.addNew })
       },
       onClose: undefined
     })
@@ -58,7 +64,9 @@ export const EditCategoryButton: FC<EditCategoryProps> = ({
         className="h-4 w-4 transform transition-transform hover:scale-110 duration-300"
         aria-hidden="true"
       />
-      <span className="ml-2">Edit Category</span>
+      <span className="ml-2">
+        {fm({ id: message.catalogue.category.editCategory })}
+      </span>
     </DropdownMenuItem>
   )
 }

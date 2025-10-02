@@ -1,7 +1,9 @@
 import { type FC } from 'react'
+import { useIntl } from 'react-intl'
 
 import ProgressBarComponent from '@/components/progress-bar.comp'
 import { useItemPropertiesData } from '@/hooks/useItemPropertiesData'
+import { message } from '@/i18n/src/messages'
 import { FILE_TYPE } from '@/modules/shared/fileManager/types'
 import { ImageGallery } from '@/modules/shared/imageManager/ImageGallery'
 import { useSuspenseSystemDetail } from '@/modules/systemItem/hooks/useSuspenseSystemDetail'
@@ -21,6 +23,7 @@ type Props = {
 }
 
 export const SystemDetailInfo: FC<Props> = ({ alias, uid }) => {
+  const { formatMessage: fm } = useIntl()
   const { loading, error, systemDetail, physicalItem, catalogueItem } =
     useSuspenseSystemDetail({
       code: alias,
@@ -44,7 +47,7 @@ export const SystemDetailInfo: FC<Props> = ({ alias, uid }) => {
     return (
       <div className="p-4 text-center">
         <p className="text-red-600 dark:text-red-400">
-          Failed to load system information
+          {fm({ id: message.common.systemOverlay.failedToLoad })}
         </p>
       </div>
     )

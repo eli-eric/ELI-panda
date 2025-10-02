@@ -1,6 +1,8 @@
 import { type FC, Fragment } from 'react'
+import { useIntl } from 'react-intl'
 
 import { Disclosure } from '@/components/ui'
+import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import type { SystemLevel } from '@/types/gql/graphql'
 
@@ -22,13 +24,14 @@ interface SystemHierarchySectionProps {
 export const SystemHierarchySection: FC<SystemHierarchySectionProps> = ({
   systemDetail
 }) => {
+  const { formatMessage: fm } = useIntl()
   if (!systemDetail?.parentPath || systemDetail.parentPath.length === 0) {
     return null
   }
 
   return (
     <Disclosure
-      title="System Hierarchy"
+      title={fm({ id: message.common.systemOverlay.systemHierarchy })}
       defaultOpen={true}
       className="w-full border rounded-md overflow-hidden shadow-md"
       buttonClassName="bg-gray-50 dark:bg-gray-700"
@@ -56,11 +59,15 @@ export const SystemHierarchySection: FC<SystemHierarchySectionProps> = ({
                 </SystemLink>
               )}
               {index < systemDetail.parentPath!.length - 1 && (
-                <span className="text-gray-400 mx-1">→</span>
+                <span className="text-gray-400 mx-1">
+                  {fm({ id: message.common.systemOverlay.hierarchyArrow })}
+                </span>
               )}
             </Fragment>
           ))}
-          <span className="text-gray-400 mx-1">→</span>
+          <span className="text-gray-400 mx-1">
+            {fm({ id: message.common.systemOverlay.hierarchyArrow })}
+          </span>
           <span
             className={cn(
               'px-2 py-1 rounded text-xs font-medium',

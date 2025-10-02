@@ -31,7 +31,7 @@ export const useServiceLinesColumns = () => {
         header: () => {
           return (
             <div className="flex items-center justify-between px-2 w-full">
-              <span>Status</span>
+              <span>{formatMessage({ id: message.common.ui.status })}</span>
               <DeliveredAllButton />
             </div>
           )
@@ -53,7 +53,12 @@ export const useServiceLinesColumns = () => {
         enableSorting: false,
         enableColumnFilter: false,
         footer: ({ table: { getRowCount } }) => (
-          <span>Total: {getRowCount()} line(s)</span>
+          <span>
+            {formatMessage(
+              { id: message.ordersPage.serviceLines.totalLines },
+              { count: getRowCount() }
+            )}
+          </span>
         )
       },
       {
@@ -85,7 +90,7 @@ export const useServiceLinesColumns = () => {
         )
       },
       {
-        header: 'Item',
+        header: formatMessage({ id: messages.item }),
         accessorFn: ({ item }) => item.name,
         size: 340,
         enablePinning: false,
@@ -99,7 +104,7 @@ export const useServiceLinesColumns = () => {
         )
       },
       {
-        header: 'EUN',
+        header: formatMessage({ id: message.ordersPage.orderLines.orderLinesTable.header.eun }),
         accessorKey: 'eun',
         enablePinning: false
       },

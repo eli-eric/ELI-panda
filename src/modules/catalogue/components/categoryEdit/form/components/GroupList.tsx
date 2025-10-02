@@ -1,9 +1,11 @@
 import { Plus, Trash2 } from 'lucide-react'
 import { useFieldArray, useFormContext } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 
 import { Input } from '@/components/form/inputs'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { message } from '@/i18n/src/messages'
 
 import type { CategoryFormType } from '../../types'
 import MoveButtons from './MoveButtons'
@@ -31,6 +33,7 @@ const Group = ({
     remove(index)
   }
 
+  const { formatMessage: fm } = useIntl()
   return (
     <Card className="border-l-4 border-l-primary">
       <CardHeader className="pb-3">
@@ -38,9 +41,9 @@ const Group = ({
           <CardTitle className="text-base w-full mr-2">
             <Input
               name={`${name}.name`}
-              placeholder="Group name"
+              placeholder={fm({ id: message.catalogue.category.groupName })}
               className="w-full"
-              label="Group name"
+              label={fm({ id: message.catalogue.category.groupName })}
             />
           </CardTitle>
           <div className="flex items-center gap-2">
@@ -70,6 +73,7 @@ const Group = ({
 }
 
 const GroupList = () => {
+  const { formatMessage: fm } = useIntl()
   const { control } = useFormContext<CategoryFormType>()
   const { fields, append, remove, move } = useFieldArray({
     control,
@@ -100,7 +104,7 @@ const GroupList = () => {
           className="border-dashed border-2 hover:border-solid"
         >
           <Plus className="h-4 w-4 mr-2" />
-          Add Group
+          {fm({ id: message.catalogue.category.groupAdd })}
         </Button>
       </div>
       {fields.length > 0 && (

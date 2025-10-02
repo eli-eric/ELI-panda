@@ -1,8 +1,10 @@
 import Link from 'next/link'
 import { Fragment } from 'react'
+import { useIntl } from 'react-intl'
 
 import { BackButton, Button } from '@/components/Buttons'
 import usePermission from '@/hooks/usePermission'
+import { message } from '@/i18n/src/messages'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
@@ -13,16 +15,17 @@ type Props = {
 
 export const HeaderButtons = ({ onSubmitAndExit, onSubmit }: Props) => {
   const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
+  const { formatMessage: fm } = useIntl()
 
   return (
     <div className="flex space-x-2">
       {editPersmission && (
         <Fragment>
           <Button type="button" onClick={onSubmit}>
-            Save
+            {fm({ id: message.common.buttons.save })}
           </Button>
           <Button type="button" onClick={onSubmitAndExit}>
-            Save and exit
+            {fm({ id: message.common.buttons.saveAndExit })}
           </Button>
         </Fragment>
       )}

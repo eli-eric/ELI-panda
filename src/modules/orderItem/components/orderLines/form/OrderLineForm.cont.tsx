@@ -1,10 +1,12 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useCallback, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 import * as yup from 'yup'
 
 import { Form } from '@/components/form/Form'
 import { Button } from '@/components/ui/button'
+import { message } from '@/i18n/src/messages'
 import type { OrderLineFormType } from '@/modules/orderItem/types/form'
 import CatalogueTableSelect from '@/modules/shared/catalogue/table/CatalogueTableSelect'
 import { useModalGlobalStore } from '@/store/useModalGlobalStore'
@@ -30,6 +32,7 @@ const OrderLineModalContent = ({
   orderLine?: OrderLineFormType
   onSave?: (data: OrderLineFormType) => void
 }) => {
+  const { formatMessage: fm } = useIntl()
   const [catalogueItem, setCatalogueItem] = useState<CatalogueItem | undefined>(
     undefined
   )
@@ -128,10 +131,12 @@ const OrderLineModalContent = ({
               closeModal('dialog1')
             }}
           >
-            Cancel
+            {fm({ id: message.common.buttons.cancel })}
           </Button>
           <Button type="submit">
-            {orderLine ? 'Update' : 'Add'} Order Line
+            {orderLine
+              ? fm({ id: message.ordersPage.orderLines.update })
+              : fm({ id: message.ordersPage.orderLines.titles.add })}
           </Button>
         </div>
       </Form>
@@ -151,7 +156,9 @@ export const useOrderLineModal = () => {
         <OrderLineModalContent orderLine={orderLine} onSave={onSave} />
       ),
       props: {
-        title: orderLine ? 'Edit Order Line' : 'Add Order Line',
+        title: orderLine
+          ? message.ordersPage.orderLines.titles.edit
+          : message.ordersPage.orderLines.titles.add,
         size: 'xl' as const
       }
     })
