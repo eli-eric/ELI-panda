@@ -104,7 +104,9 @@ export const useServiceLinesColumns = () => {
         )
       },
       {
-        header: formatMessage({ id: message.ordersPage.orderLines.orderLinesTable.header.eun }),
+        header: formatMessage({
+          id: message.ordersPage.orderLines.orderLinesTable.header.eun
+        }),
         accessorKey: 'eun',
         enablePinning: false
       },

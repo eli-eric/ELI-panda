@@ -50,7 +50,9 @@ const OrderLineActionButtons = ({
 
   return (
     <div className="flex items-center gap-1">
-  <Tooltip content={formatMessage({ id: message.ordersPage.orderLines.update })}>
+      <Tooltip
+        content={formatMessage({ id: message.ordersPage.orderLines.update })}
+      >
         <Button
           variant="ghost"
           size="sm"
@@ -64,7 +66,9 @@ const OrderLineActionButtons = ({
           <Edit className="h-4 w-4" />
         </Button>
       </Tooltip>
-  <Tooltip content={formatMessage({ id: message.ordersPage.deleteModal.message })}>
+      <Tooltip
+        content={formatMessage({ id: message.ordersPage.deleteModal.message })}
+      >
         <Button
           variant="ghost"
           size="sm"

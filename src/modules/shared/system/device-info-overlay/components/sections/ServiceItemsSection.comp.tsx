@@ -16,7 +16,7 @@ export const ServiceItemsSection: FC<ServiceItemsSectionProps> = ({
   serviceItems
 }) => {
   const { formatMessage: fm } = useIntl()
-  
+
   if (serviceItems.length === 0) return null
 
   return (

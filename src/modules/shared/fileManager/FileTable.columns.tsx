@@ -74,7 +74,7 @@ function openTagModal({
   const { openModal } = useModalGlobalStore.getState()
   openModal('dialog1', {
     component: TagModalContent,
-  props: { file, onAddTag, title: message.common.files.addTagTitle },
+    props: { file, onAddTag, title: message.common.files.addTagTitle },
     onClose: undefined
   })
 }
@@ -139,7 +139,7 @@ export const useFileColumns = ({
   const columns = useMemo<ColumnDef<FileItemExtended>[]>(() => {
     const cols: ColumnDef<FileItemExtended>[] = [
       {
-  header: () => <FormattedMessage id={filesMsg.name} />,
+        header: () => <FormattedMessage id={filesMsg.name} />,
         accessorKey: 'name',
         filterFn: fuzzyFilter,
         size: 300,
@@ -168,7 +168,7 @@ export const useFileColumns = ({
         )
       },
       {
-  header: () => <FormattedMessage id={filesMsg.tags} />,
+        header: () => <FormattedMessage id={filesMsg.tags} />,
         accessorKey: 'tags',
         filterFn: fuzzyFilter,
         size: 200,
@@ -208,7 +208,7 @@ export const useFileColumns = ({
         )
       },
       {
-  header: () => <FormattedMessage id={filesMsg.size} />,
+        header: () => <FormattedMessage id={filesMsg.size} />,
         accessorKey: 'size',
         size: 50,
         enableColumnFilter: false,

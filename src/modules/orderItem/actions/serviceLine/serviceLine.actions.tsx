@@ -61,7 +61,9 @@ export const ServiceLineActionButtons = ({
   return (
     <div className="flex items-center gap-1">
       <Tooltip
-        content={fm({ id: message.ordersPage.serviceLines.tooltips.editServiceLine })}
+        content={fm({
+          id: message.ordersPage.serviceLines.tooltips.editServiceLine
+        })}
       >
         <Button
           variant="ghost"
@@ -73,7 +75,9 @@ export const ServiceLineActionButtons = ({
         </Button>
       </Tooltip>
       <Tooltip
-        content={fm({ id: message.ordersPage.serviceLines.tooltips.deleteServiceLine })}
+        content={fm({
+          id: message.ordersPage.serviceLines.tooltips.deleteServiceLine
+        })}
       >
         <Button
           variant="ghost"
@@ -153,7 +157,11 @@ export const DeliveredAllButton = () => {
   }
 
   return (
-    <Tooltip content={fm({ id: message.ordersPage.serviceLines.tooltips.markAllAsDelivered })}>
+    <Tooltip
+      content={fm({
+        id: message.ordersPage.serviceLines.tooltips.markAllAsDelivered
+      })}
+    >
       <Button
         disabled={isPending || !hasRole}
         className="flex justify-center items-center p-1 h-7 min-h-0 w-7"

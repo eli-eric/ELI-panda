@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
-import { useIntl } from 'react-intl'
 import { useFormContext } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 
 import { Heading } from '@/components/layout/Heading'
 import { Checkbox } from '@/components/ui/checkbox'

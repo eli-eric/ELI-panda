@@ -1,7 +1,7 @@
+import { FileText, Link, Upload } from 'lucide-react'
 import { useCallback, useMemo, useRef } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { useIntl } from 'react-intl'
-import { FileText, Link, Upload } from 'lucide-react'
 
 import { Heading } from '@/components/layout/Heading'
 import ProgressBarComponent from '@/components/progress-bar.comp'
