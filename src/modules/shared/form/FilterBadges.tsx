@@ -1,6 +1,8 @@
 import { X } from 'lucide-react'
+import { useIntl } from 'react-intl'
 
 import { Badge } from '@/components/ui/badge'
+import { message } from '@/i18n/src/messages'
 import { useFilters } from '@/modules/shared/table/pandaTable/hooks/useFilters'
 import { useFormControlStore } from '@/store/useFormControlStore'
 
@@ -13,6 +15,7 @@ export const FilterBadges = ({
   enableQueryURL?: boolean
   additionalBadge?: JSX.Element
 }) => {
+  const { formatMessage: fm } = useIntl()
   const [filters, setFilters] = useFilters(tableId, enableQueryURL, false)
   const { addFieldIdToSync } = useFormControlStore()
 
@@ -20,7 +23,7 @@ export const FilterBadges = ({
     <div>
       {(filters.length > 0 || additionalBadge) && (
         <span className="text-sm pr-2 font-medium text-gray-600 dark:text-gray-200">
-          Filters:
+          {fm({ id: message.common.filters.filters })}
         </span>
       )}
       {additionalBadge}

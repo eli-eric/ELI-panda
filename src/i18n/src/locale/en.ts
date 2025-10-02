@@ -146,7 +146,8 @@ export const messages = {
       deleteModal: {
         title: 'Warning',
         text: 'Are you sure you want to remove {fileName}?'
-      }
+      },
+      newName: 'New Name'
     },
     form: {
       leaveWarning: {
@@ -198,6 +199,28 @@ export const messages = {
       ellipsis: '...',
       showStatistics: 'Show Statistics',
       deleteItem: 'Delete Item'
+    },
+    d3: {
+      detailProperties: 'Detail Properties',
+      noPropertiesAvailable: 'No properties available'
+    },
+    filters: {
+      apply: 'Apply',
+      update: 'Update',
+      saveNew: 'Save new',
+      filters: 'Filters:'
+    },
+    forms: {
+      assignItem: 'Assign Item',
+      moveItem: 'Move Item',
+      previous: 'Previous',
+      sourceSystem: 'Source System:',
+      assigningItem: 'Assigning Item:',
+      movingItem: 'Moving Item:',
+      oldItemParentSystem: 'Old Item Parent System:',
+      selectOrCreateSystem:
+        'Please select or create a system to move the item to. If you already have a system, you can select it. If you dont have a system, you can create a new one.',
+      or: 'OR'
     },
     table: {
       category: 'Category'
