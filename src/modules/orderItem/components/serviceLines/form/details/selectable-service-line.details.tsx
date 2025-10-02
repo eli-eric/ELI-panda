@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 
 import { useServiceType } from '@/modules/services/hooks/useServiceType'
 import type { CodebookType } from '@/types/responses/codebook'
@@ -18,6 +19,7 @@ export const SelectableServiceLineDetails = ({ serviceType }: Props) => {
   const { data, error } = useServiceType(
     serviceType ? serviceType.uid : serviceTypeForm?.uid
   )
+  const { formatMessage: fm } = useIntl()
 
   // Stabilize allowedDetails to prevent infinite re-renders
   const allowedDetails = useMemo(() => {
@@ -29,7 +31,12 @@ export const SelectableServiceLineDetails = ({ serviceType }: Props) => {
     return data?.category
   }, [data?.category])
 
-  if (error) return <div className="text-red-300">Something went wrong!!</div>
+  if (error)
+    return (
+      <div className="text-red-300">
+        {fm({ id: 'ordersPage.serviceLines.selectable.error' })}
+      </div>
+    )
 
   return (
     <div className="flex flex-col">

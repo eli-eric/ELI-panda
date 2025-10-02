@@ -1,7 +1,9 @@
 import { useEffect } from 'react'
 import toast from 'react-hot-toast'
+import { useIntl } from 'react-intl'
 
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
+import { message } from '@/i18n/src/messages'
 import { gql } from '@/types/gql'
 
 import { useCategoryUid } from './useCategoryUid'
@@ -31,11 +33,17 @@ export const useCategory = (catalogueCategoryUid?: string) => {
     }
   })
 
+  const { formatMessage: fm } = useIntl()
   useEffect(() => {
     if (error) {
-      toast.error('Error fetching category: ' + error.message)
+      toast.error(
+        fm(
+          { id: message.catalogue.category.errorFetching },
+          { reason: error.message }
+        )
+      )
     }
-  }, [error])
+  }, [error, fm])
 
   return {
     catalogueCategory: data?.catalogueCategories[0],

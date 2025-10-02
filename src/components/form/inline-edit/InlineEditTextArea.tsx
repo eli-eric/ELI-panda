@@ -2,8 +2,10 @@ import { Edit } from 'lucide-react'
 import * as React from 'react'
 import { useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 
 import { Textarea } from '@/components/ui/textarea'
+import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import type { FieldProps } from '@/types/form'
 
@@ -19,6 +21,7 @@ export const InlineEditTextArea = ({
   placeholder,
   rows = 3
 }: InlineEditTextAreaProps) => {
+  const { formatMessage: fm } = useIntl()
   const { control } = useFormContext()
   const [isEditing, setIsEditing] = useState(false)
   const [editValue, setEditValue] = useState('')
@@ -55,7 +58,8 @@ export const InlineEditTextArea = ({
           }
         }
 
-        const displayValue = field.value || 'N/A'
+        const displayValue =
+          field.value || fm({ id: message.common.form.notAvailable })
         const shortValue =
           displayValue.length > 100
             ? `${displayValue.substring(0, 100)}...`
@@ -95,9 +99,10 @@ export const InlineEditTextArea = ({
               </span>
             </div>
             <div className="text-sm text-foreground whitespace-pre-wrap break-words">
-              {shortValue === 'N/A' ? (
+              {shortValue === fm({ id: message.common.form.notAvailable }) ? (
                 <span className="text-muted-foreground italic">
-                  Click to add {label?.toLowerCase()}
+                  {fm({ id: message.common.ui.clickToAdd })}{' '}
+                  {label?.toLowerCase()}
                 </span>
               ) : (
                 shortValue

@@ -1,5 +1,5 @@
 import { signIn } from 'next-auth/react'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 
 import EliLogoComponent from '@/components/eli-logo.comp'
@@ -15,6 +15,7 @@ import {
 const { title } = message.authPage
 
 const AuthFormComponent = () => {
+  const { formatMessage: fm } = useIntl()
   return (
     <div className="flex min-h-screen flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -27,7 +28,7 @@ const AuthFormComponent = () => {
               <FormattedMessage id={title} />
             </CardTitle>
             <CardDescription className="text-center">
-              Choose your ELI facility to sign in
+              {fm({ id: message.authPage.chooseFacility })}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -39,7 +40,7 @@ const AuthFormComponent = () => {
                 className="w-full"
                 onClick={() => signIn('azure-ad-beamlines')}
               >
-                ELI - ALPS
+                {fm({ id: message.authPage.facilities.alps })}
               </Button>
               <Button
                 type="button"
@@ -47,7 +48,7 @@ const AuthFormComponent = () => {
                 className="w-full"
                 onClick={() => signIn('azure-ad-beamlines')}
               >
-                ELI - BEAMLINES
+                {fm({ id: message.authPage.facilities.beamlines })}
               </Button>
               <Button
                 variant="outline"
@@ -56,7 +57,7 @@ const AuthFormComponent = () => {
                 className="w-full"
                 onClick={() => signIn('azure-ad-beamlines')}
               >
-                ELI - NP
+                {fm({ id: message.authPage.facilities.np })}
               </Button>
             </div>
           </CardContent>

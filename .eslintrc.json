@@ -46,8 +46,8 @@
     "arrow-body-style": "off",
     "no-console": "warn",
     "linebreak-style": ["off", "unix"],
-    "sort-imports": "off", // Necessary keep off to enable simple-import-sort/sort rule
-    "import/order": "off", // Necessary keep off to enable simple-import-sort/sort rule
+    "sort-imports": "off",
+    "import/order": "off",
     "react/prefer-stateless-function": [2, { "ignorePureComponents": false }],
     "prettier/prettier": "off",
     "react/react-in-jsx-scope": "off",
@@ -57,7 +57,21 @@
       "warn",
       {
         "noStrings": true,
-        "allowedStrings": [" ", ":", ",", ".", "-", "+", "(", ")", "/", "\\", "?", "!", "&"],
+        "allowedStrings": [
+          " ",
+          ":",
+          ",",
+          ".",
+          "-",
+          "+",
+          "(",
+          ")",
+          "/",
+          "\\",
+          "?",
+          "!",
+          "&"
+        ],
         "ignoreProps": true
       }
     ]

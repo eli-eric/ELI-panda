@@ -1,8 +1,10 @@
 import { Fragment } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 
 import { Heading } from '@/components/layout/Heading'
 import { Table } from '@/components/ui/table'
+import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 
 import { useSystemDetail } from '../../hooks/useSystemDetail'
@@ -12,6 +14,7 @@ import { SetMinimalSparesButton } from './SetMinimalSparesButton'
 import { useSparePartsColumns } from './SpareParts.columns'
 
 export const SparePartsContainer = () => {
+  const { formatMessage: fm } = useIntl()
   const columns = useSparePartsColumns()
   const { systemDetail } = useSystemDetail()
   const { control } = useFormContext()
@@ -46,7 +49,14 @@ export const SparePartsContainer = () => {
                   : 'text-gray-500 dark:text-gray-300'
               )}
             >
-              {`Available ${systemDetail?.sparePartsCoverageSum?.toFixed(2) || '0'} out of ${minSparePartsCount || '0'} required`}
+              {fm(
+                { id: message.common.systemItem.sparePartsAvailable },
+                {
+                  available:
+                    systemDetail?.sparePartsCoverageSum?.toFixed(2) || '0',
+                  required: minSparePartsCount || '0'
+                }
+              )}
             </h3>
             <SetMinimalSparesButton />
           </div>

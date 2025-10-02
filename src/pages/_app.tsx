@@ -59,7 +59,9 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
               </Toaster>
               <SonnerToaster />
               <DndProvider backend={HTML5Backend}>
-                <NewLayout>{<Component {...componentProps} key={key} />}</NewLayout>
+                <NewLayout>
+                  {<Component {...componentProps} key={key} />}
+                </NewLayout>
                 <Suspense fallback={null}>
                   <ModalProvider />
                 </Suspense>

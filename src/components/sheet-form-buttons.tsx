@@ -1,8 +1,10 @@
 import { Loader2 } from 'lucide-react'
 import { useRef } from 'react'
+import { useIntl } from 'react-intl'
 
 import { Button } from '@/components/ui/button'
 import usePermission from '@/hooks/usePermission'
+import { message } from '@/i18n/src/messages'
 import type { ROLE } from '@/types/constants/roles'
 
 interface Props {
@@ -27,6 +29,7 @@ export const SheetFormButtons = ({
   exitLabel = 'Exit',
   loadingText
 }: Props) => {
+  const { formatMessage: fm } = useIntl()
   const disabledEdit = usePermission([editRole])
   const DEBOUNCE_TIME = 1500
   const lastSubmitTimeRef = useRef<number>(0)
@@ -60,8 +63,8 @@ export const SheetFormButtons = ({
             </span>
           )}
           {!loading && isFormDirty && (
-            <span className="text-muted-foreground text-sm">
-              You have unsaved changes
+            <span className="text-muted-foreground text-sm" aria-live="polite">
+              {fm({ id: message.common.form.unsavedChanges })}
             </span>
           )}
         </div>
@@ -72,9 +75,7 @@ export const SheetFormButtons = ({
               onClick={handleSubmit}
               disabled={loading || !isFormDirty}
             >
-              {loading && (
-                <Loader2 className="size-3 animate-spin mr-2" />
-              )}
+              {loading && <Loader2 className="size-3 animate-spin mr-2" />}
               {saveLabel}
             </Button>
             <Button
@@ -83,9 +84,7 @@ export const SheetFormButtons = ({
               disabled={loading}
               variant="outline"
             >
-              {loading && (
-                <Loader2 className="size-3 animate-spin mr-2" />
-              )}
+              {loading && <Loader2 className="size-3 animate-spin mr-2" />}
               {exitLabel}
             </Button>
           </div>

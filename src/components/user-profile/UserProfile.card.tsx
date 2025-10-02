@@ -1,6 +1,6 @@
 import { useSession } from 'next-auth/react'
 import toast from 'react-hot-toast'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 
 import { Badge } from '@/components/ui/badge'
@@ -9,6 +9,7 @@ const messages = message.layout.profile
 const securityMessages = message.profilePage.security
 
 export const UserProfileCard = () => {
+  const { formatMessage: fm } = useIntl()
   const user = useSession().data?.user
 
   const copyTokenToClipboard = () => {
@@ -84,7 +85,7 @@ export const UserProfileCard = () => {
               className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
               onClick={copyTokenToClipboard}
             >
-              Copy
+              {fm({ id: message.common.buttons.copy })}
             </button>
           </dd>
         </div>

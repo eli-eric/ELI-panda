@@ -1,4 +1,7 @@
 import type { FC } from 'react'
+import { useIntl } from 'react-intl'
+
+import { message } from '@/i18n/src/messages'
 
 import type { GraphNode } from './types'
 
@@ -7,6 +10,7 @@ interface Props {
 }
 
 export const NodeDetails: FC<Props> = ({ node }) => {
+  const { formatMessage: fm } = useIntl()
   const keys = Object.keys(node.properties)
 
   if (keys.length) {
@@ -14,7 +18,7 @@ export const NodeDetails: FC<Props> = ({ node }) => {
       <div className="h-[600px] overflow-auto col-span-5 border rounded-lg shadow-sm p-4 bg-white">
         <div className="mb-4">
           <div className="text-xl font-semibold text-gray-800">
-            Detail Properties
+            {fm({ id: message.common.d3.detailProperties })}
           </div>
         </div>
         <div className="overflow-y-auto">
@@ -40,7 +44,7 @@ export const NodeDetails: FC<Props> = ({ node }) => {
 
   return (
     <div className="h-full col-span-5 border rounded-lg shadow-sm p-4 bg-white">
-      No properties available
+      {fm({ id: message.common.d3.noPropertiesAvailable })}
     </div>
   )
 }

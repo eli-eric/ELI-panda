@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { type FC, useState } from 'react'
+import { useIntl } from 'react-intl'
 
 import {
   Card,
@@ -10,6 +11,7 @@ import {
 } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Skeleton } from '@/components/ui/skeleton'
+import { message } from '@/i18n/src/messages'
 import type { CodebookType } from '@/types/responses/codebook'
 import { queryFetcher } from '@/utils/fetcher'
 
@@ -19,7 +21,8 @@ import { SystemTypeGroup } from './components/SystemTypeGroup'
 import { SystemTypeItem } from './components/SystemTypeItem'
 import type { SystemTypesResponse } from './types'
 
-const SystemTypeEditContainer: FC = () => {
+export const SystemTypeEditContainer: FC = () => {
+  const { formatMessage: fm } = useIntl()
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null)
 
   const {
@@ -31,7 +34,7 @@ const SystemTypeEditContainer: FC = () => {
     queryFn: queryFetcher<CodebookType[]>(`systemTypeGroups`)
   })
   const {
-    data: systemTypes,
+    data: systemTypes = [],
     refetch: refetchSystemTypes,
     isLoading: isLoadingTypes
   } = useQuery({
@@ -49,10 +52,10 @@ const SystemTypeEditContainer: FC = () => {
             <div className="flex items-center justify-between">
               <div className="min-w-0 flex-1">
                 <CardTitle className="text-lg font-semibold">
-                  System Type Groups
+                  {fm({ id: message.common.systemTypeEdit.systemTypeGroups })}
                 </CardTitle>
                 <CardDescription>
-                  Manage groups for organizing system types
+                  {fm({ id: message.common.systemTypeEdit.manageGroups })}
                 </CardDescription>
               </div>
               <AddGroupButton refetch={refetchGroups} />
@@ -70,7 +73,7 @@ const SystemTypeEditContainer: FC = () => {
                 </div>
               ) : !systemTypeGroups?.length ? (
                 <div className="text-center py-8 text-muted-foreground">
-                  No groups found. Create your first group to get started.
+                  {fm({ id: message.common.systemTypeEdit.noGroupsFound })}
                 </div>
               ) : (
                 <div className="space-y-1">
@@ -95,7 +98,7 @@ const SystemTypeEditContainer: FC = () => {
             <div className="flex items-center justify-between">
               <div className="min-w-0 flex-1">
                 <CardTitle className="text-lg font-semibold">
-                  System Types
+                  {fm({ id: message.common.systemTypeEdit.systemTypes })}
                 </CardTitle>
                 <CardDescription>
                   {selectedGroup
@@ -113,7 +116,7 @@ const SystemTypeEditContainer: FC = () => {
             <ScrollArea className="h-full">
               {!selectedGroup ? (
                 <div className="text-center py-8 text-muted-foreground">
-                  Select a group from the left panel to view system types.
+                  {fm({ id: message.common.systemTypeEdit.selectGroup })}
                 </div>
               ) : isLoadingTypes ? (
                 <div className="space-y-1">
@@ -126,14 +129,13 @@ const SystemTypeEditContainer: FC = () => {
                 </div>
               ) : !systemTypes?.length ? (
                 <div className="text-center py-8 text-muted-foreground">
-                  No system types found in this group. Add the first system
-                  type.
+                  {fm({ id: message.common.systemTypeEdit.noSystemTypes })}
                 </div>
               ) : (
                 <div className="space-y-1">
                   {systemTypes.map(item => (
                     <SystemTypeItem
-                      groupUid={selectedGroup}
+                      groupUid={selectedGroup!}
                       key={item.uid}
                       systemType={item}
                       refetch={refetchSystemTypes}

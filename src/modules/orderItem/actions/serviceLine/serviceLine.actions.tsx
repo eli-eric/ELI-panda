@@ -1,6 +1,5 @@
 import type { Row } from '@tanstack/react-table'
-import { CheckCircle } from 'lucide-react'
-import { Edit, Trash2 } from 'lucide-react'
+import { CheckCircle, Edit, Trash2 } from 'lucide-react'
 import { Fragment } from 'react'
 import { useIntl } from 'react-intl'
 
@@ -25,11 +24,11 @@ export const ServiceLineActionButtons = ({
 }: {
   serviceLine: ServiceLine
 }) => {
-  const { formatMessage } = useIntl()
+  const { formatMessage: fm } = useIntl()
   const { deleteServiceLine, setServiceLine } = useServiceLine()
   const { openModal, closeModal } = useModalGlobalStore()
   const withWarning = useWarningModal(
-    formatMessage(
+    fm(
       { id: message.ordersPage.serviceLines.deleteModal.message },
       createMessageValues({ name: serviceLine.name })
     )
@@ -47,25 +46,25 @@ export const ServiceLineActionButtons = ({
     openModal('sheet', {
       component: ServiceLineEditSheet,
       props: {
-        title: 'Edit Service Line',
+        title: fm({ id: message.ordersPage.serviceLines.titles.edit }),
         serviceLine,
-        onClose: () => {
-          closeModal('sheet')
-        }
+        onClose: () => closeModal('sheet')
       },
       onSubmit: (data: ServiceLine) => {
         submit(data)
         closeModal('sheet')
       },
-      onClose: () => {
-        closeModal('sheet')
-      }
+      onClose: () => closeModal('sheet')
     })
   }
 
   return (
     <div className="flex items-center gap-1">
-      <Tooltip content="Edit service line">
+      <Tooltip
+        content={fm({
+          id: message.ordersPage.serviceLines.tooltips.editServiceLine
+        })}
+      >
         <Button
           variant="ghost"
           size="sm"
@@ -75,7 +74,11 @@ export const ServiceLineActionButtons = ({
           <Edit className="h-4 w-4" />
         </Button>
       </Tooltip>
-      <Tooltip content="Delete service line">
+      <Tooltip
+        content={fm({
+          id: message.ordersPage.serviceLines.tooltips.deleteServiceLine
+        })}
+      >
         <Button
           variant="ghost"
           size="sm"
@@ -135,7 +138,9 @@ export const ServiceLinePriceFooter = ({
     <Fragment>
       {rows.length > 0 && (
         <div className="flex flex-col whitespace-nowrap py-1">
-          <span className="font-medium">{`${parseFloat(total.toFixed(2))} ${totalCurrency}`}</span>
+          <span className="font-medium">
+            {parseFloat(total.toFixed(2)).toFixed(2)} {totalCurrency}
+          </span>
         </div>
       )}
     </Fragment>
@@ -145,13 +150,18 @@ export const ServiceLinePriceFooter = ({
 export const DeliveredAllButton = () => {
   const { handleDelivery, isPending } = useServiceDeliveryAll()
   const hasRole = usePermission([ROLE.ORDERS_DELIVERY_EDIT, ROLE.ORDERS_EDIT])
+  const { formatMessage: fm } = useIntl()
 
   const handleClick = () => {
     handleDelivery()
   }
 
   return (
-    <Tooltip content="Mark All as Delivered">
+    <Tooltip
+      content={fm({
+        id: message.ordersPage.serviceLines.tooltips.markAllAsDelivered
+      })}
+    >
       <Button
         disabled={isPending || !hasRole}
         className="flex justify-center items-center p-1 h-7 min-h-0 w-7"

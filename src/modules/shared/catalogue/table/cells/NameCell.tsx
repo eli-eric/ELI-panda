@@ -122,7 +122,7 @@ const CellActionDropdown = ({
               })
             }}
           >
-            Show Statistics
+            {formatMessage({ id: message.common.catalogue.showStatistics })}
           </DropdownMenuItem>
           {canEdit && (
             <DropdownMenuItem
@@ -137,7 +137,7 @@ const CellActionDropdown = ({
               }}
               className="text-destructive"
             >
-              Delete Item
+              {formatMessage({ id: message.common.catalogue.deleteItem })}
             </DropdownMenuItem>
           )}
         </DropdownMenuContent>

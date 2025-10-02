@@ -1,6 +1,8 @@
 import { type FC } from 'react'
+import { useIntl } from 'react-intl'
 
 import { Disclosure } from '@/components/ui'
+import { message } from '@/i18n/src/messages'
 
 import { SystemDetailParameter } from '../system-detail-parameter.comp'
 
@@ -15,6 +17,7 @@ export const ItemPropertiesSection: FC<ItemPropertiesSectionProps> = ({
   hasOverriddenProperties,
   hasProperties
 }) => {
+  const { formatMessage: fm } = useIntl()
   if (!hasProperties) return null
 
   return (
@@ -29,7 +32,7 @@ export const ItemPropertiesSection: FC<ItemPropertiesSectionProps> = ({
       {hasOverriddenProperties && (
         <div className="mb-3 flex items-center">
           <span className="text-sm font-medium text-red-600 dark:text-red-400">
-            *Original catalog parameter modified by Service
+            {fm({ id: message.common.systemOverlay.originalCatalogParameter })}
           </span>
         </div>
       )}

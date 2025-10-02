@@ -11,6 +11,7 @@ import {
 } from 'react'
 import { useDropzone } from 'react-dropzone'
 import type { UseFormSetValue } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 import type { FileItem } from 'src/modules/shared/fileManager/types'
 
 import { Button } from '@/components/ui/button'
@@ -23,6 +24,7 @@ import {
   CarouselPrevious
 } from '@/components/ui/carousel'
 import useWarningModal from '@/hooks/useWarningModal'
+import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import { uniFetcher } from '@/utils/fetcher'
 
@@ -52,6 +54,7 @@ export const ImageGallery = forwardRef(
     }: GalleryProps,
     ref
   ) => {
+    const { formatMessage: fm } = useIntl()
     const [api, setApi] = useState<CarouselApi>()
     const [current, setCurrent] = useState(0)
     const [count, setCount] = useState(0)
@@ -164,7 +167,7 @@ export const ImageGallery = forwardRef(
                         className="h-6 text-xs px-2"
                       >
                         <Upload className="h-3 w-3 mr-1" />
-                        Upload
+                        {fm({ id: message.common.imageGallery.upload })}
                       </Button>
                     )}
 
@@ -176,14 +179,14 @@ export const ImageGallery = forwardRef(
                         onClick={() =>
                           withWarnModal(
                             handleDelete,
-                            `Are you sure you want to delete ${currentImage.name}?`
+                            `${fm({ id: message.common.imageGallery.confirmDelete })} ${currentImage.name}?`
                           )(currentImage)
                         }
                         disabled={disabled || !data || data.length === 0}
                         className="h-6 text-xs px-2 text-destructive hover:text-destructive hover:bg-destructive/20"
                       >
                         <Trash2 className="h-3 w-3 mr-1" />
-                        Delete
+                        {fm({ id: message.common.imageGallery.delete })}
                       </Button>
                     )}
                   </div>
@@ -274,11 +277,15 @@ export const ImageGallery = forwardRef(
                 <ImageIcon className="h-5 w-5 text-muted-foreground mb-1" />
                 <div className="space-y-0.5">
                   <p className="text-xs font-medium text-foreground">
-                    {hasEditRole ? 'Upload an image' : 'No images available'}
+                    {hasEditRole
+                      ? fm({ id: message.common.imageGallery.uploadAnImage })
+                      : fm({
+                          id: message.common.imageGallery.noImagesAvailable
+                        })}
                   </p>
                   {hasEditRole && (
                     <p className="text-xs text-muted-foreground opacity-75">
-                      PNG, JPG up to 10MB
+                      {fm({ id: message.common.imageGallery.pngJpgInfo })}
                     </p>
                   )}
                 </div>

@@ -1,10 +1,12 @@
 import { memo, useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
+import { useIntl } from 'react-intl'
 
 import { Button } from '@/components/Buttons'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 import useQueryManager from '@/hooks/useQueryManager'
 import useWarningModal from '@/hooks/useWarningModal'
+import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import type { SystemDetail } from '@/types/responses/systems'
 
@@ -29,6 +31,7 @@ import { useSystemsSparePartsColumns } from './SystemSpareParts.columns'
 const FilterMemoized = memo(SystemFilterButtonContainer)
 
 export const SystemsSparePartsContainer = () => {
+  const { formatMessage: fm } = useIntl()
   const tableId1 = 'spare-parts'
   const tableId2 = 'for-system'
 
@@ -281,7 +284,7 @@ export const SystemsSparePartsContainer = () => {
                 loading={loading}
                 onClick={handleAssignSpareParts}
               >
-                Assign Spare Parts
+                {fm({ id: message.common.systemsSpareParts.assignSpareParts })}
               </Button>
             </div>
           }

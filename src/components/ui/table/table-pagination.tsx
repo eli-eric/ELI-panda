@@ -5,7 +5,9 @@ import {
   ChevronsRight
 } from 'lucide-react'
 import React from 'react'
+import { useIntl } from 'react-intl'
 
+import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 
 import { PageSizeDropdown } from './page-size-dropdown'
@@ -18,6 +20,7 @@ import type { TablePaginationProps } from './types'
 export function TablePagination<T extends object>({
   table
 }: TablePaginationProps<T>) {
+  const { formatMessage: fm } = useIntl()
   // Default page size options
   const pageSizeOptions = [10, 25, 50, 100]
 
@@ -53,11 +56,12 @@ export function TablePagination<T extends object>({
           <ChevronLeft className="h-4 w-4" />
         </button>
         <span className="text-sm text-foreground">
-          Page{' '}
+          {fm({ id: message.common.ui.page })}{' '}
           <span className="font-medium">
             {table.getState().pagination.pageIndex + 1}
           </span>{' '}
-          of <span className="font-medium">{table.getPageCount() || 1}</span>
+          {fm({ id: message.common.ui.of })}{' '}
+          <span className="font-medium">{table.getPageCount() || 1}</span>
         </span>
         <button
           className={cn(
@@ -90,7 +94,9 @@ export function TablePagination<T extends object>({
       </div>
 
       <div className="flex items-center gap-2">
-        <span className="text-sm text-foreground">Rows per page</span>
+        <span className="text-sm text-foreground">
+          {fm({ id: message.common.ui.rowsPerPage })}
+        </span>
         <PageSizeDropdown
           value={table.getState().pagination.pageSize}
           onChange={value => table.setPageSize(value)}

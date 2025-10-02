@@ -102,9 +102,9 @@ export const SlideOver: FC<PropsWithChildren<Props>> = ({
                               type="button"
                               className="relative rounded-md bg-white dark:bg-gray-800 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
                               onClick={() => setOpen(false)}
+                              aria-label="Close panel"
                             >
                               <span className="absolute -inset-2.5" />
-                              <span className="sr-only">Close panel</span>
                               <X className="h-6 w-6" aria-hidden="true" />
                             </button>
                           </div>
@@ -129,9 +129,8 @@ export const SlideOver: FC<PropsWithChildren<Props>> = ({
                             type="button"
                             onClick={() => setOpen(false)}
                             className={buttons.goBack.className}
-                          >
-                            Cancel
-                          </Button>
+                            aria-label="Cancel"
+                          />
                         )}
                         {buttons.goAlter && (
                           <Button

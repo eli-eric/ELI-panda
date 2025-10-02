@@ -1,10 +1,12 @@
 import { ExternalLink } from 'lucide-react'
 import { type FC } from 'react'
+import { useIntl } from 'react-intl'
 
 import { Button } from '@/components/Buttons'
 import { Tooltip } from '@/components/Tooltip'
 import { Disclosure } from '@/components/ui'
 import { Badge } from '@/components/ui/badge'
+import { message } from '@/i18n/src/messages'
 import { useSystemStore } from '@/modules/shared/system/device-info-overlay/store/useShowDeviceStore'
 import { IconCell } from '@/modules/systems/components/table/cells/IconCell'
 import type { ITEM_USAGE } from '@/modules/systems/types/constants'
@@ -13,13 +15,16 @@ import { SystemDetailParameter } from '../system-detail-parameter.comp'
 
 interface SparePartsCoverageSectionProps {
   systemDetail: any
-  withDirtyProtection?: <T extends any[]>(callback: (...args: T) => void) => (...args: T) => void
+  withDirtyProtection?: <T extends any[]>(
+    callback: (...args: T) => void
+  ) => (...args: T) => void
 }
 
 export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
   systemDetail,
   withDirtyProtection
 }) => {
+  const { formatMessage: fm } = useIntl()
   const { setUID } = useSystemStore()
 
   const handleSystemRedirect = (uid: string) => {
@@ -34,7 +39,7 @@ export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
 
   return (
     <Disclosure
-      title="Spare Parts"
+      title={fm({ id: message.common.systemOverlay.spareParts })}
       defaultOpen={true}
       className="w-full border rounded-md overflow-hidden shadow-md"
       buttonClassName="bg-orange-50 dark:bg-orange-900/20"
@@ -68,7 +73,7 @@ export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
         systemDetail.sparePartsConnection.edges.length > 0 && (
           <div className="space-y-1">
             <h4 className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
-              Spare Parts:
+              {fm({ id: message.common.systemOverlay.spareParts })}
             </h4>
             {systemDetail.sparePartsConnection.edges.map(
               (edge: any, index: number) => {
@@ -105,7 +110,7 @@ export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
                           }}
                           className="text-[10px]"
                         >
-                          Use Spare
+                          {fm({ id: message.common.systemOverlay.useSpare })}
                         </Button>
                       </Tooltip>
                     </div>
@@ -120,7 +125,7 @@ export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
       {systemDetail?.sparePartsFor && systemDetail.sparePartsFor.length > 0 && (
         <div className="space-y-1">
           <h4 className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
-            Designated spare part for:
+            {fm({ id: message.common.systemOverlay.designatedSparePart })}
           </h4>
           {systemDetail.sparePartsFor.map((system: any, index: number) => {
             const { physicalItem, name, uid } = system

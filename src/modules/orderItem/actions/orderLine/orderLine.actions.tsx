@@ -60,11 +60,11 @@ export const OrderLineActionButtons = ({
 }: {
   orderLine: OrderLineFormType
 }) => {
-  const { formatMessage } = useIntl()
+  const { formatMessage: fm } = useIntl()
   const { deleteOrderLine, setOrderLine } = useOrderLine()
   const { openEditSheet } = useOrderLineEditSheet()
   const withWarning = useWarningModal(
-    formatMessage(
+    fm(
       { id: message.ordersPage.orderLines.deleteModal.message },
       createMessageValues({ name: orderLine.name })
     )
@@ -76,7 +76,9 @@ export const OrderLineActionButtons = ({
         <Button
           variant="ghost"
           size="sm"
-          aria-label="Order line actions"
+          aria-label={fm({
+            id: message.ordersPage.orderLines.actionsMenuAriaLabel
+          })}
           className="h-8 w-8 p-0"
         >
           <MoreVertical className="h-4 w-4 text-muted-foreground" />
@@ -92,14 +94,14 @@ export const OrderLineActionButtons = ({
           className="cursor-pointer"
         >
           <Edit className="h-4 w-4 mr-2" />
-          Edit
+          {fm({ id: message.common.buttons.edit })}
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => withWarning(deleteOrderLine)(orderLine)}
           className="cursor-pointer text-destructive focus:text-destructive"
         >
           <Trash2 className="h-4 w-4 mr-2" />
-          Delete
+          {fm({ id: message.common.buttons.delete })}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -113,6 +115,7 @@ export const OrderisDeliveredAction = ({
   orderLine: OrderLineFormType
   checked?: boolean
 }) => {
+  const { formatMessage: fm } = useIntl()
   const uid = useRouter().query.uid as string
   const { orderLineDelivery } = useEndpoint({
     uid: uid,
@@ -162,7 +165,13 @@ export const OrderisDeliveredAction = ({
       <FormModal
         open={open}
         setOpen={setOpen}
-        renderOutsideForm={<Heading text="Fill missing Serial Number" />}
+        renderOutsideForm={
+          <Heading
+            text={fm({
+              id: message.ordersPage.orderLines.missingSerialNumber.title
+            })}
+          />
+        }
         onSubmit={data => {
           submit({
             serialNumber: data?.serialNumber,
@@ -183,6 +192,7 @@ export const PrintEunButton = ({
 }: {
   orderLine: OrderLineFormType
 }) => {
+  const { formatMessage: fm } = useIntl()
   const { eunforPrint } = useEndpoint({
     uid: orderLine.eun,
     query: { printEUN: true }
@@ -191,7 +201,12 @@ export const PrintEunButton = ({
     endpoint: eunforPrint,
     method: 'put',
     onSuccess: () => {
-      toast.success(`EUN ${orderLine.eun} printed successfully`)
+      toast.success(
+        fm(
+          { id: message.ordersPage.orderLines.eunPrintedSuccessfully },
+          { eun: orderLine.eun }
+        )
+      )
     },
     onError: err => {
       toast.error(err.message)
@@ -199,7 +214,9 @@ export const PrintEunButton = ({
   })
 
   return (
-    <Tooltip content={'Print eun'}>
+    <Tooltip
+      content={fm({ id: message.ordersPage.orderLines.printEunTooltip })}
+    >
       <Button
         type="button"
         variant={'link'}
@@ -228,7 +245,9 @@ export const PriceFooter = ({ rows }: { rows: Row<any>[] }) => {
     <Fragment>
       {rows.length > 0 && (
         <div className="flex flex-col whitespace-nowrap py-1">
-          <span className="font-medium">{`${parseFloat(total.toFixed(2))} ${totalCurrency}`}</span>
+          <span className="font-medium">
+            {parseFloat(total.toFixed(2)).toFixed(2)} {totalCurrency}
+          </span>
         </div>
       )}
     </Fragment>

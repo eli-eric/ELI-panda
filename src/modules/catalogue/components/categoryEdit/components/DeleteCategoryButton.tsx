@@ -1,7 +1,9 @@
 import { Trash2 } from 'lucide-react'
 import type { FC } from 'react'
+import { useIntl } from 'react-intl'
 
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
+import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 
 interface EditCategoryProps {
@@ -11,6 +13,7 @@ interface EditCategoryProps {
 export const DeleteCategoryButton: FC<EditCategoryProps> = ({
   handleDelete
 }) => {
+  const { formatMessage: fm } = useIntl()
   return (
     <DropdownMenuItem asChild>
       <button
@@ -24,7 +27,9 @@ export const DeleteCategoryButton: FC<EditCategoryProps> = ({
           className="h-4 w-4 hover:text-destructive transform transition-transform hover:scale-110 duration-300"
           aria-hidden="true"
         />
-        <span className="ml-2">Delete Category</span>
+        <span className="ml-2">
+          {fm({ id: message.catalogue.category.delete })}
+        </span>
       </button>
     </DropdownMenuItem>
   )

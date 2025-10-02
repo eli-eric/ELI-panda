@@ -14,8 +14,7 @@ import {
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { Fragment } from 'react'
-import { useIntl } from 'react-intl'
-import { message } from 'src/i18n/src/messages'
+import { FormattedMessage } from 'react-intl'
 
 import { Tile, TileContainer } from '@/components/card/tile.comp'
 import { DashboardHeader } from '@/components/header/DashboardHeader'
@@ -23,6 +22,7 @@ import { ReleasesContainer } from '@/components/Releases.cont'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { VersionControl } from '@/components/version/VersionControl'
 import { useAccessControl } from '@/hooks/useAccessControl'
+import { messages } from '@/i18n/src/locale/en'
 import { CatalogueStatisticsContainer } from '@/modules/catalogueItem/components/statistics/CatalogueStatistics.cont'
 import FileManager from '@/modules/shared/fileManager/FileManager'
 import { FILE_TYPE } from '@/modules/shared/fileManager/types'
@@ -101,21 +101,19 @@ const tiles: Tile[] = [
   }
 ]
 
-const messages = message.dashboardPage
-
 const DashboardPage: NextPage = (): JSX.Element => {
-  const intl = useIntl()
-
   const hasEditRole = useAccessControl(ROLE.DASHBOARD_FILES_ADMIN)()
 
   return (
     <Fragment>
       <Head>
-        <title>{intl.formatMessage({ id: messages.head })}</title>
+        <title>
+          <FormattedMessage id={messages.common.pages.dashboard} />
+        </title>
         <meta name="description" content="...." />
       </Head>
       <main className="flex-1 min-h-0 w-full">
-        <DashboardHeader title={intl.formatMessage({ id: messages.head })} />
+        <DashboardHeader title="Dashboard" />
         <div className="mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 py-6">
           <div className="space-y-8">
             <div className="space-y-6">
@@ -123,7 +121,11 @@ const DashboardPage: NextPage = (): JSX.Element => {
                 <CardHeader>
                   <div className="flex items-center gap-2">
                     <Link className="size-6 text-primary" />
-                    <CardTitle>Quick navigation to all modules</CardTitle>
+                    <CardTitle>
+                      <FormattedMessage
+                        id={messages.common.pages.quickNavigation}
+                      />
+                    </CardTitle>
                   </div>
                 </CardHeader>
                 <TileContainer>

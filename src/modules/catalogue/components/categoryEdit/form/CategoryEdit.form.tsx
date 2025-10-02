@@ -1,9 +1,11 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 
 import { Form } from '@/components/form/Form'
 import { SheetFormButtons } from '@/components/sheet-form-buttons'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { message } from '@/i18n/src/messages'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import { ROLE } from '@/types/constants/roles'
@@ -41,6 +43,7 @@ const CategoryEditForm = ({
   })
 
   const { handleSubmit } = formMethods
+  const { formatMessage: fm } = useIntl()
   const { closeModal } = useModalGlobalStore()
 
   return (
@@ -54,13 +57,15 @@ const CategoryEditForm = ({
             closeModal('sheet')
           }
         }}
-        saveLabel="Save Category"
-        loadingText="Saving category..."
+        saveLabel={fm({ id: message.catalogue.category.save })}
+        loadingText={fm({ id: message.catalogue.category.saving })}
       />
       <div className="space-y-6">
         <Card>
           <CardHeader>
-            <CardTitle>Basic Information</CardTitle>
+            <CardTitle>
+              {fm({ id: message.catalogue.category.basicInformation })}
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <Main uid={uid} imageRef={imageRef} />
@@ -70,7 +75,9 @@ const CategoryEditForm = ({
         {/* Property Groups */}
         <Card>
           <CardHeader>
-            <CardTitle>Property Groups</CardTitle>
+            <CardTitle>
+              {fm({ id: message.catalogue.category.propertyGroups })}
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <GroupList />
@@ -80,7 +87,9 @@ const CategoryEditForm = ({
         {/* Physical Item Properties */}
         <Card>
           <CardHeader>
-            <CardTitle>Physical Properties</CardTitle>
+            <CardTitle>
+              {fm({ id: message.catalogue.category.physicalProperties })}
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <PhysicalItemProperties />

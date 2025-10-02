@@ -1,4 +1,5 @@
 import { type FC, Fragment } from 'react'
+import { useIntl } from 'react-intl'
 
 import Card from '@/components/layout/Card'
 import ModalButtonsComponent from '@/components/overlays/modal/modal.buttons'
@@ -12,6 +13,7 @@ import { SummaryListParam } from './components/SymmaryListParam.comp'
 const btnMessages = message.common.buttons
 
 export const SummaryStep: FC = () => {
+  const { formatMessage: fm } = useIntl()
   const {
     submitWizard,
     isPending,
@@ -73,7 +75,7 @@ export const SummaryStep: FC = () => {
           </ul>
           <ul className="grid grid-cols-1">
             <h3 className="font-bold underline text-gray-600 dark:text-gray-200">
-              Moving Item:
+              {fm({ id: message.common.forms.movingItem })}
             </h3>
             <SummaryListParam name="Usage" value={formData?.itemUsage?.name} />
             <SummaryListParam
@@ -92,7 +94,9 @@ export const SummaryStep: FC = () => {
           </ul>
           {oldItemParentSystem && (
             <ul className="grid grid-cols-1">
-              <h3 className="font-bold underline">Old Item Parent System:</h3>
+              <h3 className="font-bold underline">
+                {fm({ id: message.common.forms.oldItemParentSystem })}
+              </h3>
               <SummaryListParam
                 {...{
                   name: 'System Name',

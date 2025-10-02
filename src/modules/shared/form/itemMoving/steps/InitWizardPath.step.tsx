@@ -1,6 +1,6 @@
 import { FolderPlus, LayoutGrid } from 'lucide-react'
 import { type FC } from 'react'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import ModalButtonsComponent from '@/components/overlays/modal/modal.buttons'
 import { message } from '@/i18n/src/messages'
@@ -15,6 +15,7 @@ const messages = message.systemItem.itemMove.buttons
 const commonButton = message.common.buttons
 
 export const InitWizardPath: FC = () => {
+  const { formatMessage: fm } = useIntl()
   const { setOpen, setSelectedSystem, setMoveType, setIsMovingToNewSystem } =
     useModalWizardStore()
 
@@ -50,9 +51,7 @@ export const InitWizardPath: FC = () => {
       <div className="text-center flex flex-col justify-between">
         {/* more complex test what will describe a moving item and next steps */}
         <p className="text-gray-600 dark:text-gray-200 pb-10">
-          Please select or create a system to move the item to. If you already
-          have a system, you can select it. If you dont have a system, you can
-          create a new one.
+          {fm({ id: message.common.forms.selectOrCreateSystem })}
         </p>
         <div className="flex space-x-10 items-center">
           <InitWizardButton onClick={goToParentSystem}>
@@ -61,7 +60,9 @@ export const InitWizardPath: FC = () => {
               <FormattedMessage id={messages.createNewSystem} />
             </span>
           </InitWizardButton>
-          <h3 className="text-gray-900 dark:text-gray-200 text-md">OR</h3>
+          <h3 className="text-gray-900 dark:text-gray-200 text-md">
+            {fm({ id: message.common.forms.or })}
+          </h3>
           <InitWizardButton onClick={goToDestinationSystem}>
             <LayoutGrid className="w-12 h-12 mx-auto text-gray-400 dark:text-gray-300" />
             <span className="mt-2 block text-sm font-semibold text-gray-900 dark:text-gray-200">

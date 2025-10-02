@@ -160,6 +160,7 @@ export function RenameModalContent({
   onRename,
   onClose
 }: RenameModalProps & { onClose?: () => void }) {
+  const intl = useIntl()
   const [nameWithoutExt, setNameWithoutExt] = useState('')
   const [extension, setExtension] = useState('')
 
@@ -180,7 +181,9 @@ export function RenameModalContent({
   return (
     <div>
       <div className="space-y-2">
-        <Label htmlFor="file-name">New Name</Label>
+        <Label htmlFor="file-name">
+          {intl.formatMessage({ id: message.common.fileManager.newName })}
+        </Label>
         <div className="flex items-center gap-1">
           <Input
             id="file-name"

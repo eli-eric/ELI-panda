@@ -1,8 +1,10 @@
 import { type FC } from 'react'
+import { useIntl } from 'react-intl'
 
 import Card from '@/components/layout/Card'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
+import { message } from '@/i18n/src/messages'
 import type { GetRolesQuery } from '@/types/gql/graphql'
 import type { CodebookType } from '@/types/responses/codebook'
 
@@ -19,9 +21,13 @@ export const UserRoles: FC<Props> = ({
   assignedRoles,
   roles
 }) => {
+  const { formatMessage: fm } = useIntl()
+
   return (
     <Card>
-      <div className="pb-2 font-bold dark:text-gray-200">Roles</div>
+      <div className="pb-2 font-bold dark:text-gray-200">
+        {fm({ id: message.layout.profile.roles })}
+      </div>
       <ul className="" role="list">
         {roles?.map(role => {
           const isAssigned = assignedRoles?.some(

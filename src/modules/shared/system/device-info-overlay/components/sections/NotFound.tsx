@@ -1,4 +1,10 @@
+import { useIntl } from 'react-intl'
+
+import { message } from '@/i18n/src/messages'
+
 export const NotFound = ({ code }: { code: string }) => {
+  const { formatMessage: fm } = useIntl()
+
   return (
     <div className="flex flex-col items-center justify-center p-8 text-center">
       <div className="mb-4">
@@ -18,15 +24,17 @@ export const NotFound = ({ code }: { code: string }) => {
         </svg>
       </div>
       <h3 className="text-lg font-medium text-gray-900 dark:text-gray-200 mb-2">
-        System Not Found
+        {fm({ id: message.systemsPage.notFound.heading })}
       </h3>
       <p className="text-sm text-gray-500 dark:text-gray-400 mb-4 max-w-sm">
-        {`No system found with code "${code}". The system may not exist or may
-        have been deleted.`}
+        {fm({ id: message.systemsPage.notFound.message })}{' '}
+        {fm({ id: message.common.systemOverlay.notFoundQuote })}
+        {code}
+        {fm({ id: message.common.systemOverlay.notFoundQuote })}.{' '}
+        {fm({ id: message.systemsPage.notFound.mayNotExist })}
       </p>
       <div className="text-xs text-gray-400 dark:text-gray-500">
-        Try checking the system code or contact your administrator if you
-        believe this is an error.
+        {fm({ id: message.systemsPage.notFound.tryChecking })}
       </div>
     </div>
   )

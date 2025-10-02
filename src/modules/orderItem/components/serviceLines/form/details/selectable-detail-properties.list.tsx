@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 
 import { Heading } from '@/components/layout/Heading'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -21,6 +22,7 @@ export const SelectableDetailPropertiesList = ({
   )
   const { setValue } = useFormContext()
   const { selectedProperties } = useServiceLineSelectionStore()
+  const { formatMessage: fm } = useIntl()
 
   // Create an array of all details with their indices for useEffect
   const detailsWithIndices = Array.from(groupMap.entries()).flatMap(
@@ -89,14 +91,13 @@ export const SelectableDetailPropertiesList = ({
         <div className="flex items-center space-x-2">
           <Checkbox checked={true} disabled className="pointer-events-none" />
           <span className="text-sm text-gray-600 dark:text-gray-300">
-            Checked properties will be included in the service line
+            {fm({ id: 'ordersPage.serviceLines.selectable.checkedIncluded' })}
           </span>
         </div>
         <div className="mt-2 flex items-center space-x-2">
           <Checkbox checked={false} disabled className="pointer-events-none" />
           <span className="text-sm text-gray-700 dark:text-gray-300">
-            Unchecked properties will be disabled and excluded from the service
-            line
+            {fm({ id: 'ordersPage.serviceLines.selectable.uncheckedExcluded' })}
           </span>
         </div>
       </div>

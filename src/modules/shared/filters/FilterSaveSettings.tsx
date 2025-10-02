@@ -3,6 +3,7 @@ import { useSession } from 'next-auth/react'
 import type { UseFormReset } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { useIntl } from 'react-intl'
 
 import { Button } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
@@ -13,6 +14,7 @@ import { useFilterDelete } from '@/hooks/filter/useFilterDelete'
 import { useFilterDetails } from '@/hooks/filter/useFilterDetails'
 import { useFilterUpdate } from '@/hooks/filter/useFilterUpdate'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
+import { message } from '@/i18n/src/messages'
 import { useFormControlStore } from '@/store/useFormControlStore'
 import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 
@@ -28,6 +30,7 @@ export const FilterSaveSettings = ({
   resetForm,
   defaulFormValues
 }: Props) => {
+  const { formatMessage: fm } = useIntl()
   const formMethods = useForm()
   const savedFilter = formMethods.watch('savedFilter')
   const inputFormMethods = useForm()
@@ -199,21 +202,21 @@ export const FilterSaveSettings = ({
         </Button>
         <Listbox name="savedFilter" codebookResponse={filters} position="top" />
         <Button onClick={applyFilter} disabled={!savedFilter} className="pb-2">
-          Apply
+          {fm({ id: message.common.filters.apply })}
         </Button>
         <Button
           onClick={handleUpdateSavedFilter}
           className="pb-2"
           disabled={storeFilters.length === 0 || !savedFilter}
         >
-          Update
+          {fm({ id: message.common.filters.update })}
         </Button>
         <Button
           onClick={openSaveFilterModal}
           className="pb-2 whitespace-nowrap"
           disabled={storeFilters.length === 0}
         >
-          Save new
+          {fm({ id: message.common.filters.saveNew })}
         </Button>
       </Form>
     </div>

@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 import { MoreVertical } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { useIntl } from 'react-intl'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -12,6 +13,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import usePermission from '@/hooks/usePermission'
 import useWarningModal from '@/hooks/useWarningModal'
+import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import { useCategoryUid } from '@/modules/catalogue/hooks/useCategoryUid'
 import { useModalGlobalStore } from '@/store/useModalGlobalStore'
@@ -37,13 +39,14 @@ interface Props {
 // Akční menu vpravo
 const CategoryItemActions = ({ uid }: { uid: string }) => {
   const canEdit = usePermission([ROLE.CATALOGUE_EDIT])
+  const { formatMessage: fm } = useIntl()
   const { refetch } = useCategoryList()
 
   const { mutate } = useMutation({
     mutationFn: queryMutate('catalogueCategoryEdit', 'delete', uid),
     onSuccess: () => {
       refetch()
-      toast.success('Category deleted successfully')
+      toast.success(fm({ id: message.catalogue.category.deleted }))
     }
   })
   const withWarningModal = useWarningModal()
@@ -52,7 +55,7 @@ const CategoryItemActions = ({ uid }: { uid: string }) => {
     e.stopPropagation()
     withWarningModal(
       mutate,
-      'Are you sure you want to remove this Category?'
+      fm({ id: message.catalogue.category.confirmDelete })
     )({})
   }
 
@@ -72,7 +75,7 @@ const CategoryItemActions = ({ uid }: { uid: string }) => {
         props: {
           uid: data,
           parentUID,
-          title: 'Edit Copied Category'
+          title: fm({ id: message.catalogue.category.editCopied })
         },
         onClose: undefined
       })
@@ -84,7 +87,7 @@ const CategoryItemActions = ({ uid }: { uid: string }) => {
     e.stopPropagation()
     withWarningModal(
       copyCategory,
-      'Are you sure you want to copy this Category?'
+      fm({ id: message.catalogue.category.confirmCopy })
     )(undefined)
   }
 

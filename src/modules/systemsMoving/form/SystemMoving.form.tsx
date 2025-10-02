@@ -1,9 +1,12 @@
+import { useIntl } from 'react-intl'
+
 import { BreadcrumpContainer } from '@/components/breadcrumps/Breadcrump.cont'
 import { BreadcrumpItem } from '@/components/breadcrumps/Breadcrump.item'
 import Combobox from '@/components/form/Combobox'
 import { Input, TextArea } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
+import { message } from '@/i18n/src/messages'
 import type { CodebookType } from '@/types/responses/codebook'
 
 import { useSystemMovingFormFields } from './SystemMoving.fields'
@@ -13,6 +16,7 @@ interface SystemMovingFormProps {
 }
 
 export const SystemMovingForm = ({ parentPath }: SystemMovingFormProps) => {
+  const { formatMessage: fm } = useIntl()
   const fields = useSystemMovingFormFields()
 
   return (
@@ -20,7 +24,7 @@ export const SystemMovingForm = ({ parentPath }: SystemMovingFormProps) => {
       <Col lg={12}>
         <BreadcrumpContainer>
           <span className="text-sm font-medium text-gray-500">
-            Target System:{' '}
+            {fm({ id: message.common.systemsMoving.targetSystem })}{' '}
           </span>
           {parentPath?.map((item, index) => (
             <BreadcrumpItem key={index} name={item.name} />

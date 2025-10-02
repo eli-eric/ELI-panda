@@ -63,8 +63,8 @@ export const Notification = ({ t }: Props) => {
                       setShow(false)
                       toast.dismiss(t.id)
                     }}
+                    aria-label="Close notification"
                   >
-                    <span className="sr-only">Close</span>
                     <X className="h-4 w-4" aria-hidden="true" />
                   </button>
                 </div>
