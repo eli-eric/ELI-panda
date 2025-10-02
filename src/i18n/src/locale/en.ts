@@ -20,7 +20,7 @@ export const messages = {
       copy: 'Copy',
       generate: 'Gen',
       edit: 'Edit',
-      addTag: 'Add Tag',
+      addTag: 'Add Tag'
     },
     custom404: {
       title: '404',
@@ -168,7 +168,8 @@ export const messages = {
       viewServiceDetails: 'View Service Details',
       useSpare: 'Use Spare',
       designatedSparePart: 'Designated spare part for:',
-      originalCatalogParameter: '*Original catalog parameter modified by Service',
+      originalCatalogParameter:
+        '*Original catalog parameter modified by Service',
       jobPosition: ' ({position})',
       notFoundQuote: '"',
       showing: 'Showing',
@@ -552,8 +553,10 @@ export const messages = {
         markAllAsDelivered: 'Mark All as Delivered'
       },
       selectable: {
-        checkedIncluded: 'Checked properties will be included in the service line',
-        uncheckedExcluded: 'Unchecked properties will be disabled and excluded from the service line',
+        checkedIncluded:
+          'Checked properties will be included in the service line',
+        uncheckedExcluded:
+          'Unchecked properties will be disabled and excluded from the service line',
         error: 'Something went wrong'
       },
       columns: {

@@ -76,7 +76,9 @@ export const OrderLineActionButtons = ({
         <Button
           variant="ghost"
           size="sm"
-          aria-label={fm({ id: message.ordersPage.orderLines.actionsMenuAriaLabel })}
+          aria-label={fm({
+            id: message.ordersPage.orderLines.actionsMenuAriaLabel
+          })}
           className="h-8 w-8 p-0"
         >
           <MoreVertical className="h-4 w-4 text-muted-foreground" />
@@ -165,7 +167,9 @@ export const OrderisDeliveredAction = ({
         setOpen={setOpen}
         renderOutsideForm={
           <Heading
-            text={fm({ id: message.ordersPage.orderLines.missingSerialNumber.title })}
+            text={fm({
+              id: message.ordersPage.orderLines.missingSerialNumber.title
+            })}
           />
         }
         onSubmit={data => {
@@ -210,7 +214,9 @@ export const PrintEunButton = ({
   })
 
   return (
-    <Tooltip content={fm({ id: message.ordersPage.orderLines.printEunTooltip })}>
+    <Tooltip
+      content={fm({ id: message.ordersPage.orderLines.printEunTooltip })}
+    >
       <Button
         type="button"
         variant={'link'}

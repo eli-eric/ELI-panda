@@ -113,7 +113,9 @@ export const CatalogueStatisticsSimple = ({
 
         {/* Debug Info */}
         <div className="space-y-2">
-          <h4 className="text-sm font-medium">{fm({ id: message.common.ui.debugInfo })}</h4>
+          <h4 className="text-sm font-medium">
+            {fm({ id: message.common.ui.debugInfo })}
+          </h4>
           <pre className="text-xs bg-muted p-2 rounded overflow-auto">
             {JSON.stringify(itemStatistics, null, 2)}
           </pre>
