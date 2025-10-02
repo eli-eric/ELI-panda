@@ -1,6 +1,8 @@
 import { type FC, Fragment } from 'react'
+import { useIntl } from 'react-intl'
 
 import { Disclosure } from '@/components/ui'
+import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import { useSystemStore } from '@/modules/shared/system/device-info-overlay/store/useShowDeviceStore'
 import type { SystemLevel } from '@/types/gql/graphql'
@@ -14,7 +16,9 @@ interface SystemHierarchyProps {
   currentSystemName?: string | null
   currentSystemLevel?: SystemLevel | null
   className?: string
-  withDirtyProtection?: <T extends any[]>(callback: (...args: T) => void) => (...args: T) => void
+  withDirtyProtection?: <T extends any[]>(
+    callback: (...args: T) => void
+  ) => (...args: T) => void
 }
 
 export const SystemHierarchy: FC<SystemHierarchyProps> = ({
@@ -24,6 +28,7 @@ export const SystemHierarchy: FC<SystemHierarchyProps> = ({
   className,
   withDirtyProtection
 }) => {
+  const { formatMessage: fm } = useIntl()
   const { setUID } = useSystemStore()
 
   const handleSystemRedirect = (uid: string) => {
@@ -83,11 +88,15 @@ export const SystemHierarchy: FC<SystemHierarchyProps> = ({
                 </span>
               )}
               {index < parentPath.length - 1 && (
-                <span className="text-gray-400 mx-1">→</span>
+                <span className="text-gray-400 mx-1">
+                  {fm({ id: message.common.system.arrow })}
+                </span>
               )}
             </Fragment>
           ))}
-          <span className="text-gray-400 mx-1">→</span>
+          <span className="text-gray-400 mx-1">
+            {fm({ id: message.common.system.arrow })}
+          </span>
           <span
             className={cn(
               'px-2 py-1 rounded text-xs font-medium',

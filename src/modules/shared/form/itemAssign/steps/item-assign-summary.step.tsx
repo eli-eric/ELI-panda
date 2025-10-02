@@ -1,4 +1,5 @@
 import { type FC, Fragment } from 'react'
+import { useIntl } from 'react-intl'
 
 import Card from '@/components/layout/Card'
 import ModalButtonsComponent from '@/components/overlays/modal/modal.buttons'
@@ -13,6 +14,7 @@ import { SummaryListParam } from '../../itemMoving/steps/components/SymmaryListP
 const btnMessages = message.common.buttons
 
 export const ItemAssignSummaryStep: FC = () => {
+  const { formatMessage: fm } = useIntl()
   const {
     submitWizard,
     isPending,
@@ -41,7 +43,7 @@ export const ItemAssignSummaryStep: FC = () => {
         <div className={cn('grid grid-cols-2')}>
           <ul className="grid grid-cols-1">
             <h3 className="font-bold underline text-gray-600 dark:text-gray-200">
-              {'Source System:'}
+              {fm({ id: message.common.forms.sourceSystem })}
             </h3>
             <SummaryListParam
               {...{
@@ -58,7 +60,7 @@ export const ItemAssignSummaryStep: FC = () => {
           </ul>
           <ul className="grid grid-cols-1">
             <h3 className="font-bold underline text-gray-600 dark:text-gray-200">
-              Assigning Item:
+              {fm({ id: message.common.forms.assigningItem })}
             </h3>
             <SummaryListParam
               name="Usage"

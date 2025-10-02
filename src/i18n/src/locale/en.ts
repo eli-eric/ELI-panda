@@ -222,6 +222,25 @@ export const messages = {
         'Please select or create a system to move the item to. If you already have a system, you can select it. If you dont have a system, you can create a new one.',
       or: 'OR'
     },
+    system: {
+      arrow: '→',
+      noSystemSelected: 'No system selected'
+    },
+    systemTypeEdit: {
+      systemTypeGroups: 'System Type Groups',
+      manageGroups: 'Manage groups for organizing system types',
+      noGroupsFound: 'No groups found. Create your first group to get started.',
+      systemTypes: 'System Types',
+      selectGroup: 'Select a group from the left panel to view system types.',
+      noSystemTypes:
+        'No system types found in this group. Add the first system type.',
+      addGroup: 'Add Group',
+      addType: 'Add Type',
+      editGroup: 'Edit Group',
+      deleteGroup: 'Delete Group',
+      editType: 'Edit Type',
+      deleteType: 'Delete Type'
+    },
     table: {
       category: 'Category'
     },

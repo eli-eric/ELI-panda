@@ -1,4 +1,7 @@
 import { Suspense } from 'react'
+import { useIntl } from 'react-intl'
+
+import { message } from '@/i18n/src/messages'
 
 import { useSystemStore } from '../device-info-overlay/store/useShowDeviceStore'
 import { SystemEditForm } from './components/system-edit.form'
@@ -8,13 +11,14 @@ export const SystemEditContainer = ({
   uid: propUid,
   onClose
 }: { uid?: string; onClose?: () => void } = {}) => {
+  const { formatMessage: fm } = useIntl()
   const { uid: storeUid } = useSystemStore()
 
   // Use prop UID as fallback for backward compatibility
   const uid = storeUid || propUid
 
   if (!uid) {
-    return <div>No system selected</div>
+    return <div>{fm({ id: message.common.system.noSystemSelected })}</div>
   }
 
   return (

@@ -6,8 +6,10 @@ import type {
   UseFormReset
 } from 'react-hook-form'
 import { FormProvider, useForm } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 
 import { Button } from '@/components/ui/button'
+import { message } from '@/i18n/src/messages'
 
 import FormStep from './components/form-step'
 import { StepIndicator } from './components/step-indicator'
@@ -24,6 +26,7 @@ export const FormWizard = <T extends Record<string, any>>({
   onSubmit,
   initialData
 }: FormWizardProps<T>) => {
+  const { formatMessage: fm } = useIntl()
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
   const [isProcessing, setIsProcessing] = useState(false)
   const methods = useForm<T>({
@@ -137,7 +140,7 @@ export const FormWizard = <T extends Record<string, any>>({
                 onClick={handleBack}
                 disabled={isProcessing}
               >
-                Previous
+                {fm({ id: message.common.forms.previous })}
               </Button>
             ) : (
               <div />
