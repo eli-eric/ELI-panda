@@ -1,7 +1,9 @@
 import { ListCollapse } from 'lucide-react'
+import { useIntl } from 'react-intl'
 
 import { Col, Grid } from '@/components/grid/Grid'
 import { Disclosure } from '@/components/ui'
+import { message } from '@/i18n/src/messages'
 
 import { ItemProperty } from './ItemProperty'
 
@@ -10,6 +12,8 @@ interface ItemPropertiesProps {
 }
 
 export const ItemProperties = ({ properties }: ItemPropertiesProps) => {
+  const { formatMessage: fm } = useIntl()
+
   if (!properties || properties.length === 0) {
     return null
   }
@@ -17,7 +21,7 @@ export const ItemProperties = ({ properties }: ItemPropertiesProps) => {
   const title = (
     <div className="flex items-center gap-2">
       <ListCollapse className="h-4 w-4 text-muted-foreground" />
-      <span>Catalogue Properties</span>
+      <span>{fm({ id: message.common.systemItem.catalogueProperties })}</span>
     </div>
   )
 

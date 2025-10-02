@@ -7,7 +7,7 @@ import { Edit, MoreVertical, Trash2 } from 'lucide-react'
 import { type FC } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import { Form } from '@/components/form/Form'
 import { Input } from '@/components/form/inputs'
@@ -159,6 +159,7 @@ export const SystemTypeItem: FC<Props> = ({
   refetch,
   groupUid
 }) => {
+  const { formatMessage: fm } = useIntl()
   const canEdit = usePermission([ROLE.SYSTEM_TYPE_EDIT])
 
   const withWarningModal = useWarningModal(
@@ -213,7 +214,7 @@ export const SystemTypeItem: FC<Props> = ({
               className="cursor-pointer"
             >
               <Edit className="h-4 w-4 mr-2" />
-              Edit Type
+              {fm({ id: message.common.systemTypeEdit.editType })}
             </DropdownMenuItem>
             {canEdit && (
               <DropdownMenuItem
@@ -221,7 +222,7 @@ export const SystemTypeItem: FC<Props> = ({
                 className="cursor-pointer text-destructive focus:text-destructive"
               >
                 <Trash2 className="h-4 w-4 mr-2" />
-                Delete Type
+                {fm({ id: message.common.systemTypeEdit.deleteType })}
               </DropdownMenuItem>
             )}
           </DropdownMenuContent>

@@ -241,6 +241,19 @@ export const messages = {
       editType: 'Edit Type',
       deleteType: 'Delete Type'
     },
+    systemItem: {
+      catalogueProperties: 'Catalogue Properties',
+      generate: 'Generate',
+      release: 'Release',
+      viewCatalogueItem: 'View Catalogue Item',
+      noHistoryFound: 'No history found',
+      movedItemTo: 'moved Item to',
+      movedThe: 'moved the',
+      fromUnderThatSystem: 'from under that system',
+      thisSystemWasMovedFrom: 'this system was moved from',
+      movedItemFrom: 'moved item from',
+      sparePartsAvailable: 'Available {available} out of {required} required'
+    },
     table: {
       category: 'Category'
     },

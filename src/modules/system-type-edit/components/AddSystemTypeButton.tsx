@@ -4,7 +4,7 @@ import { Plus } from 'lucide-react'
 import { type FC } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import { Form } from '@/components/form/Form'
 import { Input } from '@/components/form/inputs'
@@ -115,6 +115,7 @@ const AddSystemTypeModalContent: FC<Props> = ({ selectedGroup, refetch }) => {
 }
 
 export const AddSystemTypeButton: FC<Props> = ({ selectedGroup, refetch }) => {
+  const { formatMessage: fm } = useIntl()
   const canEdit = usePermission([ROLE.SYSTEM_TYPE_EDIT])
 
   return (
@@ -128,7 +129,7 @@ export const AddSystemTypeButton: FC<Props> = ({ selectedGroup, refetch }) => {
       className="gap-2"
     >
       <Plus className="h-4 w-4" />
-      Add Type
+      {fm({ id: message.common.systemTypeEdit.addType })}
     </Button>
   )
 }
