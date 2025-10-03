@@ -14,7 +14,7 @@ import {
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { Fragment } from 'react'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import { Tile, TileContainer } from '@/components/card/tile.comp'
 import { DashboardHeader } from '@/components/header/DashboardHeader'
@@ -22,7 +22,7 @@ import { ReleasesContainer } from '@/components/Releases.cont'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { VersionControl } from '@/components/version/VersionControl'
 import { useAccessControl } from '@/hooks/useAccessControl'
-import { messages } from '@/i18n/src/locale/en'
+import { message } from '@/i18n/src/messages'
 import { CatalogueStatisticsContainer } from '@/modules/catalogueItem/components/statistics/CatalogueStatistics.cont'
 import FileManager from '@/modules/shared/fileManager/FileManager'
 import { FILE_TYPE } from '@/modules/shared/fileManager/types'
@@ -101,14 +101,17 @@ const tiles: Tile[] = [
   }
 ]
 
+const messages = message.common.pages
+
 const DashboardPage: NextPage = (): JSX.Element => {
   const hasEditRole = useAccessControl(ROLE.DASHBOARD_FILES_ADMIN)()
+  const { formatMessage: fm } = useIntl()
 
   return (
     <Fragment>
       <Head>
         <title>
-          <FormattedMessage id={messages.common.pages.dashboard} />
+          <FormattedMessage id={messages.dashboard} />
         </title>
         <meta name="description" content="...." />
       </Head>
@@ -122,9 +125,7 @@ const DashboardPage: NextPage = (): JSX.Element => {
                   <div className="flex items-center gap-2">
                     <Link className="size-6 text-primary" />
                     <CardTitle>
-                      <FormattedMessage
-                        id={messages.common.pages.quickNavigation}
-                      />
+                      {fm({ id: messages.quickNavigation })}
                     </CardTitle>
                   </div>
                 </CardHeader>
