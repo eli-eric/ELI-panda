@@ -19,7 +19,7 @@ const server = async (): Promise<ApolloServer> => {
 
   return new ApolloServer({
     schema,
-    plugins: [ApolloServerPluginLandingPageProductionDefault()]
+    plugins: [ApolloServerPluginLandingPageLocalDefault()]
   })
 }
 
