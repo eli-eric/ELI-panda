@@ -1,21 +1,19 @@
-import { Fragment, useState } from 'react'
+import { useCallback } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import { ModalSelect } from '@/components/form/ModalSelect'
-import { Modal } from '@/components/overlays/modal/modal.comp'
-import { message } from '@/i18n/src/messages'
-import { SystemsTable } from '@/modules/systems/components/table/Systems.table'
 import type { CODEBOOK } from '@/types/constants/codebook'
-import type { FieldProps, ModalButtons, Option } from '@/types/form'
+import type { FieldProps, Option } from '@/types/form'
 import type { CodebookType } from '@/types/responses/codebook'
-import { cx } from '@/utils'
 
-const messages = message.common.buttons
+import { useSystemSelectionModal } from './hooks/useSystemSelectionModal'
 
 export const SelectSystemComboBox = ({
   selectSystemField,
   className,
+  disabled,
   onChange,
+  onSelect,
   isFilter = false
 }: {
   selectSystemField: FieldProps & {
@@ -23,68 +21,37 @@ export const SelectSystemComboBox = ({
     codebook?: CODEBOOK | undefined
   }
   className?: string
+  disabled?: boolean
   onChange?: (value?: any) => void
+  onSelect?: (item?: CodebookType | null) => void
   isFilter?: boolean
 }) => {
-  const [open, setOpen] = useState(false)
-  const [selectedSystem, setSelectedSystem] = useState<CodebookType | null>(
-    null
-  )
-  const { setValue } = useFormContext()
+  const formContext = useFormContext()
+  const { openSystemModal } = useSystemSelectionModal()
 
-  const buttons: ModalButtons = {
-    goNext: {
-      text: messages.continue,
-      disabled: !selectedSystem,
-      onClick: () => {
-        setValue(selectSystemField.name, selectedSystem)
-        onChange?.(selectedSystem)
-        setOpen(false)
+  const handleSystemSelect = useCallback(
+    (value: CodebookType | null) => {
+      if (formContext && selectSystemField.name) {
+        formContext.setValue(selectSystemField.name, value)
       }
+      onChange?.(value)
+      onSelect?.(value)
     },
-    goBack: {
-      text: messages.cancel,
-      onClick: () => {
-        setOpen(false)
-      }
-    }
+    [formContext, selectSystemField.name, onChange, onSelect]
+  )
+
+  const handleOpenModal = () => {
+    openSystemModal(handleSystemSelect)
   }
 
   return (
-    <Fragment>
-      <ModalSelect
-        {...selectSystemField}
-        className={className}
-        onChange={onChange}
-        onClick={() => {
-          setOpen(true)
-        }}
-        isFilter={isFilter}
-      />
-      <Modal open={open} setOpen={setOpen} buttons={buttons}>
-        <SystemsTable
-          tableId={'systemSelect'}
-          hideButtons={true}
-          className={'overflow-y-auto relative h-[423px]'}
-          settings={{
-            enableRowSelection: true
-          }}
-          getRowProps={row => ({
-            onClick: () => {
-              setSelectedSystem({
-                name: row.original.name,
-                uid: row.original.uid
-              })
-            },
-            className: cx(
-              selectedSystem?.uid === row.original.uid
-                ? 'bg-primary-200 hover:bg-primary-200 dark:bg-primary-600 dark:hover:bg-primary-600'
-                : '',
-              'cursor-pointer'
-            )
-          })}
-        />
-      </Modal>
-    </Fragment>
+    <ModalSelect
+      {...selectSystemField}
+      onChange={onChange}
+      className={className}
+      disabled={disabled}
+      onClick={handleOpenModal}
+      isFilter={isFilter}
+    />
   )
 }

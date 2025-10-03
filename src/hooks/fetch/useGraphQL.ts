@@ -3,12 +3,15 @@ import type {
   MutationFunction,
   UseMutationOptions,
   UseMutationResult,
-  UseQueryOptions
+  UseQueryOptions,
+  UseSuspenseQueryOptions,
+  UseSuspenseQueryResult
 } from '@tanstack/react-query'
 import {
   useMutation,
   useQuery,
-  type UseQueryResult
+  type UseQueryResult,
+  useSuspenseQuery
 } from '@tanstack/react-query'
 import { request } from 'graphql-request'
 
@@ -47,6 +50,39 @@ export function useGraphQL<TResult, TVariables extends Variables>(
   }
 
   return useQuery(adjustedOptions)
+}
+
+export function useSuspenseGraphQL<TResult, TVariables extends Variables>(
+  document: TypedDocumentNode<TResult, TVariables>,
+  options?: Omit<
+    UseSuspenseQueryOptions<TResult, Error, TResult, any[]>,
+    'queryKey' | 'queryFn'
+  > & {
+    variables?: TVariables
+    customQueryKey?: unknown[]
+  }
+): UseSuspenseQueryResult<TResult, Error> {
+  const adjustedOptions: UseSuspenseQueryOptions<
+    TResult,
+    Error,
+    TResult,
+    any[]
+  > = {
+    ...options,
+    queryFn: async () => {
+      return typedGraphQLRequest<TResult, TVariables>(
+        document,
+        options?.variables
+      )
+    },
+    queryKey: options?.customQueryKey ?? [
+      (document.definitions[0] as any).name.value,
+      options?.variables,
+      document
+    ]
+  }
+
+  return useSuspenseQuery(adjustedOptions)
 }
 
 export function useGraphQLMutation<

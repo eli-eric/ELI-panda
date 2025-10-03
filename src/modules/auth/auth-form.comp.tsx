@@ -1,53 +1,67 @@
 import { signIn } from 'next-auth/react'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 
-import { Button } from '@/components/Buttons'
 import EliLogoComponent from '@/components/eli-logo.comp'
+import { Button } from '@/components/ui/button'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from '@/components/ui/card'
 
 const { title } = message.authPage
 
 const AuthFormComponent = () => {
+  const { formatMessage: fm } = useIntl()
   return (
-    <div className="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="flex min-h-screen flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <EliLogoComponent customClass="mx-auto h-[100px] w-auto" />
-        <h2>
-          <FormattedMessage id={title} />
-        </h2>
-      </div>
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white dark:bg-gray-800 py-8 px-4 border border-spacing-1 shadow sm:rounded-lg sm:px-10">
-          <div className="pb-6">
-            <Button
-              primary
-              disabled
-              type="button"
-              className="mt-4 w-full justify-center"
-              onClick={() => signIn('azure-ad-beamlines')}
-            >
-              ELI - ALPS
-            </Button>
-            <Button
-              primary
-              type="button"
-              testid="beamlines"
-              className="mt-4 w-full justify-center"
-              onClick={() => signIn('azure-ad-beamlines')}
-            >
-              ELI - BEAMLINES
-            </Button>
-            <Button
-              primary
-              disabled
-              type="button"
-              className="mt-4 w-full justify-center"
-              onClick={() => signIn('azure-ad-beamlines')}
-            >
-              ELI - NP
-            </Button>
-          </div>
-        </div>
+        <Card>
+          <CardHeader className="space-y-1">
+            <div className="flex justify-center mb-4">
+              <EliLogoComponent customClass="h-[100px] w-auto" />
+            </div>
+            <CardTitle className="text-2xl text-center">
+              <FormattedMessage id={title} />
+            </CardTitle>
+            <CardDescription className="text-center">
+              {fm({ id: message.authPage.chooseFacility })}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col gap-4">
+              <Button
+                variant="outline"
+                disabled
+                type="button"
+                className="w-full"
+                onClick={() => signIn('azure-ad-beamlines')}
+              >
+                {fm({ id: message.authPage.facilities.alps })}
+              </Button>
+              <Button
+                type="button"
+                data-testid="beamlines"
+                className="w-full"
+                onClick={() => signIn('azure-ad-beamlines')}
+              >
+                {fm({ id: message.authPage.facilities.beamlines })}
+              </Button>
+              <Button
+                variant="outline"
+                disabled
+                type="button"
+                className="w-full"
+                onClick={() => signIn('azure-ad-beamlines')}
+              >
+                {fm({ id: message.authPage.facilities.np })}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   )

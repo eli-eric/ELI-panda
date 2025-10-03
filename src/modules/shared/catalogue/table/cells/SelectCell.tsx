@@ -22,7 +22,7 @@ export const SelectCell = ({
       onChange={() => {
         setItem(original)
       }}
-      className="h-4 w-4 border-gray-300 text-primary-500 focus:ring-primary-500"
+      className="h-4 w-4 border-gray-300 text-orange-500 focus:ring-orange-500"
     />
   </div>
 )

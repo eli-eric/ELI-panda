@@ -7,7 +7,7 @@
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended",
-    "plugin:@tanstack/eslint-plugin-query/recommended",
+    "plugin:@tanstack/query/recommended",
     "prettier"
   ],
   "plugins": [
@@ -45,14 +45,36 @@
     "react-hooks/exhaustive-deps": "warn",
     "arrow-body-style": "off",
     "no-console": "warn",
-    "linebreak-style": ["warn", "unix"],
-    "sort-imports": "off", // Necessary keep off to enable simple-import-sort/sort rule
-    "import/order": "off", // Necessary keep off to enable simple-import-sort/sort rule
+    "linebreak-style": ["off", "unix"],
+    "sort-imports": "off",
+    "import/order": "off",
     "react/prefer-stateless-function": [2, { "ignorePureComponents": false }],
     "prettier/prettier": "off",
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "warn",
-    "no-case-declarations": "off"
+    "no-case-declarations": "off",
+    "react/jsx-no-literals": [
+      "warn",
+      {
+        "noStrings": true,
+        "allowedStrings": [
+          " ",
+          ":",
+          ",",
+          ".",
+          "-",
+          "+",
+          "(",
+          ")",
+          "/",
+          "\\",
+          "?",
+          "!",
+          "&"
+        ],
+        "ignoreProps": true
+      }
+    ]
   },
   "overrides": [
     {

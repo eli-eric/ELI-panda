@@ -1,10 +1,11 @@
-import { XMarkIcon } from '@heroicons/react/24/outline'
+import { X } from 'lucide-react'
 import { useQueryState } from 'next-usequerystate'
 import { useCallback, useMemo, useState } from 'react'
+import { useIntl } from 'react-intl'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
-import { Badge } from '@/components/visuals/Badge'
+import { Badge } from '@/components/ui/badge'
 import { useFormFilter } from '@/hooks/form/useFormFilters'
 import type { CodebookType } from '@/types/responses/codebook'
 
@@ -52,9 +53,10 @@ const CatalogueContainer = () => {
     },
     [setCategoryQuery]
   )
+  const { formatMessage: fm } = useIntl()
 
   return (
-    <div className="z-10">
+    <div className="w-max-full flex flex-col">
       <SearchBar
         left={<SearchBarButtons filterFormMethods={filterFormMethods} />}
         tableId={tableId}
@@ -64,8 +66,13 @@ const CatalogueContainer = () => {
             additionalBadge={
               categoryQuery ? (
                 <Badge>
-                  <span>{'category'}</span>
-                  <XMarkIcon
+                  <span>
+                    {fm({
+                      id: 'common.table.category',
+                      defaultMessage: 'Category'
+                    })}
+                  </span>
+                  <X
                     className="h-4 w-4 ml-1 cursor-pointer hover:text-red-600"
                     onClick={() => {
                       setCategoryQuery(null)
@@ -80,14 +87,9 @@ const CatalogueContainer = () => {
       <CatalogueBreadcrumbs setCategoryFilter={setCategoryFilter} />
       <CategoryListContainer
         setCategoryFilter={setCategoryFilter}
-        onChange={open => {
-          setOpen(open)
-        }}
+        onChange={setOpen}
       />
-      <TableLayoutContainer
-        deps={[open, catalogueItems, catalogueCategories]}
-        className={'border-t border-gray-300'}
-      >
+      <TableLayoutContainer deps={[open, catalogueItems, catalogueCategories]}>
         <CatalogueTable
           tableId={tableId}
           setCategoryFilter={setCategoryFilter}

@@ -2,7 +2,7 @@ import type { HeaderGroup } from '@tanstack/react-table'
 import { flexRender } from '@tanstack/react-table'
 import type { FC } from 'react'
 
-import { cx } from '@/utils'
+import { cn } from '@/lib/utils'
 
 interface Props {
   getFooterGroups: () => HeaderGroup<any>[]
@@ -13,12 +13,12 @@ export const TableFoot: FC<Props> = ({ getFooterGroups }) => (
     {getFooterGroups().map(footerGroup => (
       <tr
         key={footerGroup.id}
-        className={cx('bg-gray-50 dark:bg-gray-700 dark:text-gray-200')}
+        className={cn('bg-gray-50 dark:bg-gray-700 dark:text-gray-200')}
       >
         {footerGroup.headers.map(header => (
           <td
             key={header.id}
-            className={cx(
+            className={cn(
               'text-xs sm:pl-6 sm:pr-6 text-gray-500',
               header.column.columnDef.meta?.className
             )}

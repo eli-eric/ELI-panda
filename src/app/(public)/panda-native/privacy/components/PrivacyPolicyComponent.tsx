@@ -1,61 +1,110 @@
+'use client'
+import { useIntl } from 'react-intl'
+
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Separator } from '@/components/ui/separator'
+import { message } from '@/i18n/src/messages'
+
 import { privacyPolicyConfig } from '../config/privacy-policy'
 
 export default function PrivacyPolicyComponent() {
   const { appName, organization, lastUpdated, sections } = privacyPolicyConfig
+  const { formatMessage: fm } = useIntl()
 
   return (
-    <div className="privacy-container">
+    <div className="container max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
       {/* Header */}
-      <div className="privacy-header">
-        <h1 className="privacy-title">{sections.introduction.title}</h1>
-        <p className="privacy-subtitle">
-          Internal application for {organization}
+      <div className="text-center mb-8">
+        <h1 className="text-4xl font-bold tracking-tight text-foreground mb-4">
+          {sections.introduction.title}
+        </h1>
+        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          {fm({ id: message.common.ui.internalApplicationFor })} {organization}
         </p>
       </div>
 
-      {/* Introduction */}
-      <div className="privacy-section">
-        <div className="privacy-content">{sections.introduction.content}</div>
-      </div>
+      <div className="space-y-6">
+        {/* Introduction */}
+        <Card>
+          <CardContent className="pt-6">
+            <p className="text-foreground leading-relaxed">
+              {sections.introduction.content}
+            </p>
+          </CardContent>
+        </Card>
 
-      {/* Data Access */}
-      <div className="privacy-section">
-        <h2 className="privacy-section-title">{sections.dataAccess.title}</h2>
-        <ul className="privacy-list">
-          {sections.dataAccess.items.map((item, index) => (
-            <li key={index} className="privacy-list-item">
-              <div className="privacy-list-bullet" />
-              <span>{item}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
+        {/* Data Access */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-xl font-semibold">
+              {sections.dataAccess.title}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ul className="space-y-3">
+              {sections.dataAccess.items.map((item, index) => (
+                <li key={index} className="flex items-start gap-3">
+                  <div className="w-2 h-2 bg-primary rounded-full mt-2 shrink-0" />
+                  <span className="text-foreground leading-relaxed">
+                    {item}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
 
-      {/* Usage Scope */}
-      <div className="privacy-section">
-        <h2 className="privacy-section-title">{sections.usageScope.title}</h2>
-        <div className="privacy-content">{sections.usageScope.content}</div>
-      </div>
+        {/* Usage Scope */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-xl font-semibold">
+              {sections.usageScope.title}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-foreground leading-relaxed">
+              {sections.usageScope.content}
+            </p>
+          </CardContent>
+        </Card>
 
-      {/* Data Storage */}
-      <div className="privacy-section">
-        <h2 className="privacy-section-title">{sections.dataStorage.title}</h2>
-        <div className="privacy-content">{sections.dataStorage.content}</div>
-      </div>
+        {/* Data Storage */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-xl font-semibold">
+              {sections.dataStorage.title}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-foreground leading-relaxed">
+              {sections.dataStorage.content}
+            </p>
+          </CardContent>
+        </Card>
 
-      {/* Contact */}
-      <div className="privacy-section">
-        <h2 className="privacy-section-title">{sections.contact.title}</h2>
-        <div className="privacy-content">{sections.contact.content}</div>
+        {/* Contact */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-xl font-semibold">
+              {sections.contact.title}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-foreground leading-relaxed">
+              {sections.contact.content}
+            </p>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Footer */}
-      <div className="privacy-footer">
-        <p>
-          {appName} | {organization}
+      <Separator className="my-8" />
+      <div className="text-center space-y-2">
+        <p className="text-sm font-medium text-foreground">
+          {appName} {fm({ id: message.common.ui.separator })} {organization}
         </p>
-        <p className="mt-2">
-          Last updated:{' '}
+        <p className="text-sm text-muted-foreground">
+          {fm({ id: message.common.ui.lastUpdated })}{' '}
           {new Date(lastUpdated).toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'long',

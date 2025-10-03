@@ -1,279 +1,360 @@
 import {
-  ArrowDownTrayIcon,
-  ArrowPathIcon,
-  ArrowUturnLeftIcon,
-  FolderOpenIcon,
-  FolderPlusIcon,
-  FunnelIcon,
-  MinusIcon,
-  NoSymbolIcon,
-  PencilSquareIcon,
-  PlusIcon,
-  QrCodeIcon,
-  ShareIcon,
-  TableCellsIcon,
-  TrashIcon,
-  XMarkIcon
-} from '@heroicons/react/24/outline'
-import { FolderArrowDownIcon } from '@heroicons/react/24/solid'
+  ArrowDown,
+  ArrowLeft,
+  Download,
+  Edit,
+  Filter,
+  FolderOpen,
+  Minus,
+  Plus,
+  QrCode,
+  RotateCcw,
+  Save,
+  Share,
+  Table,
+  Trash2,
+  X,
+  XCircle
+} from 'lucide-react'
 import Link from 'next/link'
 import type { FC, PropsWithChildren } from 'react'
 import { Fragment } from 'react'
 import { FormattedMessage } from 'react-intl'
 import type { UrlObject } from 'url'
 
-import { cx } from '@/utils'
+import { Button as ShadcnButton } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 
 import ButtonLoaderComponent from './button-loader.comp'
 
-interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
-  rounded?:
-    | 'rounded-l-md'
-    | 'rounded-t-md'
-    | 'rounded-r-md'
-    | 'rounded-b-md'
-    | 'rounded-md'
-    | 'rounded-tl-md'
-    | 'rounded-tr-md'
-    | 'rounded-br-md'
-    | 'rounded-bl-md'
-    | 'rounded-md'
-    | ''
+interface ButtonProps {
+  variant?:
+    | 'default'
+    | 'destructive'
+    | 'outline'
+    | 'secondary'
+    | 'ghost'
+    | 'link'
+  size?: 'default' | 'sm' | 'lg' | 'icon'
   loading?: boolean
-  primary?: boolean
+  disabled?: boolean
   type?: 'button' | 'submit' | 'reset'
-  buttonSize?: 'small' | 'large'
+  className?: string
   testid?: string
   text?: string
+  onClick?: () => void
+  children?: React.ReactNode
 }
 
 export const Button = ({
-  rounded = 'rounded-md',
+  variant = 'default',
+  size = 'default',
   loading,
   text,
   disabled,
-  primary = false,
   children,
   className,
-  buttonSize,
   testid,
   type = 'button',
+  onClick,
   ...restProps
 }: ButtonProps) => (
-  <button
-    {...restProps}
-    data-testid={testid}
-    disabled={loading ? true : disabled}
+  <ShadcnButton
+    variant={variant}
+    size={size}
+    disabled={loading || disabled}
     type={type}
-    className={cx(
-      'btn',
-      rounded,
-      loading && 'bg-primary-700',
-      buttonSize === 'small' ? 'px-1 py-1' : 'px-2 py-2',
-      primary ? 'btn-primary' : 'btn-secondary',
-      disabled && 'btn-disabled',
+    className={cn(
+      loading && 'opacity-50',
+      'cursor-pointer hover:border-primary',
       className
     )}
+    data-testid={testid}
+    onClick={onClick}
+    {...restProps}
   >
     {loading && <ButtonLoaderComponent />}
     {children}
     {text && <FormattedMessage id={text} />}
-  </button>
+  </ShadcnButton>
 )
 
 export const DeleteButton = ({
-  buttonSize = 'small',
+  size = 'sm',
+  variant = 'outline',
   ...restProps
 }: ButtonProps) => (
-  <Button {...restProps} buttonSize={buttonSize}>
-    <TrashIcon className="h-4 w-4 text-red-700" aria-hidden="true" />
+  <Button {...restProps} size={size} variant={variant}>
+    <Trash2 className="h-4 w-4 text-red-600" />
   </Button>
 )
 
 export const EditButton = ({
-  buttonSize = 'small',
+  size = 'sm',
+  variant = 'outline',
   ...restProps
 }: ButtonProps) => (
-  <Button {...restProps} buttonSize={buttonSize}>
-    <PencilSquareIcon className="h-4 w-4" aria-hidden="true" />
+  <Button {...restProps} size={size} variant={variant}>
+    <Edit className="h-4 w-4" />
   </Button>
 )
 
 export const DetailButton = ({
-  buttonSize = 'small',
+  size = 'sm',
+  variant = 'outline',
   ...restProps
 }: ButtonProps) => (
-  <Button {...restProps} buttonSize={buttonSize}>
-    <FolderOpenIcon className="h-4 w-4" aria-hidden="true" />
+  <Button {...restProps} size={size} variant={variant}>
+    <FolderOpen className="h-4 w-4" />
   </Button>
 )
 
 export const DownloadButton = ({
-  buttonSize = 'small',
+  size = 'sm',
+  variant = 'outline',
   ...restProps
 }: ButtonProps) => (
-  <Button {...restProps} buttonSize={buttonSize}>
-    <ArrowDownTrayIcon className="h-4 w-4" aria-hidden="true" />
+  <Button {...restProps} size={size} variant={variant}>
+    <Download className="h-4 w-4" />
   </Button>
 )
 
 export const PlusButton = ({
-  buttonSize = 'small',
+  size = 'sm',
+  variant = 'outline',
   ...restProps
 }: ButtonProps) => (
-  <Button {...restProps} buttonSize={buttonSize}>
-    <PlusIcon className="h-4 w-4" aria-hidden="true" />
+  <Button {...restProps} size={size} variant={variant}>
+    <Plus className="h-4 w-4" />
   </Button>
 )
 
 export const MinusButton = ({
-  buttonSize = 'small',
+  size = 'sm',
+  variant = 'outline',
   ...restProps
 }: ButtonProps) => (
-  <Button {...restProps} buttonSize={buttonSize}>
-    <MinusIcon className="h-4 w-4" aria-hidden="true" />
+  <Button {...restProps} size={size} variant={variant}>
+    <Minus className="h-4 w-4" />
   </Button>
 )
 
 export const BackButton = ({
-  buttonSize = 'small',
+  size,
+  variant = 'outline',
   ...restProps
 }: ButtonProps) => (
-  <Button {...restProps} buttonSize={buttonSize}>
-    <ArrowUturnLeftIcon className="h-4 w-4" aria-hidden="true" />
+  <Button {...restProps} size={size} variant={variant}>
+    <ArrowLeft className="h-4 w-4" />
   </Button>
 )
 
 export const SaveButton = ({
-  buttonSize = 'small',
+  size = 'sm',
+  variant = 'outline',
   ...restProps
 }: ButtonProps) => (
-  <Button {...restProps} buttonSize={buttonSize}>
-    <FolderPlusIcon className="h-4 w-4" aria-hidden="true" />
+  <Button {...restProps} size={size} variant={variant}>
+    <Save className="h-4 w-4" />
   </Button>
 )
 
 export const CancelButton = ({
-  buttonSize = 'small',
+  size = 'sm',
+  variant = 'outline',
   ...restProps
 }: ButtonProps) => (
-  <Button {...restProps} buttonSize={buttonSize}>
-    <NoSymbolIcon className="h-4 w-4" aria-hidden="true" />
+  <Button {...restProps} size={size} variant={variant}>
+    <XCircle className="h-4 w-4" />
   </Button>
 )
 
 export const RefreshButton = ({
-  buttonSize = 'small',
+  size = 'sm',
+  variant = 'outline',
   ...restProps
 }: ButtonProps) => (
-  <Button {...restProps} buttonSize={buttonSize}>
-    <ArrowPathIcon className="h-4 w-4" aria-hidden="true" />
+  <Button {...restProps} size={size} variant={variant}>
+    <RotateCcw className="h-4 w-4" />
   </Button>
 )
 
 export const QRReaderButton = ({
-  buttonSize = 'small',
+  size = 'sm',
+  variant = 'outline',
   ...restProps
 }: ButtonProps) => (
-  <Button {...restProps} buttonSize={buttonSize}>
-    <QrCodeIcon className="h-4 w-4" aria-hidden="true" />
+  <Button {...restProps} size={size} variant={variant}>
+    <QrCode className="h-4 w-4" />
   </Button>
 )
 
 export const FilterButton = ({
-  buttonSize = 'small',
+  size = 'sm',
+  variant = 'outline',
   ...restProps
 }: ButtonProps) => (
-  <Button {...restProps} buttonSize={buttonSize}>
-    <FunnelIcon className="h-4 w-4" aria-hidden="true" />
+  <Button {...restProps} size={size} variant={variant}>
+    <Filter className="h-4 w-4" />
   </Button>
 )
+
 export const CSVButton = ({
-  buttonSize = 'small',
+  size = 'sm',
+  variant = 'outline',
   ...restProps
 }: ButtonProps) => (
-  <Button {...restProps} buttonSize={buttonSize}>
-    <FolderArrowDownIcon className="h-4 w-4" aria-hidden="true" />
+  <Button {...restProps} size={size} variant={variant}>
+    <ArrowDown className="h-4 w-4" />
   </Button>
 )
+
 export const StatsButton = ({
-  buttonSize = 'small',
+  size = 'sm',
+  variant = 'outline',
   ...restProps
 }: ButtonProps) => (
-  <Button {...restProps} buttonSize={buttonSize}>
-    <TableCellsIcon className="h-4 w-4" aria-hidden="true" />
+  <Button {...restProps} size={size} variant={variant}>
+    <Table className="h-4 w-4" />
   </Button>
 )
 
 export const GraphTreeButton = ({
-  buttonSize = 'small',
+  size = 'sm',
+  variant = 'outline',
   ...restProps
 }: ButtonProps) => (
-  <Button {...restProps} buttonSize={buttonSize}>
-    <ShareIcon className="h-4 w-4" aria-hidden="true" />
+  <Button {...restProps} size={size} variant={variant}>
+    <Share className="h-4 w-4" />
   </Button>
 )
 
-export const TableEditButton = ({ type = 'button', ...props }: ButtonProps) => (
-  <button className="ml-2  hover:text-primary-500" type={type} {...props}>
-    <PencilSquareIcon className="h-4 w-4" aria-hidden="true" />
-  </button>
-)
-export const TableGraphTreeButton = ({
+export const TableEditButton = ({
   type = 'button',
+  className,
   ...props
 }: ButtonProps) => (
-  <button className="ml-2  hover:text-primary-500" type={type} {...props}>
-    <ShareIcon className="h-4 w-4" aria-hidden="true" />
-  </button>
+  <ShadcnButton
+    variant="ghost"
+    size="icon"
+    className={cn('ml-2 h-8 w-8 hover:text-orange-500', className)}
+    type={type}
+    {...props}
+  >
+    <Edit className="h-4 w-4" />
+  </ShadcnButton>
 )
 
-export const TableOpenButton = ({ type = 'button', ...props }: ButtonProps) => (
-  <button className="ml-2  hover:text-primary-500" type={type} {...props}>
-    <FolderOpenIcon className="h-4 w-4" aria-hidden="true" />
-  </button>
+export const TableGraphTreeButton = ({
+  type = 'button',
+  className,
+  ...props
+}: ButtonProps) => (
+  <ShadcnButton
+    variant="ghost"
+    size="icon"
+    className={cn('ml-2 h-8 w-8 hover:text-orange-500', className)}
+    type={type}
+    {...props}
+  >
+    <Share className="h-4 w-4" />
+  </ShadcnButton>
 )
 
-export const XmarkButton = ({ type = 'button', ...props }: ButtonProps) => (
-  <button className="ml-2  hover:text-primary-500" type={type} {...props}>
-    <XMarkIcon className="h-4 w-4" aria-hidden="true" />
-  </button>
+export const TableOpenButton = ({
+  type = 'button',
+  className,
+  ...props
+}: ButtonProps) => (
+  <ShadcnButton
+    variant="ghost"
+    size="icon"
+    className={cn('ml-2 h-8 w-8 hover:text-orange-500', className)}
+    type={type}
+    {...props}
+  >
+    <FolderOpen className="h-4 w-4" />
+  </ShadcnButton>
+)
+
+export const XmarkButton = ({
+  type = 'button',
+  className,
+  ...props
+}: ButtonProps) => (
+  <ShadcnButton
+    variant="ghost"
+    size="icon"
+    className={cn('ml-2 h-8 w-8 hover:text-orange-500', className)}
+    type={type}
+    {...props}
+  >
+    <X className="h-4 w-4" />
+  </ShadcnButton>
 )
 
 export const TableDeleteButton = ({
   type = 'button',
+  className,
   ...props
 }: ButtonProps) => (
-  <button
-    {...props}
-    className={cx('ml-2 hover:text-primary-500 text-red-700', props.className)}
+  <ShadcnButton
+    variant="ghost"
+    size="icon"
+    className={cn('ml-2 h-8 w-8 hover:text-orange-500 text-red-600', className)}
     type={type}
+    {...props}
   >
-    <TrashIcon className="h-4 w-4" aria-hidden="true" />
-  </button>
+    <Trash2 className="h-4 w-4" />
+  </ShadcnButton>
 )
 
 export const TableStatsButton = ({
   type = 'button',
+  className,
   ...props
 }: ButtonProps) => (
-  <button className="ml-2 hover:text-primary-500" type={type} {...props}>
-    <TableCellsIcon className="h-4 w-4" aria-hidden="true" />
-  </button>
+  <ShadcnButton
+    variant="ghost"
+    size="icon"
+    className={cn('ml-2 h-8 w-8 hover:text-orange-500', className)}
+    type={type}
+    {...props}
+  >
+    <Table className="h-4 w-4" />
+  </ShadcnButton>
 )
 
-export const TablePlusButton = ({ type = 'button', ...props }: ButtonProps) => (
-  <button className="ml-2  hover:text-primary-500" type={type} {...props}>
-    <PlusIcon className="h-4 w-4" aria-hidden="true" />
-  </button>
-)
-export const TableDownloadButton = ({
+export const TablePlusButton = ({
   type = 'button',
+  className,
   ...props
 }: ButtonProps) => (
-  <button className="ml-2  hover:text-primary-500" type={type} {...props}>
-    <ArrowDownTrayIcon className="h-4 w-4" aria-hidden="true" />
-  </button>
+  <ShadcnButton
+    variant="ghost"
+    size="icon"
+    className={cn('ml-2 h-8 w-8 hover:text-orange-500', className)}
+    type={type}
+    {...props}
+  >
+    <Plus className="h-4 w-4" />
+  </ShadcnButton>
+)
+
+export const TableDownloadButton = ({
+  type = 'button',
+  className,
+  ...props
+}: ButtonProps) => (
+  <ShadcnButton
+    variant="ghost"
+    size="icon"
+    className={cn('ml-2 h-8 w-8 hover:text-orange-500', className)}
+    type={type}
+    {...props}
+  >
+    <Download className="h-4 w-4" />
+  </ShadcnButton>
 )
 
 type TableButtonWrapperProps = {
@@ -284,7 +365,7 @@ export const TableButtonsWrapper: FC<
   PropsWithChildren<TableButtonWrapperProps>
 > = ({ children, position = 'right-0', className }) => (
   <div
-    className={cx(
+    className={cn(
       'absolute flex items-center bg-inherit pr-1',
       'sm:opacity-0 sm:group-hover:opacity-100 opacity-100',
       'z-50',

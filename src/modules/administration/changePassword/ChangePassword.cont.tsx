@@ -4,12 +4,14 @@ import { useSession } from 'next-auth/react'
 import type { FC } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { useIntl } from 'react-intl'
 import * as yup from 'yup'
 
 import { Button } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
 import { Input } from '@/components/form/inputs'
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
+import { message } from '@/i18n/src/messages'
 import { gql } from '@/types/gql'
 
 import { useUserUpdate } from '../user/hooks/useUserUpdate'
@@ -52,6 +54,7 @@ const makeSchema = () =>
       .required('Confirm password is required')
   })
 export const ChangePasswordContainer: FC = () => {
+  const { formatMessage: fm } = useIntl()
   const userUid = useSession().data?.user?.uid
 
   const { data: userPassword, isLoading } = useGraphQL(GET_USER_PASSWORD, {
@@ -102,7 +105,7 @@ export const ChangePasswordContainer: FC = () => {
               htmlFor="currentPassword"
               className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-200 sm:pt-1.5"
             >
-              Current password
+              {fm({ id: message.common.ui.currentPassword })}
             </label>
             <Input
               type="password"
@@ -118,7 +121,7 @@ export const ChangePasswordContainer: FC = () => {
               htmlFor="newPassword"
               className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-200 sm:pt-1.5"
             >
-              New password
+              {fm({ id: message.common.ui.newPassword })}
             </label>
             <Input
               type="password"
@@ -133,7 +136,7 @@ export const ChangePasswordContainer: FC = () => {
               htmlFor="confirmPassword"
               className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-200 sm:pt-1.5"
             >
-              Confirm new password
+              {fm({ id: message.common.ui.confirmNewPassword })}
             </label>
             <Input
               type="password"
@@ -151,10 +154,10 @@ export const ChangePasswordContainer: FC = () => {
               formMethods.reset()
             }}
           >
-            Cancel
+            {fm({ id: message.common.buttons.cancel })}
           </Button>
-          <Button type="submit" primary loading={loading || isLoading}>
-            Update Password
+          <Button type="submit" loading={loading || isLoading}>
+            {fm({ id: message.common.ui.updatePassword })}
           </Button>
         </div>
       </div>

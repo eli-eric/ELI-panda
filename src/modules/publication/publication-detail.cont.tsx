@@ -1,4 +1,4 @@
-import { yupResolver } from '@hookform/resolvers/yup'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import { type FC } from 'react'
@@ -17,8 +17,8 @@ import FileManager from '../shared/fileManager/FileManager'
 import { FILE_TYPE } from '../shared/fileManager/types'
 import { PublicationFormComponent } from './components/publication-form.comp'
 import {
-  validationSchemeOther,
-  validationSchemePeerReviewed
+  publicationOtherSchema,
+  publicationPeerReviewedSchema
 } from './form/scheme'
 import { useMediaTypeStore } from './hooks/useMediaTypeStore'
 import { usePublicationMutation } from './hooks/usePublicationMutation'
@@ -51,15 +51,15 @@ export const PublicationDetailContainer: FC<Props> = ({
   const defaultValues = publication
     ? formatPublication(publication)
     : ({
-        authorsDepartments: [{ department: null, authorsCount: '' }]
+        authorsDepartments: [{ department: null, authorsCount: 0 }]
       } as unknown as PublicationForm)
 
   const formMethods = useForm<any>({
     defaultValues: publication ? formatPublication(publication) : defaultValues,
-    resolver: yupResolver(
+    resolver: zodResolver(
       mediaType === MEDIA_TYPE_CODE.PeerReviewedArticle
-        ? validationSchemePeerReviewed
-        : validationSchemeOther
+        ? publicationPeerReviewedSchema
+        : publicationOtherSchema
     )
   })
 

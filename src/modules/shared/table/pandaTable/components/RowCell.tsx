@@ -3,7 +3,7 @@ import { flexRender } from '@tanstack/react-table'
 import type { FC } from 'react'
 import React, { useId } from 'react'
 
-import { cx } from '@/utils'
+import { cn } from '@/lib/utils'
 
 import styles from './RowCell.module.css'
 
@@ -40,7 +40,7 @@ export const RowCell: FC<Props> = ({ row, cell, loading }) => {
             : undefined
         } as React.CSSProperties
       }
-      className={cx(
+      className={cn(
         ' border-r border-b border-gray-400 dark:text-gray-100 pl-3 pr-3',
         cell.column.columnDef.meta?.sticky
           ? 'sticky z-30 backdrop-blur-2xl backdrop-filter border-r pt-1 pb-1'

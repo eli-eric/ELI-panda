@@ -3,13 +3,13 @@ import { Fragment } from 'react'
 
 import { PlusButton } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
-import { Table } from '@/components/ui'
+import { Table } from '@/components/ui/table'
+import { cn } from '@/lib/utils'
 import { PATH } from '@/types/constants/paths'
-import { cx } from '@/utils'
 
 import { useSystemSubsystems } from '../../hooks/useSubsystems'
 import { useSystemDetail } from '../../hooks/useSystemDetail'
-import { getColorBySystemLevel, getFontBySystemLevel } from '../../utils'
+import { getFontBySystemLevel } from '../../utils'
 import { useSubSystemsColumns } from './SubSustems.columns'
 import type { TableSystem } from './types'
 
@@ -29,7 +29,7 @@ export const SubSystemsContainer = () => {
             }
           }}
         >
-          <PlusButton buttonSize="large" primary />
+          <PlusButton />
         </Link>
       </Heading>
       <Table<TableSystem>
@@ -38,10 +38,9 @@ export const SubSystemsContainer = () => {
         enableFiltering
         enablePagination
         className={'relative overflow-x-auto mb-0 pb-0'}
-        getRowProps={({ physicalItem, systemLevel, sp_coverage }, index) => ({
-          className: cx(
-            physicalItem && 'font-bold text-gray-700 dark:text-gray-200',
-            getColorBySystemLevel(systemLevel || undefined, index),
+        getRowProps={({ physicalItem, systemLevel, sp_coverage }) => ({
+          className: cn(
+            physicalItem && 'font-bold',
             getFontBySystemLevel(systemLevel || undefined),
             sp_coverage != null &&
               sp_coverage < 1 &&

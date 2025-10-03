@@ -1,14 +1,12 @@
 import { useWarningModalStore } from 'src/store/useWarningModalStore'
-import { shallow } from 'zustand/shallow'
 
 import Modal from '@/components/overlays/modal/warning/modal-warning.comp'
 import { message as intlMessage } from '@/i18n/src/messages'
 
 export const WarningModal = () => {
-  const [params, patchParams, resetParams] = useWarningModalStore(
-    state => [state.params, state.patchParams, state.resetParams],
-    shallow
-  )
+  const params = useWarningModalStore(state => state.params)
+  const confirmModal = useWarningModalStore(state => state.confirmModal)
+  const closeModal = useWarningModalStore(state => state.closeModal)
 
   const { isOpen, error, message } = params
 
@@ -17,12 +15,14 @@ export const WarningModal = () => {
     goNext: {
       text: messages.buttons.continue,
       loading: false,
-      onClick: () => patchParams({ isConfirmed: true })
+      onClick: () => {
+        confirmModal()
+      }
     },
     goBack: {
       text: messages.buttons.cancel,
       onClick: () => {
-        resetParams()
+        closeModal()
       }
     }
   }
@@ -30,7 +30,9 @@ export const WarningModal = () => {
     <Modal
       buttons={buttons}
       open={isOpen}
-      setOpen={bool => patchParams({ isOpen: bool })}
+      setOpen={bool => {
+        if (!bool) closeModal()
+      }}
       title={messages.warning}
       message={message}
       error={error}

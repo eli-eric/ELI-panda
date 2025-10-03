@@ -1,7 +1,7 @@
 import { flexRender } from '@tanstack/react-table'
 import React from 'react'
 
-import { cx } from '@/utils'
+import { cn } from '@/lib/utils'
 
 import type { TableFooterProps } from './types'
 
@@ -29,17 +29,14 @@ export function TableFooter<T extends object>({
 
   return (
     <tfoot
-      className={cx(
-        'bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700',
+      className={cn(
+        'bg-muted/50 border-t border-border',
         'relative z-20',
         footerClassName
       )}
     >
       {table.getFooterGroups().map(footerGroup => (
-        <tr
-          key={footerGroup.id}
-          className="border-t border-gray-200 dark:border-gray-700"
-        >
+        <tr key={footerGroup.id} className="border-t border-border">
           {footerGroup.headers.map((header, headerIndex) => {
             // Get width from column definition if available
             const width = header.column.getSize()
@@ -86,25 +83,22 @@ export function TableFooter<T extends object>({
               position: isPinned ? 'sticky' : undefined,
               left: isPinned === 'left' ? `${leftOffset}px` : undefined,
               right: isPinned === 'right' ? `${rightOffset}px` : undefined,
-              zIndex: isPinned ? 21 : 20,
-              background: 'inherit',
-              opacity: 0.9,
-              backdropFilter: 'blur(4px)'
+              zIndex: isPinned ? 21 : 20
             }
 
             return (
               <th
                 key={header.id}
                 colSpan={header.colSpan}
-                className={cx(
-                  'px-4 py-2 text-left font-medium text-gray-500 dark:text-gray-400',
+                className={cn(
+                  'px-4 py-2 text-left font-medium text-muted-foreground',
                   'whitespace-nowrap',
-                  // Add border and background styles for pinned columns
+                  // Add border and backdrop-blur with overlay for pinned columns
                   isPinned === 'left'
-                    ? 'border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800'
+                    ? 'border-r border-border backdrop-blur-sm before:absolute before:inset-0 before:bg-background/30 before:pointer-events-none before:z-[-1] relative'
                     : '',
                   isPinned === 'right'
-                    ? 'border-l border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800'
+                    ? 'border-l border-border backdrop-blur-sm before:absolute before:inset-0 before:bg-background/30 before:pointer-events-none before:z-[-1] relative'
                     : ''
                 )}
                 style={style}

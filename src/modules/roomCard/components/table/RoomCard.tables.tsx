@@ -3,7 +3,7 @@ import type { FC } from 'react'
 import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
 import Card from '@/components/layout/Card'
 import { Heading } from '@/components/layout/Heading'
-import { Table } from '@/components/ui'
+import { Table } from '@/components/ui/table'
 import usePermission from '@/hooks/usePermission'
 import { ROLE } from '@/types/constants/roles'
 import type { CodebookType } from '@/types/responses/codebook'
@@ -83,7 +83,7 @@ export const RoomCardTables: FC<Props> = ({
       <Heading
         customText="LOCATIONS"
         className="mb-0"
-        textColor="text-primary-500"
+        textColor="text-orange-500"
         showBorder={false}
       >
         {editPersmission && <AddLocationButton />}
@@ -98,7 +98,7 @@ export const RoomCardTables: FC<Props> = ({
       <Heading
         customText="CLEAN ROOMS"
         className="mb-0"
-        textColor="text-primary-500"
+        textColor="text-orange-500"
         showBorder={false}
       />
       <Table<any>
@@ -111,7 +111,7 @@ export const RoomCardTables: FC<Props> = ({
       <Heading
         customText="BULDING MAINTENANCE - FM"
         className="mb-0"
-        textColor="text-primary-500"
+        textColor="text-orange-500"
         showBorder={false}
       />
       <Table<any>

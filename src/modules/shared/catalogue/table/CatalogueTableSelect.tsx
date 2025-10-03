@@ -1,10 +1,10 @@
 import { type Dispatch, Fragment, type SetStateAction, useEffect } from 'react'
 
+import { cn } from '@/lib/utils'
 import { useCatalogueItems } from '@/modules/catalogue/hooks/useCatalogueItems'
 import { useCategoryList } from '@/modules/catalogue/hooks/useCategoryList'
 import useTableStateStore from '@/store/useTableStateStore'
 import type { CatalogueItem } from '@/types/responses/catalogue'
-import { cx } from '@/utils'
 
 import { Pagination } from '../../table/Pagination'
 import { SearchBar } from '../../table/SearchBar'
@@ -46,10 +46,10 @@ const CatalogueTableSelect = ({ setItem, selectedItem }: Props) => {
           hideButtons={true}
           loading={loading}
           getRowProps={row => ({
-            className: cx(
+            className: cn(
               'cursor-pointer',
               row.original.uid === selectedItem?.uid
-                ? 'bg-primary-300 dark:bg-primary-600 hover:bg-color-300 dark:hover:bg-color-600'
+                ? 'bg-orange-300 dark:bg-orange-600 hover:bg-color-300 dark:hover:bg-color-600'
                 : ''
             ),
             onClick: () => {

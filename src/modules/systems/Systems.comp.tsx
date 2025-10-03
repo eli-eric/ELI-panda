@@ -1,12 +1,8 @@
 import type { FC } from 'react'
 
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
-import { cx } from '@/utils'
+import { cn } from '@/lib/utils'
 
-import {
-  getColorBySystemLevel,
-  getFontBySystemLevel
-} from '../systemItem/utils'
 import { SystemsTable } from './components/table/Systems.table'
 
 interface Props {
@@ -17,7 +13,6 @@ interface Props {
   className?: string
   hideButtons?: boolean
   RightSearchBarElement?: () => JSX.Element
-
   LeftSearchBarElement?: () => JSX.Element
 }
 
@@ -42,11 +37,8 @@ export const SystemsComponent: FC<Props> = ({
         pageSizeDefault={50}
         className={'relative overflow-scroll scrollbar-style'}
         getRowProps={({ original }) => ({
-          className: cx(
-            getColorBySystemLevel(original?.systemLevel),
-            getFontBySystemLevel(original?.systemLevel),
-            original?.physicalItem &&
-              'font-bold text-gray-700 dark:text-gray-200',
+          className: cn(
+            original?.physicalItem && 'font-bold',
             original?.statistics?.sp_coverage != null &&
               original.statistics.sp_coverage < 1 &&
               'text-red-500 dark:text-red-500 font-bold'

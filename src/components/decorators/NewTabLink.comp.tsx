@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import type { FC } from 'react'
 
-import { LinkDecorator } from './LinkDecorator.comp'
+import { cn } from '@/lib/utils'
 
 interface NewTabLinkProps {
   href: string
@@ -9,9 +9,16 @@ interface NewTabLinkProps {
   className?: string
 }
 export const NewTabLink: FC<NewTabLinkProps> = ({ href, value, className }) => (
-  <Link href={href} target="_blank">
-    <LinkDecorator className={className}>
-      <span>{value}</span>
-    </LinkDecorator>
+  <Link
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    onClick={e => e.stopPropagation()}
+    className={cn(
+      'text-primary hover:text-primary/80 underline cursor-pointer',
+      className
+    )}
+  >
+    {value}
   </Link>
 )

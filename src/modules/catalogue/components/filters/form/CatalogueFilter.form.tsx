@@ -3,11 +3,11 @@ import { useQueryState } from 'next-usequerystate'
 import { ComboboxTreeControlled } from '@/components/form/ComboBoxControlled'
 import { Input } from '@/components/form/inputs'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
+import { cn } from '@/lib/utils'
 import useCatalogueFormFields from '@/modules/catalogueItem/components/form/CatalogueForm.fields'
 import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
 import { CategoryPropFilters } from '@/modules/shared/form/CategoryPropFilters'
 import { useFormControlStore } from '@/store/useFormControlStore'
-import { cx } from '@/utils'
 
 interface CatalogueFilterFormProps {
   tableId: string
@@ -27,7 +27,7 @@ export const CatalogueFilterForm = ({
   const { toggleDeleteCustom } = useFormControlStore()
 
   return (
-    <div className={cx('md:grid md:grid-cols-2 md:gap-4 md:min-w-[500px]')}>
+    <div className={cn('md:grid md:grid-cols-2 md:gap-4 md:min-w-[500px]')}>
       <div className="flex flex-col gap-2">
         <Input
           {...fields.name}

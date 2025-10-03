@@ -1,10 +1,15 @@
-import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { Plus, Trash2 } from 'lucide-react'
 import { startTransition, useEffect } from 'react'
+import type { FieldArrayPath } from 'react-hook-form'
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 
-import { Button } from '@/components/Buttons'
 import { Input } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
+import { Tooltip } from '@/components/Tooltip'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { message } from '@/i18n/src/messages'
 import {
   defaultBoolOptions,
   PROPERTY_INPUT_TYPE,
@@ -19,19 +24,26 @@ import MoveButtons from './MoveButtons'
 
 //eslint-disable-next-line
 const ValueItem = ({ removeValue, index, name }) => {
+  const { formatMessage: fm } = useIntl()
   const handleRemoveValue = () => {
     removeValue(index)
   }
 
   return (
-    <div className="flex">
+    <div className="flex gap-2 mb-2">
       <Input
-        rounded="rounded-l-md"
-        name={`${name}.value`}
-        placeholder="Value"
+        name={`${name}`}
+        placeholder={fm({ id: message.catalogue.category.propertyEnterValue })}
+        className="flex-1"
       />
-      <Button rounded="rounded-r-md" onClick={handleRemoveValue}>
-        <TrashIcon className="h-4 w-4 text-red-700" aria-hidden="true" />
+      <Button
+        type="button"
+        variant="outline"
+        size="sm"
+        onClick={handleRemoveValue}
+        className="px-3"
+      >
+        <Trash2 className="h-4 w-4 text-destructive" />
       </Button>
     </div>
   )
@@ -58,21 +70,24 @@ const PropertyItem = ({
   lenght
 }: Props) => {
   const { watch, control, unregister } = useFormContext<CategoryFormType>()
-  const { fields, append, remove } = useFieldArray({
+  const { formatMessage: fm } = useIntl()
+  const { fields, append, remove } = useFieldArray<
+    CategoryFormType,
+    FieldArrayPath<CategoryFormType>
+  >({
     control,
-    name: `${name}.listOfValues`
+    // name needs to be a FieldArrayPath for the form type; cast to satisfy TS
+    name: `${name}.listOfValues` as FieldArrayPath<CategoryFormType>
   })
 
   const handleRemoveProp = () => {
     removeProp(index)
   }
   const handleAddValue = () => {
-    append({ value: '' })
+    append('' as any)
   }
   const type = useWatch({ control, name: `${name}.type` })
-
-  //eslint-disable-next-line
-  const listOfValues = watch(`${name}.listOfValues`) || []
+  const propertyName = useWatch({ control, name: `${name}.name` })
 
   /* const getDefaultOption = (name, disabled = false) => ({
     value: '',
@@ -82,31 +97,40 @@ const PropertyItem = ({
 
   useEffect(() => {
     startTransition(() => {
-      if (type?.uid !== PROPERTY_TYPE.LIST && listOfValues.length !== 0) {
+      if (type?.uid !== PROPERTY_TYPE.LIST && fields.length !== 0) {
         unregister(`${name}.listOfValues`)
       }
     })
-  }, [type, unregister, name, listOfValues])
+  }, [type, unregister, name, fields.length])
 
   const getDefaultField = (type?: PROPERTY_TYPE | string) => {
     switch (type) {
       case PROPERTY_TYPE.LIST:
+        const currentListValues = fields
+          .map((field, index) => {
+            const fieldValue = watch(`${name}.listOfValues.${index}`)
+            return fieldValue || ''
+          })
+          .filter(value => value.trim() !== '')
+
         return (
           <Listbox
-            rounded="rounded-l-md"
             name={`${name}.defaultValue`}
             allowEmptyOption={true}
-            emptyOption="Select default"
-            customOptions={[...listOfValues.map(value => value.value)]}
+            emptyOption={fm({
+              id: message.catalogue.category.selectDefaultValue
+            })}
+            customOptions={currentListValues}
           />
         )
       case PROPERTY_TYPE.BOOLEAN:
         return (
           <Listbox
-            rounded="rounded-l-md"
             name={`${name}.defaultValue`}
             allowEmptyOption={true}
-            emptyOption="Select default"
+            emptyOption={fm({
+              id: message.catalogue.category.selectDefaultValue
+            })}
             customOptions={[...defaultBoolOptions]}
           />
         )
@@ -115,10 +139,11 @@ const PropertyItem = ({
       default:
         return (
           <Input
-            rounded="rounded-l-md"
             name={`${name}.defaultValue`}
             type={type && PROPERTY_INPUT_TYPE[type]}
-            placeholder="Default value"
+            placeholder={fm({
+              id: message.catalogue.category.propertyDefaultValue
+            })}
             disabled={!type}
           />
         )
@@ -126,59 +151,126 @@ const PropertyItem = ({
   }
 
   return (
-    <div className="flex">
-      <div className="flex-col flex-grow">
-        <div className="flex flex-row flex-grow max-md:flex-wrap">
+    <Card className="mb-4 border-2 border-l-primary/50">
+      <CardContent className="p-4 ">
+        <div className="flex items-start gap-3">
           <MoveButtons
             moveDown={moveDown}
             moveUp={moveUp}
             lenght={lenght}
             index={index}
           />
-          <Input
-            name={`${name}.name`}
-            placeholder="Property name"
-            rounded="rounded-r-md"
-          />
-          <Listbox
-            name={`${name}.type`}
-            optionsSize={'sm'}
-            emptyOption="Select type"
-            allowEmptyOption={false}
-            codebook={CODEBOOK.CATALOGUE_PROPERTY_TYPE}
-          />
-          <Listbox
-            name={`${name}.unit`}
-            optionsSize={'sm'}
-            emptyOption="Select unit"
-            allowEmptyOption={true}
-            codebook={CODEBOOK.UNIT}
-          />
-          {getDefaultField(type?.uid)}
-          <Button rounded="rounded-r-md" onClick={handleRemoveProp}>
-            <TrashIcon className="h-4 w-4 text-red-700" aria-hidden="true" />
-          </Button>
-        </div>
-        {type?.uid === PROPERTY_TYPE.LIST && (
-          <div className="flex flex-col">
-            <h3 className="text-sm">List of Values:</h3>
-            <div className="flex flex-wrap">
-              {fields.map((field, index) => (
-                <ValueItem
-                  removeValue={remove}
-                  key={field.id}
-                  index={index}
-                  name={`${name}.listOfValues.${index}`}
+
+          <div className="flex-1 space-y-4">
+            {/* Property configuration */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-muted-foreground">
+                  {fm({ id: message.catalogue.category.propertyName })}
+                </label>
+                <Input
+                  name={`${name}.name`}
+                  placeholder={fm({
+                    id: message.catalogue.category.propertyName
+                  })}
                 />
-              ))}
-              <Button onClick={handleAddValue}>
-                <PlusIcon className="h-4 w-4" aria-hidden="true" />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-muted-foreground">
+                  {fm({ id: message.catalogue.category.propertyType })}
+                </label>
+                <Listbox
+                  name={`${name}.type`}
+                  optionsSize={'sm'}
+                  emptyOption={fm({
+                    id: message.catalogue.category.selectType
+                  })}
+                  allowEmptyOption={false}
+                  codebook={CODEBOOK.CATALOGUE_PROPERTY_TYPE}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-muted-foreground">
+                  {fm({ id: message.catalogue.category.propertyUnit })}
+                </label>
+                <Listbox
+                  name={`${name}.unit`}
+                  optionsSize={'sm'}
+                  emptyOption={fm({
+                    id: message.catalogue.category.selectUnit
+                  })}
+                  allowEmptyOption={true}
+                  codebook={CODEBOOK.UNIT}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-muted-foreground">
+                  {fm({ id: message.catalogue.category.propertyDefaultValue })}
+                </label>
+                {getDefaultField(type?.uid)}
+              </div>
+            </div>
+
+            {/* Remove button */}
+            <div className="flex justify-end border-t pt-3">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handleRemoveProp}
+                className="text-destructive hover:text-destructive-foreground hover:bg-destructive"
+              >
+                <Trash2 className="h-4 w-4 mr-2" />
+                {fm({ id: message.catalogue.category.propertyRemove })}
               </Button>
             </div>
+
+            {/* List of values section */}
+            {type?.uid === PROPERTY_TYPE.LIST && (
+              <div className="border-t pt-4">
+                <h4 className="text-sm font-medium mb-3 text-muted-foreground">
+                  {fm({ id: message.catalogue.category.propertyListOfValues })}
+                </h4>
+                <div className="space-y-2">
+                  {fields.map((field, index) => (
+                    <ValueItem
+                      removeValue={remove}
+                      key={field.id}
+                      index={index}
+                      name={`${name}.listOfValues.${index}`}
+                    />
+                  ))}
+                  <Tooltip
+                    content={fm(
+                      { id: message.catalogue.category.propertyAddTooltip },
+                      {
+                        name:
+                          propertyName ||
+                          fm({ id: message.catalogue.category.unnamedProperty })
+                      }
+                    )}
+                  >
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={handleAddValue}
+                      className="w-full border-dashed"
+                    >
+                      <Plus className="h-4 w-4 mr-2" />
+                      {fm({ id: message.catalogue.category.propertyAddValue })}
+                    </Button>
+                  </Tooltip>
+                </div>
+              </div>
+            )}
           </div>
-        )}
-      </div>
-    </div>
+        </div>
+      </CardContent>
+    </Card>
   )
 }
 

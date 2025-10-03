@@ -2,6 +2,8 @@ import './globals.css'
 
 import type { Metadata } from 'next'
 
+import { AppIntlProvider } from '@/components/providers/intl-provider.client'
+
 export const metadata: Metadata = {
   title: 'Panda App - Privacy Policy',
   description:
@@ -19,7 +21,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-gray-50">{children}</body>
+      <body className="min-h-screen bg-gray-50">
+        <AppIntlProvider>{children}</AppIntlProvider>
+      </body>
     </html>
   )
 }

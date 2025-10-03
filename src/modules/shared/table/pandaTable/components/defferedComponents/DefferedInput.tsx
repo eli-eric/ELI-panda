@@ -1,6 +1,6 @@
 import { useContext, useDeferredValue, useEffect, useState } from 'react'
 
-import { cx } from '@/utils'
+import { cn } from '@/lib/utils'
 
 import { PandaTableContext } from '../../PandaTableCotrolled'
 
@@ -44,7 +44,7 @@ export const DefferedInput = ({
     <input
       {...props}
       value={query}
-      className={cx('form-field rounded-md', className)}
+      className={cn('form-field rounded-md', className)}
       onChange={e => {
         setQuery(e.target.value)
       }}

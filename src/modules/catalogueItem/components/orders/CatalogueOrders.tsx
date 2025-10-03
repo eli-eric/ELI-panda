@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { Fragment } from 'react'
 
 import { Heading } from '@/components/layout/Heading'
-import { Table } from '@/components/ui'
+import { Table } from '@/components/ui/table'
 import { useOrderColumns } from '@/modules/orders/components/OrderColumns'
 import type { Order } from '@/types/responses/orders'
 import { queryFetcher } from '@/utils/fetcher'

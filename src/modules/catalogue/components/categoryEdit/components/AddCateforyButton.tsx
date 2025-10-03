@@ -1,44 +1,44 @@
-import { ChevronRightIcon } from '@heroicons/react/24/outline'
-import { Fragment, useState } from 'react'
+import { Fragment } from 'react'
+import { useIntl } from 'react-intl'
 
 import { PlusButton } from '@/components/Buttons'
-import ModalComponent from '@/components/overlays/modal/modal.comp'
+import { BreadcrumbItem, BreadcrumbSeparator } from '@/components/ui/breadcrumb'
 import usePermission from '@/hooks/usePermission'
+import { message } from '@/i18n/src/messages'
 import { useCategoryUid } from '@/modules/catalogue/hooks/useCategoryUid'
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import { ROLE } from '@/types/constants/roles'
 
 import CategoryEditContainer from '../CategoryEdit.cont'
 
 export const AddCategoryButton = () => {
-  const [open, setOpen] = useState(false)
+  const { formatMessage: fm } = useIntl()
   const parentUID = useCategoryUid()
   const canEdit = usePermission([ROLE.CATALOGUE_EDIT])
+  const openModal = useModalGlobalStore(state => state.openModal)
 
   if (!canEdit) return null
 
+  const handleOpenSheet = () => {
+    openModal('sheet', {
+      component: CategoryEditContainer,
+      props: {
+        parentUID,
+        setOpen: () => {}, // No-op, handled by global store
+        title: fm({ id: message.catalogue.category.addNew })
+      },
+      onClose: undefined,
+      onSubmit: undefined,
+      parentTriggerFn: undefined
+    })
+  }
+
   return (
     <Fragment>
-      <li className="flex">
-        <div className="flex items-center">
-          <ChevronRightIcon
-            className="h-4 w-4 mr-2 flex-shrink-0 text-gray-400"
-            aria-hidden="true"
-          />
-
-          <PlusButton
-            onClick={() => {
-              setOpen(true)
-            }}
-          />
-        </div>
-      </li>
-      <ModalComponent
-        open={open}
-        setOpen={setOpen}
-        buttons={{ noButtons: true }}
-      >
-        <CategoryEditContainer setOpen={setOpen} parentUID={parentUID} />
-      </ModalComponent>
+      <BreadcrumbSeparator />
+      <BreadcrumbItem>
+        <PlusButton onClick={handleOpenSheet} />
+      </BreadcrumbItem>
     </Fragment>
   )
 }

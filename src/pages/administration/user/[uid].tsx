@@ -1,15 +1,16 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { createContext, Fragment } from 'react'
+import { FormattedMessage } from 'react-intl'
 
 import LoaderComponent from '@/components/loader.comp'
+import { messages } from '@/i18n/src/locale/en'
 import { EditUserContainer } from '@/modules/administration/user/EditUser.cont'
 import { useRoles } from '@/modules/administration/user/hooks/useRoles'
 import { useUserDetail } from '@/modules/administration/user/hooks/useUserDetail'
 import type { UserQueryQuery } from '@/types/gql/graphql'
 
 interface Props {
-  key?: string
   userUid?: string
 }
 
@@ -35,7 +36,9 @@ const EditUserPage: NextPage = ({ userUid }: Props): React.ReactElement => {
   return (
     <Fragment>
       <Head>
-        <title>{'Administration'}</title>
+        <title>
+          <FormattedMessage id={messages.common.pages.administration} />
+        </title>
         <meta name="description" content="...." />
       </Head>
       <EditUserContext.Provider value={{ userDetail, refetch }}>
@@ -46,8 +49,7 @@ const EditUserPage: NextPage = ({ userUid }: Props): React.ReactElement => {
 }
 
 EditUserPage.getInitialProps = ({ query }) => ({
-  key: query.uid,
-  userUid: query.uid
+  userUid: query.uid as string
 })
 
 export default EditUserPage

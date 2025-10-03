@@ -26,7 +26,7 @@ export function ServiceList({ services }: ServiceListProps) {
         size: 200,
         cell: info => (
           <Link href={PATH.SERVICE + '/' + info.row.original.uid}>
-            <span className="text-primary-600 font-medium hover:underline">
+            <span className="text-primary font-medium hover:underline">
               {info.getValue()}
             </span>
           </Link>
@@ -43,7 +43,7 @@ export function ServiceList({ services }: ServiceListProps) {
               '?category=' +
               `{"uid":"${info.row.original.category?.uid}", "name":"${info.row.original.category?.name}"}`
             }
-            className="text-primary-600 font-medium hover:underline"
+            className="text-primary font-medium hover:underline"
           >
             {info.getValue()}
           </Link>
@@ -84,7 +84,7 @@ export function ServiceList({ services }: ServiceListProps) {
       enableFiltering={true}
       enablePagination={true}
       defaultPageSize={100}
-      className="shadow-md"
+      className="shadow-md w-full"
       enableSorting={true}
     />
   )

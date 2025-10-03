@@ -1,12 +1,5 @@
-import { useEffect } from 'react'
-import { useFormContext } from 'react-hook-form'
-
-import {
-  Input,
-  InputAmount,
-  InputCurrency,
-  TextArea
-} from '@/components/form/inputs'
+import { Input, TextArea } from '@/components/form/inputs'
+import { InputAmountCurrency } from '@/components/form/inputs/components/InputAmountCurrency.comp'
 import Listbox from '@/components/form/Listbox'
 import { useToggle } from '@/components/form/Switch'
 import { Col, Grid } from '@/components/grid/Grid'
@@ -21,39 +14,16 @@ import useOrderLineFormFields from './OrderLineForm.fields'
 
 const messages = message.ordersPage.orderLines
 
-interface Props {
-  orderLine?: OrderLineFormType
+interface OrderLineFormComponentProps {
   catalogueItem?: CatalogueItem
+  orderLine?: OrderLineFormType
 }
 
-const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
-  const { enabled, toggle, Toggle } = useToggle(false)
+export const OrderLineFormComponent = ({
+  orderLine
+}: OrderLineFormComponentProps) => {
+  const { Toggle, enabled, toggle } = useToggle(false)
   const formFields = useOrderLineFormFields(enabled)
-  const { setValue } = useFormContext<OrderLineFormType>()
-
-  // set default value
-  useEffect(() => {
-    if (!enabled) {
-      setValue('name', catalogueItem?.name || orderLine?.name || '')
-      setValue(
-        'catalogueNumber',
-        catalogueItem?.catalogueNumber || orderLine?.catalogueNumber || ''
-      )
-      setValue(
-        'catalogueUid',
-        catalogueItem?.uid || orderLine?.catalogueUid || ''
-      )
-    }
-  }, [catalogueItem, orderLine, enabled, setValue])
-
-  // clear values on toggle
-  useEffect(() => {
-    if (enabled) {
-      setValue('name', '')
-      setValue('catalogueNumber', '')
-      setValue('catalogueUid', '')
-    }
-  }, [enabled, setValue])
 
   return (
     <Grid>
@@ -74,9 +44,12 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
         <Input {...formFields.catalogueNumber} />
       </Col>
       <Col lg={!orderLine?.uuid || orderLine?.uid ? 4 : 6} md={6}>
-        <InputAmount {...formFields.price}>
-          <InputCurrency {...formFields.currency} />
-        </InputAmount>
+        <InputAmountCurrency
+          amountName={formFields.price.name}
+          currencyName={formFields.currency.name}
+          label={formFields.price.label}
+          required={formFields.price.required}
+        />
       </Col>
       <Col lg={!orderLine?.uuid || orderLine?.uid ? 4 : 6} md={6}>
         <Listbox {...formFields.itemUsage} position="top" />
@@ -101,11 +74,6 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
       </Col>
       <Col md={orderLine?.uid ? 6 : 12} lg={orderLine?.uid ? 6 : 12}>
         <div className="flex flex-row w-full">
-          {/*  <Tooltip content="Show only technological units">
-            <div className="self-end mr-2 mb-1 flex-none">
-              <TechUnitToogle onChange={techUnitToogle} enabled={techUnitEnabled} />
-            </div>
-          </Tooltip> */}
           <div className="flex-1 w-full">
             <SelectSystemComboBox
               selectSystemField={{
@@ -129,5 +97,3 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
     </Grid>
   )
 }
-
-export default OrderLineFormComponent

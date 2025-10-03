@@ -1,32 +1,54 @@
-import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import type { CellContext, ColumnDef } from '@tanstack/react-table'
+import { Info } from 'lucide-react'
 import Link from 'next/link'
 import { Fragment, useMemo } from 'react'
 import { FormattedDate, useIntl } from 'react-intl'
 
-import { LinkDecorator } from '@/components/decorators'
 import { Tooltip } from '@/components/Tooltip'
+import { Badge } from '@/components/ui/badge'
 import { message } from '@/i18n/src/messages'
+import { cn } from '@/lib/utils'
 import { PATH } from '@/types/constants/paths'
 import type { Order } from '@/types/responses/orders'
 
 import { DeliveryStatusMapping } from '../types'
-import { NameCell } from './cells/NameCell'
+import { getBadgeVariantByOrderStatus } from '../utils/getColorClassStatus'
+import TableActions from './TableActions'
 
 const messages = message.ordersPage.ordersTable.header
 
 const LinkNameCell = ({
   getValue,
-  row: { original }
-}: CellContext<Order, any>) => (
-  <div className="flex items-center">
-    <Link href={PATH.ORDER + '/' + original.uid} legacyBehavior>
-      <a target={'_blank'} rel="noreferrer">
-        <LinkDecorator>
-          <span>{getValue()}</span>
-        </LinkDecorator>
-      </a>
-    </Link>
+  row: { original },
+  isReadOnly
+}: CellContext<Order, any> & { isReadOnly: boolean }) => (
+  <div className="flex items-center w-full">
+    <div className="flex items-center flex-1 min-w-0">
+      <Badge
+        variant="outline"
+        className={cn(
+          'h-7 px-3 hover:opacity-80 flex items-center min-w-0 max-w-full',
+          getBadgeVariantByOrderStatus(
+            original.orderStatus,
+            original.deliveryStatus
+          )
+        )}
+      >
+        <Tooltip content={getValue()}>
+          <Link
+            href={PATH.ORDER + '/' + original.uid}
+            className="cursor-pointer text-inherit hover:underline truncate block min-w-0"
+          >
+            {getValue()}
+          </Link>
+        </Tooltip>
+      </Badge>
+    </div>
+    {!isReadOnly && (
+      <div className="flex-shrink-0 ml-2">
+        <TableActions order={original} />
+      </div>
+    )}
   </div>
 )
 
@@ -43,9 +65,9 @@ export const useOrderColumns = ({ isReadOnly }: Props) => {
         id: 'name',
         header: intl.formatMessage({ id: messages.name }),
         accessorKey: 'name',
-        cell: isReadOnly ? LinkNameCell : NameCell,
-        size: 300,
-        meta: { sticky: true, className: 'sm:pr-8' },
+        cell: props => <LinkNameCell {...props} isReadOnly={isReadOnly} />,
+        size: 440,
+        meta: { sticky: true },
         enableHiding: false
       },
       {
@@ -106,7 +128,7 @@ export const useOrderColumns = ({ isReadOnly }: Props) => {
           <Fragment>
             {getValue() && (
               <Tooltip content={getValue()}>
-                <InformationCircleIcon className="h-5 w-5 pr- flex-shrink-0" />
+                <Info className="h-5 w-5 shrink-0" />
               </Tooltip>
             )}
           </Fragment>

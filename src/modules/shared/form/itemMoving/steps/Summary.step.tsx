@@ -1,17 +1,19 @@
 import { type FC, Fragment } from 'react'
+import { useIntl } from 'react-intl'
 
-import { CheckBoxComponent } from '@/components/form/CheckBox'
 import Card from '@/components/layout/Card'
 import ModalButtonsComponent from '@/components/overlays/modal/modal.buttons'
+import { CheckboxWithLabel } from '@/components/ui/checkbox'
 import { message } from '@/i18n/src/messages'
+import { cn } from '@/lib/utils'
 import type { ModalButtons } from '@/types/form'
-import { cx } from '@/utils'
 
 import { useMoveWizardSubmit } from '../hooks/useMoveWizardSubmit'
 import { SummaryListParam } from './components/SymmaryListParam.comp'
 const btnMessages = message.common.buttons
 
 export const SummaryStep: FC = () => {
+  const { formatMessage: fm } = useIntl()
   const {
     submitWizard,
     isPending,
@@ -41,7 +43,7 @@ export const SummaryStep: FC = () => {
     <Fragment>
       <Card title="Summary">
         <div
-          className={cx(
+          className={cn(
             oldItemParentSystem ? 'grid grid-cols-3' : 'grid grid-cols-2'
           )}
         >
@@ -73,7 +75,7 @@ export const SummaryStep: FC = () => {
           </ul>
           <ul className="grid grid-cols-1">
             <h3 className="font-bold underline text-gray-600 dark:text-gray-200">
-              Moving Item:
+              {fm({ id: message.common.forms.movingItem })}
             </h3>
             <SummaryListParam name="Usage" value={formData?.itemUsage?.name} />
             <SummaryListParam
@@ -92,7 +94,9 @@ export const SummaryStep: FC = () => {
           </ul>
           {oldItemParentSystem && (
             <ul className="grid grid-cols-1">
-              <h3 className="font-bold underline">Old Item Parent System:</h3>
+              <h3 className="font-bold underline">
+                {fm({ id: message.common.forms.oldItemParentSystem })}
+              </h3>
               <SummaryListParam
                 {...{
                   name: 'System Name',
@@ -115,11 +119,12 @@ export const SummaryStep: FC = () => {
           )}
         </div>
       </Card>
-      <CheckBoxComponent
+      <CheckboxWithLabel
+        id="delete-source-system"
         label="DELETE SOURCE SYSTEM?"
         defaultChecked={formData.deleteSourceSystem || false}
-        onChange={e => {
-          updateFormData({ deleteSourceSystem: e.target.checked })
+        onChange={checked => {
+          updateFormData({ deleteSourceSystem: checked })
         }}
       />
       <ModalButtonsComponent buttons={buttons} />

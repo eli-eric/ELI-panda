@@ -1,6 +1,11 @@
+import { useIntl } from 'react-intl'
+
+import { message } from '@/i18n/src/messages'
+
 import { PhysicalItemPropertyList } from './PhysicalItemPropertyList'
 
 export const PhysicalItemProperties = () => {
+  const { formatMessage: fm } = useIntl()
   return (
     <div>
       <div className="relative mt-6">
@@ -12,7 +17,7 @@ export const PhysicalItemProperties = () => {
         </div>
         <div className="relative flex justify-center">
           <p className="dark:text-gray-200 dark:bg-gray-800 bg-white text-base px-2">
-            {'Physical Item Properties'}
+            {fm({ id: message.catalogue.category.physicalItemPropertiesTitle })}
           </p>
         </div>
       </div>

@@ -1,47 +1,9 @@
-import { startTransition, useCallback, useEffect, useState } from 'react'
-import { shallow } from 'zustand/shallow'
+import { useCallback } from 'react'
 
 import { useWarningModalStore } from '@/store/useWarningModalStore'
 
 const useWarningModal = (globalMessage?: string) => {
-  const [execData, setExecData] = useState({
-    callback: undefined as Function | undefined,
-    callbackArgs: undefined as any[] | undefined
-  })
-
-  const [params, patchParams, resetParams] = useWarningModalStore(
-    state => [state.params, state.patchParams, state.resetParams],
-    shallow
-  )
-
-  const { isOpen, isConfirmed } = params
-
-  const { callback, callbackArgs } = execData
-
-  useEffect(() => {
-    startTransition(() => {
-      if (callback && callbackArgs && isConfirmed) {
-        try {
-          callback(...callbackArgs)
-          resetParams()
-        } catch (err) {
-          patchParams({ error: String(err) })
-        }
-      }
-    })
-  }, [isConfirmed, callback, callbackArgs, resetParams, patchParams])
-
-  //Cancel execution on close
-  useEffect(() => {
-    startTransition(() => {
-      if (!isOpen && callbackArgs) {
-        setExecData({
-          callback: undefined,
-          callbackArgs: undefined
-        })
-      }
-    })
-  }, [callback, callbackArgs, isOpen])
+  const openModal = useWarningModalStore(state => state.openModal)
 
   const withWarningModal = useCallback(
     <T extends any[], R>(
@@ -49,16 +11,10 @@ const useWarningModal = (globalMessage?: string) => {
       message?: string
     ) =>
       (...callbackArgs: T) => {
-        const newParams = {
-          isOpen: true,
-          isConfirmed: false,
-          error: '',
-          message: message ?? globalMessage ?? 'Are you sure?'
-        }
-        patchParams(newParams)
-        setExecData({ callback, callbackArgs })
+        const finalMessage = message ?? globalMessage ?? 'Are you sure?'
+        openModal(finalMessage, callback, callbackArgs)
       },
-    [globalMessage, patchParams]
+    [globalMessage, openModal]
   )
 
   return withWarningModal

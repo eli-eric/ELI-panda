@@ -1,8 +1,10 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { Fragment } from 'react'
+import { FormattedMessage } from 'react-intl'
 
 import LoaderComponent from '@/components/loader.comp'
+import { messages } from '@/i18n/src/locale/en'
 import { useRoles } from '@/modules/administration/user/hooks/useRoles'
 import { NewUserContainer } from '@/modules/administration/user/NewUser.cont'
 
@@ -12,7 +14,9 @@ const NewUserPage: NextPage = (): React.ReactElement => {
   return (
     <Fragment>
       <Head>
-        <title>{'Administration'}</title>
+        <title>
+          <FormattedMessage id={messages.common.pages.administration} />
+        </title>
         <meta name="description" content="...." />
       </Head>
 

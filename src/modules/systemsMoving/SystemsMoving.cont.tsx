@@ -3,9 +3,9 @@ import { toast } from 'react-hot-toast'
 
 import { MinusButton, PlusButton } from '@/components/Buttons'
 import { Tooltip } from '@/components/Tooltip'
+import { cn } from '@/lib/utils'
 import type { CodebookType } from '@/types/responses/codebook'
 import type { SystemDetail } from '@/types/responses/systems'
-import { cx } from '@/utils'
 
 import { FilterBadges } from '../shared/form/FilterBadges'
 import { SystemFilterButtonContainer } from '../systems/components/filters/SystemsFilterButton.cont'
@@ -58,7 +58,7 @@ const SystemsMovingContainer = () => {
   return (
     <Fragment>
       <div
-        className={cx(
+        className={cn(
           'grid',
           showLeft && showRight ? 'grid-cols-2' : 'grid-cols-1'
         )}

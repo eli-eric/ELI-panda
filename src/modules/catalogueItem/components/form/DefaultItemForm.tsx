@@ -34,7 +34,7 @@ const DefaultItemForm = () => {
   }, [category, catalogueCategory])
 
   return (
-    <Grid className="px-4 py-5 sm:px-6">
+    <Grid>
       <Col lg={6}>
         <Input {...fields.name} />
       </Col>

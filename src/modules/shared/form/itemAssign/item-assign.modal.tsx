@@ -1,24 +1,41 @@
-import type { FC } from 'react'
+import React, { type FC } from 'react'
 
-import ModalComponent from '@/components/overlays/modal/modal.comp'
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 
 import { useModalWizardStore } from '../itemMoving/store/useModalWizardStore'
 import { useWizardStore } from '../wizard/store/useWizardStore'
 import { ItemAssignContainer } from './item-assign.cont'
 
-export const ItemAssignModal: FC = () => {
-  const { open, setOpen, setSelectedSystem } = useModalWizardStore()
+export function openItemAssignModal() {
+  if (typeof window === 'undefined') return // Prevent SSR execution
+
+  const { openModal } = useModalGlobalStore.getState()
+
+  openModal('dialog1', {
+    component: () => <ItemAssignModalContent />,
+    props: {
+      title: 'Assign Item',
+      size: 'xl' as const
+    }
+  })
+}
+
+export const ItemAssignModalContent: FC = () => {
   const { resetWizard } = useWizardStore()
+  const { setSelectedSystem } = useModalWizardStore()
 
-  const handleClose = (open: boolean) => {
-    setOpen(open)
-    resetWizard()
-    setSelectedSystem(null)
-  }
+  // Reset wizard when modal opens
+  React.useEffect(() => {
+    return () => {
+      resetWizard()
+      setSelectedSystem(null)
+    }
+  }, [resetWizard, setSelectedSystem])
 
-  return (
-    <ModalComponent open={open} setOpen={handleClose}>
-      <ItemAssignContainer />
-    </ModalComponent>
-  )
+  return <ItemAssignContainer />
+}
+
+// Legacy component - kept for backward compatibility but deprecated
+export const ItemAssignModal: FC = () => {
+  return null // This component is no longer functional - use openItemAssignModal() instead
 }

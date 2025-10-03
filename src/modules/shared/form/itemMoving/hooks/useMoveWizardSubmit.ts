@@ -6,6 +6,7 @@ import toast from 'react-hot-toast'
 
 import { useSystemDetail } from '@/modules/systemItem/hooks/useSystemDetail'
 import { useSystemsReload } from '@/modules/systemItem/hooks/useSystemsReload'
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import { PATH } from '@/types/constants/paths'
 import type { CodebookType } from '@/types/responses/codebook'
 import { queryMutate } from '@/utils/fetcher'
@@ -18,13 +19,13 @@ import { MOVE_TYPE } from '../types/constants'
 export const useMoveWizardSubmit = () => {
   const {
     isMovingToNewSystem,
-    setOpen,
     setSelectedSystem,
     moveType,
     oldItemParentSystem,
     selectedSystem
   } = useModalWizardStore()
 
+  const { closeModal } = useModalGlobalStore()
   const { physicalItem, catalogueItem, systemDetail } = useSystemDetail()
   const { formData, goBack, resetWizard, updateFormData } = useWizardStore()
   const router = useRouter()
@@ -33,7 +34,7 @@ export const useMoveWizardSubmit = () => {
 
   const onSuccessRedirect = () => {
     toast.success('Item moved successfully')
-    setOpen(false)
+    closeModal('dialog1')
     resetWizard()
     setSelectedSystem(null)
     if (moveType === MOVE_TYPE.ASSIGN) {

@@ -33,7 +33,9 @@ export const SelectableServiceLineGroups = ({
   const groupMap = useMemo(() => {
     const map = new Map<string, any[]>()
     groups?.forEach(group => {
-      const groupDetails = details?.filter(detail => detail.propertyGroup === group)
+      const groupDetails = details?.filter(
+        detail => detail.propertyGroup === group
+      )
       if (groupDetails) {
         map.set(group, sortBy(groupDetails, ['property.name']))
       }

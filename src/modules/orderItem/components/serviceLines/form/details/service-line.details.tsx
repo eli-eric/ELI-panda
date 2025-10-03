@@ -1,4 +1,5 @@
 import { useFormContext } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 
 import { useServiceType } from '@/modules/services/hooks/useServiceType'
 import type { CodebookType } from '@/types/responses/codebook'
@@ -17,8 +18,14 @@ export const ServiceLineDetails = ({ serviceType }: Props) => {
   const { data, error } = useServiceType(
     serviceType ? serviceType.uid : serviceTypeForm?.uid
   )
+  const { formatMessage: fm } = useIntl()
 
-  if (error) return <div className="text-red-300">Something went wrong!!</div>
+  if (error)
+    return (
+      <div className="text-red-300">
+        {fm({ id: 'ordersPage.serviceLines.selectable.error' })}
+      </div>
+    )
 
   return (
     <div className="min-h-[320px]">

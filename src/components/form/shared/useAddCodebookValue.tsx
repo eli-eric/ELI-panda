@@ -21,16 +21,18 @@ const useAddCodebookValue = (codebook?: CodeBookMetaData) => {
       )
     }
   })
-  const { getFormModal, setOpen } = useFormModal<{ name: string }>({
+  const { openFormModal } = useFormModal<{ name: string }>({
     renderForm: () => (
       <Input name="name" label="Codebook Value" rounded="rounded-md" />
     ),
     onSubmit: data => {
       submit({ name: data.name })
-    }
+    },
+    title: 'Add Codebook Value',
+    size: 'm'
   })
 
-  return { getFormModal, setOpen }
+  return { openFormModal }
 }
 
 export default useAddCodebookValue

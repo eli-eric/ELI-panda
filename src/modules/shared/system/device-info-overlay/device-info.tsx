@@ -1,30 +1,65 @@
 import { Suspense } from 'react'
 
-import SlideOver from '@/components/overlays/slideover/SlideOver'
-import LayoutDetailInfoContainer from '@/modules/layout/components/layout-detail-info.cont'
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle
+} from '@/components/ui/sheet'
+import { Skeleton } from '@/components/ui/skeleton'
 
+import LayoutDetailInfoContainer from './components/layout-detail-info.cont'
 import { useShowDeviceStore } from './store/useShowDeviceStore'
+
+const DeviceInfoSkeleton = () => (
+  <div className="space-y-4">
+    <div className="space-y-2">
+      <Skeleton className="h-30 w-full" />
+    </div>
+    <div className="space-y-2">
+      <Skeleton className="h-4 w-full" />
+      <Skeleton className="h-4 w-full" />
+    </div>
+    <div className="space-y-2">
+      <Skeleton className="h-4 w-full" />
+      <Skeleton className="h-4 w-full" />
+    </div>
+    <div className="space-y-2">
+      <Skeleton className="h-4 w-full" />
+      <Skeleton className="h-4 w-full" />
+    </div>
+  </div>
+)
 
 export const DeviceInfoOverlay = () => {
   const { uid, setOpenDeviceInfo, openDeviceInfo, locationCode, code } =
     useShowDeviceStore()
+
+  const getTitle = () => {
+    if (code || uid) return 'Device Info'
+    if (locationCode) return `Employees at location: ${locationCode}`
+    return 'Device Information'
+  }
+
   return (
-    <SlideOver
-      size="md"
-      panelSlide="right"
-      panelTitle={
-        code || uid ? 'Device Info' : `Employees at location: ${locationCode}`
-      }
-      open={openDeviceInfo}
-      setOpen={setOpenDeviceInfo}
-    >
-      <Suspense>
-        <LayoutDetailInfoContainer
-          uid={uid}
-          locationCode={locationCode}
-          systemCode={code}
-        />
-      </Suspense>
-    </SlideOver>
+    <Sheet open={openDeviceInfo} onOpenChange={setOpenDeviceInfo}>
+      <SheetContent
+        className="w-full sm:w-[200px] lg:w-[400px] xl:w-[600px] !max-w-none overflow-y-auto px-2 sm:px-4 lg:px-6"
+        style={{ maxWidth: 'none' }}
+      >
+        <SheetHeader>
+          <SheetTitle>{getTitle()}</SheetTitle>
+        </SheetHeader>
+        <div className="mt-6">
+          <Suspense fallback={<DeviceInfoSkeleton />}>
+            <LayoutDetailInfoContainer
+              uid={uid}
+              locationCode={locationCode}
+              systemCode={code}
+            />
+          </Suspense>
+        </div>
+      </SheetContent>
+    </Sheet>
   )
 }

@@ -1,7 +1,9 @@
 import { flexRender } from '@tanstack/react-table'
 import React from 'react'
+import { useIntl } from 'react-intl'
 
-import { cx } from '@/utils'
+import { message } from '@/i18n/src/messages'
+import { cn } from '@/lib/utils'
 
 import type { TableBodyProps } from './types'
 
@@ -17,6 +19,7 @@ export function TableBody<T extends object>({
   getRowProps,
   skipEmptyMessage
 }: TableBodyProps<T>) {
+  const { formatMessage: fm } = useIntl()
   // Check if there are any rows to display
   const rows = loading ? [] : table.getRowModel().rows
 
@@ -27,11 +30,9 @@ export function TableBody<T extends object>({
         {Array.from({ length: 5 }).map((_, rowIndex) => (
           <tr
             key={`skeleton-row-${rowIndex}`}
-            className={cx(
-              'border-b border-gray-200 dark:border-gray-700 last:border-0',
-              rowIndex % 2 === 0
-                ? 'bg-white dark:bg-gray-900'
-                : 'bg-gray-50 dark:bg-gray-800',
+            className={cn(
+              'border-b border-border last:border-0',
+              rowIndex % 2 === 0 ? 'bg-background' : 'bg-muted/50',
               rowClassName
             )}
           >
@@ -59,14 +60,14 @@ export function TableBody<T extends object>({
                   {colIndex !== columns.length - 1 ? (
                     <div className="animate-pulse">
                       <div
-                        className="h-6 bg-blue-200 dark:bg-blue-700 rounded-md"
+                        className="h-6 bg-primary/20 rounded-md"
                         style={{ width: colIndex === 0 ? '70%' : '85%' }}
                       ></div>
                     </div>
                   ) : (
                     /* For the last column (status), show a badge-like skeleton */
                     <div className="animate-pulse flex justify-center">
-                      <div className="h-6 w-20 bg-green-200 dark:bg-green-700 rounded-full"></div>
+                      <div className="h-6 w-20 bg-primary/20 rounded-full"></div>
                     </div>
                   )}
                 </td>
@@ -84,9 +85,9 @@ export function TableBody<T extends object>({
         <tr>
           <td
             colSpan={columns.length}
-            className="p-6 text-center text-gray-500 dark:text-gray-400"
+            className="p-6 text-center text-muted-foreground"
           >
-            No data available
+            {fm({ id: message.common.ui.noDataAvailable })}
           </td>
         </tr>
       </tbody>
@@ -103,18 +104,16 @@ export function TableBody<T extends object>({
 
         // Determine row background color
         const defaultBgClass =
-          rowIndex % 2 === 0
-            ? 'bg-white dark:bg-gray-900'
-            : 'bg-gray-50 dark:bg-gray-800'
+          rowIndex % 2 === 0 ? 'bg-background' : 'bg-muted/50'
 
         return (
           <tr
             key={row.id}
             {...customRowProps}
-            className={cx(
-              'border-b border-gray-200 dark:border-gray-700 last:border-0',
-              'transition-colors duration-150 hover:bg-gray-100 hover:dark:bg-gray-600',
-              'text-gray-900 dark:text-gray-300',
+            className={cn(
+              'border-b border-border last:border-0',
+              'transition-colors duration-150 hover:bg-accent',
+              'text-foreground',
               defaultBgClass,
               rowClassName,
               customRowProps.className
@@ -163,9 +162,6 @@ export function TableBody<T extends object>({
                 position: isPinned ? 'sticky' : undefined,
                 left: isPinned === 'left' ? `${leftOffset}px` : undefined,
                 right: isPinned === 'right' ? `${rightOffset}px` : undefined,
-                background: 'inherit',
-                opacity: 0.9,
-                backdropFilter: 'blur(4px)',
                 zIndex: isPinned ? 21 : 20
               }
 
@@ -173,17 +169,16 @@ export function TableBody<T extends object>({
                 <td
                   key={cell.id}
                   style={style}
-                  className={cx(
+                  className={cn(
                     'p-2 px-4',
-                    // Apply both backdrop-blur and background color for better compatibility
-                    // Add border styles for pinned columns
+                    // Add backdrop-blur and overlay for pinned columns using ::before
                     isPinned === 'left'
-                      ? 'border-r border-gray-200/50 dark:border-gray-700/50'
+                      ? 'border-r border-border backdrop-blur-sm before:absolute before:inset-0 before:bg-background/20 before:pointer-events-none before:z-[-1] relative'
                       : '',
                     isPinned === 'right'
-                      ? 'border-l border-gray-200/50 dark:border-gray-700/50'
+                      ? 'border-l border-border backdrop-blur-sm before:absolute before:inset-0 before:bg-background/20 before:pointer-events-none before:z-[-1] relative'
                       : '',
-                    // Zajistíme, aby se obsah buněk mohl správně zalamovat
+                    // Allow text wrapping for all columns with defined width
                     'whitespace-normal break-words',
                     cell.column.columnDef.meta?.className
                   )}

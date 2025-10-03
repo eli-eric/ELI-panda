@@ -1,5 +1,4 @@
-import { FunnelIcon as FunnelIconEmpty } from '@heroicons/react/24/outline'
-import { FunnelIcon as FunnelIconFull } from '@heroicons/react/24/solid'
+import { Filter } from 'lucide-react'
 import { Fragment, useMemo, useState } from 'react'
 
 import { Button } from '@/components/Buttons'
@@ -70,12 +69,11 @@ export const FilterButton = ({
 
   return (
     <Fragment>
-      <Button className="mr-1" buttonSize="large" onClick={() => setOpen(true)}>
-        {storeFilters.length > 0 ? (
-          <FunnelIconFull className="h-4 w-4" aria-hidden="true" />
-        ) : (
-          <FunnelIconEmpty className="h-4 w-4" aria-hidden="true" />
-        )}
+      <Button className="mr-1" onClick={() => setOpen(true)}>
+        <Filter
+          className={`h-4 w-4 ${storeFilters.length > 0 ? 'fill-current' : ''}`}
+          aria-hidden="true"
+        />
       </Button>
       <SlideOver
         className="z-40"

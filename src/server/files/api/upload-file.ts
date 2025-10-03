@@ -46,8 +46,13 @@ async function uploadFile(req: NextApiRequest, res: NextApiResponse) {
 
   try {
     await s3Client.putObject(bucket, objectKey, buffer, buffer.length, metaData)
+
+    // Verify the upload was successful
     const existingObject = await s3Client.statObject(bucket, objectKey)
-    if (!existingObject) return res.status(404).json({})
+    if (!existingObject) {
+      logger.error(`File upload verification failed for ${objectKey}`)
+      return res.status(500).json({ error: 'File upload verification failed' })
+    }
 
     const isImage = prefix.includes('/image')
     if (isImage) {

@@ -5,7 +5,7 @@ import React, {
   useState
 } from 'react'
 
-import { cx } from '@/utils'
+import { cn } from '@/lib/utils'
 
 interface Props {
   children: React.ReactNode
@@ -53,6 +53,18 @@ export const TableLayoutContainer = ({ children, deps, className }: Props) => {
         // REVIEW LAYOUT HEIGHT + 3  // TODO
         setHeight(height + 1)
       }
+
+      // Set up ResizeObserver to watch for changes in specific elements
+      const resizeObserver = new ResizeObserver(() => {
+        handleResize()
+      })
+
+      // Observe category-list element for size changes
+      const categoryListElement = document.getElementById('category-list')
+      if (categoryListElement) {
+        resizeObserver.observe(categoryListElement)
+      }
+
       startTransition(() => {
         // Handler to call on window resize
         // Add event listener
@@ -60,8 +72,12 @@ export const TableLayoutContainer = ({ children, deps, className }: Props) => {
         // Call handler right away so state gets updated with initial window size
         handleResize()
       })
-      // Remove event listener on cleanup
-      return () => window.removeEventListener('resize', handleResize)
+
+      // Remove event listeners and observers on cleanup
+      return () => {
+        window.removeEventListener('resize', handleResize)
+        resizeObserver.disconnect()
+      }
     },
     deps ? [...deps] : []
   )
@@ -71,7 +87,7 @@ export const TableLayoutContainer = ({ children, deps, className }: Props) => {
       style={{
         height: `calc(100vh - ${height}px)`
       }}
-      className={cx('flex-col', className)}
+      className={cn('flex-col', className)}
     >
       {children}
     </div>

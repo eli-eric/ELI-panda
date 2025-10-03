@@ -1,14 +1,14 @@
-import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
+import { Eye, EyeOff } from 'lucide-react'
 import React, { useEffect, useId, useState } from 'react'
 import { Controller, useWatch } from 'react-hook-form'
 import { useFormContext } from 'react-hook-form'
 import { useDebounce, useIsFirstRender } from 'usehooks-ts'
 
 import { Tooltip } from '@/components/Tooltip'
+import { Input as ShadcnInput } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { cn } from '@/lib/utils'
 import type { FieldProps } from '@/types/form'
-import { cx } from '@/utils'
-
-import { InputWrapper, Label } from '../shared'
 
 export type InputProps = FieldProps &
   React.InputHTMLAttributes<HTMLInputElement> & {
@@ -20,7 +20,6 @@ export const Input = ({
   name,
   placeholder,
   disabled,
-  rounded,
   type = 'text',
   className,
   children,
@@ -56,79 +55,80 @@ export const Input = ({
 
   const idHtml = useId()
 
+  if (hidden) return null
+
   return (
     <Controller
       name={name}
       control={control}
       defaultValue={defaultValue || ''}
       render={({ field, fieldState: { error } }) => (
-        <InputWrapper hidden={hidden} className={className}>
-          <Label label={label} htmlFor={idHtml} />
-          <div className="flex">
-            <div hidden={hidden} className="relative flex w-full">
-              <input
-                {...field}
-                step={step}
-                value={field.value || ''}
-                id={idHtml}
-                hidden={hidden}
-                required={required}
-                type={
-                  type === 'password'
-                    ? showPassword
-                      ? 'text'
-                      : 'password'
-                    : type
-                }
-                disabled={disabled}
-                onChange={e => {
-                  field.onChange(e.target.value)
-                }}
-                placeholder={placeholder}
-                className={cx(
-                  'form-field',
-                  rounded,
-                  error ? 'border-red-400' : 'border-gray-300',
-                  disabled ? 'bg-gray-100' : '',
-                  isFilter ? field.value && 'border-2 border-lime-500' : ''
-                )}
-              />
-              {type === 'password' && (
-                <div className="absolute inset-y-0 right-0 cursor-pointer flex items-center pr-3">
-                  {showPassword ? (
-                    <Tooltip content="Hide password">
-                      <EyeIcon
-                        data-testid="toggle-password-visibility"
-                        aria-label="Show password"
-                        role="button"
-                        className="text-gray-400 h-4 w-4 sm:text-sm cursor-pointer hover:text-gray-600 dark:text-gray-200"
-                        onClick={toogleShowPassword}
-                      />
-                    </Tooltip>
-                  ) : (
-                    <Tooltip content="Show password">
-                      <EyeSlashIcon
-                        data-testid="toggle-password-visibility"
-                        role="button"
-                        aria-label="Hide password"
-                        className="text-gray-400 h-4 w-4 sm:text-sm cursor-pointer hover:text-gray-600 dark:text-gray-200"
-                        onClick={toogleShowPassword}
-                      />
-                    </Tooltip>
-                  )}
-                </div>
+        <div className={cn('space-y-1 w-full', className)}>
+          {label && <Label htmlFor={idHtml}>{label}</Label>}
+          <div className="relative">
+            <ShadcnInput
+              {...field}
+              id={idHtml}
+              step={step}
+              value={field.value || ''}
+              required={required}
+              type={
+                type === 'password'
+                  ? showPassword
+                    ? 'text'
+                    : 'password'
+                  : type
+              }
+              disabled={disabled}
+              onChange={e => {
+                field.onChange(e.target.value)
+              }}
+              placeholder={placeholder}
+              className={cn(
+                isFilter && field.value && 'border-2 border-lime-500',
+                type === 'password' && 'pr-10',
+                unit && type !== 'password' && 'pr-10'
               )}
+              aria-invalid={error ? 'true' : 'false'}
+            />
 
-              {unit && (
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                  <span className="text-gray-400 sm:text-sm">{unit}</span>
-                </div>
-              )}
-              {/* {isError && <ValidationIcon />} */}
-            </div>
-            {children}
+            {type === 'password' && (
+              <div className="absolute inset-y-0 right-0 cursor-pointer flex items-center pr-3">
+                {showPassword ? (
+                  <Tooltip content="Hide password">
+                    <EyeOff
+                      data-testid="toggle-password-visibility"
+                      aria-label="Show password"
+                      role="button"
+                      className="text-muted-foreground hover:text-foreground h-4 w-4 cursor-pointer"
+                      onClick={toogleShowPassword}
+                    />
+                  </Tooltip>
+                ) : (
+                  <Tooltip content="Show password">
+                    <Eye
+                      data-testid="toggle-password-visibility"
+                      role="button"
+                      aria-label="Hide password"
+                      className="text-muted-foreground hover:text-foreground h-4 w-4 cursor-pointer"
+                      onClick={toogleShowPassword}
+                    />
+                  </Tooltip>
+                )}
+              </div>
+            )}
+
+            {unit && type !== 'password' && (
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                <span className="text-muted-foreground text-sm">{unit}</span>
+              </div>
+            )}
           </div>
-        </InputWrapper>
+
+          {error && <p className="text-sm text-destructive">{error.message}</p>}
+
+          {children && <div className="mt-2">{children}</div>}
+        </div>
       )}
     />
   )

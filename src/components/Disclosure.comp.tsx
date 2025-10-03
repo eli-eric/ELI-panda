@@ -1,8 +1,8 @@
 import { Disclosure, DisclosureButton } from '@headlessui/react'
-import { MinusIcon, PlusIcon } from '@heroicons/react/20/solid'
+import { Minus, Plus } from 'lucide-react'
 import { Fragment } from 'react'
 
-import { cx } from '@/utils'
+import { cn } from '@/lib/utils'
 
 interface Props {
   title: string
@@ -18,21 +18,21 @@ const DisclosureComponent = ({ title, children, defaultOpen }: Props) => (
           <h3>
             <DisclosureButton className="group relative flex w-full items-center justify-between py-6 text-left">
               <span
-                className={cx(
+                className={cn(
                   'text-sm font-medium',
-                  open ? 'text-primary-500' : 'text-gray-900 dark:text-gray-200'
+                  open ? 'text-orange-500' : 'text-gray-900 dark:text-gray-200'
                 )}
               >
                 {title}
               </span>
               <span className="ml-6 flex items-center">
                 {open ? (
-                  <MinusIcon
-                    className="block h-6 w-6 text-primary-400 group-hover:text-primary-500"
+                  <Minus
+                    className="block h-6 w-6 text-orange-400 group-hover:text-orange-500"
                     aria-hidden="true"
                   />
                 ) : (
-                  <PlusIcon
+                  <Plus
                     className="block h-6 w-6 text-gray-400 group-hover:text-gray-500"
                     aria-hidden="true"
                   />

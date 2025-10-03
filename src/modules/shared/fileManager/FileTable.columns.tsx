@@ -1,75 +1,82 @@
-import {
-  DocumentTextIcon,
-  LinkIcon,
-  XMarkIcon
-} from '@heroicons/react/24/outline'
 import type { ColumnDef } from '@tanstack/react-table'
+import { FileText, Link, X } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
+import { FormattedMessage, useIntl } from 'react-intl'
 
-import ModalComponent from '@/components/overlays/modal/modal.comp'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { fuzzyFilter } from '@/components/ui/table'
-import { Badge } from '@/components/visuals/Badge'
 import { message } from '@/i18n/src/messages'
-import type { ModalButtons } from '@/types/form'
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 
 import { FileActions } from './FileActions'
 import { useLinkUpdate } from './hooks/useLinks'
 import type { FileItemExtended } from './types'
 
 const buttons = message.common.buttons
+const filesMsg = message.common.files
 
-interface TagModalProps {
-  isOpen: boolean
-  setIsOpen: (isOpen: boolean) => void
-  file: FileItemExtended | null
+export function TagModalContent({
+  onAddTag,
+  onClose
+}: {
   onAddTag: (tag: string) => void
-}
-
-const TagModal = ({ isOpen, setIsOpen, onAddTag }: TagModalProps) => {
+  onClose?: () => void
+}) {
   const [tag, setTag] = useState('')
-
-  const modalButtons: ModalButtons = {
-    goNext: {
-      text: buttons.continue,
-      onClick: () => {
-        if (tag) {
-          onAddTag(tag)
-        }
-        setIsOpen(false)
-        setTag('')
-      }
-    },
-    goBack: {
-      text: buttons.cancel,
-      onClick: () => {
-        setIsOpen(false)
-        setTag('')
-      }
-    }
-  }
-
   return (
-    <ModalComponent open={isOpen} setOpen={setIsOpen} buttons={modalButtons}>
-      <div className="mb-6">
-        <h3 className="text-lg font-medium text-gray-900">Add Tag</h3>
-      </div>
-      <div>
-        <label
-          htmlFor="tag-name"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Tag Name
-        </label>
-        <input
+    <div>
+      <div className="space-y-2">
+        <Label htmlFor="tag-name">
+          <FormattedMessage id={filesMsg.tagName} />
+        </Label>
+        <Input
           id="tag-name"
           type="text"
-          className="mt-1 form-field rounded-md w-full"
           value={tag}
           onChange={e => setTag(e.target.value)}
+          className="w-full"
         />
       </div>
-    </ModalComponent>
+      <div className="flex justify-end gap-2 mt-4">
+        <Button type="button" variant="outline" onClick={onClose}>
+          <FormattedMessage id={buttons.cancel} />
+        </Button>
+        <Button
+          type="button"
+          disabled={!tag}
+          onClick={() => {
+            if (tag) {
+              onAddTag(tag)
+            }
+            if (onClose) onClose()
+            setTag('')
+          }}
+        >
+          <FormattedMessage id={buttons.continue} />
+        </Button>
+      </div>
+    </div>
   )
+}
+
+function openTagModal({
+  file,
+  onAddTag
+}: {
+  file: FileItemExtended | null
+  onAddTag: (tag: string) => void
+}) {
+  if (typeof window === 'undefined') return // Prevent SSR execution
+
+  const { openModal } = useModalGlobalStore.getState()
+  openModal('dialog1', {
+    component: TagModalContent,
+    props: { file, onAddTag, title: message.common.files.addTagTitle },
+    onClose: undefined
+  })
 }
 
 interface FileColumnsProps {
@@ -87,12 +94,8 @@ export const useFileColumns = ({
   uid,
   onFileDeleted
 }: FileColumnsProps) => {
+  const { formatMessage: fm } = useIntl()
   const { mutate: updateLink } = useLinkUpdate({ parentUid: uid })
-
-  const [tagModalOpen, setTagModalOpen] = useState(false)
-  const [selectedFile, setSelectedFile] = useState<FileItemExtended | null>(
-    null
-  )
 
   const handleAddTag = useCallback(
     (file: FileItemExtended | null, tag: string) => {
@@ -136,7 +139,7 @@ export const useFileColumns = ({
   const columns = useMemo<ColumnDef<FileItemExtended>[]>(() => {
     const cols: ColumnDef<FileItemExtended>[] = [
       {
-        header: 'Name',
+        header: () => <FormattedMessage id={filesMsg.name} />,
         accessorKey: 'name',
         filterFn: fuzzyFilter,
         size: 300,
@@ -147,17 +150,17 @@ export const useFileColumns = ({
           }
         },
         cell: ({ row: { original } }) => (
-          <div className="flex items-center pt-1 pb-1">
+          <div className="flex items-center py-1">
             {original.type === 'FILE' ? (
-              <DocumentTextIcon className="h-4 w-4 mr-2 text-gray-500" />
+              <FileText className="h-4 w-4 mr-2 text-muted-foreground" />
             ) : (
-              <LinkIcon className="h-4 w-4 mr-2 text-gray-500" />
+              <Link className="h-4 w-4 mr-2 text-muted-foreground" />
             )}
             <a
               href={original.url}
               target="_blank"
               rel="noreferrer"
-              className="hover:text-primary-500 cursor-pointer"
+              className="hover:text-primary cursor-pointer transition-colors"
             >
               {original.name}
             </a>
@@ -165,7 +168,7 @@ export const useFileColumns = ({
         )
       },
       {
-        header: 'Tags',
+        header: () => <FormattedMessage id={filesMsg.tags} />,
         accessorKey: 'tags',
         filterFn: fuzzyFilter,
         size: 200,
@@ -173,32 +176,39 @@ export const useFileColumns = ({
           <div className="flex flex-wrap gap-1 items-center">
             {original.tags &&
               original.tags.map((tag: string) => (
-                <Badge key={tag} className="mt-1">
+                <Badge key={tag} variant="secondary" className="mt-1">
                   {tag}
                   {hasEditRole && (
-                    <XMarkIcon
-                      className="h-4 w-4 ml-1 cursor-pointer hover:text-red-600"
+                    <X
+                      className="h-3 w-3 ml-1 cursor-pointer hover:text-destructive transition-colors"
                       onClick={() => handleRemoveTag(original, tag)}
                     />
                   )}
                 </Badge>
               ))}
             {hasEditRole && (
-              <button
+              <Button
+                variant="ghost"
+                size="sm"
                 onClick={() => {
-                  setSelectedFile(original)
-                  setTagModalOpen(true)
+                  openTagModal({
+                    file: original,
+                    onAddTag: tag => handleAddTag(original, tag)
+                  })
                 }}
-                className="text-primary-600 text-sm ml-2 hover:underline"
+                className="text-primary text-sm ml-2 hover:underline h-auto p-0"
               >
-                Add Tag
-              </button>
+                <FormattedMessage
+                  id="common.buttons.addTag"
+                  defaultMessage="Add Tag"
+                />
+              </Button>
             )}
           </div>
         )
       },
       {
-        header: 'Size',
+        header: () => <FormattedMessage id={filesMsg.size} />,
         accessorKey: 'size',
         size: 50,
         enableColumnFilter: false,
@@ -206,20 +216,28 @@ export const useFileColumns = ({
           className: 'text-right'
         },
         cell: ({ getValue, row: { original } }) => {
-          if (original.type === 'LINK') return '—'
+          if (original.type === 'LINK') return fm({ id: filesMsg.dash })
 
           const size = Math.round(getValue<number>() / 1000)
           const sizeString =
-            size > 1000 ? `${Math.round(size / 1000)} MB` : `${size} KB`
+            size > 1000
+              ? fm(
+                  { id: filesMsg.fileSizeMb },
+                  { value: Math.round(size / 1000) }
+                )
+              : fm({ id: filesMsg.fileSizeKb }, { value: size })
 
           return <span>{sizeString}</span>
         }
       },
       {
-        header: 'Actions',
+        header: '',
         id: 'actions',
-        size: 60,
+        size: 50,
         enableColumnFilter: false,
+        enableSorting: false,
+        enablePinning: false,
+        enableHiding: false,
         meta: {
           className: 'text-right'
         },
@@ -241,15 +259,6 @@ export const useFileColumns = ({
 
   return {
     columns,
-    modals: (
-      <>
-        <TagModal
-          isOpen={tagModalOpen}
-          setIsOpen={setTagModalOpen}
-          file={selectedFile}
-          onAddTag={tag => handleAddTag(selectedFile, tag)}
-        />
-      </>
-    )
+    modals: <>{/* Modal is now opened via openTagModal */}</>
   }
 }

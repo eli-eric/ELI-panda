@@ -15,7 +15,9 @@ export default function FormStep({ fields, component }: FormStepProps) {
 
   return (
     <Grid>
-      {fields?.map(field => <StepField key={field.field.name} field={field} />)}
+      {fields?.map(field => (
+        <StepField key={field.field.name} field={field} />
+      ))}
     </Grid>
   )
 }

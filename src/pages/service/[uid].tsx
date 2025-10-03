@@ -1,21 +1,18 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { Fragment } from 'react'
-import { useIntl } from 'react-intl'
-import { message } from 'src/i18n/src/messages'
+import { FormattedMessage } from 'react-intl'
 
 import ErrorPage from '@/components/error/ErrorPage'
+import { messages } from '@/i18n/src/locale/en'
 import { useServiceType } from '@/modules/services/hooks/useServiceType'
 import { ServiceTypeContainer } from '@/modules/serviceTypeItem/ServiceType.cont'
-
-const messages = message.service
 
 interface Props {
   uid?: string
 }
 
 const ServiceDetailPage: NextPage = ({ uid }: Props) => {
-  const intl = useIntl()
   const { data, isLoading, error } = useServiceType(uid)
   if (error) {
     return <ErrorPage />
@@ -23,10 +20,16 @@ const ServiceDetailPage: NextPage = ({ uid }: Props) => {
   return (
     <Fragment>
       <Head>
-        <title>{intl.formatMessage({ id: messages.head })}</title>
+        <title>
+          <FormattedMessage id={messages.common.pages.service} />
+        </title>
         <meta name="description" content="...." />
       </Head>
-      {isLoading && <div>Loading...</div>}
+      {isLoading && (
+        <div>
+          <FormattedMessage id={messages.common.pages.loading} />
+        </div>
+      )}
       {data && <ServiceTypeContainer uid={uid} data={data} />}
     </Fragment>
   )

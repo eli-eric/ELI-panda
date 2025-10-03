@@ -1,8 +1,9 @@
 import type { Column, Header } from '@tanstack/react-table'
 import { flexRender } from '@tanstack/react-table'
+import { ArrowDown, ArrowUp } from 'lucide-react'
 import { type FC, useMemo } from 'react'
 
-import { cx } from '@/utils'
+import { cn } from '@/lib/utils'
 
 import styles from './RowCell.module.css'
 
@@ -39,8 +40,8 @@ export const HeaderCellComponent: FC<Props> = ({
 
   return (
     <th
-      className={cx(
-        'whitespace-nowrap flex border-r outline-offset-0 bg-white dark:bg-gray-900 border-gray-400 bg-opacity-95 p-2 text-left font-semibold text-gray-900 dark:text-gray-200 backdrop-blur backdrop-filter',
+      className={cn(
+        'whitespace-nowrap flex border-r outline-offset-0 bg-background border-border p-2 text-left font-semibold text-foreground backdrop-blur backdrop-filter',
         isSticky ? 'sticky top-0 t z-40 ' : 'sticky top-0 z-10',
         styles.cell,
         header.column.columnDef.meta?.headerClassName
@@ -57,8 +58,8 @@ export const HeaderCellComponent: FC<Props> = ({
       }
     >
       <div
-        className={cx(
-          'h-full w-full',
+        className={cn(
+          'h-full w-full flex items-center justify-between',
           header.column.getCanSort() ? 'cursor-pointer select-none' : ''
         )}
         onClick={
@@ -68,10 +69,12 @@ export const HeaderCellComponent: FC<Props> = ({
         }
       >
         {flexRender(header.column.columnDef.header, header.getContext())}
-        {{
-          asc: ' 🔼',
-          desc: ' 🔽'
-        }[header.column.getIsSorted() as string] ?? null}
+        <div className="flex items-center ml-1">
+          {{
+            asc: <ArrowUp className="w-4 h-4 text-primary" />,
+            desc: <ArrowDown className="w-4 h-4 text-primary" />
+          }[header.column.getIsSorted() as string] ?? null}
+        </div>
       </div>
     </th>
   )

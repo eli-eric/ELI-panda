@@ -1,4 +1,4 @@
-import { ChevronDownIcon } from '@heroicons/react/24/outline'
+import { ChevronDown } from 'lucide-react'
 import React from 'react'
 
 import type { SortIndicatorProps } from './types'
@@ -14,11 +14,11 @@ export function SortIndicator({ column }: SortIndicatorProps) {
   return (
     <span className="ml-1">
       {column.getIsSorted() === 'asc' ? (
-        <ChevronDownIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+        <ChevronDown className="h-4 w-4 text-muted-foreground" />
       ) : column.getIsSorted() === 'desc' ? (
-        <ChevronDownIcon className="h-4 w-4 text-gray-500 dark:text-gray-400 rotate-180" />
+        <ChevronDown className="h-4 w-4 text-muted-foreground rotate-180" />
       ) : (
-        <ChevronDownIcon className="h-4 w-4 text-gray-300 dark:text-gray-600 opacity-50" />
+        <ChevronDown className="h-4 w-4 text-muted-foreground opacity-50" />
       )}
     </span>
   )

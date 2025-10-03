@@ -1,7 +1,10 @@
-import { PlusIcon } from '@heroicons/react/24/outline'
-import { useFieldArray, useFormContext } from 'react-hook-form'
+import { Plus } from 'lucide-react'
+import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 
-import { Button } from '@/components/Buttons'
+import { Tooltip } from '@/components/Tooltip'
+import { Button } from '@/components/ui/button'
+import { message } from '@/i18n/src/messages'
 
 import type { CategoryFormType } from '../../types'
 import PropertyItem from './PropertyItem'
@@ -12,6 +15,8 @@ interface Props {
 
 const PropertyList = ({ name }: Props) => {
   const { control } = useFormContext<CategoryFormType>()
+  const { formatMessage: fm } = useIntl()
+  const groupName = useWatch({ control, name: `${name}.name` })
   const { fields, append, remove, move } = useFieldArray<CategoryFormType>({
     control,
     name: `${name}.properties`
@@ -20,8 +25,8 @@ const PropertyList = ({ name }: Props) => {
   const handleAddProp = () => {
     append({
       name: '',
-      type: undefined,
-      unit: undefined,
+      type: null,
+      unit: null,
       defaultValue: ''
     })
   }
@@ -33,11 +38,16 @@ const PropertyList = ({ name }: Props) => {
     if (index > 0) move(index, index - 1)
   }
   return (
-    <div className="flex-1">
-      <ul className="">
-        {fields.map((field, index) => (
-          <li key={field.id} className="border-b px-2 py-2">
+    <div className="space-y-3">
+      <div className="text-sm text-muted-foreground">
+        {fm({ id: message.catalogue.category.groupProperties })}
+      </div>
+
+      {fields.length > 0 && (
+        <div className="space-y-3">
+          {fields.map((field, index) => (
             <PropertyItem
+              key={field.id}
               removeProp={remove}
               index={index}
               name={`${name}.properties.${index}`}
@@ -46,17 +56,30 @@ const PropertyList = ({ name }: Props) => {
               moveUp={handleMoveUp}
               lenght={fields.length}
             />
-          </li>
-        ))}
-      </ul>
-      <Button onClick={handleAddProp}>
-        <PlusIcon
-          className="h-4 w-4
+          ))}
+        </div>
+      )}
 
-"
-          aria-hidden="true"
-        />
-      </Button>
+      <Tooltip
+        content={fm(
+          { id: message.catalogue.category.propertyAddToGroupTooltip },
+          {
+            name:
+              groupName || fm({ id: message.catalogue.category.unnamedGroup })
+          }
+        )}
+      >
+        <Button
+          type="button"
+          onClick={handleAddProp}
+          variant="outline"
+          size="sm"
+          className="w-full border-dashed"
+        >
+          <Plus className="h-4 w-4 mr-2" />
+          {fm({ id: message.catalogue.category.propertyAdd })}
+        </Button>
+      </Tooltip>
     </div>
   )
 }

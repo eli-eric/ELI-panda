@@ -4,7 +4,7 @@ import { type FC, Fragment, type PropsWithChildren } from 'react'
 import EmptyResults from '@/components/empty-section/EmptyResults'
 import ProgressBarComponent from '@/components/progress-bar.comp'
 import PaginationComponent from '@/components/table/Pagination.comp'
-import { cx } from '@/utils'
+import { cn } from '@/lib/utils'
 
 import { TableSettings } from '../../pandaTable/components/TableSettings'
 
@@ -37,7 +37,7 @@ export const TableContainer: FC<PropsWithChildren<Props>> = ({
       {tableHeading && (
         <div
           id="table-heading"
-          className="items-center w-full py-[2px] px-4 text-center shadow-sm  text-primary-600 bg-white dark:bg-gray-800  "
+          className="items-center w-full py-[2px] px-4 text-center shadow-sm text-primary bg-background border-b border-border"
         >
           <span>{tableHeading}</span>
         </div>
@@ -53,7 +53,7 @@ export const TableContainer: FC<PropsWithChildren<Props>> = ({
       )}
       <div
         ref={tableContainerRef}
-        className={cx(
+        className={cn(
           'overflow-auto relative h-full min-w-full text-sm border-t',
           className
         )}

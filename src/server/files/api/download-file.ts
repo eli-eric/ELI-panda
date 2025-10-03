@@ -4,6 +4,7 @@ import logger from '@/server/logger'
 import s3Client, { config } from '@/server/s3client'
 
 import { getPathInfo } from '../utils/path-utils'
+import { safeGetObject, safeStatObject } from '../utils/s3-error-utils'
 
 const { bucket } = config
 
@@ -15,8 +16,10 @@ async function downloadFile(req: NextApiRequest, res: NextApiResponse) {
     }
     const { fullPath } = pathInfo
 
-    const objectInfo = await s3Client.statObject(bucket, fullPath)
-    if (!objectInfo) return res.status(404).end()
+    const objectInfo = await safeStatObject(s3Client, bucket, fullPath, req)
+    if (!objectInfo) {
+      return res.status(404).json({ error: 'File not found' })
+    }
 
     res.setHeader(
       'Content-Type',
@@ -28,16 +31,22 @@ async function downloadFile(req: NextApiRequest, res: NextApiResponse) {
       `filename=${objectInfo.metaData['name']}`
     )
 
-    const fileStream = await s3Client.getObject(bucket, fullPath)
+    const fileStream = await safeGetObject(s3Client, bucket, fullPath, req)
+    if (!fileStream) {
+      return res.status(404).json({ error: 'File not found' })
+    }
 
     fileStream.pipe(res).on('error', err => {
-      logger.error(err)
-      logger.info('Error downloading file', err)
-      res.status(500).end()
+      logger.error('Error streaming file:', err)
+      if (!res.headersSent) {
+        res.status(500).end()
+      }
     })
   } catch (err) {
-    logger.info('Error download file', err)
-    throw new Error('Error downloading file')
+    logger.error('Error downloading file:', err)
+    if (!res.headersSent) {
+      res.status(500).json({ error: 'Error downloading file' })
+    }
   }
 }
 

@@ -1,71 +1,102 @@
-import { Fragment, useState } from 'react'
-import { useFormContext, useWatch } from 'react-hook-form'
+import { useState } from 'react'
+import { useFormContext } from 'react-hook-form'
 import { FormattedMessage } from 'react-intl'
 
 import { Button } from '@/components/Buttons'
-import { Input } from '@/components/form/inputs'
-import ModalComponent from '@/components/overlays/modal/modal.comp'
+import { Button as UIButton } from '@/components/ui/button'
+import { Input as UIInput } from '@/components/ui/input'
 import { Paragraph } from '@/components/visuals/Paragraph'
 import { message } from '@/i18n/src/messages'
-import type { ModalButtons } from '@/types/form'
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 
 import { useSystemDetail } from '../../hooks/useSystemDetail'
-import useSystemEditFormFields from '../form/SystemForm.fields'
 
 const messages = message.systemsPage
 const messageButtons = message.common.buttons
 
-export const SetMinimalSparesButton = () => {
-  const [open, setOpen] = useState(false)
-  const fields = useSystemEditFormFields()
-  const { systemDetail } = useSystemDetail()
+interface SetMinimalSparesModalContentProps {
+  currentValue?: number
+  onSubmit?: (value: number) => void
+  onCancel?: () => void
+}
 
-  const [minValue, setMinValue] = useState(systemDetail?.minimalSpareParstCount)
+const SetMinimalSparesModalContent = ({
+  currentValue,
+  onSubmit,
+  onCancel
+}: SetMinimalSparesModalContentProps) => {
+  const { closeModal } = useModalGlobalStore()
+  const [value, setValue] = useState(currentValue || 0)
 
-  const { setValue, control } = useFormContext()
-
-  const formValue = useWatch({ control, name: 'minimalSpareParstCount' })
-
-  const buttons: ModalButtons = {
-    goNext: {
-      text: messageButtons.ok,
-      onClick: () => {
-        setOpen(false)
-        setMinValue(formValue)
-      }
-    },
-    goBack: {
-      text: messageButtons.cancel,
-      onClick: () => {
-        setValue('minimalSpareParstCount', minValue)
-        setOpen(false)
-      }
-    }
+  const handleOk = () => {
+    onSubmit?.(value)
+    closeModal('dialog1')
   }
 
-  const handleOpen = () => setOpen(true)
+  const handleCancel = () => {
+    onCancel?.()
+    closeModal('dialog1')
+  }
+
   return (
-    <Fragment>
-      <Button primary onClick={handleOpen}>
-        <FormattedMessage id={messages.systemDetail.spareParts.buttons.set} />
-      </Button>
-      <ModalComponent buttons={buttons} open={open} setOpen={setOpen}>
-        <div className="flex items-center">
-          <label className="font-bold mr-2 text-gray-600 dark:text-gray-200">
-            <FormattedMessage
-              id={messages.systemDetail.form.minimalSpareParstCount.label}
-            />
-          </label>
-          <Input
-            {...fields.minimalSpareParstCount}
-            type="number"
-            className="w-24"
+    <div className="space-y-4">
+      <div className="flex items-center">
+        <label className="font-bold mr-2 text-gray-600 dark:text-gray-200">
+          <FormattedMessage
+            id={messages.systemDetail.form.minimalSpareParstCount.label}
           />
-        </div>
-        <Paragraph
-          message={messages.systemDetail.minimalSparePartsModal.message}
+        </label>
+        <UIInput
+          type="number"
+          value={value}
+          onChange={e => setValue(Number(e.target.value))}
+          className="w-24"
         />
-      </ModalComponent>
-    </Fragment>
+      </div>
+      <Paragraph
+        message={messages.systemDetail.minimalSparePartsModal.message}
+      />
+      <div className="flex justify-end gap-2">
+        <UIButton variant="outline" onClick={handleCancel}>
+          <FormattedMessage id={messageButtons.cancel} />
+        </UIButton>
+        <UIButton onClick={handleOk}>
+          <FormattedMessage id={messageButtons.ok} />
+        </UIButton>
+      </div>
+    </div>
+  )
+}
+
+export const SetMinimalSparesButton = () => {
+  const { setValue, getValues } = useFormContext()
+  const { systemDetail } = useSystemDetail()
+
+  const openModal = () => {
+    if (typeof window === 'undefined') return
+
+    const { openModal } = useModalGlobalStore.getState()
+    const currentValue =
+      getValues('minimalSpareParstCount') ??
+      systemDetail?.minimalSpareParstCount
+
+    openModal('dialog1', {
+      component: () => (
+        <SetMinimalSparesModalContent
+          currentValue={currentValue}
+          onSubmit={value => setValue('minimalSpareParstCount', value)}
+          onCancel={() => setValue('minimalSpareParstCount', currentValue)}
+        />
+      ),
+      props: {
+        size: 'm' as const
+      }
+    })
+  }
+
+  return (
+    <Button onClick={openModal}>
+      <FormattedMessage id={messages.systemDetail.spareParts.buttons.set} />
+    </Button>
   )
 }

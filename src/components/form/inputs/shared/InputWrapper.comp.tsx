@@ -1,4 +1,4 @@
-import { cx } from '@/utils'
+import { cn } from '@/lib/utils'
 
 export const InputWrapper = ({
   hidden,
@@ -11,8 +11,8 @@ export const InputWrapper = ({
 }) => (
   <div
     hidden={hidden}
-    className={cx(
-      'block w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
+    className={cn(
+      'block w-full appearance-none placeholder-gray-400  focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm',
       className
     )}
   >

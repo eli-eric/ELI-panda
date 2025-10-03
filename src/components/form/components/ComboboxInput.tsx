@@ -1,8 +1,8 @@
 import { Combobox } from '@headlessui/react'
 import type { FieldError } from 'react-hook-form'
 
+import { cn } from '@/lib/utils'
 import type { CodebookType } from '@/types/responses/codebook'
-import { cx } from '@/utils'
 
 interface Props {
   value?: any
@@ -28,7 +28,7 @@ export const ComboboxInput = ({
     displayValue={(item: CodebookType) => item?.name}
     placeholder={placeholder}
     autoComplete="off"
-    className={cx(
+    className={cn(
       'form-field ',
       value && !disabled ? 'pr-14' : 'pr-9',
       rounded,

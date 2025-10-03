@@ -1,9 +1,10 @@
 import { type FC } from 'react'
-import { useForm } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 
-import CheckBox from '@/components/form/CheckBox'
-import { Form } from '@/components/form/Form'
 import Card from '@/components/layout/Card'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Label } from '@/components/ui/label'
+import { message } from '@/i18n/src/messages'
 import type { GetRolesQuery } from '@/types/gql/graphql'
 import type { CodebookType } from '@/types/responses/codebook'
 
@@ -20,37 +21,39 @@ export const UserRoles: FC<Props> = ({
   assignedRoles,
   roles
 }) => {
-  const formMethods = useForm<{
-    [key: string]: boolean
-  }>({
-    defaultValues:
-      assignedRoles &&
-      assignedRoles?.reduce((acc, { code }) => {
-        acc[code] = true
-        return acc
-      }, {})
-  })
+  const { formatMessage: fm } = useIntl()
 
   return (
-    <Form {...{ formMethods }}>
-      <Card>
-        <div className="pb-2 font-bold dark:text-gray-200">Roles</div>
-        <ul className="" role="list">
-          {roles?.map(role => (
+    <Card>
+      <div className="pb-2 font-bold dark:text-gray-200">
+        {fm({ id: message.layout.profile.roles })}
+      </div>
+      <ul className="" role="list">
+        {roles?.map(role => {
+          const isAssigned = assignedRoles?.some(
+            assignedRole => assignedRole.uid === role.uid
+          )
+          return (
             <li key={role.uid} className="py-1">
-              <CheckBox
-                key={role.uid}
-                name={role.code}
-                label={role.name}
-                onChange={e => {
-                  e.target.checked ? addRole(role) : removeRole(role.uid)
-                }}
-                rounded="rounded-md"
-              />
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id={`role-${role.uid}`}
+                  checked={isAssigned}
+                  onCheckedChange={checked => {
+                    checked ? addRole(role) : removeRole(role.uid)
+                  }}
+                />
+                <Label
+                  htmlFor={`role-${role.uid}`}
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  {role.name}
+                </Label>
+              </div>
             </li>
-          ))}
-        </ul>
-      </Card>
-    </Form>
+          )
+        })}
+      </ul>
+    </Card>
   )
 }

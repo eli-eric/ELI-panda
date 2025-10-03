@@ -1,18 +1,22 @@
-import React, { Fragment, useState } from 'react'
+import React, { useCallback } from 'react'
+import { useFormContext } from 'react-hook-form'
 
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps } from '@/types/form'
+import type { CodebookType } from '@/types/responses/codebook'
 
 import { ModalSelect } from './ModalSelect'
-import { CodebookTreeModal } from './shared/CodebookTreeModal'
+import { useCodebookTreeModal } from './shared/hooks/useCodebookTreeModal'
 
 type ComboboxPropsT = FieldProps &
   React.InputHTMLAttributes<HTMLInputElement> & {
     codebook?: CODEBOOK
     isObject?: boolean
     position?: 'top' | 'bottom'
-    onSelect?: (item?: any) => void
+    onSelect?: (item?: CodebookType | null) => void
     isFilter?: boolean
+    customLabel?: string
+    modalTitle?: string
   }
 
 export const ComboboxTree = ({
@@ -23,32 +27,43 @@ export const ComboboxTree = ({
   disabled,
   className,
   onSelect,
-  isFilter
+  isFilter,
+  customLabel,
+  modalTitle
 }: ComboboxPropsT) => {
-  const [open, setOpen] = useState(false)
+  const { setValue } = useFormContext()
+  const { openCodebookTreeModal } = useCodebookTreeModal()
+
+  const handleCodebookSelect = useCallback(
+    (value?: CodebookType | null | undefined) => {
+      setValue(name, value)
+      onSelect?.(value)
+    },
+    [setValue, name, onSelect]
+  )
+
+  const displayLabel = customLabel || label
+  const displayTitle = modalTitle || displayLabel || 'Select Item'
+
+  const handleOpenModal = () => {
+    openCodebookTreeModal({
+      codebook,
+      name,
+      title: displayTitle,
+      onSubmit: handleCodebookSelect
+    })
+  }
 
   return (
-    <Fragment>
-      <ModalSelect
-        name={name}
-        onChange={onSelect}
-        isFilter={isFilter}
-        className={className}
-        disabled={disabled}
-        placeholder={placeholder}
-        label={label}
-        onClick={() => {
-          setOpen(true)
-        }}
-      />
-
-      <CodebookTreeModal
-        onSubmit={onSelect}
-        codebook={codebook}
-        open={open}
-        setOpen={setOpen}
-        name={name}
-      />
-    </Fragment>
+    <ModalSelect
+      name={name}
+      onChange={onSelect}
+      isFilter={isFilter}
+      className={className}
+      disabled={disabled}
+      placeholder={placeholder}
+      label={displayLabel}
+      onClick={handleOpenModal}
+    />
   )
 }

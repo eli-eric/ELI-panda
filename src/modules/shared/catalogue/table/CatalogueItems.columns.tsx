@@ -1,10 +1,11 @@
 import type { CellContext, ColumnDef } from '@tanstack/react-table'
-import Image from 'next/image'
 import { useMemo } from 'react'
 import { FormattedDate, FormattedTime, useIntl } from 'react-intl'
 
 import { Tooltip } from '@/components/Tooltip'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { message } from '@/i18n/src/messages'
+import { cn, truncateString } from '@/lib/utils'
 import { useCategoryUid } from '@/modules/catalogue/hooks/useCategoryUid'
 import { useCategoryProperties } from '@/modules/systems/hooks/useCategoryProperties'
 import { PROPERTY_TYPE } from '@/types/catalogue/constants'
@@ -14,7 +15,6 @@ import type {
   CatalogueItemsResponse
 } from '@/types/responses/catalogue'
 import type { CodebookType } from '@/types/responses/codebook'
-import { cx, truncateString } from '@/utils'
 
 import { CategoryName } from './cells/CategoryNameCell'
 import { DescriptionCell } from './cells/DescriptionCell'
@@ -51,26 +51,15 @@ export const useCatalogueItemsColumns = ({
           sticky: true
         },
         accessorFn: row => row?.miniImageUrl?.[0],
-        cell: ({ getValue }) => {
-          if (getValue()) {
-            return (
-              <Image
-                src={getValue()}
-                alt="img"
-                width={50}
-                height={50}
-                className="rounded-full w-8 h-8 min-w-8 object-cover justify-center"
-              />
-            )
-          }
+        cell: ({ getValue, row: { original } }) => {
           return (
-            <Image
-              src={FALLBACK_IMAGE.url}
-              alt="img"
-              width={50}
-              height={50}
-              className="rounded-full w-8 h-8 min-w-8 object-cover justify-center"
-            />
+            <Avatar className="w-8 h-8 min-w-8">
+              <AvatarImage
+                src={getValue() || FALLBACK_IMAGE.url}
+                alt={original.name}
+              />
+              <AvatarFallback>{original.name?.[0] || '?'}</AvatarFallback>
+            </Avatar>
           )
         }
       },
@@ -212,7 +201,7 @@ export const useCatalogueItemsColumns = ({
             }
             return (
               <div>
-                <span className={cx(unit && 'font-bold')}>{value}</span>
+                <span className={cn(unit && 'font-bold')}>{value}</span>
                 {unit && <span> {unit}</span>}
               </div>
             )

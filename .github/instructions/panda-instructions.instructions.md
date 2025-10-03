@@ -10,15 +10,15 @@ ELI-PANDA is a sophisticated full-stack web application for managing operations 
 
 ### Core Technologies & Stack
 
-- **Frontend**: Next.js 14 with React 18.2.0, TypeScript
-- **Architecture**: App Directory (App Router) for modern routing and layouts
-- **Styling**: TailwindCSS with shadcn/ui component library
+- **Frontend**: Next.js 15 with React 19.1.0, TypeScript
+- **Architecture**: Page Directory (Page Router), new modules architecture in App Directory for modern features
+- **Styling**: TailwindCSS v4 with shadcn/ui component library
 - **State Management**: Zustand for global state, React Hook Form for form state
-- **Data Fetching**: TanStack React Query v5 for REST API caching, Apollo Client for GraphQL
+- **Data Fetching**: TanStack React Query v5 for REST API caching and GraphQL requests with ApolloServer
 - **Database**: Neo4j (Graph Database) accessed via GraphQL API
 - **Authentication**: NextAuth.js with Azure AD integration
 - **File Storage**: MinIO (S3-compatible object storage)
-- **Testing**: Jest with React Testing Library, Cypress for E2E
+- **Testing**: Jest with React Testing Library, Playwright for end-to-end testing
 - **Development**: TypeScript strict mode, ESLint, Prettier
 
 ## Architecture & Patterns
@@ -27,10 +27,25 @@ ELI-PANDA is a sophisticated full-stack web application for managing operations 
 
 ```
 src/
+├── pages/              # Application entry point (Page Router)
+│   ├── api/          # API routes
+│   ├── _app.tsx      # Custom App component
+│   ├── _document.tsx  # Custom Document component
+│   ├── index.tsx      # Login page
+│   ├── dashboard/    # Dashboard pages
+│   ├── systems/      # Systems management pages
+│   ├── catalogue/    # Catalogue management pages
+│   ├── orders/       # Order management pages
+│   ├── roomCards/    # Room card management pages
+│   ├── publications/ # Document management pages
+│   ├── services/     # Service management pages
+│   ├── administration/ # User and permission management pages
+│   └── 404.tsx       # Custom 404 page
+├── public/           # Static assets (images, fonts, etc.)
 ├── app/              # App Directory (App Router)
 │   ├── (auth)/      # Route groups for auth pages
 │   ├── (dashboard)/ # Route groups for dashboard
-│   ├── globals.css  # Global styles
+│   ├── globals.css  # Global styles even for Page Router
 │   ├── layout.tsx   # Root layout
 │   └── page.tsx     # Root page
 ├── components/       # Reusable UI components (shadcn/ui)
@@ -38,6 +53,27 @@ src/
 ├── hooks/           # Custom React hooks
 ├── lib/             # Utility libraries and configurations
 ├── modules/         # Feature-based modules (domain-driven design)
+│   ├── administration/
+│   ├── auth/
+│   ├── catalogue/
+│   ├── catalogueItem/
+│   ├── codebooks/
+│   ├── layout/
+│   ├── orderItem/
+│   ├── orders/
+│   ├── publication/
+│   ├── publications/
+│   ├── roomCard/
+│   ├── roomCards/
+│   ├── services/
+│   ├── serviceTypeItem/
+│   ├── shared/
+│   ├── system-type-edit/
+│   ├── systemItem/
+│   ├── systems/
+│   ├── systems-multi-move/
+│   ├── systemsMoving/
+│   ├── systemsSpareParts/
 ├── server/          # Server-side utilities
 ├── store/           # Zustand stores
 ├── types/           # TypeScript type definitions

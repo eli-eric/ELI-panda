@@ -1,12 +1,15 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
+import { useIntl } from 'react-intl'
 
-import { Badge } from '@/components/visuals/Badge'
+import { Badge } from '@/components/ui/badge'
+import { message } from '@/i18n/src/messages'
 import type { RoomCard } from '@/types/gql/graphql'
 
 import { LocationCell } from './LocationCell'
 
 export const useRoomCardsColumns = () => {
+  const { formatMessage: fm } = useIntl()
   const columns = useMemo(
     (): ColumnDef<RoomCard, any>[] => [
       {
@@ -30,9 +33,12 @@ export const useRoomCardsColumns = () => {
         cell: ({ getValue }) => (
           <div>
             {getValue()?.map(location => (
-              <Badge
-                key={location.code}
-              >{`${location.name} (${location.code})`}</Badge>
+              <Badge key={location.code}>
+                {fm(
+                  { id: message.common.roomCards.locationFormat },
+                  { name: location.name, code: location.code }
+                )}
+              </Badge>
             ))}
           </div>
         )
@@ -91,7 +97,7 @@ export const useRoomCardsColumns = () => {
         size: 250
       }
     ],
-    []
+    [fm]
   )
 
   return columns

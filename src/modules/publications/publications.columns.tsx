@@ -1,45 +1,40 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import Link from 'next/link'
 import { useMemo } from 'react'
+import { useIntl } from 'react-intl'
 
-import { LinkDecorator } from '@/components/decorators'
 import { ShortCell } from '@/components/table/short-cell'
-import { PATH } from '@/types/constants/paths'
+import { Button } from '@/components/ui/button'
+import { message } from '@/i18n/src/messages'
 
 import { MEDIA_TYPE_MAP } from '../publication/types/constants'
 import type { Publication } from '../publication/types/responses'
-import { ActionButtons } from './components/action-buttons.comp'
+import { TitleCell } from './components/TitleCell'
 
 export const usePublicationColumns = () => {
+  const { formatMessage: fm } = useIntl()
+
   const columns = useMemo(
     (): ColumnDef<Publication, any>[] => [
       {
-        id: 'mediaType',
-        header: 'Media Type',
-        accessorFn: row => MEDIA_TYPE_MAP[row.mediaType],
+        id: 'title',
+        header: fm({ id: message.publicationsPage.columns.title }),
+        accessorFn: row => row.title,
+        size: 375,
         meta: { sticky: true },
-        size: 200
+        cell: TitleCell
       },
       {
         id: 'code',
         header: 'Code',
         accessorFn: row => row.code,
-        size: 200,
-        meta: {
-          sticky: true
-        },
-        cell: ({ getValue, row: { original } }) => {
-          return (
-            <div className="relative w-full h-full flex items-center">
-              <Link href={PATH.PUBLICATION + '/' + original.uid}>
-                <LinkDecorator>
-                  <div>{getValue()}</div>
-                </LinkDecorator>
-              </Link>
-              <ActionButtons uid={original?.uid || ''} />
-            </div>
-          )
-        }
+        size: 200
+      },
+      {
+        id: 'mediaType',
+        header: 'Media Type',
+        accessorFn: row => MEDIA_TYPE_MAP[row.mediaType],
+        size: 200
       },
       {
         id: 'experimentalSystem',
@@ -71,7 +66,9 @@ export const usePublicationColumns = () => {
         accessorFn: row => row.webLink,
         cell: ({ getValue }) => (
           <Link href={getValue() || ''} target="_blank">
-            <LinkDecorator>Click here</LinkDecorator>
+            <Button variant="link" className="cursor-pointer">
+              {fm({ id: message.common.publications.clickHere })}
+            </Button>
           </Link>
         )
       },
@@ -80,15 +77,6 @@ export const usePublicationColumns = () => {
         header: 'Open Access Type',
         accessorFn: row => row.openAccessType?.name,
         size: 200
-      },
-      {
-        id: 'title',
-        header: 'Title',
-        accessorFn: row => row.title,
-        size: 300,
-        cell: ({ getValue }) => (
-          <ShortCell value={getValue()} numberOfChars={30} />
-        )
       },
       {
         id: 'allAuthors',
@@ -123,7 +111,10 @@ export const usePublicationColumns = () => {
         id: 'longJournalTitle',
         header: 'Journal Title',
         accessorFn: row => row.longJournalTitle,
-        size: 400
+        size: 400,
+        cell: ({ getValue }) => (
+          <ShortCell value={getValue()} numberOfChars={50} />
+        )
       },
       {
         id: 'volume',
@@ -218,7 +209,10 @@ export const usePublicationColumns = () => {
         id: 'wosNumber',
         header: 'WOS Number',
         size: 300,
-        accessorFn: row => row.wosNumber
+        accessorFn: row => row.wosNumber,
+        cell: ({ getValue }) => (
+          <ShortCell value={getValue()} numberOfChars={35} />
+        )
       },
       {
         id: 'issn',
@@ -256,7 +250,7 @@ export const usePublicationColumns = () => {
         )
       }
     ],
-    []
+    [fm]
   )
 
   return columns

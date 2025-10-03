@@ -1,10 +1,13 @@
 import { useRouter } from 'next/router'
+import { useIntl } from 'react-intl'
 
 import { Button } from '@/components/Buttons'
+import { message } from '@/i18n/src/messages'
 import { useSystemCodeClear } from '@/modules/systemItem/hooks/useSystemCodeClear'
 import { useSystemCodeGenerate } from '@/modules/systemItem/hooks/useSystemCodeGenerate'
 
 export const SystemCodeButton = () => {
+  const { formatMessage: fm } = useIntl()
   const { loading, getSystemCode, disabled } = useSystemCodeGenerate()
   const { clearSystemCode, loading: pending } = useSystemCodeClear()
   const router = useRouter()
@@ -29,22 +32,20 @@ export const SystemCodeButton = () => {
   return (
     <div className="flex w-full">
       <Button
-        primary
         loading={loading || pending}
         disabled={disabled}
         onClick={handleGenerate}
-        className="sm:mt-5 mr-2 mt-6 w-full flex justify-center"
+        className="mr-2 mt-4 flex justify-center"
       >
-        Generate
+        {fm({ id: message.common.systemItem.generate })}
       </Button>
       <Button
-        primary
         disabled={disabled}
         loading={loading || pending}
         onClick={handleClear}
-        className="sm:mt-5 mt-6 w-full flex justify-center"
+        className="mt-4 flex justify-center"
       >
-        Release
+        {fm({ id: message.common.systemItem.release })}
       </Button>
     </div>
   )

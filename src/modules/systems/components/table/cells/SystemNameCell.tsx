@@ -1,13 +1,15 @@
-import {
-  ArrowsRightLeftIcon,
-  ChevronDownIcon,
-  ChevronRightIcon
-} from '@heroicons/react/24/outline'
 import type { CellContext } from '@tanstack/react-table'
+import { ChevronDown, ChevronRight, GripVertical } from 'lucide-react'
+import { Edit } from 'lucide-react'
 import { useDrag } from 'react-dnd'
 
 import { Tooltip } from '@/components/Tooltip'
-import { cx, truncateString } from '@/utils'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
+import { useSystemStore } from '@/modules/shared/system/device-info-overlay/store/useShowDeviceStore'
+import { useSystemEditSheet } from '@/modules/shared/system/system-edit/useSystemEditSheet'
+import { getBadgeVariantBySystemLevel } from '@/modules/systemItem/utils'
 import type { EndpointProps } from '@/utils/getEndpoints'
 
 import { SystemActionButtons } from './SystemActionButtons'
@@ -35,6 +37,8 @@ export const SystemNameCell = ({
 }: SystemNameCellProps) => {
   const { original } = row
   const { sparesIn, sparesOut } = original
+  const { setUID } = useSystemStore()
+  const openEdit = useSystemEditSheet(original.uid)
 
   const [{ isDragging }, dragRef, previewRef] = useDrag({
     collect: monitor => ({
@@ -44,7 +48,7 @@ export const SystemNameCell = ({
     type: 'system'
   })
 
-  const value = truncateString(getValue(), 33)
+  const value = getValue()
 
   const handleExpand = () => {
     if (!row.getIsExpanded()) {
@@ -53,25 +57,33 @@ export const SystemNameCell = ({
     row.toggleExpanded()
   }
 
+  const handleOpenEdit = () => {
+    setUID(original.uid)
+    openEdit()
+  }
+
   return (
     <div
       style={{
         paddingLeft: `${row.depth * 1.01}rem`
       }}
-      className={cx(isDragging && 'text-primary-500', 'flex justify-center')}
+      className={cn(
+        isDragging && 'text-orange-500',
+        'flex items-center w-full group'
+      )}
     >
-      <div className="flex items-center" ref={dragRef}>
+      <div className="flex-1 min-w-0 overflow-hidden" ref={dragRef as any}>
         <div
-          className={cx(
-            'flex items-center w-full py-1',
+          className={cn(
+            'flex items-center py-1',
             original.hasSubsystems && 'group/expand cursor-pointer'
           )}
-          onClick={handleExpand}
-          ref={previewRef}
+          onClick={original.hasSubsystems ? handleExpand : undefined}
+          ref={previewRef as any}
         >
           {enableDragAndDrop && (
-            <button className="mr-2">
-              <ArrowsRightLeftIcon className="w-5 h-5" />
+            <button className="mr-2 shrink-0 text-muted-foreground hover:text-foreground transition-colors cursor-grab active:cursor-grabbing">
+              <GripVertical className="w-5 h-5" />
             </button>
           )}
           <Tooltip
@@ -81,40 +93,56 @@ export const SystemNameCell = ({
             )
               ?.map(v => v.name)
               .join(' > ')}
-            placement="top"
-            className={
-              original.parentPath && original.parentPath?.length > 0
-                ? ''
-                : 'hidden'
-            }
           >
-            <div>
-              {original.hasSubsystems ? (
-                <div className="flex items-center group-hover/expand:text-gray-400 cursor-pointer">
-                  {row.getIsExpanded() ? (
-                    <ChevronDownIcon className="w-4 h-4" />
-                  ) : (
-                    <ChevronRightIcon className="w-4 h-4" />
-                  )}
-                  <span className="pl-1">
-                    <span>{value}</span>
-                  </span>
-                </div>
-              ) : (
-                <div className="flex items-center">
-                  <span className="pl-5">
-                    <span>{value}</span>
-                  </span>
-                </div>
-              )}
-            </div>
+            {!original.hasSubsystems ? (
+              <Badge
+                onClick={handleOpenEdit}
+                variant="outline"
+                className={cn(
+                  'flex items-center h-7 max-w-full overflow-hidden justify-start px-3 hover:opacity-80',
+                  getBadgeVariantBySystemLevel(original.systemLevel)
+                )}
+              >
+                <span className="cursor-pointer text-inherit hover:underline truncate block min-w-0">
+                  {value}
+                </span>
+              </Badge>
+            ) : (
+              <Badge
+                variant="outline"
+                className={cn(
+                  'flex items-center h-7 max-w-full overflow-hidden justify-start gap-1 group-hover/expand:opacity-80 cursor-pointer px-2',
+                  getBadgeVariantBySystemLevel(original.systemLevel)
+                )}
+              >
+                {row.getIsExpanded() ? (
+                  <ChevronDown className="w-4 h-4 shrink-0" />
+                ) : (
+                  <ChevronRight className="w-4 h-4 shrink-0" />
+                )}
+                <span className="truncate min-w-0">{value}</span>
+              </Badge>
+            )}
           </Tooltip>
         </div>
+      </div>
+      <div className="flex-shrink-0 ml-2 flex items-center">
+        {!hideButtons && (
+          <Tooltip content={canEdit ? 'Edit System' : 'View System'}>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleOpenEdit}
+              className="h-8 w-8 p-0  transition-opacity duration-200 mr-1 hover:text-primary text-muted-foreground"
+            >
+              <Edit className="h-4 w-4" />
+            </Button>
+          </Tooltip>
+        )}
         <SystemActionButtons
           original={original}
           canEdit={canEdit}
           hideButtons={hideButtons}
-          enableDragAndDrop={enableDragAndDrop}
           sparesIn={sparesIn}
           sparesOut={sparesOut}
           queryKey={queryKey}

@@ -65,7 +65,7 @@ export const RangeSliderComponent = ({
                   name="min"
                   type="number"
                   placeholder={min.toString()}
-                  className="form-field rounded-md border-gray-200 border-1 px-2 py-1 text-sm"
+                  className="form-field rounded-md border-gray-200 border px-2 py-1 text-sm"
                   value={fieldValue.min ?? ''}
                   onChange={e => {
                     const value =
@@ -109,7 +109,7 @@ export const RangeSliderComponent = ({
                       })
                     }
                   }}
-                  className="form-field rounded-md border-gray-200 border-1 px-2 py-1 text-sm"
+                  className="form-field rounded-md border-gray-200 border px-2 py-1 text-sm"
                   value={fieldValue.max ?? ''}
                 />
               </div>

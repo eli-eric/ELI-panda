@@ -1,48 +1,39 @@
+import { Share } from 'lucide-react'
 import type { FC } from 'react'
-import { Fragment, useState } from 'react'
 
-import { GraphTreeButton, TableGraphTreeButton } from '@/components/Buttons'
+import { Button } from '@/components/ui/button'
 
-import { GraphModal } from './GraphModal'
+import { openGraphModal } from './GraphModal'
 
 interface Props {
   uid?: string
 }
 
 export const GraphModalButton: FC<Props> = ({ uid }) => {
-  const [open, setOpen] = useState(false)
-
-  function openModal() {
-    setOpen(true)
-  }
-
   if (!uid) {
     return null
   }
 
   return (
-    <Fragment>
-      <GraphTreeButton buttonSize="large" onClick={openModal} />
-      <GraphModal open={open} setOpen={setOpen} uid={uid} />
-    </Fragment>
+    <Button variant="outline" size="sm" onClick={() => openGraphModal(uid)}>
+      <Share className="h-4 w-4" />
+    </Button>
   )
 }
 
 export const GraphModalTableButton: FC<Props> = ({ uid }) => {
-  const [open, setOpen] = useState(false)
-
-  function openModal() {
-    setOpen(true)
-  }
-
   if (!uid) {
     return null
   }
 
   return (
-    <Fragment>
-      <TableGraphTreeButton onClick={openModal} />
-      <GraphModal open={open} setOpen={setOpen} uid={uid} />
-    </Fragment>
+    <Button
+      variant="ghost"
+      size="icon"
+      className="ml-2 h-8 w-8 hover:text-orange-500"
+      onClick={() => openGraphModal(uid)}
+    >
+      <Share className="h-4 w-4" />
+    </Button>
   )
 }
