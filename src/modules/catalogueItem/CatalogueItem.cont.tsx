@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { memo, useEffect, useRef, useState } from 'react'
+import { memo, useEffect, useMemo, useRef, useState } from 'react'
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { useForm } from 'react-hook-form'
@@ -54,21 +54,26 @@ const CatalogueItemContainer = ({
   // Convert details array to object structure for form
   // Form expects: { [propertyUid]: detail }
   // API returns: [{ property: { uid, ... }, value, ... }]
-  const detailsObject = item?.details?.reduce(
-    (acc, detail) => {
-      if (detail.property?.uid) {
-        acc[detail.property.uid] = detail
-      }
-      return acc
-    },
-    {} as Record<string, any>
-  )
+  // useMemo ensures this recalculates when item changes
+  const detailsObject = useMemo(() => {
+    return (
+      item?.details?.reduce(
+        (acc, detail) => {
+          if (detail.property?.uid) {
+            acc[detail.property.uid] = detail
+          }
+          return acc
+        },
+        {} as Record<string, any>
+      ) || {}
+    )
+  }, [item])
 
   const formMethods = useForm<CatalogueItemFormData>({
     resolver: zodResolver(catalogueItemSchema),
     defaultValues: {
       ...item,
-      details: detailsObject || {}
+      details: detailsObject
     }
   })
   const { reset, setValue } = formMethods
@@ -79,6 +84,19 @@ const CatalogueItemContainer = ({
     reset
   })
 
+  // Sync item data from React Query cache to form
+  // This ensures form is updated when item changes (e.g., after save)
+  useEffect(() => {
+    if (item) {
+      reset({
+        ...item,
+        details: detailsObject
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [item, detailsObject])
+
+  // Sync catalogueCategory when creating new item from category page
   useEffect(() => {
     if (catalogueCategory) {
       reset({

@@ -80,7 +80,8 @@ export const useItemSubmit = ({
         }
         toast.success('Item saved')
       })
-      refetch()
+      // Note: No need to refetch() here - cache is already updated via setQueryData above
+      // The form will be synced via useEffect in the container component
     },
     onError: (error: AxiosError) => {
       if (error.response?.status === 409) {
