@@ -79,11 +79,16 @@ const Groups = () => {
   }, [groupMap])
 
   // Use effect to set form values using stable property.uid
+  // shouldDirty: false prevents marking form as dirty during initialization
   useEffect(() => {
     detailsForForm.forEach(({ uid, detail }) => {
-      setValue(`details.${uid}.property`, detail.property)
-      setValue(`details.${uid}.propertyGroup`, detail.propertyGroup)
-      setValue(`details.${uid}.value`, detail.value)
+      setValue(`details.${uid}.property`, detail.property, {
+        shouldDirty: false
+      })
+      setValue(`details.${uid}.propertyGroup`, detail.propertyGroup, {
+        shouldDirty: false
+      })
+      setValue(`details.${uid}.value`, detail.value, { shouldDirty: false })
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setValue, detailsForForm])

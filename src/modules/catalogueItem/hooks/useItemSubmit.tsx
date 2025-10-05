@@ -46,9 +46,28 @@ export const useItemSubmit = ({
 
       setvalue('lastUpdateTime', catalogueItem.data?.lastUpdateTime)
 
-      // Reset form with new data from API response to prevent reverting to old defaultValues
+      // Convert API array response back to object structure for form
+      // Form stores details as object with UID keys: { [propertyUid]: detail }
+      // API returns details as array: [{ property: { uid, ... }, value, ... }]
+      const detailsObject = catalogueItem.data?.details?.reduce(
+        (acc, detail) => {
+          if (detail.property?.uid) {
+            acc[detail.property.uid] = detail
+          }
+          return acc
+        },
+        {} as Record<string, any>
+      )
+
+      const formData = {
+        ...catalogueItem.data,
+        details: detailsObject || {}
+      }
+
+      // Reset form with converted data to match form structure
+      // This prevents "unsaved changes" warning after successful save
       if (reset && catalogueItem.data) {
-        reset(catalogueItem.data)
+        reset(formData)
       }
 
       imageRef?.current?.submit(catalogueItem.data?.uid, () => {

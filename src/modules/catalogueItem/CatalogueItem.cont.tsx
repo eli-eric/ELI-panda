@@ -1,4 +1,4 @@
-import { yupResolver } from '@hookform/resolvers/yup'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { memo, useEffect, useRef, useState } from 'react'
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
@@ -20,7 +20,10 @@ import type { ImageGalleryRef } from '../shared/imageManager/types'
 import useCatalogueFormFields from './components/form/CatalogueForm.fields'
 import DefaultItemForm from './components/form/DefaultItemForm'
 import Groups from './components/form/Groups'
-import { schema } from './components/form/ItemForm.schema'
+import {
+  type CatalogueItemFormData,
+  catalogueItemSchema
+} from './components/form/ItemForm.schema'
 import { CatalogueOrders } from './components/orders/CatalogueOrders'
 import { RelatedItemsContainer } from './components/related-items/RelatedItems.cont'
 import { CatalogueStatisticsContainer } from './components/statistics/CatalogueStatistics.cont'
@@ -29,10 +32,6 @@ import { useItemSubmit } from './hooks/useItemSubmit'
 import type { CatalogueItem } from './types/responses'
 
 const MemoizedGallery = memo(ImageGallery)
-
-interface CatalogueForm extends CatalogueItem {
-  hasImageGalleryChanges?: boolean
-}
 
 interface CatalogueItemContainerProps {
   uid?: string
@@ -51,9 +50,26 @@ const CatalogueItemContainer = ({
   const { catalogueCategory } = useCategory(catalogueCategoryUid)
 
   const imageRef = useRef<ImageGalleryRef | undefined>(undefined)
-  const formMethods = useForm<any>({
-    resolver: yupResolver(schema),
-    defaultValues: { ...item }
+
+  // Convert details array to object structure for form
+  // Form expects: { [propertyUid]: detail }
+  // API returns: [{ property: { uid, ... }, value, ... }]
+  const detailsObject = item?.details?.reduce(
+    (acc, detail) => {
+      if (detail.property?.uid) {
+        acc[detail.property.uid] = detail
+      }
+      return acc
+    },
+    {} as Record<string, any>
+  )
+
+  const formMethods = useForm<CatalogueItemFormData>({
+    resolver: zodResolver(catalogueItemSchema),
+    defaultValues: {
+      ...item,
+      details: detailsObject || {}
+    }
   })
   const { reset, setValue } = formMethods
   const { submit, loading } = useItemSubmit({
@@ -75,12 +91,14 @@ const CatalogueItemContainer = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [catalogueCategory])
 
-  const onSubmit = (catalogueItem: CatalogueForm) => {
-    // extract from catalogueItem hasImageGalleryChanges
+  const onSubmit = (catalogueItem: CatalogueItemFormData) => {
+    // Extract hasImageGalleryChanges (not needed for API)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { hasImageGalleryChanges, ...rest } = catalogueItem
 
     // Convert details object with UID keys back to details array for API
+    // Form structure: { [propertyUid]: detail }
+    // API expects: [{ property, value, propertyGroup }]
     const details = rest.details ? Object.values(rest.details) : []
 
     const finalData = { ...rest, details }
@@ -88,12 +106,14 @@ const CatalogueItemContainer = ({
     setSaveAndExit(false)
     submit(finalData as CatalogueItem)
   }
-  const onSubmitAndExit = (catalogueItem: CatalogueForm) => {
-    // extract from catalogueItem hasImageGalleryChanges
+  const onSubmitAndExit = (catalogueItem: CatalogueItemFormData) => {
+    // Extract hasImageGalleryChanges (not needed for API)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { hasImageGalleryChanges, ...rest } = catalogueItem
 
     // Convert details object with UID keys back to details array for API
+    // Form structure: { [propertyUid]: detail }
+    // API expects: [{ property, value, propertyGroup }]
     const details = rest.details ? Object.values(rest.details) : []
 
     const finalData = { ...rest, details }
