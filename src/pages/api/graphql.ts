@@ -4,6 +4,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import type { NextAuthOptions } from 'next-auth'
 import { getServerSession } from 'next-auth'
 import { getToken } from 'next-auth/jwt'
+import {} from '@apollo/server/plugin/landingPage/default'
 
 import { neoSchema } from '@/server/apollo/schema'
 
@@ -13,10 +14,9 @@ const server = async (): Promise<ApolloServer> => {
   const schema = await neoSchema.getSchema()
   await neoSchema.assertIndexesAndConstraints({ options: { create: true } })
 
-  const apolloConfig = {
+  return new ApolloServer({
     schema
-  }
-  return new ApolloServer(apolloConfig)
+  })
 }
 
 function logger(session, req, res, next) {
