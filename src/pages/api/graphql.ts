@@ -4,10 +4,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import type { NextAuthOptions } from 'next-auth'
 import { getServerSession } from 'next-auth'
 import { getToken } from 'next-auth/jwt'
-import {
-  ApolloServerPluginLandingPageLocalDefault,
-  ApolloServerPluginLandingPageProductionDefault
-} from '@apollo/server/plugin/landingPage/default'
+import {} from '@apollo/server/plugin/landingPage/default'
 
 import { neoSchema } from '@/server/apollo/schema'
 
@@ -18,8 +15,7 @@ const server = async (): Promise<ApolloServer> => {
   await neoSchema.assertIndexesAndConstraints({ options: { create: true } })
 
   return new ApolloServer({
-    schema,
-    plugins: [ApolloServerPluginLandingPageLocalDefault()]
+    schema
   })
 }
 
