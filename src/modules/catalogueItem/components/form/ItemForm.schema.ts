@@ -20,7 +20,8 @@ const catalogueCategoryPropertySchema = z.object({
   defaultValue: z.string().optional(),
   type: z.object({
     uid: z.string(),
-    name: z.string()
+    name: z.string(),
+    code: z.string().optional()
   }),
   unit: z
     .object({
@@ -42,7 +43,7 @@ export const catalogueItemSchema = z.object({
   uid: z.string().optional(),
   name: z.string().trim().min(1, 'Name is required'),
   catalogueNumber: z.string().trim().min(1, 'Part Number is required'),
-  category: codebookSchema.refine((val) => val !== null, {
+  category: codebookSchema.refine(val => val !== null, {
     message: 'Category is required'
   }),
   description: z.string().optional(),
