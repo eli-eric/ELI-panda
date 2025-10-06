@@ -27,7 +27,11 @@ export const useRoomCardsColumns = () => {
     setDeleteHallContact,
     setDisconnectDeptContact,
     setDisconnectTeam,
-    setNewDeptContact
+    setNewDeptContact,
+    removeNewHallContact,
+    removeNewDeptContact,
+    removeNewTeam,
+    removeNewLocation
   } = useRoomCardStore()
 
   const columnsContactHall = useMemo(
@@ -53,6 +57,7 @@ export const useRoomCardsColumns = () => {
                 {...props}
                 formName="contactPersonsHall"
                 setDeleteItem={setDeleteHallContact}
+                removeNewItem={removeNewHallContact}
               />
             )
           },
@@ -78,7 +83,7 @@ export const useRoomCardsColumns = () => {
         ]
       }
     ],
-    [fm, setDeleteHallContact]
+    [fm, setDeleteHallContact, removeNewHallContact]
   )
 
   const columnsContactDept = useMemo(
@@ -107,6 +112,7 @@ export const useRoomCardsColumns = () => {
                 {...props}
                 formName="contactPersonsDept"
                 setDeleteItem={setDisconnectDeptContact}
+                removeNewItem={removeNewDeptContact}
               />
             ),
             size: 200
@@ -127,7 +133,7 @@ export const useRoomCardsColumns = () => {
         ]
       }
     ],
-    [fm, setDisconnectDeptContact, setNewDeptContact]
+    [fm, setDisconnectDeptContact, setNewDeptContact, removeNewDeptContact]
   )
 
   const columnsTeam = useMemo(
@@ -148,11 +154,12 @@ export const useRoomCardsColumns = () => {
             {...props}
             formName="teams"
             setDeleteItem={setDisconnectTeam}
+            removeNewItem={removeNewTeam}
           />
         )
       }
     ],
-    [fm, setDisconnectTeam]
+    [fm, setDisconnectTeam, removeNewTeam]
   )
 
   const columnsCleanRooms = useMemo(
@@ -204,7 +211,13 @@ export const useRoomCardsColumns = () => {
         header: 'Location Name',
         accessorFn: ({ name }) => name,
         id: 'name',
-        cell: props => <CellWithDelete {...props} formName="locations" />
+        cell: props => (
+          <CellWithDelete
+            {...props}
+            formName="locations"
+            removeNewItem={removeNewLocation}
+          />
+        )
       },
       {
         header: 'Location Code',
@@ -212,7 +225,7 @@ export const useRoomCardsColumns = () => {
         id: 'code'
       }
     ],
-    []
+    [removeNewLocation]
   )
 
   return {

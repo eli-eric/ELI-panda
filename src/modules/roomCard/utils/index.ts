@@ -63,15 +63,19 @@ export const updateRoomCardVariables = ({
     status: roomCard.status,
     contactPersonsDept: [
       {
-        connect: newDeptContacts.map(deptContact => whereN(deptContact?.uid)),
-        disconnect: disconnectDeptContacts.map(deptContact =>
-          whereN(deptContact?.uid)
-        )
+        connect: newDeptContacts
+          .filter(deptContact => deptContact?.uid)
+          .map(deptContact => whereN(deptContact.uid)),
+        disconnect: disconnectDeptContacts
+          .filter(deptContact => deptContact?.uid)
+          .map(deptContact => whereN(deptContact.uid))
       }
     ],
     contactPersonsHall: [
       {
-        delete: deleteHallContacts.map(hallContact => whereN(hallContact?.uid)),
+        delete: deleteHallContacts
+          .filter(hallContact => hallContact?.uid) // CRITICAL: Only delete items with valid uid
+          .map(hallContact => whereN(hallContact.uid)),
         create: newHallContacts.map(hallContact => ({
           node: {
             employee: {
@@ -86,14 +90,20 @@ export const updateRoomCardVariables = ({
     ],
     teams: [
       {
-        connect: newTeams.map(team => whereN(team.uid)),
-        disconnect: disconnectTeams.map(team => whereN(team.uid))
+        connect: newTeams.filter(team => team?.uid).map(team => whereN(team.uid)),
+        disconnect: disconnectTeams
+          .filter(team => team?.uid)
+          .map(team => whereN(team.uid))
       }
     ],
     locations: [
       {
-        connect: newLocations.map(location => whereN(location.uid)),
-        disconnect: disconnectLocations.map(location => whereN(location.uid))
+        connect: newLocations
+          .filter(location => location?.uid)
+          .map(location => whereN(location.uid)),
+        disconnect: disconnectLocations
+          .filter(location => location?.uid)
+          .map(location => whereN(location.uid))
       }
     ]
   }
