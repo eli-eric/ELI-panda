@@ -1,9 +1,8 @@
-import { yupResolver } from '@hookform/resolvers/yup'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Suspense, useEffect } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
-import { array, object, string } from 'yup'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import Card from '@/components/layout/Card'
@@ -18,6 +17,7 @@ import FileManager from '../shared/fileManager/FileManager'
 import { useRoomCard } from './hooks/useRoomCard'
 import { useRoomCardUpdate } from './hooks/useRoomCardUpdate'
 import { RoomCardComponent } from './RoomCard.comp'
+import { roomCardSchema } from './schemas/roomCard.schema'
 import { useRoomCardStore } from './store/useRoomCardStore'
 import type { RoomCardFormType } from './types/form'
 
@@ -25,27 +25,9 @@ interface Props {
   roomCardUid: string
 }
 
-const schema = object().shape({
-  status: string().required('Status is required'),
-  name: string().required('Name is required'),
-  teams: array()
-    .of(object().nullable().required('Team is required'))
-    .min(1, 'At least one team is required'),
-  contactPersonsHall: array()
-    .of(object().required('Team is required'))
-    .min(1, 'At least one Hall contact is required'),
-  contactPersonsDept: array()
-    .of(object().nullable().required('Team is required'))
-    .min(1, 'At least one department contact is required'),
-  locations: array()
-    .of(object().nullable().required('Location is required'))
-    .min(1, 'At least one location is required')
-})
-
 export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
   const { roomCard, loading } = useRoomCard(roomCardUid)
   const canEdit = usePermission([ROLE.ROOM_CARD_EDIT])
-  //TODO: fix typing
   const formMethods = useForm<RoomCardFormType>({
     defaultValues: {
       name: roomCard?.name as string,
@@ -77,7 +59,7 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
       maxPressureInColdDistributionClient:
         roomCard?.maxPressureInColdDistributionClient as string
     },
-    resolver: yupResolver(schema) as any
+    resolver: zodResolver(roomCardSchema)
   })
   const { watch, handleSubmit } = formMethods
   const { updateRoomCard } = useRoomCardUpdate(roomCardUid)
