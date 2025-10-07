@@ -47,17 +47,17 @@ export const NameCell = ({
         <CellActionDropdown tableId={tableId} uid={uid} value={getValue()} />
       )}
       <div className="flex-1 min-w-0 flex items-center justify-start">
-        <Tooltip content={getValue()}>
-          <Link
-            href={{ pathname: '/catalogue/item/' + uid }}
-            target={tableId === 'catalogueItemsModal' ? '_blank' : undefined}
-            className="flex items-center"
-          >
-            <Button variant={'link'} className="cursor-pointer">
-              {truncateString(getValue(), 50)}
-            </Button>
-          </Link>
-        </Tooltip>
+        <Link
+          href={{ pathname: '/catalogue/item/' + uid }}
+          target={tableId === 'catalogueItemsModal' ? '_blank' : undefined}
+          className="flex items-center"
+        >
+          <Button variant={'link'} className="cursor-pointer py-0">
+            <Tooltip content={getValue()}>
+              <p>{truncateString(getValue(), 50)}</p>
+            </Tooltip>
+          </Button>
+        </Link>
       </div>
     </div>
   )
