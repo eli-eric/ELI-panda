@@ -27,7 +27,7 @@ export const useItemSubmit = ({
   const { query, replace } = useRouter()
   const uid = query.uid as string | undefined
 
-  const { queryKey, refetch } = useCatalogueItem()
+  const { queryKey } = useCatalogueItem()
 
   const queryClient = useQueryClient()
 

@@ -90,7 +90,9 @@ export const updateRoomCardVariables = ({
     ],
     teams: [
       {
-        connect: newTeams.filter(team => team?.uid).map(team => whereN(team.uid)),
+        connect: newTeams
+          .filter(team => team?.uid)
+          .map(team => whereN(team.uid)),
         disconnect: disconnectTeams
           .filter(team => team?.uid)
           .map(team => whereN(team.uid))

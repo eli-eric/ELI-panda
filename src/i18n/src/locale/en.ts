@@ -315,12 +315,8 @@ export const messages = {
   authPage: {
     head: 'ELI Panda - Sign In',
     title: 'Sign in to ELI - PANDA',
-    chooseFacility: 'Choose your ELI facility to sign in',
-    facilities: {
-      alps: 'ELI - ALPS',
-      beamlines: 'ELI - BEAMLINES',
-      np: 'ELI - NP'
-    },
+    chooseFacility: 'Click to sign in with Microsoft ELI account',
+    button: { signIn: 'Sign In' },
     form: {
       userName: 'User Name',
       password: 'Password',

@@ -10,10 +10,5 @@ export const ContactHallButton = () => {
 
   if (!canEdit) return null
 
-  return (
-    <PlusButton
-      type="button"
-      onClick={openContactHallModal}
-    />
-  )
+  return <PlusButton type="button" onClick={openContactHallModal} />
 }

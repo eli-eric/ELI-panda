@@ -44,6 +44,7 @@ export const CellWithDelete = ({
         // Newly added item - remove from "to be created" list
         removeNewItem(itemToDelete.uuid)
       } else {
+        //eslint-disable-next-line no-console
         console.warn(
           `Item has neither uid nor uuid:`,
           itemToDelete,
@@ -51,6 +52,7 @@ export const CellWithDelete = ({
         )
       }
     } else {
+      //eslint-disable-next-line no-console
       console.warn(
         `Delete failed: Invalid index ${rowIndex} for ${formName}. Fields length: ${fields.length}`
       )

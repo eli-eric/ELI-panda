@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { FormattedMessage } from 'react-intl'
 
-import { Button } from '@/components/ui/button'
 import Combobox from '@/components/form/Combobox'
+import { Button } from '@/components/ui/button'
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
 import { useEmployee } from '@/hooks/graphql/useEmployee'
@@ -47,7 +47,10 @@ export const ContactHallModalContainer = ({
     resolver: zodResolver(
       contactHallSchema.refine(
         data => {
-          if (data.employee && existingEmployeeUids.includes(data.employee.uid)) {
+          if (
+            data.employee &&
+            existingEmployeeUids.includes(data.employee.uid)
+          ) {
             return false
           }
           return true
@@ -105,13 +108,21 @@ export const ContactHallModalContainer = ({
 
   const selectedRole = watch('role')
   const selectedEmployee = watch('employee')
-  const isSubmitDisabled = !selectedEmployee || !selectedRole || !loadedEmployee || employeeLoading || formState.isSubmitting
+  const isSubmitDisabled =
+    !selectedEmployee ||
+    !selectedRole ||
+    !loadedEmployee ||
+    employeeLoading ||
+    formState.isSubmitting
 
   return (
     <div className="space-y-6 min-w-0 max-w-none w-full">
       <FormProvider {...formMethods}>
         <div className="flex space-x-3">
-          <Combobox {...fields.role} codebookResponse={data?.contactPersonRoles} />
+          <Combobox
+            {...fields.role}
+            codebookResponse={data?.contactPersonRoles}
+          />
           <Combobox
             {...fields.employee}
             onSelect={v => setEmployeeUid(v ? v.uid : null)}

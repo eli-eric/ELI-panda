@@ -1,9 +1,15 @@
-import type { MutateFunction, QueryFunction, QueryKey } from '@tanstack/react-query'
+import type {
+  MutateFunction,
+  QueryFunction,
+  QueryKey
+} from '@tanstack/react-query'
 import type { AxiosError, AxiosResponse } from 'axios'
 import axios from 'axios'
 import { z } from 'zod'
 
-import axiosInstance from '@/core/axios/axiosInstance'
+// axiosInstance is gradually being replaced by fetchRequest – kept temporarily for compatibility
+// import axiosInstance from '@/core/axios/axiosInstance'
+import { fetchRequest } from '@/core/http/fetchClient'
 import { BASE_URL } from '@/types/constants/common'
 
 import type { EndpointProps } from './getEndpoints'
@@ -45,9 +51,14 @@ const normalizeError = (error: unknown): NormalizedError => {
       status: error.response?.status,
       code: (error.response?.data as any)?.code,
       message:
-        (error.response?.data as any)?.message || error.message || 'Request error',
+        (error.response?.data as any)?.message ||
+        error.message ||
+        'Request error',
       details: error.response?.data
     }
+  }
+  if ((error as any)?.name === 'AbortError') {
+    return { message: 'Request aborted' }
   }
   if (error instanceof Error) {
     return { message: error.message }
@@ -68,7 +79,8 @@ export type EndpointKey = keyof GetEndpointsReturn
 const extractParams = (queryKey: QueryKey): EndpointProps | undefined => {
   if (!Array.isArray(queryKey)) return undefined
   const candidate = queryKey[1]
-  if (candidate && typeof candidate === 'object') return candidate as EndpointProps
+  if (candidate && typeof candidate === 'object')
+    return candidate as EndpointProps
   return undefined
 }
 
@@ -85,8 +97,12 @@ const resolveEndpoint = (
   return endpoint
 }
 
-export const uniFetcher = async (url: string) =>
-  await axios.get(url).then(res => res.data)
+// Overloads to allow contextual typing and explicit generics
+export function uniFetcher<T = any>(url: string): Promise<T>
+export function uniFetcher(url: string): Promise<any>
+export function uniFetcher(url: string) {
+  return fetchRequest(url)
+}
 
 /**
  * Factory returning a Query Function bound to an endpoint key (public API preserved).
@@ -101,7 +117,10 @@ export const queryFetcher = <T = unknown>(endpointType: string) => {
       const parsed = endpointPropsSchema.safeParse(params)
       if (!parsed.success) {
         // eslint-disable-next-line no-console
-        console.warn('[queryFetcher] Invalid EndpointProps', parsed.error.format())
+        console.warn(
+          '[queryFetcher] Invalid EndpointProps',
+          parsed.error.format()
+        )
       }
     }
 
@@ -113,13 +132,7 @@ export const queryFetcher = <T = unknown>(endpointType: string) => {
       throw new Error(norm.message)
     }
 
-    try {
-      const res = await axiosInstance.get(buildUrl(endpoint), { signal })
-      return res.data
-    } catch (e) {
-      if (axios.isCancel(e)) throw e
-      throw e
-    }
+    return await fetchRequest(buildUrl(endpoint), { signal })
   }
   return querFn
 }
@@ -131,13 +144,39 @@ export const queryMutate = <TResponse, TVariables>(
   isDefaultUrl?: boolean,
   endpointVariables?: Record<string, string>
 ) => {
-  const mutateFn: MutateFunction<AxiosResponse<TResponse>, AxiosError, TVariables> = variables => {
-    const ep = resolveEndpoint(endpointType as EndpointKey, { uid, ...endpointVariables })
+  const mutateFn: MutateFunction<
+    AxiosResponse<TResponse>,
+    AxiosError,
+    TVariables
+  > = async variables => {
+    const ep = resolveEndpoint(endpointType as EndpointKey, {
+      uid,
+      ...endpointVariables
+    })
     const url = buildUrl(ep, isDefaultUrl)
-    if (mutationType === 'delete') {
-      return axiosInstance.delete(url)
+    try {
+      const method = mutationType.toUpperCase()
+      // For delete do not send body
+      const data = await fetchRequest<TResponse>(url, {
+        method,
+        body: mutationType === 'delete' ? undefined : (variables as any)
+      })
+      // Adapt to AxiosResponse shape expected by existing code
+      const axiosLike = {
+        data,
+        status: 200,
+        statusText: 'OK',
+        headers: {},
+        config: {},
+        request: undefined
+      } as AxiosResponse<TResponse>
+      return axiosLike
+    } catch (e) {
+      if ((e as any)?.name === 'AbortError') throw e
+      throw e
     }
-    return axiosInstance[mutationType](url, (variables as any) || {})
   }
   return mutateFn
 }
+
+// TODO: After full migration remove axios dependency and related types (AxiosError, AxiosResponse)
