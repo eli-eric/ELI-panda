@@ -12,7 +12,7 @@ type Props = {
 // eslint-disable-next-line react/prop-types
 export const Tooltip: React.FC<Props> = ({ children, content }) =>
   content ? (
-    <TP>
+    <TP disableHoverableContent>
       <TooltipTrigger asChild>{children}</TooltipTrigger>
       <TooltipContent>
         <p>{content}</p>

@@ -1,9 +1,8 @@
-import { yupResolver } from '@hookform/resolvers/yup'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
-import { array, object, string } from 'yup'
 
 import { PATH } from '@/types/constants/paths'
 
@@ -13,30 +12,13 @@ import {
   useRoomCardCreate
 } from './hooks/useRoomCardCreate'
 import { RoomCardComponent } from './RoomCard.comp'
+import { roomCardSchema } from './schemas/roomCard.schema'
 import { useRoomCardStore } from './store/useRoomCardStore'
 import type { RoomCardFormType } from './types/form'
 
-const schema = object().shape({
-  status: string().required('Status is required'),
-  name: string().required('Name is required'),
-  teams: array()
-    .of(object().nullable().required('Team is required'))
-    .min(1, 'At least one team is required'),
-  contactPersonsHall: array()
-    .of(object().required('Team is required'))
-    .min(1, 'At least one Hall contact is required'),
-  contactPersonsDept: array()
-    .of(object().nullable().required('Team is required'))
-    .min(1, 'At least one department contact is required'),
-  locations: array()
-    .of(object().nullable().required('Location is required'))
-    .min(1, 'At least one location is required')
-})
-
 export const RoomCardNewContainer = () => {
-  //TODO: fix typing
   const formMethods = useForm<RoomCardFormType>({
-    resolver: yupResolver(schema) as any
+    resolver: zodResolver(roomCardSchema)
   })
   const { refetch } = useRoomCards()
 

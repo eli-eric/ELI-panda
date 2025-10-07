@@ -17,7 +17,14 @@ export const getEndpoints = ({
   query: q,
   codebook
 }: EndpointProps) => {
-  const query = q ? makeQuery(q) : ''
+  const sanitizedQueryObj = q
+    ? Object.fromEntries(
+        Object.entries(q).filter(
+          ([, v]) => v !== null && v !== undefined && v !== ''
+        )
+      )
+    : null
+  const query = sanitizedQueryObj ? makeQuery(sanitizedQueryObj) : ''
   const uidPart = uid ? '/' + uid : ''
   const endpoints = {
     catalogueCategories: `/catalogue/categories${path}`,

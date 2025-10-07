@@ -125,7 +125,9 @@ export const HeaderCellDNDComponent: FC<Props> = ({
                 header.getContext() && 'opacity-50 hover:opacity-100'
               )}
             >
-              <GripVertical className="w-4 h-4 text-muted-foreground" />
+              <GripVertical
+                className={cn('w-4 h-4 text-muted-foreground cursor-grab')}
+              />
             </button>
           )}
         </div>

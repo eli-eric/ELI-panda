@@ -14,6 +14,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Cypress: `yarn cy:open` (UI) or `yarn cy:run` (headless)
 - GraphQL codegen: `yarn generate` or `yarn generate:watch`
 
+**IMPORTANT**: NEVER run `yarn dev` or start the development server automatically. The user will start the dev server manually when needed.
+
 ## Code Style
 
 - TypeScript with strict mode enabled
