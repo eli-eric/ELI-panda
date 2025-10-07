@@ -7,6 +7,7 @@ import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 import { Badge } from '@/components/ui/badge'
 import { useFormFilter } from '@/hooks/form/useFormFilters'
+import { message } from '@/i18n/src/messages'
 import type { CodebookType } from '@/types/responses/codebook'
 
 import type { CatalogueItemForm } from '../catalogueItem/types/responses'
@@ -68,6 +69,7 @@ const CatalogueContainer = () => {
                 <Badge>
                   <span>
                     {fm({
+                      id: message.catalogue.category.badge,
                       defaultMessage: 'Category'
                     })}
                   </span>
