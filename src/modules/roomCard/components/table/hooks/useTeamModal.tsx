@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 
 import type { ModalSize } from '@/components/ui/dialog'
@@ -17,7 +18,7 @@ export const useTeamModal = () => {
     name: 'teams'
   })
 
-  return () => {
+  return useCallback(() => {
     // Get existing team UIDs to prevent duplicates
     const existingTeamUids = fields.map((field: any) => field?.uid).filter(Boolean)
 
@@ -47,5 +48,5 @@ export const useTeamModal = () => {
         // Cleanup if needed
       }
     })
-  }
+  }, [openModal, closeModal, fields, append, setNewTeam])
 }

@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 
 import type { ModalSize } from '@/components/ui/dialog'
@@ -17,7 +18,7 @@ export const useContactHallModal = () => {
     name: 'contactPersonsHall'
   })
 
-  return () => {
+  return useCallback(() => {
     // Get existing employee UIDs to prevent duplicates
     const existingEmployeeUids = fields
       .map((field: any) => field?.employee?.uid)
@@ -57,5 +58,5 @@ export const useContactHallModal = () => {
         }
       }
     })
-  }
+  }, [openModal, closeModal, fields, append, setNewHallContact])
 }
