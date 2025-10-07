@@ -8,7 +8,8 @@ export const APP_VERSION = 'ver. 0.0.1'
 export enum ENV {
   DEV = 'dev',
   TEST = 'test',
-  LOCAL = 'localhost'
+  LOCAL = 'localhost',
+  PRODUCTION = 'production'
 }
 
 export const PROCESS_ENV = process.env.PANDA_ENV

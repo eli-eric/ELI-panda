@@ -109,6 +109,18 @@ export const messages = {
       foundFacilities: 'Found {count} facilities',
       status: 'Status'
     },
+    environmentWarning: {
+      title: 'WARNING!',
+      subtitle: 'You are in the {environment} environment',
+      disclaimerTitle: 'This is not a production environment. Please note:',
+      disclaimerPoints: {
+        dataNotPersistent: 'Data in this environment is not persistent',
+        noProductionImpact: 'Changes will not affect the production system',
+        canBeReset: 'Environment may be reset at any time',
+        limitedPerformance: 'Performance may be limited'
+      },
+      confirmButton: 'I understand, continue'
+    },
     navigation: {
       modules: 'Modules',
       administration: 'Administration'

@@ -125,13 +125,22 @@ const ModalDialog: React.FC<{
     <Dialog open={slot.isOpen && !!Component} onOpenChange={handleOpenChange}>
       <DialogPortal>
         <DialogOverlay />
-        <DialogContent size={slot.props?.size || 'l'}>
+        <DialogContent
+          size={slot.props?.size || 'l'}
+          aria-describedby={
+            slot.props?.description ? undefined : 'modal-content'
+          }
+        >
           <DialogHeader className="pb-2">
             {slot.props?.title && (
               <DialogTitle>{slot.props?.title || 'Dialog'}</DialogTitle>
             )}
-            {slot.props?.description && (
+            {slot.props?.description ? (
               <DialogDescription>{slot.props.description}</DialogDescription>
+            ) : (
+              <DialogDescription id="modal-content" className="sr-only">
+                Modal content
+              </DialogDescription>
             )}
           </DialogHeader>
           {Component && (

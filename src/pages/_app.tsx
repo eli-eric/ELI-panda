@@ -11,6 +11,7 @@ import { Toaster } from 'react-hot-toast'
 import { IntlProvider } from 'react-intl'
 import { messages } from 'src/i18n/src'
 
+import { EnvironmentWarning } from '@/components/environment/EnvironmentWarning'
 import { NewLayout } from '@/components/layout/NewLayout'
 import { Notification } from '@/components/Notifications/Notification'
 import { Toaster as SonnerToaster } from '@/components/ui/sonner'
@@ -50,6 +51,7 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
         <SessionProvider session={session} refetchOnWindowFocus={false}>
           <IntlProvider locale={'en'} messages={messages.en}>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+              <EnvironmentWarning />
               <Toaster
                 position="top-center"
                 reverseOrder={false}
