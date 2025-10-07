@@ -20,7 +20,9 @@ export const useTeamModal = () => {
 
   return useCallback(() => {
     // Get existing team UIDs to prevent duplicates
-    const existingTeamUids = fields.map((field: any) => field?.uid).filter(Boolean)
+    const existingTeamUids = fields
+      .map((field: any) => field?.uid)
+      .filter(Boolean)
 
     openModal('dialog1', {
       component: TeamModalContainer,

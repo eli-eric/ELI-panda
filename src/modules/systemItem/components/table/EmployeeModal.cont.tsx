@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { FormattedMessage } from 'react-intl'
 
-import { Button } from '@/components/ui/button'
 import Combobox from '@/components/form/Combobox'
+import { Button } from '@/components/ui/button'
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
 import { useEmployee } from '@/hooks/graphql/useEmployee'
 import { message } from '@/i18n/src/messages'
@@ -35,7 +35,10 @@ export const EmployeeModalContainer = ({
     resolver: zodResolver(
       employeeSchema.refine(
         data => {
-          if (data.employee && existingEmployeeUids.includes(data.employee.uid)) {
+          if (
+            data.employee &&
+            existingEmployeeUids.includes(data.employee.uid)
+          ) {
             return false
           }
           return true
@@ -85,7 +88,10 @@ export const EmployeeModalContainer = ({
 
   const selectedEmployee = watch('employee')
   const isSubmitDisabled =
-    !selectedEmployee || !loadedEmployee || employeeLoading || formState.isSubmitting
+    !selectedEmployee ||
+    !loadedEmployee ||
+    employeeLoading ||
+    formState.isSubmitting
 
   return (
     <div className="space-y-6 min-w-0 max-w-none w-full">
