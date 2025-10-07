@@ -68,12 +68,11 @@ const CatalogueContainer = () => {
                 <Badge>
                   <span>
                     {fm({
-                      id: 'common.table.category',
                       defaultMessage: 'Category'
                     })}
                   </span>
                   <X
-                    className="h-4 w-4 ml-1 cursor-pointer hover:text-red-600"
+                    className="h-4 w-4 ml-1 cursor-pointer hover:text-red-600 clickable"
                     onClick={() => {
                       setCategoryQuery(null)
                     }}
