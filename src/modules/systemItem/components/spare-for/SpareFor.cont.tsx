@@ -5,12 +5,12 @@ import { PlusButton } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
 import { Tooltip } from '@/components/Tooltip'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
+import { cn } from '@/lib/utils'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 import { PATH } from '@/types/constants/paths'
-import { cx } from '@/utils'
 
 import { useSystemDetail } from '../../hooks/useSystemDetail'
-import { getColorBySystemLevel, getFontBySystemLevel } from '../../utils'
+import { getFontBySystemLevel } from '../../utils'
 import { useSpareForColumns } from './SpareFor.columns'
 
 export const SparePartsFor = () => {
@@ -29,8 +29,6 @@ export const SparePartsFor = () => {
       <Tooltip content="Redirect to assign Spare Part page">
         <div>
           <PlusButton
-            primary
-            buttonSize="large"
             onClick={() => {
               setFilter('name')(systemDetail?.name)
               router.push(PATH.SPARE_PARTS)
@@ -50,10 +48,8 @@ export const SparePartsFor = () => {
         <PandaTable
           columns={columns}
           getRowProps={({ original }) => ({
-            className: cx(
-              original?.physicalItem &&
-                'font-bold text-gray-700 dark:text-gray-200',
-              getColorBySystemLevel(original?.systemLevel),
+            className: cn(
+              original?.physicalItem && 'font-bold',
               getFontBySystemLevel(original?.systemLevel)
             )
           })}

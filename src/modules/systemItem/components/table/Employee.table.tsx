@@ -1,15 +1,15 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { memo, useMemo } from 'react'
 
-import { Table } from '@/components/ui'
+import { PlusButton } from '@/components/Buttons'
+import { Table } from '@/components/ui/table'
+import usePermission from '@/hooks/usePermission'
+import { cn } from '@/lib/utils'
 import { ROLE } from '@/types/constants/roles'
 import type { Employee } from '@/types/gql/graphql'
-import { cx } from '@/utils'
 
-import { HeaderAddButton } from '../../../roomCard/components/table/HeaderAddButton'
 import { CellWithDelete } from './CellWithDelete'
-
-const MemoizedHeaderButton = memo(HeaderAddButton)
+import { useEmployeeModal } from './hooks/useEmployeeModal'
 
 interface Props {
   name: string
@@ -29,6 +29,12 @@ export const EmployeeTable = memo(
     data,
     className
   }: Props) => {
+    const canEdit = usePermission([ROLE.SYSTEM_EDIT])
+    const openEmployeeModal = useEmployeeModal({
+      fieldName: name,
+      onEmployeeAdded: setNewEmployee
+    })
+
     const columnsOperators = useMemo(
       (): ColumnDef<{ fullName: string }, any>[] => [
         {
@@ -36,11 +42,9 @@ export const EmployeeTable = memo(
             return (
               <div className="flex justify-between w-full items-center">
                 <span className="text-sm font-semibold">{header}</span>
-                <MemoizedHeaderButton
-                  setEmployee={setNewEmployee}
-                  name={name}
-                  editPersmissionRole={ROLE.SYSTEM_EDIT}
-                />
+                {canEdit && (
+                  <PlusButton type="button" onClick={openEmployeeModal} />
+                )}
               </div>
             )
           },
@@ -56,7 +60,7 @@ export const EmployeeTable = memo(
           size: 563
         }
       ],
-      [setNewEmployee, setDisconnectEmployee, header, name]
+      [setDisconnectEmployee, header, name, canEdit, openEmployeeModal]
     )
 
     return (
@@ -66,7 +70,7 @@ export const EmployeeTable = memo(
         data={data}
         headerClassName="whitespace-nowrap sticky"
         rowClassName="whitespace-nowrap group/row"
-        className={cx(className, 'overflow-x-auto overflow-y-auto')}
+        className={cn(className, 'overflow-x-auto overflow-y-auto')}
       />
     )
   }

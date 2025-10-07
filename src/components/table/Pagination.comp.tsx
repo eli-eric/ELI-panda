@@ -1,5 +1,4 @@
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
-import type { MouseEventHandler } from 'react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { FormattedMessage } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 
@@ -14,8 +13,8 @@ interface Props {
   pageSize: number
   pageNumbers?: number
 
-  previousPageHandler: MouseEventHandler<HTMLButtonElement>
-  nextPageHandler: MouseEventHandler<HTMLButtonElement>
+  previousPageHandler: () => void
+  nextPageHandler: () => void
 }
 
 export default function PaginationComponent({
@@ -40,11 +39,11 @@ export default function PaginationComponent({
     <nav
       data-testid="paging"
       id="paging"
-      className="flex items-center justify-between border-t border-gray-200 bg-white dark:bg-gray-900 px-3 py-2 sm:px-6 sticky bottom-0 z-10"
+      className="flex items-center justify-between border-t border-border bg-background px-3 py-2 sm:px-6 sticky bottom-0 z-10"
       aria-label="Pagination"
     >
       <div className="hidden sm:block pr-2">
-        <p className="text-sm text-gray-700 dark:text-gray-200">
+        <p className="text-sm text-muted-foreground">
           <FormattedMessage
             id={text}
             values={createMessageValues({
@@ -59,18 +58,20 @@ export default function PaginationComponent({
         <Button
           disabled={previousIsDisabled}
           onClick={previousPageHandler}
-          buttonSize="small"
+          size="sm"
+          variant="outline"
         >
-          <ChevronLeftIcon className="h-6 w-6 flex-shrink-0 " />
+          <ChevronLeft className="h-4 w-4" />
         </Button>
 
         <Button
           disabled={nextIsDisabled}
           onClick={nextPageHandler}
-          className="ml-3 "
-          buttonSize="small"
+          className="ml-3"
+          size="sm"
+          variant="outline"
         >
-          <ChevronRightIcon className="h-6 w-6 flex-shrink-0" />
+          <ChevronRight className="h-4 w-4" />
         </Button>
       </div>
     </nav>

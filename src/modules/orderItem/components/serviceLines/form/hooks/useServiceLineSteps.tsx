@@ -2,13 +2,14 @@ import type { ColumnFiltersState } from '@tanstack/react-table'
 import { useCallback, useMemo, useState } from 'react'
 import { useIntl } from 'react-intl'
 
-import { InputAmount, InputCurrency } from '@/components/form/inputs'
+import { InputAmountCurrency } from '@/components/form/inputs/components/InputAmountCurrency.comp'
 import Listbox from '@/components/form/Listbox'
 import { message } from '@/i18n/src/messages'
 import type { ServiceLineFormType } from '@/modules/orderItem/types/form'
 import { useServiceType } from '@/modules/services/hooks/useServiceType'
 import type { WizardStepConfig } from '@/modules/shared/form/wizardV2/types'
 import { useFilters } from '@/modules/shared/table/pandaTable/hooks/useFilters'
+import useTableStateStore from '@/store/useTableStateStore'
 import type { CodebookType } from '@/types/responses/codebook'
 
 import { SelectableServiceLineDetails } from '../details/selectable-service-line.details'
@@ -34,7 +35,6 @@ export const useServiceLineSteps = () => {
   // Memoizujeme filtr pro kategorii, aby nedocházelo k zbytečným re-renderům
   const categoryFilters = useMemo(() => {
     if (!data?.category) return null
-
     return [
       {
         id: 'category',
@@ -90,9 +90,12 @@ export const useServiceLineSteps = () => {
 
   const priceComponent = useMemo(() => {
     return (
-      <InputAmount {...fields.price}>
-        <InputCurrency {...fields.currency} />
-      </InputAmount>
+      <InputAmountCurrency
+        amountName={fields.price.name}
+        currencyName={fields.currency.name}
+        label={fields.price.label}
+        required={fields.price.required}
+      />
     )
   }, [fields.price, fields.currency])
 
@@ -103,6 +106,13 @@ export const useServiceLineSteps = () => {
       />
     )
   }, [data])
+
+  // Validační funkce pro kontrolu výběru systémů
+  const validateSelectedSystems = useCallback(() => {
+    const { instances } = useTableStateStore.getState()
+    const rowSelection = instances[tableId]?.rowSelection || {}
+    return Object.keys(rowSelection).length > 0
+  }, [tableId])
 
   // Memoizujeme celou strukturu kroků
   const steps = useMemo<WizardStepConfig<ServiceLineFormType>[]>(() => {
@@ -147,7 +157,8 @@ export const useServiceLineSteps = () => {
       {
         id: 'items',
         title: fm({ id: messages.steps.step3.title }),
-        component: <ItemsSelectTable />
+        component: <ItemsSelectTable />,
+        validation: validateSelectedSystems
       }
     ]
   }, [
@@ -160,7 +171,8 @@ export const useServiceLineSteps = () => {
     serviceTypeComponent,
     priceComponent,
     serviceLineDetailsComponent,
-    shouldShowDetails
+    shouldShowDetails,
+    validateSelectedSystems
   ])
 
   return steps

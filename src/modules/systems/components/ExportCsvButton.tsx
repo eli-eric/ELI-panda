@@ -29,7 +29,6 @@ export const ExportCsvButton = () => {
     <Tooltip content="Export CSV">
       <div>
         <CSVButton
-          buttonSize="large"
           onClick={() => {
             submit()
           }}

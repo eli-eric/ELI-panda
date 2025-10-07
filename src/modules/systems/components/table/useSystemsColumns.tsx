@@ -1,10 +1,10 @@
-import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import type { ColumnDef } from '@tanstack/react-table'
-import Image from 'next/image'
+import { Info } from 'lucide-react'
 import { Fragment, useMemo } from 'react'
 
 import { NewTabLink } from '@/components/decorators'
 import { Tooltip } from '@/components/Tooltip'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import usePermission from '@/hooks/usePermission'
 import { useShowDeviceStore } from '@/modules/shared/system/device-info-overlay/store/useShowDeviceStore'
 import { FALLBACK_IMAGE } from '@/types/constants/common'
@@ -48,7 +48,7 @@ export const useSystemsColumns = ({
         accessorFn: row => row?.miniImageUrl?.[0],
         cell: ({ getValue, row: { original } }) => {
           return (
-            <>
+            <Tooltip content="Show device info">
               <button
                 onClick={() => {
                   if (tableId === 'systems') {
@@ -61,19 +61,21 @@ export const useSystemsColumns = ({
                 }`}
                 disabled={tableId !== 'systems'}
               >
-                <Image
-                  src={getValue() || FALLBACK_IMAGE.url}
-                  alt="img"
-                  width={50}
-                  height={50}
-                  className={`rounded-full w-7 h-7 min-w-8 object-cover justify-center transition-all duration-200 ${
+                <Avatar
+                  className={`w-7 h-7 min-w-8 transition-all duration-200 ${
                     tableId === 'systems'
-                      ? 'hover:scale-110 group-hover:shadow-lg hover:outline hover:outline-2 hover:outline-primary-400 hover:outline-offset-1'
+                      ? 'hover:scale-110 group-hover:shadow-lg hover:outline hover:outline-link/60 hover:outline-offset-1'
                       : ''
                   }`}
-                />
+                >
+                  <AvatarImage
+                    src={getValue() || FALLBACK_IMAGE.url}
+                    alt={original.name}
+                  />
+                  <AvatarFallback>{original.name?.[0] || '?'}</AvatarFallback>
+                </Avatar>
               </button>
-            </>
+            </Tooltip>
           )
         }
       },
@@ -95,10 +97,7 @@ export const useSystemsColumns = ({
         accessorFn: row => row.name,
         id: 'name',
         size: tableId === 'systemsItem' ? 400 : 480,
-        meta:
-          tableId === 'systemsItem'
-            ? { sticky: true }
-            : { sticky: true, className: 'sm:pr-[70px]' },
+        meta: tableId === 'systemsItem' ? { sticky: true } : { sticky: true },
         enableHiding: false,
         cell: props => (
           <SystemNameCell
@@ -169,7 +168,7 @@ export const useSystemsColumns = ({
           <Fragment>
             {getValue() && (
               <Tooltip content={getValue()}>
-                <InformationCircleIcon className="h-5 w-5 pr- flex-shrink-0" />
+                <Info className="h-5 w-5 pr- shrink-0" />
               </Tooltip>
             )}
           </Fragment>
@@ -265,7 +264,7 @@ export const useSystemsColumns = ({
           <Fragment>
             {getValue() && (
               <Tooltip content={getValue()}>
-                <InformationCircleIcon className="h-6 w-6 flex-shrink-0" />
+                <Info className="h-6 w-6 shrink-0" />
               </Tooltip>
             )}
           </Fragment>

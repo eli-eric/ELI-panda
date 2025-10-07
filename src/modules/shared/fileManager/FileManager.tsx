@@ -1,18 +1,20 @@
-import { DocumentTextIcon, LinkIcon } from '@heroicons/react/24/outline'
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { FileText, Link, Upload } from 'lucide-react'
+import { useCallback, useMemo, useRef } from 'react'
 import { useDropzone } from 'react-dropzone'
+import { useIntl } from 'react-intl'
 
-import { Button } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
 import ProgressBarComponent from '@/components/progress-bar.comp'
+import { Button } from '@/components/ui/button'
 import { Table } from '@/components/ui/table/table'
 import { message } from '@/i18n/src/messages'
+import { cn } from '@/lib/utils'
 
 import { useFileColumns } from './FileTable.columns'
 import { useFileRequests } from './hooks/useFileRequests'
 import { useFiles } from './hooks/useFiles'
 import { useLinks } from './hooks/useLinks'
-import { LinkModal } from './LinkModal'
+import { openLinkModal } from './LinkModal'
 import type { FILE_TYPE, FileItemExtended } from './types'
 
 const messages = message.common.files
@@ -32,9 +34,10 @@ const FileManager = ({
   customTitle,
   allowMultiple = true
 }: FileManagerProps) => {
+  const { formatMessage: fm } = useIntl()
   const { data: filesData } = useFiles({ itemType, uid })
   const { data: linksData } = useLinks({ uid })
-  const [openLinkModal, setOpenLinkModal] = useState(false)
+  // No local state needed for openLinkModal; use global modal API
 
   const files = useMemo(() => {
     return [
@@ -82,29 +85,30 @@ const FileManager = ({
   const canUpload = hasEditRole && (allowMultiple || files.length === 0)
 
   return (
-    <div>
+    <div className="">
       <Heading
         text={messages.title}
         customText={customTitle}
         showBorder={false}
       >
         {canUpload && (
-          <div className="flex space-x-2">
+          <div className="flex gap-2">
             <Button
-              primary
               onClick={handleFileUpload}
-              className="flex items-center space-x-1"
+              className="flex items-center gap-2"
+              size="sm"
             >
-              <DocumentTextIcon className="h-4 w-4" />
-              <span>Upload File</span>
+              <FileText className="h-4 w-4" />
+              {fm({ id: message.common.files.uploadFile })}
             </Button>
             <Button
-              primary
-              onClick={() => setOpenLinkModal(true)}
-              className="flex items-center space-x-1"
+              onClick={() => openLinkModal({ parentUid: uid })}
+              variant="outline"
+              className="flex items-center gap-2"
+              size="sm"
             >
-              <LinkIcon className="h-4 w-4" />
-              <span>Add Link</span>
+              <Link className="h-4 w-4" />
+              {fm({ id: message.common.files.addLink })}
             </Button>
             <input
               {...getInputProps()}
@@ -118,40 +122,43 @@ const FileManager = ({
       {loading.some(value => value) && <ProgressBarComponent />}
 
       {files.length > 0 && (
-        <Table
-          data={files}
-          columns={columns}
-          enableSorting={true}
-          enableFiltering={true}
-        />
+        <div className="mt-4">
+          <Table
+            data={files}
+            columns={columns}
+            enableSorting={true}
+            enableFiltering={true}
+          />
+        </div>
       )}
 
       {canUpload && (
         <div
           {...getRootProps()}
-          className={`mt-4 border-2 border-dashed rounded-md p-6 text-center ${
+          className={cn(
+            'mt-4 border-2 border-dashed rounded-lg p-8 text-center transition-colors cursor-pointer',
             isDragActive
-              ? 'border-primary-500 bg-primary-50'
-              : 'border-gray-300'
-          }`}
+              ? 'border-primary bg-primary/5'
+              : 'border-muted-foreground/25 hover:border-muted-foreground/50'
+          )}
         >
-          <p className="text-gray-600">
-            Drop File to Upload or{' '}
-            <button
-              className="text-primary-600 cursor-pointer"
-              onClick={handleFileUpload}
-            >
-              Browse
-            </button>
-          </p>
+          <div className="flex flex-col items-center gap-2">
+            <Upload className="h-8 w-8 text-muted-foreground" />
+            <div className="text-sm text-muted-foreground">
+              <span>{fm({ id: message.common.files.dropFilesHereOr })} </span>
+              <button
+                className="text-primary hover:underline font-medium"
+                onClick={handleFileUpload}
+                type="button"
+              >
+                {fm({ id: message.common.files.browse })}
+              </button>
+            </div>
+          </div>
         </div>
       )}
       {modals}
-      <LinkModal
-        open={openLinkModal}
-        setOpen={setOpenLinkModal}
-        parentUid={uid}
-      />
+      {/* LinkModal is now opened via openLinkModal */}
     </div>
   )
 }

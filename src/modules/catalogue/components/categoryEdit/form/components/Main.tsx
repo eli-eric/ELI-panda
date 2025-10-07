@@ -18,7 +18,7 @@ const Main = ({
   const { setValue } = useFormContext<CategoryFormType>()
 
   return (
-    <div className="grid grid-cols-4 pb-5">
+    <div className="flex flex-col gap-4 pb-4">
       <ImageGallery
         ref={imageRef}
         allowMultipleImages={false}
@@ -28,7 +28,7 @@ const Main = ({
           itemId: String(uid)
         }}
       />
-      <div className="flex flex-col col-span-3 flex-grow ml-10">
+      <div className="flex flex-col col-span-3 grow">
         <div className="mt-1">
           <Input
             name="name"
@@ -50,7 +50,7 @@ const Main = ({
         </div>
         <div className="mt-1">
           <SystemTypeComboBox
-            systemTypeField={{ name: 'systemType', customLabel: 'System Type' }}
+            systemTypeField={{ name: 'systemType', label: 'System Type' }}
           />
         </div>
       </div>

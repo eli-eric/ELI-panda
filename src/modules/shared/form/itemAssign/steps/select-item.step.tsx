@@ -3,6 +3,7 @@ import { type FC } from 'react'
 
 import ModalButtonsComponent from '@/components/overlays/modal/modal.buttons'
 import { message } from '@/i18n/src/messages'
+import { cn } from '@/lib/utils'
 import { Pagination } from '@/modules/shared/table/Pagination'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import { PandaTableV2 } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
@@ -12,9 +13,9 @@ import {
   getFontBySystemLevel
 } from '@/modules/systemItem/utils'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import type { ModalButtons } from '@/types/form'
 import type { SystemDetail } from '@/types/responses/systems'
-import { cx } from '@/utils'
 
 import { FilterBadges } from '../../FilterBadges'
 import { FilterButton } from '../../itemMoving/steps/system-selection/filter/FilterButton'
@@ -29,7 +30,8 @@ export const SelectItemStep: FC = () => {
 
   const { setSelectedSystem, selectedSystem } = useModalWizardStore()
 
-  const { goNext, goBack, updateFormData } = useWizardStore()
+  const { goNext, updateFormData } = useWizardStore()
+  const { closeModal } = useModalGlobalStore()
 
   const { systems } = useSystems(tableId)
 
@@ -45,10 +47,10 @@ export const SelectItemStep: FC = () => {
       }
     },
     goBack: {
-      text: messages.back,
+      text: messages.close,
       onClick: () => {
-        goBack()
         setSelectedSystem(null)
+        closeModal('dialog1')
       }
     }
   }
@@ -67,7 +69,7 @@ export const SelectItemStep: FC = () => {
         return
       }
     },
-    className: cx(
+    className: cn(
       getColorBySystemLevel(row.original?.systemLevel),
       getFontBySystemLevel(row.original?.systemLevel),
       row.original?.physicalItem &&
@@ -76,7 +78,7 @@ export const SelectItemStep: FC = () => {
         row.original.statistics.sp_coverage < 1 &&
         'text-red-500 dark:text-red-500 font-bold',
       selectedSystem?.uid === row.original.uid
-        ? 'bg-primary-200 hover:bg-primary-200 dark:bg-primary-600 dark:hover:bg-primary-600'
+        ? 'bg-orange-200 hover:bg-orange-200 dark:bg-orange-600 dark:hover:bg-orange-600'
         : '',
       'cursor-pointer'
     )

@@ -1,9 +1,14 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Fragment } from 'react'
 import { useForm } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 
 import { Form } from '@/components/form/Form'
+import { SheetFormButtons } from '@/components/sheet-form-buttons'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { message } from '@/i18n/src/messages'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { ROLE } from '@/types/constants/roles'
 import type { CodebookType } from '@/types/responses/codebook'
 
 import type { CategoryFormType } from '../types'
@@ -15,7 +20,7 @@ import { PhysicalItemProperties } from './components/PhysicalItemProperties'
 interface Props {
   uid?: string
   onSubmit: (data: CategoryFormType) => void
-  children: React.ReactNode
+  children?: React.ReactNode
   systemType?: CodebookType
   categoryDetail: CategoryFormType
   imageRef?: React.MutableRefObject<ImageGalleryRef | null>
@@ -24,7 +29,6 @@ interface Props {
 const CategoryEditForm = ({
   uid,
   onSubmit,
-  children,
   systemType,
   categoryDetail,
   imageRef
@@ -38,17 +42,63 @@ const CategoryEditForm = ({
     resolver: yupResolver(categoryValidationschema)
   })
 
+  const { handleSubmit } = formMethods
+  const { formatMessage: fm } = useIntl()
+  const { closeModal } = useModalGlobalStore()
+
   return (
-    <Fragment>
-      <Form formMethods={formMethods} onSubmit={onSubmit}>
-        <div className="flex-1">
-          <Main uid={uid} imageRef={imageRef} />
-          <GroupList />
-          <PhysicalItemProperties />
-          {children}
-        </div>
-      </Form>
-    </Fragment>
+    <Form formMethods={formMethods}>
+      <SheetFormButtons
+        editRole={ROLE.CATALOGUE_EDIT}
+        isFormDirty={formMethods.formState.isDirty}
+        onSubmit={handleSubmit(onSubmit)}
+        onExit={() => {
+          {
+            closeModal('sheet')
+          }
+        }}
+        saveLabel={fm({ id: message.catalogue.category.save })}
+        loadingText={fm({ id: message.catalogue.category.saving })}
+      />
+      <div className="space-y-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              {fm({ id: message.catalogue.category.basicInformation })}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Main uid={uid} imageRef={imageRef} />
+          </CardContent>
+        </Card>
+
+        {/* Property Groups */}
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              {fm({ id: message.catalogue.category.propertyGroups })}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <GroupList />
+          </CardContent>
+        </Card>
+
+        {/* Physical Item Properties */}
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              {fm({ id: message.catalogue.category.physicalProperties })}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <PhysicalItemProperties />
+          </CardContent>
+        </Card>
+
+        {/* Action Buttons */}
+      </div>
+    </Form>
   )
 }
 

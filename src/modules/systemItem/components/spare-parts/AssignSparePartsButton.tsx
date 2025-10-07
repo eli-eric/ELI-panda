@@ -80,7 +80,7 @@ export const AssignSparePartButton = () => {
   return (
     <Tooltip content="Redirect to assign Spare Part page">
       <div>
-        <Button primary buttonSize="large" onClick={handleAssignSparePart}>
+        <Button onClick={handleAssignSparePart}>
           <FormattedMessage id={messages.assign} />
         </Button>
       </div>

@@ -1,39 +1,50 @@
-import { Combobox as HUICombobox } from '@headlessui/react'
+'use client'
+
+import { Check, ChevronsUpDown, Plus } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import React, { useMemo, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 
+import { Button } from '@/components/ui/button'
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList
+} from '@/components/ui/command'
+import { Label } from '@/components/ui/label'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from '@/components/ui/popover'
 import { useCodebook } from '@/hooks/fetch/useCodebook'
 import { message } from '@/i18n/src/messages'
+import { cn } from '@/lib/utils'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps } from '@/types/form'
 import type { CodebookFilter, CodebookType } from '@/types/responses/codebook'
-import { cx } from '@/utils'
 
-import { PlusButton } from '../Buttons'
-import { ComboboxButton } from './components/ComboboxButton'
-import { ComboboxInput } from './components/ComboboxInput'
-import { ComboboxOption } from './components/ComboboxOption'
-import { FormXMarkIcon } from './components/FormXMarkIcon'
 import useAddCodebookValue from './shared/useAddCodebookValue'
 
 const messages = message.common
 
-type ComboboxPropsT = FieldProps &
-  React.InputHTMLAttributes<HTMLInputElement> & {
-    codebook?: CODEBOOK
-    codebookResponse?: CodebookType[]
-    position?: 'top' | 'bottom'
-    limit?: number
-    showAddButton?: boolean
-    filter?: CodebookFilter[]
-    customLabel?: string
-    onClickIcon?: () => void
-    onSelect?: (item?: CodebookType | null) => void
-    isFilter?: boolean
-    hasClientFilter?: boolean
-  }
+type ComboboxPropsT = FieldProps & {
+  codebook?: CODEBOOK
+  codebookResponse?: CodebookType[]
+  position?: 'top' | 'bottom'
+  limit?: number
+  showAddButton?: boolean
+  filter?: CodebookFilter[]
+  customLabel?: string
+  onClickIcon?: () => void
+  onSelect?: (item?: CodebookType | null) => void
+  hasClientFilter?: boolean
+  className?: string
+}
 
 const Combobox = ({
   codebook,
@@ -47,18 +58,16 @@ const Combobox = ({
   limit = 10,
   filter,
   position = 'bottom',
-  rounded = 'rounded-md',
   codebookResponse,
   showAddButton = false,
-  onClickIcon,
-  onChange,
-  onSelect,
-  isFilter
+  onSelect
 }: ComboboxPropsT) => {
   const { control, setValue } = useFormContext()
   const { formatMessage: fm } = useIntl()
 
+  const [open, setOpen] = useState(false)
   const [query, setQuery] = useState<string>('')
+
   const codebookResponseData = useMemo(
     () => codebookResponse && { data: codebookResponse, metadata: undefined },
     [codebookResponse]
@@ -73,20 +82,17 @@ const Combobox = ({
   const options = useMemo(() => {
     const data = codebookResponseData || response
     if (!data) return { data: [], metadata: undefined }
-    if (query === '') return data
-    if (hasClientFilter) {
-      return {
-        data: data.data.filter(item =>
-          item.name.toLowerCase().includes(query.toLowerCase())
-        ),
-        metadata: codebookResponseData?.metadata
-      }
-    } else {
-      return data
+    if (query === '' || !hasClientFilter) return data
+
+    return {
+      data: data.data.filter(item =>
+        item.name.toLowerCase().includes(query.toLowerCase())
+      ),
+      metadata: codebookResponseData?.metadata
     }
   }, [hasClientFilter, query, codebookResponseData, response])
 
-  const { getFormModal, setOpen } = useAddCodebookValue(options?.metadata)
+  const { openFormModal } = useAddCodebookValue(options?.metadata)
   const { data: session } = useSession()
 
   const hasAddPermission =
@@ -94,15 +100,17 @@ const Combobox = ({
     options?.metadata?.roleEdit &&
     session?.user?.roles?.includes(options.metadata.roleEdit)
 
-  const handleClear = () => {
+  const handleClear = field => {
     setQuery('')
+    field.onChange(null)
     setValue(name, null)
     onSelect && onSelect(null)
   }
 
-  const handleChange = e => {
-    setQuery(e.target.value)
-    onChange && onChange(e)
+  const handleSelect = (field, item: CodebookType | null) => {
+    field.onChange(item)
+    onSelect && onSelect(item)
+    setOpen(false)
   }
 
   return (
@@ -112,82 +120,97 @@ const Combobox = ({
         control={control}
         defaultValue={null}
         render={({ field, fieldState: { error } }) => (
-          <>
-            <HUICombobox
-              as="div"
-              {...field}
-              onChange={value => {
-                field.onChange(value)
-                onSelect && onSelect(value)
-              }}
-              disabled={disabled}
-              className={cx('relative flex flex-col w-full', className)}
-            >
-              {(label || customLabel) && (
-                <HUICombobox.Label className="block text-sm font-medium text-gray-900 dark:text-gray-200">
-                  {customLabel ? customLabel : fm({ id: label })}
-                </HUICombobox.Label>
-              )}
-              <div className="relative">
-                <button
-                  type="button"
-                  className="relative h-full w-full"
-                  onClick={onClickIcon}
-                >
-                  <ComboboxInput
-                    {...{
-                      value: field.value,
-                      isFilter,
-                      error,
-                      placeholder,
-                      disabled,
-                      rounded,
-                      onChange: handleChange
-                    }}
-                  />
-                </button>
-
-                {field.value && !disabled && (
-                  <FormXMarkIcon onClick={handleClear} />
-                )}
-                <ComboboxButton onClick={onClickIcon} />
-              </div>
-
-              {options?.data && (
-                <HUICombobox.Options
-                  className={cx(
-                    'absolute z-20 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white dark:bg-gray-700 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm',
-                    position === 'top' ? 'bottom-full' : 'top-full'
-                  )}
-                >
-                  {options.data.map(item => (
-                    <ComboboxOption
-                      key={item.uid}
-                      item={item}
-                      selected={field.value?.uid === item.uid}
-                    />
-                  ))}
-                  {options.data.length === 0 && (
-                    <span className="block px-4 py-2 text-gray-700 dark:text-gray-300">
-                      {fm({ id: messages.noResults })}
-                    </span>
-                  )}
-                </HUICombobox.Options>
-              )}
-            </HUICombobox>
-            {hasAddPermission && (
-              <PlusButton
-                primary
-                buttonSize="large"
-                className="ml-1 px-[10px] py-[10px] self-end"
-                type="button"
-                onClick={() => setOpen(true)}
-              />
+          <div className={cn('space-y-1 w-full', className)}>
+            {(label || customLabel) && (
+              <Label>{customLabel ? customLabel : label}</Label>
             )}
-          </>
+
+            <div className="flex gap-2">
+              <Popover open={open} onOpenChange={setOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={open}
+                    onClick={() => {
+                      setOpen(!open)
+                    }}
+                    className={cn(
+                      'flex-1 justify-between',
+                      !field.value && 'text-muted-foreground',
+                      error && 'border-destructive'
+                    )}
+                    disabled={disabled}
+                  >
+                    {field.value?.name || placeholder || 'Select option...'}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent
+                  className={cn(
+                    'w-[var(--radix-popover-trigger-width)] p-0',
+                    position === 'top' && 'mb-2'
+                  )}
+                  side={position === 'top' ? 'top' : 'bottom'}
+                >
+                  <Command>
+                    <CommandInput
+                      placeholder={`Search ${label || customLabel || 'items'}...`}
+                      value={query}
+                      onValueChange={setQuery}
+                    />
+                    <CommandList>
+                      <CommandEmpty>
+                        {fm({ id: messages.noResults })}
+                      </CommandEmpty>
+                      <CommandGroup>
+                        {options?.data?.map(item => (
+                          <CommandItem
+                            key={item.uid}
+                            value={item.name}
+                            onSelect={() => handleSelect(field, item)}
+                          >
+                            <Check
+                              className={cn(
+                                'mr-2 h-4 w-4',
+                                field.value?.uid === item.uid
+                                  ? 'opacity-100'
+                                  : 'opacity-0'
+                              )}
+                            />
+                            {item.name}
+                          </CommandItem>
+                        ))}
+                        {field.value && (
+                          <CommandItem
+                            value=""
+                            onSelect={() => handleClear(field)}
+                            className="text-muted-foreground"
+                          >
+                            {fm({ id: message.common.ui.clearSelection })}
+                          </CommandItem>
+                        )}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+
+              {hasAddPermission && (
+                <Button
+                  type="button"
+                  variant="default"
+                  size="icon"
+                  onClick={() => openFormModal()}
+                  disabled={disabled}
+                >
+                  <Plus className="h-4 w-4" />
+                </Button>
+              )}
+            </div>
+          </div>
         )}
       />
-      {getFormModal()}
     </>
   )
 }

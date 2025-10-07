@@ -1,6 +1,7 @@
 import { startTransition, useEffect } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { useIntl } from 'react-intl'
 
 import { Button } from '@/components/Buttons'
 import CheckBox from '@/components/form/CheckBox'
@@ -10,6 +11,7 @@ import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
 import { useEmployee } from '@/hooks/graphql/useEmployee'
+import { message } from '@/i18n/src/messages'
 import { gql } from '@/types/gql'
 import { generatePassword } from '@/utils'
 
@@ -25,6 +27,7 @@ const GET_FACILITIES = gql(`
 `)
 
 export const UserForm = () => {
+  const { formatMessage: fm } = useIntl()
   const fields = useUserFormFields()
   const { setValue, control } = useFormContext()
   const { data, error } = useGraphQL(GET_FACILITIES)
@@ -89,8 +92,8 @@ export const UserForm = () => {
       </Col>
       <Col md={6}>
         <Input {...fields.password} type="password">
-          <Button primary onClick={generatePasswordHandler}>
-            Gen
+          <Button onClick={generatePasswordHandler}>
+            {fm({ id: message.common.buttons.generate })}
           </Button>
         </Input>
       </Col>

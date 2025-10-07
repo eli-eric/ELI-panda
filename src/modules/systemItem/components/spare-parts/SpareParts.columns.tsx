@@ -2,8 +2,9 @@ import type { ColumnDef } from '@tanstack/react-table'
 import Link from 'next/link'
 import { useMemo } from 'react'
 
-import { LinkDecorator } from '@/components/decorators'
 import { Tooltip } from '@/components/Tooltip'
+import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 import { IconCell } from '@/modules/systems/components/table/cells/IconCell'
 import type { ITEM_USAGE } from '@/modules/systems/types/constants'
 import { PATH } from '@/types/constants/paths'
@@ -46,12 +47,19 @@ export const useSparePartsColumns = () => {
               }
             }
           }) => (
-            <Tooltip
-              content={parentPath?.map(v => v?.name).join(' > ')}
-              placement="top"
-            >
+            <Tooltip content={parentPath?.map(v => v?.name).join(' > ')}>
               <Link href={PATH.SYSTEM + '/' + uid}>
-                <LinkDecorator>{getValue()}</LinkDecorator>
+                <Button
+                  variant={'link'}
+                  title={getValue()}
+                  type="button"
+                  size={'sm'}
+                  className={cn(
+                    'text-inherit hover:underline h-4 font-sm cursor-pointer'
+                  )}
+                >
+                  {getValue()}
+                </Button>
               </Link>
             </Tooltip>
           )

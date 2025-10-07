@@ -9,6 +9,7 @@ import { Input } from '@/components/form/inputs'
 import { RangeInput } from '@/components/form/RangeInput'
 import { RangeSliderComponent } from '@/components/form/RangeSlider'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
+import { cn } from '@/lib/utils'
 import { SelectLocationCombo } from '@/modules/shared/form/location/SelectLocation.combo'
 import { SelectSystemComboBox } from '@/modules/shared/form/systemSelect/SelectSystem.combo'
 import { SystemTypeComboBox } from '@/modules/shared/form/systemType/SelectSystemType.combo'
@@ -16,7 +17,6 @@ import { useCategoryItemProperties } from '@/modules/systems/hooks/useCategoryIt
 import { useCategoryProperties } from '@/modules/systems/hooks/useCategoryProperties'
 import { useMinMaxPrice } from '@/modules/systems/hooks/useMinMaxPrice'
 import { SystemLevel } from '@/types/gql/graphql'
-import { cx } from '@/utils'
 
 import { CategoryPropFilters } from '../../../../shared/form/CategoryPropFilters'
 import type { DisabledFields } from '../SystemsFilterButton.cont'
@@ -45,7 +45,7 @@ export const SystemsFilterForm = ({
   const { data: itemProperties } = useCategoryItemProperties(uid)
 
   return (
-    <div className={cx('md:grid md:grid-cols-2 md:gap-4 md:min-w-[500px]')}>
+    <div className={cn('md:grid md:grid-cols-2 md:gap-4 md:min-w-[500px]')}>
       <div className="flex flex-col gap-2">
         <SelectSystemComboBox
           selectSystemField={fields.parentSystem}

@@ -1,18 +1,19 @@
-import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import type { ColumnDef, Row } from '@tanstack/react-table'
+import { Info } from 'lucide-react'
 import type { HTMLProps } from 'react'
 import { Fragment, useMemo } from 'react'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 
 import { NewTabLink } from '@/components/decorators'
 import { Tooltip } from '@/components/Tooltip'
+import { Checkbox } from '@/components/ui/checkbox'
+import { cn } from '@/lib/utils'
 import { IconCell } from '@/modules/systems/components/table/cells/IconCell'
 import { SystemNameCell } from '@/modules/systems/components/table/cells/SystemNameCell'
 import { useSubsystems } from '@/modules/systems/hooks/useSubsystems'
 import type { ITEM_USAGE } from '@/modules/systems/types/constants'
 import { PATH } from '@/types/constants/paths'
 import type { SystemDetail } from '@/types/responses/systems'
-import { cx } from '@/utils'
 
 // eslint-disable-next-line
 
@@ -57,18 +58,11 @@ function IndeterminateCheckbox({
   }
 
   return (
-    <input
-      type="checkbox"
-      className={cx(
-        className,
-        !rest.disabled && 'cursor-pointer',
-        'focus:ring-primary-500 h-5 w-5 text-primary-600 dark:text-primary-600 rounded',
-        !checked && 'dark:bg-gray-700',
-        rest.disabled && 'bg-gray-300 dark:bg-gray-500'
-      )}
-      onChange={onChange}
+    <Checkbox
+      className={cn(className, !rest.disabled && 'cursor-pointer')}
+      onCheckedChange={onChange}
       checked={checked}
-      {...rest}
+      disabled={rest.disabled}
     />
   )
 }
@@ -157,7 +151,7 @@ export const useSystemsItemsColumns = ({ tableId }: SystemsColumnsProps) => {
           <Fragment>
             {getValue() && (
               <Tooltip content={getValue()}>
-                <InformationCircleIcon className="h-5 w-5 pr- flex-shrink-0" />
+                <Info className="h-5 w-5 pr- shrink-0" />
               </Tooltip>
             )}
           </Fragment>
@@ -257,7 +251,7 @@ export const useSystemsItemsColumns = ({ tableId }: SystemsColumnsProps) => {
           <Fragment>
             {getValue() && (
               <Tooltip content={getValue()}>
-                <InformationCircleIcon className="h-6 w-6 flex-shrink-0" />
+                <Info className="h-6 w-6 shrink-0" />
               </Tooltip>
             )}
           </Fragment>

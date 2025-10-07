@@ -1,35 +1,21 @@
-import { Fragment } from 'react'
-
-import { Heading } from '@/components/layout/Heading'
-import { Table } from '@/components/ui'
-
-import { useItemsAggregate } from '../../hooks/useItemsAggregate'
-import { useCatalogueStatisticsColumns } from './CatalogueStatistics.columns'
+import { CatalogueStatisticsRedesign } from './CatalogueStatistics.redesign'
 
 interface CatalogueStatisticsProps {
   catalogueItemUid?: string
+  variant?: 'modal' | 'page' | 'compact'
+  className?: string
 }
 
 export const CatalogueStatisticsContainer = ({
-  catalogueItemUid
+  catalogueItemUid,
+  variant = 'page',
+  className
 }: CatalogueStatisticsProps) => {
-  const { itemStatistics, loading } = useItemsAggregate(catalogueItemUid)
-  const columns = useCatalogueStatisticsColumns(itemStatistics)
-
   return (
-    <Fragment>
-      <Heading
-        customText="Statistics: Physical Items Inventory"
-        showBorder={false}
-      />
-      <Table
-        data={itemStatistics || []}
-        emptyMessage="No statistics available"
-        columns={columns}
-        loading={loading}
-        enableFooter={true}
-        className="relative overflow-x-auto"
-      />
-    </Fragment>
+    <CatalogueStatisticsRedesign
+      catalogueItemUid={catalogueItemUid}
+      variant={variant}
+      className={className}
+    />
   )
 }

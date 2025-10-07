@@ -1,15 +1,15 @@
 import {
-  BookOpenIcon,
-  CreditCardIcon,
-  HomeIcon,
-  RectangleGroupIcon,
-  RectangleStackIcon,
-  ShoppingCartIcon,
-  TableCellsIcon,
-  UserGroupIcon,
-  UserIcon,
-  WrenchScrewdriverIcon
-} from '@heroicons/react/24/outline'
+  BookOpen,
+  CreditCard,
+  Home,
+  Layers3,
+  LayoutGrid,
+  ShoppingCart,
+  Table2,
+  User,
+  Users,
+  Wrench
+} from 'lucide-react'
 import type { ElementType } from 'react'
 
 import { ROLE } from './roles'
@@ -68,7 +68,7 @@ export const NAV_BAR_CONFIG: NavigationType[] = [
     name: 'Dashboard',
     link: PATH.DASHBOARD,
     role: ROLE.BASICS,
-    Icon: HomeIcon
+    Icon: Home
   },
   {
     name: 'Systems',
@@ -88,43 +88,43 @@ export const NAV_BAR_CONFIG: NavigationType[] = [
       }
     ],
     role: ROLE.SYSTEMS_VIEW,
-    Icon: RectangleGroupIcon
+    Icon: LayoutGrid
   },
   {
     name: 'Catalogue',
     link: PATH.CATALOGUE,
     role: ROLE.CATALOGUE_VIEW,
-    Icon: RectangleStackIcon
+    Icon: Layers3
   },
   {
     name: 'Orders',
     link: PATH.ORDERS,
     role: ROLE.ORDERS_VIEW,
-    Icon: ShoppingCartIcon
+    Icon: ShoppingCart
   },
   {
     name: 'Codebooks',
     link: PATH.CODEBOOKS,
     role: ROLE.BASICS,
-    Icon: TableCellsIcon
+    Icon: Table2
   },
   {
     name: 'Room Cards',
     link: PATH.ROOM_CARDS,
     role: ROLE.ROOM_CARD_VIEW,
-    Icon: CreditCardIcon
+    Icon: CreditCard
   },
   {
     name: 'Publications',
     link: PATH.PUBLICATIONS,
     role: ROLE.PUBLICATIONS_VIEW,
-    Icon: BookOpenIcon
+    Icon: BookOpen
   },
   {
     name: 'Services',
     link: PATH.SERVICES,
     role: ROLE.SERVICE_VIEW,
-    Icon: WrenchScrewdriverIcon
+    Icon: Wrench
   }
 ]
 
@@ -133,13 +133,13 @@ export const USER_NAVIGATION = [
   {
     name: 'Profile',
     link: PATH.PROFILE_GENERAL,
-    Icon: UserIcon,
+    Icon: User,
     role: ROLE.BASICS
   },
   {
     name: 'Administration',
     link: PATH.ADMIN_USERS,
-    Icon: UserGroupIcon,
+    Icon: Users,
     role: ROLE.ADMIN
   }
 ]

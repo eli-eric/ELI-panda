@@ -1,10 +1,10 @@
 import { Dialog, Transition } from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
+import { X } from 'lucide-react'
 import type { FC, PropsWithChildren } from 'react'
 import { Fragment } from 'react'
 
 import { Button } from '@/components/Buttons'
-import { cx } from '@/utils'
+import { cn } from '@/lib/utils'
 
 type ButtonType = {
   type: 'button' | 'submit'
@@ -58,14 +58,14 @@ export const SlideOver: FC<PropsWithChildren<Props>> = ({
     <Transition.Root show={open} as={Fragment}>
       <Dialog
         as="div"
-        className={cx('relative z-30', className)}
+        className={cn('relative z-30', className)}
         onClose={setOpen}
       >
         <div className="fixed inset-0" />
         <div className="fixed inset-0 overflow-hidden">
           <div className="absolute inset-0 overflow-hidden">
             <div
-              className={cx(
+              className={cn(
                 'pointer-events-none fixed inset-y-0 flex max-w-full',
                 panelSlide === 'left' ? 'left-0' : 'right-0'
               )}
@@ -88,7 +88,7 @@ export const SlideOver: FC<PropsWithChildren<Props>> = ({
                 }
               >
                 <Dialog.Panel
-                  className={cx('pointer-events-auto', getWidthClasses())}
+                  className={cn('pointer-events-auto', getWidthClasses())}
                 >
                   <div className="flex h-full flex-col divide-y divide-gray-200 bg-white dark:bg-gray-800 shadow-xl">
                     <div className="flex min-h-0 flex-1 flex-col overflow-y-scroll py-6">
@@ -100,15 +100,12 @@ export const SlideOver: FC<PropsWithChildren<Props>> = ({
                           <div className="ml-3 flex h-7 items-center">
                             <button
                               type="button"
-                              className="relative rounded-md bg-white dark:bg-gray-800 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                              className="relative rounded-md bg-white dark:bg-gray-800 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
                               onClick={() => setOpen(false)}
+                              aria-label="Close panel"
                             >
                               <span className="absolute -inset-2.5" />
-                              <span className="sr-only">Close panel</span>
-                              <XMarkIcon
-                                className="h-6 w-6"
-                                aria-hidden="true"
-                              />
+                              <X className="h-6 w-6" aria-hidden="true" />
                             </button>
                           </div>
                         </div>
@@ -122,8 +119,8 @@ export const SlideOver: FC<PropsWithChildren<Props>> = ({
                     )}
                     {buttons && (
                       <div
-                        className={cx(
-                          'flex flex-shrink-0 px-4 py-4 justify-between',
+                        className={cn(
+                          'flex shrink-0 px-4 py-4 justify-between',
                           buttons.className
                         )}
                       >
@@ -132,9 +129,8 @@ export const SlideOver: FC<PropsWithChildren<Props>> = ({
                             type="button"
                             onClick={() => setOpen(false)}
                             className={buttons.goBack.className}
-                          >
-                            Cancel
-                          </Button>
+                            aria-label="Cancel"
+                          />
                         )}
                         {buttons.goAlter && (
                           <Button
@@ -147,7 +143,6 @@ export const SlideOver: FC<PropsWithChildren<Props>> = ({
                         )}
                         <Button
                           type={buttons.goNext.type}
-                          primary
                           onClick={buttons.goNext.onClick}
                           className={buttons.goNext.className}
                         >

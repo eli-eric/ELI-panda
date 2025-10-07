@@ -17,13 +17,13 @@ const Custom404Page: NextPage = (): JSX.Element => {
     <Fragment>
       <div className="min-h-full bg-white dark:bg-gray-800 py-16 px-6 sm:py-24 md:grid md:place-items-center lg:px-8">
         <div className="mx-auto max-w-max">
-          <div className="flex flex-shrink-0 justify-center pb-12">
+          <div className="flex shrink-0 justify-center pb-12">
             <div className="inline-flex">
               <EliLogoComponent customClass="h-18 w-auto" />
             </div>
           </div>
           <main className="sm:flex">
-            <p className="text-4xl font-bold tracking-tight text-primary-500 sm:text-5xl">
+            <p className="text-4xl font-bold tracking-tight text-orange-500 sm:text-5xl">
               <FormattedMessage id={common.custom404.title} />
             </p>
             <div className="sm:ml-6">
@@ -39,7 +39,7 @@ const Custom404Page: NextPage = (): JSX.Element => {
                 <Link
                   href={status === 'authenticated' ? PATH.DASHBOARD : PATH.ROOT}
                 >
-                  <Button primary>
+                  <Button>
                     <FormattedMessage id={common.buttons.home} />
                   </Button>
                 </Link>

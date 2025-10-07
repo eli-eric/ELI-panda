@@ -1,5 +1,5 @@
 import { Heading } from '@/components/layout/Heading'
-import { Table } from '@/components/ui'
+import { Table } from '@/components/ui/table'
 import type { FragmentType } from '@/types/gql'
 import { useFragment } from '@/types/gql'
 import { formatDate } from '@/utils/formatters'

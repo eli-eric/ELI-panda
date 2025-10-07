@@ -1,7 +1,7 @@
 import { Controller, useFormContext } from 'react-hook-form'
 
 import { InputWrapper, Label } from '@/components/form/inputs/shared'
-import { cx } from '@/utils'
+import { cn } from '@/lib/utils'
 
 type Props = {
   name: string
@@ -49,8 +49,8 @@ export const RadioSelect = ({
                     field.onChange(e.target.value)
                     onChange?.(e.target.value)
                   }}
-                  className={cx(
-                    'form-radio h-4 w-4 text-primary-600 border-gray-300',
+                  className={cn(
+                    'form-radio h-4 w-4 text-orange-600 border-gray-300',
                     option.disabled && 'cursor-not-allowed bg-gray-100'
                   )}
                 />

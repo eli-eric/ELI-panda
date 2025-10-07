@@ -1,42 +1,18 @@
-import { Dialog } from '@headlessui/react'
-import { ExclamationTriangleIcon } from '@heroicons/react/20/solid'
+import { AlertTriangle } from 'lucide-react'
 import type { Dispatch, SetStateAction } from 'react'
 import { FormattedMessage } from 'react-intl'
 
 import ErrorPage from '@/components/error/ErrorPage'
+import { Button } from '@/components/ui/button'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle
+} from '@/components/ui/dialog'
 import type { ModalButtons } from '@/types/form'
-
-import ModalComponent from '../modal.comp'
-
-interface ModalWarningComponentProps {
-  title: string
-  message: string
-}
-
-const ModalWarningComponent = ({
-  title,
-  message
-}: ModalWarningComponentProps) => (
-  <div className="sm:flex sm:items-start">
-    <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-      <ExclamationTriangleIcon
-        className="h-6 w-6 text-red-600"
-        aria-hidden="true"
-      />
-    </div>
-    <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-      <Dialog.Title
-        as="h3"
-        className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-200"
-      >
-        <FormattedMessage id={title} />
-      </Dialog.Title>
-      <div className="mt-2">
-        <p className="text-sm text-gray-500 dark:text-gray-200">{message}</p>
-      </div>
-    </div>
-  </div>
-)
 
 interface WarningModalProps {
   open: boolean
@@ -53,18 +29,53 @@ const WarningModal = ({
   setOpen,
   buttons,
   title,
-  message,
-  testid
+  message
 }: WarningModalProps) => (
-  <ModalComponent
-    open={open}
-    setOpen={setOpen}
-    buttons={buttons}
-    testid={testid}
-  >
-    <ModalWarningComponent title={title} message={message} />
-    {error && <ErrorPage />}
-  </ModalComponent>
+  <Dialog open={open} onOpenChange={setOpen}>
+    <DialogContent>
+      <DialogHeader>
+        <DialogTitle>
+          <span className="flex items-center gap-2">
+            <AlertTriangle className="h-6 w-6 text-red-600" />
+            <FormattedMessage id={title} />
+          </span>
+        </DialogTitle>
+        <DialogDescription>{message}</DialogDescription>
+      </DialogHeader>
+      {error && <ErrorPage />}
+      <DialogFooter>
+        {buttons.goBack && (
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => {
+              setOpen(false)
+              buttons.goBack?.onClick?.()
+            }}
+          >
+            <FormattedMessage
+              id={buttons.goBack.text}
+              defaultMessage={'Cancel'}
+            />
+          </Button>
+        )}
+        {buttons.goNext && (
+          <Button
+            type="button"
+            onClick={() => {
+              buttons.goNext?.onClick?.()
+              setOpen(false)
+            }}
+          >
+            <FormattedMessage
+              id={buttons.goNext.text}
+              defaultMessage={'Continue'}
+            />
+          </Button>
+        )}
+      </DialogFooter>
+    </DialogContent>
+  </Dialog>
 )
 
 export default WarningModal

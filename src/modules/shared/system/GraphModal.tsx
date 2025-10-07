@@ -7,8 +7,8 @@ import { useForm } from 'react-hook-form'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { Form } from '@/components/form/Form'
-import ModalComponent from '@/components/overlays/modal/modal.comp'
 import ProgressBarComponent from '@/components/progress-bar.comp'
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import { queryFetcher } from '@/utils/fetcher'
 
 import { NodeDetails } from '../d3/graph/NodeDetails'
@@ -19,18 +19,33 @@ import type { SystemGraphResponse } from './types'
 const GraphViewLazy = dynamic(() => import('../d3/graph/GraphView'))
 
 interface GraphModalProps {
-  open: boolean
-  setOpen: (open: boolean) => void
   uid: string
 }
 
-export const GraphModal: FC<GraphModalProps> = ({ open, setOpen, uid }) => {
+/**
+ * Opens a system graph modal in the global modal system
+ */
+export function openGraphModal(uid: string) {
+  if (typeof window === 'undefined') return // Prevent SSR execution
+
+  const { openModal } = useModalGlobalStore.getState()
+
+  openModal('dialog1', {
+    component: () => <GraphModalContent uid={uid} />,
+    props: {
+      title: 'System Graph',
+      size: 'xl'
+    }
+  })
+}
+
+export const GraphModalContent: FC<GraphModalProps> = ({ uid }) => {
   const [data, setData] = useState<SystemGraphResponse | undefined>(undefined)
 
   const { data: response } = useQuery({
     queryKey: ['systemGraph', { uid }],
     queryFn: queryFetcher<SystemGraphResponse>('generalGraph'),
-    enabled: open
+    enabled: !!uid
   })
 
   const uniqueRelationships = response?.links.reduce((acc, link) => {
@@ -87,6 +102,7 @@ export const GraphModal: FC<GraphModalProps> = ({ open, setOpen, uid }) => {
     if (!open || !selectedNode) return null
     return <NodeDetails node={selectedNode} />
   }
+
   const renderFilter = ({ open }: { open: boolean }) => {
     if (!open) return null
     return (
@@ -101,7 +117,7 @@ export const GraphModal: FC<GraphModalProps> = ({ open, setOpen, uid }) => {
   }
 
   return (
-    <ModalComponent open={open} setOpen={setOpen}>
+    <>
       {data && (
         <ErrorBoundary fallback={<ErrorPage />}>
           <Suspense>
@@ -114,6 +130,6 @@ export const GraphModal: FC<GraphModalProps> = ({ open, setOpen, uid }) => {
         </ErrorBoundary>
       )}
       {!data && <ProgressBarComponent />}
-    </ModalComponent>
+    </>
   )
 }

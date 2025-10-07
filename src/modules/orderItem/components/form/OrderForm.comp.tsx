@@ -4,8 +4,14 @@ import Combobox from '@/components/form/Combobox'
 import DateInput from '@/components/form/DatePicker'
 import { Input, TextArea } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
-import { Col, Grid } from '@/components/grid/Grid'
-import Card from '@/components/layout/Card'
+import {
+  Card as CardUI,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from '@/components/ui/card'
+import { Separator } from '@/components/ui/separator'
 
 import useOrderFormFields from './OrderForm.fields'
 
@@ -14,45 +20,42 @@ const OrderFormComponent = () => {
   const uid = useRouter().query.uid as string
 
   return (
-    <Card className="py-6">
-      <Grid>
-        <Col lg={6}>
-          <h1 className="text-2xl justify-center font-semibold text-gray-900 dark:text-gray-200">
-            {uid ? 'EDIT ORDER' : 'NEW ORDER'}
-          </h1>
-        </Col>
-        <Col lg={6}>
-          <DateInput {...fields.orderDate} />
-        </Col>
-        <Col lg={6}>
-          <Input {...fields.name} />
-        </Col>
-        <Col lg={6}>
-          <Combobox {...fields.supplier} showAddButton={true} />
-        </Col>
-        <Col lg={6}>
-          <Listbox {...fields.procurementResponsible} />
-        </Col>
-        <Col lg={6}>
-          <Combobox {...fields.requestor} />
-        </Col>
-        <Col>
-          <Listbox {...fields.orderStatus} />
-        </Col>
-        <Col>
-          <Input {...fields.requestNumber} />
-        </Col>
-        <Col>
-          <Input {...fields.orderNumber} />
-        </Col>
-        <Col>
-          <Input {...fields.contractNumber} />
-        </Col>
-        <Col sm="full">
-          <TextArea {...fields.notes} />
-        </Col>
-      </Grid>
-    </Card>
+    <CardUI className="w-full px-4 py-4 sm:px-6 md:px-8 mt-4">
+      <CardHeader>
+        <CardTitle>{uid ? 'Edit Order' : 'New Order'}</CardTitle>
+        <CardDescription>
+          {uid
+            ? 'Edit the order details below.'
+            : 'Fill in the order details below.'}
+        </CardDescription>
+      </CardHeader>
+
+      <CardContent className="space-y-4">
+        {/* Basic Information - stacked */}
+        <Input {...fields.name} className="w-full" />
+        <DateInput {...fields.orderDate} className="w-full" />
+        <Combobox
+          {...fields.supplier}
+          showAddButton={true}
+          className="w-full"
+        />
+        <Listbox {...fields.procurementResponsible} className="w-full" />
+        <Combobox {...fields.requestor} className="w-full" />
+        <Listbox {...fields.orderStatus} className="w-full" />
+
+        <Separator />
+
+        {/* Order Details - stacked */}
+        <Input {...fields.requestNumber} className="w-full" />
+        <Input {...fields.orderNumber} className="w-full" />
+        <Input {...fields.contractNumber} className="w-full" />
+
+        <Separator />
+
+        {/* Additional Information - stacked */}
+        <TextArea {...fields.notes} className="w-full" />
+      </CardContent>
+    </CardUI>
   )
 }
 

@@ -1,17 +1,20 @@
 import { Fragment } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 
 import { Heading } from '@/components/layout/Heading'
-import { Table } from '@/components/ui'
-import { cx } from '@/utils'
+import { Table } from '@/components/ui/table'
+import { message } from '@/i18n/src/messages'
+import { cn } from '@/lib/utils'
 
 import { useSystemDetail } from '../../hooks/useSystemDetail'
-import { getColorBySystemLevel, getFontBySystemLevel } from '../../utils'
+import { getFontBySystemLevel } from '../../utils'
 import { AssignSparePartButton } from './AssignSparePartsButton'
 import { SetMinimalSparesButton } from './SetMinimalSparesButton'
 import { useSparePartsColumns } from './SpareParts.columns'
 
 export const SparePartsContainer = () => {
+  const { formatMessage: fm } = useIntl()
   const columns = useSparePartsColumns()
   const { systemDetail } = useSystemDetail()
   const { control } = useFormContext()
@@ -37,7 +40,7 @@ export const SparePartsContainer = () => {
         titleNode={
           <div className="flex w-[300px] ml-4 items-center">
             <h3
-              className={cx(
+              className={cn(
                 'font-medium whitespace-nowrap mr-4',
                 minSparePartsCount
                   ? sparePartsCoverageSum || 0 < minSparePartsCount
@@ -46,7 +49,14 @@ export const SparePartsContainer = () => {
                   : 'text-gray-500 dark:text-gray-300'
               )}
             >
-              {`Available ${systemDetail?.sparePartsCoverageSum?.toFixed(2) || '0'} out of ${minSparePartsCount || '0'} required`}
+              {fm(
+                { id: message.common.systemItem.sparePartsAvailable },
+                {
+                  available:
+                    systemDetail?.sparePartsCoverageSum?.toFixed(2) || '0',
+                  required: minSparePartsCount || '0'
+                }
+              )}
             </h3>
             <SetMinimalSparesButton />
           </div>
@@ -58,11 +68,9 @@ export const SparePartsContainer = () => {
         systemDetail.sparePartsConnection.edges.length > 0 && (
           <Table<any>
             columns={columns}
-            getRowProps={({ original }, index) => ({
-              className: cx(
-                original?.physicalItem &&
-                  'font-bold text-gray-700 dark:text-gray-200',
-                getColorBySystemLevel(original?.systemLevel, index),
+            getRowProps={({ original }) => ({
+              className: cn(
+                original?.physicalItem && 'font-bold',
                 getFontBySystemLevel(original?.systemLevel)
               )
             })}

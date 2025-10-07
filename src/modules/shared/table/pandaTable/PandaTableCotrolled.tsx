@@ -4,7 +4,7 @@ import { createContext, Fragment } from 'react'
 import EmptyResults from '@/components/empty-section/EmptyResults'
 import ProgressBarComponent from '@/components/progress-bar.comp'
 import PaginationComponent from '@/components/table/Pagination.comp'
-import { cx } from '@/utils'
+import { cn } from '@/lib/utils'
 
 import { TableBody } from './components/TableBody'
 import { TableFoot } from './components/TableFoot'
@@ -65,7 +65,7 @@ export const PandaTableControlled = ({
       {tableHeading && (
         <div
           id="table-heading"
-          className="items-center w-full py-[2px] px-4 text-center shadow-sm  text-primary-600 bg-white dark:bg-gray-800  "
+          className="items-center w-full py-[2px] px-4 text-center shadow-sm  text-orange-600 bg-white dark:bg-gray-800  "
         >
           <span>{tableHeading}</span>
         </div>
@@ -80,7 +80,7 @@ export const PandaTableControlled = ({
         />
       )}
       <div
-        className={cx(
+        className={cn(
           'h-full flex flex-col border-t border-l border-gray-300 mb-4 text-sm',
           className
         )}

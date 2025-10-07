@@ -1,11 +1,12 @@
 import { type FC, Fragment } from 'react'
+import { useIntl } from 'react-intl'
 
-import { CheckBoxComponent } from '@/components/form/CheckBox'
 import Card from '@/components/layout/Card'
 import ModalButtonsComponent from '@/components/overlays/modal/modal.buttons'
+import { CheckboxWithLabel } from '@/components/ui/checkbox'
 import { message } from '@/i18n/src/messages'
+import { cn } from '@/lib/utils'
 import type { ModalButtons } from '@/types/form'
-import { cx } from '@/utils'
 
 import { useMoveWizardSubmit } from '../../itemMoving/hooks/useMoveWizardSubmit'
 import { SummaryListParam } from '../../itemMoving/steps/components/SymmaryListParam.comp'
@@ -13,6 +14,7 @@ import { SummaryListParam } from '../../itemMoving/steps/components/SymmaryListP
 const btnMessages = message.common.buttons
 
 export const ItemAssignSummaryStep: FC = () => {
+  const { formatMessage: fm } = useIntl()
   const {
     submitWizard,
     isPending,
@@ -38,10 +40,10 @@ export const ItemAssignSummaryStep: FC = () => {
   return (
     <Fragment>
       <Card title="Summary">
-        <div className={cx('grid grid-cols-2')}>
+        <div className={cn('grid grid-cols-2')}>
           <ul className="grid grid-cols-1">
             <h3 className="font-bold underline text-gray-600 dark:text-gray-200">
-              {'Source System:'}
+              {fm({ id: message.common.forms.sourceSystem })}
             </h3>
             <SummaryListParam
               {...{
@@ -58,7 +60,7 @@ export const ItemAssignSummaryStep: FC = () => {
           </ul>
           <ul className="grid grid-cols-1">
             <h3 className="font-bold underline text-gray-600 dark:text-gray-200">
-              Assigning Item:
+              {fm({ id: message.common.forms.assigningItem })}
             </h3>
             <SummaryListParam
               name="Usage"
@@ -85,11 +87,12 @@ export const ItemAssignSummaryStep: FC = () => {
           </ul>
         </div>
       </Card>
-      <CheckBoxComponent
+      <CheckboxWithLabel
+        id="delete-source-system"
         label="DELETE SOURCE SYSTEM?"
         defaultChecked={formData.deleteSourceSystem || false}
-        onChange={e => {
-          updateFormData({ deleteSourceSystem: e.target.checked })
+        onChange={checked => {
+          updateFormData({ deleteSourceSystem: checked })
         }}
       />
       <ModalButtonsComponent buttons={buttons} />

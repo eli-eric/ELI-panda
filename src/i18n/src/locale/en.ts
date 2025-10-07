@@ -3,6 +3,7 @@ export const messages = {
     buttons: {
       close: 'Close',
       next: 'Next',
+      previous: 'Previous',
       back: 'Back',
       finish: 'Finish',
       saveAndExit: 'Save and Exit',
@@ -11,7 +12,15 @@ export const messages = {
       save: 'Save',
       home: 'Go Home',
       addNew: 'Add new item',
-      ok: 'OK'
+      ok: 'OK',
+      exit: 'Exit',
+      return: 'Return',
+      logOut: 'Log out',
+      delete: 'Delete',
+      copy: 'Copy',
+      generate: 'Gen',
+      edit: 'Edit',
+      addTag: 'Add Tag'
     },
     custom404: {
       title: '404',
@@ -19,23 +28,275 @@ export const messages = {
       message:
         'Please check the URL in the address bar and try again.Probably you have no permission.'
     },
+    recordNotFound: {
+      title: '404',
+      heading: 'Record Not Found',
+      message: 'Sorry, the record you are looking for does not exist.'
+    },
     property: {
       description: 'Description'
     },
     warning: 'Warning',
+    errors: {
+      somethingWentWrong: 'Something went wrong!',
+      noResults: 'No results'
+    },
+    ui: {
+      appName: 'Panda',
+      separator: '|',
+      total: 'Total:',
+      active: 'Active:',
+      inactive: 'Inactive:',
+      users: 'users',
+      percentActive: '% active',
+      version: 'Version',
+      clickToAdd: 'Click to add',
+      clearSelection: 'Clear selection',
+      closePanel: 'Close panel',
+      selectOption: 'Select option...',
+      noItemsFound: 'No items found.',
+      noDataAvailable: 'No data available',
+      page: 'Page',
+      of: 'of',
+      rowsPerPage: 'Rows per page',
+      search: 'Search',
+      modified: 'Modified',
+      modifiedShort: 'M',
+      previousSlide: 'Previous slide',
+      nextSlide: 'Next slide',
+      sidebar: 'Sidebar',
+      sidebarDescription: 'Displays the mobile sidebar.',
+      toggleSidebar: 'Toggle Sidebar',
+      versionHistory: 'Version History',
+      versionHistoryDescription:
+        'Track changes and improvements to the application',
+      versionPrefix: 'v',
+      currentPassword: 'Current password',
+      newPassword: 'New password',
+      confirmNewPassword: 'Confirm new password',
+      updatePassword: 'Update Password',
+      lastUpdated: 'Last updated:',
+      fixedBugs: 'Fixed bugs:',
+      newFeatures: 'New features:',
+      latestVersion: '- Latest version',
+      internalApplicationFor: 'Internal application for',
+      catalogueProperties: 'Catalogue Properties',
+      showLoadingState: 'Show Loading State',
+      loadSmallDataset: 'Load Small Dataset (4 rows)',
+      currency: 'Currency',
+      category: 'Category',
+      clearFilters: 'Clear filters',
+      delivered: 'Delivered',
+      pending: 'Pending',
+      deleteOrder: 'Delete Order',
+      filter: 'Filter',
+      clear: 'Clear',
+      apply: 'Apply',
+      loading: 'Loading...',
+      items: 'items',
+      facilities: 'facilities',
+      found: 'Found',
+      debugInfo: 'Debug Info:',
+      physicalItemsStatistics: 'Physical Items Statistics',
+      noStatisticsAvailable: 'No statistics available',
+      allFacilities: 'All Facilities',
+      addRelatedItem: 'Add Related Item',
+      adding: 'Adding...',
+      ofTotalPercent: '% of total',
+      facilitiesOverview: 'Facilities Overview',
+      noStatisticsAvailableForItem: 'No statistics available for this item',
+      itemsCount: '{count} items',
+      foundFacilities: 'Found {count} facilities',
+      status: 'Status'
+    },
+    environmentWarning: {
+      title: 'WARNING!',
+      subtitle: 'You are in the {environment} environment',
+      disclaimerTitle: 'This is not a production environment. Please note:',
+      disclaimerPoints: {
+        dataNotPersistent: 'Data in this environment is not persistent',
+        noProductionImpact: 'Changes will not affect the production system',
+        canBeReset: 'Environment may be reset at any time',
+        limitedPerformance: 'Performance may be limited'
+      },
+      confirmButton: 'I understand, continue'
+    },
+    navigation: {
+      modules: 'Modules',
+      administration: 'Administration'
+    },
+    imageGallery: {
+      upload: 'Upload',
+      uploadAnImage: 'Upload an image',
+      delete: 'Delete',
+      noImagesAvailable: 'No images available',
+      pngJpgInfo: 'PNG, JPG up to 10MB',
+      confirmDelete: 'Are you sure you want to delete'
+    },
+    files: {
+      title: 'Files',
+      uploadFile: 'Upload File',
+      addLink: 'Add Link',
+      dropFilesHereOr: 'Drop files here or',
+      browse: 'browse',
+      tagName: 'Tag Name',
+      addTagTitle: 'Add Tag',
+      createLinkTitle: 'Create Link',
+      linkUrl: 'Link URL',
+      linkUrlPlaceholder: 'Paste or type URL here',
+      linkName: 'Link Name',
+      linkNamePlaceholder: 'Enter a name for this link',
+      name: 'Name',
+      tags: 'Tags',
+      size: 'Size',
+      dash: '—',
+      fileSizeMb: '{value} MB',
+      fileSizeKb: '{value} KB',
+      actions: 'Actions'
+    },
     fileManager: {
       deleteModal: {
         title: 'Warning',
         text: 'Are you sure you want to remove {fileName}?'
-      }
+      },
+      newName: 'New Name'
     },
     form: {
       leaveWarning: {
         title: 'Warning',
         text: 'You have unsaved changes. Are you sure you want to leave?'
-      }
+      },
+      unsavedChanges: 'You have unsaved changes',
+      notAvailable: 'N/A'
     },
-    files: { title: 'Files' },
+    systemOverlay: {
+      order: 'Order:',
+      serviceProperties: 'Service Properties:',
+      spareParts: 'Spare Parts:',
+      relatedSystems: 'Related Systems:',
+      showingSubsystems: 'Showing {shown} of {total} subsystems',
+      coveragePercent: '{percent}%',
+      hierarchyArrow: '→',
+      failedToLoad: 'Failed to load system information',
+      viewServiceDetails: 'View Service Details',
+      useSpare: 'Use Spare',
+      designatedSparePart: 'Designated spare part for:',
+      originalCatalogParameter:
+        '*Original catalog parameter modified by Service',
+      jobPosition: ' ({position})',
+      notFoundQuote: '"',
+      showing: 'Showing',
+      of: 'of',
+      subsystems: 'subsystems',
+      subsystem: 'Subsystem',
+      filterSubsystems: 'Filter subsystems...',
+      systemHierarchy: 'System Hierarchy',
+      location: 'Location:'
+    },
+    publications: {
+      clickHere: 'Click here'
+    },
+    roomCard: {
+      contactHall: 'Contact - Hall',
+      contactDept: 'Contact - Dept.',
+      team: 'Team'
+    },
+    roomCards: {
+      locationFormat: '{name} ({code})'
+    },
+    services: {
+      in: 'in'
+    },
+    catalogue: {
+      ellipsis: '...',
+      showStatistics: 'Show Statistics',
+      deleteItem: 'Delete Item'
+    },
+    d3: {
+      detailProperties: 'Detail Properties',
+      noPropertiesAvailable: 'No properties available'
+    },
+    filters: {
+      apply: 'Apply',
+      update: 'Update',
+      saveNew: 'Save new',
+      filters: 'Filters:'
+    },
+    forms: {
+      assignItem: 'Assign Item',
+      moveItem: 'Move Item',
+      previous: 'Previous',
+      sourceSystem: 'Source System:',
+      assigningItem: 'Assigning Item:',
+      movingItem: 'Moving Item:',
+      oldItemParentSystem: 'Old Item Parent System:',
+      selectOrCreateSystem:
+        'Please select or create a system to move the item to. If you already have a system, you can select it. If you dont have a system, you can create a new one.',
+      or: 'OR'
+    },
+    system: {
+      arrow: '→',
+      noSystemSelected: 'No system selected'
+    },
+    systemTypeEdit: {
+      systemTypeGroups: 'System Type Groups',
+      manageGroups: 'Manage groups for organizing system types',
+      noGroupsFound: 'No groups found. Create your first group to get started.',
+      systemTypes: 'System Types',
+      selectGroup: 'Select a group from the left panel to view system types.',
+      noSystemTypes:
+        'No system types found in this group. Add the first system type.',
+      addGroup: 'Add Group',
+      addType: 'Add Type',
+      editGroup: 'Edit Group',
+      deleteGroup: 'Delete Group',
+      editType: 'Edit Type',
+      deleteType: 'Delete Type'
+    },
+    systemItem: {
+      catalogueProperties: 'Catalogue Properties',
+      generate: 'Generate',
+      release: 'Release',
+      viewCatalogueItem: 'View Catalogue Item',
+      noHistoryFound: 'No history found',
+      movedItemTo: 'moved Item to',
+      movedThe: 'moved the',
+      fromUnderThatSystem: 'from under that system',
+      thisSystemWasMovedFrom: 'this system was moved from',
+      movedItemFrom: 'moved item from',
+      sparePartsAvailable: 'Available {available} out of {required} required'
+    },
+    systemsMultiMove: {
+      moveSystemsHere: 'Move Systems here'
+    },
+    systemsMoving: {
+      targetSystem: 'Target System:'
+    },
+    systemsSpareParts: {
+      assignSpareParts: 'Assign Spare Parts'
+    },
+    pages: {
+      administration: 'Administration',
+      adminSection: 'Admin Section',
+      dashboard: 'Dashboard',
+      profile: 'Profile',
+      service: 'Service',
+      quickNavigation: 'Quick navigation to all modules',
+      underConstruction: 'Under construction',
+      underConstructionMessage:
+        'This page is under construction. Please check back later.',
+      reports: 'Reports',
+      loading: 'Loading...',
+      systemNotFound: 'System not found',
+      systemNotFoundMessage:
+        'The system by alias was not found. Please check the URL and try again.',
+      systemsOverview: 'Systems Overview',
+      systemsMoving: 'Systems Moving',
+      spareParts: 'Spare Parts'
+    },
+    table: {
+      category: 'Category'
+    },
     noResults: 'No options.'
   },
   layout: {
@@ -66,6 +327,8 @@ export const messages = {
   authPage: {
     head: 'ELI Panda - Sign In',
     title: 'Sign in to ELI - PANDA',
+    chooseFacility: 'Click to sign in with Microsoft ELI account',
+    button: { signIn: 'Sign In' },
     form: {
       userName: 'User Name',
       password: 'Password',
@@ -140,6 +403,13 @@ export const messages = {
   },
   systemsPage: {
     head: 'ELI Panda - Systems',
+    notFound: {
+      heading: 'System Not Found',
+      message: 'No system found with code',
+      mayNotExist: 'The system may not exist or may have been deleted.',
+      tryChecking:
+        'Try checking the system code or contact your administrator if you believe this is an error.'
+    },
     systemDetail: {
       form: {
         criticalSpCoverage: {
@@ -193,6 +463,7 @@ export const messages = {
           },
           eun: { label: 'Eun', placeholder: 'Eun' },
           price: { label: 'Price', placeholder: 'Price' },
+          currency: { label: 'Currency' },
           procurementStatus: {
             label: 'Procurement Status',
             placeholder: 'Procurement Status'
@@ -250,6 +521,17 @@ export const messages = {
           'Would navigate back, but staying on page to see payload',
         reloadPage: 'Would reload page, but staying to see payload'
       }
+    },
+    systemActions: {
+      ariaLabel: 'System actions',
+      viewDetail: 'View Detail',
+      showGraph: 'Show Graph',
+      showSpareParts: 'Show Spare Parts ({count})',
+      showSparePartsFor: 'Show Spare Parts For ({count})',
+      addSubsystem: 'Add Subsystem',
+      deleteSystem: 'Delete System',
+      sparePartsModalTitle: 'Spare Parts:',
+      sparePartsForModalTitle: 'Spare Part for Systems:'
     },
     itemDetail: {
       eun: 'Eun',
@@ -363,6 +645,27 @@ export const messages = {
       }
     },
     serviceLines: {
+      update: 'Update Service Line',
+      properties: 'Properties',
+      deleteModal: {
+        title: 'Warning',
+        message: 'Are you sure you want to delete {name}?'
+      },
+      titles: {
+        edit: 'Edit Service Line'
+      },
+      tooltips: {
+        editServiceLine: 'Edit service line',
+        deleteServiceLine: 'Delete service line',
+        markAllAsDelivered: 'Mark All as Delivered'
+      },
+      selectable: {
+        checkedIncluded:
+          'Checked properties will be included in the service line',
+        uncheckedExcluded:
+          'Unchecked properties will be disabled and excluded from the service line',
+        error: 'Something went wrong'
+      },
       columns: {
         name: 'Name',
         serviceType: 'Service Type',
@@ -371,7 +674,9 @@ export const messages = {
         isDelivered: 'Delivered',
         price: 'Price'
       },
+
       header: 'Service Lines',
+      totalLines: 'Total: {count} line(s)',
       wizard: {
         steps: {
           step1: {
@@ -439,6 +744,12 @@ export const messages = {
         'Order lines or Service lines is missing are you sure you want to continue?'
     },
     orderLines: {
+      update: 'Update Order Line',
+      titles: {
+        add: 'Add Order Line',
+        edit: 'Edit Order Line'
+      },
+      actionsMenuAriaLabel: 'Order line actions',
       formHeadings: {
         itemInfo: 'Item Info',
         systemInfo: 'System Info'
@@ -476,6 +787,7 @@ export const messages = {
           service: 'Last Service'
         }
       },
+      totalLines: 'Total: {count} line(s)',
       deleteModal: {
         title: 'Warning',
         message: 'Are you sure you want to delete <medium>{name}</medium>?'
@@ -483,7 +795,9 @@ export const messages = {
       missingSerialNumber: {
         title: 'Warning',
         message: 'Serial number is missing, please fill it.'
-      }
+      },
+      eunPrintedSuccessfully: 'EUN {eun} printed successfully',
+      printEunTooltip: 'Print EUN'
     }
   },
   codebooksPage: {
@@ -621,5 +935,101 @@ export const messages = {
   },
   layoutPage: {
     head: 'ELI Panda - Layout'
+  },
+  publicationsPage: {
+    columns: {
+      title: 'Title',
+      code: 'Code',
+      mediaType: 'Media Type',
+      experimentalSystem: 'Experimental System',
+      userCall: 'User Call',
+      userExperiment: 'User Experiment',
+      doi: 'DOI',
+      webLink: 'Web Link',
+      openAccessType: 'Open Access Type',
+      authors: 'Authors',
+      authorsCount: 'Authors Count',
+      eliAuthors: 'ELI Authors',
+      eliAuthorsCount: 'ELI Authors Count',
+      journalTitle: 'Journal Title',
+      volume: 'Volume',
+      issue: 'Issue',
+      pages: 'Pages',
+      pagesCount: 'Pages Count',
+      citeAs: 'Cite As',
+      impactFactor: 'Impact Factor',
+      quartilBasis: 'Quartil Basis',
+      quartil: 'Quartil',
+      yearOfPublication: 'Year Of Publication',
+      dateOfPublication: 'Date Of Publication',
+      abstract: 'Abstract',
+      keywords: 'Keywords',
+      oecdFord: 'OECD Ford',
+      grant: 'Grant',
+      wosNumber: 'WOS Number',
+      issn: 'ISSN',
+      eissn: 'E-ISSN',
+      eidScopus: 'EID Scopus',
+      publishingCountry: 'Publishing Country',
+      language: 'Language',
+      note: 'Note',
+      clickHere: 'Click here'
+    },
+    actions: {
+      editPublication: 'Edit Publication',
+      deletePublication: 'Delete Publication'
+    }
+  },
+  servicesPage: {
+    title: 'Manage Services',
+    addNewService: 'Add New Service'
+  },
+  catalogue: {
+    category: {
+      badge: 'category',
+      copy: 'Copy Category',
+      delete: 'Delete Category',
+      addNew: 'Add New Category',
+      saved: 'Category {name} saved',
+      errorSaving: 'Error saving category',
+      confirmDelete: 'Are you sure you want to remove this Category?',
+      confirmCopy: 'Are you sure you want to copy this Category?',
+      editCopied: 'Edit Copied Category',
+      editCategory: 'Edit Category',
+      save: 'Save Category',
+      saving: 'Saving category...',
+      basicInformation: 'Basic Information',
+      propertyGroups: 'Property Groups',
+      physicalProperties: 'Physical Properties',
+      errorLoading: 'Error Loading Category',
+      failedToLoadDetails: 'Failed to load category details',
+      retry: 'Retry',
+      deleted: 'Category deleted successfully',
+      failedToLoadList: 'Failed to fetch categories',
+      errorFetching: 'Error fetching category: {reason}',
+      groupName: 'Group name',
+      groupAdd: 'Add Group',
+      groupProperties: 'Group properties',
+      physicalItemPropertiesTitle: 'Physical Item Properties',
+      propertyName: 'Property name',
+      propertyType: 'Property type',
+      propertyUnit: 'Unit',
+      propertyDefaultValue: 'Default value',
+      propertyRemove: 'Remove property',
+      propertyListOfValues: 'List of Values:',
+      propertyAdd: 'Add Property',
+      propertyAddValue: 'Add Value',
+      propertyEnterValue: 'Enter value',
+      propertyAddTooltip: 'Add value to property: {name}',
+      propertyAddToGroupTooltip: 'Add property to group: {name}',
+      unnamedProperty: 'Unnamed Property',
+      unnamedGroup: 'Unnamed Group',
+      selectDefaultValue: 'Select default value',
+      selectType: 'Select type',
+      selectUnit: 'Select unit'
+    },
+    items: {
+      errorFetching: 'Error fetching catalogue items: {reason}'
+    }
   }
 }

@@ -6,6 +6,7 @@ import logger from '@/server/logger'
 import s3Client, { config } from '@/server/s3client'
 
 import { getPathInfo } from '../utils/path-utils'
+import { safeGetObject, safeStatObject } from '../utils/s3-error-utils'
 import { streamToBuffer } from '../utils/stream-utils'
 import { withErrorHandler } from '../utils/with-error-handler'
 
@@ -20,10 +21,15 @@ async function updateFile(req: NextApiRequest, res: NextApiResponse) {
   const { name, tags } = req.body
 
   try {
-    const obj = await s3Client.statObject(bucket, fullPath)
-    if (!obj) return res.status(404).json({ error: 'File not found' })
+    const obj = await safeStatObject(s3Client, bucket, fullPath, req)
+    if (!obj) {
+      return res.status(404).json({ error: 'File not found' })
+    }
 
-    const fileStream = await s3Client.getObject(bucket, fullPath)
+    const fileStream = await safeGetObject(s3Client, bucket, fullPath, req)
+    if (!fileStream) {
+      return res.status(404).json({ error: 'File not found' })
+    }
     const buffer = await streamToBuffer(fileStream)
     logger.info(tags)
 

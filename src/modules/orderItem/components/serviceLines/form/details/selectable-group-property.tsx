@@ -3,6 +3,7 @@ import React from 'react'
 import { Input } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
 import { RangeInput } from '@/components/form/RangeInput'
+import { CheckboxWithLabel } from '@/components/ui/checkbox'
 import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
 import { PROPERTY_TYPE } from '@/types/catalogue/constants'
 
@@ -106,21 +107,12 @@ export const SelectableGroupProperty = ({ detail }: Props) => {
 
   return (
     <div className="flex flex-col space-y-1">
-      <div className="flex items-center space-x-2">
-        <input
-          type="checkbox"
-          id={`property-${propertyUid}`}
-          checked={isSelected}
-          onChange={handleCheckboxChange}
-          className="h-4 w-4 rounded border-gray-300 dark:border-gray-600 text-primary-600 focus:ring-0 focus:outline-none"
-        />
-        <label
-          htmlFor={`property-${propertyUid}`}
-          className="text-xs font-medium text-gray-500 dark:text-gray-400"
-        >
-          Include in service line
-        </label>
-      </div>
+      <CheckboxWithLabel
+        id={`property-${propertyUid}`}
+        checked={isSelected}
+        onChange={handleCheckboxChange}
+        label="Include in service line"
+      />
       <div className={`${disabled ? 'opacity-50' : ''}`}>
         {renderProperty()}
       </div>

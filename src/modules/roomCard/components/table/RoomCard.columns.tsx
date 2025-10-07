@@ -1,7 +1,11 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
+import { useIntl } from 'react-intl'
 
+import { PlusButton } from '@/components/Buttons'
 import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
+import usePermission from '@/hooks/usePermission'
+import { message } from '@/i18n/src/messages'
 import { ROLE } from '@/types/constants/roles'
 import type { Employee, HallContactPerson, Team } from '@/types/gql/graphql'
 import { formatPhoneNumber } from '@/utils/formatters'
@@ -10,7 +14,7 @@ import { useRoomCardStore } from '../../store/useRoomCardStore'
 import { CellInput } from './CellInput'
 import { CellWithDelete } from './CellWithDelete'
 import { ContactHallButton } from './ContactHallButton'
-import { HeaderAddButton } from './HeaderAddButton'
+import { useContactDeptModal } from './hooks/useContactDeptModal'
 import { TeamButton } from './TeamButton'
 
 export type RoomCardProperties = {
@@ -20,11 +24,18 @@ export type RoomCardProperties = {
 }
 
 export const useRoomCardsColumns = () => {
+  const { formatMessage: fm } = useIntl()
+  const canEdit = usePermission([ROLE.ROOM_CARD_EDIT])
+  const openContactDeptModal = useContactDeptModal()
+
   const {
     setDeleteHallContact,
     setDisconnectDeptContact,
     setDisconnectTeam,
-    setNewDeptContact
+    removeNewHallContact,
+    removeNewDeptContact,
+    removeNewTeam,
+    removeNewLocation
   } = useRoomCardStore()
 
   const columnsContactHall = useMemo(
@@ -34,7 +45,7 @@ export const useRoomCardsColumns = () => {
         header: () => {
           return (
             <div className="flex items-center justify-between px-2 w-full">
-              <span>Contact - Hall</span>
+              <span>{fm({ id: message.common.roomCard.contactHall })}</span>
               <ContactHallButton />
             </div>
           )
@@ -50,6 +61,7 @@ export const useRoomCardsColumns = () => {
                 {...props}
                 formName="contactPersonsHall"
                 setDeleteItem={setDeleteHallContact}
+                removeNewItem={removeNewHallContact}
               />
             )
           },
@@ -75,7 +87,7 @@ export const useRoomCardsColumns = () => {
         ]
       }
     ],
-    [setDeleteHallContact]
+    [fm, setDeleteHallContact, removeNewHallContact]
   )
 
   const columnsContactDept = useMemo(
@@ -84,12 +96,10 @@ export const useRoomCardsColumns = () => {
         header: () => {
           return (
             <div className="flex items-center justify-between px-2 w-full">
-              <span>Contact - Dept.</span>
-              <HeaderAddButton
-                setEmployee={setNewDeptContact}
-                editPersmissionRole={ROLE.ROOM_CARD_EDIT}
-                name={'contactPersonsDept'}
-              />
+              <span>{fm({ id: message.common.roomCard.contactDept })}</span>
+              {canEdit && (
+                <PlusButton type="button" onClick={openContactDeptModal} />
+              )}
             </div>
           )
         },
@@ -104,6 +114,7 @@ export const useRoomCardsColumns = () => {
                 {...props}
                 formName="contactPersonsDept"
                 setDeleteItem={setDisconnectDeptContact}
+                removeNewItem={removeNewDeptContact}
               />
             ),
             size: 200
@@ -124,7 +135,13 @@ export const useRoomCardsColumns = () => {
         ]
       }
     ],
-    [setDisconnectDeptContact, setNewDeptContact]
+    [
+      fm,
+      setDisconnectDeptContact,
+      removeNewDeptContact,
+      canEdit,
+      openContactDeptModal
+    ]
   )
 
   const columnsTeam = useMemo(
@@ -133,7 +150,7 @@ export const useRoomCardsColumns = () => {
         header: () => {
           return (
             <div className="flex items-center justify-between px-2 w-full">
-              <span>Team</span>
+              <span>{fm({ id: message.common.roomCard.team })}</span>
               <TeamButton />
             </div>
           )
@@ -145,11 +162,12 @@ export const useRoomCardsColumns = () => {
             {...props}
             formName="teams"
             setDeleteItem={setDisconnectTeam}
+            removeNewItem={removeNewTeam}
           />
         )
       }
     ],
-    [setDisconnectTeam]
+    [fm, setDisconnectTeam, removeNewTeam]
   )
 
   const columnsCleanRooms = useMemo(
@@ -201,7 +219,13 @@ export const useRoomCardsColumns = () => {
         header: 'Location Name',
         accessorFn: ({ name }) => name,
         id: 'name',
-        cell: props => <CellWithDelete {...props} formName="locations" />
+        cell: props => (
+          <CellWithDelete
+            {...props}
+            formName="locations"
+            removeNewItem={removeNewLocation}
+          />
+        )
       },
       {
         header: 'Location Code',
@@ -209,7 +233,7 @@ export const useRoomCardsColumns = () => {
         id: 'code'
       }
     ],
-    []
+    [removeNewLocation]
   )
 
   return {

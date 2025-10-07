@@ -42,5 +42,5 @@ export interface Publication {
 
 export type AuthorsDepartment = {
   department: CodebookType | null
-  authorsCount: number
+  authorsCount: string | number
 }

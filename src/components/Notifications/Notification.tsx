@@ -1,13 +1,9 @@
 import { Transition } from '@headlessui/react'
-import {
-  CheckCircleIcon,
-  ExclamationTriangleIcon,
-  XMarkIcon
-} from '@heroicons/react/24/outline'
+import { AlertTriangle, CheckCircle, X } from 'lucide-react'
 import { Fragment, useState } from 'react'
 import { resolveValue, type Toast, toast } from 'react-hot-toast'
 
-import { cx } from '@/utils'
+import { cn } from '@/lib/utils'
 
 import ButtonLoaderComponent from '../button-loader.comp'
 
@@ -19,7 +15,7 @@ export const Notification = ({ t }: Props) => {
   const [show, setShow] = useState(true)
   return (
     <div
-      className={cx(
+      className={cn(
         'w-[800px] bg-white dark:bg-gray-800 rounded-lg pointer-events-auto flex',
         t.visible ? 'animate-enter' : 'animate-leave'
       )}
@@ -36,18 +32,18 @@ export const Notification = ({ t }: Props) => {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="pointer-events-auto w-full overflow-hidden rounded-lg bg-white dark:bg-primary-700 shadow-lg ring-1 ring-black ring-opacity-5">
+          <div className="pointer-events-auto w-full overflow-hidden rounded-lg bg-white dark:bg-orange-700 shadow-lg ring-1 ring-black ring-opacity-5">
             <div className="p-4">
               <div className="flex items-start">
-                <div className="flex-shrink-0">
+                <div className="shrink-0">
                   {t.type === 'error' && (
-                    <ExclamationTriangleIcon
+                    <AlertTriangle
                       className="h-6 w-6 text-red-400 dark:text-black"
                       aria-hidden="true"
                     />
                   )}
                   {t.type === 'success' && (
-                    <CheckCircleIcon
+                    <CheckCircle
                       className="h-6 w-6 text-green-400"
                       aria-hidden="true"
                     />
@@ -59,7 +55,7 @@ export const Notification = ({ t }: Props) => {
                     {resolveValue(t.message, t)}
                   </p>
                 </div>
-                <div className="ml-4 flex flex-shrink-0">
+                <div className="ml-4 flex shrink-0">
                   <button
                     type="button"
                     className="inline-flex rounded-md bg-white dark:bg-gray-800 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
@@ -67,14 +63,9 @@ export const Notification = ({ t }: Props) => {
                       setShow(false)
                       toast.dismiss(t.id)
                     }}
+                    aria-label="Close notification"
                   >
-                    <span className="sr-only">Close</span>
-                    <XMarkIcon
-                      className="h-4 w-4
-
-"
-                      aria-hidden="true"
-                    />
+                    <X className="h-4 w-4" aria-hidden="true" />
                   </button>
                 </div>
               </div>

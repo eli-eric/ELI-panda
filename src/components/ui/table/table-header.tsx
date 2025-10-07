@@ -1,7 +1,7 @@
 import { flexRender } from '@tanstack/react-table'
 import React from 'react'
 
-import { cx } from '@/utils'
+import { cn } from '@/lib/utils'
 
 import { FilterDropdown } from './filter-dropdown'
 import { PinIndicator } from './pin-indicator'
@@ -23,8 +23,8 @@ export function TableHeader<T extends object>({
 
   return (
     <thead
-      className={cx(
-        'bg-gray-100 dark:bg-gray-800 rounded-t-md',
+      className={cn(
+        'bg-muted/50 rounded-t-md',
         headerClassName,
         'relative z-30'
       )}
@@ -41,10 +41,7 @@ export function TableHeader<T extends object>({
         }
 
         return (
-          <tr
-            key={headerGroup.id}
-            className="border-b border-gray-200 dark:border-gray-700"
-          >
+          <tr key={headerGroup.id} className="border-b border-border">
             {visibleHeaders.map((header, headerIndex) => {
               // Check if this is a group header (has subcolumns)
               const isGroupHeader = header.column.columns?.length > 0
@@ -105,22 +102,20 @@ export function TableHeader<T extends object>({
                 <th
                   key={header.id}
                   style={style}
-                  className={cx(
-                    'h-10 px-4 text-left align-middle font-medium text-gray-500 dark:text-gray-400',
-                    'hover:bg-gray-200 dark:hover:bg-gray-700',
+                  className={cn(
+                    'h-10 px-4 text-left align-middle font-medium text-muted-foreground',
+                    'hover:bg-accent',
                     'whitespace-nowrap',
                     // Apply sticky styles directly to th elements when sticky header is enabled
-                    isSticky
-                      ? 'sticky top-0 bg-gray-100 dark:bg-gray-800 z-10'
-                      : '',
+                    isSticky ? 'sticky top-0 bg-muted/50 z-10' : '',
                     // Add shadow when sticky to visually separate from content
                     isSticky ? 'shadow-sm' : '',
-                    // Add border and background styles for pinned columns
+                    // Add border and backdrop-blur with overlay for pinned columns
                     isPinned === 'left'
-                      ? 'border-r border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800'
+                      ? 'border-r border-border backdrop-blur-sm before:absolute before:inset-0 before:bg-background/30 before:pointer-events-none before:z-[-1] relative'
                       : '',
                     isPinned === 'right'
-                      ? 'border-l border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800'
+                      ? 'border-l border-border backdrop-blur-sm before:absolute before:inset-0 before:bg-background/30 before:pointer-events-none before:z-[-1] relative'
                       : '',
                     isPinned && 'z-30',
                     // Use meta className from column definition
@@ -134,7 +129,7 @@ export function TableHeader<T extends object>({
                   colSpan={header.colSpan}
                 >
                   <div
-                    className={cx(
+                    className={cn(
                       'flex items-center justify-between gap-2',
                       // For group headers, ensure the content can fill available space
                       isGroupHeader ? 'w-full' : ''

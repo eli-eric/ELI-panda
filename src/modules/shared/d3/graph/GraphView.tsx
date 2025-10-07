@@ -8,7 +8,7 @@ import {
   PlusButton,
   StatsButton
 } from '@/components/Buttons'
-import { cx } from '@/utils'
+import { cn } from '@/lib/utils'
 
 import { useForceGraph } from './hooks/useForceGraph'
 import type { GraphNode, SystemGraphResponse } from './types'
@@ -27,7 +27,7 @@ const GraphView: FC<PropsWithChildren<Props>> = ({
   renderStats,
   renderFilter
 }) => {
-  const svgRef = useRef<SVGSVGElement | null>(null)
+  const svgRef = useRef<SVGSVGElement>(null!)
   const circleRadius = 10
 
   const [openStats, setOpenStats] = useState(false)
@@ -68,7 +68,7 @@ const GraphView: FC<PropsWithChildren<Props>> = ({
         {renderFilter({ open: openFilter })}
         <svg
           ref={svgRef}
-          className={cx(
+          className={cn(
             'w-full border rounded-md',
             openStats ? 'col-span-7' : openFilter ? 'col-span-8' : 'col-span-12'
           )}

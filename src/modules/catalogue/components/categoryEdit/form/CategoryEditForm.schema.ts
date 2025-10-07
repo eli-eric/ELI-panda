@@ -24,17 +24,9 @@ export const categoryValidationschema: yup.ObjectSchema<CategoryFormType> = yup
                 type: yup.mixed<CodebookType>().nullable(),
                 unit: yup.mixed<CodebookType>().nullable(),
                 defaultValue: yup.string().nullable().notRequired(),
-                listOfValues: yup.lazy(values =>
-                  Array.isArray(values)
-                    ? yup.array().of(
-                        yup.object().shape({
-                          value: yup.string().required("Value can't be empty")
-                        })
-                      )
-                    : yup
-                        .array()
-                        .of(yup.string().required("Value can't be empty"))
-                )
+                listOfValues: yup
+                  .array()
+                  .of(yup.string().required("Value can't be empty"))
               })
             )
             .required("Properties can't be empty")
@@ -54,15 +46,9 @@ export const categoryValidationschema: yup.ObjectSchema<CategoryFormType> = yup
           type: yup.mixed<CodebookType>().nullable(),
           unit: yup.mixed<CodebookType>().nullable(),
           defaultValue: yup.string().nullable().notRequired(),
-          listOfValues: yup.lazy(values =>
-            Array.isArray(values)
-              ? yup.array().of(
-                  yup.object().shape({
-                    value: yup.string().required("Value can't be empty")
-                  })
-                )
-              : yup.array().of(yup.string().required("Value can't be empty"))
-          )
+          listOfValues: yup
+            .array()
+            .of(yup.string().required("Value can't be empty"))
         })
       )
       .required("Properties can't be empty")

@@ -22,5 +22,10 @@ export const useAssignSpareParts = () => {
       toast.error(erorr.message)
     }
   })
-  return { assignSpareParts: mutate, loading: isPending }
+
+  const wrappedMutate = (variables: any, options?: any) => {
+    return mutate(variables, options)
+  }
+
+  return { assignSpareParts: wrappedMutate, loading: isPending }
 }

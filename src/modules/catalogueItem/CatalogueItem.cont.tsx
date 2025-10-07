@@ -1,5 +1,5 @@
-import { yupResolver } from '@hookform/resolvers/yup'
-import { memo, useEffect, useRef, useState } from 'react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { memo, useEffect, useMemo, useRef, useState } from 'react'
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { useForm } from 'react-hook-form'
@@ -20,19 +20,18 @@ import type { ImageGalleryRef } from '../shared/imageManager/types'
 import useCatalogueFormFields from './components/form/CatalogueForm.fields'
 import DefaultItemForm from './components/form/DefaultItemForm'
 import Groups from './components/form/Groups'
-import { schema } from './components/form/ItemForm.schema'
+import {
+  type CatalogueItemFormData,
+  catalogueItemSchema
+} from './components/form/ItemForm.schema'
 import { CatalogueOrders } from './components/orders/CatalogueOrders'
 import { RelatedItemsContainer } from './components/related-items/RelatedItems.cont'
 import { CatalogueStatisticsContainer } from './components/statistics/CatalogueStatistics.cont'
 import { useCatalogueItem } from './hooks/useItem'
 import { useItemSubmit } from './hooks/useItemSubmit'
-import type { CatalogueItem, CatalogueItemDetail } from './types/responses'
+import type { CatalogueItem } from './types/responses'
 
 const MemoizedGallery = memo(ImageGallery)
-
-interface CatalogueForm extends CatalogueItem {
-  hasImageGalleryChanges?: boolean
-}
 
 interface CatalogueItemContainerProps {
   uid?: string
@@ -50,13 +49,34 @@ const CatalogueItemContainer = ({
 
   const { catalogueCategory } = useCategory(catalogueCategoryUid)
 
-  const imageRef = useRef<ImageGalleryRef>()
-  const formMethods = useForm<any>({
-    resolver: yupResolver(schema),
-    defaultValues: { ...item }
+  const imageRef = useRef<ImageGalleryRef | undefined>(undefined)
+
+  // Convert details array to object structure for form
+  // Form expects: { [propertyUid]: detail }
+  // API returns: [{ property: { uid, ... }, value, ... }]
+  // useMemo ensures this recalculates when item changes
+  const detailsObject = useMemo(() => {
+    return (
+      item?.details?.reduce(
+        (acc, detail) => {
+          if (detail.property?.uid) {
+            acc[detail.property.uid] = detail
+          }
+          return acc
+        },
+        {} as Record<string, any>
+      ) || {}
+    )
+  }, [item])
+
+  const formMethods = useForm<CatalogueItemFormData>({
+    resolver: zodResolver(catalogueItemSchema),
+    defaultValues: {
+      ...item,
+      details: detailsObject
+    }
   })
-  const { reset, setValue, formState } = formMethods
-  console.log('Form state:', formState)
+  const { reset, setValue } = formMethods
   const { submit, loading } = useItemSubmit({
     setvalue: setValue,
     imageRef: imageRef,
@@ -64,6 +84,19 @@ const CatalogueItemContainer = ({
     reset
   })
 
+  // Sync item data from React Query cache to form
+  // This ensures form is updated when item changes (e.g., after save)
+  useEffect(() => {
+    if (item) {
+      reset({
+        ...item,
+        details: detailsObject
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [item, detailsObject])
+
+  // Sync catalogueCategory when creating new item from category page
   useEffect(() => {
     if (catalogueCategory) {
       reset({
@@ -76,35 +109,32 @@ const CatalogueItemContainer = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [catalogueCategory])
 
-  const onSubmit = (catalogueItem: CatalogueForm) => {
-    console.log('Submit data raw:', catalogueItem)
-    
-    // extract from catalogueItem hasImageGalleryChanges
+  const onSubmit = (catalogueItem: CatalogueItemFormData) => {
+    // Extract hasImageGalleryChanges (not needed for API)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { hasImageGalleryChanges, ...rest } = catalogueItem
-    
+
     // Convert details object with UID keys back to details array for API
+    // Form structure: { [propertyUid]: detail }
+    // API expects: [{ property, value, propertyGroup }]
     const details = rest.details ? Object.values(rest.details) : []
-    
+
     const finalData = { ...rest, details }
-    console.log('Submit data processed:', finalData)
-    
+
     setSaveAndExit(false)
     submit(finalData as CatalogueItem)
   }
-  const onSubmitAndExit = (catalogueItem: CatalogueForm) => {
-    console.log('SubmitAndExit data raw:', catalogueItem)
-    
-    // extract from catalogueItem hasImageGalleryChanges
+  const onSubmitAndExit = (catalogueItem: CatalogueItemFormData) => {
+    // Extract hasImageGalleryChanges (not needed for API)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { hasImageGalleryChanges, ...rest } = catalogueItem
-    
+
     // Convert details object with UID keys back to details array for API
+    // Form structure: { [propertyUid]: detail }
+    // API expects: [{ property, value, propertyGroup }]
     const details = rest.details ? Object.values(rest.details) : []
-    
+
     const finalData = { ...rest, details }
-    console.log('SubmitAndExit data processed:', finalData)
-    
     setSaveAndExit(true)
     submit(finalData as CatalogueItem)
   }
@@ -118,34 +148,21 @@ const CatalogueItemContainer = ({
       <HeaderWithButtons
         loading={loading}
         editRole={ROLE.CATALOGUE_EDIT}
-        onSubmit={formMethods.handleSubmit(
-          (data) => {
-            console.log('handleSubmit SUCCESS:', data)
-            onSubmit(data)
-          },
-          (errors) => {
-            console.log('handleSubmit ERRORS:', errors)
-          }
-        )}
-        onSubmitAndExit={formMethods.handleSubmit(
-          (data) => {
-            console.log('handleSubmitAndExit SUCCESS:', data)
-            onSubmitAndExit(data)
-          },
-          (errors) => {
-            console.log('handleSubmitAndExit ERRORS:', errors)
-          }
-        )}
+        onSubmit={formMethods.handleSubmit(data => {
+          onSubmit(data)
+        })}
+        onSubmitAndExit={formMethods.handleSubmit(data => {
+          onSubmitAndExit(data)
+        })}
       />
       <Card className="flex flex-col justify-between pb-5">
         <div className="lg:grid lg:grid-cols-3 lg:items-start lg:gap-x-8 pb-3">
           <MemoizedGallery
             ref={imageRef}
             config={{ itemCategory: FILE_TYPE.CATALOGUE, itemId: String(uid) }}
-            className="relative h-full max-h-56 mt-6 pl-6 "
             hasEditRole={!disabledEdit}
           />
-          <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0 col-span-2">
+          <div className="col-span-2">
             <DefaultItemForm />
           </div>
         </div>
@@ -153,7 +170,13 @@ const CatalogueItemContainer = ({
         <Groups />
         {uid && <RelatedItemsContainer />}
         {uid && <CatalogueOrders />}
-        {uid && <CatalogueStatisticsContainer catalogueItemUid={uid} />}
+        {uid && (
+          <CatalogueStatisticsContainer
+            catalogueItemUid={uid}
+            variant="page"
+            className="mt-6"
+          />
+        )}
         {uid && (
           <ErrorBoundary fallback={<ErrorPage />}>
             <Suspense>

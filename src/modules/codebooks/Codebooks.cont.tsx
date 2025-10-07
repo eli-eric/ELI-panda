@@ -88,7 +88,6 @@ export const CodebooksContainer: FC<Props> = () => {
     <Fragment>
       <PageHead>
         <PlusButton
-          buttonSize="large"
           onClick={handleAddNewCodebookValue}
           disabled={!selectedCodebookQuery}
         />

@@ -3,6 +3,7 @@ import { type FC } from 'react'
 
 import ModalButtonsComponent from '@/components/overlays/modal/modal.buttons'
 import { message } from '@/i18n/src/messages'
+import { cn } from '@/lib/utils'
 import { Pagination } from '@/modules/shared/table/Pagination'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import { PandaTableV2 } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
@@ -14,7 +15,6 @@ import {
 import { useSystems } from '@/modules/systems/hooks/useSystems'
 import type { ModalButtons } from '@/types/form'
 import type { SystemDetail } from '@/types/responses/systems'
-import { cx } from '@/utils'
 
 import { FilterBadges } from '../../FilterBadges'
 import { useWizardStore } from '../../wizard/store/useWizardStore'
@@ -67,7 +67,7 @@ export const OldItemDestinationStep: FC = () => {
         setOldItemParentSystem(row.original)
       }
     },
-    className: cx(
+    className: cn(
       getColorBySystemLevel(row.original?.systemLevel),
       getFontBySystemLevel(row.original?.systemLevel),
       row.original?.physicalItem &&
@@ -76,7 +76,7 @@ export const OldItemDestinationStep: FC = () => {
         row.original.statistics.sp_coverage < 1 &&
         'text-red-500 dark:text-red-500 font-bold',
       oldItemParentSystem?.uid === row.original.uid
-        ? 'bg-primary-200 hover:bg-primary-200 dark:bg-primary-600 dark:hover:bg-primary-600'
+        ? 'bg-orange-200 hover:bg-orange-200 dark:bg-orange-600 dark:hover:bg-orange-600'
         : '',
       'cursor-pointer'
     )

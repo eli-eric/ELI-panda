@@ -1,14 +1,15 @@
-import { Fragment, useMemo, useState } from 'react'
+import { Fragment, useMemo } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 
 import { PlusButton } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
+import { Tooltip } from '@/components/Tooltip'
 import { Table } from '@/components/ui/table/table'
 import { message } from '@/i18n/src/messages'
-import { cx } from '@/utils'
 
+import { useOrderLine } from '../../hooks/useOrderLine'
 import useOrderLinesColumns from './components/OrderLines.columns'
-import { OrderLineForm } from './form/OrderLineForm.cont'
+import { useOrderLineModal } from './form/OrderLineForm.cont'
 
 const messages = message.ordersPage.orderDetail.sectionHeadings
 
@@ -18,8 +19,9 @@ interface OrderLinesTableProps {
 
 const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
   const columns = useOrderLinesColumns()
-  const [openOrderLineForm, setOpenOrderLineForm] = useState(false)
   const { control } = useFormContext()
+  const { openOrderLineModal } = useOrderLineModal()
+  const { setOrderLine } = useOrderLine()
 
   // Používáme useWatch s memoizací k efektivnější práci s daty
   const orderLinesData = useWatch({ control, name: 'orderLines' })
@@ -33,22 +35,33 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
   )
 
   const handleOpenOrderLineForm = () => {
-    setOpenOrderLineForm(true)
+    openOrderLineModal(undefined, data => {
+      const quantity = data.quantity || 1
+
+      // Vytvoříme tolik kopií order line, kolik je zadáno v quantity
+      for (let i = 0; i < quantity; i++) {
+        const orderLineToAdd = {
+          ...data,
+          // Odebereme uuid, aby setOrderLine věděl, že má vytvořit novou položku
+          uuid: undefined,
+          quantity: 1 // Každá order line má quantity 1
+        }
+        setOrderLine(orderLineToAdd)
+      }
+    })
   }
 
   return (
     <Fragment>
       <Heading text={messages.orderLines} showBorder={false}>
         {!disabledEdit && (
-          <div className="flex items-center mr-2">
+          <Tooltip content="Add new order line">
             <PlusButton
-              primary
               type="button"
-              buttonSize="large"
               onClick={handleOpenOrderLineForm}
               className="mb-2"
             />
-          </div>
+          </Tooltip>
         )}
       </Heading>
       <div className="w-full overflow-hidden">
@@ -62,18 +75,9 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
           className="overflow-x-auto overflow-y-auto"
           headerClassName="whitespace-nowrap sticky"
           rowClassName="whitespace-nowrap group/row"
-          getRowProps={(orderLine, index) => ({
-            className: cx(
-              orderLine?.isDelivered
-                ? index % 2 === 0
-                  ? 'bg-green-200 dark:bg-green-800 '
-                  : 'bg-green-100 dark:bg-green-700 '
-                : ''
-            )
-          })}
+          getRowProps={() => ({})}
         />
       </div>
-      <OrderLineForm open={openOrderLineForm} setOpen={setOpenOrderLineForm} />
     </Fragment>
   )
 }

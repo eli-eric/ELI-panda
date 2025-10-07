@@ -1,11 +1,7 @@
-import { Fragment, lazy, useEffect } from 'react'
+import { Fragment, useEffect } from 'react'
 
 import { DeviceInfoOverlay } from '../shared/system/device-info-overlay/device-info'
 import { useShowDeviceStore } from '../shared/system/device-info-overlay/store/useShowDeviceStore'
-
-const LayoutDetailInfoContainer = lazy(
-  () => import('./components/layout-detail-info.cont')
-)
 
 const LayoutContainer = () => {
   const { setCode, setOpenDeviceInfo, setUID, setLocationCode } =
@@ -44,6 +40,7 @@ const LayoutContainer = () => {
       setUID(undefined)
       setOpenDeviceInfo(false)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

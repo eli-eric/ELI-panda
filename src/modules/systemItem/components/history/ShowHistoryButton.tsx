@@ -1,12 +1,13 @@
-import { ClockIcon } from '@heroicons/react/24/outline'
 import { useQuery } from '@tanstack/react-query'
+import { Clock } from 'lucide-react'
 import { useRouter } from 'next/router'
-import { Fragment, useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import toast from 'react-hot-toast'
 
 import { Button } from '@/components/Buttons'
-import ModalComponent from '@/components/overlays/modal/modal.comp'
+import { Button as UIButton } from '@/components/ui/button'
 import { message } from '@/i18n/src/messages'
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import { queryFetcher } from '@/utils/fetcher'
 
 import type { HistoryResponse } from '../../types/responses'
@@ -14,15 +15,27 @@ import { HistoryFeeds } from './HistoryFeeds'
 
 const messages = message.common.buttons
 
-export const ShowHistoryButton = () => {
-  const [open, setOpen] = useState(false)
-  const router = useRouter()
-  const { uid } = router.query as { uid: string }
+function openHistoryModal(uid: string) {
+  if (typeof window === 'undefined') return // Prevent SSR execution
+
+  const { openModal } = useModalGlobalStore.getState()
+
+  openModal('dialog1', {
+    component: () => <HistoryModalContent uid={uid} />,
+    props: {
+      title: 'History',
+      size: 'l' as const
+    }
+  })
+}
+
+const HistoryModalContent = ({ uid }: { uid: string }) => {
+  const { closeModal } = useModalGlobalStore()
 
   const { data, error, isError } = useQuery({
     queryKey: ['history', { uid }],
     queryFn: queryFetcher<HistoryResponse[]>('history'),
-    enabled: open
+    enabled: true
   })
 
   useEffect(() => {
@@ -32,22 +45,24 @@ export const ShowHistoryButton = () => {
   }, [isError, error])
 
   return (
-    <Fragment>
-      <Button buttonSize="large" type="button" onClick={() => setOpen(!open)}>
-        <ClockIcon className="w-4 h-4" />
-      </Button>
-      <ModalComponent
-        open={open}
-        setOpen={setOpen}
-        buttons={{
-          goNext: {
-            text: messages.close,
-            onClick: () => setOpen(false)
-          }
-        }}
-      >
-        <HistoryFeeds history={data} />
-      </ModalComponent>
-    </Fragment>
+    <div className="space-y-4">
+      <HistoryFeeds history={data} />
+      <div className="flex justify-end">
+        <UIButton onClick={() => closeModal('dialog1')}>
+          {messages.close}
+        </UIButton>
+      </div>
+    </div>
+  )
+}
+
+export const ShowHistoryButton = () => {
+  const router = useRouter()
+  const { uid } = router.query as { uid: string }
+
+  return (
+    <Button type="button" onClick={() => openHistoryModal(uid)}>
+      <Clock className="w-4 h-4" />
+    </Button>
   )
 }

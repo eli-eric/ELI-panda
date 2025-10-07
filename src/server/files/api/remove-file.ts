@@ -7,6 +7,7 @@ import s3Client, { config } from '@/server/s3client'
 
 import { handleMiniImages } from '../service/image-service'
 import { getPathInfo } from '../utils/path-utils'
+import { safeStatObject } from '../utils/s3-error-utils'
 import { withErrorHandler } from '../utils/with-error-handler'
 
 const { bucket } = config
@@ -19,8 +20,10 @@ async function removeFile(req: NextApiRequest, res: NextApiResponse) {
   const { fullPath, prefix, shortPrefix, id } = pathInfo
 
   try {
-    const obj = await s3Client.statObject(bucket, fullPath)
-    if (!obj) return res.status(404).json({ error: 'File not found' })
+    const obj = await safeStatObject(s3Client, bucket, fullPath, req)
+    if (!obj) {
+      return res.status(404).json({ error: 'File not found' })
+    }
 
     await s3Client.removeObject(bucket, fullPath)
     await s3Client.removeObject(bucket, `${shortPrefix}image-small/${id}`)

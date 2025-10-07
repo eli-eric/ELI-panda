@@ -1,19 +1,18 @@
 import { type ColumnDef } from '@tanstack/react-table'
 import { useEffect, useMemo, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
+import { FormattedMessage } from 'react-intl'
 
-import ModalComponent from '@/components/overlays/modal/modal.comp'
+import { Button } from '@/components/ui/button'
 import { message } from '@/i18n/src/messages'
+import { cn } from '@/lib/utils'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import { PandaTableControlled } from '@/modules/shared/table/pandaTable/PandaTableCotrolled'
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import useTableStateStore from '@/store/useTableStateStore'
-import type { ModalButtons } from '@/types/form'
 import type { CodebookType } from '@/types/responses/codebook'
-import { cx } from '@/utils'
 
 import { ExpandableNameCell } from './ExpandableNameCell'
-
-const messages = message.common.buttons
 
 export type Codebooktree = {
   name: string
@@ -24,10 +23,8 @@ export type Codebooktree = {
 }
 
 interface CodebookTreeModalProps {
-  open: boolean
   loading?: boolean
   enableFiltering?: boolean
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
   data?: Codebooktree[]
   name?: string
   fetchChildren?: (uid: string) => void
@@ -39,23 +36,48 @@ interface CodebookTreeModalProps {
   onSelect?: (item?: CodebookType | null) => void
 }
 
-export const CodebookTreeModalGraphql = ({
-  open,
-  setOpen,
-  data,
-  name,
-  fetchChildren,
-  additionalColumn,
-  enableFiltering,
-  loading = false,
-  tableId = 'codebook-tree',
-  selectParent = true,
-  manualFiltering,
-  customSetValue,
-  onSelect
-}: CodebookTreeModalProps) => {
-  const [item, setItem] = useState<Codebooktree | undefined>(undefined)
+/**
+ * Opens the CodebookTreeModalGraphql as a Dialog via the global modal system.
+ * Usage: openCodebookTreeModalGraphql({ ...props })
+ */
+export function openCodebookTreeModalGraphql(props: CodebookTreeModalProps) {
+  if (typeof window === 'undefined') return // Prevent SSR execution
 
+  const { openModal } = useModalGlobalStore.getState()
+  openModal('dialog2', {
+    component: CodebookTreeModalGraphqlContent,
+    props,
+    onClose:
+      typeof props.onSelect === 'function'
+        ? () => {
+            props.onSelect?.(undefined)
+          }
+        : undefined
+  })
+}
+
+// The actual modal content, rendered by the global modal system
+export function CodebookTreeModalGraphqlContent(
+  props: CodebookTreeModalProps & {
+    onClose?: () => void
+  }
+) {
+  const {
+    data,
+    name,
+    fetchChildren,
+    additionalColumn,
+    enableFiltering,
+    loading = false,
+    tableId = 'codebook-tree',
+    selectParent = true,
+    manualFiltering,
+    customSetValue,
+    onSelect,
+    onClose
+  } = props
+
+  const [item, setItem] = useState<Codebooktree | undefined>(undefined)
   const { instances } = useTableStateStore()
   const filter = useMemo(
     () => instances[tableId]?.columnFilter,
@@ -116,34 +138,10 @@ export const CodebookTreeModalGraphql = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter])
 
-  const modalButtons: ModalButtons = {
-    goNext: {
-      text: messages.save,
-      type: 'button',
-      disabled: !item,
-      onClick: () => {
-        if (customSetValue) {
-          customSetValue(item)
-        } else if (name && setValue) {
-          setValue(name, item)
-        }
-        onSelect && onSelect(item)
-        setOpen(false)
-        setItem(undefined)
-      }
-    },
-    goBack: {
-      text: messages.close,
-      type: 'button',
-      onClick: () => {
-        setOpen(false)
-      }
-    }
-  }
-
+  // Instead of ModalButtons, use a simple footer with actions
   return (
-    <ModalComponent open={open} setOpen={setOpen} buttons={modalButtons}>
-      <div className={cx('max-h-[300px]', loading && ' opacity-70')}>
+    <div>
+      <div className={cn('max-h-[300px]', loading && ' opacity-70')}>
         <PandaTableControlled
           tableId={tableId}
           data={data}
@@ -182,14 +180,39 @@ export const CodebookTreeModalGraphql = ({
                 })
               }
             },
-            className: cx(
+            className: cn(
               item?.uid === row.original.uid &&
-                'bg-primary-200 dark:bg-primary-600 hover:bg-primary-200 dark:hover:bg-primary-600',
+                'bg-orange-200 dark:bg-orange-600 hover:bg-orange-200 dark:hover:bg-orange-600',
               'cursor-pointer'
             )
           })}
         />
       </div>
-    </ModalComponent>
+      <div className="flex justify-end gap-2 mt-4">
+        <Button
+          type="button"
+          onClick={() => {
+            if (onClose) onClose()
+          }}
+        >
+          <FormattedMessage id={message.common.buttons.close} />
+        </Button>
+        <Button
+          type="button"
+          disabled={!item}
+          onClick={() => {
+            if (customSetValue) {
+              customSetValue(item)
+            } else if (name && setValue) {
+              setValue(name, item)
+            }
+            onSelect && onSelect(item)
+            if (onClose) onClose()
+          }}
+        >
+          <FormattedMessage id={message.common.buttons.continue} />
+        </Button>
+      </div>
+    </div>
   )
 }

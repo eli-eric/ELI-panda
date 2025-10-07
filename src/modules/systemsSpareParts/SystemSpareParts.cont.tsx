@@ -1,12 +1,14 @@
 import { memo, useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
+import { useIntl } from 'react-intl'
 
 import { Button } from '@/components/Buttons'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 import useQueryManager from '@/hooks/useQueryManager'
 import useWarningModal from '@/hooks/useWarningModal'
+import { message } from '@/i18n/src/messages'
+import { cn } from '@/lib/utils'
 import type { SystemDetail } from '@/types/responses/systems'
-import { cx } from '@/utils'
 
 import { FilterBadges } from '../shared/form/FilterBadges'
 import { Pagination } from '../shared/table/Pagination'
@@ -29,6 +31,7 @@ import { useSystemsSparePartsColumns } from './SystemSpareParts.columns'
 const FilterMemoized = memo(SystemFilterButtonContainer)
 
 export const SystemsSparePartsContainer = () => {
+  const { formatMessage: fm } = useIntl()
   const tableId1 = 'spare-parts'
   const tableId2 = 'for-system'
 
@@ -107,6 +110,10 @@ export const SystemsSparePartsContainer = () => {
   const [recalculate2] = useRecalculate({ tableId: tableId2 })
 
   const saveRelations = () => {
+    if (loading) {
+      return
+    }
+
     assignSpareParts(
       {
         fromSystemIds: table1SelectedUids,
@@ -129,6 +136,11 @@ export const SystemsSparePartsContainer = () => {
   }
 
   const handleAssignSpareParts = () => {
+    // Prevent multiple calls while mutation is already running
+    if (loading) {
+      return
+    }
+
     const isSameSystemType =
       getSelectedRowModel().flatRows.every(
         system =>
@@ -207,7 +219,7 @@ export const SystemsSparePartsContainer = () => {
   }, [])
 
   return (
-    <div className={cx('grid grid-cols-2')}>
+    <div className={cn('grid grid-cols-2')}>
       <TableLayoutContainer
         deps={[sysetms1.systems]}
         className="border-r-4 border-gray-400"
@@ -228,7 +240,7 @@ export const SystemsSparePartsContainer = () => {
           className={'relative overflow-scroll scrollbar-style'}
           settings={tableSettings}
           getRowProps={({ original }) => ({
-            className: cx(
+            className: cn(
               original?.physicalItem &&
                 'font-bold text-gray-700 dark:text-gray-200',
               getColorBySystemLevel(original?.systemLevel),
@@ -265,7 +277,6 @@ export const SystemsSparePartsContainer = () => {
             <div className="flex">
               <FilterBadges enableQueryURL={false} tableId={tableId2} />
               <Button
-                primary
                 disabled={
                   table1SelectedUids.length === 0 ||
                   table2SelectedUids.length === 0
@@ -273,7 +284,7 @@ export const SystemsSparePartsContainer = () => {
                 loading={loading}
                 onClick={handleAssignSpareParts}
               >
-                Assign Spare Parts
+                {fm({ id: message.common.systemsSpareParts.assignSpareParts })}
               </Button>
             </div>
           }
@@ -288,7 +299,7 @@ export const SystemsSparePartsContainer = () => {
           className={'relative overflow-scroll scrollbar-style'}
           settings={tableSettings}
           getRowProps={({ original }) => ({
-            className: cx(
+            className: cn(
               original?.physicalItem &&
                 'font-bold text-gray-700 dark:text-gray-200',
               getColorBySystemLevel(original?.systemLevel),

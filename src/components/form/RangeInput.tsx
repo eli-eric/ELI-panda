@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 
-import { cx } from '@/utils'
+import { Input as ShadcnInput } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { cn } from '@/lib/utils'
 
 interface Props {
   name: string
@@ -41,63 +43,59 @@ export const RangeInput = ({
   }, [inputValues, clearErrors, name, setError])
 
   return (
-    <div className="flex flex-col">
-      <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
-        {label}
-      </span>
+    <div className="flex flex-col gap-2 w-full">
+      {label && <Label>{label}</Label>}
       <Controller
         name={name}
         control={control}
         render={({ field, fieldState: { error } }) => {
           const fieldValue = field.value || {}
           return (
-            <div className="w-full">
-              <div className="flex pt-1 gap-14 w-full justify-between">
-                <input
-                  name={'min' + name}
-                  type="number"
-                  pattern="[0-9]*"
-                  placeholder={placeholder?.min || 'Min'}
-                  disabled={disabled}
-                  className={cx(
-                    'form-field rounded-md border-gray-200 border-1 px-2 py-1 text-sm',
-                    isFilter && fieldValue?.min && 'border-green-500',
-                    error && 'border-red-500',
-                    disabled && 'bg-gray-100 cursor-not-allowed'
-                  )}
-                  value={fieldValue.min ?? ''}
-                  onChange={e => {
-                    const value =
-                      e.target.value === '' ? '' : Number(e.target.value)
-                    field.onChange({
-                      min: value,
-                      max: fieldValue?.max
-                    })
-                  }}
-                />
-                <input
-                  name={'max' + name}
-                  type="number"
-                  pattern="[0-9]*"
-                  disabled={disabled}
-                  placeholder={placeholder?.max || 'Max'}
-                  onChange={e => {
-                    const value =
-                      e.target.value === '' ? '' : Number(e.target.value)
-                    field.onChange({
-                      min: fieldValue?.min,
-                      max: value
-                    })
-                  }}
-                  className={cx(
-                    'form-field rounded-md border-gray-200 border-1 px-2 py-1 text-sm',
-                    isFilter && fieldValue?.max && 'border-green-500',
-                    error && 'border-red-500',
-                    disabled && 'bg-gray-100 cursor-not-allowed'
-                  )}
-                  value={fieldValue.max ?? ''}
-                />
-              </div>
+            <div className="flex gap-2 w-full">
+              <ShadcnInput
+                name={'min' + name}
+                type="number"
+                pattern="[0-9]*"
+                placeholder={placeholder?.min || 'Min'}
+                disabled={disabled}
+                className={cn(
+                  'w-full rounded-md border px-3 py-2 text-sm',
+                  isFilter && fieldValue?.min && 'border-green-500',
+                  error && 'border-red-500',
+                  disabled && 'bg-muted cursor-not-allowed'
+                )}
+                value={fieldValue.min ?? ''}
+                onChange={e => {
+                  const value =
+                    e.target.value === '' ? '' : Number(e.target.value)
+                  field.onChange({
+                    min: value,
+                    max: fieldValue?.max
+                  })
+                }}
+              />
+              <ShadcnInput
+                name={'max' + name}
+                type="number"
+                pattern="[0-9]*"
+                disabled={disabled}
+                placeholder={placeholder?.max || 'Max'}
+                onChange={e => {
+                  const value =
+                    e.target.value === '' ? '' : Number(e.target.value)
+                  field.onChange({
+                    min: fieldValue?.min,
+                    max: value
+                  })
+                }}
+                className={cn(
+                  'w-full rounded-md border px-3 py-2 text-sm',
+                  isFilter && fieldValue?.max && 'border-green-500',
+                  error && 'border-red-500',
+                  disabled && 'bg-muted cursor-not-allowed'
+                )}
+                value={fieldValue.max ?? ''}
+              />
             </div>
           )
         }}

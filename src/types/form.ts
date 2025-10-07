@@ -1,3 +1,5 @@
+import type React from 'react'
+
 import type { CodebookType } from './responses/codebook'
 
 export type ModalButtons = {
@@ -39,5 +41,5 @@ export type Option = {
   value: string | number | readonly string[] | undefined
   disabled?: boolean | undefined
   name?: string | undefined
-  children?: JSX.Element
+  children?: React.ReactElement
 }

@@ -2,11 +2,11 @@ import type { ColumnDef } from '@tanstack/react-table'
 import Link from 'next/link'
 import { useMemo } from 'react'
 
-import { LinkDecorator } from '@/components/decorators'
+import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 import { IconCell } from '@/modules/systems/components/table/cells/IconCell'
 import type { ITEM_USAGE } from '@/modules/systems/types/constants'
 import { PATH } from '@/types/constants/paths'
-import { cx } from '@/utils'
 
 import type { TableSystem } from './types'
 
@@ -31,16 +31,20 @@ export const useSubSystemsColumns = () => {
         id: 'name',
         cell: ({ getValue, row: { original } }) => (
           <Link href={PATH.SYSTEM + '/' + original.uid}>
-            <LinkDecorator
+            <Button
+              variant={'link'}
+              type="button"
               title={getValue()}
-              className={cx(
+              size={'sm'}
+              className={cn(
                 original?.sp_coverage != null &&
                   original.sp_coverage < 1 &&
-                  'text-red-500 dark:text-red-500'
+                  'text-red-500 dark:text-red-500',
+                'text-inherit hover:underline h-4 font-sm cursor-pointer'
               )}
             >
               {getValue()}
-            </LinkDecorator>
+            </Button>
           </Link>
         )
       },

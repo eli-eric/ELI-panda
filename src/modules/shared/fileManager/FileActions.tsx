@@ -1,14 +1,21 @@
-import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { useQueryClient } from '@tanstack/react-query'
+import { Edit, MoreVertical, Trash2 } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { useIntl } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
-import ModalComponent from '@/components/overlays/modal/modal.comp'
+import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import axiosInstance from '@/core/axios/axiosInstance'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
-import type { ModalButtons } from '@/types/form'
 import { createMessageValues } from '@/utils/formatters'
 
 import { useLinkDelete, useLinkUpdate } from './hooks/useLinks'
@@ -36,7 +43,6 @@ export const FileActions = ({
 }: FileActionsProps) => {
   const intl = useIntl()
   const { mutate: deleteLink } = useLinkDelete({ parentUid: uid, uid: file.id })
-  const [renameModalOpen, setRenameModalOpen] = useState(false)
   const { mutate: updateLink } = useLinkUpdate({ parentUid: uid })
   const queryClient = useQueryClient()
 
@@ -101,51 +107,65 @@ export const FileActions = ({
   if (!hasEditRole) return null
 
   return (
-    <div className="flex items-center gap-2 text-right">
-      <button
-        className="text-gray-600 hover:text-primary-500 mr-2"
-        onClick={() => setRenameModalOpen(true)}
-      >
-        <span className="flex items-center">
-          <PencilIcon className="h-4 w-4 mr-1" />
-          Rename
-        </span>
-      </button>
-      <button
-        className="text-red-600 hover:text-red-700"
-        onClick={handleDeleteWithConfirmation}
-      >
-        <span className="flex items-center">
-          <TrashIcon className="h-4 w-4 mr-1" />
-          Delete
-        </span>
-      </button>
-      <RenameModal
-        isOpen={renameModalOpen}
-        setIsOpen={setRenameModalOpen}
-        file={file}
-        onRename={newName => handleRenameFile(file, newName)}
-      />
-    </div>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="ghost"
+          size="sm"
+          aria-label="File actions"
+          className="h-8 w-8 p-0"
+        >
+          <MoreVertical className="h-4 w-4 text-muted-foreground" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" sideOffset={4}>
+        <DropdownMenuItem
+          onClick={() => {
+            openRenameModal({
+              file,
+              onRename: newName => handleRenameFile(file, newName)
+            })
+          }}
+          className="cursor-pointer"
+        >
+          <Edit className="h-4 w-4 mr-2" />
+          <FormattedMessage
+            id="common.buttons.rename"
+            defaultMessage={'Rename'}
+          />
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={handleDeleteWithConfirmation}
+          className="cursor-pointer text-destructive focus:text-destructive"
+        >
+          <Trash2 className="h-4 w-4 mr-2" />
+          <FormattedMessage
+            id="common.buttons.delete"
+            defaultMessage={'Delete'}
+          />
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+
 interface RenameModalProps {
-  isOpen: boolean
-  setIsOpen: (isOpen: boolean) => void
   file: FileItemExtended | null
   onRename: (newName: string) => void
 }
-const RenameModal = ({
-  isOpen,
-  setIsOpen,
+
+export function RenameModalContent({
   file,
-  onRename
-}: RenameModalProps) => {
+  onRename,
+  onClose
+}: RenameModalProps & { onClose?: () => void }) {
+  const intl = useIntl()
   const [nameWithoutExt, setNameWithoutExt] = useState('')
   const [extension, setExtension] = useState('')
 
   useEffect(() => {
-    if (isOpen && file) {
+    if (file) {
       const fileName = file.name
       if (file.type === 'FILE' && fileName.includes('.')) {
         const lastDotIndex = fileName.lastIndexOf('.')
@@ -156,51 +176,56 @@ const RenameModal = ({
         setExtension('')
       }
     }
-  }, [isOpen, file])
-
-  const modalButtons: ModalButtons = {
-    goNext: {
-      text: buttons.continue,
-      onClick: () => {
-        // Combine name and extension when saving
-        const newFullName = extension
-          ? `${nameWithoutExt}${extension}`
-          : nameWithoutExt
-        onRename(newFullName)
-        setIsOpen(false)
-      }
-    },
-    goBack: {
-      text: buttons.cancel,
-      onClick: () => setIsOpen(false)
-    }
-  }
+  }, [file])
 
   return (
-    <ModalComponent open={isOpen} setOpen={setIsOpen} buttons={modalButtons}>
-      <div className="mb-6">
-        <h3 className="text-lg font-medium text-gray-900">Rename</h3>
-      </div>
-      <div>
-        <label
-          htmlFor="file-name"
-          className="block text-sm font-medium text-gray-700"
-        >
-          New Name
-        </label>
-        <div className="flex items-center mt-1">
-          <input
+    <div>
+      <div className="space-y-2">
+        <Label htmlFor="file-name">
+          {intl.formatMessage({ id: message.common.fileManager.newName })}
+        </Label>
+        <div className="flex items-center gap-1">
+          <Input
             id="file-name"
             type="text"
-            className="form-field rounded-md flex-grow"
             value={nameWithoutExt}
             onChange={e => setNameWithoutExt(e.target.value)}
+            className="grow"
           />
           {extension && (
             <span className="ml-1 text-gray-500 font-medium">{extension}</span>
           )}
         </div>
       </div>
-    </ModalComponent>
+      <div className="flex justify-end gap-2 mt-4">
+        <Button type="button" variant="outline" onClick={onClose}>
+          <FormattedMessage id={buttons.cancel} />
+        </Button>
+        <Button
+          type="button"
+          onClick={() => {
+            const newFullName = extension
+              ? `${nameWithoutExt}${extension}`
+              : nameWithoutExt
+            onRename(newFullName)
+            if (onClose) onClose()
+          }}
+        >
+          <FormattedMessage id={buttons.continue} />
+        </Button>
+      </div>
+    </div>
   )
+}
+
+// Usage: openRenameModal({ file, onRename })
+export function openRenameModal({ file, onRename }: RenameModalProps) {
+  if (typeof window === 'undefined') return // Prevent SSR execution
+
+  const { openModal } = useModalGlobalStore.getState()
+  openModal('dialog1', {
+    component: RenameModalContent,
+    props: { file, onRename, title: 'Rename File' },
+    onClose: undefined
+  })
 }

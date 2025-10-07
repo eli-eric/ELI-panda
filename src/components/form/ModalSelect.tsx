@@ -1,15 +1,14 @@
-import { Listbox as HUIListbox } from '@headlessui/react'
-import { TableCellsIcon } from '@heroicons/react/24/outline'
+import { Table2, X } from 'lucide-react'
 import React from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 
+import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
+import { cn } from '@/lib/utils'
 import type { FieldProps } from '@/types/form'
 import type { CodebookType } from '@/types/responses/codebook'
-import { cx } from '@/utils'
 
-import { FormXMarkIcon } from './components/FormXMarkIcon'
-
-export type ListboxPropsT = FieldProps & {
+export type ModalSelectPropsT = FieldProps & {
   onChange?: (value: any) => void
   className?: string
   defaultValue?: CodebookType[] | string | null
@@ -27,12 +26,11 @@ export const ModalSelect = ({
   onChange,
   onClick,
   isFilter
-}: ListboxPropsT) => {
+}: ModalSelectPropsT) => {
   const { control, setValue } = useFormContext()
 
-  const handleChange = (value: any) => (value?.uid === '' ? null : value)
-
-  const handleClear = () => {
+  const handleClear = (e: React.MouseEvent) => {
+    e.stopPropagation()
     setValue(name, null)
     onChange && onChange(null)
   }
@@ -45,55 +43,53 @@ export const ModalSelect = ({
       render={({ field, fieldState: { error } }) => {
         const value =
           typeof field.value === 'string' ? field.value : field.value?.name
-
         return (
-          <HUIListbox
-            as="div"
-            {...field}
-            onChange={v => {
-              field.onChange(handleChange(v))
-              onChange && onChange(v)
-            }}
-            disabled={disabled}
-            className={cx('relative flex flex-col w-full h-min', className)}
-          >
-            {label && (
-              <HUIListbox.Label className="block text-sm font-medium text-gray-900 dark:text-gray-200">
-                {label}
-              </HUIListbox.Label>
-            )}
-            <div>
-              <HUIListbox.Button
+          <div className={cn('space-y-1 w-full', className)}>
+            {label && <Label>{label}</Label>}
+            <div className="relative">
+              <Button
                 type="button"
-                className={cx(
-                  'form-field-combo h-[38px] rounded-md relative',
-                  field.value && !disabled ? '' : '',
-                  error ? 'border-red-500' : 'border-gray-300',
-                  disabled ? 'bg-gray-100' : '',
-                  isFilter ? field.value && 'border-2 border-lime-500' : ''
+                variant="outline"
+                disabled={disabled}
+                onClick={onClick}
+                className={cn(
+                  'w-full justify-between h-9 px-3 font-normal',
+                  !value && 'text-muted-foreground',
+                  error && 'border-destructive',
+                  isFilter && field.value && 'border-2 border-lime-500'
                 )}
               >
-                <div onClick={onClick}>
-                  <div className="h-full w-full pr-12 ml-3 text-left">
-                    <span className="block truncate">{value}</span>
-                    {placeholder && !value && (
-                      <span className="block truncate text-gray-400">
-                        {placeholder}
-                      </span>
-                    )}
-                  </div>
-                  <div className="absolute inset-y-0 right-0 flex items-center pr-2">
-                    <TableCellsIcon
-                      onClick={onClick}
-                      className="h-4 w-4 text-gray-500 dark:text-gray-200"
-                      aria-hidden="true"
-                    />
-                  </div>
+                <span className="truncate text-left">
+                  {value || placeholder}
+                </span>
+
+                <div className="flex items-center gap-1 shrink-0">
+                  {!disabled && value && (
+                    <div
+                      role="button"
+                      tabIndex={0}
+                      onClick={handleClear}
+                      onKeyDown={e => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault()
+                          handleClear(e as any)
+                        }
+                      }}
+                      className="p-0.5 hover:bg-accent rounded-sm cursor-pointer"
+                      aria-label="Clear selection"
+                    >
+                      <X className="h-3 w-3" />
+                    </div>
+                  )}
+                  <Table2 className="h-4 w-4 opacity-50" />
                 </div>
-                {!disabled && value && <FormXMarkIcon onClick={handleClear} />}
-              </HUIListbox.Button>
+              </Button>
             </div>
-          </HUIListbox>
+
+            {error && (
+              <p className="text-sm text-destructive">{error.message}</p>
+            )}
+          </div>
         )
       }}
     />

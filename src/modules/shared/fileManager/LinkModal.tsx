@@ -1,90 +1,86 @@
 import { useState } from 'react'
+import { FormattedMessage, useIntl } from 'react-intl'
 
-import ModalComponent from '@/components/overlays/modal/modal.comp'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { message } from '@/i18n/src/messages'
-import type { ModalButtons } from '@/types/form'
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 
 import { useLinkCreate } from './hooks/useLinks'
 
 const buttons = message.common.buttons
+const filesMsg = message.common.files
 
-interface LinkModalProps {
-  open: boolean
-  setOpen: (open: boolean) => void
+export function LinkModalContent({
+  parentUid,
+  onClose
+}: {
   parentUid?: string
-}
-
-export const LinkModal = ({ open, setOpen, parentUid }: LinkModalProps) => {
+  onClose?: () => void
+}) {
   const [linkValue, setLinkValue] = useState('')
   const [linkName, setLinkName] = useState('')
+  const { formatMessage: fm } = useIntl()
 
   const { mutate: linkCreate } = useLinkCreate({ parentUid })
 
   const handleCreateLink = () => {
     linkCreate({ name: linkName, url: linkValue })
-    setOpen(false)
+    if (onClose) onClose()
     setLinkValue('')
     setLinkName('')
   }
 
-  const modalLinkButtons: ModalButtons = {
-    goNext: {
-      text: buttons.continue,
-      onClick: handleCreateLink
-    },
-    goBack: {
-      text: buttons.cancel,
-      onClick: () => {
-        setOpen(false)
-        setLinkValue('')
-        setLinkName('')
-      }
-    }
-  }
-
   return (
-    <ModalComponent
-      {...{
-        open,
-        setOpen,
-        buttons: modalLinkButtons,
-        title: 'Add New Link'
-      }}
-    >
-      <div className="space-y-4">
-        <div>
-          <label
-            htmlFor="link-url"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Link URL
-          </label>
-          <input
-            id="link-url"
-            type="text"
-            className="mt-1 form-field rounded-md w-full"
-            placeholder="Paste or type URL here"
-            value={linkValue}
-            onChange={e => setLinkValue(e.target.value)}
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="link-name"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Link Name
-          </label>
-          <input
-            id="link-name"
-            type="text"
-            className="mt-1 form-field rounded-md w-full"
-            placeholder="Enter a name for this link"
-            value={linkName}
-            onChange={e => setLinkName(e.target.value)}
-          />
-        </div>
+    <div className="space-y-4">
+      <div className="space-y-2">
+        <Label htmlFor="link-url">
+          <FormattedMessage id={filesMsg.linkUrl} />
+        </Label>
+        <Input
+          id="link-url"
+          type="text"
+          placeholder={fm({ id: filesMsg.linkUrlPlaceholder })}
+          value={linkValue}
+          onChange={e => setLinkValue(e.target.value)}
+        />
       </div>
-    </ModalComponent>
+      <div className="space-y-2">
+        <Label htmlFor="link-name">
+          <FormattedMessage id={filesMsg.linkName} />
+        </Label>
+        <Input
+          id="link-name"
+          type="text"
+          placeholder={fm({ id: filesMsg.linkNamePlaceholder })}
+          value={linkName}
+          onChange={e => setLinkName(e.target.value)}
+        />
+      </div>
+      <div className="flex justify-end gap-2 mt-4">
+        <Button type="button" variant="outline" onClick={onClose}>
+          <FormattedMessage id={buttons.cancel} />
+        </Button>
+        <Button
+          type="button"
+          disabled={!linkValue || !linkName}
+          onClick={handleCreateLink}
+        >
+          <FormattedMessage id={buttons.continue} />
+        </Button>
+      </div>
+    </div>
   )
+}
+
+export function openLinkModal({ parentUid }: { parentUid?: string }) {
+  if (typeof window === 'undefined') return // Prevent SSR execution
+
+  const { openModal } = useModalGlobalStore.getState()
+  openModal('dialog1', {
+    component: LinkModalContent,
+    props: { parentUid, title: message.common.files.createLinkTitle },
+    onClose: undefined
+  })
 }

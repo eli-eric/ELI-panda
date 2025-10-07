@@ -4,8 +4,8 @@ import { Fragment } from 'react'
 import { TableStatsButton } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
 import { Tooltip } from '@/components/Tooltip'
-import { useModal } from '@/hooks/useModal'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 
 import {
   useGetSpareParts,
@@ -66,10 +66,17 @@ export const ShowSpareButton: FC<ShowSpareButtonProps> = ({
   sparesIn,
   sparesOut
 }) => {
-  const setSpareShow = useModal(<SparePartsModal tableId={tableId} uid={uid} />)
-  const setSpareForShow = useModal(
-    <SparePartsForModal tableId={tableId} uid={uid} />
-  )
+  const openModal = useModalGlobalStore(state => state.openModal)
+  const handleSpareShow = () =>
+    openModal('dialog1', {
+      component: SparePartsModal,
+      props: { tableId, uid }
+    })
+  const handleSpareForShow = () =>
+    openModal('dialog1', {
+      component: SparePartsForModal,
+      props: { tableId, uid }
+    })
 
   const isSparePartsTable =
     tableId === 'spare-parts' && (sparesOut === 0 || !sparesOut)
@@ -86,22 +93,22 @@ export const ShowSpareButton: FC<ShowSpareButtonProps> = ({
     if (hasSparesIn && hasSparesOut) {
       return (
         <div className="flex items-center">
-          <Tooltip content="Spare Parts" placement="top">
+          <Tooltip content="Spare Parts">
             <div className="flex items-center">
-              <TableStatsButton onClick={setSpareShow()} />
+              <TableStatsButton onClick={handleSpareShow} />
             </div>
           </Tooltip>
-          <Tooltip content="Spare Part for Systems" placement="top">
+          <Tooltip content="Spare Part for Systems">
             <div className="flex items-center">
-              <TableStatsButton onClick={setSpareForShow()} />
+              <TableStatsButton onClick={handleSpareForShow} />
             </div>
           </Tooltip>
         </div>
       )
     } else if (hasSparesIn) {
-      return <TableStatsButton onClick={setSpareShow()} />
+      return <TableStatsButton onClick={handleSpareShow} />
     } else if (hasSparesOut) {
-      return <TableStatsButton onClick={setSpareForShow()} />
+      return <TableStatsButton onClick={handleSpareForShow} />
     } else {
       return null
     }
@@ -109,7 +116,7 @@ export const ShowSpareButton: FC<ShowSpareButtonProps> = ({
 
   return (
     <TableStatsButton
-      onClick={tableId === 'spare-parts' ? setSpareForShow() : setSpareShow()}
+      onClick={tableId === 'spare-parts' ? handleSpareForShow : handleSpareShow}
     />
   )
 }

@@ -1,5 +1,9 @@
 import type { CodebookType } from '@/types/responses/codebook'
 
+import type {
+  PublicationOtherFormData,
+  PublicationPeerReviewedFormData
+} from '../form/scheme'
 import type { AuthorsDepartment } from './responses'
 
 export interface PublicationForm {
@@ -13,17 +17,17 @@ export interface PublicationForm {
   openAccessType: CodebookType
   title: string
   allAuthors: string
-  allAuthorsCount: string
+  allAuthorsCount: string | number
   eliAuthors: string
-  eliAuthorsCount: string
+  eliAuthorsCount: string | number
   authorsDepartments: AuthorsDepartment[]
   longJournalTitle: string
-  volume: string
-  issue?: string
+  volume: string | number
+  issue?: string | number
   pages: string
-  pagesCount: string
+  pagesCount: string | number
   citeAs: string
-  impactFactor?: string
+  impactFactor?: string | number
   quartilBasis?: string
   quartil?: CodebookType
   yearOfPublication: string
@@ -40,3 +44,7 @@ export interface PublicationForm {
   language: CodebookType
   note?: string
 }
+
+// Type aliases for form validation
+export type PublicationPeerReviewedForm = PublicationPeerReviewedFormData
+export type PublicationOtherForm = PublicationOtherFormData

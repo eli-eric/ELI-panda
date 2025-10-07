@@ -89,7 +89,7 @@ export function PandaTableV2<T>({
       isLoading={loading && !data}
       isEmpty={data?.length === 0}
     >
-      <thead className="sticky top-0 z-10 dark:bg-gray-900  bg-opacity-75  backdrop-blur backdrop-filter">
+      <thead className="sticky top-0 z-10 bg-background/95 backdrop-blur backdrop-filter">
         {table.getHeaderGroups().map(headerGroup => {
           return (
             <tr className="flex w-full" key={headerGroup.id}>

@@ -7,7 +7,6 @@ import { useIntl } from 'react-intl'
 import ErrorPage from '@/components/error/ErrorPage'
 import { Form } from '@/components/form/Form'
 import { HeaderWithButtons } from '@/components/header/HeaderWithButtons'
-import Card from '@/components/layout/Card'
 import ProgressBarComponent from '@/components/progress-bar.comp'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
@@ -133,7 +132,7 @@ export const OrderItemContainer = () => {
   // Komponenty renderujeme s React.memo
   return (
     <Form
-      className="h-screen overflow-auto"
+      className="min-[1200px]:h-screen min-[1200px]:overflow-hidden"
       formMethods={formMethods}
       enableLeaveWarning={true}
     >
@@ -142,23 +141,36 @@ export const OrderItemContainer = () => {
         editRole={ROLE.ORDERS_EDIT}
         onSubmit={formMethods.handleSubmit(onSubmit)}
         onSubmitAndExit={formMethods.handleSubmit(onSubmitAndExit)}
+        title={uid ? `Order ${orderDetail?.name || uid}` : 'Create New Order'}
       />
-      <MemoizedOrderFormComponent />
-      <Card className="flex flex-col justify-between">
-        <MemoizedOrderLinesTable disabledEdit={disabledEdit} />
-        <MemoizedServiceLinesContainer disabledEdit={disabledEdit} />
-        {uid && (
-          <ErrorBoundary fallback={<ErrorPage />}>
-            <Suspense fallback={<ProgressBarComponent />}>
-              <MemoizedFileManager
-                itemType={FILE_TYPE.ORDER}
-                uid={uid}
-                hasEditRole={!disabledEdit}
-              />
-            </Suspense>
-          </ErrorBoundary>
-        )}
-      </Card>
+
+      <div className="w-full px-4 sm:px-6 lg:px-8 ">
+        <div className="grid grid-cols-1 min-[1200px]:grid-cols-4 gap-6">
+          {/* Left: Form card (1/3) */}
+          <div className="lg:col-span-1 py-4 sm:py-6">
+            <MemoizedOrderFormComponent />
+          </div>
+
+          {/* Right: Tables + Files (2/3) */}
+          <div className="lg:col-span-3 py-4 sm:py-6 min-[1200px]:h-[calc(100vh-8rem)] min-[1200px]:overflow-y-auto min-[1200px]:overflow-x-hidden">
+            <div className="space-y-6 pr-2">
+              <MemoizedOrderLinesTable disabledEdit={disabledEdit} />
+              <MemoizedServiceLinesContainer disabledEdit={disabledEdit} />
+              {uid && (
+                <ErrorBoundary fallback={<ErrorPage />}>
+                  <Suspense fallback={<ProgressBarComponent />}>
+                    <MemoizedFileManager
+                      itemType={FILE_TYPE.ORDER}
+                      uid={uid}
+                      hasEditRole={!disabledEdit}
+                    />
+                  </Suspense>
+                </ErrorBoundary>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
     </Form>
   )
 }

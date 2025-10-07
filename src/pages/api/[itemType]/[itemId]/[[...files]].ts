@@ -8,10 +8,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const user = await getToken({ req })
   if (user) {
     logger.debug(composeDebugMessage(req, 'Incoming request'))
-    return await handler(req, res)
+    await handler(req, res)
   } else {
     logger.error(composeDebugMessage(req, 'Unauthorized request'))
-    return res.status(401).end()
+    res.status(401).end()
   }
 }
 

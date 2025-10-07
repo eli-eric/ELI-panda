@@ -3,27 +3,36 @@ import {
   type RefetchOptions,
   useMutation
 } from '@tanstack/react-query'
-import { type FC, Fragment, useState } from 'react'
+import { Edit, MoreVertical, Trash2 } from 'lucide-react'
+import { type FC } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { FormattedMessage, useIntl } from 'react-intl'
 
-import { DeleteButton, EditButton } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
 import { Input } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
-import ModalComponent from '@/components/overlays/modal/modal.comp'
+import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
 import axiosInstance from '@/core/axios/axiosInstance'
 import usePermission from '@/hooks/usePermission'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
+import { cn } from '@/lib/utils'
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import { CODEBOOK } from '@/types/constants/codebook'
 import { BASE_URL } from '@/types/constants/common'
 import { ROLE } from '@/types/constants/roles'
-import type { ModalButtons } from '@/types/form'
-import { cx } from '@/utils'
 
 import type { SystemTypesResponse } from '../types'
+
 const messages = message.common.buttons
+
 interface Props {
   systemType: SystemTypesResponse
   groupUid?: string | null
@@ -31,17 +40,38 @@ interface Props {
     options?: RefetchOptions | undefined
   ) => Promise<QueryObserverResult<SystemTypesResponse[], Error>>
 }
-export const SystemTypeItem: FC<Props> = ({
-  systemType,
-  refetch,
-  groupUid
-}) => {
-  const [openEdit, setOpenEdit] = useState(false)
-  const canEdit = usePermission([ROLE.SYSTEM_TYPE_EDIT])
 
-  const withWarningModal = useWarningModal(
-    `Are you sure you want to delete ${systemType.name}?`
-  )
+function openEditSystemTypeModal(
+  systemType: SystemTypesResponse,
+  groupUid: string | null | undefined,
+  refetch: Props['refetch']
+) {
+  if (typeof window === 'undefined') return // Prevent SSR execution
+
+  const { openModal } = useModalGlobalStore.getState()
+
+  openModal('dialog1', {
+    component: () => (
+      <EditSystemTypeModalContent
+        systemType={systemType}
+        groupUid={groupUid}
+        refetch={refetch}
+      />
+    ),
+    props: {
+      title: 'Edit System Type',
+      size: 'm' as const
+    }
+  })
+}
+
+const EditSystemTypeModalContent: FC<{
+  systemType: SystemTypesResponse
+  groupUid: string | null | undefined
+  refetch: Props['refetch']
+}> = ({ systemType, groupUid, refetch }) => {
+  const { closeModal } = useModalGlobalStore()
+  const canEdit = usePermission([ROLE.SYSTEM_TYPE_EDIT])
 
   const formMethods = useForm({
     defaultValues: {
@@ -52,8 +82,7 @@ export const SystemTypeItem: FC<Props> = ({
     }
   })
 
-  //TODO: bit refactor after big merge
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: async () => {
       const res = await axiosInstance
         .put(
@@ -66,10 +95,77 @@ export const SystemTypeItem: FC<Props> = ({
     },
     onSuccess: () => {
       refetch()
-      setOpenEdit(false)
+      closeModal('dialog1')
       toast.success(`${systemType.name} was updated.`)
+    },
+    onError: () => {
+      toast.error(`Failed to update ${systemType.name}.`)
+      closeModal('dialog1')
     }
   })
+
+  const handleSubmit = () => {
+    mutate()
+  }
+
+  return (
+    <div className="space-y-4 pt-4">
+      <Form formMethods={formMethods} className="flex flex-col gap-2">
+        <Input
+          name="name"
+          label="Name"
+          rounded="rounded-md"
+          disabled={!canEdit}
+        />
+        <Input
+          name="code"
+          label="Code"
+          rounded="rounded-md"
+          disabled={!canEdit}
+        />
+        <Input
+          name="mask"
+          label="Mask"
+          rounded="rounded-md"
+          disabled={!canEdit}
+        />
+        <Listbox
+          name="systemAttribute"
+          codebook={CODEBOOK.SYSTEM_ATTRIBUTE}
+          rounded="rounded-md"
+          customLabel="System Attribute"
+          disabled={!canEdit}
+          emptyOption="Select System Attribute"
+        />
+      </Form>
+      <div className="flex justify-end gap-2">
+        <Button
+          variant="outline"
+          onClick={() => closeModal('dialog1')}
+          disabled={isPending}
+        >
+          <FormattedMessage id={messages.cancel} defaultMessage="Cancel" />
+        </Button>
+        <Button onClick={handleSubmit} disabled={isPending || !canEdit}>
+          <FormattedMessage id={messages.save} defaultMessage="Save" />
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+export const SystemTypeItem: FC<Props> = ({
+  systemType,
+  refetch,
+  groupUid
+}) => {
+  const { formatMessage: fm } = useIntl()
+  const canEdit = usePermission([ROLE.SYSTEM_TYPE_EDIT])
+
+  const withWarningModal = useWarningModal(
+    `Are you sure you want to delete ${systemType.name}?`
+  )
+
   const { mutate: deleteType } = useMutation({
     mutationFn: async () => {
       const res = await axiosInstance
@@ -83,72 +179,55 @@ export const SystemTypeItem: FC<Props> = ({
     }
   })
 
-  const buttons: ModalButtons = {
-    goNext: {
-      onClick: () => {
-        mutate()
-      },
-      text: messages.save,
-      disabled: !canEdit
-    },
-    goBack: {
-      onClick: () => setOpenEdit(false),
-      text: messages.cancel
-    }
-  }
   return (
-    <Fragment>
-      <li
-        className={cx(
-          'py-2 px-4 flex justify-between',
-          'cursor-pointer rounded-md',
-          'hover:bg-primary-100 dark:hover:bg-primary-400',
-          'dark:text-gray-200'
+    <div
+      className={cn(
+        'group p-3 rounded-lg transition-all duration-200',
+        'border border-transparent hover:border-border hover:bg-accent/50',
+        'flex items-center justify-between'
+      )}
+    >
+      <div className="min-w-0 flex-1">
+        <div className="truncate font-medium">{systemType.name}</div>
+        {systemType.code && (
+          <div className="text-sm text-muted-foreground">{systemType.code}</div>
         )}
-        key={systemType.uid}
-      >
-        {systemType.name}
-        <div>
-          <EditButton
-            className="mr-2"
-            onClick={() => {
-              setOpenEdit(true)
-            }}
-          />
-          {canEdit && (
-            <DeleteButton onClick={() => withWarningModal(deleteType)()} />
-          )}
-        </div>
-      </li>
-      <ModalComponent open={openEdit} setOpen={setOpenEdit} buttons={buttons}>
-        <Form formMethods={formMethods}>
-          <Input
-            name="name"
-            label="Name"
-            rounded="rounded-md"
-            disabled={!canEdit}
-          />
-          <Input
-            name="code"
-            label="Code"
-            rounded="rounded-md"
-            disabled={!canEdit}
-          />
-          <Input
-            name="mask"
-            label="Mask"
-            rounded="rounded-md"
-            disabled={!canEdit}
-          />
-          <Listbox
-            name="systemAttribute"
-            codebook={CODEBOOK.SYSTEM_ATTRIBUTE}
-            rounded="rounded-md"
-            customLabel="System Attribute"
-            disabled={!canEdit}
-          />
-        </Form>
-      </ModalComponent>
-    </Fragment>
+      </div>
+      <div className="flex items-center pl-2">
+        <div className="self-center h-6 w-px bg-muted mx-1" />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="sm"
+              aria-label="System type actions"
+              className="h-8 w-8 p-0"
+            >
+              <MoreVertical className="h-4 w-4 text-muted-foreground" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" sideOffset={4}>
+            <DropdownMenuItem
+              onClick={() => {
+                openEditSystemTypeModal(systemType, groupUid, refetch)
+              }}
+              className="cursor-pointer"
+            >
+              <Edit className="h-4 w-4 mr-2" />
+              {fm({ id: message.common.systemTypeEdit.editType })}
+            </DropdownMenuItem>
+            {canEdit && (
+              <DropdownMenuItem
+                onClick={() => withWarningModal(deleteType)()}
+                className="cursor-pointer text-destructive focus:text-destructive"
+              >
+                <Trash2 className="h-4 w-4 mr-2" />
+                {fm({ id: message.common.systemTypeEdit.deleteType })}
+              </DropdownMenuItem>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </div>
   )
 }

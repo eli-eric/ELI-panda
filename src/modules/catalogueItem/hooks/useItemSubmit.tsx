@@ -27,7 +27,7 @@ export const useItemSubmit = ({
   const { query, replace } = useRouter()
   const uid = query.uid as string | undefined
 
-  const { queryKey, refetch } = useCatalogueItem()
+  const { queryKey } = useCatalogueItem()
 
   const queryClient = useQueryClient()
 
@@ -46,9 +46,28 @@ export const useItemSubmit = ({
 
       setvalue('lastUpdateTime', catalogueItem.data?.lastUpdateTime)
 
-      // Reset form with new data from API response to prevent reverting to old defaultValues
+      // Convert API array response back to object structure for form
+      // Form stores details as object with UID keys: { [propertyUid]: detail }
+      // API returns details as array: [{ property: { uid, ... }, value, ... }]
+      const detailsObject = catalogueItem.data?.details?.reduce(
+        (acc, detail) => {
+          if (detail.property?.uid) {
+            acc[detail.property.uid] = detail
+          }
+          return acc
+        },
+        {} as Record<string, any>
+      )
+
+      const formData = {
+        ...catalogueItem.data,
+        details: detailsObject || {}
+      }
+
+      // Reset form with converted data to match form structure
+      // This prevents "unsaved changes" warning after successful save
       if (reset && catalogueItem.data) {
-        reset(catalogueItem.data)
+        reset(formData)
       }
 
       imageRef?.current?.submit(catalogueItem.data?.uid, () => {
@@ -61,7 +80,8 @@ export const useItemSubmit = ({
         }
         toast.success('Item saved')
       })
-      refetch()
+      // Note: No need to refetch() here - cache is already updated via setQueryData above
+      // The form will be synced via useEffect in the container component
     },
     onError: (error: AxiosError) => {
       if (error.response?.status === 409) {

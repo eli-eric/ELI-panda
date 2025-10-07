@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import toast from 'react-hot-toast'
+import { toast } from 'sonner'
 
 import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
 import { gql } from '@/types/gql'
@@ -16,7 +16,7 @@ const CREATE_USER = gql(`
 
 export const useUserCreate = () => {
   const router = useRouter()
-  const { mutate } = useGraphQLMutation(CREATE_USER, {
+  const { mutate, isPending } = useGraphQLMutation(CREATE_USER, {
     onError: err => {
       toast.error('Error while creating user:' + err.message)
     },
@@ -26,5 +26,5 @@ export const useUserCreate = () => {
     }
   })
 
-  return [mutate]
+  return { createUser: mutate, loading: isPending }
 }

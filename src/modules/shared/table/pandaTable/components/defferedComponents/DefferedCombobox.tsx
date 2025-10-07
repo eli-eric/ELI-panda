@@ -1,15 +1,11 @@
 import { Combobox as HUICombobox } from '@headlessui/react'
-import {
-  CheckIcon,
-  ChevronDownIcon,
-  XMarkIcon
-} from '@heroicons/react/20/solid'
+import { Check, ChevronDown, X } from 'lucide-react'
 import React, { useDeferredValue, useEffect, useState } from 'react'
 
 import { useCodebook } from '@/hooks/fetch/useCodebook'
+import { cn } from '@/lib/utils'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { CodebookType } from '@/types/responses/codebook'
-import { cx } from '@/utils'
 
 type ComboboxPropsT = {
   codebook?: CODEBOOK
@@ -57,7 +53,7 @@ export const DefferedCombobox = ({
         setValue(v)
         onChange(v)
       }}
-      className={cx('relative flex flex-col w-full mt-auto', className)}
+      className={cn('relative flex flex-col w-full mt-auto', className)}
     >
       <div className="relative">
         <HUICombobox.Input
@@ -67,8 +63,8 @@ export const DefferedCombobox = ({
           value={query}
           placeholder={placeholder}
           autoComplete="off"
-          className={cx(
-            'px-3 py-2 pb-2 border rounded-md placeholder-gray-300 border-gray-300  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm block w-full h-[38px] appearance-none text-left',
+          className={cn(
+            'px-3 py-2 pb-2 border rounded-md placeholder-gray-300 border-gray-300  focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm block w-full h-[38px] appearance-none text-left',
             value ? 'pr-14' : 'pr-9'
           )}
         />
@@ -77,20 +73,17 @@ export const DefferedCombobox = ({
             onClick={handleClear}
             className="absolute mr-7 inset-y-0 right-0 flex items-center rounded-r-md px-1 focus:outline-none cursor-pointer text-gray-200  hover:text-red-500"
           >
-            <XMarkIcon className="h-4 w-4" aria-hidden="true" />
+            <X className="h-4 w-4" aria-hidden="true" />
           </div>
         )}
         <HUICombobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
-          <ChevronDownIcon
-            className="h-4 w-4text-gray-500"
-            aria-hidden="true"
-          />
+          <ChevronDown className="h-4 w-4 text-gray-500" aria-hidden="true" />
         </HUICombobox.Button>
       </div>
 
       {options && options.length > 0 && (
         <HUICombobox.Options
-          className={cx(
+          className={cn(
             'absolute z-20 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white dark:bg-gray-800 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm',
             position === 'top' ? 'bottom-full' : 'top-full'
           )}
@@ -101,10 +94,10 @@ export const DefferedCombobox = ({
               value={item}
               defaultValue={''}
               className={({ active }) =>
-                cx(
+                cn(
                   'relative cursor-default select-none py-2 pl-3 pr-9',
                   active
-                    ? 'bg-primary-500 text-white'
+                    ? 'bg-orange-500 text-white'
                     : 'text-gray-900 dark:text-gray-200'
                 )
               }
@@ -114,7 +107,7 @@ export const DefferedCombobox = ({
                 return (
                   <>
                     <span
-                      className={cx(
+                      className={cn(
                         'block truncate',
                         selected && 'font-semibold'
                       )}
@@ -123,12 +116,12 @@ export const DefferedCombobox = ({
                     </span>
                     {selected && (
                       <span
-                        className={cx(
+                        className={cn(
                           'absolute inset-y-0 right-0 flex items-center pr-4',
-                          active ? 'text-white' : 'text-primary-500'
+                          active ? 'text-white' : 'text-orange-500'
                         )}
                       >
-                        <CheckIcon className="h-4 w-4" aria-hidden="true" />
+                        <Check className="h-4 w-4" aria-hidden="true" />
                       </span>
                     )}
                   </>

@@ -18,13 +18,13 @@ const MemoizedSystemGallery = memo(ImageGallery)
 import { useRouter } from 'next/router'
 
 import { HeaderWithButtons } from '@/components/header/HeaderWithButtons'
-import Card, { FormCard } from '@/components/layout/Card'
+import { Card as CardUI, CardContent } from '@/components/ui/card'
 import usePermission from '@/hooks/usePermission'
+import { cn } from '@/lib/utils'
 import { GraphModalButton } from '@/modules/shared/system/GraphModalButton'
 import { ROLE } from '@/types/constants/roles'
 import { SystemLevel } from '@/types/gql/graphql'
 import type { CodebookType } from '@/types/responses/codebook'
-import { cx } from '@/utils'
 
 import { useSystemCreate } from '../../hooks/useSystemCreate'
 import { useSystemDetail } from '../../hooks/useSystemDetail'
@@ -33,7 +33,7 @@ import { useSystemUpdate } from '../../hooks/useSystemUpdate'
 import { useSystemContext } from '../../store/useSystemContext'
 import { useSystemItemStore } from '../../store/useSystemItemStore'
 import type { SystemDetailFormType } from '../../types/form'
-import { getColorBySystemLevel } from '../../utils'
+import { getBorderBySystemLevel } from '../../utils'
 import { ShowHistoryButton } from '../history/ShowHistoryButton'
 import { SystemItemCard } from './components/SystemItem.card'
 
@@ -66,7 +66,7 @@ export const SystemForm: FC<PropsWithChildren> = ({ children }) => {
   const router = useRouter()
   const uid = router.query.uid as string | undefined
 
-  const systemImageRef = useRef<ImageGalleryRef>()
+  const systemImageRef = useRef<ImageGalleryRef | undefined>(undefined)
 
   const { updateSystem, loading } = useSystemUpdate(
     systemImageRef,
@@ -301,41 +301,47 @@ export const SystemForm: FC<PropsWithChildren> = ({ children }) => {
           </div>
         }
       />
-      <Card>
-        <Breadcrumbs
-          parentPath={
-            (systemDetail?.parentPath as CodebookType[]) || parentPath
-          }
-        />
-      </Card>
-      <FormCard
-        className={cx(
-          'shadow-md rounded-lg border',
-          getColorBySystemLevel(systemLevel as SystemLevel)
-        )}
-      >
-        <SystemMainForm>
-          <MemoizedSystemGallery
-            ref={systemImageRef}
-            setValue={formMethods.setValue}
-            config={{
-              itemCategory: FILE_TYPE.SYSTEM,
-              itemId: uid ? String(uid) : 'new',
-              additionalParams: catalogueItem?.uid
-                ? {
-                    itemCategory: FILE_TYPE.CATALOGUE,
-                    itemId: catalogueItem?.uid
-                  }
-                : undefined
-            }}
-            className="w-full"
-            disabled={blockedEdit}
-            hasEditRole={hasEditRole}
-          />
-        </SystemMainForm>
-        {uid && <SystemItemCard />}
-      </FormCard>
-      {children}
+      <div className="container mx-auto max-w-7xl px-4 space-y-6">
+        <CardUI>
+          <CardContent>
+            <Breadcrumbs
+              parentPath={
+                (systemDetail?.parentPath as CodebookType[]) || parentPath
+              }
+            />
+          </CardContent>
+        </CardUI>
+        <CardUI
+          className={cn(
+            'shadow-lg',
+            getBorderBySystemLevel(systemLevel as SystemLevel)
+          )}
+        >
+          <CardContent>
+            <SystemMainForm>
+              <MemoizedSystemGallery
+                ref={systemImageRef}
+                setValue={formMethods.setValue}
+                config={{
+                  itemCategory: FILE_TYPE.SYSTEM,
+                  itemId: uid ? String(uid) : 'new',
+                  additionalParams: catalogueItem?.uid
+                    ? {
+                        itemCategory: FILE_TYPE.CATALOGUE,
+                        itemId: catalogueItem?.uid
+                      }
+                    : undefined
+                }}
+                className="w-full"
+                disabled={blockedEdit}
+                hasEditRole={hasEditRole}
+              />
+            </SystemMainForm>
+            {uid && <SystemItemCard />}
+          </CardContent>
+        </CardUI>
+        {children}
+      </div>
     </Form>
   )
 }

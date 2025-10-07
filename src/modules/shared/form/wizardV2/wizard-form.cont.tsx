@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import type {
   DefaultValues,
   FieldValues,
@@ -6,8 +6,10 @@ import type {
   UseFormReset
 } from 'react-hook-form'
 import { FormProvider, useForm } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 
-import { Button } from '@/components/Buttons'
+import { Button } from '@/components/ui/button'
+import { message } from '@/i18n/src/messages'
 
 import FormStep from './components/form-step'
 import { StepIndicator } from './components/step-indicator'
@@ -24,6 +26,7 @@ export const FormWizard = <T extends Record<string, any>>({
   onSubmit,
   initialData
 }: FormWizardProps<T>) => {
+  const { formatMessage: fm } = useIntl()
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
   const [isProcessing, setIsProcessing] = useState(false)
   const methods = useForm<T>({
@@ -34,24 +37,33 @@ export const FormWizard = <T extends Record<string, any>>({
   const currentStep = steps[currentStepIndex]
   const isLastStep = currentStepIndex === steps.length - 1
 
-  const isCurrentStepValid = () => {
-    const currentFields = steps[currentStepIndex].fields
-    if (!currentFields) {
-      return true
+  const isCurrentStepValid = useMemo(() => {
+    const currentFields = currentStep.fields
+
+    // Kontrola fields (existující logika)
+    if (currentFields) {
+      const fieldsValid = currentFields.every(field => {
+        if (!field.field.required) {
+          return true
+        }
+        const fieldValue = watch(field.field.name as Path<T>)
+        if (Array.isArray(fieldValue)) {
+          return fieldValue.length > 0
+        }
+        return (
+          fieldValue !== undefined && fieldValue !== null && fieldValue !== ''
+        )
+      })
+      if (!fieldsValid) return false
     }
-    return currentFields.every(field => {
-      if (!field.field.required) {
-        return true
-      }
-      const fieldValue = watch(field.field.name as Path<T>)
-      if (Array.isArray(fieldValue)) {
-        return fieldValue.length > 0
-      }
-      return (
-        fieldValue !== undefined && fieldValue !== null && fieldValue !== ''
-      )
-    })
-  }
+
+    // Kontrola custom validation
+    if (currentStep.validation) {
+      return currentStep.validation(getValues())
+    }
+
+    return true
+  }, [currentStep, getValues, watch])
 
   const handleNext = async () => {
     const currentData = getValues()
@@ -124,21 +136,19 @@ export const FormWizard = <T extends Record<string, any>>({
             {currentStepIndex > 0 ? (
               <Button
                 type="button"
-                buttonSize="large"
+                variant="outline"
                 onClick={handleBack}
                 disabled={isProcessing}
               >
-                Previous
+                {fm({ id: message.common.forms.previous })}
               </Button>
             ) : (
               <div />
             )}
             <Button
-              buttonSize="large"
-              primary={isLastStep}
               type="button"
               onClick={handleNext}
-              disabled={!isCurrentStepValid() || isProcessing}
+              disabled={!isCurrentStepValid || isProcessing}
             >
               {isProcessing ? 'Processing...' : isLastStep ? 'Submit' : 'Next'}
             </Button>

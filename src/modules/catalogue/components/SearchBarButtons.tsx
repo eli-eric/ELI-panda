@@ -35,7 +35,7 @@ export const SearchBarButtons = ({
       handleRefresh={handleRefresh}
       editRole={ROLE.CATALOGUE_EDIT}
     >
-      <div>
+      <div className="flex gap-1">
         <ModalStatisticsButtonLarge />
         <CatalogueFilterButtonContainer filterFormMethods={filterFormMethods} />
       </div>

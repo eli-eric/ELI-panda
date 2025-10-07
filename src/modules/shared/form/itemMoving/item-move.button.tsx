@@ -1,30 +1,16 @@
-import dynamic from 'next/dynamic'
 import type { FC } from 'react'
-import { Fragment, Suspense } from 'react'
+import { useIntl } from 'react-intl'
 
 import { Button } from '@/components/Buttons'
+import { message } from '@/i18n/src/messages'
 
-import { useModalWizardStore } from './store/useModalWizardStore'
-
-const ItemMoveModal = dynamic(() =>
-  import('./item-move.modal').then(mod => mod.ItemMoveModal)
-)
+import { openItemMoveModal } from './item-move.modal'
 
 export const ItemMoveButton: FC = () => {
-  const { setOpen } = useModalWizardStore()
-
-  function handleShow() {
-    setOpen(true)
-  }
-
+  const { formatMessage: fm } = useIntl()
   return (
-    <Fragment>
-      <Button primary onClick={handleShow}>
-        Move Item
-      </Button>
-      <Suspense>
-        <ItemMoveModal />
-      </Suspense>
-    </Fragment>
+    <Button onClick={openItemMoveModal}>
+      {fm({ id: message.common.forms.moveItem })}
+    </Button>
   )
 }

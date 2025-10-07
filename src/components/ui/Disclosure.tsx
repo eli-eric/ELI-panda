@@ -1,16 +1,20 @@
-import { Disclosure as HeadlessDisclosure } from '@headlessui/react'
-import { ChevronDownIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { ChevronDown, X } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useState } from 'react'
 import { isMobile } from 'react-device-detect'
 
-import { cx } from '@/utils'
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger
+} from '@/components/ui/collapsible'
+import { cn } from '@/lib/utils'
 
 interface DisclosureProps {
   /**
    * The title to display on the disclosure button
    */
-  title: string
+  title: ReactNode
   /**
    * The content to display when the disclosure is open
    */
@@ -44,7 +48,7 @@ interface DisclosureProps {
 }
 
 /**
- * Universal disclosure component that maintains its own open state
+ * Universal disclosure component built with shadcn/ui Collapsible
  */
 export const Disclosure = ({
   title,
@@ -56,39 +60,42 @@ export const Disclosure = ({
   panelClassName = '',
   transparentButton = false
 }: DisclosureProps) => {
-  const [, setIsOpen] = useState(defaultOpen)
+  const [isOpen, setIsOpen] = useState(defaultOpen)
 
-  const handleToggle = (newState: boolean) => {
-    setIsOpen(newState)
-    onChange?.(newState)
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open)
+    // Small delay to ensure DOM changes are complete before notifying parent
+    setTimeout(() => {
+      onChange?.(open)
+    }, 100)
   }
 
-  const defaultButtonClasses = transparentButton
-    ? ' hover:text-primary-600 text-sm flex items-center justify-between w-full py-[2px] px-4 shadow-sm text-gray-500 bg-transparent dark:bg-transparent hover:bg-transparent dark:hover:bg-transparent'
-    : ' hover:text-primary-600 dark:hover:bg-slate-600 text-sm flex items-center justify-between w-full py-[2px] px-4 shadow-sm text-gray-500 bg-white dark:bg-gray-800 hover:bg-gray-100'
-
   return (
-    <HeadlessDisclosure defaultOpen={defaultOpen}>
-      {({ open }) => (
-        <div className={cx(`flex flex-col ${className}`)}>
-          <HeadlessDisclosure.Button
-            className={cx(defaultButtonClasses, buttonClassName)}
-            onClick={() => {
-              handleToggle(!open)
-            }}
-          >
-            <span>{title || (open ? 'Hide' : 'Show')}</span>
-            {open ? (
-              <XMarkIcon className="block h-4 w-4" aria-hidden="true" />
-            ) : (
-              <ChevronDownIcon className="block h-4 w-4" aria-hidden="true" />
-            )}
-          </HeadlessDisclosure.Button>
-          <HeadlessDisclosure.Panel className={`${panelClassName}`}>
-            {children}
-          </HeadlessDisclosure.Panel>
-        </div>
-      )}
-    </HeadlessDisclosure>
+    <Collapsible
+      open={isOpen}
+      onOpenChange={handleOpenChange}
+      className={cn('flex flex-col', className)}
+    >
+      <CollapsibleTrigger
+        className={cn(
+          'flex items-center justify-between w-full py-1 px-4 text-sm transition-colors',
+          'border rounded-md cursor-pointer',
+          transparentButton
+            ? 'hover:text-primary text-muted-foreground bg-transparent hover:bg-transparent border-transparent'
+            : 'hover:text-primary text-muted-foreground bg-background hover:bg-accent border-border',
+          buttonClassName
+        )}
+      >
+        <div>{title || (isOpen ? 'Hide' : 'Show')}</div>
+        {isOpen ? (
+          <X className="h-4 w-4" />
+        ) : (
+          <ChevronDown className="h-4 w-4" />
+        )}
+      </CollapsibleTrigger>
+      <CollapsibleContent className={cn(panelClassName)}>
+        {children}
+      </CollapsibleContent>
+    </Collapsible>
   )
 }

@@ -3,7 +3,7 @@ import { useCallback, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
-import { FormModal } from '@/hooks/form/useFormModal'
+import { FormModal } from '@/components/form/FormModal'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
 import {
   addSubsystem,
