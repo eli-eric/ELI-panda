@@ -6,8 +6,8 @@ import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import type { Employee } from '@/types/gql/graphql'
 
 import { useRoomCardStore } from '../../../store/useRoomCardStore'
-import type { ContactDeptFormData } from '../schemas/contactDept.schema'
 import { ContactDeptModalContainer } from '../ContactDeptModal.cont'
+import type { ContactDeptFormData } from '../schemas/contactDept.schema'
 
 export const useContactDeptModal = () => {
   const { openModal, closeModal } = useModalGlobalStore()
@@ -20,7 +20,9 @@ export const useContactDeptModal = () => {
 
   return useCallback(() => {
     // Get existing employee UIDs to prevent duplicates
-    const existingEmployeeUids = fields.map((field: any) => field?.uid).filter(Boolean)
+    const existingEmployeeUids = fields
+      .map((field: any) => field?.uid)
+      .filter(Boolean)
 
     openModal('dialog1', {
       component: ContactDeptModalContainer,

@@ -17,7 +17,10 @@ import { Input } from '../inputs'
 const messages = message.common.buttons
 
 const schema = z.object({
-  name: z.string().min(1, 'Name is required').transform(val => val.trim())
+  name: z
+    .string()
+    .min(1, 'Name is required')
+    .transform(val => val.trim())
 })
 
 type FormData = z.infer<typeof schema>

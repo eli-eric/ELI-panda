@@ -5,8 +5,8 @@ import type { ModalSize } from '@/components/ui/dialog'
 import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import type { Employee } from '@/types/gql/graphql'
 
-import type { EmployeeFormData } from '../schemas/employee.schema'
 import { EmployeeModalContainer } from '../EmployeeModal.cont'
+import type { EmployeeFormData } from '../schemas/employee.schema'
 
 interface UseEmployeeModalProps {
   fieldName: string
