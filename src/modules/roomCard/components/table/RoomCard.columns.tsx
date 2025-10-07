@@ -135,7 +135,13 @@ export const useRoomCardsColumns = () => {
         ]
       }
     ],
-    [fm, setDisconnectDeptContact, removeNewDeptContact, canEdit, openContactDeptModal]
+    [
+      fm,
+      setDisconnectDeptContact,
+      removeNewDeptContact,
+      canEdit,
+      openContactDeptModal
+    ]
   )
 
   const columnsTeam = useMemo(
