@@ -10,11 +10,12 @@ import { cn } from '@/lib/utils'
 import { useSystemStore } from '@/modules/shared/system/device-info-overlay/store/useShowDeviceStore'
 import { useSystemEditSheet } from '@/modules/shared/system/system-edit/useSystemEditSheet'
 import { getBadgeVariantBySystemLevel } from '@/modules/systemItem/utils'
+import type { SystemDetail } from '@/types/responses/systems'
 import type { EndpointProps } from '@/utils/getEndpoints'
 
 import { SystemActionButtons } from './SystemActionButtons'
 
-interface SystemNameCellProps extends CellContext<any, any> {
+interface SystemNameCellProps extends CellContext<SystemDetail, any> {
   setUid?: (uid: string | null) => void
   canEdit?: boolean
   hideButtons?: boolean
@@ -100,7 +101,9 @@ export const SystemNameCell = ({
                 variant="outline"
                 className={cn(
                   'flex items-center h-7 max-w-full overflow-hidden justify-start px-3 hover:opacity-80',
-                  getBadgeVariantBySystemLevel(original.systemLevel)
+                  getBadgeVariantBySystemLevel(original.systemLevel),
+                  !original?.physicalItem?.uid &&
+                    'bg-transparent dark:bg-transparent'
                 )}
               >
                 <span className="cursor-pointer text-inherit hover:underline truncate block min-w-0">
@@ -112,7 +115,9 @@ export const SystemNameCell = ({
                 variant="outline"
                 className={cn(
                   'flex items-center h-7 max-w-full overflow-hidden justify-start gap-1 group-hover/expand:opacity-80 cursor-pointer px-2',
-                  getBadgeVariantBySystemLevel(original.systemLevel)
+                  getBadgeVariantBySystemLevel(original.systemLevel),
+                  !original?.physicalItem?.uid &&
+                    'bg-transparent dark:bg-transparent'
                 )}
               >
                 {row.getIsExpanded() ? (
