@@ -8,7 +8,7 @@ import type { CatalogueItem } from '@/types/responses/catalogue'
 
 import { Pagination } from '../../table/Pagination'
 import { SearchBar } from '../../table/SearchBar'
-import { CatalogueTable } from './CatalogueItems.table'
+import { CatalogueTableSelectComponent } from './CatalogueTableSelect.table'
 
 interface Props {
   setItem: Dispatch<SetStateAction<CatalogueItem | undefined>>
@@ -30,6 +30,13 @@ const CatalogueTableSelect = ({ setItem, selectedItem }: Props) => {
     setItem(undefined)
   }, [search, pagination, setItem])
 
+  const handleSelectionChange = (uid: string) => {
+    const item = catalogueItems?.data.find(item => item.uid === uid)
+    if (item) {
+      setItem(item)
+    }
+  }
+
   return (
     <Fragment>
       <SearchBar
@@ -40,17 +47,19 @@ const CatalogueTableSelect = ({ setItem, selectedItem }: Props) => {
         }}
       />
       <div className="h-full overflow-y-hidden min-h-[245px] border-t border-gray-300">
-        <CatalogueTable
+        <CatalogueTableSelectComponent
           tableId={tableId}
           enableQueryURL={false}
           hideButtons={true}
           loading={loading}
+          selectedItemUid={selectedItem?.uid}
+          onSelectionChange={handleSelectionChange}
           getRowProps={row => ({
             className: cn(
-              'cursor-pointer',
+              'cursor-pointer transition-all',
               row.original.uid === selectedItem?.uid
-                ? 'bg-orange-300 dark:bg-orange-600 hover:bg-color-300 dark:hover:bg-color-600'
-                : ''
+                ? 'bg-orange-50 dark:bg-orange-950 border-l-1 border-l-orange-500'
+                : 'hover:bg-gray-50 dark:hover:bg-gray-900'
             ),
             onClick: () => {
               setItem(row.original)
