@@ -6,8 +6,8 @@ import { cn } from '@/lib/utils'
 import { ROLE } from '@/types/constants/roles'
 import type { Employee } from '@/types/gql/graphql'
 
-import { HeaderAddButton } from '../../../roomCard/components/table/HeaderAddButton'
 import { CellWithDelete } from './CellWithDelete'
+import { HeaderAddButton } from './HeaderAddButton'
 
 const MemoizedHeaderButton = memo(HeaderAddButton)
 
