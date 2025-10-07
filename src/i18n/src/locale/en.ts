@@ -986,6 +986,7 @@ export const messages = {
   },
   catalogue: {
     category: {
+      badge: 'category',
       copy: 'Copy Category',
       delete: 'Delete Category',
       addNew: 'Add New Category',
