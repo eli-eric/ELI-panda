@@ -120,10 +120,15 @@ export const SystemEditForm = ({
         setValue={formMethods.setValue}
         config={{
           itemCategory: FILE_TYPE.SYSTEM,
-          itemId: uid
+          itemId: uid,
+          additionalParams: catalogueItem?.uid
+            ? {
+                itemCategory: FILE_TYPE.CATALOGUE,
+                itemId: catalogueItem?.uid
+              }
+            : undefined
         }}
         className="w-full"
-        hasEditRole={true}
       />
       {parentPath && parentPath.length > 0 && (
         <SystemHierarchy
