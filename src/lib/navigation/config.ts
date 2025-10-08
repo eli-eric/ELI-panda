@@ -64,7 +64,7 @@ export const NAV_ITEMS: NavigationItem[] = [
   {
     title: 'Publications',
     url: PATH.PUBLICATIONS,
-    role: ROLE.BASICS,
+    role: ROLE.PUBLICATIONS_VIEW,
     icon: Library
   },
   {
