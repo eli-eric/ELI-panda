@@ -1,5 +1,7 @@
 import { getSession } from 'next-auth/react'
 
+import { isFeatureEnabled } from '@/config/featureFlags'
+
 export interface FetchRequestOptions {
   method?: string
   body?: any
@@ -95,5 +97,32 @@ export async function fetchRequest<T = unknown>(
   if (type === 'blob') return (await response.blob()) as T
   // default json
   if (response.status === 204) return undefined as T
-  return (await response.json()) as T
+
+  // Get the raw text first to log it
+  const rawText = await response.text()
+
+  if (isFeatureEnabled('enableHttpLogging')) {
+    console.log('[fetchClient] Response details:', {
+      url,
+      method: options.method || 'GET',
+      status: response.status,
+      statusText: response.statusText,
+      contentType: response.headers.get('content-type'),
+      rawText: rawText.substring(0, 200), // First 200 chars
+      rawTextLength: rawText.length
+    })
+  }
+
+  // Try to parse as JSON
+  try {
+    return JSON.parse(rawText) as T
+  } catch (error) {
+    if (isFeatureEnabled('enableHttpLogging')) {
+      console.error('[fetchClient] JSON parse error:', {
+        error,
+        rawText: rawText.substring(0, 500)
+      })
+    }
+    throw error
+  }
 }

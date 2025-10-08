@@ -145,7 +145,14 @@ export const useMoveSubmit = ({
   }
 
   return useMutation({
-    mutationFn: queryMutate<string, MoveSystemsBody>('systemsMove', 'post'),
+    mutationFn: queryMutate<string, MoveSystemsBody>(
+      'systemsMove',
+      'post',
+      undefined,
+      undefined,
+      undefined,
+      'text' // Server returns text/plain instead of application/json),
+    ),
     onSuccess,
     onError: () => {
       toast.error('Something went wrong. Systems didnt move.', {
