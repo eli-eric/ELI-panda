@@ -142,7 +142,8 @@ export const queryMutate = <TResponse, TVariables>(
   mutationType: 'post' | 'put' | 'delete',
   uid?: string,
   isDefaultUrl?: boolean,
-  endpointVariables?: Record<string, string>
+  endpointVariables?: Record<string, string>,
+  responseType?: 'json' | 'text' | 'blob'
 ) => {
   const mutateFn: MutateFunction<
     AxiosResponse<TResponse>,
@@ -159,7 +160,8 @@ export const queryMutate = <TResponse, TVariables>(
       // For delete do not send body
       const data = await fetchRequest<TResponse>(url, {
         method,
-        body: mutationType === 'delete' ? undefined : (variables as any)
+        body: mutationType === 'delete' ? undefined : (variables as any),
+        responseType
       })
       // Adapt to AxiosResponse shape expected by existing code
       const axiosLike = {
