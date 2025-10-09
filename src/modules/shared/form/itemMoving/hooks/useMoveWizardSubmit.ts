@@ -86,7 +86,14 @@ export const useMoveWizardSubmit = () => {
 
   const { mutate, isPending } = useMutation({
     mutationKey: ['moveItem'],
-    mutationFn: queryMutate<string, ItemMovePost>('physicalItemMove', 'post'),
+    mutationFn: queryMutate<string, ItemMovePost>(
+      'physicalItemMove',
+      'post',
+      undefined,
+      undefined,
+      undefined,
+      'text'
+    ),
     onError: (e: AxiosError) => {
       toast.error(`Error: ${e.response?.data}`)
     },
@@ -106,7 +113,11 @@ export const useMoveWizardSubmit = () => {
     mutationKey: ['moveItem'],
     mutationFn: queryMutate<string, ItemMovePost>(
       'physicalItemReplace',
-      'post'
+      'post',
+      undefined,
+      undefined,
+      undefined,
+      'text'
     ),
     onError: (e: AxiosError) => {
       toast.error(`Error: ${e.response?.data}`)
