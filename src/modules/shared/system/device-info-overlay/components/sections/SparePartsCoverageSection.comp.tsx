@@ -11,6 +11,7 @@ import { useSystemStore } from '@/modules/shared/system/device-info-overlay/stor
 import { IconCell } from '@/modules/systems/components/table/cells/IconCell'
 import type { ITEM_USAGE } from '@/modules/systems/types/constants'
 
+import { useSpareDialog } from '../../../use-spare/useSpareDialog'
 import { SystemDetailParameter } from '../system-detail-parameter.comp'
 
 interface SparePartsCoverageSectionProps {
@@ -26,6 +27,7 @@ export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
 }) => {
   const { formatMessage: fm } = useIntl()
   const { setUID } = useSystemStore()
+  const openUseSpare = useSpareDialog()
 
   const handleSystemRedirect = (uid: string) => {
     if (withDirtyProtection) {
@@ -104,12 +106,7 @@ export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
                     </div>
                     <div className="flex items-center space-x-1">
                       <Tooltip content="Use this spare part">
-                        <Button
-                          onClick={() => {
-                            // TODO: Implement use spare part functionality
-                          }}
-                          className="text-[10px]"
-                        >
+                        <Button onClick={openUseSpare} className="text-[10px]">
                           {fm({ id: message.common.systemOverlay.useSpare })}
                         </Button>
                       </Tooltip>
