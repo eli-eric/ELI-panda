@@ -22,7 +22,7 @@ const orderLineFormSchema = yup.object({
   price: yup.number().nullable().optional(),
   quantity: yup.number().max(100).nullable().optional(),
   system: yup.object().nullable().required('Parent system is required'),
-  serialNumbers: yup.string().nullable().optional()
+  serialNumber: yup.string().nullable().optional()
 })
 
 interface OrderLineEditSheetProps {
@@ -47,7 +47,7 @@ export const OrderLineEditSheet = ({
       price: orderLine?.price || undefined,
       currency: orderLine?.currency || 'EUR',
       quantity: orderLine?.quantity || undefined,
-      serialNumbers: orderLine?.serialNumbers || '',
+      serialNumber: orderLine?.serialNumber || '',
       notes: orderLine?.notes || '',
       location: orderLine?.location || undefined,
       system: orderLine?.system || undefined,
@@ -68,7 +68,6 @@ export const OrderLineEditSheet = ({
   })
 
   const handleSubmit = (data: OrderLineFormType) => {
-    // Call the onSubmit prop which comes from modal store
     onSubmit?.(data)
   }
 
@@ -97,7 +96,7 @@ export const OrderLineEditSheet = ({
                   currencyName={formFields.currency.name}
                 />
 
-                <Input {...formFields.serialNumbers} />
+                <Input {...formFields.serialNumber} />
 
                 <TextArea {...formFields.notes} />
               </div>
