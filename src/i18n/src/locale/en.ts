@@ -976,7 +976,7 @@ export const messages = {
       clickHere: 'Click here'
     },
     actions: {
-      editPublication: 'Edit Publication',
+      editPublication: 'View Detail',
       deletePublication: 'Delete Publication'
     }
   },

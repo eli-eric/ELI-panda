@@ -16,7 +16,6 @@ import { useAccessControl } from '@/hooks/useAccessControl'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 import { usePublicationEditSheet } from '@/modules/shared/publications/publication-edit/usePublicationEditSheet'
-import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 import { truncateString } from '@/utils'
 
@@ -56,9 +55,15 @@ export const TitleCell: FC<TitleCellProps> = ({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" sideOffset={4}>
-          <DropdownMenuItem onClick={openEdit}>
-            <Edit className="size-4" />
-            {fm({ id: message.publicationsPage.actions.editPublication })}
+          <DropdownMenuItem>
+            <Link
+              href={`/publication/${uid}`}
+              target="_blank"
+              className="flex gap-2 istems-center"
+            >
+              <Edit className="size-4" />
+              {fm({ id: message.publicationsPage.actions.editPublication })}
+            </Link>
           </DropdownMenuItem>
           {canEdit && (
             <DropdownMenuItem
@@ -73,15 +78,9 @@ export const TitleCell: FC<TitleCellProps> = ({
       </DropdownMenu>
       <div className="flex-1 min-w-0 flex items-center justify-start">
         <Tooltip content={title}>
-          <Link
-            href={`${PATH.PUBLICATION}/${uid}`}
-            target="_blank"
-            className="flex items-center"
-          >
-            <Button variant="link" className="cursor-pointer">
-              {truncateString(title, 40)}
-            </Button>
-          </Link>
+          <Button variant="link" onClick={openEdit} className="cursor-pointer">
+            {truncateString(title, 40)}
+          </Button>
         </Tooltip>
       </div>
     </div>

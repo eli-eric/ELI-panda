@@ -17,10 +17,13 @@ export const PublicationEditContainer = ({ uid }: Props) => {
   const {
     data: publication,
     isLoading,
+    isFetching,
     isError,
     error,
     refetch
   } = usePublication(uid)
+
+  console.log({ publication, isLoading, isFetching, isError, error })
 
   const [, closeModal] = usePublicationEditSheet(uid)
 
@@ -38,7 +41,11 @@ export const PublicationEditContainer = ({ uid }: Props) => {
     return <ErrorPage />
   }
 
-  if (isLoading) {
+  if (isLoading || isFetching) {
+    return <PublicationSkeleton />
+  }
+
+  if (!publication) {
     return <PublicationSkeleton />
   }
 
