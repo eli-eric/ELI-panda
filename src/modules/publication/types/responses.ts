@@ -7,8 +7,8 @@ export interface Publication {
   experimentalSystem?: string
   userCall?: CodebookType
   userExperiment?: CodebookType
-  doi: string
-  webLink: string
+  doi?: string
+  webLink?: string
   openAccessType: CodebookType
   title: string
   allAuthors: string
@@ -17,7 +17,7 @@ export interface Publication {
   eliAuthorsCount: number
   authorsDepartments: AuthorsDepartment[]
   longJournalTitle: string
-  volume: number
+  volume?: number
   issue?: number
   pages: string
   pagesCount: number
@@ -36,8 +36,9 @@ export interface Publication {
   eissn?: string
   eidScopus?: string
   publishingCountry: CodebookType
-  language: CodebookType
+  language?: CodebookType
   note?: string
+  shortJournalTitle?: string
 }
 
 export type AuthorsDepartment = {
