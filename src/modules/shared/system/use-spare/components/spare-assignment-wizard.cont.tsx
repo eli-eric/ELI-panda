@@ -1,16 +1,22 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useMemo } from 'react'
+import { useFormContext } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import { useIntl } from 'react-intl'
 
+import Listbox from '@/components/form/Listbox'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Label } from '@/components/ui/label'
 import { message } from '@/i18n/src/messages'
-import { FormWizard } from '@/modules/shared/form/wizardV2/wizard-form.cont'
+import { SelectLocationCombo } from '@/modules/shared/form/location/SelectLocation.combo'
+import { FormWizard, WizardStep } from '@/modules/shared/form/wizardV3'
 import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import useTableStateStore from '@/store/useTableStateStore'
+import { CODEBOOK } from '@/types/constants/codebook'
 
 import { useAssignSpare } from '../hooks/useAssignSpare'
-import { useSpareAssignmentSteps } from '../hooks/useSpareAssignmentSteps'
 import type { SpareAssignmentFormType, SpareAssignmentPayload } from '../types'
+import { SpareParentSystemSelectTable } from './spare-parent-system-select.table'
 
 interface SpareAssignmentWizardProps {
   systemUid: string
@@ -19,6 +25,32 @@ interface SpareAssignmentWizardProps {
 }
 
 const tableId = 'spare-parent-system-select-table'
+const messages = message.common.spareAssignment
+
+// Auto-assign checkbox component
+const AutoAssignCheckbox = () => {
+  const { formatMessage: fm } = useIntl()
+  const { setValue, watch } = useFormContext<SpareAssignmentFormType>()
+  const autoAssignParent = watch('autoAssignParent')
+
+  return (
+    <div className="flex items-center space-x-2">
+      <Checkbox
+        id="autoAssignParent"
+        checked={autoAssignParent}
+        onCheckedChange={(checked: boolean) =>
+          setValue('autoAssignParent', checked, { shouldValidate: true })
+        }
+      />
+      <Label
+        htmlFor="autoAssignParent"
+        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+      >
+        {fm({ id: messages.form.autoAssignParent.label })}
+      </Label>
+    </div>
+  )
+}
 
 export const SpareAssignmentWizardContainer = ({
   systemUid,
@@ -26,7 +58,6 @@ export const SpareAssignmentWizardContainer = ({
   onSuccess
 }: SpareAssignmentWizardProps) => {
   const { formatMessage: fm } = useIntl()
-  const steps = useSpareAssignmentSteps()
   const { mutateAsync, isPending } = useAssignSpare()
   const { closeModal } = useModalGlobalStore()
   const queryClient = useQueryClient()
@@ -116,7 +147,7 @@ export const SpareAssignmentWizardContainer = ({
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
           <p className="text-sm text-muted-foreground">
-            {fm({ id: message.common.spareAssignment.processing })}
+            {fm({ id: messages.processing })}
           </p>
         </div>
       </div>
@@ -125,9 +156,44 @@ export const SpareAssignmentWizardContainer = ({
 
   return (
     <FormWizard<SpareAssignmentFormType>
-      steps={steps}
       onSubmit={handleSubmit}
-      initialData={initialData}
-    />
+      initialValues={initialData}
+    >
+      <WizardStep
+        id="itemSettings"
+        title={fm({ id: messages.wizard.steps.step1.title })}
+        validate={data =>
+          Boolean(data.oldItemCondition && data.newItemLocation)
+        }
+      >
+        <div className="space-y-4">
+          <Listbox
+            name="oldItemCondition"
+            label={fm({ id: messages.form.oldItemCondition.label })}
+            codebook={CODEBOOK.ITEM_CONDITION_STATUS}
+            required
+            rounded="rounded-md"
+          />
+          <SelectLocationCombo
+            locationField={{
+              name: 'newItemLocation',
+              label: fm({ id: messages.form.newItemLocation.label }),
+              codebook: CODEBOOK.LOCATION,
+              required: true,
+              rounded: 'rounded-md'
+            }}
+          />
+          <AutoAssignCheckbox />
+        </div>
+      </WizardStep>
+
+      <WizardStep
+        id="parentSystemSelection"
+        title={fm({ id: messages.wizard.steps.step2.title })}
+        shouldShow={data => !data.autoAssignParent}
+      >
+        <SpareParentSystemSelectTable />
+      </WizardStep>
+    </FormWizard>
   )
 }
