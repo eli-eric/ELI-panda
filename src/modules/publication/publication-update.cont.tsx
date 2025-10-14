@@ -36,6 +36,10 @@ export const PublicationUpdateContainer = () => {
     return <LoaderComponent />
   }
 
+  if (!publication) {
+    return <LoaderComponent />
+  }
+
   return (
     <PublicationDetailContainer publication={publication} refetch={refetch} />
   )
