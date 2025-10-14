@@ -1,29 +1,29 @@
 import type { PublicationForm } from '../types/form'
 import type { Publication } from '../types/responses'
 
-export const formatFormData = (data: PublicationForm): Publication => ({
+export const formatFormData = (data: any): Publication => ({
   ...data,
   allAuthorsCount: Number(data.allAuthorsCount),
   eliAuthorsCount: Number(data.eliAuthorsCount),
-  volume: Number(data.volume),
+  volume: data.volume ? Number(data.volume) : undefined,
   pagesCount: Number(data.pagesCount),
   issue: data.issue ? Number(data.issue) : undefined,
   impactFactor: data.impactFactor ? Number(data.impactFactor) : undefined,
-  authorsDepartments: data.authorsDepartments?.map(author => ({
-    ...author,
-    authorsCount: Number(author.authorsCount)
-  }))
+  authorsDepartments:
+    data.authorsDepartments?.map((author: any) => ({
+      ...author,
+      authorsCount: Number(author.authorsCount)
+    })) ?? []
 })
 
 export const formatPublication = (
   publication?: Publication
-): PublicationForm | undefined => {
+): any | undefined => {
   if (!publication) {
     return undefined
   }
 
-  const formattedPublication: PublicationForm = {
+  return {
     ...publication
   }
-  return formattedPublication
 }
