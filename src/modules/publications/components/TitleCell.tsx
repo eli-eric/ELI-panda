@@ -16,6 +16,7 @@ import { useAccessControl } from '@/hooks/useAccessControl'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 import { usePublicationEditSheet } from '@/modules/shared/publications/publication-edit/usePublicationEditSheet'
+import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 import { truncateString } from '@/utils'
 
@@ -57,8 +58,7 @@ export const TitleCell: FC<TitleCellProps> = ({
         <DropdownMenuContent align="start" sideOffset={4}>
           <DropdownMenuItem>
             <Link
-              href={`/publication/${uid}`}
-              target="_blank"
+              href={`${PATH.PUBLICATION}/${uid}`}
               className="flex gap-2 istems-center"
             >
               <Edit className="size-4" />

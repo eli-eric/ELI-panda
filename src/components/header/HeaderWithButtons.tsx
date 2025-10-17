@@ -1,4 +1,4 @@
-import { ArrowLeft, Save } from 'lucide-react'
+import { ArrowLeft, Loader2, Save } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { useRef } from 'react'
 import { useIntl } from 'react-intl'
@@ -17,6 +17,8 @@ interface Props {
   customElement?: React.ReactNode
   isFormInvalid?: boolean
   title?: string
+  isFormDirty?: boolean
+  loadingText?: string
 }
 
 export const HeaderWithButtons = ({
@@ -26,7 +28,9 @@ export const HeaderWithButtons = ({
   editRole,
   customElement,
   isFormInvalid = false,
-  title
+  title,
+  isFormDirty,
+  loadingText
 }: Props) => {
   const disabledEdit = usePermission([editRole])
   const { back } = useRouter()
@@ -58,6 +62,8 @@ export const HeaderWithButtons = ({
     onSubmitAndExit?.()
   }
 
+  const currentLoadingText = loadingText || (loading ? 'Processing...' : '')
+
   return (
     <div className="border-b bg-background sticky top-0 z-10">
       <div className="w-full px-4 py-2">
@@ -69,6 +75,17 @@ export const HeaderWithButtons = ({
               <h1 className="text-lg sm:text-xl font-semibold truncate">
                 {title}
               </h1>
+            )}
+            {loading && currentLoadingText && (
+              <span className="text-muted-foreground text-sm flex items-center gap-2 ml-4">
+                <Loader2 className="size-3 animate-spin" />
+                {currentLoadingText}
+              </span>
+            )}
+            {!loading && isFormDirty && (
+              <span className="text-muted-foreground text-sm ml-4" aria-live="polite">
+                {fm({ id: message.common.form.unsavedChanges })}
+              </span>
             )}
           </div>
           <div className="flex items-center gap-2 flex-shrink-0">
@@ -99,6 +116,7 @@ export const HeaderWithButtons = ({
                   onClick={handleSubmit}
                   disabled={loading || isFormInvalid}
                 >
+                  {loading && <Loader2 className="size-3 animate-spin mr-2" />}
                   {fm({ id: message.common.buttons.save })}
                 </Button>
                 <Button
@@ -106,6 +124,7 @@ export const HeaderWithButtons = ({
                   onClick={handleSubmitAndExit}
                   disabled={loading || isFormInvalid}
                 >
+                  {loading && <Loader2 className="size-3 animate-spin mr-2" />}
                   {fm({ id: message.common.buttons.saveAndExit })}
                 </Button>
               </div>
@@ -137,7 +156,11 @@ export const HeaderWithButtons = ({
                   disabled={loading || isFormInvalid}
                   title="Save"
                 >
-                  <Save className="h-4 w-4" />
+                  {loading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Save className="h-4 w-4" />
+                  )}
                 </Button>
                 <Button
                   size="sm"
@@ -145,7 +168,11 @@ export const HeaderWithButtons = ({
                   disabled={loading || isFormInvalid}
                   title="Save and Exit"
                 >
-                  <Save className="h-4 w-4" />
+                  {loading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Save className="h-4 w-4" />
+                  )}
                 </Button>
               </>
             )}

@@ -145,6 +145,7 @@ export const usePublicationFields = () => {
       label: form.impactFactor.label,
       rounded: 'rounded-md',
       name: 'impactFactor',
+      type: 'number',
       disabled
     },
     quartilBasis: {

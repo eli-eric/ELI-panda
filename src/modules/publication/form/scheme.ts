@@ -61,8 +61,25 @@ export const publicationPeerReviewedSchema = z.object({
   userCall: codebookSchema.nullable().optional(),
   userExperiment: z.string().optional(),
   webLink: z.string().optional(),
-  issue: z.union([z.string(), z.number()]).optional(),
-  impactFactor: z.number().optional(),
+  issue: z
+    .union([z.string(), z.number()])
+    .optional()
+    .transform(val => {
+      if (val === '' || val === undefined) return null
+      const num = Number(val)
+      return isNaN(num) ? null : num
+    })
+    .nullable(),
+
+  impactFactor: z
+    .union([z.string(), z.number()])
+    .optional()
+    .transform(val => {
+      if (val === '' || val === undefined) return null
+      const num = Number(val)
+      return isNaN(num) ? null : num
+    })
+    .nullable(),
   quartilBasis: z.string().optional(),
   quartil: z.string().nullable().optional(),
   grant: z.string().optional(),
@@ -117,7 +134,15 @@ export const publicationOtherSchema = z.object({
   userExperiment: z.string().optional(),
   webLink: z.string().optional(),
   issue: z.union([z.string(), z.number()]).optional(),
-  impactFactor: z.number().optional(),
+  impactFactor: z
+    .union([z.string(), z.number()])
+    .optional()
+    .transform(val => {
+      if (val === '' || val === undefined) return null
+      const num = Number(val)
+      return isNaN(num) ? null : num
+    })
+    .nullable(),
   shortJournalTitle: z.string().optional(),
   quartilBasis: z.string().optional(),
   quartil: z.string().nullable().optional(),
