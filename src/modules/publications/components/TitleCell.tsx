@@ -57,8 +57,7 @@ export const TitleCell: FC<TitleCellProps> = ({
         <DropdownMenuContent align="start" sideOffset={4}>
           <DropdownMenuItem>
             <Link
-              href={`/publication/${uid}`}
-              target="_blank"
+              href={`${PATH.PUBLICATION}/${uid}`}
               className="flex gap-2 istems-center"
             >
               <Edit className="size-4" />

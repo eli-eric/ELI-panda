@@ -51,11 +51,12 @@ export const PublicationFormContainer: FC<Props> = ({
   const defaultValues = publication
     ? formatPublication(publication)
     : ({
-        authorsDepartments: [{ department: null, authorsCount: 0 }]
+        authorsDepartments: [{ department: null, authorsCount: 0 }],
+        language: 'English'
       } as unknown as PublicationForm)
 
   const formMethods = useForm<any>({
-    defaultValues: publication ? formatPublication(publication) : defaultValues,
+    defaultValues: defaultValues,
     resolver: zodResolver(
       mediaType === MEDIA_TYPE_CODE.PeerReviewedArticle
         ? publicationPeerReviewedSchema

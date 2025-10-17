@@ -75,7 +75,7 @@ export const PublicationFreeFormComponent = () => {
       <Input {...fields.eissn} />
       <Input {...fields.eidScopus} />
       <PublishingCountryListbox />
-      <Input {...fields.language} defaultValue={'English'} disabled={true} />
+      <Input {...fields.language} disabled={true} />
       <TextArea {...fields.note} />
     </div>
   )

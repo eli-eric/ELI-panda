@@ -63,7 +63,7 @@ export const PublicationDetailContainer: FC<Props> = ({
     )
   })
 
-  const { mutate } = usePublicationMutation()
+  const { mutate, isPending } = usePublicationMutation()
 
   const onSuccessfulSubmit = () => {
     queryClient.invalidateQueries({ queryKey: [publicationsTableId] })
@@ -83,8 +83,8 @@ export const PublicationDetailContainer: FC<Props> = ({
   const onSubmitAndExit = formMethods.handleSubmit(data => {
     mutate(formatFormData(data), {
       onSuccess: () => {
-        router.push(PATH.PUBLICATIONS)
         onSuccessfulSubmit()
+        router.push(PATH.PUBLICATIONS)
       }
     })
   })
@@ -98,6 +98,8 @@ export const PublicationDetailContainer: FC<Props> = ({
       <HeaderWithButtons
         editRole={ROLE.PUBLICATIONS_EDIT}
         onSubmit={onSubmit}
+        loading={isPending}
+        isFormDirty={formMethods.formState.isDirty}
         onSubmitAndExit={onSubmitAndExit}
         customElement={
           <h1 className="text-xl font-bold">
