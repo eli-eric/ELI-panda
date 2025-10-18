@@ -110,10 +110,7 @@ export const FormModal = <T extends FieldValues>({
   open = false,
   setOpen,
   className,
-  disableSubmit = false,
-  title,
-  description,
-  size = 'l'
+  disableSubmit = false
 }: FormModalProps<T>) => {
   // Only render modal content when open
   if (!open) return null

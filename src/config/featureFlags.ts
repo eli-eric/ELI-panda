@@ -5,6 +5,8 @@
  * These flags are useful for development, debugging, and gradual feature rollouts.
  */
 
+import { isProductionEnvironment } from '@/lib/environment/utils'
+
 interface FeatureFlags {
   /**
    * Enable detailed HTTP request/response logging in fetchClient
@@ -17,11 +19,19 @@ interface FeatureFlags {
    * Logs mutation lifecycle: start, success, error with payloads
    */
   enableMutationLogging: boolean
+
+  /**
+   * Enable spare parts assignment functionality
+   * Allows users to assign spare parts to systems
+   * Disabled in production environment
+   */
+  enableSparePartsAssignment: boolean
 }
 
 export const featureFlags: FeatureFlags = {
   enableHttpLogging: false,
-  enableMutationLogging: false
+  enableMutationLogging: false,
+  enableSparePartsAssignment: !isProductionEnvironment()
 }
 
 /**

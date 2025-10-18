@@ -23,8 +23,6 @@ export const PublicationEditContainer = ({ uid }: Props) => {
     refetch
   } = usePublication(uid)
 
-  console.log({ publication, isLoading, isFetching, isError, error })
-
   const [, closeModal] = usePublicationEditSheet(uid)
 
   useEffect(() => {

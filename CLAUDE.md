@@ -169,3 +169,205 @@ const MyModalContent: React.FC<MyModalContentProps> = ({
 - Use appropriate `size` prop for content
 - For nested modals, use Dialog2 when Dialog1 is already open
 - Clean up any subscriptions or timers in `onClose`
+
+## Form Wizard V3 Pattern
+
+The application uses a declarative Form Wizard V3 system for multi-step forms with React Hook Form integration.
+
+### Core Components
+
+- **FormWizard**: Main wrapper component that manages wizard state and form context
+- **WizardStep**: Individual step component with validation and conditional rendering
+
+### When to Use Wizard V3
+
+Use Form Wizard V3 for:
+- Multi-step forms with 2+ steps
+- Forms with conditional steps based on previous inputs
+- Complex data entry workflows with validation per step
+- Forms requiring step-by-step validation before submission
+
+### Basic Wizard Structure
+
+```typescript
+import { useCallback, useMemo } from 'react'
+import { useIntl } from 'react-intl'
+import type { UseFormReset } from 'react-hook-form'
+import { FormWizard, WizardStep } from '@/modules/shared/form/wizardV3'
+import { TABLE_IDS } from '@/types/constants/tableIds'
+
+interface MyFormType {
+  field1: string
+  field2?: string
+  // ... other fields
+}
+
+export const MyFormWizard = ({
+  handleSubmit
+}: {
+  handleSubmit: (data: MyFormType, reset: UseFormReset<MyFormType>) => void
+}) => {
+  const { formatMessage: fm } = useIntl()
+
+  // Step validation
+  const validateStep1 = useCallback((data: MyFormType) => {
+    return Boolean(data.field1)
+  }, [])
+
+  // Conditional step visibility
+  const shouldShowStep2 = useCallback((data: MyFormType) => {
+    return Boolean(data.field1)
+  }, [])
+
+  // Step completion handler (async operations, filters, etc.)
+  const handleStep1Complete = useCallback(async (data: MyFormType) => {
+    // Perform async operations after step completion
+    console.log('Step 1 completed', data)
+  }, [])
+
+  return (
+    <FormWizard<MyFormType> onSubmit={handleSubmit}>
+      <WizardStep
+        id="step1"
+        title={fm({ id: 'messages.step1.title' })}
+        validate={validateStep1}
+        onStepComplete={handleStep1Complete}
+      >
+        {/* Step content */}
+        <div>Step 1 content</div>
+      </WizardStep>
+
+      <WizardStep
+        id="step2"
+        title={fm({ id: 'messages.step2.title' })}
+        shouldShow={shouldShowStep2}
+      >
+        {/* Step content */}
+        <div>Step 2 content</div>
+      </WizardStep>
+    </FormWizard>
+  )
+}
+```
+
+### Wizard Best Practices
+
+#### 1. **Use TABLE_IDS constant for table identifiers**
+```typescript
+import { TABLE_IDS } from '@/types/constants/tableIds'
+
+// ✅ Good
+const tableId = TABLE_IDS.SERVICE_LINE_ITEMS_SELECT
+
+// ❌ Bad - hardcoded string
+const tableId = 'items-select-table'
+```
+
+#### 2. **Memoize complex values to prevent re-renders**
+```typescript
+// ✅ Good - prevents child component re-renders
+const serviceTypeData = useMemo(() => {
+  return data ? { name: data.name, uid: data.uid } : undefined
+}, [data?.name, data?.uid])
+
+// ✅ Good - memoize array/object dependencies for useCallback
+const categoryFilters = useMemo(() => {
+  if (!data?.category) return null
+  return [{ id: 'category', value: data.category }]
+}, [data?.category])
+
+// ❌ Bad - creates new object on every render
+<MyComponent data={data ? { name: data.name, uid: data.uid } : undefined} />
+```
+
+#### 3. **Use fm() directly in title prop (don't memoize translations)**
+```typescript
+// ✅ Good - formatMessage is stable, call directly
+<WizardStep
+  id="step1"
+  title={fm({ id: messages.step1.title })}
+>
+
+// ❌ Bad - unnecessary memoization
+const stepTitles = useMemo(
+  () => ({
+    step1: fm({ id: messages.step1.title })
+  }),
+  [fm]
+)
+```
+
+#### 4. **Validation and conditional rendering**
+```typescript
+// Validation - returns boolean
+const validateStep = useCallback((data: FormType) => {
+  return Boolean(data.requiredField)
+}, [])
+
+// Conditional step visibility - MUST use formData parameter
+const shouldShowStep = useCallback((formData: FormType) => {
+  return formData.someField === 'someValue'
+}, [/* external dependencies if needed */])
+
+// ⚠️ Special case: Need external data but keep signature for API consistency
+const shouldShowStepWithExternal = useCallback((formData: FormType) => {
+  // NOTE: Using closure over external data because it's not in formData
+  // The formData parameter is kept for API consistency
+  return externalData ? Boolean(externalData.property) : true
+}, [externalData])
+
+<WizardStep
+  id="step1"
+  validate={validateStep}
+  shouldShow={shouldShowStep}
+>
+```
+
+#### 5. **Step completion handlers for side effects**
+```typescript
+// Use onStepComplete for:
+// - Applying filters
+// - Fetching additional data
+// - Clearing form fields
+// - Analytics/tracking
+
+const handleStepComplete = useCallback(async (data: FormType) => {
+  if (categoryFilters) {
+    setColumnFilters(categoryFilters)
+  }
+  // Other side effects
+}, [categoryFilters, setColumnFilters])
+```
+
+#### 6. **Document unusual patterns with comments**
+```typescript
+// ✅ Good - explain why eslint-disable is needed
+const data = useMemo(() => {
+  return processData(input)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // Reason: We only track specific properties to prevent unnecessary re-renders
+}, [input.specificProp])
+
+// ✅ Good - explain closure over external data in shouldShow
+const shouldShow = useCallback((formData: FormType) => {
+  // NOTE: Using closure over external API data because it's not in formData
+  return apiData ? Boolean(apiData.property) : true
+}, [apiData])
+```
+
+### Complete Real-World Examples
+
+**Primary example**: `src/modules/orderItem/components/serviceLines/form/service-line-v3.wizz.tsx`
+
+Key features demonstrated:
+- ✅ Uses `TABLE_IDS` and `ITEM_USAGE_FILTERS` constants
+- ✅ Memoizes complex objects (`categoryFilters`, `serviceTypeData`)
+- ✅ Uses `fm()` directly in title props
+- ✅ Proper useCallback with correct dependencies
+- ✅ Step validation and conditional rendering
+- ✅ Side effects in `onStepComplete`
+- ✅ Documented eslint-disable and special cases
+
+**Secondary example**: `src/modules/shared/system/use-spare/components/spare-assignment-wizard.cont.tsx`
+- Shows proper usage of `shouldShow` with formData parameter
+- Demonstrates error handling in onSubmit

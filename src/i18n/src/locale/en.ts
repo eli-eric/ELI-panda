@@ -193,6 +193,39 @@ export const messages = {
       systemHierarchy: 'System Hierarchy',
       location: 'Location:'
     },
+    spareAssignment: {
+      wizard: {
+        steps: {
+          step1: {
+            title: 'Item Settings'
+          },
+          step2: {
+            title: 'Select Parent System'
+          }
+        }
+      },
+      form: {
+        oldItemCondition: {
+          label: 'Old Item Condition'
+        },
+        newItemLocation: {
+          label: 'New Item Location'
+        },
+        autoAssignParent: {
+          label: 'Auto-assign parent system (closest trash in hierarchy)'
+        }
+      },
+      success: {
+        assigned: 'Spare part successfully assigned to system'
+      },
+      errors: {
+        noSystemSelected: 'Please select a parent system for the old item',
+        assignmentFailed: 'Failed to assign spare part. Please try again.',
+        conditionRequired: 'Please select the condition of the old item',
+        locationRequired: 'Please select the location for the old item'
+      },
+      processing: 'Assigning spare part...'
+    },
     publications: {
       clickHere: 'Click here'
     },
@@ -226,6 +259,8 @@ export const messages = {
       assignItem: 'Assign Item',
       moveItem: 'Move Item',
       previous: 'Previous',
+      loadingStep: 'Loading step...',
+      modalContent: 'Modal content',
       sourceSystem: 'Source System:',
       assigningItem: 'Assigning Item:',
       movingItem: 'Moving Item:',
