@@ -6,6 +6,7 @@ import { Button } from '@/components/Buttons'
 import { Tooltip } from '@/components/Tooltip'
 import { Disclosure } from '@/components/ui'
 import { Badge } from '@/components/ui/badge'
+import { isFeatureEnabled } from '@/config/featureFlags'
 import { message } from '@/i18n/src/messages'
 import { useSystemStore } from '@/modules/shared/system/device-info-overlay/store/useShowDeviceStore'
 import { IconCell } from '@/modules/systems/components/table/cells/IconCell'
@@ -113,13 +114,22 @@ export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
                       <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-blue-500 dark:text-blue-400 shrink-0" />
                     </div>
                     <div className="flex items-center space-x-1">
-                      <Tooltip content="Use this spare part">
+                      <Tooltip
+                        content={
+                          isFeatureEnabled('enableSparePartsAssignment')
+                            ? 'Use this spare part'
+                            : 'Spare parts assignment is disabled'
+                        }
+                      >
                         <Button
                           onClick={handleUseSpare(
                             physicalItem?.uid || '',
                             systemDetail.uid
                           )}
                           className="text-[10px]"
+                          disabled={
+                            !isFeatureEnabled('enableSparePartsAssignment')
+                          }
                         >
                           {fm({ id: message.common.systemOverlay.useSpare })}
                         </Button>
