@@ -33,9 +33,8 @@ export const SystemEditForm = ({
   uid: string
   onClose?: () => void
 }) => {
-  const { systemDetail, physicalItem, catalogueItem } = useSuspenseSystemDetail(
-    { uid }
-  )
+  const { systemDetail, physicalItem, catalogueItem, refetch } =
+    useSuspenseSystemDetail({ uid })
   const parentPath = systemDetail?.parentPath || []
   const systemImageRef = useRef<ImageGalleryRef | undefined>(undefined)
   const serviceItems = physicalItem?.serviceItemsConnection?.edges || []
@@ -168,6 +167,7 @@ export const SystemEditForm = ({
           <SparePartsCoverageSection
             systemDetail={systemDetail}
             withDirtyProtection={withDirtyProtection}
+            onSpareAssigned={refetch}
           />
         )}
       {systemDetail && (

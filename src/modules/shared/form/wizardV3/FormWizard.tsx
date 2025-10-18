@@ -1,112 +1,84 @@
-import { useMemo, useState } from 'react'
-import type {
-  DefaultValues,
-  FieldValues,
-  Path,
-  UseFormReset
-} from 'react-hook-form'
+import type { ReactElement } from 'react'
+import { Children, useMemo, useState } from 'react'
+import type { DefaultValues, FieldValues, UseFormReset } from 'react-hook-form'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 
 import { Button } from '@/components/ui/button'
 import { message } from '@/i18n/src/messages'
 
-import FormStep from './components/form-step'
-import { StepIndicator } from './components/step-indicator'
-import type { WizardStepConfig } from './types'
+import { StepIndicator } from './components/StepIndicator'
+import type { VisibleStep, WizardStepProps } from './types'
 
 interface FormWizardProps<T extends FieldValues> {
-  steps: WizardStepConfig<T>[]
-  onSubmit: (data: T, reset: UseFormReset<T>) => void
-  initialData?: Partial<T>
+  children: ReactElement<WizardStepProps<T>>[]
+  onSubmit: (data: T, reset: UseFormReset<T>) => void | Promise<void>
+  initialValues?: Partial<T>
 }
 
-export const FormWizard = <T extends Record<string, any>>({
-  steps,
+export const FormWizard = <T extends FieldValues>({
+  children,
   onSubmit,
-  initialData
+  initialValues
 }: FormWizardProps<T>) => {
   const { formatMessage: fm } = useIntl()
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
   const [isProcessing, setIsProcessing] = useState(false)
-  const methods = useForm<T>({
-    defaultValues: initialData as DefaultValues<T>
-  })
-  const { handleSubmit, getValues, watch, reset, unregister } = methods
 
-  // Watch all form values to trigger re-calculation of visible steps
+  const methods = useForm<T>({
+    defaultValues: initialValues as DefaultValues<T>,
+    mode: 'onChange'
+  })
+
+  const { handleSubmit, watch, reset } = methods
   const formValues = watch()
 
-  // Filter out steps that shouldn't be shown
-  const visibleSteps = useMemo(
-    () => steps.filter(step => !step.shouldShow || step.shouldShow(formValues)),
-    [steps, formValues]
-  )
+  // Extract step configurations from children
+  const steps = useMemo(() => {
+    return Children.map(children, child => child.props) || []
+  }, [children])
+
+  // Filter visible steps based on shouldShow
+  const visibleSteps = useMemo<VisibleStep[]>(() => {
+    return steps
+      .filter(step => !step.shouldShow || step.shouldShow(formValues as T))
+      .map(step => ({ id: step.id, title: step.title }))
+  }, [steps, formValues])
 
   const currentStep = steps[currentStepIndex]
-
-  // Determine if current step is the last VISIBLE step
   const currentStepIndexInVisible = visibleSteps.findIndex(
     step => step.id === currentStep?.id
   )
   const isLastStep = currentStepIndexInVisible === visibleSteps.length - 1
 
+  // Check if current step is valid
   const isCurrentStepValid = useMemo(() => {
     if (!currentStep) return false
-    const currentFields = currentStep.fields
-
-    // Kontrola fields (existující logika)
-    if (currentFields) {
-      const fieldsValid = currentFields.every(field => {
-        if (!field.field.required) {
-          return true
-        }
-        const fieldValue = watch(field.field.name as Path<T>)
-        if (Array.isArray(fieldValue)) {
-          return fieldValue.length > 0
-        }
-        return (
-          fieldValue !== undefined && fieldValue !== null && fieldValue !== ''
-        )
-      })
-      if (!fieldsValid) return false
+    if (currentStep.validate) {
+      return currentStep.validate(formValues as T)
     }
-
-    // Kontrola custom validation
-    if (currentStep.validation) {
-      return currentStep.validation(getValues())
-    }
-
     return true
-  }, [currentStep, getValues, watch])
+  }, [currentStep, formValues])
 
   const handleNext = async () => {
     if (!currentStep) return
 
-    const currentData = getValues()
-    // Check if current step has validation
-    if (currentStep.validation) {
-      const isValid = currentStep.validation(currentData)
-      if (!isValid) {
-        return
-      }
-    }
-
     setIsProcessing(true)
     try {
-      // Wait for onStepComplete if it's defined
+      // Call onStepComplete if defined
       if (currentStep.onStepComplete) {
-        await currentStep.onStepComplete(currentData, unregister)
+        await currentStep.onStepComplete(formValues as T)
       }
 
       if (isLastStep) {
-        handleSubmit(data => onSubmit(data, reset))()
+        // Submit the form
+        await handleSubmit(data => onSubmit(data, reset))()
       } else {
         // Find next visible step
         let nextIndex = currentStepIndex + 1
         while (nextIndex < steps.length) {
           const nextStep = steps[nextIndex]
-          if (!nextStep.shouldShow || nextStep.shouldShow(currentData)) {
+          if (!nextStep.shouldShow || nextStep.shouldShow(formValues as T)) {
             break
           }
           nextIndex++
@@ -123,7 +95,7 @@ export const FormWizard = <T extends Record<string, any>>({
     let prevIndex = currentStepIndex - 1
     while (prevIndex >= 0) {
       const prevStep = steps[prevIndex]
-      if (!prevStep.shouldShow || prevStep.shouldShow(getValues())) {
+      if (!prevStep.shouldShow || prevStep.shouldShow(formValues as T)) {
         break
       }
       prevIndex--
@@ -139,6 +111,15 @@ export const FormWizard = <T extends Record<string, any>>({
     )
   }
 
+  // Render current step content
+  const stepContent =
+    typeof currentStep.children === 'function'
+      ? currentStep.children({
+          values: formValues as T,
+          isValid: isCurrentStepValid
+        })
+      : currentStep.children
+
   return (
     <div>
       <StepIndicator
@@ -148,10 +129,7 @@ export const FormWizard = <T extends Record<string, any>>({
       />
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(data => onSubmit(data, reset))}>
-          <FormStep
-            fields={currentStep.fields}
-            component={currentStep.component}
-          />
+          <div className="py-6">{stepContent}</div>
           <div className="mt-6 flex justify-between">
             {currentStepIndex > 0 ? (
               <Button
@@ -170,7 +148,11 @@ export const FormWizard = <T extends Record<string, any>>({
               onClick={handleNext}
               disabled={!isCurrentStepValid || isProcessing}
             >
-              {isProcessing ? 'Processing...' : isLastStep ? 'Submit' : 'Next'}
+              {isProcessing
+                ? 'Processing...'
+                : isLastStep
+                  ? 'Submit'
+                  : 'Next'}
             </Button>
           </div>
         </form>

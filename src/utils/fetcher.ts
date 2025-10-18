@@ -138,7 +138,7 @@ export const queryFetcher = <T = unknown>(endpointType: string) => {
 }
 
 export const queryMutate = <TResponse, TVariables>(
-  endpointType: string,
+  endpointType: keyof ReturnType<typeof getEndpoints>,
   mutationType: 'post' | 'put' | 'delete',
   uid?: string,
   isDefaultUrl?: boolean,

@@ -9,7 +9,7 @@ export const useLocationSelectionModal = () => {
   const openLocationModal = (
     onSelect?: (location: CodebookType | null) => void
   ) => {
-    openModal('dialog2', {
+    openModal('dialog1', {
       component: CodebookTreeModalGraphqlContent,
       props: {
         title: 'Select Location',
