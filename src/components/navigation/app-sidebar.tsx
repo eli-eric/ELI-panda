@@ -29,8 +29,6 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
 
   const filteredNavMain = useFilteredNavigation(NAV_ITEMS)
   const filteredOthers = useFilteredNavigation(OTHERS_NAV_ITEMS)
-  console.log('Filtered Nav Main:', filteredNavMain)
-  console.log('Filtered Others:', filteredOthers)
 
   return (
     <Sidebar collapsible="icon" {...props}>

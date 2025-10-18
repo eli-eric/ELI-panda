@@ -63,7 +63,6 @@ export const Input = ({
       control={control}
       defaultValue={defaultValue || ''}
       render={({ field, fieldState: { error } }) => {
-        console.log(error)
         return (
           <div className={cn('space-y-1 w-full', className)}>
             {label && <Label htmlFor={idHtml}>{label}</Label>}

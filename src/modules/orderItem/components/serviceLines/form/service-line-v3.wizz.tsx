@@ -35,6 +35,10 @@ export const ServiceLineV3Wizard = ({ handleSubmit }: Props) => {
   >()
 
   const { data } = useServiceType(serviceTypeUid)
+  const category = data?.category
+  const properties = data?.properties
+  const serviceName = data?.name
+  const serviceUid = data?.uid
 
   const [, setColumnFilters] = useFilters(
     TABLE_IDS.SERVICE_LINE_ITEMS_SELECT,
@@ -44,11 +48,11 @@ export const ServiceLineV3Wizard = ({ handleSubmit }: Props) => {
 
   // Memoized category filters - prevents unnecessary re-renders
   const categoryFilters = useMemo(() => {
-    if (!data?.category) return null
+    if (!category) return null
     return [
       {
         id: 'category',
-        value: data.category
+        value: category
       },
       {
         id: 'itemUsage',
@@ -56,15 +60,14 @@ export const ServiceLineV3Wizard = ({ handleSubmit }: Props) => {
         name: 'itemUsage'
       }
     ] as ColumnFiltersState
-  }, [data?.category])
+  }, [category])
 
   // Memoized service type data - prevents unnecessary re-renders of Step2
   const serviceTypeData = useMemo(() => {
-    return data ? { name: data.name, uid: data.uid } : undefined
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    // Reason: We only want to track changes in name and uid properties to prevent
-    // unnecessary re-renders when other data properties change
-  }, [data?.name, data?.uid])
+    return serviceName && serviceUid
+      ? { name: serviceName, uid: serviceUid }
+      : undefined
+  }, [serviceName, serviceUid])
 
   // Callback for service type change
   const onServiceTypeChange = useCallback((serviceType?: any) => {
@@ -73,13 +76,14 @@ export const ServiceLineV3Wizard = ({ handleSubmit }: Props) => {
 
   // Determine if details step should be shown
   const shouldShowDetails = useCallback(
-    (formData: ServiceLineFormType) => {
-      // NOTE: We use closure over 'data' from useServiceType because
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    (_formData: ServiceLineFormType) => {
+      // NOTE: We use closure over 'properties' from useServiceType because
       // service type properties are fetched separately and not stored in formData.
-      // The formData parameter is kept for API consistency.
-      return data ? Boolean(data?.properties?.length) : true
+      // The formData parameter is kept for WizardStep API consistency.
+      return properties ? Boolean(properties.length) : true
     },
-    [data]
+    [properties]
   )
 
   // Step 1 completion handler

@@ -92,6 +92,7 @@ export const FormWizard = <T extends FieldValues>({
       const errorMessage =
         err instanceof Error ? err.message : 'An error occurred'
       setError(errorMessage)
+      // eslint-disable-next-line no-console
       console.error('Wizard step error:', err)
     } finally {
       setIsProcessing(false)
@@ -115,7 +116,7 @@ export const FormWizard = <T extends FieldValues>({
   if (!currentStep) {
     return (
       <div className="p-4 text-center text-muted-foreground">
-        Loading step...
+        {fm({ id: message.common.forms.loadingStep })}
       </div>
     )
   }

@@ -259,6 +259,8 @@ export const messages = {
       assignItem: 'Assign Item',
       moveItem: 'Move Item',
       previous: 'Previous',
+      loadingStep: 'Loading step...',
+      modalContent: 'Modal content',
       sourceSystem: 'Source System:',
       assigningItem: 'Assigning Item:',
       movingItem: 'Moving Item:',

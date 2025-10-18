@@ -76,12 +76,16 @@ export const SpareAssignmentWizardContainer = ({
     try {
       // Validate required fields
       if (!data.oldItemCondition) {
-        toast.error(fm({ id: message.common.spareAssignment.errors.conditionRequired }))
+        toast.error(
+          fm({ id: message.common.spareAssignment.errors.conditionRequired })
+        )
         return
       }
 
       if (!data.newItemLocation) {
-        toast.error(fm({ id: message.common.spareAssignment.errors.locationRequired }))
+        toast.error(
+          fm({ id: message.common.spareAssignment.errors.locationRequired })
+        )
         return
       }
 
@@ -122,9 +126,7 @@ export const SpareAssignmentWizardContainer = ({
         queryClient.invalidateQueries({ queryKey: ['system-detail'] })
       ])
 
-      toast.success(
-        fm({ id: message.common.spareAssignment.success.assigned })
-      )
+      toast.success(fm({ id: message.common.spareAssignment.success.assigned }))
 
       // Call onSuccess callback to refresh system detail
       if (onSuccess) {
@@ -137,6 +139,7 @@ export const SpareAssignmentWizardContainer = ({
       toast.error(
         fm({ id: message.common.spareAssignment.errors.assignmentFailed })
       )
+      //eslint-disable-next-line
       console.error('Failed to assign spare part:', error)
     }
   }

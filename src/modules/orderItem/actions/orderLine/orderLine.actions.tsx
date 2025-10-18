@@ -113,7 +113,6 @@ export const OrderisDeliveredAction = ({
   orderLine: OrderLineFormType
   checked?: boolean
 }) => {
-  const { formatMessage: fm } = useIntl()
   const uid = useRouter().query.uid as string
   const { orderLineDelivery } = useEndpoint({
     uid: uid,

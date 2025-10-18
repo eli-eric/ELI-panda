@@ -11,7 +11,6 @@ import { filterNavigationByPermission } from '@/lib/navigation/utils'
  */
 export function useFilteredNavigation(items: NavigationItem[]) {
   const { data } = useSession()
-  console.log('User roles:', data?.user?.roles)
 
   return useMemo(
     () => filterNavigationByPermission(items, data?.user?.roles),

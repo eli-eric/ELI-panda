@@ -134,7 +134,7 @@ export const FormWizard = <T extends Record<string, any>>({
   if (!currentStep) {
     return (
       <div className="p-4 text-center text-muted-foreground">
-        Loading step...
+        {fm({ id: message.common.forms.loadingStep })}
       </div>
     )
   }
