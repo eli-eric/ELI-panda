@@ -5,18 +5,18 @@ import { Tooltip } from '@/components/Tooltip'
 import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
 import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import useTableStateStore from '@/store/useTableStateStore'
+import { TABLE_IDS } from '@/types/constants/tableIds'
 
 import { useServiceLine } from '../../hooks/useServiceLine'
 import type { ServiceLineFormType } from '../../types/form'
 import { useServiceLineSelectionStore } from './form/details/store/useServiceLineSelectionStore'
-import { ServiceLineWizard } from './form/service-line.wizz'
+import { ServiceLineV3Wizard } from './form/service-line-v3.wizz'
 
 export const ServiceLinesAddButton = () => {
   const { openModal, closeModal } = useModalGlobalStore()
   const { setServiceLine } = useServiceLine()
   const { clearSelections } = useServiceLineSelectionStore()
 
-  const tableId = 'items-select-table'
   const { reset: resetTable } = useTableStateStore()
 
   const handleSubmit = useCallback(
@@ -53,16 +53,16 @@ export const ServiceLinesAddButton = () => {
       }
 
       reset()
-      resetTable(tableId)
+      resetTable(TABLE_IDS.SERVICE_LINE_ITEMS_SELECT)
       clearSelections()
       closeModal('dialog1')
     },
-    [setServiceLine, resetTable, tableId, clearSelections, closeModal]
+    [setServiceLine, resetTable, clearSelections, closeModal]
   )
   // Use useCallback for handleAddServiceLine
   const handleOpenAddServiceLine = () => {
     openModal('dialog1', {
-      component: ServiceLineWizard,
+      component: ServiceLineV3Wizard,
       props: {
         title: 'Add Service Line',
         size: 'xl',

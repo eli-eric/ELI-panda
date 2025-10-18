@@ -1,5 +1,6 @@
 import { XIcon } from 'lucide-react'
 import React from 'react'
+import { useIntl } from 'react-intl'
 
 import {
   Dialog,
@@ -20,6 +21,7 @@ import {
   SheetPortal,
   SheetTitle
 } from '@/components/ui/sheet'
+import { message } from '@/i18n/src/messages'
 import {
   type ModalSlot,
   useModalGlobalStore
@@ -107,6 +109,8 @@ const ModalDialog: React.FC<{
   closeModal: (type: 'dialog1' | 'dialog2') => void
   type: 'dialog1' | 'dialog2'
 }> = ({ slot, closeModal, type }) => {
+  const { formatMessage: fm } = useIntl()
+
   const handleOpenChange = (open: boolean) => {
     if (!open) {
       // Check if closing should be prevented
@@ -139,7 +143,7 @@ const ModalDialog: React.FC<{
               <DialogDescription>{slot.props.description}</DialogDescription>
             ) : (
               <DialogDescription id="modal-content" className="sr-only">
-                Modal content
+                {fm({ id: message.common.forms.modalContent })}
               </DialogDescription>
             )}
           </DialogHeader>

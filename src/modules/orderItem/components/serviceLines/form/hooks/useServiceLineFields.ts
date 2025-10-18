@@ -24,6 +24,7 @@ export const useServiceLineFields = () => {
       name: 'serviceType',
       label: formMessage.serviceType.label,
       rounded: 'rounded-md',
+      required: true,
       codebookResponse: data?.map(({ uid, name }) => ({
         name,
         uid

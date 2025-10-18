@@ -6,11 +6,13 @@ import { Button } from '@/components/Buttons'
 import { Tooltip } from '@/components/Tooltip'
 import { Disclosure } from '@/components/ui'
 import { Badge } from '@/components/ui/badge'
+import { isFeatureEnabled } from '@/config/featureFlags'
 import { message } from '@/i18n/src/messages'
 import { useSystemStore } from '@/modules/shared/system/device-info-overlay/store/useShowDeviceStore'
 import { IconCell } from '@/modules/systems/components/table/cells/IconCell'
 import type { ITEM_USAGE } from '@/modules/systems/types/constants'
 
+import { useSpareDialog } from '../../../use-spare/useSpareDialog'
 import { SystemDetailParameter } from '../system-detail-parameter.comp'
 
 interface SparePartsCoverageSectionProps {
@@ -18,20 +20,29 @@ interface SparePartsCoverageSectionProps {
   withDirtyProtection?: <T extends any[]>(
     callback: (...args: T) => void
   ) => (...args: T) => void
+  onSpareAssigned?: () => void
 }
 
 export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
   systemDetail,
-  withDirtyProtection
+  withDirtyProtection,
+  onSpareAssigned
 }) => {
   const { formatMessage: fm } = useIntl()
   const { setUID } = useSystemStore()
+  const openUseSpare = useSpareDialog()
 
   const handleSystemRedirect = (uid: string) => {
     if (withDirtyProtection) {
       withDirtyProtection(() => setUID(uid))()
     } else {
       setUID(uid)
+    }
+  }
+
+  const handleUseSpare = (spareItemUid: string, systemUid: string) => {
+    return () => {
+      openUseSpare({ systemUid, spareItemUid, onSuccess: onSpareAssigned })
     }
   }
 
@@ -78,12 +89,12 @@ export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
             {systemDetail.sparePartsConnection.edges.map(
               (edge: any, index: number) => {
                 const { node } = edge
-                const { physicalItem, name } = node
+                const { physicalItem, name, uid: spareSystemUid } = node
 
                 return (
                   <button
                     key={index}
-                    onClick={() => handleSystemRedirect(node.uid)}
+                    onClick={() => handleSystemRedirect(spareSystemUid)}
                     className="flex justify-between text-xs px-2 py-1 rounded-md transition-all duration-200 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-200 dark:hover:border-blue-700 border border-transparent cursor-pointer group w-full"
                   >
                     <div className="flex items-center space-x-2 flex-1 min-w-0">
@@ -103,12 +114,22 @@ export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
                       <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-blue-500 dark:text-blue-400 shrink-0" />
                     </div>
                     <div className="flex items-center space-x-1">
-                      <Tooltip content="Use this spare part">
+                      <Tooltip
+                        content={
+                          isFeatureEnabled('enableSparePartsAssignment')
+                            ? 'Use this spare part'
+                            : 'Spare parts assignment is disabled'
+                        }
+                      >
                         <Button
-                          onClick={() => {
-                            // TODO: Implement use spare part functionality
-                          }}
+                          onClick={handleUseSpare(
+                            physicalItem?.uid || '',
+                            systemDetail.uid
+                          )}
                           className="text-[10px]"
+                          disabled={
+                            !isFeatureEnabled('enableSparePartsAssignment')
+                          }
                         >
                           {fm({ id: message.common.systemOverlay.useSpare })}
                         </Button>

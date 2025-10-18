@@ -7,27 +7,25 @@ import { PandaTableV2 } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
 import { SearchBar } from '@/modules/shared/table/SearchBar'
 import { SystemFilterButtonContainer } from '@/modules/systems/components/filters/SystemsFilterButton.cont'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
-import { TABLE_IDS } from '@/types/constants/tableIds'
 import type { SystemDetail } from '@/types/responses/systems'
 
-import { useSystemsItemsColumns } from './useSystemItemsColumns'
+import { useSpareParentSystemColumns } from './useSpareParentSystemColumns'
 
-export const ItemsSelectTable = () => {
-  const tableId = TABLE_IDS.SERVICE_LINE_ITEMS_SELECT
+export const SpareParentSystemSelectTable = () => {
+  const tableId = 'spare-parent-system-select-table'
 
-  // Memoizujeme nastavení tabulky, aby nedocházelo k zbytečným re-renderům
   const settings = useMemo<PandaTableSettings<SystemDetail>>(
     () => ({
-      enableMultiRowSelection: true,
+      enableMultiRowSelection: false,
       enableColumnHiding: true,
       enableColumnReordering: false,
       enableQueryURL: false,
-      enableRowSelection: row => !!row.original.physicalItem?.uid
+      enableRowSelection: row => !row.original.physicalItem?.uid
     }),
     []
   )
 
-  const columns = useSystemsItemsColumns({ tableId })
+  const columns = useSpareParentSystemColumns({ tableId })
 
   const { systems } = useSystems(tableId)
 
@@ -39,7 +37,6 @@ export const ItemsSelectTable = () => {
     getSubRows: original => original.subSystems ?? []
   })
 
-  // Memoizujeme další props pro komponenty
   const paginationSettings = useMemo(
     () => ({
       enableQueryURL: settings?.enableQueryURL,
@@ -49,7 +46,6 @@ export const ItemsSelectTable = () => {
     [settings?.enableQueryURL, systems?.totalCount]
   )
 
-  // Optimalizujeme renderování komponenty
   return (
     <div>
       <SearchBar
@@ -57,7 +53,6 @@ export const ItemsSelectTable = () => {
         useQuery={settings?.enableQueryURL}
         left={
           <SystemFilterButtonContainer
-            disabledFields={{ category: true }}
             tableId={tableId}
             enableQueryURL={settings?.enableQueryURL}
           />
@@ -75,6 +70,5 @@ export const ItemsSelectTable = () => {
   )
 }
 
-// Export optimalizované komponenty
-const MemoizedItemsSelectTable = memo(ItemsSelectTable)
-export default MemoizedItemsSelectTable
+const MemoizedSpareParentSystemSelectTable = memo(SpareParentSystemSelectTable)
+export default MemoizedSpareParentSystemSelectTable

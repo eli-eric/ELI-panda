@@ -102,6 +102,7 @@ export async function fetchRequest<T = unknown>(
   const rawText = await response.text()
 
   if (isFeatureEnabled('enableHttpLogging')) {
+    //eslint-disable-next-line
     console.log('[fetchClient] Response details:', {
       url,
       method: options.method || 'GET',
@@ -118,6 +119,7 @@ export async function fetchRequest<T = unknown>(
     return JSON.parse(rawText) as T
   } catch (error) {
     if (isFeatureEnabled('enableHttpLogging')) {
+      //eslint-disable-next-line
       console.error('[fetchClient] JSON parse error:', {
         error,
         rawText: rawText.substring(0, 500)

@@ -34,10 +34,25 @@ export const FormWizard = <T extends Record<string, any>>({
   })
   const { handleSubmit, getValues, watch, reset, unregister } = methods
 
+  // Watch all form values to trigger re-calculation of visible steps
+  const formValues = watch()
+
+  // Filter out steps that shouldn't be shown
+  const visibleSteps = useMemo(
+    () => steps.filter(step => !step.shouldShow || step.shouldShow(formValues)),
+    [steps, formValues]
+  )
+
   const currentStep = steps[currentStepIndex]
-  const isLastStep = currentStepIndex === steps.length - 1
+
+  // Determine if current step is the last VISIBLE step
+  const currentStepIndexInVisible = visibleSteps.findIndex(
+    step => step.id === currentStep?.id
+  )
+  const isLastStep = currentStepIndexInVisible === visibleSteps.length - 1
 
   const isCurrentStepValid = useMemo(() => {
+    if (!currentStep) return false
     const currentFields = currentStep.fields
 
     // Kontrola fields (existující logika)
@@ -66,6 +81,8 @@ export const FormWizard = <T extends Record<string, any>>({
   }, [currentStep, getValues, watch])
 
   const handleNext = async () => {
+    if (!currentStep) return
+
     const currentData = getValues()
     // Check if current step has validation
     if (currentStep.validation) {
@@ -114,10 +131,13 @@ export const FormWizard = <T extends Record<string, any>>({
     setCurrentStepIndex(Math.max(0, prevIndex))
   }
 
-  // Filter out steps that shouldn't be shown
-  const visibleSteps = steps.filter(
-    step => !step.shouldShow || step.shouldShow(getValues())
-  )
+  if (!currentStep) {
+    return (
+      <div className="p-4 text-center text-muted-foreground">
+        {fm({ id: message.common.forms.loadingStep })}
+      </div>
+    )
+  }
 
   return (
     <div>
