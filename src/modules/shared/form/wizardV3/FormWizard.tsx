@@ -22,8 +22,9 @@ export const FormWizard = <T extends FieldValues>({
   initialValues
 }: FormWizardProps<T>) => {
   const { formatMessage: fm } = useIntl()
-  const [currentStepIndex, setCurrentStepIndex] = useState(0)
+  const [currentAllStepsIndex, setCurrentAllStepsIndex] = useState(0)
   const [isProcessing, setIsProcessing] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const methods = useForm<T>({
     defaultValues: initialValues as DefaultValues<T>,
@@ -45,11 +46,11 @@ export const FormWizard = <T extends FieldValues>({
       .map(step => ({ id: step.id, title: step.title }))
   }, [steps, formValues])
 
-  const currentStep = steps[currentStepIndex]
-  const currentStepIndexInVisible = visibleSteps.findIndex(
+  const currentStep = steps[currentAllStepsIndex]
+  const currentVisibleStepIndex = visibleSteps.findIndex(
     step => step.id === currentStep?.id
   )
-  const isLastStep = currentStepIndexInVisible === visibleSteps.length - 1
+  const isLastStep = currentVisibleStepIndex === visibleSteps.length - 1
 
   // Check if current step is valid
   const isCurrentStepValid = useMemo(() => {
@@ -64,6 +65,8 @@ export const FormWizard = <T extends FieldValues>({
     if (!currentStep) return
 
     setIsProcessing(true)
+    setError(null) // Clear previous errors
+
     try {
       // Call onStepComplete if defined
       if (currentStep.onStepComplete) {
@@ -75,7 +78,7 @@ export const FormWizard = <T extends FieldValues>({
         await handleSubmit(data => onSubmit(data, reset))()
       } else {
         // Find next visible step
-        let nextIndex = currentStepIndex + 1
+        let nextIndex = currentAllStepsIndex + 1
         while (nextIndex < steps.length) {
           const nextStep = steps[nextIndex]
           if (!nextStep.shouldShow || nextStep.shouldShow(formValues as T)) {
@@ -83,8 +86,13 @@ export const FormWizard = <T extends FieldValues>({
           }
           nextIndex++
         }
-        setCurrentStepIndex(nextIndex)
+        setCurrentAllStepsIndex(nextIndex)
       }
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : 'An error occurred'
+      setError(errorMessage)
+      console.error('Wizard step error:', err)
     } finally {
       setIsProcessing(false)
     }
@@ -92,7 +100,7 @@ export const FormWizard = <T extends FieldValues>({
 
   const handleBack = () => {
     // Find previous visible step
-    let prevIndex = currentStepIndex - 1
+    let prevIndex = currentAllStepsIndex - 1
     while (prevIndex >= 0) {
       const prevStep = steps[prevIndex]
       if (!prevStep.shouldShow || prevStep.shouldShow(formValues as T)) {
@@ -100,7 +108,8 @@ export const FormWizard = <T extends FieldValues>({
       }
       prevIndex--
     }
-    setCurrentStepIndex(Math.max(0, prevIndex))
+    setCurrentAllStepsIndex(Math.max(0, prevIndex))
+    setError(null) // Clear errors when going back
   }
 
   if (!currentStep) {
@@ -124,14 +133,19 @@ export const FormWizard = <T extends FieldValues>({
     <div>
       <StepIndicator
         steps={visibleSteps}
-        currentStep={currentStepIndex}
+        currentStep={currentVisibleStepIndex}
         totalSteps={visibleSteps.length}
       />
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(data => onSubmit(data, reset))}>
+          {error && (
+            <div className="mb-4 p-3 bg-destructive/10 text-destructive rounded-md text-sm">
+              {error}
+            </div>
+          )}
           <div className="py-6">{stepContent}</div>
           <div className="mt-6 flex justify-between">
-            {currentStepIndex > 0 ? (
+            {currentAllStepsIndex > 0 ? (
               <Button
                 type="button"
                 variant="outline"

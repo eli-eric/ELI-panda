@@ -7,12 +7,13 @@ import { PandaTableV2 } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
 import { SearchBar } from '@/modules/shared/table/SearchBar'
 import { SystemFilterButtonContainer } from '@/modules/systems/components/filters/SystemsFilterButton.cont'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
+import { TABLE_IDS } from '@/types/constants/tableIds'
 import type { SystemDetail } from '@/types/responses/systems'
 
 import { useSystemsItemsColumns } from './useSystemItemsColumns'
 
 export const ItemsSelectTable = () => {
-  const tableId = 'items-select-table'
+  const tableId = TABLE_IDS.SERVICE_LINE_ITEMS_SELECT
 
   // Memoizujeme nastavení tabulky, aby nedocházelo k zbytečným re-renderům
   const settings = useMemo<PandaTableSettings<SystemDetail>>(
