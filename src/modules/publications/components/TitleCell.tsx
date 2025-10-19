@@ -16,6 +16,7 @@ import { useAccessControl } from '@/hooks/useAccessControl'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 import { usePublicationEditSheet } from '@/modules/shared/publications/publication-edit/usePublicationEditSheet'
+import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 import { truncateString } from '@/utils'
 
