@@ -15,6 +15,7 @@ export const useSpareDialog = () => {
   return ({ systemUid, spareItemUid, onSuccess }: UseSpareDialogParams) => {
     // Feature flag check - spare parts assignment disabled in production
     if (!isFeatureEnabled('enableSparePartsAssignment')) {
+      //eslint-disable-next-line
       console.warn('Spare parts assignment is disabled in this environment')
       return
     }
