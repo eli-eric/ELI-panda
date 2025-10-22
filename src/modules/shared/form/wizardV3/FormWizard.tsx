@@ -163,11 +163,7 @@ export const FormWizard = <T extends FieldValues>({
               onClick={handleNext}
               disabled={!isCurrentStepValid || isProcessing}
             >
-              {isProcessing
-                ? 'Processing...'
-                : isLastStep
-                  ? 'Submit'
-                  : 'Next'}
+              {isProcessing ? 'Processing...' : isLastStep ? 'Submit' : 'Next'}
             </Button>
           </div>
         </form>

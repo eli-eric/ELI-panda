@@ -51,7 +51,7 @@ export const FilterCheckboxes = ({
                     field.onChange(value)
                     onChange && onChange(value)
                   }}
-                  key={crypto.randomUUID()}
+                  key={option}
                   className="pb-1"
                   label={option}
                 />
