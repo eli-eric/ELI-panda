@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { memo, useEffect, useMemo, useRef, useState } from 'react'
+import { memo, useEffect, useMemo, useState } from 'react'
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { useForm } from 'react-hook-form'
@@ -15,8 +15,7 @@ import { ROLE } from '@/types/constants/roles'
 
 import { useCategory } from '../catalogue/hooks/useCategory'
 import FileManager from '../shared/fileManager/FileManager'
-import { ImageGallery } from '../shared/imageManager/ImageGallery'
-import type { ImageGalleryRef } from '../shared/imageManager/types'
+import { ImageGalleryV2 } from '../shared/imageManager/v2'
 import useCatalogueFormFields from './components/form/CatalogueForm.fields'
 import DefaultItemForm from './components/form/DefaultItemForm'
 import Groups from './components/form/Groups'
@@ -31,7 +30,7 @@ import { useCatalogueItem } from './hooks/useItem'
 import { useItemSubmit } from './hooks/useItemSubmit'
 import type { CatalogueItem } from './types/responses'
 
-const MemoizedGallery = memo(ImageGallery)
+const MemoizedGalleryV2 = memo(ImageGalleryV2)
 
 interface CatalogueItemContainerProps {
   uid?: string
@@ -48,8 +47,6 @@ const CatalogueItemContainer = ({
   const [saveAndExit, setSaveAndExit] = useState(false)
 
   const { catalogueCategory } = useCategory(catalogueCategoryUid)
-
-  const imageRef = useRef<ImageGalleryRef | undefined>(undefined)
 
   // Convert details array to object structure for form
   // Form expects: { [propertyUid]: detail }
@@ -79,7 +76,6 @@ const CatalogueItemContainer = ({
   const { reset, setValue } = formMethods
   const { submit, loading } = useItemSubmit({
     setvalue: setValue,
-    imageRef: imageRef,
     saveAndExit,
     reset
   })
@@ -110,31 +106,27 @@ const CatalogueItemContainer = ({
   }, [catalogueCategory])
 
   const onSubmit = (catalogueItem: CatalogueItemFormData) => {
-    // Extract hasImageGalleryChanges (not needed for API)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { hasImageGalleryChanges, ...rest } = catalogueItem
-
     // Convert details object with UID keys back to details array for API
     // Form structure: { [propertyUid]: detail }
     // API expects: [{ property, value, propertyGroup }]
-    const details = rest.details ? Object.values(rest.details) : []
+    const details = catalogueItem.details
+      ? Object.values(catalogueItem.details)
+      : []
 
-    const finalData = { ...rest, details }
+    const finalData = { ...catalogueItem, details }
 
     setSaveAndExit(false)
     submit(finalData as CatalogueItem)
   }
   const onSubmitAndExit = (catalogueItem: CatalogueItemFormData) => {
-    // Extract hasImageGalleryChanges (not needed for API)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { hasImageGalleryChanges, ...rest } = catalogueItem
-
     // Convert details object with UID keys back to details array for API
     // Form structure: { [propertyUid]: detail }
     // API expects: [{ property, value, propertyGroup }]
-    const details = rest.details ? Object.values(rest.details) : []
+    const details = catalogueItem.details
+      ? Object.values(catalogueItem.details)
+      : []
 
-    const finalData = { ...rest, details }
+    const finalData = { ...catalogueItem, details }
     setSaveAndExit(true)
     submit(finalData as CatalogueItem)
   }
@@ -157,9 +149,9 @@ const CatalogueItemContainer = ({
       />
       <Card className="flex flex-col justify-between pb-5">
         <div className="lg:grid lg:grid-cols-3 lg:items-start lg:gap-x-8 pb-3">
-          <MemoizedGallery
-            ref={imageRef}
-            config={{ itemCategory: FILE_TYPE.CATALOGUE, itemId: String(uid) }}
+          <MemoizedGalleryV2
+            itemType={FILE_TYPE.CATALOGUE}
+            itemId={uid}
             hasEditRole={!disabledEdit}
           />
           <div className="col-span-2">

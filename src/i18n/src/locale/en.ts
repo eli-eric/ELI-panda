@@ -131,7 +131,11 @@ export const messages = {
       delete: 'Delete',
       noImagesAvailable: 'No images available',
       pngJpgInfo: 'PNG, JPG up to 10MB',
-      confirmDelete: 'Are you sure you want to delete'
+      confirmDelete: 'Are you sure you want to delete',
+      saveItemToUploadImages: 'Please save the item first to upload images',
+      loading: 'Loading...',
+      uploading: 'Uploading...',
+      deleting: 'Deleting...'
     },
     files: {
       title: 'Files',

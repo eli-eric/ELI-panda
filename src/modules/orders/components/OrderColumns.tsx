@@ -37,6 +37,7 @@ const LinkNameCell = ({
         <Tooltip content={getValue()}>
           <Link
             href={PATH.ORDER + '/' + original.uid}
+            target={isReadOnly ? '_blank' : '_self'}
             className="cursor-pointer text-inherit hover:underline truncate block min-w-0"
           >
             {getValue()}
