@@ -1,4 +1,4 @@
-import { toast } from 'react-hot-toast'
+import { toast } from 'sonner'
 
 import axiosInstance from '@/core/axios/axiosInstance'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'

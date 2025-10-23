@@ -53,7 +53,12 @@ export const useImageUpload = ({ itemType, itemId }: ImageHookParams) => {
   const queryClient = useQueryClient()
   const endpoint = itemId ? `/api/${itemType}/${itemId}/image` : null
 
-  return useMutation<ImageUploadResponse, Error, UploadImageParams, { previous?: ImageItem[] }>({
+  return useMutation<
+    ImageUploadResponse,
+    Error,
+    UploadImageParams,
+    { previous?: ImageItem[] }
+  >({
     mutationFn: async ({ file }: UploadImageParams) => {
       if (!endpoint) {
         throw new Error('Cannot upload image: itemId is required')

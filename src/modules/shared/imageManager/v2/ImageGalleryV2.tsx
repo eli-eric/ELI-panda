@@ -168,8 +168,10 @@ export const ImageGalleryV2 = ({
               {/* Upload/Delete status */}
               {isProcessing && (
                 <div className="text-xs text-muted-foreground">
-                  {isUploading && fm({ id: message.common.imageGallery.uploading })}
-                  {isDeleting && fm({ id: message.common.imageGallery.deleting })}
+                  {isUploading &&
+                    fm({ id: message.common.imageGallery.uploading })}
+                  {isDeleting &&
+                    fm({ id: message.common.imageGallery.deleting })}
                 </div>
               )}
             </div>

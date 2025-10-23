@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import type { AxiosError, AxiosResponse } from 'axios'
 import { useRouter } from 'next/router'
-import { toast } from 'react-hot-toast'
+import { toast } from 'sonner'
 
 import { PATH } from '@/types/constants/paths'
 import { queryMutate } from '@/utils/fetcher'

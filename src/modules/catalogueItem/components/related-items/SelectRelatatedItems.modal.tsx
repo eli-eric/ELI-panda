@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { type FC, useState } from 'react'
-import toast from 'react-hot-toast'
 import { useIntl } from 'react-intl'
+import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
 import { message } from '@/i18n/src/messages'

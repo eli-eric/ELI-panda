@@ -52,14 +52,14 @@ function MyComponent({ itemId }: { itemId?: string }) {
 
 ### Props
 
-| Prop | Type | Required | Default | Description |
-|------|------|----------|---------|-------------|
-| `itemType` | `FILE_TYPE` | ✅ | - | Type of item (e.g., `FILE_TYPE.CATALOGUE`, `FILE_TYPE.SYSTEM`) |
-| `itemId` | `string \| undefined` | ✅ | - | UUID of the item. If undefined, gallery is disabled |
-| `hasEditRole` | `boolean` | ❌ | `false` | Whether user can upload/delete images |
-| `allowMultipleImages` | `boolean` | ❌ | `true` | Allow multiple images in gallery |
-| `disabled` | `boolean` | ❌ | `false` | Disable all actions |
-| `className` | `string` | ❌ | - | Additional CSS classes |
+| Prop                  | Type                  | Required | Default | Description                                                    |
+| --------------------- | --------------------- | -------- | ------- | -------------------------------------------------------------- |
+| `itemType`            | `FILE_TYPE`           | ✅       | -       | Type of item (e.g., `FILE_TYPE.CATALOGUE`, `FILE_TYPE.SYSTEM`) |
+| `itemId`              | `string \| undefined` | ✅       | -       | UUID of the item. If undefined, gallery is disabled            |
+| `hasEditRole`         | `boolean`             | ❌       | `false` | Whether user can upload/delete images                          |
+| `allowMultipleImages` | `boolean`             | ❌       | `true`  | Allow multiple images in gallery                               |
+| `disabled`            | `boolean`             | ❌       | `false` | Disable all actions                                            |
+| `className`           | `string`              | ❌       | -       | Additional CSS classes                                         |
 
 ### Example with All Props
 
@@ -226,14 +226,17 @@ yarn test --watch imageManager/v2
 ### What's Tested
 
 **Hooks:**
+
 - ✅ `useImages` - Fetching, loading, error states (7 tests)
 - ✅ `useImageUpload` - Upload, optimistic updates, rollback (6 tests)
 - ✅ `useImageDelete` - Delete, optimistic removal, rollback (7 tests)
 
 **Components:**
+
 - ✅ `ImageGalleryV2` - Rendering, interactions, permissions (11 tests)
 
 **Test Mocks:**
+
 - ✅ `@/core/axios/axiosInstance` - HTTP requests
 - ✅ `sonner` - Toast notifications
 - ✅ `@/utils/fetcher` - Data fetching
@@ -243,16 +246,16 @@ yarn test --watch imageManager/v2
 
 ## 🆚 Comparison with V1
 
-| Feature | V1 (Old) | V2 (New) | Winner |
-|---------|----------|----------|--------|
-| **Upload timing** | On form submit | Immediate | V2 ⭐ |
-| **Form coupling** | Tight (refs) | None | V2 ⭐ |
-| **State management** | `useRef` + manual | React Query | V2 ⭐ |
-| **Duplicate protection** | ❌ Broken | ✅ Works | V2 ⭐ |
-| **User feedback** | Delayed | Instant | V2 ⭐ |
-| **Code complexity** | High (~450 LOC) | Low (~300 LOC) | V2 ⭐ |
-| **Testability** | Hard | Easy | V2 ⭐ |
-| **Maintainability** | ❌ Complex | ✅ Simple | V2 ⭐ |
+| Feature                  | V1 (Old)          | V2 (New)       | Winner |
+| ------------------------ | ----------------- | -------------- | ------ |
+| **Upload timing**        | On form submit    | Immediate      | V2 ⭐  |
+| **Form coupling**        | Tight (refs)      | None           | V2 ⭐  |
+| **State management**     | `useRef` + manual | React Query    | V2 ⭐  |
+| **Duplicate protection** | ❌ Broken         | ✅ Works       | V2 ⭐  |
+| **User feedback**        | Delayed           | Instant        | V2 ⭐  |
+| **Code complexity**      | High (~450 LOC)   | Low (~300 LOC) | V2 ⭐  |
+| **Testability**          | Hard              | Easy           | V2 ⭐  |
+| **Maintainability**      | ❌ Complex        | ✅ Simple      | V2 ⭐  |
 
 ---
 
@@ -266,12 +269,12 @@ yarn test --watch imageManager/v2
 
 ```tsx
 // ❌ Bad
-<ImageGalleryV2 itemType={FILE_TYPE.CATALOGUE} itemId={undefined} />
+;<ImageGalleryV2 itemType={FILE_TYPE.CATALOGUE} itemId={undefined} />
 
 // ✅ Good
-{itemId && (
-  <ImageGalleryV2 itemType={FILE_TYPE.CATALOGUE} itemId={itemId} />
-)}
+{
+  itemId && <ImageGalleryV2 itemType={FILE_TYPE.CATALOGUE} itemId={itemId} />
+}
 ```
 
 ### Issue: Can't upload images
@@ -394,9 +397,7 @@ const CatalogueItemContainer = ({ uid }: { uid?: string }) => {
         itemId={uid}
         hasEditRole={hasEditRole}
       />
-      <div className="col-span-2">
-        {/* Form fields */}
-      </div>
+      <div className="col-span-2">{/* Form fields */}</div>
     </div>
   )
 }

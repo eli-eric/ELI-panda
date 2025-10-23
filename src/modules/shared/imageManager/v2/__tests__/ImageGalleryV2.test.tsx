@@ -63,7 +63,8 @@ describe('ImageGalleryV2', () => {
       'common.imageGallery.uploading': 'Uploading...',
       'common.imageGallery.deleting': 'Deleting...',
       'common.imageGallery.confirmDelete': 'Delete image',
-      'common.imageGallery.saveItemToUploadImages': 'Please save the item first to upload images',
+      'common.imageGallery.saveItemToUploadImages':
+        'Please save the item first to upload images',
       'common.ui.previousSlide': 'Previous slide',
       'common.ui.nextSlide': 'Next slide'
     }
@@ -213,7 +214,9 @@ describe('ImageGalleryV2', () => {
     ).toBeInTheDocument()
 
     // Should show AlertCircle icon
-    const container = screen.getByText(/please save the item first to upload images/i).closest('div')
+    const container = screen
+      .getByText(/please save the item first to upload images/i)
+      .closest('div')
     expect(container).toBeInTheDocument()
   })
 

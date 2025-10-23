@@ -9,6 +9,7 @@
 ## 📋 Overview
 
 Successfully implemented ImageGalleryV2 with immediate upload pattern, eliminating all issues from V1:
+
 - ✅ No more duplicate uploads
 - ✅ No cache inconsistencies
 - ✅ No form coupling
@@ -20,11 +21,13 @@ Successfully implemented ImageGalleryV2 with immediate upload pattern, eliminati
 ## 📦 Deliverables
 
 ### 1. Documentation
+
 - ✅ `REFACTOR_PLAN.md` - Complete architectural plan and decision rationale
 - ✅ `README.md` - Usage guide, API reference, examples
 - ✅ `IMPLEMENTATION_SUMMARY.md` - This file
 
 ### 2. Core Implementation
+
 - ✅ `types.ts` - TypeScript type definitions
 - ✅ `hooks/useImages.ts` - Fetch images hook (React Query)
 - ✅ `hooks/useImageUpload.ts` - Upload with optimistic updates
@@ -32,6 +35,7 @@ Successfully implemented ImageGalleryV2 with immediate upload pattern, eliminati
 - ✅ `hooks/index.ts` - Barrel export
 
 ### 3. Components
+
 - ✅ `ImageGalleryV2.tsx` - Main gallery component
 - ✅ `components/ImageCarousel.tsx` - Image display with shadcn/ui
 - ✅ `components/ImageUploadZone.tsx` - Drag & drop upload
@@ -39,6 +43,7 @@ Successfully implemented ImageGalleryV2 with immediate upload pattern, eliminati
 - ✅ `components/index.ts` - Barrel export
 
 ### 4. Tests
+
 - ✅ `__tests__/useImages.test.ts` - Query hook tests (7 scenarios)
 - ✅ `__tests__/useImageUpload.test.ts` - Upload mutation tests (6 scenarios)
 - ✅ `__tests__/useImageDelete.test.ts` - Delete mutation tests (7 scenarios)
@@ -47,6 +52,7 @@ Successfully implemented ImageGalleryV2 with immediate upload pattern, eliminati
 **Total Test Coverage**: 31 test scenarios
 
 ### 5. Integration
+
 - ✅ Updated `CatalogueItem.cont.tsx` to use ImageGalleryV2
 - ✅ Updated `useItemSubmit.tsx` - Removed imageRef coordination
 - ✅ Updated `ItemForm.schema.ts` - Removed hasImageGalleryChanges field
@@ -91,45 +97,55 @@ Total: 17 files, ~640 LOC (production), ~680 LOC (tests)
 ## 🎯 Problems Solved
 
 ### Issue #1: Duplicate Uploads ✅ FIXED
+
 **V1 Problem**: `useRef` state persisted across tab switches, causing duplicate uploads
 
 **V2 Solution**:
+
 - Server is source of truth
 - React Query manages all state
 - Upload happens immediately on drop
 - No client-side tracking of pending uploads
 
 ### Issue #2: Cache Inconsistency ✅ FIXED
+
 **V1 Problem**: Manual `queryClient.setQueryData()` got out of sync with refs
 
 **V2 Solution**:
+
 - React Query handles all cache operations
 - Optimistic updates with automatic rollback
 - No manual cache manipulation
 - Single source of truth
 
 ### Issue #3: Form Coupling ✅ FIXED
+
 **V1 Problem**: Tight coupling via `forwardRef`, `imageRef.current.submit()`, `setValue`
 
 **V2 Solution**:
+
 - Pure props-based interface
 - No refs, no imperative API
 - Completely independent from forms
 - Images upload independently
 
 ### Issue #4: No Immediate Feedback ✅ FIXED
+
 **V1 Problem**: Images only uploaded on form submit
 
 **V2 Solution**:
+
 - Upload immediately on drop
 - Optimistic updates for instant preview
 - Toast notifications
 - Real-time progress feedback
 
 ### Issue #5: Complex Architecture ✅ FIXED
+
 **V1 Problem**: ~450 LOC, refs, manual cache, form coordination
 
 **V2 Solution**:
+
 - ~300 LOC production code
 - Standard React Query patterns
 - Simple, predictable data flow
@@ -140,6 +156,7 @@ Total: 17 files, ~640 LOC (production), ~680 LOC (tests)
 ## 🧪 Test Coverage
 
 ### Summary
+
 - **Total Tests**: 31 scenarios
 - **Coverage Target**: >80%
 - **Test Framework**: Jest + React Testing Library
@@ -148,6 +165,7 @@ Total: 17 files, ~640 LOC (production), ~680 LOC (tests)
 ### Test Breakdown
 
 **useImages (7 tests)**
+
 - ✅ Fetches images successfully
 - ✅ Returns empty when itemId undefined
 - ✅ Handles empty response
@@ -157,6 +175,7 @@ Total: 17 files, ~640 LOC (production), ~680 LOC (tests)
 - ✅ Refetches on window focus
 
 **useImageUpload (6 tests)**
+
 - ✅ Uploads successfully
 - ✅ Shows optimistic update
 - ✅ Rolls back on error
@@ -165,6 +184,7 @@ Total: 17 files, ~640 LOC (production), ~680 LOC (tests)
 - ✅ Converts File to base64
 
 **useImageDelete (7 tests)**
+
 - ✅ Deletes successfully
 - ✅ Shows optimistic removal
 - ✅ Rolls back on error
@@ -174,6 +194,7 @@ Total: 17 files, ~640 LOC (production), ~680 LOC (tests)
 - ✅ API call verification
 
 **ImageGalleryV2 (11 tests)**
+
 - ✅ Renders loading state
 - ✅ Renders empty state
 - ✅ Renders images
@@ -193,6 +214,7 @@ Total: 17 files, ~640 LOC (production), ~680 LOC (tests)
 ### CatalogueItem.cont.tsx
 
 **Before**:
+
 ```typescript
 import { ImageGallery } from '../shared/imageManager/ImageGallery'
 import type { ImageGalleryRef } from '../shared/imageManager/types'
@@ -215,6 +237,7 @@ const { submit } = useItemSubmit({
 ```
 
 **After**:
+
 ```typescript
 import { ImageGalleryV2 } from '../shared/imageManager/v2'
 
@@ -236,6 +259,7 @@ const { submit } = useItemSubmit({
 ### useItemSubmit.tsx
 
 **Before**:
+
 ```typescript
 export const useItemSubmit = ({
   setvalue,
@@ -249,7 +273,7 @@ export const useItemSubmit = ({
   reset?: (data?: any) => void
 }) => {
   // ...
-  onSuccess: (catalogueItem) => {
+  onSuccess: catalogueItem => {
     imageRef?.current?.submit(catalogueItem.data?.uid, () => {
       if (saveAndExit) navigateBack()
     })
@@ -258,6 +282,7 @@ export const useItemSubmit = ({
 ```
 
 **After**:
+
 ```typescript
 export const useItemSubmit = ({
   setvalue,
@@ -269,7 +294,7 @@ export const useItemSubmit = ({
   reset?: (data?: any) => void
 }) => {
   // ...
-  onSuccess: (catalogueItem) => {
+  onSuccess: catalogueItem => {
     // Images already uploaded independently!
     if (saveAndExit) navigateBack()
     else if (!uid) replace(PATH.CATALOGUE_ITEM + '/' + catalogueItem.data?.uid)
@@ -281,15 +306,17 @@ export const useItemSubmit = ({
 ### ItemForm.schema.ts
 
 **Before**:
+
 ```typescript
 export const catalogueItemSchema = z.object({
   // ...
-  hasImageGalleryChanges: z.boolean().optional(),
+  hasImageGalleryChanges: z.boolean().optional()
   // ...
 })
 ```
 
 **After**:
+
 ```typescript
 export const catalogueItemSchema = z.object({
   // ...
@@ -303,6 +330,7 @@ export const catalogueItemSchema = z.object({
 ## ✅ Verification Checklist
 
 ### Functionality
+
 - [x] Images upload on drop immediately
 - [x] Optimistic updates show preview instantly
 - [x] Upload errors rollback automatically
@@ -315,6 +343,7 @@ export const catalogueItemSchema = z.object({
 - [x] Works without itemId (disabled state)
 
 ### Architecture
+
 - [x] No refs used
 - [x] No imperative API
 - [x] No form coupling
@@ -325,6 +354,7 @@ export const catalogueItemSchema = z.object({
 - [x] TypeScript strict mode compliant
 
 ### Integration
+
 - [x] CatalogueItem updated
 - [x] useItemSubmit updated
 - [x] ItemForm.schema updated
@@ -332,6 +362,7 @@ export const catalogueItemSchema = z.object({
 - [x] V1 remains available for gradual migration
 
 ### Testing
+
 - [x] Hook tests written (20 tests)
 - [x] Component tests written (11 tests)
 - [x] All tests pass
@@ -339,6 +370,7 @@ export const catalogueItemSchema = z.object({
 - [x] Edge cases covered
 
 ### Documentation
+
 - [x] REFACTOR_PLAN.md created
 - [x] README.md created
 - [x] IMPLEMENTATION_SUMMARY.md created
@@ -350,18 +382,21 @@ export const catalogueItemSchema = z.object({
 ## 🚀 Next Steps
 
 ### Immediate (Week 1)
+
 1. ✅ Manual testing in dev environment
 2. ✅ Run test suite (`yarn test imageManager/v2`)
 3. ✅ Type checking (`yarn tsc --noEmit`)
 4. ✅ Lint checking (`yarn lint`)
 
 ### Short-term (Week 2-3)
+
 1. ⏳ User acceptance testing
 2. ⏳ Monitor production for issues
 3. ⏳ Gather user feedback
 4. ⏳ Performance monitoring
 
 ### Medium-term (Week 4+)
+
 1. ⏳ Migrate other modules (systemItem, etc.)
 2. ⏳ Add enhanced features (progress bars, compression)
 3. ⏳ Eventually deprecate V1
@@ -373,38 +408,39 @@ export const catalogueItemSchema = z.object({
 
 ### Code Metrics
 
-| Metric | V1 | V2 | Improvement |
-|--------|----|----|-------------|
-| **Production LOC** | ~450 | ~300 | -33% 📉 |
-| **Test LOC** | ~50 | ~680 | +1260% 📈 |
-| **Test Coverage** | ~20% | >80% | +300% 📈 |
-| **Complexity** | High | Low | ⭐⭐⭐ |
-| **Maintainability** | 3/10 | 9/10 | +200% 📈 |
+| Metric              | V1   | V2   | Improvement |
+| ------------------- | ---- | ---- | ----------- |
+| **Production LOC**  | ~450 | ~300 | -33% 📉     |
+| **Test LOC**        | ~50  | ~680 | +1260% 📈   |
+| **Test Coverage**   | ~20% | >80% | +300% 📈    |
+| **Complexity**      | High | Low  | ⭐⭐⭐      |
+| **Maintainability** | 3/10 | 9/10 | +200% 📈    |
 
 ### Performance
 
-| Operation | V1 | V2 | Improvement |
-|-----------|----|----|-------------|
-| **Upload Feedback** | 2-5s (form submit) | <100ms (optimistic) | 20-50x faster ⚡ |
-| **Delete Feedback** | 2-5s (form submit) | <100ms (optimistic) | 20-50x faster ⚡ |
-| **Cache Sync** | Manual, error-prone | Automatic | ✅ Reliable |
-| **Duplicate Protection** | ❌ Broken | ✅ Works | Fixed 🎉 |
+| Operation                | V1                  | V2                  | Improvement      |
+| ------------------------ | ------------------- | ------------------- | ---------------- |
+| **Upload Feedback**      | 2-5s (form submit)  | <100ms (optimistic) | 20-50x faster ⚡ |
+| **Delete Feedback**      | 2-5s (form submit)  | <100ms (optimistic) | 20-50x faster ⚡ |
+| **Cache Sync**           | Manual, error-prone | Automatic           | ✅ Reliable      |
+| **Duplicate Protection** | ❌ Broken           | ✅ Works            | Fixed 🎉         |
 
 ### User Experience
 
-| Aspect | V1 | V2 |
-|--------|----|----|
-| **Upload immediately visible** | ❌ No | ✅ Yes |
-| **Clear feedback** | ❌ Poor | ✅ Excellent |
-| **Duplicate uploads** | ❌ Yes | ✅ No |
-| **Form independence** | ❌ Coupled | ✅ Independent |
-| **Matches modern UX** | ❌ No | ✅ Yes |
+| Aspect                         | V1         | V2             |
+| ------------------------------ | ---------- | -------------- |
+| **Upload immediately visible** | ❌ No      | ✅ Yes         |
+| **Clear feedback**             | ❌ Poor    | ✅ Excellent   |
+| **Duplicate uploads**          | ❌ Yes     | ✅ No          |
+| **Form independence**          | ❌ Coupled | ✅ Independent |
+| **Matches modern UX**          | ❌ No      | ✅ Yes         |
 
 ---
 
 ## 🎓 Lessons Learned
 
 ### What Worked Well ✅
+
 1. **Immediate Upload Pattern** - Users expect instant feedback, matches Google Drive/Dropbox
 2. **React Query** - Standard solution, eliminates manual cache management
 3. **Optimistic Updates** - Provides instant UI feedback with automatic rollback
@@ -412,12 +448,14 @@ export const catalogueItemSchema = z.object({
 5. **Clean Separation** - Hooks for logic, components for UI = easy to test
 
 ### What Could Be Improved 🔄
+
 1. **File Size Validation** - Should add client-side validation before upload
 2. **Progress Indicators** - Could add upload/delete progress bars
 3. **Image Compression** - Could optimize images before upload
 4. **Batch Operations** - Could support selecting multiple images for delete
 
 ### Key Insights 💡
+
 1. **Simplicity Wins** - V1 tried to be "smart" (defer uploads), V2 is simple (upload now)
 2. **Server as Truth** - Let server handle validation, client just displays
 3. **Standard Patterns** - Use established patterns (React Query) over custom solutions
@@ -428,12 +466,14 @@ export const catalogueItemSchema = z.object({
 ## 🤝 Team Communication
 
 ### Stakeholders Notified
+
 - ✅ Development team
 - ✅ QA team
 - ⏳ Product owner
 - ⏳ End users (via release notes)
 
 ### Knowledge Sharing
+
 - ✅ Documentation written (REFACTOR_PLAN, README)
 - ✅ Code review requested
 - ⏳ Team presentation scheduled
@@ -444,12 +484,14 @@ export const catalogueItemSchema = z.object({
 ## 📞 Support
 
 ### Questions?
+
 - See `README.md` for usage examples
 - See `REFACTOR_PLAN.md` for architecture
 - Check test files for edge cases
 - Contact development team
 
 ### Issues?
+
 - Check browser console for errors
 - Verify network requests in DevTools
 - Run tests locally (`yarn test imageManager/v2`)
@@ -460,6 +502,7 @@ export const catalogueItemSchema = z.object({
 ## 🎉 Conclusion
 
 ImageGalleryV2 successfully addresses all issues from V1:
+
 - ✅ **No more duplicate uploads** - Server is source of truth
 - ✅ **Immediate feedback** - Optimistic updates
 - ✅ **Form independent** - Clean architecture

@@ -2,7 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import type { FC, PropsWithChildren } from 'react'
 import { memo, useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
-import { toast } from 'react-hot-toast'
+import { toast } from 'sonner'
 
 import { Form } from '@/components/form/Form'
 import { FILE_TYPE } from '@/modules/shared/fileManager/types'

@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Clock } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
-import toast from 'react-hot-toast'
+import { toast } from 'sonner'
 
 import { Button } from '@/components/Buttons'
 import { Button as UIButton } from '@/components/ui/button'

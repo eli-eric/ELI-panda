@@ -1,6 +1,6 @@
 import { useSession } from 'next-auth/react'
-import toast from 'react-hot-toast'
 import { FormattedMessage, useIntl } from 'react-intl'
+import { toast } from 'sonner'
 import { message } from 'src/i18n/src/messages'
 
 import { Badge } from '@/components/ui/badge'

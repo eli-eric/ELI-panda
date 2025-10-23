@@ -1,7 +1,7 @@
 import { startTransition, useEffect } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
-import toast from 'react-hot-toast'
 import { useIntl } from 'react-intl'
+import { toast } from 'sonner'
 
 import { Button } from '@/components/Buttons'
 import CheckBox from '@/components/form/CheckBox'

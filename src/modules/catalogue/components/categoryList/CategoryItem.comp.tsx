@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 import { MoreVertical } from 'lucide-react'
-import toast from 'react-hot-toast'
 import { useIntl } from 'react-intl'
+import { toast } from 'sonner'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'

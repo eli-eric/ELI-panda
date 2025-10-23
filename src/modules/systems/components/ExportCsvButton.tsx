@@ -1,4 +1,4 @@
-import toast from 'react-hot-toast'
+import { toast } from 'sonner'
 
 import { CSVButton } from '@/components/Buttons'
 import { Tooltip } from '@/components/Tooltip'

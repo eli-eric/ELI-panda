@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import type { AxiosError } from 'axios'
 import { useRouter } from 'next/router'
 import type { UseFormSetValue } from 'react-hook-form'
-import { toast } from 'react-hot-toast'
+import { toast } from 'sonner'
 
 import { PATH } from '@/types/constants/paths'
 import { navigateBack } from '@/utils'

@@ -1,6 +1,6 @@
 import { useSession } from 'next-auth/react'
 import { useEffect } from 'react'
-import toast from 'react-hot-toast'
+import { toast } from 'sonner'
 
 import { gql } from '@/types/gql'
 
