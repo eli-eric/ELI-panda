@@ -426,7 +426,11 @@ export const messages = {
         },
         manuFacturerUrl: {
           label: 'Supplier/Manufacturer Url',
-          placeholder: 'Supplier/Manufacturer Url'
+          placeholder: 'Supplier/Manufacturer Url',
+          tooltip: {
+            openUrl: 'Open {url} in new window',
+            enterUrl: 'Enter URL to open link'
+          }
         },
         catalogueCategory: { label: 'Catalogue Category' } // codebook of catalogue categories - CATALOGUE_CATEGORY
       }
