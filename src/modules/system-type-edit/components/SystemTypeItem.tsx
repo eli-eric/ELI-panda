@@ -6,8 +6,8 @@ import {
 import { Edit, MoreVertical, Trash2 } from 'lucide-react'
 import { type FC } from 'react'
 import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
 import { FormattedMessage, useIntl } from 'react-intl'
+import { toast } from 'sonner'
 
 import { Form } from '@/components/form/Form'
 import { Input } from '@/components/form/inputs'

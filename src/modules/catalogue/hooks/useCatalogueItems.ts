@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
-import toast from 'react-hot-toast'
 import { useIntl } from 'react-intl'
+import { toast } from 'sonner'
 
 import useQueryManager from '@/hooks/useQueryManager'
 import { message } from '@/i18n/src/messages'

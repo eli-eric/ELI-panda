@@ -1,8 +1,8 @@
 import type { CellContext } from '@tanstack/react-table'
 import { MoreVertical } from 'lucide-react'
 import Link from 'next/link'
-import { toast } from 'react-hot-toast'
 import { useIntl } from 'react-intl'
+import { toast } from 'sonner'
 
 import { Tooltip } from '@/components/Tooltip'
 import { Button } from '@/components/ui/button'

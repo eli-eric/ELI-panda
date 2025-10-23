@@ -21,19 +21,20 @@
 
 ### Current ImageGallery V1 Issues
 
-| Problem | Root Cause | Impact |
-|---------|-----------|--------|
-| **Duplicate uploads** | `useRef` state persists across tab switches | Users upload same image 2x |
-| **Cache inconsistency** | Manual `queryClient.setQueryData()` + refs | Preview disappears but upload still pending |
-| **Tight form coupling** | `forwardRef` + imperative `submit()` | Complex, fragile dependencies |
-| **No immediate feedback** | Upload deferred until form submit | Users don't know if upload succeeded |
-| **Complex state** | Refs + cache + form field `hasImageGalleryChanges` | Hard to debug, maintain |
+| Problem                   | Root Cause                                         | Impact                                      |
+| ------------------------- | -------------------------------------------------- | ------------------------------------------- |
+| **Duplicate uploads**     | `useRef` state persists across tab switches        | Users upload same image 2x                  |
+| **Cache inconsistency**   | Manual `queryClient.setQueryData()` + refs         | Preview disappears but upload still pending |
+| **Tight form coupling**   | `forwardRef` + imperative `submit()`               | Complex, fragile dependencies               |
+| **No immediate feedback** | Upload deferred until form submit                  | Users don't know if upload succeeded        |
+| **Complex state**         | Refs + cache + form field `hasImageGalleryChanges` | Hard to debug, maintain                     |
 
 ---
 
 ## 🏗️ Architecture
 
 ### V1 (Current - Problems)
+
 ```
 User uploads → useRef stores → Tab switch → Preview gone, ref still has file →
 User uploads again → 2x in ref → Form submits → imageRef.current.submit() →
@@ -41,6 +42,7 @@ User uploads again → 2x in ref → Form submits → imageRef.current.submit() 
 ```
 
 ### V2 (New - Solution)
+
 ```
 User uploads → Upload immediately to server → Server returns image →
 React Query cache updates → UI shows uploaded image →
@@ -86,6 +88,7 @@ src/modules/shared/imageManager/
 ### Server Endpoints (Existing - No changes needed)
 
 **Upload Image**
+
 ```
 POST /api/{itemType}/{itemId}/image
 Body: { name: string, payload: string (base64) }
@@ -93,18 +96,21 @@ Response: { id: string, name: string, url: string, type: string }
 ```
 
 **List Images**
+
 ```
 GET /api/{itemType}/{itemId}/image
 Response: Array<{ id, name, url, type, ts, size }>
 ```
 
 **Delete Image**
+
 ```
 DELETE /api/{itemType}/{itemId}/image/{imageId}
 Response: {}
 ```
 
 ### Key API Features
+
 - ✅ **Auto-generates UUID** for each image (`crypto.randomUUID()`)
 - ✅ **Stores in MinIO** (S3-compatible)
 - ✅ **Creates thumbnails** for images (100px width)
@@ -116,6 +122,7 @@ Response: {}
 ## 🧩 Component Architecture
 
 ### 1. **useImages Hook**
+
 ```typescript
 // Fetch images with React Query
 const useImages = ({ itemType, itemId }: UseImagesParams) => {
@@ -128,6 +135,7 @@ const useImages = ({ itemType, itemId }: UseImagesParams) => {
 ```
 
 **Responsibilities**:
+
 - Fetch images from server
 - Cache with React Query
 - Auto-refetch on mount
@@ -136,6 +144,7 @@ const useImages = ({ itemType, itemId }: UseImagesParams) => {
 ---
 
 ### 2. **useImageUpload Hook**
+
 ```typescript
 // Upload with optimistic updates
 const useImageUpload = ({ itemType, itemId }: UseImageUploadParams) => {
@@ -145,21 +154,22 @@ const useImageUpload = ({ itemType, itemId }: UseImageUploadParams) => {
     mutationFn: (file: File) => {
       // Convert to base64, POST to server
     },
-    onMutate: async (file) => {
+    onMutate: async file => {
       // Optimistic update: show preview immediately
       const tempImage = {
         id: `temp-${Date.now()}`,
         url: URL.createObjectURL(file),
         name: file.name
       }
-      queryClient.setQueryData(['images', itemType, itemId], old =>
-        [tempImage, ...old]
-      )
+      queryClient.setQueryData(['images', itemType, itemId], old => [
+        tempImage,
+        ...old
+      ])
     },
-    onSuccess: (newImage) => {
+    onSuccess: newImage => {
       // Replace temp with real image from server
       queryClient.setQueryData(['images', itemType, itemId], old =>
-        old.map(img => img.id.startsWith('temp') ? newImage : img)
+        old.map(img => (img.id.startsWith('temp') ? newImage : img))
       )
       toast.success(`Uploaded ${newImage.name}`)
     },
@@ -173,6 +183,7 @@ const useImageUpload = ({ itemType, itemId }: UseImageUploadParams) => {
 ```
 
 **Responsibilities**:
+
 - Convert File → base64
 - Upload to server
 - Optimistic updates (instant UI feedback)
@@ -182,6 +193,7 @@ const useImageUpload = ({ itemType, itemId }: UseImageUploadParams) => {
 ---
 
 ### 3. **useImageDelete Hook**
+
 ```typescript
 // Delete with optimistic updates
 const useImageDelete = ({ itemType, itemId }: UseImageDeleteParams) => {
@@ -191,7 +203,7 @@ const useImageDelete = ({ itemType, itemId }: UseImageDeleteParams) => {
     mutationFn: (imageId: string) => {
       return axios.delete(`/api/${itemType}/${itemId}/image/${imageId}`)
     },
-    onMutate: async (imageId) => {
+    onMutate: async imageId => {
       // Optimistic: remove from UI immediately
       queryClient.setQueryData(['images', itemType, itemId], old =>
         old.filter(img => img.id !== imageId)
@@ -210,6 +222,7 @@ const useImageDelete = ({ itemType, itemId }: UseImageDeleteParams) => {
 ```
 
 **Responsibilities**:
+
 - Delete from server
 - Optimistic removal from UI
 - Auto-rollback on error
@@ -268,6 +281,7 @@ export const ImageGalleryV2 = ({
 ```
 
 **Key Principles**:
+
 - ✅ **No refs** - Pure component
 - ✅ **No imperative API** - No `forwardRef`, no `useImperativeHandle`
 - ✅ **No form coupling** - Independent module
@@ -279,12 +293,14 @@ export const ImageGalleryV2 = ({
 ## 🔄 Migration Strategy
 
 ### Phase 1: Build V2 (Week 1)
+
 - [ ] Create `v2/` directory structure
 - [ ] Implement core hooks (`useImages`, `useImageUpload`, `useImageDelete`)
 - [ ] Build presentational components
 - [ ] Write unit tests
 
 ### Phase 2: CatalogueItem Integration (Week 2)
+
 - [ ] Replace ImageGallery with ImageGalleryV2 in `CatalogueItem.cont.tsx`
 - [ ] Remove `imageRef` usage
 - [ ] Remove `hasImageGalleryChanges` form field
@@ -292,12 +308,14 @@ export const ImageGalleryV2 = ({
 - [ ] Test manually (upload, delete, duplicate scenarios)
 
 ### Phase 3: Documentation & Review (Week 2)
+
 - [ ] Create `README.md` with usage examples
 - [ ] Document test coverage
 - [ ] Code review
 - [ ] User acceptance testing
 
 ### Phase 4: Future Rollout (Week 3+)
+
 - [ ] Keep V1 for other modules (systemItem, etc.)
 - [ ] Gradual migration module by module
 - [ ] Monitor for issues
@@ -310,6 +328,7 @@ export const ImageGalleryV2 = ({
 ### Before (V1 - Complex)
 
 **CatalogueItem.cont.tsx**:
+
 ```typescript
 const imageRef = useRef<ImageGalleryRef | undefined>(undefined)
 
@@ -331,16 +350,19 @@ const { submit } = useItemSubmit({
 ```
 
 **useItemSubmit.tsx**:
+
 ```typescript
-onSuccess: (catalogueItem) => {
+onSuccess: catalogueItem => {
   // ...
-  imageRef?.current?.submit(catalogueItem.data?.uid, () => { // ❌ Imperative call
+  imageRef?.current?.submit(catalogueItem.data?.uid, () => {
+    // ❌ Imperative call
     if (saveAndExit) navigateBack()
   })
 }
 ```
 
 **ItemForm.schema.ts**:
+
 ```typescript
 hasImageGalleryChanges: z.boolean().optional() // ❌ Special form field
 ```
@@ -350,6 +372,7 @@ hasImageGalleryChanges: z.boolean().optional() // ❌ Special form field
 ### After (V2 - Simple)
 
 **CatalogueItem.cont.tsx**:
+
 ```typescript
 // ✅ No refs needed!
 
@@ -371,8 +394,9 @@ const { submit } = useItemSubmit({
 ```
 
 **useItemSubmit.tsx**:
+
 ```typescript
-onSuccess: (catalogueItem) => {
+onSuccess: catalogueItem => {
   // ✅ No image coordination needed!
   // Images already uploaded independently
   if (saveAndExit) navigateBack()
@@ -382,6 +406,7 @@ onSuccess: (catalogueItem) => {
 ```
 
 **ItemForm.schema.ts**:
+
 ```typescript
 // ✅ No hasImageGalleryChanges field needed!
 ```
@@ -391,6 +416,7 @@ onSuccess: (catalogueItem) => {
 ## ✅ Success Criteria
 
 ### Functional Requirements
+
 - [ ] User can upload images via drag & drop or click
 - [ ] User sees uploaded images immediately
 - [ ] User can delete images with confirmation
@@ -400,6 +426,7 @@ onSuccess: (catalogueItem) => {
 - [ ] Works with or without existing `itemId` (new items)
 
 ### Non-Functional Requirements
+
 - [ ] Upload completes within 3 seconds for typical images (<5MB)
 - [ ] UI remains responsive during upload
 - [ ] Optimistic updates provide instant feedback
@@ -408,6 +435,7 @@ onSuccess: (catalogueItem) => {
 - [ ] Test coverage >80%
 
 ### Architecture Requirements
+
 - [ ] No refs used in component
 - [ ] No form coupling (no setValue, no ref.current.submit)
 - [ ] Uses React Query for all server state
@@ -422,12 +450,14 @@ onSuccess: (catalogueItem) => {
 ### Unit Tests
 
 **useImages.test.ts**
+
 - ✅ Fetches images successfully
 - ✅ Handles empty response
 - ✅ Handles error state
 - ✅ Disabled when no itemId
 
 **useImageUpload.test.ts**
+
 - ✅ Uploads image successfully
 - ✅ Shows optimistic update
 - ✅ Rolls back on error
@@ -435,12 +465,14 @@ onSuccess: (catalogueItem) => {
 - ✅ Converts File to base64 correctly
 
 **useImageDelete.test.ts**
+
 - ✅ Deletes image successfully
 - ✅ Shows optimistic removal
 - ✅ Rolls back on error
 - ✅ Shows toast notifications
 
 **ImageGalleryV2.test.tsx**
+
 - ✅ Renders images correctly
 - ✅ Shows empty state when no images
 - ✅ Handles upload via dropzone
@@ -451,6 +483,7 @@ onSuccess: (catalogueItem) => {
 ### Integration Tests
 
 **CatalogueItem Integration**
+
 - ✅ Images upload independently of form
 - ✅ Images persist after form submit
 - ✅ Images available after page refresh
@@ -463,16 +496,19 @@ onSuccess: (catalogueItem) => {
 ## 🚀 Rollout Plan
 
 ### Week 1: Development
+
 - **Days 1-2**: Core hooks implementation + tests
 - **Days 3-4**: Components implementation + tests
 - **Day 5**: Integration testing
 
 ### Week 2: Integration
+
 - **Days 1-2**: CatalogueItem integration
 - **Days 3-4**: Manual testing, bug fixes
 - **Day 5**: Documentation (README.md)
 
 ### Week 3+: Expansion
+
 - Monitor production usage
 - Gather feedback
 - Plan migration for other modules (systemItem, etc.)
@@ -481,28 +517,30 @@ onSuccess: (catalogueItem) => {
 
 ## 📊 Comparison Matrix
 
-| Feature | V1 (Current) | V2 (New) | Improvement |
-|---------|-------------|----------|-------------|
-| **Upload timing** | On form submit | Immediate | ⬆️ Better UX |
-| **Duplicate protection** | ❌ Broken | ✅ Server-side | ⬆️ Fixed bug |
-| **Form coupling** | ✅ Tight (refs) | ❌ None | ⬆️ Cleaner arch |
-| **State management** | useRef | React Query | ⬆️ Standard pattern |
-| **User feedback** | Delayed | Instant | ⬆️ Better UX |
-| **Complexity** | High | Low | ⬆️ Maintainable |
-| **Test coverage** | ~20% | >80% | ⬆️ Quality |
-| **LOC** | ~450 | ~300 | ⬆️ Simpler |
+| Feature                  | V1 (Current)    | V2 (New)       | Improvement         |
+| ------------------------ | --------------- | -------------- | ------------------- |
+| **Upload timing**        | On form submit  | Immediate      | ⬆️ Better UX        |
+| **Duplicate protection** | ❌ Broken       | ✅ Server-side | ⬆️ Fixed bug        |
+| **Form coupling**        | ✅ Tight (refs) | ❌ None        | ⬆️ Cleaner arch     |
+| **State management**     | useRef          | React Query    | ⬆️ Standard pattern |
+| **User feedback**        | Delayed         | Instant        | ⬆️ Better UX        |
+| **Complexity**           | High            | Low            | ⬆️ Maintainable     |
+| **Test coverage**        | ~20%            | >80%           | ⬆️ Quality          |
+| **LOC**                  | ~450            | ~300           | ⬆️ Simpler          |
 
 ---
 
 ## 🎓 Lessons Learned
 
 ### What Went Wrong in V1
+
 1. **Over-engineering** - Tried to be "smart" with deferred uploads
 2. **Wrong abstraction** - `useRef` for state that should be in server
 3. **Tight coupling** - Mixed image management with form lifecycle
 4. **No tests** - Hard to verify behavior, led to bugs
 
 ### Principles for V2
+
 1. **Server is source of truth** - Upload immediately, query for state
 2. **Single Responsibility** - Gallery manages images, form manages form data
 3. **Simplicity** - Fewest moving parts, standard patterns
@@ -523,18 +561,23 @@ onSuccess: (catalogueItem) => {
 ## 📞 Questions & Decisions
 
 ### Q: What about offline support?
+
 **A**: Out of scope for V2. Images require server upload, no local-first strategy.
 
 ### Q: Should we support undo?
+
 **A**: Not in V2. Delete is permanent (with confirmation modal).
 
 ### Q: File size limits?
+
 **A**: Server enforces 50MB limit. Client should validate before upload in future iteration.
 
 ### Q: Image optimization?
+
 **A**: Server auto-generates 100px thumbnails. Client sends original.
 
 ### Q: Multiple simultaneous uploads?
+
 **A**: Supported. Each file triggers separate mutation, React Query batches.
 
 ---

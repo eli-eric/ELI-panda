@@ -1,7 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useCallback, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
+import { toast } from 'sonner'
 
 import { FormModal } from '@/components/form/FormModal'
 import { useSystems } from '@/modules/systems/hooks/useSystems'

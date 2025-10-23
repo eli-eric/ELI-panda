@@ -1,7 +1,7 @@
 import React, { startTransition, useEffect } from 'react'
 import { Controller, useFormContext, useWatch } from 'react-hook-form'
-import toast from 'react-hot-toast'
 import RangeSlider from 'react-range-slider-input'
+import { toast } from 'sonner'
 
 interface Props {
   min?: number

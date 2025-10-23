@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query'
 import type { AxiosError } from 'axios'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import toast from 'react-hot-toast'
+import { toast } from 'sonner'
 
 import { useSystemDetail } from '@/modules/systemItem/hooks/useSystemDetail'
 import { useSystemsReload } from '@/modules/systemItem/hooks/useSystemsReload'

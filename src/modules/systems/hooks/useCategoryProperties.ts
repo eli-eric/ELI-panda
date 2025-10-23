@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { useEffect } from 'react'
-import { toast } from 'react-hot-toast'
+import { toast } from 'sonner'
 
 import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
 import { queryFetcher } from '@/utils/fetcher'

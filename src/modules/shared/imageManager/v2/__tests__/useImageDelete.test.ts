@@ -117,10 +117,7 @@ describe('useImageDelete', () => {
 
     // Delay the API response
     mockFetchRequest.mockImplementation(
-      () =>
-        new Promise(resolve =>
-          setTimeout(() => resolve(undefined), 100)
-        )
+      () => new Promise(resolve => setTimeout(() => resolve(undefined), 100))
     )
 
     const { result } = renderHook(

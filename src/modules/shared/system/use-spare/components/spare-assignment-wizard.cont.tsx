@@ -1,8 +1,8 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { toast } from 'react-hot-toast'
 import { useIntl } from 'react-intl'
+import { toast } from 'sonner'
 
 import Listbox from '@/components/form/Listbox'
 import { Checkbox } from '@/components/ui/checkbox'

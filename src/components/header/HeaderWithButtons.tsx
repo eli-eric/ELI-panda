@@ -83,7 +83,10 @@ export const HeaderWithButtons = ({
               </span>
             )}
             {!loading && isFormDirty && (
-              <span className="text-muted-foreground text-sm ml-4" aria-live="polite">
+              <span
+                className="text-muted-foreground text-sm ml-4"
+                aria-live="polite"
+              >
                 {fm({ id: message.common.form.unsavedChanges })}
               </span>
             )}

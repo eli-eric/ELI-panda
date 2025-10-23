@@ -182,6 +182,7 @@ The application uses a declarative Form Wizard V3 system for multi-step forms wi
 ### When to Use Wizard V3
 
 Use Form Wizard V3 for:
+
 - Multi-step forms with 2+ steps
 - Forms with conditional steps based on previous inputs
 - Complex data entry workflows with validation per step
@@ -253,6 +254,7 @@ export const MyFormWizard = ({
 ### Wizard Best Practices
 
 #### 1. **Use TABLE_IDS constant for table identifiers**
+
 ```typescript
 import { TABLE_IDS } from '@/types/constants/tableIds'
 
@@ -264,6 +266,7 @@ const tableId = 'items-select-table'
 ```
 
 #### 2. **Memoize complex values to prevent re-renders**
+
 ```typescript
 // ✅ Good - prevents child component re-renders
 const serviceTypeData = useMemo(() => {
@@ -281,6 +284,7 @@ const categoryFilters = useMemo(() => {
 ```
 
 #### 3. **Use fm() directly in title prop (don't memoize translations)**
+
 ```typescript
 // ✅ Good - formatMessage is stable, call directly
 <WizardStep
@@ -298,6 +302,7 @@ const stepTitles = useMemo(
 ```
 
 #### 4. **Validation and conditional rendering**
+
 ```typescript
 // Validation - returns boolean
 const validateStep = useCallback((data: FormType) => {
@@ -324,6 +329,7 @@ const shouldShowStepWithExternal = useCallback((formData: FormType) => {
 ```
 
 #### 5. **Step completion handlers for side effects**
+
 ```typescript
 // Use onStepComplete for:
 // - Applying filters
@@ -331,15 +337,19 @@ const shouldShowStepWithExternal = useCallback((formData: FormType) => {
 // - Clearing form fields
 // - Analytics/tracking
 
-const handleStepComplete = useCallback(async (data: FormType) => {
-  if (categoryFilters) {
-    setColumnFilters(categoryFilters)
-  }
-  // Other side effects
-}, [categoryFilters, setColumnFilters])
+const handleStepComplete = useCallback(
+  async (data: FormType) => {
+    if (categoryFilters) {
+      setColumnFilters(categoryFilters)
+    }
+    // Other side effects
+  },
+  [categoryFilters, setColumnFilters]
+)
 ```
 
 #### 6. **Document unusual patterns with comments**
+
 ```typescript
 // ✅ Good - explain why eslint-disable is needed
 const data = useMemo(() => {
@@ -349,10 +359,13 @@ const data = useMemo(() => {
 }, [input.specificProp])
 
 // ✅ Good - explain closure over external data in shouldShow
-const shouldShow = useCallback((formData: FormType) => {
-  // NOTE: Using closure over external API data because it's not in formData
-  return apiData ? Boolean(apiData.property) : true
-}, [apiData])
+const shouldShow = useCallback(
+  (formData: FormType) => {
+    // NOTE: Using closure over external API data because it's not in formData
+    return apiData ? Boolean(apiData.property) : true
+  },
+  [apiData]
+)
 ```
 
 ### Complete Real-World Examples
@@ -360,6 +373,7 @@ const shouldShow = useCallback((formData: FormType) => {
 **Primary example**: `src/modules/orderItem/components/serviceLines/form/service-line-v3.wizz.tsx`
 
 Key features demonstrated:
+
 - ✅ Uses `TABLE_IDS` and `ITEM_USAGE_FILTERS` constants
 - ✅ Memoizes complex objects (`categoryFilters`, `serviceTypeData`)
 - ✅ Uses `fm()` directly in title props
@@ -369,5 +383,6 @@ Key features demonstrated:
 - ✅ Documented eslint-disable and special cases
 
 **Secondary example**: `src/modules/shared/system/use-spare/components/spare-assignment-wizard.cont.tsx`
+
 - Shows proper usage of `shouldShow` with formData parameter
 - Demonstrates error handling in onSubmit

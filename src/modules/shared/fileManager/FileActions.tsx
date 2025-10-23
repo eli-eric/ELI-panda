@@ -1,8 +1,8 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { Edit, MoreVertical, Trash2 } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
-import toast from 'react-hot-toast'
 import { FormattedMessage, useIntl } from 'react-intl'
+import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
 import {

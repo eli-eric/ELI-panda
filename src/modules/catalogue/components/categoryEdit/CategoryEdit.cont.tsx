@@ -1,8 +1,8 @@
 'use client'
 import { useQueryClient } from '@tanstack/react-query'
 import { type Dispatch, type SetStateAction, useRef } from 'react'
-import toast from 'react-hot-toast'
 import { useIntl } from 'react-intl'
+import { toast } from 'sonner'
 
 import { Button } from '@/components/Buttons'
 import { Skeleton } from '@/components/ui/skeleton'
