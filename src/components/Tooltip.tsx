@@ -1,3 +1,5 @@
+import type { FC } from 'react'
+
 import {
   Tooltip as TP,
   TooltipContent,
@@ -12,7 +14,7 @@ type Props = {
 }
 
 // eslint-disable-next-line react/prop-types
-export const Tooltip: React.FC<Props> = ({
+export const Tooltip: FC<Props> = ({
   children,
   content,
   className,
