@@ -3,8 +3,10 @@ import '@testing-library/jest-dom'
 
 // Suppress React Query "undefined data" warnings in tests
 // This happens when testing disabled queries - it's expected behavior
+// eslint-disable-next-line no-console
 const originalError = console.error
 beforeAll(() => {
+  // eslint-disable-next-line no-console
   console.error = (...args: any[]) => {
     if (
       typeof args[0] === 'string' &&
@@ -17,6 +19,7 @@ beforeAll(() => {
 })
 
 afterAll(() => {
+  // eslint-disable-next-line no-console
   console.error = originalError
 })
 
@@ -36,6 +39,7 @@ Object.defineProperty(window, 'matchMedia', {
 })
 
 // Mock IntersectionObserver for components that use it (e.g., Embla Carousel)
+/* eslint-disable @typescript-eslint/no-empty-function */
 global.IntersectionObserver = class IntersectionObserver {
   constructor() {}
   disconnect() {}
@@ -53,3 +57,4 @@ global.ResizeObserver = class ResizeObserver {
   observe() {}
   unobserve() {}
 } as any
+/* eslint-enable @typescript-eslint/no-empty-function */
