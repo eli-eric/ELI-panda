@@ -23,7 +23,6 @@ interface FeatureFlags {
   /**
    * Enable spare parts assignment functionality
    * Allows users to assign spare parts to systems
-   * Disabled in production environment
    */
   enableSparePartsAssignment: boolean
 }
