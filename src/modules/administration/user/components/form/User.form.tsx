@@ -3,7 +3,6 @@ import { useFormContext, useWatch } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 import { toast } from 'sonner'
 
-import { Button } from '@/components/Buttons'
 import CheckBox from '@/components/form/CheckBox'
 import Combobox from '@/components/form/Combobox'
 import { Input } from '@/components/form/inputs'
@@ -11,7 +10,6 @@ import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
 import { useEmployee } from '@/hooks/graphql/useEmployee'
-import { message } from '@/i18n/src/messages'
 import { gql } from '@/types/gql'
 import { generatePassword } from '@/utils'
 
@@ -89,16 +87,6 @@ export const UserForm = () => {
             uid: value.code
           }))}
         />
-      </Col>
-      <Col md={6}>
-        <Input {...fields.password} type="password">
-          <Button onClick={generatePasswordHandler}>
-            {fm({ id: message.common.buttons.generate })}
-          </Button>
-        </Input>
-      </Col>
-      <Col md={6}>
-        <Input {...fields.confirmPassword} type="password" />
       </Col>
     </Grid>
   )

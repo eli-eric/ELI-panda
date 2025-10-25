@@ -5,7 +5,6 @@ import { useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 
 import { UserProfileLayout } from '@/components/user-profile/UserProfile.layout'
-import { ChangePasswordContainer } from '@/modules/administration/changePassword/ChangePassword.cont'
 
 const messages = message.profilePage
 
@@ -21,9 +20,7 @@ const ProfileSecurityPage: NextPage = (): JSX.Element => {
       <UserProfileLayout
         title={messages.security.title}
         subTitle={messages.security.subTitle}
-      >
-        <ChangePasswordContainer />
-      </UserProfileLayout>
+      />
     </Fragment>
   )
 }
