@@ -1,6 +1,11 @@
 import type { ReactElement } from 'react'
 import { Children, useMemo, useState } from 'react'
-import type { DefaultValues, FieldValues, UseFormReset } from 'react-hook-form'
+import type {
+  DefaultValues,
+  FieldValues,
+  Resolver,
+  UseFormReset
+} from 'react-hook-form'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 
@@ -14,12 +19,14 @@ interface FormWizardProps<T extends FieldValues> {
   children: ReactElement<WizardStepProps<T>>[]
   onSubmit: (data: T, reset: UseFormReset<T>) => void | Promise<void>
   initialValues?: Partial<T>
+  resolver?: Resolver<T>
 }
 
 export const FormWizard = <T extends FieldValues>({
   children,
   onSubmit,
-  initialValues
+  initialValues,
+  resolver
 }: FormWizardProps<T>) => {
   const { formatMessage: fm } = useIntl()
   const [currentAllStepsIndex, setCurrentAllStepsIndex] = useState(0)
@@ -28,7 +35,8 @@ export const FormWizard = <T extends FieldValues>({
 
   const methods = useForm<T>({
     defaultValues: initialValues as DefaultValues<T>,
-    mode: 'onChange'
+    mode: 'onChange',
+    resolver
   })
 
   const { handleSubmit, watch, reset } = methods
@@ -126,9 +134,17 @@ export const FormWizard = <T extends FieldValues>({
     typeof currentStep.children === 'function'
       ? currentStep.children({
           values: formValues as T,
-          isValid: isCurrentStepValid
+          isValid: isCurrentStepValid,
+          handleNext,
+          handleBack,
+          isProcessing,
+          isLastStep,
+          currentStepIndex: currentVisibleStepIndex
         })
       : currentStep.children
+
+  // Check if current step wants to hide default navigation
+  const showDefaultNavigation = !currentStep.hideDefaultNavigation
 
   return (
     <div>
@@ -145,27 +161,29 @@ export const FormWizard = <T extends FieldValues>({
             </div>
           )}
           <div className="py-6">{stepContent}</div>
-          <div className="mt-6 flex justify-between">
-            {currentAllStepsIndex > 0 ? (
+          {showDefaultNavigation && (
+            <div className="mt-6 flex justify-between">
+              {currentAllStepsIndex > 0 ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleBack}
+                  disabled={isProcessing}
+                >
+                  {fm({ id: message.common.forms.previous })}
+                </Button>
+              ) : (
+                <div />
+              )}
               <Button
                 type="button"
-                variant="outline"
-                onClick={handleBack}
-                disabled={isProcessing}
+                onClick={handleNext}
+                disabled={!isCurrentStepValid || isProcessing}
               >
-                {fm({ id: message.common.forms.previous })}
+                {isProcessing ? 'Processing...' : isLastStep ? 'Submit' : 'Next'}
               </Button>
-            ) : (
-              <div />
-            )}
-            <Button
-              type="button"
-              onClick={handleNext}
-              disabled={!isCurrentStepValid || isProcessing}
-            >
-              {isProcessing ? 'Processing...' : isLastStep ? 'Submit' : 'Next'}
-            </Button>
-          </div>
+            </div>
+          )}
         </form>
       </FormProvider>
     </div>

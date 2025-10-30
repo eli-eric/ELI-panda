@@ -840,7 +840,20 @@ export const messages = {
         message: 'Serial number is missing, please fill it.'
       },
       eunPrintedSuccessfully: 'EUN {eun} printed successfully',
-      printEunTooltip: 'Print EUN'
+      printEunTooltip: 'Print EUN',
+      wizard: {
+        steps: {
+          step1: {
+            title: 'Select Item',
+            helperText:
+              'Select an item from the catalogue or continue to enter details manually',
+            continueWithoutSelection: 'Continue without selection'
+          },
+          step2: {
+            title: 'Order Details'
+          }
+        }
+      }
     }
   },
   codebooksPage: {
