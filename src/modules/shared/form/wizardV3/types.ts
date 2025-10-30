@@ -9,11 +9,17 @@ export interface WizardStepProps<T extends FieldValues> {
   validate?: (data: T) => boolean
   shouldShow?: (data: T) => boolean
   onStepComplete?: (data: T) => void | Promise<void>
+  hideDefaultNavigation?: boolean
 }
 
 export interface WizardStepContext<T extends FieldValues> {
   values: T
   isValid: boolean
+  handleNext: () => void
+  handleBack: () => void
+  isProcessing: boolean
+  isLastStep: boolean
+  currentStepIndex: number
 }
 
 export interface VisibleStep {

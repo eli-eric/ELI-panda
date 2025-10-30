@@ -74,7 +74,7 @@ const CatalogueTableSelect = ({ setItem, selectedItem }: Props) => {
         settings={{
           enableQueryURL: false,
           total: catalogueItems?.totalCount,
-          pageSizeDefault: 5
+          pageSizeDefault: 10
         }}
       />
     </Fragment>
