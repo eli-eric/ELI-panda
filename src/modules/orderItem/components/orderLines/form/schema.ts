@@ -11,6 +11,10 @@ const codebookSchema = z.object({
 // Order Line form validation schema
 export const orderLineSchema = z
   .object({
+    // Metadata fields (prefixed with _ to indicate they're not submitted to backend)
+    // Used for UI state management and persistence during wizard navigation
+    _selectedCatalogueItem: z.any().optional(),
+
     // Required fields
     name: z.string().trim().min(1, 'Name is required'),
     catalogueNumber: z.string().trim().min(1, 'Catalogue number is required'),

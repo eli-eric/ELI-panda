@@ -1,26 +1,29 @@
+import { useFormContext } from 'react-hook-form'
+
 import { Input } from '@/components/form/inputs'
 import { InputAmountCurrency } from '@/components/form/inputs/components/InputAmountCurrency.comp'
 import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
 import Divider from '@/components/layout/Divider'
 import { message } from '@/i18n/src/messages'
+import type { OrderLineFormType } from '@/modules/orderItem/types/form'
 import { SelectSystemComboBox } from '@/modules/shared/form/systemSelect/SelectSystem.combo'
 
 import useOrderLineFormFields from './OrderLineForm.fields'
 
 const messages = message.ordersPage.orderLines
 
-interface OrderLineFormComponentProps {
-  isFromCatalogue?: boolean
-}
+export const OrderLineFormComponent = () => {
+  const { watch } = useFormContext<OrderLineFormType>()
 
-export const OrderLineFormComponent = ({
-  isFromCatalogue = false
-}: OrderLineFormComponentProps) => {
+  // Read from form state to determine if item is from catalogue
+  const selectedCatalogueItem = watch('_selectedCatalogueItem')
+  const isFromCatalogue = Boolean(selectedCatalogueItem)
+
   const formFields = useOrderLineFormFields(!isFromCatalogue)
 
   return (
-    <Grid>
+    <Grid className="pt-2">
       <Col md={6} lg={6}>
         <Input {...formFields.name} disabled={isFromCatalogue} />
       </Col>
