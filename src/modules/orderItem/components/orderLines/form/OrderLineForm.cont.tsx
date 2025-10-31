@@ -1,4 +1,5 @@
 import type { UseFormReset } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 
 import { message } from '@/i18n/src/messages'
 import type { OrderLineFormType } from '@/modules/orderItem/types/form'
@@ -31,12 +32,13 @@ const OrderLineModalContent = ({
 
 export const useOrderLineModal = () => {
   const { openModal } = useModalGlobalStore()
+  const { formatMessage: fm } = useIntl()
 
   const openOrderLineModal = (onSave?: (data: OrderLineFormType) => void) => {
     openModal('dialog1', {
       component: () => <OrderLineModalContent onSave={onSave} />,
       props: {
-        title: message.ordersPage.orderLines.titles.add,
+        title: fm({ id: message.ordersPage.orderLines.titles.add }),
         size: 'xl' as const
       }
     })

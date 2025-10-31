@@ -160,7 +160,7 @@ export const FormWizard = <T extends FieldValues>({
               {error}
             </div>
           )}
-          <div className="py-6">{stepContent}</div>
+          <div>{stepContent}</div>
           {showDefaultNavigation && (
             <div className="mt-6 flex justify-between">
               {currentAllStepsIndex > 0 ? (
@@ -180,7 +180,11 @@ export const FormWizard = <T extends FieldValues>({
                 onClick={handleNext}
                 disabled={!isCurrentStepValid || isProcessing}
               >
-                {isProcessing ? 'Processing...' : isLastStep ? 'Submit' : 'Next'}
+                {isProcessing
+                  ? 'Processing...'
+                  : isLastStep
+                    ? 'Submit'
+                    : 'Next'}
               </Button>
             </div>
           )}

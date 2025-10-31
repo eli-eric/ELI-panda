@@ -13,6 +13,7 @@ export const TABLE_IDS = {
 
   // Modals & dialogs
   CATALOGUE_ITEMS_MODAL: 'catalogueItemsModal',
+  CATALOGUE_ITEM_SELECT: 'catalogue-item-select',
   CODEBOOK_TREE: 'codebook-tree',
   CODEBOOK: 'codebook',
   SYSTEM_TYPE_TREE: 'system-type-tree',

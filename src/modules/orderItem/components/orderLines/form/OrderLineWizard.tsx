@@ -50,11 +50,10 @@ export const OrderLineWizard = ({ handleSubmit }: Props) => {
         title={fm({ id: messages.steps.step1.title })}
         hideDefaultNavigation
       >
-        {({ handleNext, isProcessing, values }) => (
+        {({ handleNext, isProcessing }) => (
           <OrderLineStep1Catalogue
             handleNext={handleNext}
             isProcessing={isProcessing}
-            hasSelectedItem={Boolean(values.catalogueUid)}
           />
         )}
       </WizardStep>
@@ -64,9 +63,7 @@ export const OrderLineWizard = ({ handleSubmit }: Props) => {
         title={fm({ id: messages.steps.step2.title })}
         validate={validateStep2}
       >
-        {({ values }) => (
-          <OrderLineStep2Form hasSelectedItem={Boolean(values.catalogueUid)} />
-        )}
+        <OrderLineStep2Form />
       </WizardStep>
     </FormWizard>
   )
