@@ -20,7 +20,6 @@ const documents = {
     "\n  query GetEmployee($uid: ID!) {\n    employees(where: { uid: $uid }) {\n      uid\n      fullName\n      firstName\n      facility {\n        code\n        name\n      }\n      lastName\n      phone1\n      phone2\n    }\n  }\n": types.GetEmployeeDocument,
     "\nquery Systems($where: SystemWhere) {\n  systems(where: $where) {\n    name\n    uid\n    systemCode\n    zone {\n      code\n    }\n  }\n}": types.SystemsDocument,
     "\nquery Query($where: EmployeeWhere) {\n  employees(where: $where) {\n    fullName\n    jobPosition\n    email\n    phone1\n    workplaceName\n    facility {\n      name\n    }\n  }\n}\n": types.QueryDocument,
-    "\n  query UserPWDQuery($uid: ID!) {\n    users(where: { uid: $uid }) {\n      uid\n      passwordHash\n    }\n  }\n": types.UserPwdQueryDocument,
     "\n  query GetFacilities {\n    facilities {\n      code\n      name\n    }\n  }\n": types.GetFacilitiesDocument,
     "\n  query GetRoles {\n    roles {\n      name\n      code\n      uid\n    }\n  }\n": types.GetRolesDocument,
     "\n  mutation CreateUser($input: [UserCreateInput!]!) {\n    createUsers(input: $input) {\n      users {\n        uid\n      }\n    }\n  }\n": types.CreateUserDocument,
@@ -106,10 +105,6 @@ export function gql(source: "\nquery Systems($where: SystemWhere) {\n  systems(w
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\nquery Query($where: EmployeeWhere) {\n  employees(where: $where) {\n    fullName\n    jobPosition\n    email\n    phone1\n    workplaceName\n    facility {\n      name\n    }\n  }\n}\n"): (typeof documents)["\nquery Query($where: EmployeeWhere) {\n  employees(where: $where) {\n    fullName\n    jobPosition\n    email\n    phone1\n    workplaceName\n    facility {\n      name\n    }\n  }\n}\n"];
-/**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function gql(source: "\n  query UserPWDQuery($uid: ID!) {\n    users(where: { uid: $uid }) {\n      uid\n      passwordHash\n    }\n  }\n"): (typeof documents)["\n  query UserPWDQuery($uid: ID!) {\n    users(where: { uid: $uid }) {\n      uid\n      passwordHash\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

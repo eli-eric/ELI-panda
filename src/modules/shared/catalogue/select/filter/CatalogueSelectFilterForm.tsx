@@ -1,3 +1,5 @@
+import { useFormContext } from 'react-hook-form'
+
 import { ComboboxTreeControlled } from '@/components/form/ComboBoxControlled'
 import { Input } from '@/components/form/inputs'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
@@ -6,7 +8,6 @@ import useCatalogueFormFields from '@/modules/catalogueItem/components/form/Cata
 import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
 import { CategoryPropFilters } from '@/modules/shared/form/CategoryPropFilters'
 import { useFormControlStore } from '@/store/useFormControlStore'
-import { useFormContext } from 'react-hook-form'
 
 interface CatalogueSelectFilterFormProps {
   tableId: string

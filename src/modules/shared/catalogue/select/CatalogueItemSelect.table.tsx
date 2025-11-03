@@ -2,7 +2,9 @@ import type { Row } from '@tanstack/react-table'
 import { createContext, useEffect } from 'react'
 
 import type { GetCategoriesQuery } from '@/types/gql/graphql'
-import type { CatalogueItemsResponse, CatalogueItem } from '@/types/responses/catalogue'
+import type {
+  CatalogueItem,
+  CatalogueItemsResponse} from '@/types/responses/catalogue'
 import type { CodebookType } from '@/types/responses/codebook'
 
 import { usePandaTable } from '../../table/pandaTable/hooks/usePandaTable'

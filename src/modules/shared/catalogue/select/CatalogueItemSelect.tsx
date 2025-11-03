@@ -3,7 +3,6 @@ import { Fragment } from 'react'
 import { cn } from '@/lib/utils'
 import { useCatalogueItems } from '@/modules/catalogue/hooks/useCatalogueItems'
 import { useCategoryList } from '@/modules/catalogue/hooks/useCategoryList'
-import useTableStateStore from '@/store/useTableStateStore'
 import type { CatalogueItem } from '@/types/responses/catalogue'
 
 import { FilterBadges } from '../../form/FilterBadges'
@@ -75,10 +74,7 @@ export const CatalogueItemSelect = ({
   const { catalogueCategories } = useCategoryList()
 
   // Pin selected item to first row
-  const pinnedData = usePinnedCatalogueData(
-    catalogueItems?.data,
-    selectedItem
-  )
+  const pinnedData = usePinnedCatalogueData(catalogueItems?.data, selectedItem)
 
   // Handle checkbox toggle - select or deselect
   const handleItemToggle = (item: CatalogueItem) => {
