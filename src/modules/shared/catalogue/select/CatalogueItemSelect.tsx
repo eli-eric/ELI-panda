@@ -1,8 +1,9 @@
-import { Fragment } from 'react'
+import { Fragment, useEffect } from 'react'
 
 import { cn } from '@/lib/utils'
 import { useCatalogueItems } from '@/modules/catalogue/hooks/useCatalogueItems'
 import { useCategoryList } from '@/modules/catalogue/hooks/useCategoryList'
+import useTableStateStore from '@/store/useTableStateStore'
 import type { CatalogueItem } from '@/types/responses/catalogue'
 
 import { FilterBadges } from '../../form/FilterBadges'
@@ -38,6 +39,12 @@ interface CatalogueItemSelectProps {
   hideButtons?: boolean
 
   /**
+   * Default page size for pagination
+   * @default 10
+   */
+  pageSizeDefault?: number
+
+  /**
    * Additional CSS classes for the container
    */
   className?: string
@@ -68,8 +75,19 @@ export const CatalogueItemSelect = ({
   onSelect,
   tableId,
   hideButtons = true,
+  pageSizeDefault = 10,
   className
 }: CatalogueItemSelectProps) => {
+  const { setPagination, instances } = useTableStateStore()
+
+  // Initialize pagination BEFORE useCatalogueItems runs to prevent pageSize change
+  // This fixes issue where useQueryManager defaults to pageSize:50
+  useEffect(() => {
+    if (!instances[tableId]?.pagination) {
+      setPagination(tableId, `{"page":1,"pageSize":${pageSizeDefault}}`)
+    }
+  }, [tableId, pageSizeDefault, setPagination, instances])
+
   const { catalogueItems, loading } = useCatalogueItems(tableId)
   const { catalogueCategories } = useCategoryList()
 
@@ -132,7 +150,7 @@ export const CatalogueItemSelect = ({
         settings={{
           enableQueryURL: false,
           total: catalogueItems?.totalCount,
-          pageSizeDefault: 10
+          pageSizeDefault
         }}
       />
     </Fragment>

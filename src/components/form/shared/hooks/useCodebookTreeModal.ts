@@ -20,7 +20,7 @@ export const useCodebookTreeModal = () => {
   }) => {
     if (typeof window === 'undefined') return // Prevent SSR execution
 
-    openModal('dialog1', {
+    openModal('dialog3', {
       component: CodebookTreeModalContent,
       props: {
         title,

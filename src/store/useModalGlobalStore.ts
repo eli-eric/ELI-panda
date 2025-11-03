@@ -2,7 +2,7 @@ import { create } from 'zustand'
 
 import type { ModalSize } from '@/components/ui/dialog'
 
-export type ModalSlotType = 'sheet' | 'dialog1' | 'dialog2'
+export type ModalSlotType = 'sheet' | 'dialog1' | 'dialog2' | 'dialog3'
 
 export interface ModalSlot {
   isOpen: boolean
@@ -24,6 +24,7 @@ export interface ModalGlobalState {
   sheet: ModalSlot
   dialog1: ModalSlot
   dialog2: ModalSlot
+  dialog3: ModalSlot
   openModal: (
     slot: ModalSlotType,
     config: Omit<ModalSlot, 'priority' | 'isOpen'>
@@ -48,6 +49,7 @@ export const useModalGlobalStore = create<ModalGlobalState>(set => ({
   sheet: initialSlot(0),
   dialog1: initialSlot(1),
   dialog2: initialSlot(2),
+  dialog3: initialSlot(3),
   openModal: (slot, config) => {
     set(state => ({
       ...state,
@@ -78,7 +80,8 @@ export const useModalGlobalStore = create<ModalGlobalState>(set => ({
     set({
       sheet: initialSlot(0),
       dialog1: initialSlot(1),
-      dialog2: initialSlot(2)
+      dialog2: initialSlot(2),
+      dialog3: initialSlot(3)
     })
   }
 }))
