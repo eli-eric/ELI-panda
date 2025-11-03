@@ -49,6 +49,7 @@ export const OrderLineStep1Catalogue = ({
         selectedItem={selectedCatalogueItem}
         onSelect={handleItemSelect}
         tableId={TABLE_IDS.CATALOGUE_ITEM_SELECT}
+        pageSizeDefault={10}
       />
 
       <div className="flex justify-end gap-2 pt-4 border-t">

@@ -1,6 +1,4 @@
-import { useFormContext } from 'react-hook-form'
-
-import { ComboboxTreeControlled } from '@/components/form/ComboBoxControlled'
+import { ComboboxTree } from '@/components/form/ComboboxTree'
 import { Input } from '@/components/form/inputs'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import { cn } from '@/lib/utils'
@@ -21,8 +19,6 @@ export const CatalogueSelectFilterForm = ({
   const fields = useCatalogueFormFields()
   const { setFilter } = useFormFilterState({ tableId, enableQueryUrl: false })
   const { toggleDeleteCustom } = useFormControlStore()
-  const { watch, setValue } = useFormContext()
-  const categoryValue = watch('category')
 
   return (
     <div className={cn('md:grid md:grid-cols-2 md:gap-4 md:min-w-[500px]')}>
@@ -55,14 +51,18 @@ export const CatalogueSelectFilterForm = ({
         />
       </div>
 
-      <ComboboxTreeControlled
+      <ComboboxTree
         {...fields.category}
         disabled={false}
-        value={categoryValue || null}
         customLabel="Category"
         className="col-span-2"
-        onChange={v => {
-          setValue('category', v)
+        onSelect={v => {
+          // Add to store columnFilter so filtering works
+          setFilter(fields.category.name)(
+            v?.uid ? v : null,
+            undefined,
+            'Category'
+          )
           if (!v) {
             toggleDeleteCustom()
           }

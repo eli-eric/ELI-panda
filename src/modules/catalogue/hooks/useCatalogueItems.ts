@@ -8,6 +8,7 @@ import { message } from '@/i18n/src/messages'
 import type { CatalogueItemsResponse } from '@/types/responses/catalogue'
 import type { QueryFetcherKey } from '@/utils/fetcher'
 import { queryFetcher } from '@/utils/fetcher'
+
 export const useCatalogueItems = (tableId = 'catalogueItems') => {
   const { query } = useQueryManager(tableId)
   const pagination = JSON.parse(query.pagination || '{}')
