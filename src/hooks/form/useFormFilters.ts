@@ -142,12 +142,31 @@ export const useFormFilterState = ({
     false
   )
   const [, setQueryPage] = useQueryState('page', { history: 'replace' })
-  const { setPagination, setSearch, setSearchValue } = useTableStateStore()
+  const { setPagination, setSearch, setSearchValue, instances } =
+    useTableStateStore()
 
   const [, setQuerySearch] = useQueryState('search', { history: 'replace' })
 
   const clearPageAndSearch = useCallback(() => {
-    setPagination(tableId, `{"page":${1},"pageSize":${50}}`)
+    // Preserve existing pageSize from store, only reset page to 1
+    // This prevents overwriting custom pageSize (e.g., 10) with hardcoded 50
+    const currentPagination = instances[tableId]?.pagination
+    let pageSize = 50 // Default fallback for backward compatibility
+
+    if (currentPagination) {
+      try {
+        const parsed = JSON.parse(currentPagination)
+        pageSize = parsed.pageSize || 50
+      } catch (e) {
+        // Invalid JSON, use default
+        console.warn(
+          `Failed to parse pagination for tableId ${tableId}:`,
+          currentPagination
+        )
+      }
+    }
+
+    setPagination(tableId, `{"page":1,"pageSize":${pageSize}}`)
     setSearch(tableId, '')
     setSearchValue(tableId, '')
     if (enableQueryUrl) {
@@ -161,7 +180,8 @@ export const useFormFilterState = ({
     tableId,
     enableQueryUrl,
     setQueryPage,
-    setQuerySearch
+    setQuerySearch,
+    instances
   ])
 
   //set filter value to store on change field and remove from store if value is empty
