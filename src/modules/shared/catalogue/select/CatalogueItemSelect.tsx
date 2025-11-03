@@ -1,4 +1,4 @@
-import { Fragment, useEffect } from 'react'
+import { Fragment, useMemo } from 'react'
 
 import { cn } from '@/lib/utils'
 import { useCatalogueItems } from '@/modules/catalogue/hooks/useCatalogueItems'
@@ -80,12 +80,14 @@ export const CatalogueItemSelect = ({
 }: CatalogueItemSelectProps) => {
   const { setPagination, instances } = useTableStateStore()
 
-  // Initialize pagination BEFORE useCatalogueItems runs to prevent pageSize change
-  // This fixes issue where useQueryManager defaults to pageSize:50
-  useEffect(() => {
+  // Initialize pagination SYNCHRONOUSLY before useCatalogueItems runs
+  // This fixes timing issue where useQueryManager defaults to pageSize:50
+  // useMemo runs during render (synchronous), useEffect runs after (async)
+  useMemo(() => {
     if (!instances[tableId]?.pagination) {
       setPagination(tableId, `{"page":1,"pageSize":${pageSizeDefault}}`)
     }
+    return null
   }, [tableId, pageSizeDefault, setPagination, instances])
 
   const { catalogueItems, loading } = useCatalogueItems(tableId)
