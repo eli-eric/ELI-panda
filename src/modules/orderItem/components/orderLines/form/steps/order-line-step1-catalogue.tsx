@@ -5,8 +5,8 @@ import { Button } from '@/components/ui/button'
 import { message } from '@/i18n/src/messages'
 import type { OrderLineFormType } from '@/modules/orderItem/types/form'
 import { CatalogueItemSelect } from '@/modules/shared/catalogue/select/CatalogueItemSelect'
-import type { CatalogueItem } from '@/types/responses/catalogue'
 import { TABLE_IDS } from '@/types/constants/tableIds'
+import type { CatalogueItem } from '@/types/responses/catalogue'
 
 interface OrderLineStep1Props {
   handleNext: () => void
