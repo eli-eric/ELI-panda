@@ -39,6 +39,7 @@ export const useOrderLineModal = () => {
       component: () => <OrderLineModalContent onSave={onSave} />,
       props: {
         title: fm({ id: message.ordersPage.orderLines.titles.add }),
+        side: 'left',
         size: 'xl' as const
       }
     })
