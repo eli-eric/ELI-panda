@@ -364,6 +364,7 @@ enum SystemLevel {
   TECHNOLOGY_UNIT
   KEY_SYSTEMS
   SUBSYSTEMS_AND_PARTS
+  TRASH
 }
 
 interface hasOrderLine @relationshipProperties {

@@ -14597,7 +14597,8 @@ export type SystemItemPhysicalItemNodeAggregateSelection = {
 export enum SystemLevel {
   KeySystems = 'KEY_SYSTEMS',
   SubsystemsAndParts = 'SUBSYSTEMS_AND_PARTS',
-  TechnologyUnit = 'TECHNOLOGY_UNIT'
+  TechnologyUnit = 'TECHNOLOGY_UNIT',
+  Trash = 'TRASH'
 }
 
 export type SystemLinkLinksAggregationSelection = {

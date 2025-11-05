@@ -4,7 +4,6 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import type { NextAuthOptions } from 'next-auth'
 import { getServerSession } from 'next-auth'
 import { getToken } from 'next-auth/jwt'
-import {} from '@apollo/server/plugin/landingPage/default'
 
 import { neoSchema } from '@/server/apollo/schema'
 
