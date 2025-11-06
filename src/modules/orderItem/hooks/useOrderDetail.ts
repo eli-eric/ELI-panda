@@ -25,8 +25,8 @@ const useOrderDetail = () => {
     queryFn: queryFetcher<OrderDetailFormType>('order'),
     enabled: !!uid,
     refetchOnMount: true,
-    // Přidání staleTime pro omezení zbytečných dotazů
-    staleTime: 30 * 1000 // 30 sekund
+    // Snížené staleTime pro zajištění aktuálních dat po uložení
+    staleTime: 5 * 1000 // 5 sekund
   })
 
   const { data: session } = useSession()

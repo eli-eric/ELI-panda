@@ -3,7 +3,6 @@ import type { AxiosError, AxiosResponse } from 'axios'
 import { useRouter } from 'next/router'
 import { toast } from 'react-hot-toast'
 
-import { useOrders } from '@/modules/orders/hooks/useOrders'
 import { PATH } from '@/types/constants/paths'
 import { queryMutate } from '@/utils/fetcher'
 
@@ -13,7 +12,6 @@ import useOrderDetail from './useOrderDetail'
 export const useOrderSubmit = (formReset: (t: any) => void) => {
   const router = useRouter()
   const { uid, queryKey } = useOrderDetail()
-  const { mutate: refetchOrders } = useOrders()
 
   const queryClient = useQueryClient()
 
@@ -36,9 +34,11 @@ export const useOrderSubmit = (formReset: (t: any) => void) => {
 
   const handleOnSuccess =
     (saveAndExit: boolean) =>
-    (data: AxiosResponse<OrderDetailFormType, any>) => {
+    async (data: AxiosResponse<OrderDetailFormType, any>) => {
       const orderDetail = data.data
-      formReset({
+
+      // Příprava dat pro reset formu s uuid
+      const resetData = {
         ...orderDetail,
         orderLines:
           orderDetail?.orderLines &&
@@ -57,10 +57,19 @@ export const useOrderSubmit = (formReset: (t: any) => void) => {
           uid: 'c5ef9d00-ac38-44c1-b48a-fde0d7095c54',
           name: 'Requested'
         }
-      })
-      queryClient.invalidateQueries({ queryKey })
+      }
 
-      refetchOrders()
+      formReset(resetData)
+
+      // Okamžitá aktualizace cache detailu objednávky
+      queryClient.setQueryData(queryKey, orderDetail)
+
+      // Invalidovat všechny relevantní queries (awaitat pro zajištění dokončení)
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey }),
+        queryClient.invalidateQueries({ queryKey: ['orders'] })
+      ])
+
       if (saveAndExit) {
         router.push(PATH.ORDERS)
       } else {
