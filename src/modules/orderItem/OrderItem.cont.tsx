@@ -12,7 +12,6 @@ import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 import { FILE_TYPE } from '@/modules/shared/fileManager/types'
 import { ROLE } from '@/types/constants/roles'
-import { convertDate } from '@/utils/formatters'
 
 import FileManager from '../shared/fileManager/FileManager'
 import OrderFormComponent from './components/form/OrderForm.comp'
@@ -22,10 +21,15 @@ import { ServiceLinesContainer } from './components/serviceLines/service-lines.c
 import useOrderDetail from './hooks/useOrderDetail'
 import { useOrderSubmit } from './hooks/useOrderSubmit'
 import type { OrderDetailFormType } from './types/form'
+import {
+  addUuidsToOrderData,
+  hasEmptyLines,
+  prepareOrderForSubmit
+} from './utils/order-transforms'
 
 const messages = message.ordersPage
 
-// Memoizujeme komponenty, aby se snížil počet re-renderů
+// Memoize components to reduce re-renders
 const MemoizedOrderLinesTable = memo(OrderLinesTable)
 const MemoizedServiceLinesContainer = memo(ServiceLinesContainer)
 const MemoizedOrderFormComponent = memo(OrderFormComponent)
@@ -39,28 +43,9 @@ export const OrderItemContainer = () => {
     fm({ id: messages.ordelineMissingModal.message })
   )
 
-  // Použití useMemo pro defaultValues, aby se zbytečně nepřepočítávaly
+  // Use useMemo for defaultValues to avoid unnecessary recalculations
   const defaultValues = useMemo(
-    () => ({
-      ...orderDetail,
-      orderLines:
-        orderDetail?.orderLines &&
-        orderDetail?.orderLines.map(orderLine => ({
-          ...orderLine,
-          uuid: orderLine.uid
-        })),
-      serviceLines:
-        orderDetail?.serviceLines &&
-        orderDetail?.serviceLines.map(serviceLine => ({
-          ...serviceLine,
-          uuid: serviceLine.uid
-        })),
-      orderDate: orderDetail?.orderDate,
-      orderStatus: orderDetail?.orderStatus || {
-        uid: 'c5ef9d00-ac38-44c1-b48a-fde0d7095c54',
-        name: 'Requested'
-      }
-    }),
+    () => (orderDetail ? addUuidsToOrderData(orderDetail) : undefined),
     [orderDetail]
   )
 
@@ -73,43 +58,14 @@ export const OrderItemContainer = () => {
 
   const submitData = useCallback(
     (saveAndExit: boolean, data: OrderDetailFormType) => {
-      const orderLines = data?.orderLines?.map(orderLine => {
-        // extract uuid from orderLines array (uuid is not needed for the backend ist is only used for the frontend when no uid is available)
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { uuid, ...rest } = orderLine
-        return rest
-      })
-      const serviceLines =
-        data.serviceLines &&
-        data?.serviceLines?.map(serviceLine => {
-          // extract uuid from serviceLines array (uuid is not needed for the backend ist is only used for the frontend when no uid is available)
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const { uuid, ...rest } = serviceLine
-          return rest
-        })
-      if (
-        (data?.orderLines?.length === 0 || !data?.orderLines) &&
-        (data?.serviceLines?.length === 0 || !data?.serviceLines)
-      ) {
-        withWarningModal(submit)(
-          {
-            ...data,
-            orderLines: orderLines,
-            serviceLines: serviceLines,
-            orderDate: convertDate(data.orderDate)
-          },
-          false
-        )
+      // Prepare data for submission (remove uuid, convert date)
+      const preparedData = prepareOrderForSubmit(data)
+
+      // If order has no lines, show warning
+      if (hasEmptyLines(data)) {
+        withWarningModal(submit)(preparedData, false)
       } else {
-        submit(
-          {
-            ...data,
-            orderLines: orderLines,
-            serviceLines: serviceLines,
-            orderDate: convertDate(data.orderDate)
-          },
-          saveAndExit
-        )
+        submit(preparedData, saveAndExit)
       }
     },
     [submit, withWarningModal]
@@ -129,7 +85,7 @@ export const OrderItemContainer = () => {
     [submitData]
   )
 
-  // Komponenty renderujeme s React.memo
+  // Render components with React.memo
   return (
     <Form
       className="min-[1200px]:h-screen min-[1200px]:overflow-hidden"
