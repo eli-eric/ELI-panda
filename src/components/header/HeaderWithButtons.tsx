@@ -13,6 +13,8 @@ interface Props {
   loading?: boolean
   onSubmit?: () => void
   onSubmitAndExit?: () => void
+  disableSubmit?: boolean
+  disableSubmitAndExit?: boolean
   editRole: ROLE
   customElement?: React.ReactNode
   isFormInvalid?: boolean
@@ -25,6 +27,8 @@ export const HeaderWithButtons = ({
   loading,
   onSubmit,
   onSubmitAndExit,
+  disableSubmit,
+  disableSubmitAndExit,
   editRole,
   customElement,
   isFormInvalid = false,
@@ -64,6 +68,11 @@ export const HeaderWithButtons = ({
 
   const currentLoadingText = loadingText || (loading ? 'Processing...' : '')
 
+  const disabledSubmit =
+    disableSubmit || loading || !disabledEdit || isFormInvalid
+  const disabledSubmitAndExit =
+    disableSubmitAndExit || loading || !disabledEdit || isFormInvalid
+
   return (
     <div className="border-b bg-background sticky top-0 z-10">
       <div className="w-full px-4 py-2">
@@ -83,7 +92,10 @@ export const HeaderWithButtons = ({
               </span>
             )}
             {!loading && isFormDirty && (
-              <span className="text-muted-foreground text-sm ml-4" aria-live="polite">
+              <span
+                className="text-muted-foreground text-sm ml-4"
+                aria-live="polite"
+              >
                 {fm({ id: message.common.form.unsavedChanges })}
               </span>
             )}
@@ -114,7 +126,7 @@ export const HeaderWithButtons = ({
                   variant="outline"
                   size="sm"
                   onClick={handleSubmit}
-                  disabled={loading || isFormInvalid}
+                  disabled={disabledSubmit}
                 >
                   {loading && <Loader2 className="size-3 animate-spin mr-2" />}
                   {fm({ id: message.common.buttons.save })}
@@ -122,7 +134,7 @@ export const HeaderWithButtons = ({
                 <Button
                   size="sm"
                   onClick={handleSubmitAndExit}
-                  disabled={loading || isFormInvalid}
+                  disabled={disabledSubmitAndExit}
                 >
                   {loading && <Loader2 className="size-3 animate-spin mr-2" />}
                   {fm({ id: message.common.buttons.saveAndExit })}
