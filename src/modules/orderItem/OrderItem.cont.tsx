@@ -138,7 +138,6 @@ export const OrderItemContainer = () => {
     >
       <HeaderWithButtons
         loading={loading}
-        disableSubmitAndExit={true} // Dočasně zakázáno TODO fix mutaci pro submit and exit
         editRole={ROLE.ORDERS_EDIT}
         onSubmit={formMethods.handleSubmit(onSubmit)}
         onSubmitAndExit={formMethods.handleSubmit(onSubmitAndExit)}
