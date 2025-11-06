@@ -53,3 +53,21 @@ export const getBadgeVariantBySystemLevel = (level?: SystemLevel) => {
       return 'border-gray-200 bg-gray-50 text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300'
   }
 }
+
+export const formatParentPath = (
+  parentPath?:
+    | Array<{ name?: string | null | undefined; uid?: string | null | undefined } | null | undefined>
+    | null
+    | undefined,
+  currentName?: string
+): string => {
+  const path = parentPath || []
+  const names = currentName ? [...path, { name: currentName }] : path
+
+  return names
+    .filter((v): v is { name: string; uid?: string | null | undefined } =>
+      v != null && v.name != null && typeof v.name === 'string'
+    )
+    .map(v => v.name)
+    .join(' > ')
+}
