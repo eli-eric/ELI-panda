@@ -5,7 +5,7 @@
  * to ensure uniform behavior and data integrity.
  */
 
-import { ITEM_USAGE } from '@/modules/systems/types/constants'
+import { ITEM_USAGE_OPTION } from '@/modules/systems/types/constants'
 
 /**
  * Default values for Order Line forms
@@ -19,16 +19,12 @@ export const ORDER_LINE_DEFAULTS = {
    * Default currency for order line items
    * Standard currency used across the ELI facility
    */
-  CURRENCY: 'EUR',
+  currency: 'EUR',
 
   /**
-   * Default item usage category
-   * Set to "In System Part" for items that are part of operational systems
+   * Default item usage
    */
-  ITEM_USAGE: {
-    uid: ITEM_USAGE.IN_SYSTEM_PART,
-    name: 'In System Part'
-  }
+  itemUsage: ITEM_USAGE_OPTION.STOCK_ITEM
 } as const
 
 /**
@@ -42,7 +38,7 @@ export const SERVICE_LINE_DEFAULTS = {
   /**
    * Default currency for service line items
    */
-  CURRENCY: 'EUR'
+  currency: 'EUR'
 } as const
 
 export type OrderLineDefaultKey = keyof typeof ORDER_LINE_DEFAULTS

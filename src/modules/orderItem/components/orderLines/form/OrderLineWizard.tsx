@@ -31,13 +31,7 @@ export const OrderLineWizard = ({ handleSubmit }: Props) => {
   }, [])
 
   // Initial values with defaults from constants
-  const initialValues = useMemo(
-    () => ({
-      currency: ORDER_LINE_DEFAULTS.CURRENCY,
-      itemUsage: ORDER_LINE_DEFAULTS.ITEM_USAGE
-    }),
-    []
-  )
+  const initialValues = useMemo(() => ORDER_LINE_DEFAULTS, [])
 
   return (
     <FormWizard<OrderLineFormType>
