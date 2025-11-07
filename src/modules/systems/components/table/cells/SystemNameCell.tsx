@@ -33,6 +33,12 @@ export const SystemNameCell = ({
     setUid
   )
 
+  // Detect if this is the last child in parent's subRows (for future use)
+  const parentRow = row.getParentRow()
+  const isLastChild = parentRow
+    ? parentRow.subRows?.at(-1)?.id === row.id
+    : false
+
   const content = (
     <SystemNameCellContent
       value={getValue()}
@@ -48,6 +54,8 @@ export const SystemNameCell = ({
       sparesOut={original.sparesOut}
       queryKey={queryKey}
       tableId={tableId}
+      depth={row.depth}
+      isLastChild={isLastChild}
     />
   )
 

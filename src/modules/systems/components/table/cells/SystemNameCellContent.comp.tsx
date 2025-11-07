@@ -24,6 +24,8 @@ interface SystemNameCellContentProps {
   sparesOut?: number
   queryKey?: [string, EndpointProps]
   tableId: string
+  depth: number
+  isLastChild: boolean
 }
 
 export const SystemNameCellContent = ({
@@ -39,8 +41,15 @@ export const SystemNameCellContent = ({
   sparesIn,
   sparesOut,
   queryKey,
-  tableId
+  tableId,
+  depth,
+  isLastChild
 }: SystemNameCellContentProps) => {
+  // Calculate indentation based on hierarchy depth (16px per level)
+  const indentStyle = {
+    paddingLeft: `${depth * 16}px`
+  }
+
   return (
     <div className="flex items-center w-full group">
       <div className="flex-1 min-w-0 overflow-hidden">
@@ -49,6 +58,7 @@ export const SystemNameCellContent = ({
             'flex items-center py-1',
             hasSubsystems && 'group/expand cursor-pointer'
           )}
+          style={indentStyle}
           onClick={hasSubsystems ? onExpand : undefined}
         >
           {showDragHandle && (
