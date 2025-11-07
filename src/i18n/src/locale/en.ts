@@ -183,7 +183,7 @@ export const messages = {
       hierarchyArrow: '→',
       failedToLoad: 'Failed to load system information',
       viewServiceDetails: 'View Service Details',
-      useSpare: 'Use Spare',
+      useSpare: 'Use',
       designatedSparePart: 'Designated spare part for:',
       originalCatalogParameter:
         '*Original catalog parameter modified by Service',
