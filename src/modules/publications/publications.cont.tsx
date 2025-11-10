@@ -1,10 +1,11 @@
+import { useRouter } from 'next/router'
 import type { FC } from 'react'
 
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
+import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
 import type { Publication } from '../publication/types/responses'
-import { usePublicationCreateSheet } from '../shared/publications/publication-create/usePublicationCreateSheet'
 import { Pagination } from '../shared/table/Pagination'
 import { usePandaTable } from '../shared/table/pandaTable/hooks/usePandaTable'
 import type { PandaTableSettings } from '../shared/table/pandaTable/PandaTable'
@@ -16,6 +17,7 @@ import { usePublicationColumns } from './publications.columns'
 
 export const PublicationsContainer: FC = () => {
   const tableId = 'publications'
+  const router = useRouter()
 
   const columns = usePublicationColumns()
   const { data, refetch } = usePublications(tableId)
@@ -35,7 +37,9 @@ export const PublicationsContainer: FC = () => {
     settings: tableSettings
   })
 
-  const openCreateSheet = usePublicationCreateSheet()
+  const openCreateSheet = () => {
+    router.push(PATH.PUBLICATION)
+  }
 
   const handleRefresh = () => {
     refetch()
