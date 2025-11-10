@@ -1,5 +1,5 @@
 import type { CellContext } from '@tanstack/react-table'
-import { Edit, MoreVertical, Trash2 } from 'lucide-react'
+import { MoreVertical, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 import type { FC } from 'react'
 import { useIntl } from 'react-intl'
@@ -15,7 +15,6 @@ import {
 import { useAccessControl } from '@/hooks/useAccessControl'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
-import { usePublicationEditSheet } from '@/modules/shared/publications/publication-edit/usePublicationEditSheet'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 import { truncateString } from '@/utils'
@@ -35,7 +34,6 @@ export const TitleCell: FC<TitleCellProps> = ({
   const title = getValue()
   const deletePublication = usePublicationDelete(uid as string)
   const withWarning = useWarningModal()
-  const [openEdit] = usePublicationEditSheet(uid as string)
   const canEdit = useAccessControl(ROLE.PUBLICATIONS_EDIT)()
 
   const onDeleteClick = () => {
@@ -44,28 +42,19 @@ export const TitleCell: FC<TitleCellProps> = ({
 
   return (
     <div className="flex items-center justify-between w-full flex-row-reverse">
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            aria-label="Publication actions"
-            variant="ghost"
-            tabIndex={0}
-            className="has-[>svg]:px-1 cursor-pointer"
-          >
-            <MoreVertical className="size-4 text-muted-foreground" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="start" sideOffset={4}>
-          <DropdownMenuItem>
-            <Link
-              href={`${PATH.PUBLICATION}/${uid}`}
-              className="flex gap-2 istems-center"
+      {canEdit && (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              aria-label="Publication actions"
+              variant="ghost"
+              tabIndex={0}
+              className="has-[>svg]:px-1 cursor-pointer"
             >
-              <Edit className="size-4" />
-              {fm({ id: message.publicationsPage.actions.editPublication })}
-            </Link>
-          </DropdownMenuItem>
-          {canEdit && (
+              <MoreVertical className="size-4 text-muted-foreground" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start" sideOffset={4}>
             <DropdownMenuItem
               onClick={onDeleteClick}
               className="text-destructive"
@@ -73,14 +62,16 @@ export const TitleCell: FC<TitleCellProps> = ({
               <Trash2 className="size-4" />
               {fm({ id: message.publicationsPage.actions.deletePublication })}
             </DropdownMenuItem>
-          )}
-        </DropdownMenuContent>
-      </DropdownMenu>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )}
       <div className="flex-1 min-w-0 flex items-center justify-start">
         <Tooltip content={title}>
-          <Button variant="link" onClick={openEdit} className="cursor-pointer">
-            {truncateString(title, 40)}
-          </Button>
+          <Link href={`${PATH.PUBLICATION}/${uid}`}>
+            <Button variant="link" className="cursor-pointer">
+              {truncateString(title, 40)}
+            </Button>
+          </Link>
         </Tooltip>
       </div>
     </div>
