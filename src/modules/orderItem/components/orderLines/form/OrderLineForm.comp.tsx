@@ -25,10 +25,10 @@ export const OrderLineFormComponent = () => {
   return (
     <Grid className="pt-2">
       <Col md={6} lg={6}>
-        <Input {...formFields.name} disabled={isFromCatalogue} />
+        <Input {...formFields.name} disabled={true} />
       </Col>
       <Col md={6} lg={6}>
-        <Input {...formFields.catalogueNumber} disabled={isFromCatalogue} />
+        <Input {...formFields.catalogueNumber} disabled={true} />
       </Col>
       <Col lg={4} md={6}>
         <InputAmountCurrency

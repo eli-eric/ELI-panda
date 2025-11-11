@@ -50,6 +50,11 @@ export const CatalogueSelectFilterForm = ({
           isFilter={true}
         />
       </div>
+      <Input
+        {...fields.itemUID}
+        onChange={setFilter(fields.itemUID.name)}
+        isFilter={true}
+      />
 
       <ComboboxTree
         {...fields.category}

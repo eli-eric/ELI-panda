@@ -1,6 +1,7 @@
 import { useFormContext } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 
+import { Tooltip } from '@/components/Tooltip'
 import { Button } from '@/components/ui/button'
 import { message } from '@/i18n/src/messages'
 import type { OrderLineFormType } from '@/modules/orderItem/types/form'
@@ -53,19 +54,24 @@ export const OrderLineStep1Catalogue = ({
       />
 
       <div className="flex justify-end gap-2 pt-4 border-t">
-        <Button
-          type="button"
-          onClick={handleNext}
-          disabled={isProcessing}
-          variant={hasSelectedItem ? 'default' : 'outline'}
+        <Tooltip
+          content={
+            hasSelectedItem
+              ? undefined
+              : 'Please select or create a catalogue item to proceed.'
+          }
         >
-          {hasSelectedItem
-            ? fm({ id: message.common.buttons.next })
-            : fm({
-                id: message.ordersPage.orderLines.wizard.steps.step1
-                  .continueWithoutSelection
-              })}
-        </Button>
+          <div>
+            <Button
+              type="button"
+              onClick={handleNext}
+              disabled={!hasSelectedItem || isProcessing}
+              variant={'default'}
+            >
+              {fm({ id: message.common.buttons.next })}
+            </Button>
+          </div>
+        </Tooltip>
       </div>
     </div>
   )
