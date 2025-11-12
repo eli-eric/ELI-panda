@@ -1,6 +1,5 @@
 import { Fragment, useMemo } from 'react'
 
-import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { useCatalogueItems } from '@/modules/catalogue/hooks/useCatalogueItems'
 import { useCategoryList } from '@/modules/catalogue/hooks/useCategoryList'
@@ -10,7 +9,6 @@ import type { CatalogueItem } from '@/types/responses/catalogue'
 import { FilterBadges } from '../../form/FilterBadges'
 import { Pagination } from '../../table/Pagination'
 import { SearchBar } from '../../table/SearchBar'
-import { UseItemCreateDialog } from '../create/use-item-create.dialog'
 import { CatalogueItemSelectTable } from './CatalogueItemSelect.table'
 import { CatalogueSelectFilterButton } from './filter/CatalogueSelectFilterButton'
 import { usePinnedCatalogueData } from './hooks/usePinnedCatalogueData'
@@ -50,6 +48,11 @@ interface CatalogueItemSelectProps {
    * Additional CSS classes for the container
    */
   className?: string
+
+  /**
+   * Optional left element for the search bar
+   */
+  right?: JSX.Element
 }
 
 /**
@@ -78,7 +81,8 @@ export const CatalogueItemSelect = ({
   tableId,
   hideButtons = true,
   pageSizeDefault = 10,
-  className
+  className,
+  right
 }: CatalogueItemSelectProps) => {
   const { setPagination, instances } = useTableStateStore()
 
@@ -94,7 +98,6 @@ export const CatalogueItemSelect = ({
 
   const { catalogueItems, loading } = useCatalogueItems(tableId)
   const { catalogueCategories } = useCategoryList()
-  const openCreateDialaog = UseItemCreateDialog()
 
   // Pin selected item to first row
   const pinnedData = usePinnedCatalogueData(catalogueItems?.data, selectedItem)
@@ -116,7 +119,7 @@ export const CatalogueItemSelect = ({
         tableId={tableId}
         useQuery={false}
         left={<CatalogueSelectFilterButton tableId={tableId} />}
-        right={<Button onClick={openCreateDialaog}>Create New Item</Button>}
+        right={right}
       />
 
       <FilterBadges tableId={tableId} enableQueryURL={false} />
