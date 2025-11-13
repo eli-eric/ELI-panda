@@ -1,15 +1,21 @@
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import type { CodebookType } from '@/types/responses/codebook'
 
 import { CodebookTreeModalGraphqlContent } from '../components/location-modal-content'
 
+/**
+ * Opens location selection modal using new dynamic modal system
+ * Automatically handles z-index when opened from nested modals
+ */
 export const useLocationSelectionModal = () => {
-  const { openModal } = useModalGlobalStore()
+  const { openModal } = useDynamicModalStore()
 
   const openLocationModal = (
     onSelect?: (location: CodebookType | null) => void
   ) => {
-    openModal('dialog1', {
+    // Use custom ID for consistent modal management
+    const modalId = openModal('dialog', {
+      id: 'location-select',
       component: CodebookTreeModalGraphqlContent,
       props: {
         title: 'Select Location',
@@ -20,6 +26,8 @@ export const useLocationSelectionModal = () => {
         onSelect: onSelect || (() => {})
       }
     })
+
+    return modalId
   }
 
   return { openLocationModal }

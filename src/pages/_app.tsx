@@ -31,6 +31,12 @@ const ModalProvider = lazy(() =>
   }))
 )
 
+const DynamicModalProvider = lazy(() =>
+  import('@/components/overlays/DynamicModalProvider').then(d => ({
+    default: d.DynamicModalProvider
+  }))
+)
+
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
   const [queryClient] = useState(() => getQueryClient())
 
@@ -57,6 +63,7 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
                 </NewLayout>
                 <Suspense fallback={null}>
                   <ModalProvider />
+                  <DynamicModalProvider />
                 </Suspense>
                 <WarningModal />
               </DndProvider>

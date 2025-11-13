@@ -13,10 +13,13 @@ interface UseSystemsFilterSheetProps {
 }
 
 /**
- * Opens system filter sheet using new dynamic modal system
- * Supports proper z-index layering when opened from other modals
+ * V2 Hook using new dynamic modal system
+ * Opens system filter sheet with automatic z-index management
+ * Can be used alongside other modals/dialogs without z-index conflicts
+ *
+ * Returns modalId for potential manual closing if needed
  */
-export const useSystemsFilterSheet = () => {
+export const useSystemsFilterSheetV2 = () => {
   const { openModal } = useDynamicModalStore()
 
   const openFilterSheet = useCallback(
@@ -26,7 +29,7 @@ export const useSystemsFilterSheet = () => {
       disabledFields,
       side = 'left'
     }: UseSystemsFilterSheetProps = {}) => {
-      // Open with custom ID for easy reference and proper z-index management
+      // Open with custom ID for easy reference
       const modalId = openModal('sheet', {
         id: `system-filters-${tableId}`,
         component: SystemsFilterSheet,

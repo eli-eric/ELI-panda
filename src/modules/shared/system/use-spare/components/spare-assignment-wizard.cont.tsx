@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label'
 import { message } from '@/i18n/src/messages'
 import { SelectLocationCombo } from '@/modules/shared/form/location/SelectLocation.combo'
 import { FormWizard, WizardStep } from '@/modules/shared/form/wizardV3'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import useTableStateStore from '@/store/useTableStateStore'
 import { CODEBOOK } from '@/types/constants/codebook'
 
@@ -59,7 +59,7 @@ export const SpareAssignmentWizardContainer = ({
 }: SpareAssignmentWizardProps) => {
   const { formatMessage: fm } = useIntl()
   const { mutateAsync, isPending } = useAssignSpare()
-  const { closeModal } = useModalGlobalStore()
+  const { closeModal } = useDynamicModalStore()
   const queryClient = useQueryClient()
 
   const initialData: Partial<SpareAssignmentFormType> = useMemo(
@@ -134,7 +134,7 @@ export const SpareAssignmentWizardContainer = ({
       }
 
       reset()
-      closeModal('dialog2')
+      closeModal('spare-assignment-wizard')
     } catch (error) {
       toast.error(
         fm({ id: message.common.spareAssignment.errors.assignmentFailed })

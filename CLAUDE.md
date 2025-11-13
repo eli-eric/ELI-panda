@@ -170,6 +170,126 @@ const MyModalContent: React.FC<MyModalContentProps> = ({
 - For nested modals, use Dialog2 when Dialog1 is already open
 - Clean up any subscriptions or timers in `onClose`
 
+## Dynamic Modal System V2 (NEW)
+
+**⚠️ Migration in Progress**: The application is transitioning to a new dynamic modal system that supports unlimited modals with automatic z-index management.
+
+### Key Improvements
+
+- **Unlimited Modals**: Open as many sheets and dialogs as needed simultaneously
+- **Automatic Z-Index Management**: Each modal automatically gets the correct z-index based on open order (FIFO)
+- **Custom IDs**: Use custom IDs for easy modal management or let the system auto-generate them
+- **Type-Aware Rendering**: Sheet vs Dialog components rendered correctly based on type
+- **No Z-Index Conflicts**: Fixes issues where sheets appeared behind dialogs
+
+### Core Components
+
+- **`useDynamicModalStore`**: New Zustand store with Map-based architecture
+- **`DynamicModalProvider`**: Dynamic modal renderer (runs alongside old `ModalProvider`)
+- **Updated `sheet.tsx` and `dialog.tsx`**: Support inline z-index styles
+
+### Migration Strategy
+
+**Old System (Legacy)**:
+```typescript
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+
+const { openModal, closeModal } = useModalGlobalStore()
+
+// Fixed slots: 'sheet', 'dialog1', 'dialog2', 'dialog3'
+openModal('dialog2', {
+  component: MyComponent,
+  props: { title: 'My Modal' }
+})
+
+closeModal('dialog2')
+```
+
+**New System (V2)**:
+```typescript
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
+
+const { openModal, closeModal } = useDynamicModalStore()
+
+// Option A: Auto-generated ID
+const modalId = openModal('dialog', {
+  component: MyComponent,
+  props: { title: 'My Modal' }
+})
+closeModal(modalId) // Use returned ID
+
+// Option B: Custom ID (recommended for reusable modals)
+openModal('dialog', {
+  id: 'my-custom-modal',
+  component: MyComponent,
+  props: { title: 'My Modal' }
+})
+closeModal('my-custom-modal')
+```
+
+### Example: Nested Modals with Proper Layering
+
+```typescript
+// Open spare assignment wizard
+const wizardId = openModal('dialog', {
+  id: 'spare-wizard',
+  component: SpareWizardComponent,
+  props: { title: 'Assign Spare Part', size: 'xl' }
+})
+// Z-index: 50 (overlay), 51 (content)
+
+// Inside wizard, open filter sheet
+const filterId = openModal('sheet', {
+  id: 'system-filters',
+  component: FilterComponent,
+  props: { title: 'Filter Systems', side: 'left' }
+})
+// Z-index: 52 (overlay), 53 (content) ← Automatically higher!
+
+// Filter sheet is correctly rendered above the wizard dialog
+```
+
+### Z-Index Calculation
+
+```
+Base Z-Index: 50
+For each modal in order:
+- Overlay: baseZIndex + (modalIndex * 2)
+- Content: baseZIndex + (modalIndex * 2) + 1
+
+Example with 3 open modals:
+Modal 1: overlay=50, content=51
+Modal 2: overlay=52, content=53
+Modal 3: overlay=54, content=55 (top layer)
+```
+
+### Additional Functions
+
+```typescript
+// Bring existing modal to front
+bringToFront('my-modal-id')
+
+// Close all modals at once
+closeAllModals()
+
+// Get modal instance by ID
+const modal = getModalById('my-modal-id')
+```
+
+### Migration Checklist for New Features
+
+When creating new modals, use the V2 system:
+
+1. Import `useDynamicModalStore` instead of `useModalGlobalStore`
+2. Change `openModal('dialog2', ...)` to `openModal('dialog', { id: 'unique-id', ... })`
+3. Store returned `modalId` or use custom ID for closing
+4. Update `closeModal` to use the ID instead of slot name
+
+**Example Files Using V2**:
+- `useSpareDialog.ts` - Spare assignment wizard
+- `useSystemsFilterSheetV2.ts` - System filters (V2 version)
+- `SystemFilterButtonV2.tsx` - Filter button (V2 version)
+
 ## Form Wizard V3 Pattern
 
 The application uses a declarative Form Wizard V3 system for multi-step forms with React Hook Form integration.
