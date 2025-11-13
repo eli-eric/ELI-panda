@@ -28,6 +28,7 @@ interface Props<T> {
   data?: T[]
 
   getSubRows?: (original: T, index: number) => T[]
+  getRowId?: (original: T, index: number, parent?: T) => string
 }
 
 export const usePandaTable = <T>({
@@ -35,7 +36,8 @@ export const usePandaTable = <T>({
   columns,
   settings,
   data,
-  getSubRows
+  getSubRows,
+  getRowId
 }: Props<T>) => {
   const {
     enableSorting = false,
@@ -76,6 +78,7 @@ export const usePandaTable = <T>({
       ? getPaginationRowModel()
       : undefined,
     getSubRows,
+    getRowId,
     onExpandedChange: setExpanded,
     onSortingChange: setSorting,
     onColumnOrderChange: setColumnOrder,

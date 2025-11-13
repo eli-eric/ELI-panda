@@ -34,7 +34,8 @@ export const SpareParentSystemSelectTable = () => {
     settings,
     data: systems?.data,
     columns: columns.columns,
-    getSubRows: original => original.subSystems ?? []
+    getSubRows: original => original.subSystems ?? [],
+    getRowId: original => original.uid
   })
 
   const paginationSettings = useMemo(

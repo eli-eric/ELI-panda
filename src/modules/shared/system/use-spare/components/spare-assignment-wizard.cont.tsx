@@ -95,18 +95,21 @@ export const SpareAssignmentWizardContainer = ({
       if (!data.autoAssignParent) {
         const { instances } = useTableStateStore.getState()
         const rowSelection = instances[tableId]?.rowSelection || {}
-        const selectedRowIds = Object.keys(rowSelection).filter(
+
+        // Get selected row IDs (which are now system UIDs thanks to getRowId in table)
+        const selectedSystemUids = Object.keys(rowSelection).filter(
           key => rowSelection[key]
         )
 
-        if (selectedRowIds.length === 0) {
+        if (selectedSystemUids.length === 0) {
           toast.error(
             fm({ id: message.common.spareAssignment.errors.noSystemSelected })
           )
           return
         }
 
-        newParentSystemUid = selectedRowIds[0]
+        // Row ID is now directly the system UID (configured via getRowId in SpareParentSystemSelectTable)
+        newParentSystemUid = selectedSystemUids[0]
       }
 
       const payload: SpareAssignmentPayload = {

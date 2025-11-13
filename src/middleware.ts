@@ -109,10 +109,16 @@ export async function middleware(request: NextRequest) {
   // Create response and add security headers
   const response = NextResponse.next()
 
+  // Build Content Security Policy based on environment
+  const isDevelopment = process.env.PANDA_ENV === 'localhost'
+  const connectSrc = isDevelopment
+    ? "'self' http://localhost:* https:"
+    : "'self' https:"
+
   // Add Content Security Policy header
   response.headers.set(
     'Content-Security-Policy',
-    "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https:; frame-ancestors 'self';"
+    `default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src ${connectSrc}; frame-ancestors 'self';`
   )
 
   // Add X-Frame-Options to prevent clickjacking
