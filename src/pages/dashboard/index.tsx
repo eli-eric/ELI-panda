@@ -2,6 +2,7 @@ import {
   Cog,
   CreditCard,
   Image as ImageIcon,
+  Keyboard,
   Layers,
   LayoutGrid,
   Library,
@@ -19,6 +20,7 @@ import { FormattedMessage, useIntl } from 'react-intl'
 import { Tile, TileContainer } from '@/components/card/tile.comp'
 import { DashboardHeader } from '@/components/header/DashboardHeader'
 import { ReleasesContainer } from '@/components/Releases.cont'
+import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { VersionControl } from '@/components/version/VersionControl'
 import { useAccessControl } from '@/hooks/useAccessControl'
@@ -26,6 +28,7 @@ import { message } from '@/i18n/src/messages'
 import { CatalogueStatisticsContainer } from '@/modules/catalogueItem/components/statistics/CatalogueStatistics.cont'
 import FileManager from '@/modules/shared/fileManager/FileManager'
 import { FILE_TYPE } from '@/modules/shared/fileManager/types'
+import { useGlobalSearchShortcut } from '@/modules/shared/globalSearch'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
@@ -106,6 +109,10 @@ const messages = message.common.pages
 const DashboardPage: NextPage = (): JSX.Element => {
   const hasEditRole = useAccessControl(ROLE.DASHBOARD_FILES_ADMIN)()
   const { formatMessage: fm } = useIntl()
+  const { shortcutDisplay } = useGlobalSearchShortcut({
+    onToggle: () => {},
+    enabled: false
+  })
 
   return (
     <Fragment>
@@ -142,6 +149,32 @@ const DashboardPage: NextPage = (): JSX.Element => {
                 </TileContainer>
               </Card>
               <CatalogueStatisticsContainer />
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center gap-2">
+                    <Keyboard className="size-6 text-primary" />
+                    <CardTitle>
+                      {fm({ id: message.common.globalSearch.title })}
+                    </CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <p className="text-sm text-muted-foreground">
+                    {fm({ id: message.common.globalSearch.description })}
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="outline" className="font-mono text-sm">
+                      {shortcutDisplay}
+                    </Badge>
+                    <span className="text-sm text-muted-foreground">
+                      {fm(
+                        { id: message.common.globalSearch.shortcutHint },
+                        { shortcut: shortcutDisplay }
+                      )}
+                    </span>
+                  </div>
+                </CardContent>
+              </Card>
               <Card>
                 <CardContent>
                   <FileManager

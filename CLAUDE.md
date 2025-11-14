@@ -29,6 +29,55 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Tailwind CSS for styling with custom design system
 - Use `data-testid` for test selectors
 
+## Internationalization (i18n)
+
+The application uses `react-intl` for internationalization with a custom message system.
+
+### Message Files
+
+- **Message definitions**: `/src/i18n/src/locale/en.ts` - Contains all translation strings
+- **Message paths**: `/src/i18n/src/messages.ts` - Exports `message` object with type-safe paths
+
+### Usage Pattern
+
+```typescript
+import { useIntl } from 'react-intl'
+import { message } from '@/i18n/src/messages'
+
+const MyComponent = () => {
+  const { formatMessage: fm } = useIntl()
+
+  // ✅ Correct - use message object for type-safe paths
+  return <h1>{fm({ id: message.common.ui.appName })}</h1>
+
+  // ❌ Incorrect - hardcoded strings are not type-safe
+  return <h1>{fm({ id: 'common.ui.appName' })}</h1>
+}
+```
+
+### Adding New Translations
+
+1. Add translation string to `/src/i18n/src/locale/en.ts`
+2. Use via `message` object: `fm({ id: message.path.to.key })`
+3. The `message` object mirrors the structure of the locale file
+
+**Example:**
+
+```typescript
+// In /src/i18n/src/locale/en.ts
+export const messages = {
+  common: {
+    globalSearch: {
+      title: 'Global Search',
+      placeholder: 'Type to search...'
+    }
+  }
+}
+
+// In your component
+fm({ id: message.common.globalSearch.title })
+```
+
 ## Design System Migration
 
 The codebase is currently migrating from HeadlessUI to shadcn/ui + Radix UI components:

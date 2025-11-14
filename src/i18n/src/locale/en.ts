@@ -109,6 +109,16 @@ export const messages = {
       foundFacilities: 'Found {count} facilities',
       status: 'Status'
     },
+    globalSearch: {
+      title: 'Global Search',
+      description: 'Search for systems, orders, and catalogue items',
+      placeholder: 'Type to search... (min 2 characters)',
+      minChars: 'Type at least 2 characters to search',
+      noResults: 'No results found',
+      error: 'Error loading results. Please try again.',
+      updating: 'Updating...',
+      shortcutHint: 'Press {shortcut} to open global search'
+    },
     environmentWarning: {
       title: 'WARNING!',
       subtitle: 'You are in the {environment} environment',

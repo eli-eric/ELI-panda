@@ -37,6 +37,14 @@ const DynamicModalProvider = lazy(() =>
   }))
 )
 
+const GlobalSearchCommandContainer = lazy(() =>
+  import(
+    '@/modules/shared/globalSearch/components/GlobalSearchCommand.cont'
+  ).then(d => ({
+    default: d.GlobalSearchCommandContainer
+  }))
+)
+
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
   const [queryClient] = useState(() => getQueryClient())
 
@@ -64,6 +72,7 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
                 <Suspense fallback={null}>
                   <ModalProvider />
                   <DynamicModalProvider />
+                  <GlobalSearchCommandContainer />
                 </Suspense>
                 <WarningModal />
               </DndProvider>

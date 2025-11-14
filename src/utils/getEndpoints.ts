@@ -38,6 +38,7 @@ export const getEndpoints = ({
     catalogueCategoryProperties: `/catalogue/category/${uid}/properties${query}`,
     cataloguePhysicalItemProperties: `/catalogue/category/${uid}/physical-item-properties`,
     catalogueOrders: `/catalogue/${uid}/orders`,
+    globalSearch: `/global-search${query}`,
     system: `/system${uidPart}`,
     systemCodeGenerate: `/system/systemCode${query}`,
     systemImage: `/system/${uid}/image`,
