@@ -82,7 +82,9 @@ const AddGroupModalContent: FC<Props> = ({ refetch }) => {
       <div className="flex justify-end gap-2">
         <Button
           variant="outline"
-          onClick={() => currentAddGroupModalId && closeModal(currentAddGroupModalId)}
+          onClick={() =>
+            currentAddGroupModalId && closeModal(currentAddGroupModalId)
+          }
           disabled={isPending}
         >
           <FormattedMessage id={messages.cancel} defaultMessage={'Cancel'} />

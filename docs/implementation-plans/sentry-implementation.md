@@ -65,12 +65,12 @@ This guide provides a comprehensive implementation plan for integrating Sentry e
 
 Add the following secrets to your GitHub repository (Settings → Secrets and variables → Actions):
 
-| Secret Name | Description | Example |
-|-------------|-------------|---------|
-| `SENTRY_AUTH_TOKEN` | Sentry authentication token | `sntrys_xxxxx...` |
-| `SENTRY_ORG` | Sentry organization slug | `eli-panda` |
-| `SENTRY_PROJECT` | Sentry project slug | `eli-panda-frontend` |
-| `NEXT_PUBLIC_SENTRY_DSN` | Public DSN URL | `https://xxx@xxx.ingest.sentry.io/xxx` |
+| Secret Name              | Description                 | Example                                |
+| ------------------------ | --------------------------- | -------------------------------------- |
+| `SENTRY_AUTH_TOKEN`      | Sentry authentication token | `sntrys_xxxxx...`                      |
+| `SENTRY_ORG`             | Sentry organization slug    | `eli-panda`                            |
+| `SENTRY_PROJECT`         | Sentry project slug         | `eli-panda-frontend`                   |
+| `NEXT_PUBLIC_SENTRY_DSN` | Public DSN URL              | `https://xxx@xxx.ingest.sentry.io/xxx` |
 
 ---
 
@@ -81,6 +81,7 @@ yarn add @sentry/nextjs
 ```
 
 This will install the official Sentry SDK for Next.js, which includes integrations for:
+
 - Client-side (Browser)
 - Server-side (Node.js)
 - Edge Runtime
@@ -138,7 +139,8 @@ Client-side Sentry configuration for browser runtime.
 import * as Sentry from '@sentry/nextjs'
 
 const SENTRY_DSN = process.env.NEXT_PUBLIC_SENTRY_DSN
-const ENVIRONMENT = process.env.SENTRY_ENVIRONMENT || process.env.PANDA_ENV || 'production'
+const ENVIRONMENT =
+  process.env.SENTRY_ENVIRONMENT || process.env.PANDA_ENV || 'production'
 const IS_PRODUCTION = process.env.NODE_ENV === 'production'
 
 Sentry.init({
@@ -161,13 +163,13 @@ Sentry.init({
   integrations: [
     Sentry.replayIntegration({
       maskAllText: true,
-      blockAllMedia: true,
+      blockAllMedia: true
     }),
     Sentry.feedbackIntegration({
       colorScheme: 'system',
-      showBranding: false,
+      showBranding: false
     }),
-    Sentry.browserTracingIntegration(),
+    Sentry.browserTracingIntegration()
   ],
 
   // Filtering
@@ -180,7 +182,7 @@ Sentry.init({
     'Network request failed',
     'NetworkError',
     // NextAuth errors (expected during auth flow)
-    '[next-auth]',
+    '[next-auth]'
   ],
 
   // Performance
@@ -190,7 +192,7 @@ Sentry.init({
       return null
     }
     return event
-  },
+  }
 })
 ```
 
@@ -203,7 +205,8 @@ Server-side Sentry configuration for Node.js runtime.
 import * as Sentry from '@sentry/nextjs'
 
 const SENTRY_DSN = process.env.NEXT_PUBLIC_SENTRY_DSN
-const ENVIRONMENT = process.env.SENTRY_ENVIRONMENT || process.env.PANDA_ENV || 'production'
+const ENVIRONMENT =
+  process.env.SENTRY_ENVIRONMENT || process.env.PANDA_ENV || 'production'
 const IS_PRODUCTION = process.env.NODE_ENV === 'production'
 
 Sentry.init({
@@ -219,10 +222,7 @@ Sentry.init({
   tracesSampleRate: 0.1, // 10% of transactions
 
   // Integrations
-  integrations: [
-    Sentry.httpIntegration(),
-    Sentry.graphqlIntegration(),
-  ],
+  integrations: [Sentry.httpIntegration(), Sentry.graphqlIntegration()],
 
   // Filtering
   ignoreErrors: [
@@ -230,7 +230,7 @@ Sentry.init({
     'GraphQL error:',
     // Auth errors (expected)
     'Unauthorized',
-    'Authentication required',
+    'Authentication required'
   ],
 
   // Performance
@@ -244,12 +244,12 @@ Sentry.init({
     if (event.request) {
       event.tags = {
         ...event.tags,
-        server: 'true',
+        server: 'true'
       }
     }
 
     return event
-  },
+  }
 })
 ```
 
@@ -262,7 +262,8 @@ Edge runtime Sentry configuration.
 import * as Sentry from '@sentry/nextjs'
 
 const SENTRY_DSN = process.env.NEXT_PUBLIC_SENTRY_DSN
-const ENVIRONMENT = process.env.SENTRY_ENVIRONMENT || process.env.PANDA_ENV || 'production'
+const ENVIRONMENT =
+  process.env.SENTRY_ENVIRONMENT || process.env.PANDA_ENV || 'production'
 const IS_PRODUCTION = process.env.NODE_ENV === 'production'
 
 Sentry.init({
@@ -286,11 +287,11 @@ Sentry.init({
     // Add edge context
     event.tags = {
       ...event.tags,
-      runtime: 'edge',
+      runtime: 'edge'
     }
 
     return event
-  },
+  }
 })
 ```
 
@@ -383,7 +384,7 @@ const nextConfig = {
 
   // Enable instrumentation
   experimental: {
-    instrumentationHook: true,
+    instrumentationHook: true
   },
 
   images: {
@@ -434,7 +435,7 @@ const sentryWebpackPluginOptions = {
 
   // Automatically annotate React components for better error messages
   reactComponentAnnotation: {
-    enabled: true,
+    enabled: true
   },
 
   // Uncomment to route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
@@ -447,7 +448,7 @@ const sentryWebpackPluginOptions = {
   hideSourceMaps: true,
 
   // Automatically tree-shake Sentry logger statements to reduce bundle size
-  disableLogger: true,
+  disableLogger: true
 
   // Enables automatic instrumentation of Vercel Cron Monitors.
   // See the following for more information:
@@ -590,6 +591,7 @@ services:
 ### 5.3 Update Other Docker Compose Files
 
 Apply similar changes to:
+
 - `docker-compose-dev.yml`
 - `docker-compose-test.yml`
 
@@ -723,13 +725,13 @@ SENTRY_ENVIRONMENT=development
 
 Ensure the following are set via Docker Compose or CI/CD:
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `NEXT_PUBLIC_SENTRY_DSN` | ✅ Yes | Public DSN for Sentry project |
-| `SENTRY_AUTH_TOKEN` | ✅ Yes (build) | Auth token for source maps upload |
-| `SENTRY_ORG` | ✅ Yes (build) | Sentry organization slug |
-| `SENTRY_PROJECT` | ✅ Yes (build) | Sentry project slug |
-| `SENTRY_ENVIRONMENT` | ⚠️ Optional | Defaults to `production` |
+| Variable                 | Required       | Description                       |
+| ------------------------ | -------------- | --------------------------------- |
+| `NEXT_PUBLIC_SENTRY_DSN` | ✅ Yes         | Public DSN for Sentry project     |
+| `SENTRY_AUTH_TOKEN`      | ✅ Yes (build) | Auth token for source maps upload |
+| `SENTRY_ORG`             | ✅ Yes (build) | Sentry organization slug          |
+| `SENTRY_PROJECT`         | ✅ Yes (build) | Sentry project slug               |
+| `SENTRY_ENVIRONMENT`     | ⚠️ Optional    | Defaults to `production`          |
 
 ---
 
@@ -854,10 +856,12 @@ export default SentryTestPage
 ### 9.2 Testing Steps
 
 1. **Local Testing** (optional):
+
    ```bash
    NODE_ENV=production yarn build
    NODE_ENV=production yarn start
    ```
+
    - Navigate to `http://localhost:5001/sentry-test`
    - Click "Test Client Error" - check Sentry dashboard for error
    - Click "Test API Error" - check Sentry dashboard for API error
@@ -892,6 +896,7 @@ export default SentryTestPage
 **Symptoms**: Stack traces show minified code instead of original source
 
 **Solutions**:
+
 1. Verify `SENTRY_AUTH_TOKEN` is set correctly in build environment
 2. Check Docker build logs for Sentry webpack plugin output
 3. Verify `SENTRY_ORG` and `SENTRY_PROJECT` match your Sentry project
@@ -902,6 +907,7 @@ export default SentryTestPage
 **Symptoms**: Errors occur but don't show up in Sentry dashboard
 
 **Solutions**:
+
 1. Verify `NODE_ENV=production` in runtime environment
 2. Check that `NEXT_PUBLIC_SENTRY_DSN` is set correctly
 3. Look for Sentry initialization logs in browser console (should see "Sentry initialized")
@@ -913,6 +919,7 @@ export default SentryTestPage
 **Symptoms**: Docker build fails during `yarn build` with Sentry-related errors
 
 **Solutions**:
+
 1. Temporarily disable source maps upload by removing `SENTRY_AUTH_TOKEN` from build args
 2. Check that all Sentry config files are present
 3. Verify `@sentry/nextjs` is installed in `package.json`
@@ -923,6 +930,7 @@ export default SentryTestPage
 **Symptoms**: Sentry quota exceeded quickly
 
 **Solutions**:
+
 1. Lower `tracesSampleRate` (e.g., from 0.1 to 0.05)
 2. Lower `replaysSessionSampleRate` (e.g., from 0.1 to 0.05)
 3. Add more entries to `ignoreErrors` array
@@ -933,6 +941,7 @@ export default SentryTestPage
 **Symptoms**: Errors appear but no replay available
 
 **Solutions**:
+
 1. Verify `Sentry.replayIntegration()` is included in client config
 2. Check browser console for replay errors
 3. Ensure the page was loaded after Sentry initialization
@@ -945,6 +954,7 @@ export default SentryTestPage
 Before considering the implementation complete, verify the following:
 
 ### Configuration Files
+
 - [ ] `instrumentation.ts` created in root
 - [ ] `sentry.client.config.ts` created in root
 - [ ] `sentry.server.config.ts` created in root
@@ -954,6 +964,7 @@ Before considering the implementation complete, verify the following:
 - [ ] `next.config.js` wrapped with `withSentryConfig`
 
 ### Environment Setup
+
 - [ ] Sentry project created on sentry.io
 - [ ] DSN obtained from Sentry project
 - [ ] Auth token generated with correct scopes
@@ -961,6 +972,7 @@ Before considering the implementation complete, verify the following:
 - [ ] Local `.env` updated (optional)
 
 ### Docker & Deployment
+
 - [ ] `Dockerfile` updated with Sentry ARGs and ENVs (builder stage)
 - [ ] `Dockerfile` updated with Sentry ENVs (runner stage)
 - [ ] `docker-compose.yml` updated with Sentry build args and environment
@@ -968,11 +980,13 @@ Before considering the implementation complete, verify the following:
 - [ ] `.gitignore` updated with Sentry exclusions
 
 ### CI/CD
+
 - [ ] `compose-up-production-on-push.yml` updated with Sentry secrets
 - [ ] `compose-up-dev-on-push.yml` updated (optional)
 - [ ] `compose-up-test-on-push.yml` updated (optional)
 
 ### Testing
+
 - [ ] Test endpoint `/api/sentry-test` created
 - [ ] Test page `/sentry-test` created
 - [ ] Client-side error test successful
@@ -983,6 +997,7 @@ Before considering the implementation complete, verify the following:
 - [ ] Performance monitoring data appearing in Sentry
 
 ### Production Verification
+
 - [ ] Production build succeeds without errors
 - [ ] Source maps uploaded successfully during build
 - [ ] Application starts and runs normally

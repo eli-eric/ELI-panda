@@ -191,6 +191,7 @@ const MyModalContent: React.FC<MyModalContentProps> = ({
 ### Migration Strategy
 
 **Old System (Legacy)**:
+
 ```typescript
 import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 
@@ -206,6 +207,7 @@ closeModal('dialog2')
 ```
 
 **New System (V2)**:
+
 ```typescript
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 
@@ -286,6 +288,7 @@ When creating new modals, use the V2 system:
 4. Update `closeModal` to use the ID instead of slot name
 
 **Example Files Using V2**:
+
 - `useSpareDialog.ts` - Spare assignment wizard
 - `useSystemsFilterSheetV2.ts` - System filters (V2 version)
 - `SystemFilterButtonV2.tsx` - Filter button (V2 version)

@@ -70,10 +70,7 @@ const ModalSheetRenderer: React.FC<{
     >
       <SheetPortal>
         {/* Custom overlay with dynamic z-index */}
-        <SheetOverlay
-          style={{ zIndex: overlayZIndex }}
-          onClick={handleClose}
-        />
+        <SheetOverlay style={{ zIndex: overlayZIndex }} onClick={handleClose} />
         <SheetContent
           style={{ zIndex: contentZIndex }}
           size={modal.props?.size || 'l'}

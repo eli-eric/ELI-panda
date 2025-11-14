@@ -5,7 +5,11 @@ import { formatParentPath } from '@/modules/systemItem/utils'
 
 interface SystemPathTooltipProps {
   parentPath?:
-    | Array<{ name?: string | null | undefined; uid?: string | null | undefined } | null | undefined>
+    | Array<
+        | { name?: string | null | undefined; uid?: string | null | undefined }
+        | null
+        | undefined
+      >
     | null
     | undefined
   currentName?: string

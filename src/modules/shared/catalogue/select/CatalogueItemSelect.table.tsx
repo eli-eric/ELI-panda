@@ -4,7 +4,8 @@ import { createContext, useEffect } from 'react'
 import type { GetCategoriesQuery } from '@/types/gql/graphql'
 import type {
   CatalogueItem,
-  CatalogueItemsResponse} from '@/types/responses/catalogue'
+  CatalogueItemsResponse
+} from '@/types/responses/catalogue'
 import type { CodebookType } from '@/types/responses/codebook'
 
 import { usePandaTable } from '../../table/pandaTable/hooks/usePandaTable'

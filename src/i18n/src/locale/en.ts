@@ -439,7 +439,8 @@ export const messages = {
         nameRequired: 'Name is required',
         nameTooLong: 'Name must be at most 255 characters',
         catalogueNumberRequired: 'Catalogue number is required',
-        catalogueNumberTooLong: 'Catalogue number must be at most 100 characters',
+        catalogueNumberTooLong:
+          'Catalogue number must be at most 100 characters',
         categoryRequired: 'Category is required'
       }
     },
