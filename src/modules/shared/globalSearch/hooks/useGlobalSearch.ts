@@ -6,6 +6,8 @@ import { queryFetcher } from '@/utils/fetcher'
 
 import type { GlobalSearchResponse } from '../types'
 
+const GLOBAL_SEARCH_PAGINATION = '{"pageSize": 20, "page": 1}'
+
 interface UseGlobalSearchOptions {
   search?: string
   enabled?: boolean
@@ -33,7 +35,7 @@ export const useGlobalSearch = ({
         query: trimmedSearch
           ? {
               searchText: trimmedSearch,
-              pagination: `{"pageSize": 20, "page": 1}`
+              pagination: GLOBAL_SEARCH_PAGINATION
             }
           : null
       }

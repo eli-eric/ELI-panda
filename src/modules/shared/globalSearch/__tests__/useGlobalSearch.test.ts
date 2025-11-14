@@ -66,7 +66,6 @@ describe('useGlobalSearch', () => {
       () =>
         useGlobalSearch({
           search: 'test',
-          pagination: 20,
           enabled: true
         }),
       { wrapper: createWrapper() }
@@ -86,7 +85,6 @@ describe('useGlobalSearch', () => {
       () =>
         useGlobalSearch({
           search: 'a',
-          pagination: 20,
           enabled: true
         }),
       { wrapper: createWrapper() }
@@ -107,7 +105,6 @@ describe('useGlobalSearch', () => {
       () =>
         useGlobalSearch({
           search: 'test query',
-          pagination: 20,
           enabled: false
         }),
       { wrapper: createWrapper() }
@@ -131,7 +128,6 @@ describe('useGlobalSearch', () => {
       () =>
         useGlobalSearch({
           search: '  test  ',
-          pagination: 20,
           enabled: true
         }),
       { wrapper: createWrapper() }
@@ -142,8 +138,8 @@ describe('useGlobalSearch', () => {
     // Verify queryKey includes trimmed search
     expect(result.current.queryKey[1]).toEqual({
       query: {
-        search: 'test',
-        pagination: 20
+        searchText: 'test',
+        pagination: '{"pageSize": 20, "page": 1}'
       }
     })
   })
@@ -160,7 +156,6 @@ describe('useGlobalSearch', () => {
       () =>
         useGlobalSearch({
           search: 'nonexistent',
-          pagination: 20,
           enabled: true
         }),
       { wrapper: createWrapper() }
@@ -181,7 +176,6 @@ describe('useGlobalSearch', () => {
       () =>
         useGlobalSearch({
           search: 'test',
-          pagination: 20,
           enabled: true
         }),
       { wrapper: createWrapper() }
@@ -193,7 +187,7 @@ describe('useGlobalSearch', () => {
     expect(result.current.error).toBeDefined()
   })
 
-  it('uses default pagination value of 20', async () => {
+  it('uses default pagination value', async () => {
     const mockResponse: GlobalSearchResponse = {
       data: [],
       totalCount: 0
@@ -213,8 +207,8 @@ describe('useGlobalSearch', () => {
 
     expect(result.current.queryKey[1]).toEqual({
       query: {
-        search: 'test',
-        pagination: 20
+        searchText: 'test',
+        pagination: '{"pageSize": 20, "page": 1}'
       }
     })
   })
@@ -226,7 +220,6 @@ describe('useGlobalSearch', () => {
       () =>
         useGlobalSearch({
           search: 'test search',
-          pagination: 50,
           enabled: true
         }),
       { wrapper: createWrapper() }
@@ -238,8 +231,8 @@ describe('useGlobalSearch', () => {
       'globalSearch',
       {
         query: {
-          search: 'test search',
-          pagination: 50
+          searchText: 'test search',
+          pagination: '{"pageSize": 20, "page": 1}'
         }
       }
     ])
@@ -271,7 +264,6 @@ describe('useGlobalSearch', () => {
       () =>
         useGlobalSearch({
           search: 'test',
-          pagination: 20,
           enabled: true
         }),
       { wrapper: createWrapper() }
