@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 
 import { OrdersFilterSheet } from '../OrdersFilterSheet.cont'
 
@@ -11,7 +11,7 @@ interface UseOrdersFilterSheetProps {
 }
 
 export const useOrdersFilterSheet = () => {
-  const { openModal } = useModalGlobalStore()
+  const { openModal } = useDynamicModalStore()
 
   const openFilterSheet = useCallback(
     ({
@@ -19,7 +19,8 @@ export const useOrdersFilterSheet = () => {
       enableQueryURL = true,
       side = 'left'
     }: UseOrdersFilterSheetProps = {}) => {
-      openModal('sheet', {
+      const modalId = openModal('sheet', {
+        id: `orders-filters-${tableId}`,
         component: OrdersFilterSheet,
         props: {
           title: 'Order Filters',
@@ -29,6 +30,8 @@ export const useOrdersFilterSheet = () => {
           enableQueryURL
         }
       })
+
+      return modalId
     },
     [openModal]
   )

@@ -21,7 +21,7 @@ import {
   formatFormData,
   formatPublication
 } from '@/modules/publication/utils/formatters'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { ROLE } from '@/types/constants/roles'
 import { queryMutate } from '@/utils/fetcher'
 
@@ -81,7 +81,7 @@ export const PublicationFormContainer: FC<Props> = ({
       toast.error(`Error: ${error.response?.data?.message}`)
     }
   })
-  const { closeModal } = useModalGlobalStore()
+  const { closeModal } = useDynamicModalStore()
 
   const onSuccessfulSubmit = (publication: Publication) => {
     queryClient.invalidateQueries({ queryKey: [publicationsTableId] })
@@ -101,7 +101,12 @@ export const PublicationFormContainer: FC<Props> = ({
   })
 
   const onExit = () => {
-    closeModal('sheet')
+    // NOTE: Modal is opened with ID 'publication-create' or 'publication-edit-${uid}'
+    // in usePublicationCreateSheet and usePublicationEditSheet
+    const modalId = publication?.uid
+      ? `publication-edit-${publication.uid}`
+      : 'publication-create'
+    closeModal(modalId)
   }
 
   return (

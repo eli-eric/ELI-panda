@@ -1,32 +1,42 @@
+import { useRef } from 'react'
+
 import type { OrderLineFormType } from '@/modules/orderItem/types/form'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 
 import { OrderLineEditSheet } from '../components/OrderLineEditSheet.comp'
 
 export const useOrderLineEditSheet = () => {
-  const { openModal, closeModal } = useModalGlobalStore()
+  const { openModal, closeModal } = useDynamicModalStore()
+  const modalIdRef = useRef<string | undefined>(undefined)
 
   const openEditSheet = (
     orderLine: OrderLineFormType,
     onSave?: (data: OrderLineFormType) => void
   ) => {
-    openModal('sheet', {
+    modalIdRef.current = openModal('sheet', {
+      id: 'order-line-edit',
       component: OrderLineEditSheet,
       props: {
         title: 'Edit Order Line',
         orderLine,
-        onClose: () => closeModal('sheet')
+        onClose: () => {
+          if (modalIdRef.current) closeModal(modalIdRef.current)
+        }
       },
       onSubmit: (data: OrderLineFormType) => {
         onSave?.(data)
-        closeModal('sheet')
+        if (modalIdRef.current) closeModal(modalIdRef.current)
       },
-      onClose: () => closeModal('sheet')
+      onClose: () => {
+        if (modalIdRef.current) closeModal(modalIdRef.current)
+      }
     })
   }
 
   const closeEditSheet = () => {
-    closeModal('sheet')
+    if (modalIdRef.current) {
+      closeModal(modalIdRef.current)
+    }
   }
 
   return {

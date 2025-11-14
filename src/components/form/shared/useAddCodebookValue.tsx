@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import { message } from '@/i18n/src/messages'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import type { CodeBookMetaData } from '@/types/responses/codebook'
 
 import { Input } from '../inputs'
@@ -85,10 +85,11 @@ const AddCodebookValueModal = ({
 }
 
 const useAddCodebookValue = (codebook?: CodeBookMetaData) => {
-  const { openModal } = useModalGlobalStore()
+  const { openModal } = useDynamicModalStore()
 
   const openFormModal = () => {
-    openModal('dialog1', {
+    const modalId = openModal('dialog', {
+      id: `add-codebook-value-${codebook?.code || 'unknown'}`,
       component: AddCodebookValueModal,
       props: {
         title: 'Add Codebook Value',
@@ -96,6 +97,7 @@ const useAddCodebookValue = (codebook?: CodeBookMetaData) => {
         codebook
       }
     })
+    return modalId
   }
 
   return { openFormModal }

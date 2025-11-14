@@ -29,7 +29,7 @@ import {
   useGetSpareParts,
   useGetSparePartsFor
 } from '@/modules/systemsSpareParts/hooks/useGetSpareParts'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { PATH } from '@/types/constants/paths'
 import type { SystemDetail } from '@/types/responses/systems'
 import type { EndpointProps } from '@/utils/getEndpoints'
@@ -100,7 +100,7 @@ export const SystemActionButtons = ({
     queryKey
   })
 
-  const { openModal } = useModalGlobalStore()
+  const { openModal } = useDynamicModalStore()
   const openSystemCreateSheet = useSystemCreateSheet()
 
   const handleDelete = () => {
@@ -112,14 +112,16 @@ export const SystemActionButtons = ({
   }
 
   const handleShowSpareParts = () => {
-    openModal('dialog1', {
+    openModal('dialog', {
+      id: `spare-parts-${original.uid}`,
       component: SparePartsModal,
       props: { uid: original.uid }
     })
   }
 
   const handleShowSparePartsFor = () => {
-    openModal('dialog1', {
+    openModal('dialog', {
+      id: `spare-parts-for-${original.uid}`,
       component: SparePartsForModal,
       props: { uid: original.uid }
     })

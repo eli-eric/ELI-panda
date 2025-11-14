@@ -1,11 +1,11 @@
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { CodebookType } from '@/types/responses/codebook'
 
 import { CodebookTreeModalContent } from '../CodebookTreeModal'
 
 export const useCodebookTreeModal = () => {
-  const { openModal } = useModalGlobalStore()
+  const { openModal } = useDynamicModalStore()
 
   const openCodebookTreeModal = ({
     codebook,
@@ -20,7 +20,8 @@ export const useCodebookTreeModal = () => {
   }) => {
     if (typeof window === 'undefined') return // Prevent SSR execution
 
-    openModal('dialog3', {
+    const modalId = openModal('dialog', {
+      id: `codebook-tree-${codebook || name}`,
       component: CodebookTreeModalContent,
       props: {
         title,
@@ -29,6 +30,8 @@ export const useCodebookTreeModal = () => {
         onSelect: onSubmit
       }
     })
+
+    return modalId
   }
 
   return { openCodebookTreeModal }

@@ -1,6 +1,6 @@
 import React, { type FC } from 'react'
 
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 
 import { useModalWizardStore } from '../itemMoving/store/useModalWizardStore'
 import { useWizardStore } from '../wizard/store/useWizardStore'
@@ -9,15 +9,18 @@ import { ItemAssignContainer } from './item-assign.cont'
 export function openItemAssignModal() {
   if (typeof window === 'undefined') return // Prevent SSR execution
 
-  const { openModal } = useModalGlobalStore.getState()
+  const { openModal } = useDynamicModalStore.getState()
 
-  openModal('dialog1', {
+  const modalId = openModal('dialog', {
+    id: 'item-assign',
     component: () => <ItemAssignModalContent />,
     props: {
       title: 'Assign Item',
       size: 'xl' as const
     }
   })
+
+  return modalId
 }
 
 export const ItemAssignModalContent: FC = () => {

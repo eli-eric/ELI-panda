@@ -1,5 +1,5 @@
 import type { DialogSize } from '@/components/ui/dialog'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 
 // Utility functions for opening modals with specific sizes
 export const openModal = (
@@ -9,15 +9,16 @@ export const openModal = (
     size?: DialogSize
     title?: string
     description?: string
-    slot?: 'dialog1' | 'dialog2'
+    id?: string
   } = {}
 ) => {
   if (typeof window === 'undefined') return // Prevent SSR execution
 
-  const { openModal } = useModalGlobalStore.getState()
-  const { size = 'l', title, description, slot = 'dialog1' } = options
+  const { openModal } = useDynamicModalStore.getState()
+  const { size = 'l', title, description, id } = options
 
-  openModal(slot, {
+  const modalId = openModal('dialog', {
+    id: id || 'modal-helper-dialog',
     component,
     props: {
       ...props,
@@ -27,6 +28,8 @@ export const openModal = (
     },
     onClose: undefined
   })
+
+  return modalId
 }
 
 // Convenience functions for different sizes

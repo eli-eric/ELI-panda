@@ -1,4 +1,4 @@
-import type { ColumnDef, PaginationState } from '@tanstack/react-table'
+import type { ColumnDef, PaginationState, Row } from '@tanstack/react-table'
 import {
   getCoreRowModel,
   getExpandedRowModel,
@@ -28,7 +28,7 @@ interface Props<T> {
   data?: T[]
 
   getSubRows?: (original: T, index: number) => T[]
-  getRowId?: (original: T, index: number, parent?: T) => string
+  getRowId?: (originalRow: T, index: number, parent?: Row<T>) => string
 }
 
 export const usePandaTable = <T>({

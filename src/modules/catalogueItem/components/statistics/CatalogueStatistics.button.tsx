@@ -2,12 +2,12 @@ import { BarChart3 } from 'lucide-react'
 
 import { Tooltip } from '@/components/Tooltip'
 import { Button } from '@/components/ui/button'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 
 import { CatalogueStatisticsContainer } from './CatalogueStatistics.cont'
 
 export const ModalStatisticsButtonLarge = () => {
-  const openModal = useModalGlobalStore(state => state.openModal)
+  const openModal = useDynamicModalStore(state => state.openModal)
 
   return (
     <Tooltip content="View Statistics">
@@ -15,7 +15,8 @@ export const ModalStatisticsButtonLarge = () => {
         variant="outline"
         size="sm"
         onClick={() =>
-          openModal('dialog1', {
+          openModal('dialog', {
+            id: 'catalogue-stats',
             component: CatalogueStatisticsContainer,
             props: {
               variant: 'modal',

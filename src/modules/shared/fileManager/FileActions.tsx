@@ -148,12 +148,15 @@ export const FileActions = ({
     </DropdownMenu>
   )
 }
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 
 interface RenameModalProps {
   file: FileItemExtended | null
   onRename: (newName: string) => void
 }
+
+// Store modalId in closure for RenameModalContent to access
+let currentRenameModalId: string | undefined
 
 export function RenameModalContent({
   file,
@@ -222,10 +225,13 @@ export function RenameModalContent({
 export function openRenameModal({ file, onRename }: RenameModalProps) {
   if (typeof window === 'undefined') return // Prevent SSR execution
 
-  const { openModal } = useModalGlobalStore.getState()
-  openModal('dialog1', {
+  const { openModal } = useDynamicModalStore.getState()
+  currentRenameModalId = openModal('dialog', {
+    id: `file-rename-${file?.id}`,
     component: RenameModalContent,
     props: { file, onRename, title: 'Rename File' },
     onClose: undefined
   })
+
+  return currentRenameModalId
 }

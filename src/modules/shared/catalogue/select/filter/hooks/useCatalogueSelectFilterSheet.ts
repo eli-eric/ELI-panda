@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 
 import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 
 import { CatalogueSelectFilterSheet } from '../CatalogueSelectFilterSheet'
 
@@ -12,7 +12,7 @@ interface UseCatalogueSelectFilterSheetProps {
 }
 
 export const useCatalogueSelectFilterSheet = () => {
-  const { openModal } = useModalGlobalStore()
+  const { openModal } = useDynamicModalStore()
 
   const openFilterSheet = useCallback(
     ({
@@ -20,7 +20,8 @@ export const useCatalogueSelectFilterSheet = () => {
       catalogueCategoryProperties,
       side = 'right'
     }: UseCatalogueSelectFilterSheetProps) => {
-      openModal('sheet', {
+      const modalId = openModal('sheet', {
+        id: `catalogue-select-filters-${tableId}`,
         component: CatalogueSelectFilterSheet,
         props: {
           title: 'Catalogue Filters',
@@ -30,6 +31,8 @@ export const useCatalogueSelectFilterSheet = () => {
           catalogueCategoryProperties
         }
       })
+
+      return modalId
     },
     [openModal]
   )

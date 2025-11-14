@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button'
 import axiosInstance from '@/core/axios/axiosInstance'
 import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { BASE_URL } from '@/types/constants/common'
 import { ROLE } from '@/types/constants/roles'
 import type { CodebookType } from '@/types/responses/codebook'
@@ -25,22 +25,26 @@ interface Props {
   ) => Promise<QueryObserverResult<CodebookType[], Error>>
 }
 
+let currentAddGroupModalId: string | undefined
+
 function openAddGroupModal(refetch: Props['refetch']) {
   if (typeof window === 'undefined') return // Prevent SSR execution
 
-  const { openModal } = useModalGlobalStore.getState()
+  const { openModal } = useDynamicModalStore.getState()
 
-  openModal('dialog1', {
+  currentAddGroupModalId = openModal('dialog', {
+    id: 'add-system-type-group',
     component: () => <AddGroupModalContent refetch={refetch} />,
     props: {
       title: 'Add Group',
       size: 'm' as const
     }
   })
+  return currentAddGroupModalId
 }
 
 const AddGroupModalContent: FC<Props> = ({ refetch }) => {
-  const { closeModal } = useModalGlobalStore()
+  const { closeModal } = useDynamicModalStore()
   const formMethods = useForm()
 
   const { mutate, isPending } = useMutation({
@@ -52,13 +56,17 @@ const AddGroupModalContent: FC<Props> = ({ refetch }) => {
     },
     onSuccess: () => {
       refetch()
-      closeModal('dialog1')
+      if (currentAddGroupModalId) {
+        closeModal(currentAddGroupModalId)
+      }
       formMethods.reset()
       toast.success(`Group was created.`)
     },
     onError: () => {
       toast.error(`Failed to create group.`)
-      closeModal('dialog1')
+      if (currentAddGroupModalId) {
+        closeModal(currentAddGroupModalId)
+      }
     }
   })
 
@@ -74,7 +82,7 @@ const AddGroupModalContent: FC<Props> = ({ refetch }) => {
       <div className="flex justify-end gap-2">
         <Button
           variant="outline"
-          onClick={() => closeModal('dialog1')}
+          onClick={() => currentAddGroupModalId && closeModal(currentAddGroupModalId)}
           disabled={isPending}
         >
           <FormattedMessage id={messages.cancel} defaultMessage={'Cancel'} />

@@ -8,7 +8,7 @@ import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import { PandaTableControlled } from '@/modules/shared/table/pandaTable/PandaTableCotrolled'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import useTableStateStore from '@/store/useTableStateStore'
 import type { CodebookType } from '@/types/responses/codebook'
 
@@ -43,8 +43,9 @@ interface CodebookTreeModalProps {
 export function openCodebookTreeModalGraphql(props: CodebookTreeModalProps) {
   if (typeof window === 'undefined') return // Prevent SSR execution
 
-  const { openModal } = useModalGlobalStore.getState()
-  openModal('dialog2', {
+  const { openModal } = useDynamicModalStore.getState()
+  const modalId = openModal('dialog', {
+    id: `codebook-tree-${props.tableId || 'default'}`,
     component: CodebookTreeModalGraphqlContent,
     props,
     onClose:
@@ -54,6 +55,7 @@ export function openCodebookTreeModalGraphql(props: CodebookTreeModalProps) {
           }
         : undefined
   })
+  return modalId
 }
 
 // The actual modal content, rendered by the global modal system

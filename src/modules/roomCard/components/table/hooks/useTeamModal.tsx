@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 
 import type { ModalSize } from '@/components/ui/dialog'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import type { Team } from '@/types/gql/graphql'
 
 import { useRoomCardStore } from '../../../store/useRoomCardStore'
@@ -10,7 +10,7 @@ import type { TeamFormData } from '../schemas/team.schema'
 import { TeamModalContainer } from '../TeamModal.cont'
 
 export const useTeamModal = () => {
-  const { openModal, closeModal } = useModalGlobalStore()
+  const { openModal, closeModal } = useDynamicModalStore()
   const { setNewTeam } = useRoomCardStore()
   const { control } = useFormContext()
   const { append, fields } = useFieldArray({
@@ -24,7 +24,8 @@ export const useTeamModal = () => {
       .map((field: any) => field?.uid)
       .filter(Boolean)
 
-    openModal('dialog1', {
+    const modalId = openModal('dialog', {
+      id: 'team-modal',
       component: TeamModalContainer,
       props: {
         title: 'Add Team',
@@ -42,7 +43,7 @@ export const useTeamModal = () => {
             setNewTeam(data.team as Team)
 
             // Close modal
-            closeModal('dialog1')
+            closeModal(modalId)
           }
         }
       },

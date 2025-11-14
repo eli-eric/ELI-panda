@@ -19,7 +19,7 @@ import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 import { useCatalogueItems } from '@/modules/catalogue/hooks/useCatalogueItems'
 import { CatalogueStatisticsContainer } from '@/modules/catalogueItem/components/statistics/CatalogueStatistics.cont'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { ROLE } from '@/types/constants/roles'
 import type { CatalogueItem } from '@/types/responses/catalogue'
 import { truncateString } from '@/utils'
@@ -76,7 +76,7 @@ const CellActionDropdown = ({
   const { formatMessage } = useIntl()
   const { refetch, catalogueItems } = useCatalogueItems(tableId)
   const canEdit = usePermission([ROLE.CATALOGUE_EDIT])
-  const openModal = useModalGlobalStore(state => state.openModal)
+  const openModal = useDynamicModalStore(state => state.openModal)
   const withWarningModal = useWarningModal()
 
   const deleteSubmit = useSubmit({
@@ -111,7 +111,8 @@ const CellActionDropdown = ({
         <DropdownMenuContent align="start" sideOffset={4}>
           <DropdownMenuItem
             onClick={() => {
-              openModal('dialog1', {
+              openModal('dialog', {
+                id: `catalogue-statistics-${uid}`,
                 component: CatalogueStatisticsContainer,
                 props: {
                   catalogueItemUid: uid,

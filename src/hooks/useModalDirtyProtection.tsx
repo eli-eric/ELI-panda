@@ -5,12 +5,12 @@ import { useModalFormStateStore } from '@/store/useModalFormStateStore'
 import useWarningModal from './useWarningModal'
 
 interface UseModalDirtyProtectionOptions {
-  slot: 'sheet' | 'dialog1' | 'dialog2'
+  modalId: string
   warningMessage?: string
 }
 
 export const useModalDirtyProtection = ({
-  slot,
+  modalId,
   warningMessage = 'You have unsaved changes. Are you sure you want to close without saving?'
 }: UseModalDirtyProtectionOptions) => {
   const withWarningModal = useWarningModal(warningMessage)
@@ -22,15 +22,15 @@ export const useModalDirtyProtection = ({
       return true // Allow closing - form is clean
     }
     withWarningModal(() => {
-      require('@/store/useModalGlobalStore')
-        .useModalGlobalStore.getState()
-        .closeModal(slot)
+      require('@/store/useDynamicModalStore')
+        .useDynamicModalStore.getState()
+        .closeModal(modalId)
       require('@/store/useModalFormStateStore')
         .useModalFormStateStore.getState()
         .reset()
     })()
     return false // Prevent immediate closing, let user decide via warning modal
-  }, [withWarningModal, slot])
+  }, [withWarningModal, modalId])
 
   return { onCloseAttempt }
 }

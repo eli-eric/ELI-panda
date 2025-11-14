@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form'
 import ErrorPage from '@/components/error/ErrorPage'
 import { Form } from '@/components/form/Form'
 import ProgressBarComponent from '@/components/progress-bar.comp'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { queryFetcher } from '@/utils/fetcher'
 
 import { NodeDetails } from '../d3/graph/NodeDetails'
@@ -28,15 +28,18 @@ interface GraphModalProps {
 export function openGraphModal(uid: string) {
   if (typeof window === 'undefined') return // Prevent SSR execution
 
-  const { openModal } = useModalGlobalStore.getState()
+  const { openModal } = useDynamicModalStore.getState()
 
-  openModal('dialog1', {
+  const modalId = openModal('dialog', {
+    id: `system-graph-${uid}`,
     component: () => <GraphModalContent uid={uid} />,
     props: {
       title: 'System Graph',
       size: 'xl'
     }
   })
+
+  return modalId
 }
 
 export const GraphModalContent: FC<GraphModalProps> = ({ uid }) => {

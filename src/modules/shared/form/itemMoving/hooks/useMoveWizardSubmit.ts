@@ -6,7 +6,7 @@ import { toast } from 'sonner'
 
 import { useSystemDetail } from '@/modules/systemItem/hooks/useSystemDetail'
 import { useSystemsReload } from '@/modules/systemItem/hooks/useSystemsReload'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { PATH } from '@/types/constants/paths'
 import type { CodebookType } from '@/types/responses/codebook'
 import { queryMutate } from '@/utils/fetcher'
@@ -25,7 +25,7 @@ export const useMoveWizardSubmit = () => {
     selectedSystem
   } = useModalWizardStore()
 
-  const { closeModal } = useModalGlobalStore()
+  const { closeModal } = useDynamicModalStore()
   const { physicalItem, catalogueItem, systemDetail } = useSystemDetail()
   const { formData, goBack, resetWizard, updateFormData } = useWizardStore()
   const router = useRouter()
@@ -34,7 +34,8 @@ export const useMoveWizardSubmit = () => {
 
   const onSuccessRedirect = () => {
     toast.success('Item moved successfully')
-    closeModal('dialog1')
+    // NOTE: Modal is opened with ID 'item-move-wizard' in item-move.modal.tsx
+    closeModal('item-move-wizard')
     resetWizard()
     setSelectedSystem(null)
     if (moveType === MOVE_TYPE.ASSIGN) {

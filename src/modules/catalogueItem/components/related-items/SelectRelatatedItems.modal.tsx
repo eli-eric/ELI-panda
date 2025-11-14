@@ -6,11 +6,14 @@ import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { message } from '@/i18n/src/messages'
 import CatalogueTableSelect from '@/modules/shared/catalogue/table/CatalogueTableSelect'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import type { CatalogueItem } from '@/types/responses/catalogue'
 
 import { useCreateRelatedItem } from '../../hooks/useCreateRelatedItem'
 import { useRelatedItems } from '../../hooks/useRelatedItems'
+
+// Store modalId in closure for SelectRelatatedItemsModalContent to access
+let currentRelatedItemsModalId: string | undefined
 
 /**
  * Opens the select related items modal
@@ -18,22 +21,25 @@ import { useRelatedItems } from '../../hooks/useRelatedItems'
 export function openSelectRelatedItemsModal() {
   if (typeof window === 'undefined') return // Prevent SSR execution
 
-  const { openModal } = useModalGlobalStore.getState()
+  const { openModal } = useDynamicModalStore.getState()
 
-  openModal('dialog1', {
+  currentRelatedItemsModalId = openModal('dialog', {
+    id: 'related-items',
     component: () => <SelectRelatatedItemsModalContent />,
     props: {
       title: 'Select Related Item',
       size: 'l' as const
     }
   })
+
+  return currentRelatedItemsModalId
 }
 export const SelectRelatatedItemsModalContent: FC = () => {
   const { formatMessage: fm } = useIntl()
   const [selectedItem, setSelectedItem] = useState<CatalogueItem | undefined>()
   const { createRelatedItem, loading } = useCreateRelatedItem()
   const { refetch } = useRelatedItems()
-  const { closeModal } = useModalGlobalStore()
+  const { closeModal } = useDynamicModalStore()
   const router = useRouter()
   const itemUid = router.query.uid as string
 
@@ -65,7 +71,9 @@ export const SelectRelatatedItemsModalContent: FC = () => {
             toast.error(error.message)
           },
           onSuccess: () => {
-            closeModal('dialog1')
+            if (currentRelatedItemsModalId) {
+              closeModal(currentRelatedItemsModalId)
+            }
             setSelectedItem(undefined)
             refetch()
           }
@@ -81,7 +89,14 @@ export const SelectRelatatedItemsModalContent: FC = () => {
         selectedItem={selectedItem}
       />
       <div className="flex justify-end gap-2">
-        <Button variant="outline" onClick={() => closeModal('dialog1')}>
+        <Button
+          variant="outline"
+          onClick={() => {
+            if (currentRelatedItemsModalId) {
+              closeModal(currentRelatedItemsModalId)
+            }
+          }}
+        >
           {fm({ id: message.common.buttons.cancel })}
         </Button>
         <Button onClick={handleSubmit} disabled={!selectedItem || loading}>

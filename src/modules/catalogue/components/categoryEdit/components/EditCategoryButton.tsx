@@ -12,7 +12,9 @@ interface EditCategoryProps {
 }
 
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
+
+let currentEditCategoryModalId: string | undefined
 
 export function EditCategorySheetContent({
   uid,
@@ -27,6 +29,7 @@ export function EditCategorySheetContent({
         }}
         parentUID={parentUID}
         uid={uid}
+        modalId={currentEditCategoryModalId}
       />
     </>
   )
@@ -40,9 +43,10 @@ export const EditCategoryButton: FC<EditCategoryProps> = ({
   const openEditCategorySheet = e => {
     e.stopPropagation()
     if (typeof window === 'undefined') return // Prevent SSR execution
-    const { openModal } = useModalGlobalStore.getState()
+    const { openModal } = useDynamicModalStore.getState()
 
-    openModal('sheet', {
+    currentEditCategoryModalId = openModal('sheet', {
+      id: `category-edit-${uid}`,
       component: EditCategorySheetContent,
       props: {
         uid,
@@ -53,6 +57,7 @@ export const EditCategoryButton: FC<EditCategoryProps> = ({
       },
       onClose: undefined
     })
+    return currentEditCategoryModalId
   }
 
   return (
