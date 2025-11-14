@@ -210,10 +210,10 @@ export const messages = {
       },
       form: {
         oldItemCondition: {
-          label: 'Old Item Condition'
+          label: 'Item Condition Status'
         },
         newItemLocation: {
-          label: 'New Item Location'
+          label: 'Item Location'
         },
         autoAssignParent: {
           label: 'Auto-assign parent system (closest trash in hierarchy)'

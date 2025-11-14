@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label'
 import { message } from '@/i18n/src/messages'
 import { SelectLocationCombo } from '@/modules/shared/form/location/SelectLocation.combo'
 import { FormWizard, WizardStep } from '@/modules/shared/form/wizardV3'
+import { useRecalculate } from '@/modules/systemItem/hooks/useRecalculate'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import useTableStateStore from '@/store/useTableStateStore'
 import { CODEBOOK } from '@/types/constants/codebook'
@@ -69,6 +70,16 @@ export const SpareAssignmentWizardContainer = ({
     []
   )
 
+  const [recalculate] = useRecalculate({
+    onSuccess: () => {
+      toast.success(fm({ id: message.common.spareAssignment.success.assigned }))
+      if (onSuccess) {
+        onSuccess()
+      }
+      closeModal('spare-assignment-wizard')
+    }
+  })
+
   const handleSubmit = async (
     data: SpareAssignmentFormType,
     reset: () => void
@@ -122,22 +133,13 @@ export const SpareAssignmentWizardContainer = ({
 
       await mutateAsync(payload)
 
-      // Invalidate relevant queries
+      // Recalculate system tree structure to preserve subsystems
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: [systemUid] }),
-        queryClient.invalidateQueries({ queryKey: ['systems'] }),
         queryClient.invalidateQueries({ queryKey: ['system-detail'] })
       ])
-
-      toast.success(fm({ id: message.common.spareAssignment.success.assigned }))
-
-      // Call onSuccess callback to refresh system detail
-      if (onSuccess) {
-        onSuccess()
-      }
-
+      recalculate(null)
       reset()
-      closeModal('spare-assignment-wizard')
     } catch (error) {
       toast.error(
         fm({ id: message.common.spareAssignment.errors.assignmentFailed })

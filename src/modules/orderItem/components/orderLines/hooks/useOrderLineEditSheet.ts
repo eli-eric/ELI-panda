@@ -18,18 +18,15 @@ export const useOrderLineEditSheet = () => {
       component: OrderLineEditSheet,
       props: {
         title: 'Edit Order Line',
-        orderLine,
-        onClose: () => {
-          if (modalIdRef.current) closeModal(modalIdRef.current)
-        }
+        orderLine
+        // NOTE: onClose is automatically provided by DynamicModalProvider
+        // No need to pass it in props - it would override the Provider's handler
       },
       onSubmit: (data: OrderLineFormType) => {
         onSave?.(data)
         if (modalIdRef.current) closeModal(modalIdRef.current)
-      },
-      onClose: () => {
-        if (modalIdRef.current) closeModal(modalIdRef.current)
       }
+      // NOTE: No config onClose needed - closeModal is already called by Provider's handleClose
     })
   }
 
