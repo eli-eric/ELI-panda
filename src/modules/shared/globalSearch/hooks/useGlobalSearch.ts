@@ -8,7 +8,6 @@ import type { GlobalSearchResponse } from '../types'
 
 interface UseGlobalSearchOptions {
   search?: string
-  pagination?: number
   enabled?: boolean
 }
 
@@ -18,7 +17,6 @@ interface UseGlobalSearchOptions {
  */
 export const useGlobalSearch = ({
   search = '',
-  pagination = 20,
   enabled = true
 }: UseGlobalSearchOptions = {}) => {
   // Only enable search if:
@@ -34,13 +32,13 @@ export const useGlobalSearch = ({
       {
         query: trimmedSearch
           ? {
-              search: trimmedSearch,
-              pagination: pagination
+              searchText: trimmedSearch,
+              pagination: `{"pageSize": 20, "page": 1}`
             }
           : null
       }
     ]
-  }, [search, pagination])
+  }, [search])
 
   const { data, isLoading, error, isFetching } = useQuery({
     queryKey,
