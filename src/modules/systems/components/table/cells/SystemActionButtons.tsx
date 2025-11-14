@@ -1,11 +1,4 @@
-import {
-  Edit,
-  MoreVertical,
-  Network,
-  Plus,
-  Settings,
-  Trash2
-} from 'lucide-react'
+import { Edit, MoreVertical, Network, Settings, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 import { Fragment } from 'react'
 import { FormattedMessage } from 'react-intl'
@@ -195,16 +188,6 @@ export const SystemActionButtons = ({
             </DropdownMenuItem>
           )}
           <DropdownMenuSeparator />
-          <DropdownMenuItem asChild>
-            <button
-              onClick={() => openSystemCreateSheet(original.uid)}
-              className="flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 px-2 py-1 rounded transition-colors"
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              <FormattedMessage id={messages.addSubsystem} />
-            </button>
-          </DropdownMenuItem>
-
           {canEdit && (
             <DropdownMenuItem
               onClick={handleDelete}

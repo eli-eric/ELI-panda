@@ -40,9 +40,9 @@ export const SystemBadge = ({
     >
       {variant === 'expandable' &&
         (isExpanded ? (
-          <ChevronDown className="w-4 h-4 shrink-0" />
+          <ChevronDown className="size-5 shrink-0" />
         ) : (
-          <ChevronRight className="w-4 h-4 shrink-0" />
+          <ChevronRight className="size-5 shrink-0" />
         ))}
       <span
         className={cn(

@@ -129,6 +129,7 @@ export const useSystemSheetUpdate = ({
     systemDetailMutation,
     {
       onError: error => {
+        console.error('Update system error:', error)
         showErrorToast(
           intl,
           message.systemsPage.systemDetail.updateModal.onError,

@@ -1,10 +1,11 @@
-import { Edit, GripVertical } from 'lucide-react'
+import { Edit, GripVertical, PlusIcon } from 'lucide-react'
 
 import { SystemBadge } from '@/components/system/SystemBadge.comp'
 import { SystemPathTooltip } from '@/components/system/SystemPathTooltip.comp'
 import { Tooltip } from '@/components/Tooltip'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { useSystemCreateSheet } from '@/modules/shared/system/system-create/useSystemCreateSheet'
 import type { SystemDetail } from '@/types/responses/systems'
 import type { EndpointProps } from '@/utils/getEndpoints'
 
@@ -42,13 +43,13 @@ export const SystemNameCellContent = ({
   sparesOut,
   queryKey,
   tableId,
-  depth,
-  isLastChild
+  depth
 }: SystemNameCellContentProps) => {
   // Calculate indentation based on hierarchy depth (16px per level)
   const indentStyle = {
     paddingLeft: `${depth * 16}px`
   }
+  const openSystemCreateSheet = useSystemCreateSheet()
 
   return (
     <div className="flex items-center w-full group">
@@ -93,6 +94,18 @@ export const SystemNameCellContent = ({
               className="h-8 w-8 p-0 transition-opacity duration-200 mr-1 hover:text-primary text-muted-foreground"
             >
               <Edit className="h-4 w-4" />
+            </Button>
+          </Tooltip>
+        )}
+        {!hideButtons && (
+          <Tooltip content={'Create Subsystem'}>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => openSystemCreateSheet(original.uid)}
+              className="h-8 w-8 p-0 transition-opacity duration-200 mr-1 hover:text-primary text-muted-foreground"
+            >
+              <PlusIcon className="h-4 w-4" />
             </Button>
           </Tooltip>
         )}
