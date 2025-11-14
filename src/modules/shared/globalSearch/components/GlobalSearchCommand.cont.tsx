@@ -17,14 +17,9 @@ export const GlobalSearchCommandContainer = () => {
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [searchValue, setSearchValue] = useState('')
-  console.log('GlobalSearchCommandContainer - searchValue:', searchValue)
 
   // Debounce search input to avoid excessive API calls
-  const debouncedSearch = useDebounce(searchValue, 300)
-  console.log(
-    'GlobalSearchCommandContainer - debouncedSearch:',
-    debouncedSearch
-  )
+  const debouncedSearch = useDebounce(searchValue, 500)
 
   // Fetch search results
   const { data, isLoading, isFetching, error } = useGlobalSearch({

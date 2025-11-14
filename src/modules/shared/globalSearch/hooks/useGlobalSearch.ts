@@ -18,6 +18,7 @@ interface UseGlobalSearchOptions {
  */
 export const useGlobalSearch = ({
   search = '',
+  pagination = 20,
   enabled = true
 }: UseGlobalSearchOptions = {}) => {
   // Only enable search if:
@@ -33,14 +34,13 @@ export const useGlobalSearch = ({
       {
         query: trimmedSearch
           ? {
-              searchText: trimmedSearch,
-              pagination: '{ page: 1, pageSize: 20 }'
+              search: trimmedSearch,
+              pagination: pagination
             }
           : null
       }
     ]
-  }, [search])
-  console.log('useGlobalSearch - queryKey:', queryKey)
+  }, [search, pagination])
 
   const { data, isLoading, error, isFetching } = useQuery({
     queryKey,
