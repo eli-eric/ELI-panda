@@ -106,8 +106,8 @@ const ModalSheet: React.FC<{
 
 const ModalDialog: React.FC<{
   slot: ModalSlot
-  closeModal: (type: 'dialog1' | 'dialog2') => void
-  type: 'dialog1' | 'dialog2'
+  closeModal: (type: 'dialog1' | 'dialog2' | 'dialog3') => void
+  type: 'dialog1' | 'dialog2' | 'dialog3'
 }> = ({ slot, closeModal, type }) => {
   const { formatMessage: fm } = useIntl()
 
@@ -169,13 +169,14 @@ const ModalDialog: React.FC<{
  * using the global modal store for state and content.
  */
 export const ModalProvider: React.FC = () => {
-  const { sheet, dialog1, dialog2, closeModal } = useModalGlobalStore()
+  const { sheet, dialog1, dialog2, dialog3, closeModal } = useModalGlobalStore()
 
   return (
     <>
       <ModalSheet slot={sheet} closeModal={closeModal} />
       <ModalDialog slot={dialog1} closeModal={closeModal} type="dialog1" />
       <ModalDialog slot={dialog2} closeModal={closeModal} type="dialog2" />
+      <ModalDialog slot={dialog3} closeModal={closeModal} type="dialog3" />
     </>
   )
 }

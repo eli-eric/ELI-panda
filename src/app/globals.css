@@ -330,4 +330,88 @@ input[type='number'] {
     color: #d1d5db;
     text-decoration: underline;
   }
+
+  /* Toast styles for different types - using Sonner's actual DOM structure */
+  [data-sonner-toaster] [data-type='success'] [data-icon] {
+    color: oklch(0.6 0.15 142) !important;
+  }
+
+  [data-sonner-toaster] [data-type='error'] [data-icon] {
+    color: oklch(0.577 0.245 27.325) !important;
+  }
+
+  [data-sonner-toaster] [data-type='warning'] [data-icon] {
+    color: oklch(0.8 0.18 85) !important;
+  }
+
+  [data-sonner-toaster] [data-type='info'] [data-icon] {
+    color: oklch(0.6 0.15 250) !important;
+  }
+
+  /* Dark mode overrides for toasts */
+  .dark [data-sonner-toaster] [data-type='success'] [data-icon] {
+    color: oklch(0.7 0.18 142) !important;
+  }
+
+  .dark [data-sonner-toaster] [data-type='error'] [data-icon] {
+    color: oklch(0.704 0.191 22.216) !important;
+  }
+
+  .dark [data-sonner-toaster] [data-type='warning'] [data-icon] {
+    color: oklch(0.85 0.2 85) !important;
+  }
+
+  .dark [data-sonner-toaster] [data-type='info'] [data-icon] {
+    color: oklch(0.65 0.18 250) !important;
+  }
+
+  /* Alternative selectors for toast class names */
+  .toast-success [data-icon],
+  .toast-success svg {
+    color: oklch(0.6 0.15 142) !important;
+    fill: oklch(0.6 0.15 142) !important;
+  }
+
+  .toast-error [data-icon],
+  .toast-error svg {
+    color: oklch(0.577 0.245 27.325) !important;
+    fill: oklch(0.577 0.245 27.325) !important;
+  }
+
+  .toast-warning [data-icon],
+  .toast-warning svg {
+    color: oklch(0.8 0.18 85) !important;
+    fill: oklch(0.8 0.18 85) !important;
+  }
+
+  .toast-info [data-icon],
+  .toast-info svg {
+    color: oklch(0.6 0.15 250) !important;
+    fill: oklch(0.6 0.15 250) !important;
+  }
+
+  /* Dark mode for class-based selectors */
+  .dark .toast-success [data-icon],
+  .dark .toast-success svg {
+    color: oklch(0.7 0.18 142) !important;
+    fill: oklch(0.7 0.18 142) !important;
+  }
+
+  .dark .toast-error [data-icon],
+  .dark .toast-error svg {
+    color: oklch(0.704 0.191 22.216) !important;
+    fill: oklch(0.704 0.191 22.216) !important;
+  }
+
+  .dark .toast-warning [data-icon],
+  .dark .toast-warning svg {
+    color: oklch(0.85 0.2 85) !important;
+    fill: oklch(0.85 0.2 85) !important;
+  }
+
+  .dark .toast-info [data-icon],
+  .dark .toast-info svg {
+    color: oklch(0.65 0.18 250) !important;
+    fill: oklch(0.65 0.18 250) !important;
+  }
 }

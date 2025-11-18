@@ -5,10 +5,10 @@ import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaT
 import type { PandaTableSettings } from '@/modules/shared/table/pandaTable/PandaTable'
 import { PandaTableV2 } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
 import { SearchBar } from '@/modules/shared/table/SearchBar'
-import { SystemFilterButtonContainer } from '@/modules/systems/components/filters/SystemsFilterButton.cont'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
 import type { SystemDetail } from '@/types/responses/systems'
 
+import { SystemFilterButtonV2 } from './SystemFilterButtonV2'
 import { useSpareParentSystemColumns } from './useSpareParentSystemColumns'
 
 export const SpareParentSystemSelectTable = () => {
@@ -34,7 +34,8 @@ export const SpareParentSystemSelectTable = () => {
     settings,
     data: systems?.data,
     columns: columns.columns,
-    getSubRows: original => original.subSystems ?? []
+    getSubRows: original => original.subSystems ?? [],
+    getRowId: original => original.uid
   })
 
   const paginationSettings = useMemo(
@@ -52,7 +53,7 @@ export const SpareParentSystemSelectTable = () => {
         tableId={tableId}
         useQuery={settings?.enableQueryURL}
         left={
-          <SystemFilterButtonContainer
+          <SystemFilterButtonV2
             tableId={tableId}
             enableQueryURL={settings?.enableQueryURL}
           />

@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 
 import type { ModalSize } from '@/components/ui/dialog'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import type { Employee } from '@/types/gql/graphql'
 
 import { EmployeeModalContainer } from '../EmployeeModal.cont'
@@ -17,7 +17,7 @@ export const useEmployeeModal = ({
   fieldName,
   onEmployeeAdded
 }: UseEmployeeModalProps) => {
-  const { openModal, closeModal } = useModalGlobalStore()
+  const { openModal, closeModal } = useDynamicModalStore()
   const { control } = useFormContext()
   const { append, fields } = useFieldArray({
     control,
@@ -30,7 +30,8 @@ export const useEmployeeModal = ({
       .map((field: any) => field?.uid)
       .filter(Boolean)
 
-    openModal('dialog1', {
+    const modalId = openModal('dialog', {
+      id: 'employee-add',
       component: EmployeeModalContainer,
       props: {
         title: 'Add Employee',
@@ -45,7 +46,7 @@ export const useEmployeeModal = ({
             onEmployeeAdded(data.employee as Employee)
 
             // Close modal
-            closeModal('dialog1')
+            closeModal(modalId)
           }
         }
       },

@@ -18,8 +18,58 @@ export interface VersionData {
 }
 
 export const versionsData: VersionData = {
-  currentVersion: '2.0.0',
+  currentVersion: '2.0.1',
   releases: [
+    {
+      version: '2.0.1',
+      date: '2025-10-24',
+      title: 'Image Gallery V2 - Complete Refactor',
+      description:
+        'Complete refactor of image gallery with immediate upload, optimistic updates, and improved UX',
+      type: 'patch',
+      changes: [
+        {
+          category: 'Image Gallery Refactor',
+          items: [
+            'Complete rewrite of ImageGallery from V1 to V2 with modern architecture',
+            'Implemented immediate upload pattern with React Query for state management',
+            'Added optimistic updates with automatic rollback on errors',
+            'Removed refs and form coupling for cleaner component interface',
+            'Migrated from axios to fetchRequest for consistent HTTP handling',
+            'Migrated toast notifications from react-hot-toast to Sonner',
+            'Fixed duplicate upload issues when switching between tabs',
+            'Fixed cache inconsistency problems with image preview',
+            'Added disabled state with informative message when item has no UID',
+            'Implemented comprehensive test suite with 27 passing tests',
+            'Added browser API mocks (matchMedia, IntersectionObserver, ResizeObserver) to jest setup',
+            'Fixed ESLint warnings and improved code quality',
+            'Added internationalization for all user-facing messages',
+            'Improved accessibility with proper ARIA labels and keyboard navigation'
+          ]
+        },
+        {
+          category: 'Bug Fixes',
+          items: [
+            'Fixed image upload triggering twice on drag & drop',
+            'Fixed file picker dialog not opening on button click',
+            'Fixed images disappearing from UI while remaining in cache',
+            'Prevented upload attempts before item is saved (no UID)',
+            'Fixed TypeScript compilation errors in test environment',
+            'Suppressed React Query "undefined data" warnings in tests'
+          ]
+        },
+        {
+          category: 'Developer Experience',
+          items: [
+            'Added comprehensive documentation (REFACTOR_PLAN.md, README.md, IMPLEMENTATION_SUMMARY.md)',
+            'Created reusable hooks: useImages, useImageUpload, useImageDelete',
+            'Implemented pure component architecture for better testing',
+            'Added detailed code comments and JSDoc documentation',
+            'Improved error handling with user-friendly toast messages'
+          ]
+        }
+      ]
+    },
     {
       version: '2.0.0',
       date: '2025-10-07',

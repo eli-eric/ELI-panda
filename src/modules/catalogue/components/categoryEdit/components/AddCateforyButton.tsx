@@ -6,31 +6,39 @@ import { BreadcrumbItem, BreadcrumbSeparator } from '@/components/ui/breadcrumb'
 import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
 import { useCategoryUid } from '@/modules/catalogue/hooks/useCategoryUid'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { ROLE } from '@/types/constants/roles'
 
 import CategoryEditContainer from '../CategoryEdit.cont'
+
+let currentAddCategoryModalId: string | undefined
 
 export const AddCategoryButton = () => {
   const { formatMessage: fm } = useIntl()
   const parentUID = useCategoryUid()
   const canEdit = usePermission([ROLE.CATALOGUE_EDIT])
-  const openModal = useModalGlobalStore(state => state.openModal)
+  const openModal = useDynamicModalStore(state => state.openModal)
 
   if (!canEdit) return null
 
   const handleOpenSheet = () => {
-    openModal('sheet', {
-      component: CategoryEditContainer,
+    currentAddCategoryModalId = openModal('sheet', {
+      id: `category-add-${parentUID || 'root'}`,
+      component: () => (
+        <CategoryEditContainer
+          parentUID={parentUID}
+          setOpen={() => {}}
+          modalId={currentAddCategoryModalId}
+        />
+      ),
       props: {
-        parentUID,
-        setOpen: () => {}, // No-op, handled by global store
         title: fm({ id: message.catalogue.category.addNew })
       },
       onClose: undefined,
       onSubmit: undefined,
       parentTriggerFn: undefined
     })
+    return currentAddCategoryModalId
   }
 
   return (

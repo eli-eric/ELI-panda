@@ -1,6 +1,6 @@
 import { memo, useEffect, useMemo, useState } from 'react'
-import toast from 'react-hot-toast'
 import { useIntl } from 'react-intl'
+import { toast } from 'sonner'
 
 import { Button } from '@/components/Buttons'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'

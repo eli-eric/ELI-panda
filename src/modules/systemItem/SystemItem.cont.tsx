@@ -1,6 +1,6 @@
 import { Fragment, Suspense, useCallback, useState } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
-import { toast } from 'react-hot-toast'
+import { toast } from 'sonner'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import ProgressBarComponent from '@/components/progress-bar.comp'

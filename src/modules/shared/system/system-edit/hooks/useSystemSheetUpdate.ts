@@ -7,7 +7,7 @@ import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
 import { message } from '@/i18n/src/messages'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { useSuspenseSystemDetail } from '@/modules/systemItem/hooks/useSuspenseSystemDetail'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { BASE_URL } from '@/types/constants/common'
 import { gql } from '@/types/gql'
 import type { PhysicalItemProperty } from '@/types/responses/systems'
@@ -110,7 +110,7 @@ export const useSystemSheetUpdate = ({
       message.systemsPage.systemDetail.updateModal.onSuccess
     )
   }
-  const { closeModal } = useModalGlobalStore()
+  const { closeModal } = useDynamicModalStore()
 
   const [recalculate] = useRecalculate({
     onSuccess: onFinish
@@ -119,7 +119,8 @@ export const useSystemSheetUpdate = ({
     const responseUid = systems[0].uid
     imageRef?.current?.submit(responseUid, () => {
       recalculate(null)
-      closeModal('sheet')
+      // NOTE: Modal is opened with ID `system-edit-${uid}` in useSystemEditSheet.tsx
+      closeModal(`system-edit-${uid}`)
       refetch()
     })
   }
@@ -128,6 +129,7 @@ export const useSystemSheetUpdate = ({
     systemDetailMutation,
     {
       onError: error => {
+        console.error('Update system error:', error)
         showErrorToast(
           intl,
           message.systemsPage.systemDetail.updateModal.onError,

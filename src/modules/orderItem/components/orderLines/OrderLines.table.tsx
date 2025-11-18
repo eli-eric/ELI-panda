@@ -35,7 +35,7 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
   )
 
   const handleOpenOrderLineForm = () => {
-    openOrderLineModal(undefined, data => {
+    openOrderLineModal(data => {
       const quantity = data.quantity || 1
 
       // Vytvoříme tolik kopií order line, kolik je zadáno v quantity

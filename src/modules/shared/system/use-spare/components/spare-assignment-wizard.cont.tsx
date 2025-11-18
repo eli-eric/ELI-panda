@@ -1,8 +1,8 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { toast } from 'react-hot-toast'
 import { useIntl } from 'react-intl'
+import { toast } from 'sonner'
 
 import Listbox from '@/components/form/Listbox'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -10,7 +10,8 @@ import { Label } from '@/components/ui/label'
 import { message } from '@/i18n/src/messages'
 import { SelectLocationCombo } from '@/modules/shared/form/location/SelectLocation.combo'
 import { FormWizard, WizardStep } from '@/modules/shared/form/wizardV3'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useRecalculate } from '@/modules/systemItem/hooks/useRecalculate'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import useTableStateStore from '@/store/useTableStateStore'
 import { CODEBOOK } from '@/types/constants/codebook'
 
@@ -59,7 +60,7 @@ export const SpareAssignmentWizardContainer = ({
 }: SpareAssignmentWizardProps) => {
   const { formatMessage: fm } = useIntl()
   const { mutateAsync, isPending } = useAssignSpare()
-  const { closeModal } = useModalGlobalStore()
+  const { closeModal } = useDynamicModalStore()
   const queryClient = useQueryClient()
 
   const initialData: Partial<SpareAssignmentFormType> = useMemo(
@@ -68,6 +69,16 @@ export const SpareAssignmentWizardContainer = ({
     }),
     []
   )
+
+  const [recalculate] = useRecalculate({
+    onSuccess: () => {
+      toast.success(fm({ id: message.common.spareAssignment.success.assigned }))
+      if (onSuccess) {
+        onSuccess()
+      }
+      closeModal('spare-assignment-wizard')
+    }
+  })
 
   const handleSubmit = async (
     data: SpareAssignmentFormType,
@@ -95,18 +106,21 @@ export const SpareAssignmentWizardContainer = ({
       if (!data.autoAssignParent) {
         const { instances } = useTableStateStore.getState()
         const rowSelection = instances[tableId]?.rowSelection || {}
-        const selectedRowIds = Object.keys(rowSelection).filter(
+
+        // Get selected row IDs (which are now system UIDs thanks to getRowId in table)
+        const selectedSystemUids = Object.keys(rowSelection).filter(
           key => rowSelection[key]
         )
 
-        if (selectedRowIds.length === 0) {
+        if (selectedSystemUids.length === 0) {
           toast.error(
             fm({ id: message.common.spareAssignment.errors.noSystemSelected })
           )
           return
         }
 
-        newParentSystemUid = selectedRowIds[0]
+        // Row ID is now directly the system UID (configured via getRowId in SpareParentSystemSelectTable)
+        newParentSystemUid = selectedSystemUids[0]
       }
 
       const payload: SpareAssignmentPayload = {
@@ -119,22 +133,13 @@ export const SpareAssignmentWizardContainer = ({
 
       await mutateAsync(payload)
 
-      // Invalidate relevant queries
+      // Recalculate system tree structure to preserve subsystems
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: [systemUid] }),
-        queryClient.invalidateQueries({ queryKey: ['systems'] }),
         queryClient.invalidateQueries({ queryKey: ['system-detail'] })
       ])
-
-      toast.success(fm({ id: message.common.spareAssignment.success.assigned }))
-
-      // Call onSuccess callback to refresh system detail
-      if (onSuccess) {
-        onSuccess()
-      }
-
+      recalculate(null)
       reset()
-      closeModal('dialog2')
     } catch (error) {
       toast.error(
         fm({ id: message.common.spareAssignment.errors.assignmentFailed })

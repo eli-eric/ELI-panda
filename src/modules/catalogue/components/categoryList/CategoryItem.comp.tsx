@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 import { MoreVertical } from 'lucide-react'
-import toast from 'react-hot-toast'
 import { useIntl } from 'react-intl'
+import { toast } from 'sonner'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -16,7 +16,7 @@ import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import { useCategoryUid } from '@/modules/catalogue/hooks/useCategoryUid'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { FALLBACK_IMAGE } from '@/types/constants/general'
 import { ROLE } from '@/types/constants/roles'
 import type { GetCategoriesQuery } from '@/types/gql/graphql'
@@ -69,8 +69,9 @@ const CategoryItemActions = ({ uid }: { uid: string }) => {
     ),
 
     onSuccess: ({ data }) => {
-      const { openModal } = useModalGlobalStore.getState()
+      const { openModal } = useDynamicModalStore.getState()
       openModal('sheet', {
+        id: `category-edit-${data}`,
         component: EditCategorySheetContent,
         props: {
           uid: data,

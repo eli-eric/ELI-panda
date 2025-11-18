@@ -52,7 +52,6 @@ export const catalogueItemSchema = z.object({
   supplier: codebookSchema.optional(),
   manufacturerUrl: z.string().optional(),
   lastUpdateTime: z.string().optional(),
-  hasImageGalleryChanges: z.boolean().optional(),
   // Details as a record/object with UID keys instead of array
   // This matches the form structure where details are stored as { [propertyUid]: detail }
   details: z.record(z.string(), catalogueItemDetailSchema).optional()

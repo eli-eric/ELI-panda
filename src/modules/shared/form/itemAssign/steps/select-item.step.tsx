@@ -13,7 +13,7 @@ import {
   getFontBySystemLevel
 } from '@/modules/systemItem/utils'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import type { ModalButtons } from '@/types/form'
 import type { SystemDetail } from '@/types/responses/systems'
 
@@ -31,7 +31,7 @@ export const SelectItemStep: FC = () => {
   const { setSelectedSystem, selectedSystem } = useModalWizardStore()
 
   const { goNext, updateFormData } = useWizardStore()
-  const { closeModal } = useModalGlobalStore()
+  const { closeModal } = useDynamicModalStore()
 
   const { systems } = useSystems(tableId)
 
@@ -50,7 +50,8 @@ export const SelectItemStep: FC = () => {
       text: messages.close,
       onClick: () => {
         setSelectedSystem(null)
-        closeModal('dialog1')
+        // NOTE: Modal is opened with ID 'item-assign' in item-assign.modal.tsx
+        closeModal('item-assign')
       }
     }
   }

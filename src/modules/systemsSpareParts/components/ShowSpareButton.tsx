@@ -5,7 +5,7 @@ import { TableStatsButton } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
 import { Tooltip } from '@/components/Tooltip'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 
 import {
   useGetSpareParts,
@@ -66,14 +66,16 @@ export const ShowSpareButton: FC<ShowSpareButtonProps> = ({
   sparesIn,
   sparesOut
 }) => {
-  const openModal = useModalGlobalStore(state => state.openModal)
+  const openModal = useDynamicModalStore(state => state.openModal)
   const handleSpareShow = () =>
-    openModal('dialog1', {
+    openModal('dialog', {
+      id: `spare-parts-in-${uid}`,
       component: SparePartsModal,
       props: { tableId, uid }
     })
   const handleSpareForShow = () =>
-    openModal('dialog1', {
+    openModal('dialog', {
+      id: `spare-parts-out-${uid}`,
       component: SparePartsForModal,
       props: { tableId, uid }
     })

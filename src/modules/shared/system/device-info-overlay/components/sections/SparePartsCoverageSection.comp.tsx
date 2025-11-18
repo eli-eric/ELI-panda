@@ -108,10 +108,17 @@ export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
                           }
                         />
                       </div>
-                      <span className="font-medium text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors truncate">
-                        {name}
-                      </span>
-                      <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-blue-500 dark:text-blue-400 shrink-0" />
+                      <div className="flex items-center gap-1.5 min-w-0 flex-1">
+                        <span className="font-medium text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors truncate">
+                          {name}
+                        </span>
+                        <ExternalLink className="h-3 w-3 ml-2 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-blue-500 dark:text-blue-400 shrink-0" />
+                        {physicalItem?.eun && (
+                          <Badge className="text-[10px] bg-blue-100 dark:bg-blue-600 text-blue-800 dark:text-blue-100 shrink-0">
+                            {physicalItem.eun}
+                          </Badge>
+                        )}
+                      </div>
                     </div>
                     <div className="flex items-center space-x-1">
                       <Tooltip
@@ -126,7 +133,8 @@ export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
                             physicalItem?.uid || '',
                             systemDetail.uid
                           )}
-                          className="text-[10px]"
+                          className="text-[9px] px-1.5 py-0.5 h-5"
+                          size="sm"
                           disabled={
                             !isFeatureEnabled('enableSparePartsAssignment')
                           }
@@ -163,10 +171,17 @@ export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
                       itemUsageUid={physicalItem?.itemUsage?.uid as ITEM_USAGE}
                     />
                   </div>
-                  <span className="font-medium text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors truncate">
-                    {name}
-                  </span>
-                  <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-blue-500 dark:text-blue-400 shrink-0" />
+                  <div className="flex items-center gap-1.5 min-w-0 flex-1">
+                    <span className="font-medium text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors truncate">
+                      {name}
+                    </span>
+                    {physicalItem?.eun && (
+                      <Badge className="text-[10px] bg-blue-100 dark:bg-blue-600 text-blue-800 dark:text-blue-100 shrink-0">
+                        {physicalItem.eun}
+                      </Badge>
+                    )}
+                  </div>
+                  <ExternalLink className="h-3 w-3 ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-blue-500 dark:text-blue-400 shrink-0" />
                 </div>
               </button>
             )

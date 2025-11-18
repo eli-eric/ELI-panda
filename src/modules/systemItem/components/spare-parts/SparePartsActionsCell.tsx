@@ -1,5 +1,5 @@
 import type { CellContext } from '@tanstack/react-table'
-import toast from 'react-hot-toast'
+import { toast } from 'sonner'
 
 import { TableDeleteButton } from '@/components/Buttons'
 import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'

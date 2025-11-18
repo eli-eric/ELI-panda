@@ -1,6 +1,6 @@
 import { Fragment } from 'react'
 import { useFieldArray, useFormContext } from 'react-hook-form'
-import toast from 'react-hot-toast'
+import { toast } from 'sonner'
 
 import { PlusButton } from '@/components/Buttons'
 import { useLocationSelectionModal } from '@/modules/shared/form/location/hooks/useLocationSelectionModal'

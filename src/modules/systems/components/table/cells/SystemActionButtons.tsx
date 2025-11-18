@@ -1,11 +1,4 @@
-import {
-  Edit,
-  MoreVertical,
-  Network,
-  Plus,
-  Settings,
-  Trash2
-} from 'lucide-react'
+import { Edit, MoreVertical, Network, Settings, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 import { Fragment } from 'react'
 import { FormattedMessage } from 'react-intl'
@@ -29,7 +22,7 @@ import {
   useGetSpareParts,
   useGetSparePartsFor
 } from '@/modules/systemsSpareParts/hooks/useGetSpareParts'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { PATH } from '@/types/constants/paths'
 import type { SystemDetail } from '@/types/responses/systems'
 import type { EndpointProps } from '@/utils/getEndpoints'
@@ -100,7 +93,7 @@ export const SystemActionButtons = ({
     queryKey
   })
 
-  const { openModal } = useModalGlobalStore()
+  const { openModal } = useDynamicModalStore()
   const openSystemCreateSheet = useSystemCreateSheet()
 
   const handleDelete = () => {
@@ -112,14 +105,16 @@ export const SystemActionButtons = ({
   }
 
   const handleShowSpareParts = () => {
-    openModal('dialog1', {
+    openModal('dialog', {
+      id: `spare-parts-${original.uid}`,
       component: SparePartsModal,
       props: { uid: original.uid }
     })
   }
 
   const handleShowSparePartsFor = () => {
-    openModal('dialog1', {
+    openModal('dialog', {
+      id: `spare-parts-for-${original.uid}`,
       component: SparePartsForModal,
       props: { uid: original.uid }
     })
@@ -193,16 +188,6 @@ export const SystemActionButtons = ({
             </DropdownMenuItem>
           )}
           <DropdownMenuSeparator />
-          <DropdownMenuItem asChild>
-            <button
-              onClick={() => openSystemCreateSheet(original.uid)}
-              className="flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 px-2 py-1 rounded transition-colors"
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              <FormattedMessage id={messages.addSubsystem} />
-            </button>
-          </DropdownMenuItem>
-
           {canEdit && (
             <DropdownMenuItem
               onClick={handleDelete}

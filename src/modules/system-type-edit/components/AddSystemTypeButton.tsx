@@ -3,8 +3,8 @@ import { useMutation } from '@tanstack/react-query'
 import { Plus } from 'lucide-react'
 import { type FC } from 'react'
 import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
 import { FormattedMessage, useIntl } from 'react-intl'
+import { toast } from 'sonner'
 
 import { Form } from '@/components/form/Form'
 import { Input } from '@/components/form/inputs'
@@ -13,7 +13,7 @@ import { Button } from '@/components/ui/button'
 import axiosInstance from '@/core/axios/axiosInstance'
 import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { CODEBOOK } from '@/types/constants/codebook'
 import { BASE_URL } from '@/types/constants/common'
 import { ROLE } from '@/types/constants/roles'
@@ -29,15 +29,19 @@ interface Props {
   ) => Promise<QueryObserverResult<SystemTypesResponse[], Error>>
 }
 
+// Store modalId in closure for AddSystemTypeModalContent to access
+let currentAddSystemTypeModalId: string | undefined
+
 function openAddSystemTypeModal(
   selectedGroup: string,
   refetch: Props['refetch']
 ) {
   if (typeof window === 'undefined') return // Prevent SSR execution
 
-  const { openModal } = useModalGlobalStore.getState()
+  const { openModal } = useDynamicModalStore.getState()
 
-  openModal('dialog1', {
+  currentAddSystemTypeModalId = openModal('dialog', {
+    id: `add-system-type-${selectedGroup}`,
     component: () => (
       <AddSystemTypeModalContent
         selectedGroup={selectedGroup}
@@ -49,10 +53,12 @@ function openAddSystemTypeModal(
       size: 'm' as const
     }
   })
+
+  return currentAddSystemTypeModalId
 }
 
 const AddSystemTypeModalContent: FC<Props> = ({ selectedGroup, refetch }) => {
-  const { closeModal } = useModalGlobalStore()
+  const { closeModal } = useDynamicModalStore()
 
   const formMethods = useForm({
     defaultValues: { mask: '{STC}{ZC}-{serial(3)}' }
@@ -70,13 +76,17 @@ const AddSystemTypeModalContent: FC<Props> = ({ selectedGroup, refetch }) => {
     },
     onSuccess: () => {
       refetch()
-      closeModal('dialog1')
+      if (currentAddSystemTypeModalId) {
+        closeModal(currentAddSystemTypeModalId)
+      }
       formMethods.reset()
       toast.success(`System Type was created.`)
     },
     onError: () => {
       toast.error(`Failed to create SystemType.`)
-      closeModal('dialog1')
+      if (currentAddSystemTypeModalId) {
+        closeModal(currentAddSystemTypeModalId)
+      }
     }
   })
 
@@ -101,7 +111,11 @@ const AddSystemTypeModalContent: FC<Props> = ({ selectedGroup, refetch }) => {
       <div className="flex justify-end gap-2">
         <Button
           variant="outline"
-          onClick={() => closeModal('dialog1')}
+          onClick={() => {
+            if (currentAddSystemTypeModalId) {
+              closeModal(currentAddSystemTypeModalId)
+            }
+          }}
           disabled={isPending}
         >
           <FormattedMessage id={messages.cancel} defaultMessage="Cancel" />

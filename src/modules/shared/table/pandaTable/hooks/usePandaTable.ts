@@ -1,4 +1,4 @@
-import type { ColumnDef, PaginationState } from '@tanstack/react-table'
+import type { ColumnDef, PaginationState, Row } from '@tanstack/react-table'
 import {
   getCoreRowModel,
   getExpandedRowModel,
@@ -28,6 +28,7 @@ interface Props<T> {
   data?: T[]
 
   getSubRows?: (original: T, index: number) => T[]
+  getRowId?: (originalRow: T, index: number, parent?: Row<T>) => string
 }
 
 export const usePandaTable = <T>({
@@ -35,7 +36,8 @@ export const usePandaTable = <T>({
   columns,
   settings,
   data,
-  getSubRows
+  getSubRows,
+  getRowId
 }: Props<T>) => {
   const {
     enableSorting = false,
@@ -76,6 +78,7 @@ export const usePandaTable = <T>({
       ? getPaginationRowModel()
       : undefined,
     getSubRows,
+    getRowId,
     onExpandedChange: setExpanded,
     onSortingChange: setSorting,
     onColumnOrderChange: setColumnOrder,

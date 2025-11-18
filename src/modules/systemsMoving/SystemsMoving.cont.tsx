@@ -1,5 +1,5 @@
 import { Fragment, useCallback, useState } from 'react'
-import { toast } from 'react-hot-toast'
+import { toast } from 'sonner'
 
 import { MinusButton, PlusButton } from '@/components/Buttons'
 import { Tooltip } from '@/components/Tooltip'

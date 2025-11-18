@@ -5,12 +5,15 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { message } from '@/i18n/src/messages'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 
 import { useLinkCreate } from './hooks/useLinks'
 
 const buttons = message.common.buttons
 const filesMsg = message.common.files
+
+// Store modalId in closure for LinkModalContent to access
+let currentLinkModalId: string | undefined
 
 export function LinkModalContent({
   parentUid,
@@ -77,10 +80,13 @@ export function LinkModalContent({
 export function openLinkModal({ parentUid }: { parentUid?: string }) {
   if (typeof window === 'undefined') return // Prevent SSR execution
 
-  const { openModal } = useModalGlobalStore.getState()
-  openModal('dialog1', {
+  const { openModal } = useDynamicModalStore.getState()
+  currentLinkModalId = openModal('dialog', {
+    id: 'link-modal',
     component: LinkModalContent,
     props: { parentUid, title: message.common.files.createLinkTitle },
     onClose: undefined
   })
+
+  return currentLinkModalId
 }

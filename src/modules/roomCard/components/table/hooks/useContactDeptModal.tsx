@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 
 import type { ModalSize } from '@/components/ui/dialog'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import type { Employee } from '@/types/gql/graphql'
 
 import { useRoomCardStore } from '../../../store/useRoomCardStore'
@@ -10,7 +10,7 @@ import { ContactDeptModalContainer } from '../ContactDeptModal.cont'
 import type { ContactDeptFormData } from '../schemas/contactDept.schema'
 
 export const useContactDeptModal = () => {
-  const { openModal, closeModal } = useModalGlobalStore()
+  const { openModal, closeModal } = useDynamicModalStore()
   const { setNewDeptContact } = useRoomCardStore()
   const { control } = useFormContext()
   const { append, fields } = useFieldArray({
@@ -24,7 +24,8 @@ export const useContactDeptModal = () => {
       .map((field: any) => field?.uid)
       .filter(Boolean)
 
-    openModal('dialog1', {
+    const modalId = openModal('dialog', {
+      id: 'contact-dept',
       component: ContactDeptModalContainer,
       props: {
         title: 'Add Contact Person (Dept)',
@@ -42,7 +43,7 @@ export const useContactDeptModal = () => {
             setNewDeptContact(data.employee as Employee)
 
             // Close modal
-            closeModal('dialog1')
+            closeModal(modalId)
           }
         }
       },

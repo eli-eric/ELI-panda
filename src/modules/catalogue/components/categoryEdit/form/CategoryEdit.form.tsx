@@ -7,7 +7,7 @@ import { SheetFormButtons } from '@/components/sheet-form-buttons'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { message } from '@/i18n/src/messages'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { ROLE } from '@/types/constants/roles'
 import type { CodebookType } from '@/types/responses/codebook'
 
@@ -24,6 +24,7 @@ interface Props {
   systemType?: CodebookType
   categoryDetail: CategoryFormType
   imageRef?: React.MutableRefObject<ImageGalleryRef | null>
+  modalId?: string
 }
 
 const CategoryEditForm = ({
@@ -31,7 +32,8 @@ const CategoryEditForm = ({
   onSubmit,
   systemType,
   categoryDetail,
-  imageRef
+  imageRef,
+  modalId
 }: Props) => {
   const formMethods = useForm<CategoryFormType>({
     defaultValues: !uid
@@ -44,7 +46,7 @@ const CategoryEditForm = ({
 
   const { handleSubmit } = formMethods
   const { formatMessage: fm } = useIntl()
-  const { closeModal } = useModalGlobalStore()
+  const { closeModal } = useDynamicModalStore()
 
   return (
     <Form formMethods={formMethods}>
@@ -53,8 +55,8 @@ const CategoryEditForm = ({
         isFormDirty={formMethods.formState.isDirty}
         onSubmit={handleSubmit(onSubmit)}
         onExit={() => {
-          {
-            closeModal('sheet')
+          if (modalId) {
+            closeModal(modalId)
           }
         }}
         saveLabel={fm({ id: message.catalogue.category.save })}

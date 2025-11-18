@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { toast } from 'react-hot-toast'
+import { toast } from 'sonner'
 
 import { PATH } from '@/types/constants/paths'
 

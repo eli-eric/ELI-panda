@@ -3,7 +3,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import type { CellContext } from '@tanstack/react-table'
 import { useEffect } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
-import { toast } from 'react-hot-toast'
+import { toast } from 'sonner'
 
 import { TableDeleteButton } from '@/components/Buttons'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'

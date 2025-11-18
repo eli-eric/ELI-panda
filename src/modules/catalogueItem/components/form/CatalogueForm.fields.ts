@@ -52,6 +52,13 @@ const useCatalogueFormFields = () => {
       placeholder: form.description.placeholder,
       disabled,
       rounded: 'rounded-md'
+    },
+    itemUID: {
+      name: 'itemUID',
+      label: form.itemUID.label,
+      placeholder: form.itemUID.placeholder,
+      disabled,
+      rounded: 'rounded-md'
     }
   })
 }

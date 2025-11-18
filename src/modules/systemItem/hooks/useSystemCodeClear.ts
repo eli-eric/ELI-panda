@@ -1,5 +1,5 @@
 import { useFormContext } from 'react-hook-form'
-import toast from 'react-hot-toast'
+import { toast } from 'sonner'
 
 import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
 import { gql } from '@/types/gql'

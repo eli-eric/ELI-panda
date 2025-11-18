@@ -1,8 +1,8 @@
-import { lazy } from 'react'
+import { lazy, useCallback, useRef } from 'react'
 
-import { useModalDirtyProtection } from '@/hooks/useModalDirtyProtection'
+import useWarningModal from '@/hooks/useWarningModal'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { useModalFormStateStore } from '@/store/useModalFormStateStore'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 
 import { useSystemStore } from '../device-info-overlay/store/useShowDeviceStore'
 
@@ -13,11 +13,31 @@ const SystemEditContainer = lazy(() =>
 )
 
 export const useSystemEditSheet = (directUid?: string) => {
-  const { openModal } = useModalGlobalStore()
+  const { openModal } = useDynamicModalStore()
   const { uid: storeUid } = useSystemStore()
   const { reset: resetFormState } = useModalFormStateStore()
+  const modalIdRef = useRef<string | undefined>(undefined)
+  const withWarningModal = useWarningModal(
+    'You have unsaved changes. Are you sure you want to close without saving?'
+  )
 
-  const { onCloseAttempt } = useModalDirtyProtection({ slot: 'sheet' })
+  // Create dirty protection handler that doesn't violate hooks rules
+  const createCloseAttemptHandler = useCallback(
+    (modalId: string) => {
+      return () => {
+        const currentIsDirty = useModalFormStateStore.getState().isDirty
+        if (!currentIsDirty) {
+          return true // Allow closing - form is clean
+        }
+        withWarningModal(() => {
+          useDynamicModalStore.getState().closeModal(modalId)
+          useModalFormStateStore.getState().reset()
+        })()
+        return false // Prevent immediate closing, let user decide via warning modal
+      }
+    },
+    [withWarningModal]
+  )
 
   return () => {
     const uid = directUid || storeUid
@@ -28,7 +48,11 @@ export const useSystemEditSheet = (directUid?: string) => {
       return
     }
 
-    openModal('sheet', {
+    const modalId = `system-edit-${uid}`
+    const onCloseAttempt = createCloseAttemptHandler(modalId)
+
+    modalIdRef.current = openModal('sheet', {
+      id: modalId,
       component: SystemEditContainer,
       props: { uid, size: 'l', title: 'Edit System' },
       onCloseAttempt,
@@ -36,5 +60,7 @@ export const useSystemEditSheet = (directUid?: string) => {
         resetFormState()
       }
     })
+
+    return modalIdRef.current
   }
 }

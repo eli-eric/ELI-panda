@@ -1,5 +1,5 @@
 import { isFeatureEnabled } from '@/config/featureFlags'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 
 import { SpareAssignmentWizardContainer } from './components/spare-assignment-wizard.cont'
 
@@ -10,7 +10,7 @@ interface UseSpareDialogParams {
 }
 
 export const useSpareDialog = () => {
-  const { openModal } = useModalGlobalStore()
+  const { openModal } = useDynamicModalStore()
 
   return ({ systemUid, spareItemUid, onSuccess }: UseSpareDialogParams) => {
     // Feature flag check - spare parts assignment disabled in production
@@ -20,7 +20,9 @@ export const useSpareDialog = () => {
       return
     }
 
-    return openModal('dialog2', {
+    // Use new dynamic modal system with custom ID
+    return openModal('dialog', {
+      id: 'spare-assignment-wizard',
       component: SpareAssignmentWizardContainer,
       props: {
         title: 'Assign Spare Part',

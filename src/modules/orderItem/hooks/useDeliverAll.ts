@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 import type { AxiosError, AxiosResponse } from 'axios'
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
-import toast from 'react-hot-toast'
+import { toast } from 'sonner'
 
 import { queryMutate } from '@/utils/fetcher'
 
