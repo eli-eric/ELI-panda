@@ -20,6 +20,7 @@ import { NAV_ITEMS, OTHERS_NAV_ITEMS } from '@/lib/navigation/config'
 import { NavMain } from './nav-main'
 import { NavProjects } from './nav-projects'
 import { NavUser } from './nav-user'
+import { SidebarSearch } from './sidebar-search'
 
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {}
 
@@ -54,6 +55,7 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
           </div>
         </SidebarMenuButton>
       </SidebarHeader>
+      <SidebarSearch />
       <SidebarContent>
         <NavMain items={filteredNavMain} />
         <NavProjects projects={filteredOthers} />

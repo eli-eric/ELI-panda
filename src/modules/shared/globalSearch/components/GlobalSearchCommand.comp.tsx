@@ -137,6 +137,7 @@ export const GlobalSearchCommand = ({
                       key={item.url}
                       value={item.url}
                       onSelect={() => onQuickNavSelect(item.url)}
+                      className="cursor-pointer"
                     >
                       <div className="flex size-8 shrink-0 items-center justify-center rounded-md bg-muted">
                         <Icon className="size-4 text-muted-foreground" />
@@ -175,6 +176,7 @@ export const GlobalSearchCommand = ({
                         key={item.uid}
                         value={item.uid}
                         onSelect={() => onSelect(item)}
+                        className="cursor-pointer"
                       >
                         <div
                           className={cn(

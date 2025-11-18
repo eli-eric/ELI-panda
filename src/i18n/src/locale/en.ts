@@ -117,7 +117,9 @@ export const messages = {
       noResults: 'No results found',
       error: 'Error loading results. Please try again.',
       updating: 'Updating...',
-      shortcutHint: 'Press {shortcut} to open global search'
+      shortcutHint: 'Press {shortcut} to open global search',
+      search: 'Search',
+      searchPlaceholder: 'Search...'
     },
     environmentWarning: {
       title: 'WARNING!',
