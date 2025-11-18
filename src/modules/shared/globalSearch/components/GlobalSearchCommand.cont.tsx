@@ -1,13 +1,16 @@
+import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 
 import { useDebounce } from '@/hooks/useDebounce'
+import { NAV_BAR_CONFIG } from '@/types/constants/paths'
 
 import { useGlobalSearch } from '../hooks/useGlobalSearch'
 import { useGlobalSearchShortcut } from '../hooks/useGlobalSearchShortcut'
 import { useGlobalSearchStore } from '../store/useGlobalSearchStore'
 import type { GlobalSearchItem } from '../types'
 import { getRedirectPath } from '../utils/getRedirectPath'
+import { mapNavBarToQuickNav } from '../utils/mapNavBarToQuickNav'
 import { GlobalSearchCommand } from './GlobalSearchCommand.comp'
 
 /**
@@ -16,11 +19,18 @@ import { GlobalSearchCommand } from './GlobalSearchCommand.comp'
  */
 export const GlobalSearchCommandContainer = () => {
   const router = useRouter()
+  const { data: session } = useSession()
   const { searchValue, open, setSearchValue, setOpen, clearSearch, toggleOpen } =
     useGlobalSearchStore()
 
   // Debounce search input to avoid excessive API calls
   const debouncedSearch = useDebounce(searchValue, 500)
+
+  // Quick navigation items filtered by user permissions
+  const quickNavItems = useMemo(
+    () => mapNavBarToQuickNav(NAV_BAR_CONFIG, session?.user?.roles),
+    [session?.user?.roles]
+  )
 
   // Fetch search results
   const { data, isLoading, isFetching, error } = useGlobalSearch({
@@ -66,6 +76,15 @@ export const GlobalSearchCommandContainer = () => {
     [router, setOpen]
   )
 
+  // Handle quick navigation selection - keep search value
+  const handleQuickNavSelect = useCallback(
+    (url: string) => {
+      router.push(url)
+      setOpen(false)
+    },
+    [router, setOpen]
+  )
+
   return (
     <GlobalSearchCommand
       open={open}
@@ -77,6 +96,8 @@ export const GlobalSearchCommandContainer = () => {
       isLoading={isLoading}
       isFetching={isFetching}
       onSelect={handleSelect}
+      quickNavItems={quickNavItems}
+      onQuickNavSelect={handleQuickNavSelect}
       error={error}
     />
   )

@@ -23,6 +23,7 @@ import { cn } from '@/lib/utils'
 
 import type { GlobalSearchItem } from '../types'
 import { getNodeTypeConfig } from '../utils/getNodeTypeConfig'
+import type { QuickNavItem } from '../utils/mapNavBarToQuickNav'
 
 interface GlobalSearchCommandProps {
   open: boolean
@@ -34,6 +35,8 @@ interface GlobalSearchCommandProps {
   isLoading: boolean
   isFetching: boolean
   onSelect: (item: GlobalSearchItem) => void
+  quickNavItems: QuickNavItem[]
+  onQuickNavSelect: (url: string) => void
   error?: Error | null
 }
 
@@ -51,6 +54,8 @@ export const GlobalSearchCommand = ({
   isLoading,
   isFetching,
   onSelect,
+  quickNavItems,
+  onQuickNavSelect,
   error
 }: GlobalSearchCommandProps) => {
   const { formatMessage: fm } = useIntl()
@@ -71,6 +76,7 @@ export const GlobalSearchCommand = ({
   const showEmpty =
     !isLoading && searchValue.length >= 2 && results.length === 0
   const showMinChars = searchValue.length > 0 && searchValue.length < 2
+  const showQuickNav = searchValue.length < 2 && quickNavItems.length > 0
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -82,7 +88,11 @@ export const GlobalSearchCommand = ({
           {fm({ id: message.common.globalSearch.description })}
         </DialogDescription>
       </DialogHeader>
-      <DialogContent className="overflow-hidden p-0" showCloseButton={false}>
+      <DialogContent
+        className="overflow-hidden p-0"
+        showCloseButton={false}
+        position="top"
+      >
         <Command shouldFilter={false}>
           <CommandInput
             value={searchValue}
@@ -115,6 +125,34 @@ export const GlobalSearchCommand = ({
               <div className="py-6 text-center text-sm text-destructive">
                 {fm({ id: message.common.globalSearch.error })}
               </div>
+            )}
+
+            {showQuickNav && (
+              <CommandGroup heading="Quick Navigation">
+                {quickNavItems.map(item => {
+                  const Icon = item.icon
+
+                  return (
+                    <CommandItem
+                      key={item.url}
+                      value={item.url}
+                      onSelect={() => onQuickNavSelect(item.url)}
+                    >
+                      <div className="flex size-8 shrink-0 items-center justify-center rounded-md bg-muted">
+                        <Icon className="size-4 text-muted-foreground" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium truncate">{item.title}</p>
+                        {item.category && (
+                          <p className="text-sm text-muted-foreground">
+                            {item.category}
+                          </p>
+                        )}
+                      </div>
+                    </CommandItem>
+                  )
+                })}
+              </CommandGroup>
             )}
 
             {showEmpty && !error && (

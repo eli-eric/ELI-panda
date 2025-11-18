@@ -17,3 +17,5 @@ export type {
 } from './types'
 export { getNodeTypeConfig } from './utils/getNodeTypeConfig'
 export { getRedirectPath } from './utils/getRedirectPath'
+export { mapNavBarToQuickNav } from './utils/mapNavBarToQuickNav'
+export type { QuickNavItem } from './utils/mapNavBarToQuickNav'
