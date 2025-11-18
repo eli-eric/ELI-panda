@@ -7,6 +7,7 @@ export { GlobalSearchCommand } from './components/GlobalSearchCommand.comp'
 export { GlobalSearchCommandContainer } from './components/GlobalSearchCommand.cont'
 export { useGlobalSearch } from './hooks/useGlobalSearch'
 export { useGlobalSearchShortcut } from './hooks/useGlobalSearchShortcut'
+export { useGlobalSearchStore } from './store/useGlobalSearchStore'
 export type {
   GlobalSearchItem,
   GlobalSearchQuery,

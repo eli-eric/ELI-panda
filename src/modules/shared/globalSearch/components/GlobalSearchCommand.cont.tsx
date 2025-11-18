@@ -1,10 +1,11 @@
 import { useRouter } from 'next/router'
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 
 import { useDebounce } from '@/hooks/useDebounce'
 
 import { useGlobalSearch } from '../hooks/useGlobalSearch'
 import { useGlobalSearchShortcut } from '../hooks/useGlobalSearchShortcut'
+import { useGlobalSearchStore } from '../store/useGlobalSearchStore'
 import type { GlobalSearchItem } from '../types'
 import { getRedirectPath } from '../utils/getRedirectPath'
 import { GlobalSearchCommand } from './GlobalSearchCommand.comp'
@@ -15,8 +16,8 @@ import { GlobalSearchCommand } from './GlobalSearchCommand.comp'
  */
 export const GlobalSearchCommandContainer = () => {
   const router = useRouter()
-  const [open, setOpen] = useState(false)
-  const [searchValue, setSearchValue] = useState('')
+  const { searchValue, open, setSearchValue, setOpen, clearSearch, toggleOpen } =
+    useGlobalSearchStore()
 
   // Debounce search input to avoid excessive API calls
   const debouncedSearch = useDebounce(searchValue, 500)
@@ -27,40 +28,42 @@ export const GlobalSearchCommandContainer = () => {
     enabled: open // Only fetch when modal is open
   })
 
-  // Handle keyboard shortcut
+  // Handle keyboard shortcut - just toggle, don't clear search
   const handleToggle = useCallback(() => {
-    setOpen(prev => !prev)
-    // Clear search when closing
-    if (open) {
-      setSearchValue('')
-    }
-  }, [open])
+    toggleOpen()
+  }, [toggleOpen])
 
   useGlobalSearchShortcut({ onToggle: handleToggle })
 
-  // Handle modal open/close
-  const handleOpenChange = useCallback((newOpen: boolean) => {
-    setOpen(newOpen)
-    // Clear search when closing
-    if (!newOpen) {
-      setSearchValue('')
-    }
-  }, [])
+  // Handle modal open/close - don't clear search on close
+  const handleOpenChange = useCallback(
+    (newOpen: boolean) => {
+      setOpen(newOpen)
+    },
+    [setOpen]
+  )
 
   // Handle search input change
-  const handleSearchChange = useCallback((value: string) => {
-    setSearchValue(value)
-  }, [])
+  const handleSearchChange = useCallback(
+    (value: string) => {
+      setSearchValue(value)
+    },
+    [setSearchValue]
+  )
 
-  // Handle item selection
+  // Handle clear button click
+  const handleClear = useCallback(() => {
+    clearSearch()
+  }, [clearSearch])
+
+  // Handle item selection - keep search value for quick re-search
   const handleSelect = useCallback(
     (item: GlobalSearchItem) => {
       const path = getRedirectPath(item.nodeType, item.uid)
       router.push(path)
       setOpen(false)
-      setSearchValue('')
     },
-    [router]
+    [router, setOpen]
   )
 
   return (
@@ -69,6 +72,7 @@ export const GlobalSearchCommandContainer = () => {
       onOpenChange={handleOpenChange}
       searchValue={searchValue}
       onSearchChange={handleSearchChange}
+      onClear={handleClear}
       results={data}
       isLoading={isLoading}
       isFetching={isFetching}

@@ -29,6 +29,7 @@ interface GlobalSearchCommandProps {
   onOpenChange: (open: boolean) => void
   searchValue: string
   onSearchChange: (value: string) => void
+  onClear: () => void
   results: GlobalSearchItem[]
   isLoading: boolean
   isFetching: boolean
@@ -45,6 +46,7 @@ export const GlobalSearchCommand = ({
   onOpenChange,
   searchValue,
   onSearchChange,
+  onClear,
   results,
   isLoading,
   isFetching,
@@ -85,6 +87,7 @@ export const GlobalSearchCommand = ({
           <CommandInput
             value={searchValue}
             onValueChange={onSearchChange}
+            onClear={onClear}
             placeholder={fm({ id: message.common.globalSearch.placeholder })}
           />
           <CommandList className="max-h-[400px]">
@@ -122,6 +125,7 @@ export const GlobalSearchCommand = ({
 
             {!showLoading &&
               !showMinChars &&
+              searchValue.length >= 2 &&
               Object.entries(groupedResults).map(([nodeType, items]) => {
                 const config = getNodeTypeConfig(nodeType as any)
                 const Icon = config.icon
