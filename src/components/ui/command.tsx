@@ -1,7 +1,7 @@
 'use client'
 
 import { Command as CommandPrimitive } from 'cmdk'
-import { SearchIcon } from 'lucide-react'
+import { SearchIcon, X } from 'lucide-react'
 import * as React from 'react'
 
 import {
@@ -62,8 +62,14 @@ function CommandDialog({
 
 function CommandInput({
   className,
+  onClear,
+  value,
   ...props
-}: React.ComponentProps<typeof CommandPrimitive.Input>) {
+}: React.ComponentProps<typeof CommandPrimitive.Input> & {
+  onClear?: () => void
+}) {
+  const showClear = onClear && value
+
   return (
     <div
       data-slot="command-input-wrapper"
@@ -76,8 +82,19 @@ function CommandInput({
           'placeholder:text-muted-foreground flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-50',
           className
         )}
+        value={value}
         {...props}
       />
+      {showClear && (
+        <button
+          type="button"
+          onClick={onClear}
+          className="text-muted-foreground hover:text-foreground size-4 shrink-0 transition-colors"
+          aria-label="Clear search"
+        >
+          <X className="size-4" />
+        </button>
+      )}
     </div>
   )
 }

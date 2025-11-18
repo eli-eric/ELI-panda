@@ -29,6 +29,55 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Tailwind CSS for styling with custom design system
 - Use `data-testid` for test selectors
 
+## Internationalization (i18n)
+
+The application uses `react-intl` for internationalization with a custom message system.
+
+### Message Files
+
+- **Message definitions**: `/src/i18n/src/locale/en.ts` - Contains all translation strings
+- **Message paths**: `/src/i18n/src/messages.ts` - Exports `message` object with type-safe paths
+
+### Usage Pattern
+
+```typescript
+import { useIntl } from 'react-intl'
+import { message } from '@/i18n/src/messages'
+
+const MyComponent = () => {
+  const { formatMessage: fm } = useIntl()
+
+  // ✅ Correct - use message object for type-safe paths
+  return <h1>{fm({ id: message.common.ui.appName })}</h1>
+
+  // ❌ Incorrect - hardcoded strings are not type-safe
+  return <h1>{fm({ id: 'common.ui.appName' })}</h1>
+}
+```
+
+### Adding New Translations
+
+1. Add translation string to `/src/i18n/src/locale/en.ts`
+2. Use via `message` object: `fm({ id: message.path.to.key })`
+3. The `message` object mirrors the structure of the locale file
+
+**Example:**
+
+```typescript
+// In /src/i18n/src/locale/en.ts
+export const messages = {
+  common: {
+    globalSearch: {
+      title: 'Global Search',
+      placeholder: 'Type to search...'
+    }
+  }
+}
+
+// In your component
+fm({ id: message.common.globalSearch.title })
+```
+
 ## Design System Migration
 
 The codebase is currently migrating from HeadlessUI to shadcn/ui + Radix UI components:
@@ -170,6 +219,129 @@ const MyModalContent: React.FC<MyModalContentProps> = ({
 - For nested modals, use Dialog2 when Dialog1 is already open
 - Clean up any subscriptions or timers in `onClose`
 
+## Dynamic Modal System V2 (NEW)
+
+**⚠️ Migration in Progress**: The application is transitioning to a new dynamic modal system that supports unlimited modals with automatic z-index management.
+
+### Key Improvements
+
+- **Unlimited Modals**: Open as many sheets and dialogs as needed simultaneously
+- **Automatic Z-Index Management**: Each modal automatically gets the correct z-index based on open order (FIFO)
+- **Custom IDs**: Use custom IDs for easy modal management or let the system auto-generate them
+- **Type-Aware Rendering**: Sheet vs Dialog components rendered correctly based on type
+- **No Z-Index Conflicts**: Fixes issues where sheets appeared behind dialogs
+
+### Core Components
+
+- **`useDynamicModalStore`**: New Zustand store with Map-based architecture
+- **`DynamicModalProvider`**: Dynamic modal renderer (runs alongside old `ModalProvider`)
+- **Updated `sheet.tsx` and `dialog.tsx`**: Support inline z-index styles
+
+### Migration Strategy
+
+**Old System (Legacy)**:
+
+```typescript
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+
+const { openModal, closeModal } = useModalGlobalStore()
+
+// Fixed slots: 'sheet', 'dialog1', 'dialog2', 'dialog3'
+openModal('dialog2', {
+  component: MyComponent,
+  props: { title: 'My Modal' }
+})
+
+closeModal('dialog2')
+```
+
+**New System (V2)**:
+
+```typescript
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
+
+const { openModal, closeModal } = useDynamicModalStore()
+
+// Option A: Auto-generated ID
+const modalId = openModal('dialog', {
+  component: MyComponent,
+  props: { title: 'My Modal' }
+})
+closeModal(modalId) // Use returned ID
+
+// Option B: Custom ID (recommended for reusable modals)
+openModal('dialog', {
+  id: 'my-custom-modal',
+  component: MyComponent,
+  props: { title: 'My Modal' }
+})
+closeModal('my-custom-modal')
+```
+
+### Example: Nested Modals with Proper Layering
+
+```typescript
+// Open spare assignment wizard
+const wizardId = openModal('dialog', {
+  id: 'spare-wizard',
+  component: SpareWizardComponent,
+  props: { title: 'Assign Spare Part', size: 'xl' }
+})
+// Z-index: 50 (overlay), 51 (content)
+
+// Inside wizard, open filter sheet
+const filterId = openModal('sheet', {
+  id: 'system-filters',
+  component: FilterComponent,
+  props: { title: 'Filter Systems', side: 'left' }
+})
+// Z-index: 52 (overlay), 53 (content) ← Automatically higher!
+
+// Filter sheet is correctly rendered above the wizard dialog
+```
+
+### Z-Index Calculation
+
+```
+Base Z-Index: 50
+For each modal in order:
+- Overlay: baseZIndex + (modalIndex * 2)
+- Content: baseZIndex + (modalIndex * 2) + 1
+
+Example with 3 open modals:
+Modal 1: overlay=50, content=51
+Modal 2: overlay=52, content=53
+Modal 3: overlay=54, content=55 (top layer)
+```
+
+### Additional Functions
+
+```typescript
+// Bring existing modal to front
+bringToFront('my-modal-id')
+
+// Close all modals at once
+closeAllModals()
+
+// Get modal instance by ID
+const modal = getModalById('my-modal-id')
+```
+
+### Migration Checklist for New Features
+
+When creating new modals, use the V2 system:
+
+1. Import `useDynamicModalStore` instead of `useModalGlobalStore`
+2. Change `openModal('dialog2', ...)` to `openModal('dialog', { id: 'unique-id', ... })`
+3. Store returned `modalId` or use custom ID for closing
+4. Update `closeModal` to use the ID instead of slot name
+
+**Example Files Using V2**:
+
+- `useSpareDialog.ts` - Spare assignment wizard
+- `useSystemsFilterSheetV2.ts` - System filters (V2 version)
+- `SystemFilterButtonV2.tsx` - Filter button (V2 version)
+
 ## Form Wizard V3 Pattern
 
 The application uses a declarative Form Wizard V3 system for multi-step forms with React Hook Form integration.
@@ -182,6 +354,7 @@ The application uses a declarative Form Wizard V3 system for multi-step forms wi
 ### When to Use Wizard V3
 
 Use Form Wizard V3 for:
+
 - Multi-step forms with 2+ steps
 - Forms with conditional steps based on previous inputs
 - Complex data entry workflows with validation per step
@@ -253,6 +426,7 @@ export const MyFormWizard = ({
 ### Wizard Best Practices
 
 #### 1. **Use TABLE_IDS constant for table identifiers**
+
 ```typescript
 import { TABLE_IDS } from '@/types/constants/tableIds'
 
@@ -264,6 +438,7 @@ const tableId = 'items-select-table'
 ```
 
 #### 2. **Memoize complex values to prevent re-renders**
+
 ```typescript
 // ✅ Good - prevents child component re-renders
 const serviceTypeData = useMemo(() => {
@@ -281,6 +456,7 @@ const categoryFilters = useMemo(() => {
 ```
 
 #### 3. **Use fm() directly in title prop (don't memoize translations)**
+
 ```typescript
 // ✅ Good - formatMessage is stable, call directly
 <WizardStep
@@ -298,6 +474,7 @@ const stepTitles = useMemo(
 ```
 
 #### 4. **Validation and conditional rendering**
+
 ```typescript
 // Validation - returns boolean
 const validateStep = useCallback((data: FormType) => {
@@ -324,6 +501,7 @@ const shouldShowStepWithExternal = useCallback((formData: FormType) => {
 ```
 
 #### 5. **Step completion handlers for side effects**
+
 ```typescript
 // Use onStepComplete for:
 // - Applying filters
@@ -331,15 +509,19 @@ const shouldShowStepWithExternal = useCallback((formData: FormType) => {
 // - Clearing form fields
 // - Analytics/tracking
 
-const handleStepComplete = useCallback(async (data: FormType) => {
-  if (categoryFilters) {
-    setColumnFilters(categoryFilters)
-  }
-  // Other side effects
-}, [categoryFilters, setColumnFilters])
+const handleStepComplete = useCallback(
+  async (data: FormType) => {
+    if (categoryFilters) {
+      setColumnFilters(categoryFilters)
+    }
+    // Other side effects
+  },
+  [categoryFilters, setColumnFilters]
+)
 ```
 
 #### 6. **Document unusual patterns with comments**
+
 ```typescript
 // ✅ Good - explain why eslint-disable is needed
 const data = useMemo(() => {
@@ -349,10 +531,13 @@ const data = useMemo(() => {
 }, [input.specificProp])
 
 // ✅ Good - explain closure over external data in shouldShow
-const shouldShow = useCallback((formData: FormType) => {
-  // NOTE: Using closure over external API data because it's not in formData
-  return apiData ? Boolean(apiData.property) : true
-}, [apiData])
+const shouldShow = useCallback(
+  (formData: FormType) => {
+    // NOTE: Using closure over external API data because it's not in formData
+    return apiData ? Boolean(apiData.property) : true
+  },
+  [apiData]
+)
 ```
 
 ### Complete Real-World Examples
@@ -360,6 +545,7 @@ const shouldShow = useCallback((formData: FormType) => {
 **Primary example**: `src/modules/orderItem/components/serviceLines/form/service-line-v3.wizz.tsx`
 
 Key features demonstrated:
+
 - ✅ Uses `TABLE_IDS` and `ITEM_USAGE_FILTERS` constants
 - ✅ Memoizes complex objects (`categoryFilters`, `serviceTypeData`)
 - ✅ Uses `fm()` directly in title props
@@ -369,5 +555,6 @@ Key features demonstrated:
 - ✅ Documented eslint-disable and special cases
 
 **Secondary example**: `src/modules/shared/system/use-spare/components/spare-assignment-wizard.cont.tsx`
+
 - Shows proper usage of `shouldShow` with formData parameter
 - Demonstrates error handling in onSubmit

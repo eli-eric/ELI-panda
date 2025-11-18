@@ -3,8 +3,8 @@
  * These helpers reduce code duplication and improve maintainability
  */
 
-import { toast } from 'react-hot-toast'
 import type { IntlShape } from 'react-intl'
+import { toast } from 'sonner'
 
 import { message } from '@/i18n/src/messages'
 import { createMessageValues } from '@/utils/formatters'

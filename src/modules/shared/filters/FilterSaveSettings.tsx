@@ -1,9 +1,9 @@
 import { Trash2 } from 'lucide-react'
 import { useSession } from 'next-auth/react'
-import type { UseFormReset } from 'react-hook-form'
-import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
+import { useRef } from 'react'
+import { useForm, type UseFormReset } from 'react-hook-form'
 import { useIntl } from 'react-intl'
+import { toast } from 'sonner'
 
 import { Button } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
@@ -15,8 +15,8 @@ import { useFilterDetails } from '@/hooks/filter/useFilterDetails'
 import { useFilterUpdate } from '@/hooks/filter/useFilterUpdate'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import { message } from '@/i18n/src/messages'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { useFormControlStore } from '@/store/useFormControlStore'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 
 interface Props {
   tableId: string
@@ -98,7 +98,9 @@ export const FilterSaveSettings = ({
         },
         onSuccess: () => {
           refetch()
-          closeModal('dialog1')
+          if (filterModalIdRef.current) {
+            closeModal(filterModalIdRef.current)
+          }
           toast.success('Filter created successfully')
         }
       }
@@ -143,10 +145,12 @@ export const FilterSaveSettings = ({
       }, 1000)
     }
   }
-  const { openModal, closeModal } = useModalGlobalStore()
+  const { openModal, closeModal } = useDynamicModalStore()
+  const filterModalIdRef = useRef<string | undefined>(undefined)
 
   const openSaveFilterModal = () => {
-    openModal('dialog1', {
+    filterModalIdRef.current = openModal('dialog', {
+      id: 'filter-save-settings',
       component: () => (
         <Form formMethods={inputFormMethods}>
           <Input

@@ -7,7 +7,7 @@ import { Button as UIButton } from '@/components/ui/button'
 import { Input as UIInput } from '@/components/ui/input'
 import { Paragraph } from '@/components/visuals/Paragraph'
 import { message } from '@/i18n/src/messages'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 
 import { useSystemDetail } from '../../hooks/useSystemDetail'
 
@@ -18,24 +18,32 @@ interface SetMinimalSparesModalContentProps {
   currentValue?: number
   onSubmit?: (value: number) => void
   onCancel?: () => void
+  modalId?: string
 }
+
+let currentMinimalSparesModalId: string | undefined
 
 const SetMinimalSparesModalContent = ({
   currentValue,
   onSubmit,
-  onCancel
+  onCancel,
+  modalId
 }: SetMinimalSparesModalContentProps) => {
-  const { closeModal } = useModalGlobalStore()
+  const { closeModal } = useDynamicModalStore()
   const [value, setValue] = useState(currentValue || 0)
 
   const handleOk = () => {
     onSubmit?.(value)
-    closeModal('dialog1')
+    if (modalId) {
+      closeModal(modalId)
+    }
   }
 
   const handleCancel = () => {
     onCancel?.()
-    closeModal('dialog1')
+    if (modalId) {
+      closeModal(modalId)
+    }
   }
 
   return (
@@ -75,23 +83,26 @@ export const SetMinimalSparesButton = () => {
   const openModal = () => {
     if (typeof window === 'undefined') return
 
-    const { openModal } = useModalGlobalStore.getState()
+    const { openModal } = useDynamicModalStore.getState()
     const currentValue =
       getValues('minimalSpareParstCount') ??
       systemDetail?.minimalSpareParstCount
 
-    openModal('dialog1', {
+    currentMinimalSparesModalId = openModal('dialog', {
+      id: `set-minimal-spares-${systemDetail?.uid}`,
       component: () => (
         <SetMinimalSparesModalContent
           currentValue={currentValue}
           onSubmit={value => setValue('minimalSpareParstCount', value)}
           onCancel={() => setValue('minimalSpareParstCount', currentValue)}
+          modalId={currentMinimalSparesModalId}
         />
       ),
       props: {
         size: 'm' as const
       }
     })
+    return currentMinimalSparesModalId
   }
 
   return (

@@ -44,7 +44,7 @@ export const Tile = ({ name, link, Icon, role }: CardProps) => {
   return (
     <AccessControl roles={role}>
       {link ? (
-        <Link href={link} target="_blank" className="block">
+        <Link href={link} className="block">
           <CardWrapper>{cardContent}</CardWrapper>
         </Link>
       ) : (

@@ -6,8 +6,8 @@ import {
 import { Edit, MoreVertical, Trash2 } from 'lucide-react'
 import { type FC } from 'react'
 import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
 import { FormattedMessage, useIntl } from 'react-intl'
+import { toast } from 'sonner'
 
 import { Form } from '@/components/form/Form'
 import { Input } from '@/components/form/inputs'
@@ -24,7 +24,7 @@ import usePermission from '@/hooks/usePermission'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { CODEBOOK } from '@/types/constants/codebook'
 import { BASE_URL } from '@/types/constants/common'
 import { ROLE } from '@/types/constants/roles'
@@ -41,6 +41,9 @@ interface Props {
   ) => Promise<QueryObserverResult<SystemTypesResponse[], Error>>
 }
 
+// Store modalId in closure for EditSystemTypeModalContent to access
+let currentEditTypeModalId: string | undefined
+
 function openEditSystemTypeModal(
   systemType: SystemTypesResponse,
   groupUid: string | null | undefined,
@@ -48,9 +51,10 @@ function openEditSystemTypeModal(
 ) {
   if (typeof window === 'undefined') return // Prevent SSR execution
 
-  const { openModal } = useModalGlobalStore.getState()
+  const { openModal } = useDynamicModalStore.getState()
 
-  openModal('dialog1', {
+  currentEditTypeModalId = openModal('dialog', {
+    id: `edit-system-type-${systemType.uid}`,
     component: () => (
       <EditSystemTypeModalContent
         systemType={systemType}
@@ -63,6 +67,8 @@ function openEditSystemTypeModal(
       size: 'm' as const
     }
   })
+
+  return currentEditTypeModalId
 }
 
 const EditSystemTypeModalContent: FC<{
@@ -70,7 +76,7 @@ const EditSystemTypeModalContent: FC<{
   groupUid: string | null | undefined
   refetch: Props['refetch']
 }> = ({ systemType, groupUid, refetch }) => {
-  const { closeModal } = useModalGlobalStore()
+  const { closeModal } = useDynamicModalStore()
   const canEdit = usePermission([ROLE.SYSTEM_TYPE_EDIT])
 
   const formMethods = useForm({
@@ -95,12 +101,16 @@ const EditSystemTypeModalContent: FC<{
     },
     onSuccess: () => {
       refetch()
-      closeModal('dialog1')
+      if (currentEditTypeModalId) {
+        closeModal(currentEditTypeModalId)
+      }
       toast.success(`${systemType.name} was updated.`)
     },
     onError: () => {
       toast.error(`Failed to update ${systemType.name}.`)
-      closeModal('dialog1')
+      if (currentEditTypeModalId) {
+        closeModal(currentEditTypeModalId)
+      }
     }
   })
 
@@ -141,7 +151,11 @@ const EditSystemTypeModalContent: FC<{
       <div className="flex justify-end gap-2">
         <Button
           variant="outline"
-          onClick={() => closeModal('dialog1')}
+          onClick={() => {
+            if (currentEditTypeModalId) {
+              closeModal(currentEditTypeModalId)
+            }
+          }}
           disabled={isPending}
         >
           <FormattedMessage id={messages.cancel} defaultMessage="Cancel" />

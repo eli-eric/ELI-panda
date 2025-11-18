@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
 
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 
 import { CatalogueFilterSheet } from '../CatalogueFilterSheet.cont'
 
@@ -13,7 +13,7 @@ interface UseCatalogueFilterSheetProps {
 }
 
 export const useCatalogueFilterSheet = () => {
-  const { openModal } = useModalGlobalStore()
+  const { openModal } = useDynamicModalStore()
 
   const openFilterSheet = useCallback(
     ({
@@ -22,7 +22,8 @@ export const useCatalogueFilterSheet = () => {
       side = 'left',
       filterFormMethods
     }: UseCatalogueFilterSheetProps) => {
-      openModal('sheet', {
+      const modalId = openModal('sheet', {
+        id: `catalogue-filters-${tableId}`,
         component: CatalogueFilterSheet,
         props: {
           title: 'Catalogue Filters',
@@ -33,6 +34,8 @@ export const useCatalogueFilterSheet = () => {
           filterFormMethods
         }
       })
+
+      return modalId
     },
     [openModal]
   )

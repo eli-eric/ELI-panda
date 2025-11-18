@@ -109,6 +109,18 @@ export const messages = {
       foundFacilities: 'Found {count} facilities',
       status: 'Status'
     },
+    globalSearch: {
+      title: 'Global Search',
+      description: 'Search for systems, orders, and catalogue items',
+      placeholder: 'Type to search... (min 2 characters)',
+      minChars: 'Type at least 2 characters to search',
+      noResults: 'No results found',
+      error: 'Error loading results. Please try again.',
+      updating: 'Updating...',
+      shortcutHint: 'Press {shortcut} to open global search',
+      search: 'Search',
+      searchPlaceholder: 'Search...'
+    },
     environmentWarning: {
       title: 'WARNING!',
       subtitle: 'You are in the {environment} environment',
@@ -131,7 +143,11 @@ export const messages = {
       delete: 'Delete',
       noImagesAvailable: 'No images available',
       pngJpgInfo: 'PNG, JPG up to 10MB',
-      confirmDelete: 'Are you sure you want to delete'
+      confirmDelete: 'Are you sure you want to delete',
+      saveItemToUploadImages: 'Please save the item first to upload images',
+      loading: 'Loading...',
+      uploading: 'Uploading...',
+      deleting: 'Deleting...'
     },
     files: {
       title: 'Files',
@@ -179,7 +195,7 @@ export const messages = {
       hierarchyArrow: '→',
       failedToLoad: 'Failed to load system information',
       viewServiceDetails: 'View Service Details',
-      useSpare: 'Use Spare',
+      useSpare: 'Use',
       designatedSparePart: 'Designated spare part for:',
       originalCatalogParameter:
         '*Original catalog parameter modified by Service',
@@ -206,10 +222,10 @@ export const messages = {
       },
       form: {
         oldItemCondition: {
-          label: 'Old Item Condition'
+          label: 'Item Condition Status'
         },
         newItemLocation: {
-          label: 'New Item Location'
+          label: 'Item Location'
         },
         autoAssignParent: {
           label: 'Auto-assign parent system (closest trash in hierarchy)'
@@ -420,11 +436,24 @@ export const messages = {
           label: 'Manufacturer Number',
           placeholder: 'Manufacturer Number'
         },
+        itemUID: { label: 'Item UUID', placeholder: 'Item UUID' },
         manuFacturerUrl: {
           label: 'Supplier/Manufacturer Url',
-          placeholder: 'Supplier/Manufacturer Url'
+          placeholder: 'Supplier/Manufacturer Url',
+          tooltip: {
+            openUrl: 'Open {url} in new window',
+            enterUrl: 'Enter URL to open link'
+          }
         },
         catalogueCategory: { label: 'Catalogue Category' } // codebook of catalogue categories - CATALOGUE_CATEGORY
+      },
+      validation: {
+        nameRequired: 'Name is required',
+        nameTooLong: 'Name must be at most 255 characters',
+        catalogueNumberRequired: 'Catalogue number is required',
+        catalogueNumberTooLong:
+          'Catalogue number must be at most 100 characters',
+        categoryRequired: 'Category is required'
       }
     },
     edit: {
@@ -832,7 +861,20 @@ export const messages = {
         message: 'Serial number is missing, please fill it.'
       },
       eunPrintedSuccessfully: 'EUN {eun} printed successfully',
-      printEunTooltip: 'Print EUN'
+      printEunTooltip: 'Print EUN',
+      wizard: {
+        steps: {
+          step1: {
+            title: 'Select Item',
+            helperText:
+              'Select an item from the catalogue or continue to enter details manually',
+            continueWithoutSelection: 'Continue without selection'
+          },
+          step2: {
+            title: 'Order Details'
+          }
+        }
+      }
     }
   },
   codebooksPage: {

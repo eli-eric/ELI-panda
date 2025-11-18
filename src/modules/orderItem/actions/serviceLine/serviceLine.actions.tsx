@@ -13,7 +13,7 @@ import { useServiceLineDeliver } from '@/modules/orderItem/hooks/useServiceDeliv
 import { useServiceDeliveryAll } from '@/modules/orderItem/hooks/useServiceDeliveryAll'
 import { useServiceLine } from '@/modules/orderItem/hooks/useServiceLine'
 import type { ServiceLine } from '@/modules/orderItem/types/form'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { ROLE } from '@/types/constants/roles'
 import { createMessageValues } from '@/utils/formatters'
 
@@ -26,7 +26,7 @@ export const ServiceLineActionButtons = ({
 }) => {
   const { formatMessage: fm } = useIntl()
   const { deleteServiceLine, setServiceLine } = useServiceLine()
-  const { openModal, closeModal } = useModalGlobalStore()
+  const { openModal, closeModal } = useDynamicModalStore()
   const withWarning = useWarningModal(
     fm(
       { id: message.ordersPage.serviceLines.deleteModal.message },
@@ -34,27 +34,27 @@ export const ServiceLineActionButtons = ({
     )
   )
 
-  const submit = (data: ServiceLine) => {
+  const submit = (data: ServiceLine, modalId: string) => {
     setServiceLine({
       ...data,
       details: Array.isArray(data.details) ? data.details : []
     })
-    closeModal('dialog1')
+    closeModal(modalId)
   }
 
   const openEditSheet = () => {
-    openModal('sheet', {
+    const modalId = openModal('sheet', {
+      id: `service-line-edit-${serviceLine.uuid}`,
       component: ServiceLineEditSheet,
       props: {
         title: fm({ id: message.ordersPage.serviceLines.titles.edit }),
         serviceLine,
-        onClose: () => closeModal('sheet')
+        onClose: () => closeModal(modalId)
       },
       onSubmit: (data: ServiceLine) => {
-        submit(data)
-        closeModal('sheet')
+        submit(data, modalId)
       },
-      onClose: () => closeModal('sheet')
+      onClose: () => closeModal(modalId)
     })
   }
 

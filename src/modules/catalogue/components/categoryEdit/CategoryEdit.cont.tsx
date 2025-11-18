@@ -1,8 +1,8 @@
 'use client'
 import { useQueryClient } from '@tanstack/react-query'
 import { type Dispatch, type SetStateAction, useRef } from 'react'
-import toast from 'react-hot-toast'
 import { useIntl } from 'react-intl'
+import { toast } from 'sonner'
 
 import { Button } from '@/components/Buttons'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -10,7 +10,7 @@ import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import { message } from '@/i18n/src/messages'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import type { CodebookType } from '@/types/responses/codebook'
 
 import { useCatalogueItems } from '../../hooks/useCatalogueItems'
@@ -25,9 +25,10 @@ interface Props {
   setOpen: Dispatch<SetStateAction<boolean>>
   parentUID?: string
   uid?: string
+  modalId?: string
 }
 
-const CategoryEditContainer = ({ setOpen, parentUID, uid }: Props) => {
+const CategoryEditContainer = ({ setOpen, parentUID, uid, modalId }: Props) => {
   const { formatMessage: fm } = useIntl()
   const { catalogueCategoryEdit } = useEndpoint({
     uid
@@ -47,7 +48,7 @@ const CategoryEditContainer = ({ setOpen, parentUID, uid }: Props) => {
   } = useCategoryDetail(uid)
   // removed unused loadingSubmit state (was previously set but not used for UI)
   const queryClient = useQueryClient()
-  const { closeModal } = useModalGlobalStore()
+  const { closeModal } = useDynamicModalStore()
 
   const { refetch } = useCategoryList()
 
@@ -61,7 +62,9 @@ const CategoryEditContainer = ({ setOpen, parentUID, uid }: Props) => {
         toast.success(
           fm({ id: message.catalogue.category.saved }, { name: data.name })
         )
-        closeModal('sheet')
+        if (modalId) {
+          closeModal(modalId)
+        }
         queryClient.invalidateQueries({ queryKey })
       })
     },
@@ -148,6 +151,7 @@ const CategoryEditContainer = ({ setOpen, parentUID, uid }: Props) => {
         imageRef={imageRef}
         categoryDetail={categoryDetail as CategoryFormType}
         systemType={catalogueCategory?.systemType as CodebookType}
+        modalId={modalId}
       ></CategoryEditForm>
     </div>
   )

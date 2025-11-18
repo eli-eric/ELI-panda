@@ -10,6 +10,8 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
+  DialogOverlay,
+  DialogPortal,
   DialogTitle
 } from '@/components/ui/dialog'
 import type { ModalButtons } from '@/types/form'
@@ -32,49 +34,52 @@ const WarningModal = ({
   message
 }: WarningModalProps) => (
   <Dialog open={open} onOpenChange={setOpen}>
-    <DialogContent>
-      <DialogHeader>
-        <DialogTitle>
-          <span className="flex items-center gap-2">
-            <AlertTriangle className="h-6 w-6 text-red-600" />
-            <FormattedMessage id={title} />
-          </span>
-        </DialogTitle>
-        <DialogDescription>{message}</DialogDescription>
-      </DialogHeader>
-      {error && <ErrorPage />}
-      <DialogFooter>
-        {buttons.goBack && (
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => {
-              setOpen(false)
-              buttons.goBack?.onClick?.()
-            }}
-          >
-            <FormattedMessage
-              id={buttons.goBack.text}
-              defaultMessage={'Cancel'}
-            />
-          </Button>
-        )}
-        {buttons.goNext && (
-          <Button
-            type="button"
-            onClick={() => {
-              buttons.goNext?.onClick?.()
-              setOpen(false)
-            }}
-          >
-            <FormattedMessage
-              id={buttons.goNext.text}
-              defaultMessage={'Continue'}
-            />
-          </Button>
-        )}
-      </DialogFooter>
-    </DialogContent>
+    <DialogPortal>
+      <DialogOverlay style={{ zIndex: 9999 }} />
+      <DialogContent style={{ zIndex: 10000 }}>
+        <DialogHeader>
+          <DialogTitle>
+            <span className="flex items-center gap-2">
+              <AlertTriangle className="h-6 w-6 text-red-600" />
+              <FormattedMessage id={title} />
+            </span>
+          </DialogTitle>
+          <DialogDescription>{message}</DialogDescription>
+        </DialogHeader>
+        {error && <ErrorPage />}
+        <DialogFooter>
+          {buttons.goBack && (
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                setOpen(false)
+                buttons.goBack?.onClick?.()
+              }}
+            >
+              <FormattedMessage
+                id={buttons.goBack.text}
+                defaultMessage={'Cancel'}
+              />
+            </Button>
+          )}
+          {buttons.goNext && (
+            <Button
+              type="button"
+              onClick={() => {
+                buttons.goNext?.onClick?.()
+                setOpen(false)
+              }}
+            >
+              <FormattedMessage
+                id={buttons.goNext.text}
+                defaultMessage={'Continue'}
+              />
+            </Button>
+          )}
+        </DialogFooter>
+      </DialogContent>
+    </DialogPortal>
   </Dialog>
 )
 

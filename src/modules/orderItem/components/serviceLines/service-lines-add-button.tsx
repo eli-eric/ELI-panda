@@ -1,9 +1,9 @@
-import { useCallback } from 'react'
+import { useCallback, useRef } from 'react'
 
 import { PlusButton } from '@/components/Buttons'
 import { Tooltip } from '@/components/Tooltip'
 import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import useTableStateStore from '@/store/useTableStateStore'
 import { TABLE_IDS } from '@/types/constants/tableIds'
 
@@ -13,9 +13,10 @@ import { useServiceLineSelectionStore } from './form/details/store/useServiceLin
 import { ServiceLineV3Wizard } from './form/service-line-v3.wizz'
 
 export const ServiceLinesAddButton = () => {
-  const { openModal, closeModal } = useModalGlobalStore()
+  const { openModal, closeModal } = useDynamicModalStore()
   const { setServiceLine } = useServiceLine()
   const { clearSelections } = useServiceLineSelectionStore()
+  const modalIdRef = useRef<string | undefined>(undefined)
 
   const { reset: resetTable } = useTableStateStore()
 
@@ -55,13 +56,16 @@ export const ServiceLinesAddButton = () => {
       reset()
       resetTable(TABLE_IDS.SERVICE_LINE_ITEMS_SELECT)
       clearSelections()
-      closeModal('dialog1')
+      if (modalIdRef.current) {
+        closeModal(modalIdRef.current)
+      }
     },
     [setServiceLine, resetTable, clearSelections, closeModal]
   )
   // Use useCallback for handleAddServiceLine
   const handleOpenAddServiceLine = () => {
-    openModal('dialog1', {
+    modalIdRef.current = openModal('dialog', {
+      id: 'service-line-add',
       component: ServiceLineV3Wizard,
       props: {
         title: 'Add Service Line',

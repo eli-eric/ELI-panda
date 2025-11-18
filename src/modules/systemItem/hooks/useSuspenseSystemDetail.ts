@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { toast } from 'react-hot-toast'
+import { toast } from 'sonner'
 
 import { useSuspenseGraphQL } from '@/hooks/fetch/useGraphQL'
 import { gql, useFragment } from '@/types/gql'

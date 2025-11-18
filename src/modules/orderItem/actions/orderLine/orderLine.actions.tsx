@@ -3,8 +3,8 @@ import { Edit, MoreVertical, Trash2 } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type { FC, PropsWithChildren } from 'react'
 import { Fragment } from 'react'
-import { toast } from 'react-hot-toast'
 import { useIntl } from 'react-intl'
+import { toast } from 'sonner'
 
 import { Toggle } from '@/components/form/Switch'
 import { Tooltip } from '@/components/Tooltip'
@@ -23,7 +23,7 @@ import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import { useOrderLine } from '@/modules/orderItem/hooks/useOrderLine'
 import type { OrderLineFormType } from '@/modules/orderItem/types/form'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { ROLE } from '@/types/constants/roles'
 import { createMessageValues } from '@/utils/formatters'
 
@@ -120,7 +120,7 @@ export const OrderisDeliveredAction = ({
   })
   const hasRole = usePermission([ROLE.ORDERS_DELIVERY_EDIT, ROLE.ORDERS_EDIT])
   const { setOrderLine } = useOrderLine()
-  const { openModal } = useModalGlobalStore()
+  const { openModal } = useDynamicModalStore()
 
   const { submit } = useSubmit<OrderLineFormType>({
     endpoint: orderLineDelivery,
@@ -141,7 +141,8 @@ export const OrderisDeliveredAction = ({
 
   const handleCheck = () => {
     if (!orderLine.isDelivered) {
-      openModal('dialog1', {
+      openModal('dialog', {
+        id: `order-delivery-${orderLine.uid}`,
         component: OrderIsDeliveryModal,
         props: {
           title: 'Fill missing Serial Number',

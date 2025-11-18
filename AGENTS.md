@@ -1,22 +1,29 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-Source lives in `src/`, grouped by feature modules under `src/modules/*`. Shared shadcn/ui primitives live in `src/components/`, hooks in `src/hooks/`, and Zustand slices in `src/store/`. GraphQL types/codegen output sits in `src/types/gql/`, while server utilities are under `src/server/` and static assets in `public/`. Tests sit beside their targets.
+
+`src/modules/*` holds feature modules that pair UI, hooks, and GraphQL logic per domain. Shared primitives stay in `src/components/`, reusable hooks in `src/hooks/`, and Zustand slices in `src/store/`. GraphQL codegen artifacts live under `src/types/gql/`, server helpers under `src/server/`, and assets in `public/`. Tests reside beside their targets as `*.spec.ts(x)` files with optional local `__mocks__` folders.
 
 ## Build, Test, and Development Commands
-Run `yarn dev` to start the Next.js app on port 5001; never auto-start it for the user. `yarn build` compiles for production and `yarn start` serves the built bundle. Use `yarn lint` for ESLint checks and `yarn format` for Prettier. Execute `yarn test` or `yarn test path/to/file.spec.tsx` for Jest suites. Keep GraphQL typings fresh with `yarn generate` or watch updates via `yarn generate:watch`.
+
+Start Next.js on port 5001 with `yarn dev` only when the user requests it. Ship-ready bundles come from `yarn build`; serve them via `yarn start`. Lint with `yarn lint`, format with `yarn format`, and run Jest suites using `yarn test` or scope to one file (`yarn test path/to/file.spec.tsx`). Launch Cypress UI mode through `yarn cy:open` or headless runs via `yarn cy:run`. Regenerate GraphQL types with `yarn generate`; watch changes using `yarn generate:watch`.
 
 ## Coding Style & Naming Conventions
-TypeScript strict mode, two-space indentation, LF endings, no semicolons, and single quotes are the defaults. Imports are ordered with `eslint-plugin-simple-import-sort`; prefer `import type` when importing only types. Preserve the `.cont.tsx` (data/logic) and `.comp.tsx` (pure UI) split. Constants stay `UPPER_CASE`, Tailwind classes drive styling, and add `data-testid` selectors when tests need stable hooks.
 
-## Design System & Forms
-New UI should use shadcn/ui + Radix primitives. When touching legacy HeadlessUI code, replace it with shadcn/ui equivalents. Forms migrate toward Zod schemas; maintainers may leave existing Yup logic untouched unless editing those areas. Keep React Hook Form patterns consistent and reuse shared form components where available.
+Strict TypeScript, two-space indentation, LF endings, single quotes, and no semicolons are enforced. `eslint-plugin-simple-import-sort` manages import order; prefer `import type` for type-only imports. Maintain the `.cont.tsx` container and `.comp.tsx` presenter split, keep constants `UPPER_CASE`, and rely on Tailwind utilities. Apply `data-testid` sparingly for resilient selectors.
 
-## Modal & UI Patterns
-Use the global modal store (`useModalGlobalStore`) and slots (`sheet`, `dialog1`, `dialog2`). Always pass a `title`, wire `onSubmit`/`onClose`, and size dialogs appropriately. Sheets suit side panels or multi-step flows, while dialog2 nests inside dialog1 when necessary. Clean up listeners or timers in modal teardown callbacks.
+## UI, Forms, and Modal Patterns
+
+Adopt shadcn/ui + Radix primitives by default and replace HeadlessUI when editing legacy code. Coordinate overlays through `useModalGlobalStore` with slots `sheet`, `dialog1`, and `dialog2`, always supplying `title`, `onSubmit`, and `onClose`. Forms run through React Hook Form; prefer Zod for new schemas while leaving untouched Yup flows as-is.
+
+## Architecture Overview
+
+The app is a Next.js 14 + React 19 frontend for the ELI Panda maintenance platform. TanStack Query orchestrates client-side data, Apollo GraphQL fronts a Neo4j backend, and MinIO handles object storage. Zustand stores track global state, custom PandaTable components wrap TanStack Table, and NextAuth.js integrates Azure AD.
 
 ## Testing Guidelines
-Jest with Testing Library covers unit and integration tests. Name suites `*.spec.ts(x)` next to the implementation and focus on behavior visible to end users. Store shared mocks under colocated `__mocks__` directories. Before opening a PR, confirm `yarn lint` and `yarn test` succeed and extend coverage when business logic changes.
+
+Use Jest with Testing Library for unit and integration coverage and Cypress for end-to-end paths. Keep tests co-located, assert observable behavior, and expand suites when logic changes. Always run `yarn lint` and `yarn test` before opening a PR; schedule Cypress where regressions are likely.
 
 ## Commit & Pull Request Guidelines
-Follow the commit prefixes used in history (`feat:`, `fix:`, `chore:`, `refactor:`) and keep messages scoped and descriptive. Pull requests should summarize the change, list verification steps, call out follow-ups, and attach UI screenshots or clips when relevant. Link issues or specs to give reviewers context and request review only after automated checks pass.
+
+Commits follow prefixes like `feat:`, `fix:`, `chore:`, and `refactor:` with scoped messages. In PRs, summarize the change, list verification steps (`yarn lint`, `yarn test`, Cypress runs), link issues or specs, and attach UI evidence when visuals shift. Request review only after automated checks pass and note any deferred follow-ups.

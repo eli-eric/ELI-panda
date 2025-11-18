@@ -1,15 +1,16 @@
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import type { CodebookType } from '@/types/responses/codebook'
 
 import { SystemTypeModalContent } from '../components/system-type-modal-content'
 
 export const useSystemTypeSelectionModal = () => {
-  const { openModal } = useModalGlobalStore()
+  const { openModal } = useDynamicModalStore()
 
   const openSystemTypeModal = (
     onSelect?: (systemType: CodebookType | null) => void
   ) => {
-    openModal('dialog2', {
+    const modalId = openModal('dialog', {
+      id: 'system-type-select',
       component: SystemTypeModalContent,
       props: {
         title: 'Select System Type',
@@ -20,6 +21,8 @@ export const useSystemTypeSelectionModal = () => {
         onSelect: onSelect || (() => {})
       }
     })
+
+    return modalId
   }
 
   return { openSystemTypeModal }

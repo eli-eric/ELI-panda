@@ -20,7 +20,7 @@ export const FilterBadges = ({
   const { addFieldIdToSync } = useFormControlStore()
 
   return (
-    <div>
+    <div className="pb-1">
       {(filters.length > 0 || additionalBadge) && (
         <span className="text-sm pr-2 font-medium text-gray-600 dark:text-gray-200">
           {fm({ id: message.common.filters.filters })}

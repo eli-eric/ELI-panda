@@ -8,7 +8,7 @@ const codebookSchema = z.object({
   uid: z.string(),
   name: z.string(),
   description: z.string().optional(),
-  code: z.string().optional()
+  code: z.string().optional().nullable()
 })
 
 const physicalItemSchema = z

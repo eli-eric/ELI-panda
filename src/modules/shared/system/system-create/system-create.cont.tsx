@@ -9,7 +9,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { FILE_TYPE } from '@/modules/shared/fileManager/types'
 import { ImageGallery } from '@/modules/shared/imageManager/ImageGallery'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { ROLE } from '@/types/constants/roles'
 import { SystemLevel } from '@/types/gql/graphql'
 
@@ -89,14 +89,15 @@ export const SystemCreateContainer: FC = () => {
   }, [parentSystem, formMethods])
 
   const { createSystem, loading } = useSystemCreate(systemImageRef)
-  const { closeModal } = useModalGlobalStore()
+  const { closeModal } = useDynamicModalStore()
 
   const onSubmit = (data: SystemCreateFormData) => {
     createSystem(data)
   }
 
   const onExit = () => {
-    closeModal('sheet')
+    // NOTE: Modal is opened with ID 'system-create' in useSystemCreateSheet.ts
+    closeModal('system-create')
   }
 
   const systemLevel = formMethods.watch('systemLevel') as SystemLevel

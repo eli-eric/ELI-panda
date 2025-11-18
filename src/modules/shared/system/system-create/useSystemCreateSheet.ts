@@ -1,12 +1,12 @@
 import { useCallback } from 'react'
 
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 
 import { useSystemCreateParentStore } from './store/useSystemCreateParentStore'
 import { SystemCreateContainer } from './system-create.cont'
 
 export const useSystemCreateSheet = () => {
-  const { openModal } = useModalGlobalStore()
+  const { openModal } = useDynamicModalStore()
   const { setParentUid, clear } = useSystemCreateParentStore()
 
   const openSheetWithParent = useCallback(
@@ -20,7 +20,8 @@ export const useSystemCreateSheet = () => {
       }
       // If no parentUid, store remains with null (from clear())
 
-      openModal('sheet', {
+      const modalId = openModal('sheet', {
+        id: 'system-create',
         component: SystemCreateContainer,
         props: {
           size: 'l',
@@ -30,6 +31,8 @@ export const useSystemCreateSheet = () => {
             : 'Create a new system in the database'
         }
       })
+
+      return modalId
     },
     [openModal, setParentUid, clear]
   )

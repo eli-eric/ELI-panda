@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 
 import type { ModalSize } from '@/components/ui/dialog'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import type { ContactPersonRole, Employee } from '@/types/gql/graphql'
 
 import { useRoomCardStore } from '../../../store/useRoomCardStore'
@@ -10,7 +10,7 @@ import { ContactHallModalContainer } from '../ContactHallModal.cont'
 import type { ContactHallFormData } from '../schemas/contactHall.schema'
 
 export const useContactHallModal = () => {
-  const { openModal, closeModal } = useModalGlobalStore()
+  const { openModal, closeModal } = useDynamicModalStore()
   const { setNewHallContact } = useRoomCardStore()
   const { control } = useFormContext()
   const { append, fields } = useFieldArray({
@@ -24,7 +24,8 @@ export const useContactHallModal = () => {
       .map((field: any) => field?.employee?.uid)
       .filter(Boolean)
 
-    openModal('dialog1', {
+    const modalId = openModal('dialog', {
+      id: 'contact-hall',
       component: ContactHallModalContainer,
       props: {
         title: 'Add Contact Person (Hall)',
@@ -54,7 +55,7 @@ export const useContactHallModal = () => {
           })
 
           // Close modal
-          closeModal('dialog1')
+          closeModal(modalId)
         }
       }
     })

@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { type Control, type FieldValues, useFormState } from 'react-hook-form'
-import { toast } from 'react-hot-toast'
+import { toast } from 'sonner'
 
 interface Props<T extends FieldValues> {
   control: Control<T, any>

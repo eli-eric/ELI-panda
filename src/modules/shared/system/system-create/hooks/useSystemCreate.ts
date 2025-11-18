@@ -13,7 +13,7 @@ import {
 } from '@/modules/systemItem/utils/hookHelpers'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
 import { addSubsystem } from '@/modules/systems/utils'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { gql } from '@/types/gql'
 import type { SystemLevel } from '@/types/gql/graphql'
 import { Actions } from '@/types/gql/graphql'
@@ -40,7 +40,7 @@ export const useSystemCreate = (
   const { queryKey, refetch } = useSystems('systems')
   const queryClient = useQueryClient()
   const { data: session } = useSession()
-  const { closeModal } = useModalGlobalStore()
+  const { closeModal } = useDynamicModalStore()
   const { parentUid, clear } = useSystemCreateParentStore()
 
   // Handle cache updates
@@ -67,7 +67,8 @@ export const useSystemCreate = (
       )
 
       handleCacheUpdate(body)
-      closeModal('sheet')
+      // NOTE: Modal is opened with ID 'system-create' in useSystemCreateSheet.ts
+      closeModal('system-create')
       clear()
     },
     [intl, handleCacheUpdate, closeModal, clear]
@@ -93,7 +94,8 @@ export const useSystemCreate = (
         )
 
         handleCacheUpdate(body)
-        closeModal('sheet')
+        // NOTE: Modal is opened with ID 'system-create' in useSystemCreateSheet.ts
+        closeModal('system-create')
         clear()
       }
     },

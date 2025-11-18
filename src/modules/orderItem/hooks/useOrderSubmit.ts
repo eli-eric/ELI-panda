@@ -1,13 +1,53 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import type { AxiosError, AxiosResponse } from 'axios'
 import { useRouter } from 'next/router'
-import { toast } from 'react-hot-toast'
+import { toast } from 'sonner'
 
 import { PATH } from '@/types/constants/paths'
+import type { QueryFetcherKey } from '@/utils/fetcher'
 import { queryMutate } from '@/utils/fetcher'
 
 import type { OrderDetailFormType } from '../types/form'
+import { addUuidsToOrderData } from '../utils/order-transforms'
 import useOrderDetail from './useOrderDetail'
+
+/**
+ * Updates cache and invalidates relevant queries
+ */
+const updateCacheAndInvalidate = async (
+  queryClient: ReturnType<typeof useQueryClient>,
+  queryKey: QueryFetcherKey,
+  orderDetail: OrderDetailFormType
+) => {
+  // Immediate cache update for order detail
+  queryClient.setQueryData(queryKey, orderDetail)
+
+  // Invalidate all relevant queries (await to ensure completion)
+  await Promise.all([
+    queryClient.invalidateQueries({ queryKey }),
+    queryClient.invalidateQueries({ queryKey: ['orders'] })
+  ])
+}
+
+/**
+ * Handles navigation and displays notifications after successful save
+ */
+const handleNavigation = (
+  router: ReturnType<typeof useRouter>,
+  saveAndExit: boolean,
+  orderDetail: OrderDetailFormType,
+  currentUid: string | undefined
+) => {
+  if (saveAndExit) {
+    router.push(PATH.ORDERS)
+  } else {
+    // After creating a new order, redirect to its detail
+    if (!currentUid) {
+      router.push(PATH.ORDER + '/' + orderDetail.uid)
+    }
+    toast.success('Order was successfully saved.')
+  }
+}
 
 export const useOrderSubmit = (formReset: (t: any) => void) => {
   const router = useRouter()
@@ -37,47 +77,15 @@ export const useOrderSubmit = (formReset: (t: any) => void) => {
     async (data: AxiosResponse<OrderDetailFormType, any>) => {
       const orderDetail = data.data
 
-      // Příprava dat pro reset formu s uuid
-      const resetData = {
-        ...orderDetail,
-        orderLines:
-          orderDetail?.orderLines &&
-          orderDetail?.orderLines.map(orderLine => ({
-            ...orderLine,
-            uuid: orderLine.uid
-          })),
-        serviceLines:
-          orderDetail?.serviceLines &&
-          orderDetail?.serviceLines.map(serviceLine => ({
-            ...serviceLine,
-            uuid: serviceLine.uid
-          })),
-        orderDate: orderDetail?.orderDate,
-        orderStatus: orderDetail?.orderStatus || {
-          uid: 'c5ef9d00-ac38-44c1-b48a-fde0d7095c54',
-          name: 'Requested'
-        }
-      }
-
+      // Prepare data for form reset (add uuid)
+      const resetData = addUuidsToOrderData(orderDetail)
       formReset(resetData)
 
-      // Okamžitá aktualizace cache detailu objednávky
-      queryClient.setQueryData(queryKey, orderDetail)
+      // Cache management
+      await updateCacheAndInvalidate(queryClient, queryKey, orderDetail)
 
-      // Invalidovat všechny relevantní queries (awaitat pro zajištění dokončení)
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey }),
-        queryClient.invalidateQueries({ queryKey: ['orders'] })
-      ])
-
-      if (saveAndExit) {
-        router.push(PATH.ORDERS)
-      } else {
-        if (!uid) {
-          router.push(PATH.ORDER + '/' + orderDetail.uid)
-        }
-        toast.success(`Order was successfully saved.`)
-      }
+      // Navigation and UI feedback
+      handleNavigation(router, saveAndExit, orderDetail, uid)
     }
 
   const submit = (data: OrderDetailFormType, saveAndExit: boolean) => {

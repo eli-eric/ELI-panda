@@ -2,7 +2,7 @@ import type { ColumnDef } from '@tanstack/react-table'
 import Link from 'next/link'
 import { useMemo } from 'react'
 
-import { Tooltip } from '@/components/Tooltip'
+import { SystemPathTooltip } from '@/components/system/SystemPathTooltip.comp'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { IconCell } from '@/modules/systems/components/table/cells/IconCell'
@@ -30,7 +30,7 @@ export const useSpareForColumns = (tableId?: string) => {
         accessorKey: 'name',
         id: 'name',
         cell: ({ getValue, row: { original } }) => (
-          <Tooltip content={original.parentPath?.map(v => v?.name).join(' > ')}>
+          <SystemPathTooltip parentPath={original.parentPath}>
             <Link href={PATH.SYSTEM + '/' + original.uid}>
               <Button
                 variant={'link'}
@@ -46,7 +46,7 @@ export const useSpareForColumns = (tableId?: string) => {
                 {getValue()}
               </Button>
             </Link>
-          </Tooltip>
+          </SystemPathTooltip>
         )
       },
       {

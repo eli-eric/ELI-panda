@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 
 import type { DisabledFields } from '../SystemsFilterButton.cont'
 import { SystemsFilterSheet } from '../SystemsFilterSheet.cont'
@@ -12,8 +12,12 @@ interface UseSystemsFilterSheetProps {
   side?: 'top' | 'right' | 'bottom' | 'left'
 }
 
+/**
+ * Opens system filter sheet using new dynamic modal system
+ * Supports proper z-index layering when opened from other modals
+ */
 export const useSystemsFilterSheet = () => {
-  const { openModal } = useModalGlobalStore()
+  const { openModal } = useDynamicModalStore()
 
   const openFilterSheet = useCallback(
     ({
@@ -22,7 +26,9 @@ export const useSystemsFilterSheet = () => {
       disabledFields,
       side = 'left'
     }: UseSystemsFilterSheetProps = {}) => {
-      openModal('sheet', {
+      // Open with custom ID for easy reference and proper z-index management
+      const modalId = openModal('sheet', {
+        id: `system-filters-${tableId}`,
         component: SystemsFilterSheet,
         props: {
           title: 'System Filters',
@@ -33,6 +39,8 @@ export const useSystemsFilterSheet = () => {
           disabledFields
         }
       })
+
+      return modalId
     },
     [openModal]
   )

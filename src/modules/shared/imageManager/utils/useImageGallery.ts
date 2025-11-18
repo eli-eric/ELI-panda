@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useCallback, useRef } from 'react'
-import toast from 'react-hot-toast'
+import { toast } from 'sonner'
 
 import axiosInstance from '@/core/axios/axiosInstance'
 

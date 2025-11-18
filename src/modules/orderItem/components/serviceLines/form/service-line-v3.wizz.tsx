@@ -10,6 +10,7 @@ import { FormWizard } from '@/modules/shared/form/wizardV3/FormWizard'
 import { WizardStep } from '@/modules/shared/form/wizardV3/WizardStep'
 import { useFilters } from '@/modules/shared/table/pandaTable/hooks/useFilters'
 import useTableStateStore from '@/store/useTableStateStore'
+import { SERVICE_LINE_DEFAULTS } from '@/types/constants/formDefaults'
 import { ITEM_USAGE_FILTERS } from '@/types/constants/itemUsageFilters'
 import { TABLE_IDS } from '@/types/constants/tableIds'
 
@@ -124,7 +125,10 @@ export const ServiceLineV3Wizard = ({ handleSubmit }: Props) => {
   }, [])
 
   return (
-    <FormWizard<ServiceLineFormType> onSubmit={handleSubmit}>
+    <FormWizard<ServiceLineFormType>
+      onSubmit={handleSubmit}
+      initialValues={SERVICE_LINE_DEFAULTS}
+    >
       <WizardStep
         id="basicInfo"
         title={fm({ id: messages.steps.step1.title })}

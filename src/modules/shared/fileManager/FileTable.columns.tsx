@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { fuzzyFilter } from '@/components/ui/table'
 import { message } from '@/i18n/src/messages'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 
 import { FileActions } from './FileActions'
 import { useLinkUpdate } from './hooks/useLinks'
@@ -71,12 +71,14 @@ function openTagModal({
 }) {
   if (typeof window === 'undefined') return // Prevent SSR execution
 
-  const { openModal } = useModalGlobalStore.getState()
-  openModal('dialog1', {
+  const { openModal } = useDynamicModalStore.getState()
+  const modalId = openModal('dialog', {
+    id: `add-tag-${file?.id}`,
     component: TagModalContent,
     props: { file, onAddTag, title: message.common.files.addTagTitle },
     onClose: undefined
   })
+  return modalId
 }
 
 interface FileColumnsProps {

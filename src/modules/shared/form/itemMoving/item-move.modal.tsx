@@ -1,6 +1,6 @@
 import React, { type FC } from 'react'
 
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 
 import { useWizardStore } from '../wizard/store/useWizardStore'
 import { ItemMoveContainer } from './item-move.cont'
@@ -9,15 +9,18 @@ import { useModalWizardStore } from './store/useModalWizardStore'
 export function openItemMoveModal() {
   if (typeof window === 'undefined') return // Prevent SSR execution
 
-  const { openModal } = useModalGlobalStore.getState()
+  const { openModal } = useDynamicModalStore.getState()
 
-  openModal('dialog1', {
+  const modalId = openModal('dialog', {
+    id: 'item-move',
     component: () => <ItemMoveModalContent />,
     props: {
       title: 'Move Item',
       size: 'l' as const
     }
   })
+
+  return modalId
 }
 
 export const ItemMoveModalContent: FC = () => {

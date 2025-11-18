@@ -6,8 +6,8 @@ import {
 import { Edit, MoreVertical, Trash2 } from 'lucide-react'
 import { type FC } from 'react'
 import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
 import { FormattedMessage, useIntl } from 'react-intl'
+import { toast } from 'sonner'
 
 import { Form } from '@/components/form/Form'
 import { Input } from '@/components/form/inputs'
@@ -23,7 +23,7 @@ import usePermission from '@/hooks/usePermission'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { BASE_URL } from '@/types/constants/common'
 import { ROLE } from '@/types/constants/roles'
 import type { CodebookType } from '@/types/responses/codebook'
@@ -39,15 +39,19 @@ interface Props {
   ) => Promise<QueryObserverResult<CodebookType[], Error>>
 }
 
+// Store modalId in closure for EditSystemTypeGroupModalContent to access
+let currentEditGroupModalId: string | undefined
+
 function openEditSystemTypeGroupModal(
   systemTypeGroup: CodebookType,
   refetch: Props['refetch']
 ) {
   if (typeof window === 'undefined') return // Prevent SSR execution
 
-  const { openModal } = useModalGlobalStore.getState()
+  const { openModal } = useDynamicModalStore.getState()
 
-  openModal('dialog1', {
+  currentEditGroupModalId = openModal('dialog', {
+    id: `edit-system-type-group-${systemTypeGroup.uid}`,
     component: () => (
       <EditSystemTypeGroupModalContent
         systemTypeGroup={systemTypeGroup}
@@ -59,13 +63,15 @@ function openEditSystemTypeGroupModal(
       size: 'm' as const
     }
   })
+
+  return currentEditGroupModalId
 }
 
 const EditSystemTypeGroupModalContent: FC<{
   systemTypeGroup: CodebookType
   refetch: Props['refetch']
 }> = ({ systemTypeGroup, refetch }) => {
-  const { closeModal } = useModalGlobalStore()
+  const { closeModal } = useDynamicModalStore()
 
   const formMethods = useForm({
     defaultValues: {
@@ -85,12 +91,16 @@ const EditSystemTypeGroupModalContent: FC<{
     },
     onSuccess: () => {
       refetch()
-      closeModal('dialog1')
+      if (currentEditGroupModalId) {
+        closeModal(currentEditGroupModalId)
+      }
       toast.success(`${systemTypeGroup.name} was updated.`)
     },
     onError: () => {
       toast.error(`Failed to update ${systemTypeGroup.name}.`)
-      closeModal('dialog1')
+      if (currentEditGroupModalId) {
+        closeModal(currentEditGroupModalId)
+      }
     }
   })
 
@@ -106,7 +116,11 @@ const EditSystemTypeGroupModalContent: FC<{
       <div className="flex justify-end gap-2">
         <Button
           variant="outline"
-          onClick={() => closeModal('dialog1')}
+          onClick={() => {
+            if (currentEditGroupModalId) {
+              closeModal(currentEditGroupModalId)
+            }
+          }}
           disabled={isPending}
         >
           <FormattedMessage id={messages.cancel} defaultMessage="Cancel" />
