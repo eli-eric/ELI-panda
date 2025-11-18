@@ -6,7 +6,7 @@ import { queryFetcher } from '@/utils/fetcher'
 
 import type { GlobalSearchResponse } from '../types'
 
-const GLOBAL_SEARCH_PAGINATION = '{"pageSize": 20, "page": 1}'
+const GLOBAL_SEARCH_PAGINATION = '{"pageSize": 50, "page": 1}'
 
 interface UseGlobalSearchOptions {
   search?: string
