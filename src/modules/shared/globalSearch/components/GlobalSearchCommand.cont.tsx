@@ -1,5 +1,5 @@
-import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
+import { useSession } from 'next-auth/react'
 import { useCallback, useMemo } from 'react'
 
 import { useDebounce } from '@/hooks/useDebounce'
@@ -20,8 +20,14 @@ import { GlobalSearchCommand } from './GlobalSearchCommand.comp'
 export const GlobalSearchCommandContainer = () => {
   const router = useRouter()
   const { data: session } = useSession()
-  const { searchValue, open, setSearchValue, setOpen, clearSearch, toggleOpen } =
-    useGlobalSearchStore()
+  const {
+    searchValue,
+    open,
+    setSearchValue,
+    setOpen,
+    clearSearch,
+    toggleOpen
+  } = useGlobalSearchStore()
 
   // Debounce search input to avoid excessive API calls
   const debouncedSearch = useDebounce(searchValue, 500)

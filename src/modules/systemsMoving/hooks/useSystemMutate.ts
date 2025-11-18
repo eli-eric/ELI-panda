@@ -4,30 +4,50 @@ import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
 import { gql } from '@/types/gql'
 
 const UPDATE_SYSTEM = gql(`
-  mutation UpdateSystemParentMutation(
+  mutation UpdateSystemMovingMutation(
     $where: SystemWhere
     $update: SystemUpdateInput!
-    $systemFromUid: String
-    $systemUid: String
   ) {
     updateSystems(where: $where, update: $update) {
       systems {
         ...SystemDetail
       }
     }
-    systemMovedFromResolver(
-      systemFromUid: $systemFromUid
+  }
+`)
+
+const MOVE_SYSTEM = gql(`
+  mutation MoveSystemMutation(
+    $systemUid: ID!
+    $newParentUid: ID!
+    $oldParentUid: ID
+  ) {
+    moveSystem(
       systemUid: $systemUid
+      newParentUid: $newParentUid
+      oldParentUid: $oldParentUid
     )
   }
 `)
 
 export const useSystemMutation = () => {
-  const { mutate, isPending } = useGraphQLMutation(UPDATE_SYSTEM, {
-    onError: error => {
-      toast.error('Something went wrong: ' + error.message)
-    }
-  })
+  const { mutate: updateMutate, isPending: updatePending } =
+    useGraphQLMutation(UPDATE_SYSTEM, {
+      onError: error => {
+        toast.error('Failed to update system: ' + error.message)
+      }
+    })
 
-  return { update: mutate, loading: isPending }
+  const { mutate: moveMutate, isPending: movePending } =
+    useGraphQLMutation(MOVE_SYSTEM, {
+      onError: error => {
+        toast.error('Failed to move system: ' + error.message)
+      }
+    })
+
+  return {
+    update: updateMutate,
+    moveSystem: moveMutate,
+    loading: updatePending || movePending
+  }
 }
