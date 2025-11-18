@@ -139,7 +139,7 @@ describe('useGlobalSearch', () => {
     expect(result.current.queryKey[1]).toEqual({
       query: {
         searchText: 'test',
-        pagination: '{"pageSize": 20, "page": 1}'
+        pagination: '{"pageSize": 50, "page": 1}'
       }
     })
   })
@@ -208,7 +208,7 @@ describe('useGlobalSearch', () => {
     expect(result.current.queryKey[1]).toEqual({
       query: {
         searchText: 'test',
-        pagination: '{"pageSize": 20, "page": 1}'
+        pagination: '{"pageSize": 50, "page": 1}'
       }
     })
   })
@@ -232,7 +232,7 @@ describe('useGlobalSearch', () => {
       {
         query: {
           searchText: 'test search',
-          pagination: '{"pageSize": 20, "page": 1}'
+          pagination: '{"pageSize": 50, "page": 1}'
         }
       }
     ])
