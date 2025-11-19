@@ -36,22 +36,23 @@ export const useEmployeeModal = ({
       props: {
         title: 'Add Employee',
         size: 'l' as ModalSize,
-        existingEmployeeUids,
-        onSubmit: (data: EmployeeFormData) => {
-          if (data.employee) {
-            // Add to form array with full employee data
-            append(data.employee as any)
-
-            // Notify parent via callback
-            onEmployeeAdded(data.employee as Employee)
-
-            // Close modal
-            closeModal(modalId)
-          }
-        }
+        existingEmployeeUids
       },
       onClose: () => {
         // Cleanup if needed
+      },
+      onSubmit: (data: EmployeeFormData) => {
+        console.log('Employee modal submitted data:', data)
+        if (data.employee) {
+          // Add to form array with full employee data
+          append(data.employee as any)
+
+          // Notify parent via callback
+          onEmployeeAdded(data.employee as Employee)
+
+          // Close modal
+          closeModal(modalId)
+        }
       }
     })
   }, [openModal, closeModal, fields, append, onEmployeeAdded])
