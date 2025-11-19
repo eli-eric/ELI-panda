@@ -3,8 +3,6 @@ import Link from 'next/link'
 import { useMemo } from 'react'
 
 import { SystemPathTooltip } from '@/components/system/SystemPathTooltip.comp'
-import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
 import { IconCell } from '@/modules/systems/components/table/cells/IconCell'
 import type { ITEM_USAGE } from '@/modules/systems/types/constants'
 import { PATH } from '@/types/constants/paths'
@@ -48,18 +46,11 @@ export const useSparePartsColumns = () => {
             }
           }) => (
             <SystemPathTooltip parentPath={parentPath}>
-              <Link href={PATH.SYSTEM + '/' + uid}>
-                <Button
-                  variant={'link'}
-                  title={getValue()}
-                  type="button"
-                  size={'sm'}
-                  className={cn(
-                    'text-inherit hover:underline h-4 font-sm cursor-pointer'
-                  )}
-                >
-                  {getValue()}
-                </Button>
+              <Link
+                className="text-primary underline-offset-4 hover:underline"
+                href={PATH.SYSTEM + '/' + uid}
+              >
+                {getValue()}
               </Link>
             </SystemPathTooltip>
           )
@@ -77,6 +68,7 @@ export const useSparePartsColumns = () => {
         {
           id: 'coverage',
           header: 'SP Assigned',
+          size: 100,
           meta: {
             className: 'text-right'
           },
@@ -91,12 +83,13 @@ export const useSparePartsColumns = () => {
         {
           id: 'eun',
           header: 'EUN',
+          size: 100,
           accessorFn: row => row?.node.physicalItem?.eun as string
         },
         {
           id: 'actions',
           header: 'Actions',
-          size: 20,
+          size: 40,
           cell: SparePartsActionsCell
         }
       ]

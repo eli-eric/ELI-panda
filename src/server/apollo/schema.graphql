@@ -3,6 +3,7 @@ type Mutation {
   updatedByResolver(node: String, nodeUid: String, action: String): String
   itemOriginatedResolver(itemUid: String, systemOriginatedUid: String): String
   systemMovedFromResolver(systemFromUid: String, systemUid: String): String
+  moveSystem(systemUid: ID!, newParentUid: ID!, oldParentUid: ID): String
 }
 
 type JWT @jwt {

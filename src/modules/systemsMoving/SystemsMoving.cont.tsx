@@ -10,7 +10,7 @@ import type { SystemDetail } from '@/types/responses/systems'
 import { FilterBadges } from '../shared/form/FilterBadges'
 import { SystemFilterButtonContainer } from '../systems/components/filters/SystemsFilterButton.cont'
 import { SystemsComponent } from '../systems/Systems.comp'
-import { SystemMovingModal } from './form/SystemMoving.modal'
+import { useSystemMovingDialog } from './hooks/useSystemMovingDialog'
 import { useSystemMovingStore } from './store/useSystemMovingStore'
 
 interface SystemsMovingType extends SystemDetail {
@@ -30,7 +30,7 @@ export type SystemMovingFormType = {
 const SystemsMovingContainer = () => {
   const { tableIdLeft, tableIdRight, setChildSystem, setParentSystem } =
     useSystemMovingStore()
-  const [openModal, setOpenModal] = useState(false)
+  const openSystemMovingDialog = useSystemMovingDialog()
 
   const onDropHandler = useCallback(
     (from: SystemsMovingType, to: SystemsMovingType) => {
@@ -44,16 +44,16 @@ const SystemsMovingContainer = () => {
       }
       setChildSystem(from)
       setParentSystem(to)
-      setOpenModal(true)
+      openSystemMovingDialog(from, to)
     },
-    [setChildSystem, setParentSystem, setOpenModal]
+    [setChildSystem, setParentSystem, openSystemMovingDialog]
   )
 
   const [showLeft, setShowLeft] = useState(true)
-  const toggleLeft = useCallback(() => setShowLeft(!showLeft), [showLeft])
+  const toggleLeft = useCallback(() => setShowLeft(prev => !prev), [])
 
   const [showRight, setShowRight] = useState(true)
-  const toggleRight = useCallback(() => setShowRight(!showRight), [showRight])
+  const toggleRight = useCallback(() => setShowRight(prev => !prev), [])
 
   return (
     <Fragment>
@@ -132,8 +132,6 @@ const SystemsMovingContainer = () => {
           />
         )}
       </div>
-
-      <SystemMovingModal open={openModal} setOpen={setOpenModal} />
     </Fragment>
   )
 }

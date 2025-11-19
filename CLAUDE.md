@@ -80,8 +80,6 @@ fm({ id: message.common.globalSearch.title })
 
 ## Design System Migration
 
-The codebase is currently migrating from HeadlessUI to shadcn/ui + Radix UI components:
-
 ### Current State
 
 - **New components**: Use shadcn/ui components (Dialog, Sheet, Button, Card, etc.)

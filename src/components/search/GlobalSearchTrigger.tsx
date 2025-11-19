@@ -5,11 +5,11 @@ import { useIntl } from 'react-intl'
 
 import { Badge } from '@/components/ui/badge'
 import { message } from '@/i18n/src/messages'
+import { cn } from '@/lib/utils'
 import {
   useGlobalSearchShortcut,
   useOpenGlobalSearch
 } from '@/modules/shared/globalSearch'
-import { cn } from '@/lib/utils'
 
 interface GlobalSearchTriggerProps {
   placeholder?: string
