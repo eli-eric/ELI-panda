@@ -1,9 +1,15 @@
 import type { CellContext } from '@tanstack/react-table'
+import { useRouter } from 'next/router'
+import { useIntl } from 'react-intl'
 import { toast } from 'sonner'
 
 import { TableDeleteButton } from '@/components/Buttons'
+import { Button } from '@/components/ui/button'
+import { isFeatureEnabled } from '@/config/featureFlags'
 import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
 import useWarningModal from '@/hooks/useWarningModal'
+import { message } from '@/i18n/src/messages'
+import { useSpareDialog } from '@/modules/shared/system/use-spare/useSpareDialog'
 import { gql } from '@/types/gql'
 import type { SystemInterfaceSparePartsRelationship } from '@/types/gql/graphql'
 
@@ -40,12 +46,25 @@ export const SparePartsActionsCell = ({
   }
 }: CellContext<SystemInterfaceSparePartsRelationship, string>) => {
   const { systemDetail, refetch } = useSystemDetail()
+  const router = useRouter()
+  const openUseSpare = useSpareDialog()
   const [recalculate] = useRecalculate({
     onSuccess: () => {
       refetch()
       toast.success('Spare part deleted successfully')
     }
   })
+  const { formatMessage: fm } = useIntl()
+
+  const handleUseSpare = (spareItemUid: string, systemUid: string) => {
+    return () => {
+      openUseSpare({
+        systemUid,
+        spareItemUid,
+        onSuccess: () => router.reload()
+      })
+    }
+  }
 
   const withWarningModal = useWarningModal(
     'Make sure you have a saved changes before deleting related spare part. Page will be reloaded after this action. Are you sure you want to continue?'
@@ -84,7 +103,18 @@ export const SparePartsActionsCell = ({
   }
 
   return (
-    <div className="flex align-middle">
+    <div className="flex align-middle justify-center items-center">
+      <Button
+        onClick={handleUseSpare(
+          node.physicalItem?.uid || '',
+          systemDetail?.uid || ''
+        )}
+        className="text-[9px] h-5 w-8"
+        size="sm"
+        disabled={!isFeatureEnabled('enableSparePartsAssignment')}
+      >
+        {fm({ id: message.common.systemOverlay.useSpare })}
+      </Button>
       <TableDeleteButton onClick={handleDelete} />
     </div>
   )
