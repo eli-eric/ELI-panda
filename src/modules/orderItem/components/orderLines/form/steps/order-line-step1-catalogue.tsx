@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { useIntl } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import { Tooltip } from '@/components/Tooltip'
 import { Button } from '@/components/ui/button'
@@ -94,7 +94,9 @@ export const OrderLineStep1Catalogue = ({
             onClick={() => openCreateDialog(handleItemCreated)}
             disabled={isApplyingFilter}
           >
-            Create New Item
+            <FormattedMessage
+              id={message.ordersPage.orderLines.wizard.steps.step1.createCatalogueEntry}
+            />
           </Button>
         }
       />

@@ -872,7 +872,8 @@ export const messages = {
             title: 'Select Item',
             helperText:
               'Select an item from the catalogue or continue to enter details manually',
-            continueWithoutSelection: 'Continue without selection'
+            continueWithoutSelection: 'Continue without selection',
+            createCatalogueEntry: 'Create new catalogue entry'
           },
           step2: {
             title: 'Order Details'
