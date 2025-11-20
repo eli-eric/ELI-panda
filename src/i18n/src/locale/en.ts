@@ -321,7 +321,11 @@ export const messages = {
       moveSystemsHere: 'Move Systems here'
     },
     systemsMoving: {
-      targetSystem: 'Target System:'
+      targetSystem: 'Target System:',
+      dialog: {
+        title: 'Move System',
+        description: 'Configure the system settings before moving it'
+      }
     },
     systemsSpareParts: {
       assignSpareParts: 'Assign Spare Parts'

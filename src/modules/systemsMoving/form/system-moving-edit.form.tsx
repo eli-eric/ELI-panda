@@ -1,15 +1,20 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useCallback, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 import { toast } from 'sonner'
 
-import { FormModal } from '@/components/form/FormModal'
+import { Form } from '@/components/form/Form'
+import { SheetFormButtons } from '@/components/sheet-form-buttons'
+import { message } from '@/i18n/src/messages'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
 import {
   addSubsystem,
   filterSubsystem,
   filterSubsystemFromSubsystems
 } from '@/modules/systems/utils'
+import { useDynamicModalStore } from '@/store/useDynamicModalStore'
+import { ROLE } from '@/types/constants/roles'
 import type { SystemDetail } from '@/types/responses/systems'
 import { whereC, whereN } from '@/utils/graphql/mutations'
 
@@ -18,28 +23,38 @@ import { useSystemMovingStore } from '../store/useSystemMovingStore'
 import type { SystemMovingFormType } from '../SystemsMoving.cont'
 import { SystemMovingForm } from './SystemMoving.form'
 
-interface Props {
-  open: boolean
-  setOpen: (open: boolean) => void
+interface SystemsMovingType extends SystemDetail {
+  tableId: string
 }
 
-export const SystemMovingModal = ({ open, setOpen }: Props) => {
-  const formMethods = useForm<SystemMovingFormType>()
-  const { setValue, reset } = formMethods
+interface SystemMovingEditFormProps {
+  childSystem: SystemsMovingType
+  parentSystem: SystemsMovingType
+  onClose?: () => void
+}
 
-  const { parentSystem, childSystem, tableIdLeft, tableIdRight, clear } =
-    useSystemMovingStore()
+export const SystemMovingEditForm = ({
+  childSystem,
+  parentSystem,
+  onClose
+}: SystemMovingEditFormProps) => {
+  const { formatMessage: fm } = useIntl()
+  const formMethods = useForm<SystemMovingFormType>()
+  const { setValue, reset, formState } = formMethods
+
+  const { tableIdLeft, tableIdRight, clear } = useSystemMovingStore()
 
   const systemsLeft = useSystems(tableIdLeft)
   const systemsRight = useSystems(tableIdRight)
 
   const queryClient = useQueryClient()
+  const { closeModal } = useDynamicModalStore()
 
   const childParentUid =
     childSystem?.parentPath &&
     childSystem?.parentPath[childSystem?.parentPath?.length - 1].uid
 
-  const { update } = useSystemMutation()
+  const { update, moveSystem, loading } = useSystemMutation()
 
   const mutateSubsystem = useCallback(
     (system, method, formData) => {
@@ -84,7 +99,6 @@ export const SystemMovingModal = ({ open, setOpen }: Props) => {
       }
       const currentAction =
         systemActions[parentSystem?.tableId as keyof typeof systemActions]
-      //const isSameTable = parentSystem?.tableId === childSystem?.tableId
 
       if (!currentAction || !childSystem) {
         return
@@ -94,9 +108,9 @@ export const SystemMovingModal = ({ open, setOpen }: Props) => {
         ['subsystems', { uid: parentSystem?.uid }],
         prev => {
           if (prev) {
-            const newSubsystems = [...prev] // Create a copy of the previous array
-            newSubsystems.push(childSystem) // Add the childSystem to the new array
-            return newSubsystems // Return the new array
+            const newSubsystems = [...prev]
+            newSubsystems.push(childSystem)
+            return newSubsystems
           }
           return prev
         }
@@ -120,6 +134,7 @@ export const SystemMovingModal = ({ open, setOpen }: Props) => {
         `System ${childSystem.name} was moved under ${parentSystem?.name}`
       )
       clear()
+      closeModal('system-moving-dialog')
     },
     [
       childSystem,
@@ -131,7 +146,8 @@ export const SystemMovingModal = ({ open, setOpen }: Props) => {
       childParentUid,
       queryClient,
       mutateSubsystem,
-      clear
+      clear,
+      closeModal
     ]
   )
 
@@ -148,15 +164,12 @@ export const SystemMovingModal = ({ open, setOpen }: Props) => {
 
   const updateSystem = useCallback(
     (data: SystemMovingFormType) => {
+      // Step 1: Update system fields (name, location, zone, responsible)
       update(
         {
           where: { uid: childSystem?.uid },
           update: {
             name: data.name,
-            parentSystem: {
-              disconnect: whereN(childParentUid),
-              connect: whereN(parentSystem?.uid)
-            },
             location: {
               connect: data.location?.uid
                 ? whereC(data.location?.uid)
@@ -179,33 +192,58 @@ export const SystemMovingModal = ({ open, setOpen }: Props) => {
                 ? whereN(childSystem?.zone?.uid)
                 : undefined
             }
-          },
-          systemFromUid: childParentUid,
-          systemUid: childSystem?.uid
+          }
         },
         {
           onSuccess: () => {
-            onSuccess(data)
+            // Step 2: Move system in hierarchy using custom resolver
+            moveSystem(
+              {
+                systemUid: childSystem?.uid,
+                newParentUid: parentSystem?.uid,
+                oldParentUid: childParentUid
+              },
+              {
+                onSuccess: () => {
+                  onSuccess(data)
+                }
+              }
+            )
           }
         }
       )
     },
-    [childSystem, childParentUid, parentSystem, update, onSuccess]
+    [childSystem, childParentUid, parentSystem, update, moveSystem, onSuccess]
   )
 
+  const handleExit = useCallback(() => {
+    reset()
+    onClose?.()
+  }, [reset, onClose])
+
   return (
-    <FormModal
-      formMethods={formMethods}
-      onSubmit={updateSystem}
-      open={open}
-      setOpen={setOpen}
-    >
-      <SystemMovingForm
-        parentPath={[
-          ...(parentSystem?.parentPath || []),
-          { name: parentSystem?.name || '', uid: parentSystem?.uid || '' }
-        ]}
+    <div className="space-y-4">
+      <SheetFormButtons
+        onSubmit={formMethods.handleSubmit(updateSystem)}
+        onExit={handleExit}
+        editRole={ROLE.ADMIN}
+        loading={loading}
+        isFormDirty={formState.isDirty}
+        saveLabel={fm({ id: message.common.buttons.save })}
+        exitLabel={fm({ id: message.common.buttons.exit })}
       />
-    </FormModal>
+      <Form
+        formMethods={formMethods}
+        onSubmit={updateSystem}
+        enableLeaveWarning={false}
+      >
+        <SystemMovingForm
+          parentPath={[
+            ...(parentSystem?.parentPath || []),
+            { name: parentSystem?.name || '', uid: parentSystem?.uid || '' }
+          ]}
+        />
+      </Form>
+    </div>
   )
 }
