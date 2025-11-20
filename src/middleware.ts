@@ -118,7 +118,7 @@ export async function middleware(request: NextRequest) {
   // Add Content Security Policy header
   response.headers.set(
     'Content-Security-Policy',
-    `default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src ${connectSrc}; frame-ancestors 'self';`
+    `default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src ${connectSrc}; frame-src https://layout.eli-beams.eu; frame-ancestors 'self';`
   )
 
   // Add X-Frame-Options to prevent clickjacking
