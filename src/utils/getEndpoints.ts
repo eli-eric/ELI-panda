@@ -81,7 +81,8 @@ export const getEndpoints = ({
     generateUUID: '/uuid/v4',
     serviceType: `/catalogue/service/type${uidPart}`,
     serviceTypeList: `/catalogue/service/types${query}`,
-    sparePartUse: `/system/${uid}/assign-spare`
+    sparePartUse: `/system/${uid}/assign-spare`,
+    catalogueNumberUniqueCheck: `/catalogue/item/catalogue-number/unique${query}`
   }
   return endpoints
 }

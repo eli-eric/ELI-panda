@@ -30,7 +30,8 @@ export const Input = ({
   defaultValue,
   isFilter,
   step = '0.001',
-  required
+  required,
+  ...rest
 }: InputProps) => {
   const { control } = useFormContext()
 
@@ -69,6 +70,7 @@ export const Input = ({
             <div className="relative">
               <ShadcnInput
                 {...field}
+                {...rest}
                 id={idHtml}
                 step={step}
                 value={field.value || ''}
