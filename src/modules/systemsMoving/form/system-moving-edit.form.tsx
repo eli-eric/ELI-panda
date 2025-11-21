@@ -223,20 +223,20 @@ export const SystemMovingEditForm = ({
 
   return (
     <div className="space-y-4">
-      <SheetFormButtons
-        onSubmit={formMethods.handleSubmit(updateSystem)}
-        onExit={handleExit}
-        editRole={ROLE.ADMIN}
-        loading={loading}
-        isFormDirty={formState.isDirty}
-        saveLabel={fm({ id: message.common.buttons.save })}
-        exitLabel={fm({ id: message.common.buttons.exit })}
-      />
       <Form
         formMethods={formMethods}
         onSubmit={updateSystem}
         enableLeaveWarning={false}
       >
+        <SheetFormButtons
+          onSubmit={formMethods.handleSubmit(updateSystem)}
+          onExit={handleExit}
+          editRole={ROLE.SYSTEM_EDIT}
+          loading={loading}
+          isFormDirty={formState.isDirty}
+          saveLabel={fm({ id: message.common.buttons.save })}
+          exitLabel={fm({ id: message.common.buttons.exit })}
+        />
         <SystemMovingForm
           parentPath={[
             ...(parentSystem?.parentPath || []),

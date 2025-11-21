@@ -72,14 +72,16 @@ export const SystemNameCellContent = ({
             parentPath={original.parentPath}
             currentName={value}
           >
-            <SystemBadge
-              value={value}
-              systemLevel={original.systemLevel}
-              hasPhysicalItem={!!original?.physicalItem?.uid}
-              variant={hasSubsystems ? 'expandable' : 'clickable'}
-              isExpanded={isExpanded}
-              onClick={!hasSubsystems ? onEdit : undefined}
-            />
+            <div>
+              <SystemBadge
+                value={value}
+                systemLevel={original.systemLevel}
+                hasPhysicalItem={!!original?.physicalItem?.uid}
+                variant={hasSubsystems ? 'expandable' : 'clickable'}
+                isExpanded={isExpanded}
+                onClick={!hasSubsystems ? onEdit : undefined}
+              />
+            </div>
           </SystemPathTooltip>
         </div>
       </div>
