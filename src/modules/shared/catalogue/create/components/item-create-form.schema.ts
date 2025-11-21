@@ -36,8 +36,6 @@ export const createItemSchema = (fm: (descriptor: { id: string }) => string) =>
       .refine(val => val !== null && val !== undefined, {
         message: fm({ id: validation.categoryRequired })
       }),
-    manufacturerUrl: z.string().url().optional().or(z.literal('')),
-    description: z.string().max(1000).optional()
   })
 
 /**
