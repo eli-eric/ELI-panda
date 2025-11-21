@@ -430,6 +430,7 @@ export const messages = {
         catalogueNumber: { label: 'Part Number', placeholder: 'Part Number' },
         category: {
           label: 'Category: {parentPath}',
+          label2: 'Category:',
           placeholder: 'Type here...'
         }, // codebook of categories - CATEGORY
         manufacturer: {
@@ -457,6 +458,8 @@ export const messages = {
         catalogueNumberRequired: 'Catalogue number is required',
         catalogueNumberTooLong:
           'Catalogue number must be at most 100 characters',
+        catalogueNumberExists:
+          'This catalogue number already exists. Please use a unique number.',
         categoryRequired: 'Category is required'
       }
     },
@@ -872,7 +875,8 @@ export const messages = {
             title: 'Select Item',
             helperText:
               'Select an item from the catalogue or continue to enter details manually',
-            continueWithoutSelection: 'Continue without selection'
+            continueWithoutSelection: 'Continue without selection',
+            createCatalogueEntry: 'Create new catalogue entry'
           },
           step2: {
             title: 'Order Details'

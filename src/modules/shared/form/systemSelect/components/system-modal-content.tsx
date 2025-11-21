@@ -28,7 +28,8 @@ export function SystemModalContent({
           hideButtons={true}
           className={'overflow-y-auto relative h-[400px]'}
           settings={{
-            enableRowSelection: true
+            enableRowSelection: true,
+            enableQueryURL: false
           }}
           getRowProps={row => ({
             onClick: () => {
