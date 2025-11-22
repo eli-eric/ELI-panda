@@ -441,7 +441,7 @@ export const messages = {
           label: 'Manufacturer Number',
           placeholder: 'Manufacturer Number'
         },
-        itemUID: { label: 'Item UUID', placeholder: 'Item UUID' },
+        itemUID: { label: 'Catalogue item UUID', placeholder: 'Catalogue item UUID' },
         manuFacturerUrl: {
           label: 'Supplier/Manufacturer Url',
           placeholder: 'Supplier/Manufacturer Url',
