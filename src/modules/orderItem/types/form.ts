@@ -28,6 +28,7 @@ export interface OrderLineFormType extends FieldValues {
   catalogueUid?: string
   catalogueNumber: string
   system?: CodebookType
+  parentSystem?: CodebookType
   location?: CodebookType
   itemUsage?: CodebookType
   price?: number

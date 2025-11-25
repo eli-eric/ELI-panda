@@ -1,5 +1,5 @@
 import type { Row } from '@tanstack/react-table'
-import { Edit, MoreVertical, Trash2 } from 'lucide-react'
+import { Edit, MoreVertical, Printer, Trash2 } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type { FC, PropsWithChildren } from 'react'
 import { Fragment } from 'react'
@@ -204,20 +204,24 @@ export const PrintEunButton = ({
   })
 
   return (
-    <Tooltip
-      content={fm({ id: message.ordersPage.orderLines.printEunTooltip })}
-    >
-      <Button
-        type="button"
-        variant={'link'}
-        className="cursor-pointer"
-        onClick={() => {
-          submit()
-        }}
+    <div className="flex items-center gap-2">
+      <span>{orderLine.eun}</span>
+      <Tooltip
+        content={fm({ id: message.ordersPage.orderLines.printEunTooltip })}
       >
-        <span>{orderLine.eun}</span>
-      </Button>
-    </Tooltip>
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          className="h-6 w-6 p-0 hover:text-primary"
+          onClick={() => {
+            submit()
+          }}
+        >
+          <Printer className="h-4 w-4" />
+        </Button>
+      </Tooltip>
+    </div>
   )
 }
 

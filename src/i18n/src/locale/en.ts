@@ -441,7 +441,10 @@ export const messages = {
           label: 'Manufacturer Number',
           placeholder: 'Manufacturer Number'
         },
-        itemUID: { label: 'Catalogue item UUID', placeholder: 'Catalogue item UUID' },
+        itemUID: {
+          label: 'Catalogue item UUID',
+          placeholder: 'Catalogue item UUID'
+        },
         manuFacturerUrl: {
           label: 'Supplier/Manufacturer Url',
           placeholder: 'Supplier/Manufacturer Url',
@@ -847,7 +850,8 @@ export const messages = {
           actions: 'Actions',
           name: 'Name',
           catalogueNumber: 'Part Number',
-          system: 'Parent System',
+          system: 'System',
+          parentSystem: 'Parent System',
           price: 'Price',
           location: 'Location',
           itemUsage: 'Item Usage',

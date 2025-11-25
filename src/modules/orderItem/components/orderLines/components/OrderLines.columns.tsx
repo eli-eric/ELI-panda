@@ -128,7 +128,20 @@ const useOrderLinesColumns = () => {
         header: formatMessage({ id: messages.name }),
         accessorKey: 'name',
         enablePinning: true,
-        cell: ({ getValue }) => <div className="break-words">{getValue()}</div>,
+        cell: ({
+          getValue,
+          row: {
+            original: { system }
+          }
+        }) =>
+          system ? (
+            <NewTabLink
+              href={PATH.SYSTEM + '/' + system?.uid}
+              value={getValue()}
+            />
+          ) : (
+            <div className="break-words">{getValue()}</div>
+          ),
         size: 280
       },
       {
@@ -198,8 +211,8 @@ const useOrderLinesColumns = () => {
         enablePinning: false
       },
       {
-        header: formatMessage({ id: messages.system }),
-        accessorFn: row => row.system?.name,
+        header: formatMessage({ id: messages.parentSystem }),
+        accessorFn: row => row.parentSystem?.name,
         size: 240,
         enablePinning: false,
         cell: ({ getValue, row: { original } }) => (
