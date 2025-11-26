@@ -65,7 +65,7 @@ export const formatParentPath = (
     | undefined,
   currentName?: string
 ): string => {
-  const path = parentPath ? [...parentPath].reverse() : []
+  const path = parentPath || []
   const names = currentName ? [...path, { name: currentName }] : path
 
   return names
