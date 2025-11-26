@@ -95,7 +95,12 @@ export const OrderLineActionButtons = ({
           {fm({ id: message.common.buttons.edit })}
         </DropdownMenuItem>
         <DropdownMenuItem
-          onClick={() => orderLine.id && withWarning(deleteOrderLine)(orderLine as OrderLineFormType & { id: string })}
+          onClick={() =>
+            orderLine.id &&
+            withWarning(deleteOrderLine)(
+              orderLine as OrderLineFormType & { id: string }
+            )
+          }
           className="cursor-pointer text-destructive focus:text-destructive"
         >
           <Trash2 className="h-4 w-4 mr-2" />
@@ -108,10 +113,12 @@ export const OrderLineActionButtons = ({
 
 export const OrderisDeliveredAction = ({
   orderLine,
-  checked
+  checked,
+  setOrderLine
 }: {
   orderLine: OrderLineFormType
   checked?: boolean
+  setOrderLine: (orderLine: OrderLineFormType) => void
 }) => {
   const uid = useRouter().query.uid as string
   const { orderLineDelivery } = useEndpoint({
@@ -119,7 +126,6 @@ export const OrderisDeliveredAction = ({
     itemUid: orderLine.uid!
   })
   const hasRole = usePermission([ROLE.ORDERS_DELIVERY_EDIT, ROLE.ORDERS_EDIT])
-  const { setOrderLine } = useOrderLine()
   const { openModal } = useDynamicModalStore()
 
   const { submit } = useSubmit<OrderLineFormType>({
@@ -202,6 +208,10 @@ export const PrintEunButton = ({
       toast.error(err.message)
     }
   })
+
+  if (!orderLine.eun) {
+    return null
+  }
 
   return (
     <div className="flex items-center gap-2">

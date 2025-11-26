@@ -113,6 +113,7 @@ const useOrderLinesColumns = ({
               <OrderisDeliveredAction
                 orderLine={original}
                 checked={getValue()}
+                setOrderLine={setOrderLine}
               />
             </div>
           ) : null,
