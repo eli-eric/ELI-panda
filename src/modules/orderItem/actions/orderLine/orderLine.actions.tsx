@@ -56,7 +56,7 @@ export const ButtonsWrapperNew: FC<
 export const OrderLineActionButtons = ({
   orderLine
 }: {
-  orderLine: OrderLineFormType
+  orderLine: OrderLineFormType & { id?: string }
 }) => {
   const { formatMessage: fm } = useIntl()
   const { deleteOrderLine, setOrderLine } = useOrderLine()
@@ -95,7 +95,7 @@ export const OrderLineActionButtons = ({
           {fm({ id: message.common.buttons.edit })}
         </DropdownMenuItem>
         <DropdownMenuItem
-          onClick={() => withWarning(deleteOrderLine)(orderLine)}
+          onClick={() => orderLine.id && withWarning(deleteOrderLine)(orderLine as OrderLineFormType & { id: string })}
           className="cursor-pointer text-destructive focus:text-destructive"
         >
           <Trash2 className="h-4 w-4 mr-2" />
@@ -116,7 +116,7 @@ export const OrderisDeliveredAction = ({
   const uid = useRouter().query.uid as string
   const { orderLineDelivery } = useEndpoint({
     uid: uid,
-    itemUid: orderLine.uid
+    itemUid: orderLine.uid!
   })
   const hasRole = usePermission([ROLE.ORDERS_DELIVERY_EDIT, ROLE.ORDERS_EDIT])
   const { setOrderLine } = useOrderLine()

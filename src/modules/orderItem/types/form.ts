@@ -42,8 +42,7 @@ export interface OrderLineSystemConfig {
 }
 
 export interface OrderLineFormType extends FieldValues {
-  uuid?: string
-  uid: string
+  uid?: string // Optional - only saved items have uid from DB
   name: string
   catalogueUid?: string
   catalogueNumber: string

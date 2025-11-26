@@ -1,5 +1,4 @@
-import { Fragment, useMemo } from 'react'
-import { useFormContext, useWatch } from 'react-hook-form'
+import { Fragment } from 'react'
 
 import { PlusButton } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
@@ -18,21 +17,13 @@ interface OrderLinesTableProps {
 }
 
 const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
-  const columns = useOrderLinesColumns()
-  const { control } = useFormContext()
   const { openOrderLineModal } = useOrderLineModal()
-  const { setOrderLine } = useOrderLine()
 
-  // Používáme useWatch s memoizací k efektivnější práci s daty
-  const orderLinesData = useWatch({ control, name: 'orderLines' })
+  // Use fields from useOrderLine - this ensures same 'id' values for delete
+  const { setOrderLine, deleteOrderLine, fields } = useOrderLine()
 
-  // Memoizujeme data pro předcházení zbytečným re-renderům
-  // Už nepoužíváme neefektivní JSON.stringify
-  const orderLines = useMemo(
-    () => orderLinesData,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [JSON.stringify(orderLinesData)]
-  )
+  // Pass functions to columns to avoid creating new useFieldArray instances
+  const columns = useOrderLinesColumns({ deleteOrderLine, setOrderLine })
 
   const handleOpenOrderLineForm = () => {
     openOrderLineModal(orderLine => {
@@ -58,7 +49,7 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
       <div className="w-full overflow-hidden">
         <Table
           columns={columns}
-          data={orderLines}
+          data={fields}
           enablePagination
           enableFiltering
           enableFooter
