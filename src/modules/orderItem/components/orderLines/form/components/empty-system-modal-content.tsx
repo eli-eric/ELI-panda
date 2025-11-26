@@ -34,7 +34,7 @@ export function EmptySystemModalContent({
               // Get parent from parentPath (last element is direct parent)
               const parent =
                 row.original.parentPath && row.original.parentPath.length > 0
-                  ? row.original.parentPath[0]
+                  ? row.original.parentPath[row.original.parentPath.length - 1]
                   : null
 
               setSelectedSystem({
