@@ -21,6 +21,26 @@ export interface OrderDetailFormType extends FieldValues {
   orderLines: OrderLineFormType[]
 }
 
+/**
+ * System configuration for each order line row in Step 3
+ *
+ * How parent system works:
+ * - For "new" systems: `parentSystem` = globalParentSystem (user's selection)
+ * - For "existing" systems: `parentSystem` = parent of the selected system (from parentPath)
+ */
+export interface OrderLineSystemConfig {
+  index: number
+  itemName: string
+  /** Parent system - used for BOTH new and existing systems */
+  parentSystem: CodebookType | null
+  /** Type of system: "new" creates a new system, "existing" links to existing system */
+  systemType: 'new' | 'existing'
+  /** System name - auto-filled from item name (new) or selected system (existing) */
+  systemName: string
+  /** Selected existing system - only populated when systemType is "existing" */
+  selectedSystem?: CodebookType | null
+}
+
 export interface OrderLineFormType extends FieldValues {
   uuid?: string
   uid: string
@@ -42,6 +62,17 @@ export interface OrderLineFormType extends FieldValues {
   serialNumbers?: string
   serviceOrderUid?: string
   serviceItemName?: string
+}
+
+/**
+ * Extended type for Order Line Wizard form
+ * Includes wizard-specific UI state fields that are not part of final order line
+ */
+export interface OrderLineWizardFormType extends OrderLineFormType {
+  // Wizard-specific fields (UI state only, not submitted to backend)
+  _selectedCatalogueItem?: any
+  globalParentSystem?: CodebookType | null
+  systemConfigs?: OrderLineSystemConfig[]
 }
 
 export interface ServiceLine extends FieldValues {

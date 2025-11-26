@@ -4,14 +4,9 @@ import { Input } from '@/components/form/inputs'
 import { InputAmountCurrency } from '@/components/form/inputs/components/InputAmountCurrency.comp'
 import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
-import Divider from '@/components/layout/Divider'
-import { message } from '@/i18n/src/messages'
 import type { OrderLineFormType } from '@/modules/orderItem/types/form'
-import { SelectSystemComboBox } from '@/modules/shared/form/systemSelect/SelectSystem.combo'
 
 import useOrderLineFormFields from '../OrderLineForm.fields'
-
-const messages = message.ordersPage.orderLines
 
 export const OrderLineStep2Form = () => {
   const { watch } = useFormContext<OrderLineFormType>()
@@ -46,12 +41,6 @@ export const OrderLineStep2Form = () => {
       </Col>
       <Col md={12} lg={12}>
         <Input {...formFields.serialNumbers} />
-      </Col>
-      <Col sm="full">
-        <Divider text={messages.formHeadings.systemInfo} />
-      </Col>
-      <Col md={12} lg={12}>
-        <SelectSystemComboBox selectSystemField={formFields.system} />
       </Col>
     </Grid>
   )

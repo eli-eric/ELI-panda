@@ -20,9 +20,9 @@ const useOrderLineFormFields = (enabled: boolean) =>
       disabled: !enabled,
       rounded: 'rounded-md'
     },
-    system: {
-      name: 'system',
-      label: form.systemName.label,
+    parentSystem: {
+      name: 'parentSystem',
+      label: form.parentSystem.label,
       rounded: 'rounded-md',
       required: true
     },

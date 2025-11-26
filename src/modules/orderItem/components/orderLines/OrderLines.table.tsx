@@ -35,19 +35,10 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
   )
 
   const handleOpenOrderLineForm = () => {
-    openOrderLineModal(data => {
-      const quantity = data.quantity || 1
-
-      // Vytvoříme tolik kopií order line, kolik je zadáno v quantity
-      for (let i = 0; i < quantity; i++) {
-        const orderLineToAdd = {
-          ...data,
-          // Odebereme uuid, aby setOrderLine věděl, že má vytvořit novou položku
-          uuid: undefined,
-          quantity: 1 // Každá order line má quantity 1
-        }
-        setOrderLine(orderLineToAdd)
-      }
+    openOrderLineModal(orderLine => {
+      // Wizard already converted systemConfigs to individual order lines
+      // Just add the prepared order line to the form
+      setOrderLine(orderLine)
     })
   }
 

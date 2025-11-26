@@ -1023,3 +1023,48 @@ Key features demonstrated:
 
 - Shows proper usage of `shouldShow` with formData parameter
 - Demonstrates error handling in onSubmit
+
+### Important: Minimize useEffect Usage
+
+**Prefer callbacks over useEffect whenever possible:**
+
+- ✅ **User interactions** → Use callbacks (onClick, onChange, onSelect)
+- ✅ **Derived state** → Use useMemo or direct calculations
+- ✅ **One-time initialization** → Use empty deps array `useEffect([], [])` with ref guard
+- ❌ **Avoid useEffect** for synchronizing form state (causes dependency cycles)
+
+**Anti-pattern: useEffect for form synchronization**
+```typescript
+// ❌ Bad - dependency hell, infinite loops, race conditions
+useEffect(() => {
+  setValue('field', computedValue)
+}, [computedValue, otherDep, anotherDep, setValue])
+```
+
+**Correct pattern: Callbacks**
+```typescript
+// ✅ Good - direct, no side effects, no dependencies
+const handleChange = useCallback((value) => {
+  setValue('field', value)
+  // Update derived fields immediately
+  setValue('derivedField', computeDerived(value))
+}, [setValue])
+```
+
+**Exception: One-time mount initialization**
+```typescript
+// ✅ Acceptable - runs once on mount, no dependency issues
+const isInitializedRef = useRef(false)
+
+useEffect(() => {
+  if (isInitializedRef.current) return
+  isInitializedRef.current = true
+
+  // Initialization logic
+  if (shouldInitialize) {
+    initializeData()
+  }
+}, []) // Empty deps = mount only
+```
+
+**Key principle**: If the logic can be triggered by user interaction, use a callback. Only use useEffect for true side effects (API calls, subscriptions, DOM manipulation).
