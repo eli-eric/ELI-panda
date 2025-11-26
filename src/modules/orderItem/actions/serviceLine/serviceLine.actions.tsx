@@ -37,6 +37,7 @@ export const ServiceLineActionButtons = ({
   const submit = (data: ServiceLine, modalId: string) => {
     setServiceLine({
       ...data,
+      price: Number(data.price),
       details: Array.isArray(data.details) ? data.details : []
     })
     closeModal(modalId)
@@ -48,13 +49,12 @@ export const ServiceLineActionButtons = ({
       component: ServiceLineEditSheet,
       props: {
         title: fm({ id: message.ordersPage.serviceLines.titles.edit }),
-        serviceLine,
-        onClose: () => closeModal(modalId)
+        serviceLine
       },
       onSubmit: (data: ServiceLine) => {
         submit(data, modalId)
-      },
-      onClose: () => closeModal(modalId)
+      }
+      // NOTE: No onClose callback needed - closeModal is already handled by DynamicModalProvider
     })
   }
 
@@ -126,7 +126,7 @@ export const ServiceLinePriceFooter = ({
   rows: Row<ServiceLine>[]
 }) => {
   const total = rows.reduce(
-    (sum, { original: { price } }) => sum + (price || 0),
+    (sum, { original: { price } }) => sum + (Number(price) || 0),
     0
   )
   const totalCurrencyRows = rows.filter(
