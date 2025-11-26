@@ -441,7 +441,10 @@ export const messages = {
           label: 'Manufacturer Number',
           placeholder: 'Manufacturer Number'
         },
-        itemUID: { label: 'Catalogue item UUID', placeholder: 'Catalogue item UUID' },
+        itemUID: {
+          label: 'Catalogue item UUID',
+          placeholder: 'Catalogue item UUID'
+        },
         manuFacturerUrl: {
           label: 'Supplier/Manufacturer Url',
           placeholder: 'Supplier/Manufacturer Url',
@@ -829,6 +832,10 @@ export const messages = {
         name: { label: 'Name', placeholder: 'Name' },
         catalogueNumber: { label: 'Part Number', placeholder: 'Part Number' },
         systemName: { label: 'Parent System', placeholder: 'Parent System' },
+        parentSystem: {
+          label: 'Parent System (for all)',
+          placeholder: 'Select parent system'
+        },
         price: { label: 'Price', placeholder: '0.00' },
         quantity: { label: 'Quantity', placeholder: 'Quantity' },
         location: { label: 'Location', placeholder: 'Location' },
@@ -847,7 +854,8 @@ export const messages = {
           actions: 'Actions',
           name: 'Name',
           catalogueNumber: 'Part Number',
-          system: 'Parent System',
+          system: 'System',
+          parentSystem: 'Parent System',
           price: 'Price',
           location: 'Location',
           itemUsage: 'Item Usage',
@@ -880,6 +888,9 @@ export const messages = {
           },
           step2: {
             title: 'Order Details'
+          },
+          step3: {
+            title: 'System Configuration'
           }
         }
       }

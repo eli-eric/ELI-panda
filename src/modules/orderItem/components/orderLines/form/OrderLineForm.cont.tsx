@@ -2,7 +2,10 @@ import type { UseFormReset } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 
 import { message } from '@/i18n/src/messages'
-import type { OrderLineFormType } from '@/modules/orderItem/types/form'
+import type {
+  OrderLineFormType,
+  OrderLineWizardFormType
+} from '@/modules/orderItem/types/form'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 
 import { OrderLineWizard } from './OrderLineWizard'
@@ -18,10 +21,43 @@ const OrderLineModalContent = ({
   const { closeModal } = useDynamicModalStore()
 
   const handleSubmit = (
-    data: OrderLineFormType,
-    reset: UseFormReset<OrderLineFormType>
+    data: OrderLineWizardFormType,
+    reset: UseFormReset<OrderLineWizardFormType>
   ) => {
-    onSave?.(data)
+    const systemConfigs = data.systemConfigs || []
+
+    // Convert each system config to individual order line
+    systemConfigs.forEach(config => {
+      // Create clean OrderLineFormType without wizard fields
+      const orderLine: OrderLineFormType = {
+        // Copy base data from wizard
+        catalogueUid: data.catalogueUid,
+        catalogueNumber: data.catalogueNumber,
+        price: data.price,
+        currency: data.currency,
+        serialNumbers: data.serialNumbers,
+        location: data.location,
+        itemUsage: data.itemUsage,
+        notes: data.notes,
+        // Each order line has quantity 1
+        quantity: 1,
+        // Name from config
+        name: config.itemName,
+        // Parent system - always from config.parentSystem
+        // For "new": this is globalParentSystem
+        // For "existing": this is parent of selected system
+        parentSystem: config.parentSystem || undefined,
+        // System - only for existing system selection
+        system:
+          config.systemType === 'existing'
+            ? config.selectedSystem || undefined
+            : undefined
+      } as OrderLineFormType
+
+      // Pass clean OrderLineFormType (no wizard fields!)
+      onSave?.(orderLine)
+    })
+
     reset()
     if (currentOrderLineModalId) {
       closeModal(currentOrderLineModalId)

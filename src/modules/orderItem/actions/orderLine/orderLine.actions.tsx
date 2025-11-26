@@ -1,5 +1,5 @@
 import type { Row } from '@tanstack/react-table'
-import { Edit, MoreVertical, Trash2 } from 'lucide-react'
+import { Edit, MoreVertical, Printer, Trash2 } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type { FC, PropsWithChildren } from 'react'
 import { Fragment } from 'react'
@@ -56,7 +56,7 @@ export const ButtonsWrapperNew: FC<
 export const OrderLineActionButtons = ({
   orderLine
 }: {
-  orderLine: OrderLineFormType
+  orderLine: OrderLineFormType & { id?: string }
 }) => {
   const { formatMessage: fm } = useIntl()
   const { deleteOrderLine, setOrderLine } = useOrderLine()
@@ -95,7 +95,7 @@ export const OrderLineActionButtons = ({
           {fm({ id: message.common.buttons.edit })}
         </DropdownMenuItem>
         <DropdownMenuItem
-          onClick={() => withWarning(deleteOrderLine)(orderLine)}
+          onClick={() => orderLine.id && withWarning(deleteOrderLine)(orderLine as OrderLineFormType & { id: string })}
           className="cursor-pointer text-destructive focus:text-destructive"
         >
           <Trash2 className="h-4 w-4 mr-2" />
@@ -116,7 +116,7 @@ export const OrderisDeliveredAction = ({
   const uid = useRouter().query.uid as string
   const { orderLineDelivery } = useEndpoint({
     uid: uid,
-    itemUid: orderLine.uid
+    itemUid: orderLine.uid!
   })
   const hasRole = usePermission([ROLE.ORDERS_DELIVERY_EDIT, ROLE.ORDERS_EDIT])
   const { setOrderLine } = useOrderLine()
@@ -204,20 +204,24 @@ export const PrintEunButton = ({
   })
 
   return (
-    <Tooltip
-      content={fm({ id: message.ordersPage.orderLines.printEunTooltip })}
-    >
-      <Button
-        type="button"
-        variant={'link'}
-        className="cursor-pointer"
-        onClick={() => {
-          submit()
-        }}
+    <div className="flex items-center gap-2">
+      <span>{orderLine.eun}</span>
+      <Tooltip
+        content={fm({ id: message.ordersPage.orderLines.printEunTooltip })}
       >
-        <span>{orderLine.eun}</span>
-      </Button>
-    </Tooltip>
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          className="h-6 w-6 p-0 hover:text-primary"
+          onClick={() => {
+            submit()
+          }}
+        >
+          <Printer className="h-4 w-4" />
+        </Button>
+      </Tooltip>
+    </div>
   )
 }
 
