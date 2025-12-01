@@ -1,5 +1,7 @@
 import { useMemo } from 'react'
 
+import { isEmptyArray } from '@/lib/predicates/data'
+import { isUndefined } from '@/lib/predicates/type-guards'
 import type { CatalogueItem } from '@/types/responses/catalogue'
 
 /**
@@ -9,15 +11,20 @@ import type { CatalogueItem } from '@/types/responses/catalogue'
  *
  * @param catalogueItems - Array of catalogue items from API
  * @param selectedItem - Currently selected catalogue item (if any)
- * @returns Array with selected item pinned to first position
+ * @returns Array with selected item pinned to first position, or undefined if no data loaded yet
  */
 export const usePinnedCatalogueData = (
   catalogueItems: CatalogueItem[] | undefined,
   selectedItem: CatalogueItem | undefined
-): CatalogueItem[] => {
+): CatalogueItem[] | undefined => {
   return useMemo(() => {
-    // No items to display
-    if (!catalogueItems || catalogueItems.length === 0) {
+    // Initial load - data hasn't been fetched yet
+    if (isUndefined(catalogueItems)) {
+      return selectedItem ? [selectedItem] : undefined
+    }
+
+    // Empty results - data is loaded but empty (e.g., after filtering)
+    if (isEmptyArray(catalogueItems)) {
       return selectedItem ? [selectedItem] : []
     }
 

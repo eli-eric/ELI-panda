@@ -107,6 +107,7 @@ export const SystemsTable = ({
         table={table}
         loading={loading || pending}
         tableId={tableId}
+        skeletonRowCount={pageSizeDefault}
         getRowProps={getRowProps}
         settings={{
           ...settings,

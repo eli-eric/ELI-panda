@@ -20,7 +20,9 @@ import { message } from '@/i18n/src/messages'
 import { useCatalogueItems } from '@/modules/catalogue/hooks/useCatalogueItems'
 import { CatalogueStatisticsContainer } from '@/modules/catalogueItem/components/statistics/CatalogueStatistics.cont'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
+import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
+import { TABLE_IDS } from '@/types/constants/tableIds'
 import type { CatalogueItem } from '@/types/responses/catalogue'
 import { truncateString } from '@/utils'
 import { createMessageValues } from '@/utils/formatters'
@@ -47,17 +49,22 @@ export const NameCell = ({
         <CellActionDropdown tableId={tableId} uid={uid} value={getValue()} />
       )}
       <div className="flex-1 min-w-0 flex items-center justify-start">
-        <Link
-          href={{ pathname: '/catalogue/item/' + uid }}
-          target={tableId === 'catalogueItemsModal' ? '_blank' : undefined}
-          className="flex items-center"
-        >
-          <Button variant={'link'} className="cursor-pointer py-0">
+        <Button variant={'link'} className="cursor-pointer py-0" asChild>
+          <Link
+            href={{ pathname: PATH.CATALOGUE_ITEM + '/' + uid }}
+            target={
+              tableId === 'catalogueItemsModal' ||
+              tableId === TABLE_IDS.CATALOGUE_ITEM_SELECT
+                ? '_blank'
+                : undefined
+            }
+            onClick={e => e.stopPropagation()}
+          >
             <Tooltip content={getValue()}>
               <p>{truncateString(getValue(), 50)}</p>
             </Tooltip>
-          </Button>
-        </Link>
+          </Link>
+        </Button>
       </div>
     </div>
   )

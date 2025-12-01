@@ -1,5 +1,5 @@
 import type { Row } from '@tanstack/react-table'
-import { createContext, useEffect } from 'react'
+import { useEffect } from 'react'
 
 import type { GetCategoriesQuery } from '@/types/gql/graphql'
 import type {
@@ -24,14 +24,9 @@ interface CatalogueItemSelectTableProps {
   getRowProps?: (row: Row<any>) => GetRowPropsReturnType
   selectedItemUid?: string
   onItemToggle: (item: CatalogueItem) => void
-  pinnedData: CatalogueItem[]
+  pinnedData: CatalogueItem[] | undefined
+  pageSizeDefault?: number
 }
-
-export const CatalogueItemSelectTableContext = createContext<{
-  isHoveringId: number | undefined | string
-}>({
-  isHoveringId: undefined
-})
 
 export const CatalogueItemSelectTable = ({
   hideButtons,
@@ -44,7 +39,8 @@ export const CatalogueItemSelectTable = ({
   setCategoryFilter,
   selectedItemUid,
   onItemToggle,
-  pinnedData
+  pinnedData,
+  pageSizeDefault = 10
 }: CatalogueItemSelectTableProps) => {
   const columns = useCatalogueItemSelectColumns({
     tableId,
@@ -58,7 +54,7 @@ export const CatalogueItemSelectTable = ({
   const table = usePandaTable({
     tableId,
     columns,
-    data: pinnedData,
+    data: pinnedData || [],
     settings: {
       enableSorting: true,
       enableQueryURL: false,
@@ -83,6 +79,7 @@ export const CatalogueItemSelectTable = ({
       tableId={tableId}
       getRowProps={getRowProps}
       data={pinnedData}
+      skeletonRowCount={pageSizeDefault}
       className={'relative overflow-y-scroll scrollbar-style text-sm'}
       settings={{
         enableQueryURL,

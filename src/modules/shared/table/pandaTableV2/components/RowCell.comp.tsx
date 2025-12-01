@@ -10,10 +10,9 @@ import styles from './RowCell.module.css'
 interface Props {
   cell: Cell<any, unknown>
   row: Row<any>
-  loading: boolean
   index: number
 }
-export const RowCellComponent: FC<Props> = ({ cell, row, loading, index }) => {
+export const RowCellComponent: FC<Props> = ({ cell, row, index }) => {
   const stickyCellsSize = useMemo(() => {
     let size = 0
     for (let i = 0; i < index; i++) {
@@ -42,7 +41,6 @@ export const RowCellComponent: FC<Props> = ({ cell, row, loading, index }) => {
         cell.column.columnDef.meta?.sticky
           ? 'sticky z-30 backdrop-blur-2xl backdrop-filter border-r pt-1 pb-1'
           : '',
-        loading ? 'opacity-50' : '',
         styles.cell,
         cell.column.columnDef.meta?.className
       )}

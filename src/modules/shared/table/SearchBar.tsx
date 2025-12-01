@@ -1,6 +1,6 @@
 import { Search } from 'lucide-react'
 import { useQueryState } from 'next-usequerystate'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useDeferredValue, useEffect, useRef, useState } from 'react'
 
 import { PlusButton, RefreshButton } from '@/components/Buttons'
 import { GlobalSearchTrigger } from '@/components/search/GlobalSearchTrigger'
@@ -34,11 +34,22 @@ export const SearchBar = ({
 
   const { setSearch, instances, setSearchValue } = useTableStateStore()
   const searchInstance = querySearch || instances[tableId]?.search
-  const value = instances[tableId]?.searchBarValue
+  const storeValue = instances[tableId]?.searchBarValue
+
+  // Use deferred value for non-blocking store updates
+  const deferredStoreValue = useDeferredValue(storeValue || '')
+
+  // Local state for immediate input responsiveness
+  const [localValue, setLocalValue] = useState(deferredStoreValue)
 
   const onChangeRef = useRef(onChange)
 
   const [mounted, setMounted] = useState(false)
+
+  // Sync local value with deferred store value
+  useEffect(() => {
+    setLocalValue(deferredStoreValue)
+  }, [deferredStoreValue])
 
   useEffect(() => {
     if (!mounted) {
@@ -51,17 +62,17 @@ export const SearchBar = ({
     const delayInputTimeoutId = setTimeout(() => {
       if (mounted) {
         if (onChangeRef.current) {
-          onChangeRef.current(value || '')
+          onChangeRef.current(localValue || '')
         }
-        setSearch(tableId, value)
+        setSearch(tableId, localValue)
         if (useQuery) {
-          setQuerySearch(value || '', { shallow: true })
+          setQuerySearch(localValue || '', { shallow: true })
         }
       }
     }, 500)
     return () => clearTimeout(delayInputTimeoutId)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value])
+  }, [localValue])
 
   return (
     <div
@@ -85,9 +96,11 @@ export const SearchBar = ({
             <div className="relative max-w-md">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                value={value || ''}
+                value={localValue}
                 onChange={e => {
-                  setSearchValue(tableId, e.target.value)
+                  const newValue = e.target.value
+                  setLocalValue(newValue) // Immediate local update (no lag)
+                  setSearchValue(tableId, newValue) // Deferred store update
                 }}
                 placeholder="Search..."
                 className="pl-10"
