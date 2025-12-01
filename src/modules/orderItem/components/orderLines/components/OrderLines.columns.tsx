@@ -226,7 +226,7 @@ const useOrderLinesColumns = ({
         cell: ({ getValue, row: { original } }) => (
           <NewTabLink
             href={PATH.SYSTEM + '/' + original.parentSystem?.uid}
-            value={getValue().split('-')[0]}
+            value={getValue()?.split(' - ')[0]}
           />
         )
       },
@@ -245,7 +245,7 @@ const useOrderLinesColumns = ({
         cell: ({ getValue, row: { original } }) => (
           <NewTabLink
             href={PATH.SYSTEM + '/' + original.parentSystem?.uid}
-            value={getValue().split('-')[0]}
+            value={getValue()?.split('-')[0]}
           />
         )
       },
