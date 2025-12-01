@@ -11,6 +11,7 @@ const SystemsContainer: FC = () => (
       enableDragAndDrop={false}
       tableId={'systems'}
       hideButtons={false}
+      isGlobalSearch={true}
       RightSearchBarElement={() => <FilterBadges tableId={'systems'} />}
     />
     <DeviceInfoOverlay />

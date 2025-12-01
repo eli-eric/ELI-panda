@@ -119,7 +119,7 @@ export const messages = {
       updating: 'Updating...',
       shortcutHint: 'Press {shortcut} to open global search',
       search: 'Search',
-      searchPlaceholder: 'Search...'
+      searchPlaceholder: 'Global search...'
     },
     environmentWarning: {
       title: 'WARNING!',
