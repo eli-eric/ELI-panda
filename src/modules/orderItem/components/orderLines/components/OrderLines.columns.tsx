@@ -1,7 +1,6 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { Info } from 'lucide-react'
 import { Edit, Trash2 } from 'lucide-react'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Fragment, useMemo } from 'react'
 import { useIntl } from 'react-intl'
@@ -225,15 +224,10 @@ const useOrderLinesColumns = ({
         size: 240,
         enablePinning: false,
         cell: ({ getValue, row: { original } }) => (
-          <Link
-            className="link"
-            href={PATH.SYSTEM + '/' + original.system?.uid}
-            target="_blank"
-          >
-            <Button type="button" variant="link" className="cursor-pointer">
-              <span>{getValue()?.split('-')[0]}</span>
-            </Button>
-          </Link>
+          <NewTabLink
+            href={PATH.SYSTEM + '/' + original.parentSystem?.uid}
+            value={getValue().split('-')[0]}
+          />
         )
       },
       {
@@ -249,13 +243,10 @@ const useOrderLinesColumns = ({
         enablePinning: false,
         size: 240,
         cell: ({ getValue, row: { original } }) => (
-          <Link
-            className="link"
-            href={PATH.ORDER + '/' + original.serviceOrderUid}
-            target="_blank"
-          >
-            <span>{getValue()?.split('-')[0]}</span>
-          </Link>
+          <NewTabLink
+            href={PATH.SYSTEM + '/' + original.parentSystem?.uid}
+            value={getValue().split('-')[0]}
+          />
         )
       },
       {
