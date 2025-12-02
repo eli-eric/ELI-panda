@@ -4,7 +4,9 @@ import { FormattedMessage } from 'react-intl'
 import { Button } from '@/components/ui/button'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
+import { SystemFilterButtonContainer } from '@/modules/systems/components/filters/SystemsFilterButton.cont'
 import { SystemsTable } from '@/modules/systems/components/table/Systems.table'
+import { TABLE_IDS } from '@/types/constants/tableIds'
 import type { CodebookType } from '@/types/responses/codebook'
 
 interface SystemModalContentProps {
@@ -24,9 +26,15 @@ export function SystemModalContent({
     <div className="flex flex-col">
       <div className="max-h-[400px] overflow-hidden">
         <SystemsTable
-          tableId={'systemSelect'}
+          tableId={TABLE_IDS.SYSTEM_SELECTION_MODAL}
           hideButtons={true}
           className={'overflow-y-auto relative h-[400px]'}
+          LeftSearchBarElement={() => (
+            <SystemFilterButtonContainer
+              tableId={TABLE_IDS.SYSTEM_SELECTION_MODAL}
+              enableQueryURL={false}
+            />
+          )}
           settings={{
             enableRowSelection: true,
             enableQueryURL: false
