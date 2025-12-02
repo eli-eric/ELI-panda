@@ -60,7 +60,14 @@ export const SystemNameCellContent = ({
             hasSubsystems && 'group/expand cursor-pointer'
           )}
           style={indentStyle}
-          onClick={hasSubsystems ? onExpand : undefined}
+          onClick={
+            hasSubsystems
+              ? e => {
+                  e.stopPropagation()
+                  onExpand?.()
+                }
+              : undefined
+          }
         >
           {showDragHandle && (
             <button className="mr-2 shrink-0 text-muted-foreground hover:text-foreground transition-colors cursor-grab active:cursor-grabbing">
@@ -79,7 +86,6 @@ export const SystemNameCellContent = ({
                 hasPhysicalItem={!!original?.physicalItem?.uid}
                 variant={hasSubsystems ? 'expandable' : 'clickable'}
                 isExpanded={isExpanded}
-                onClick={!hasSubsystems ? onEdit : undefined}
               />
             </div>
           </SystemPathTooltip>

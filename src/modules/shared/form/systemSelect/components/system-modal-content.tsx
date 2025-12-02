@@ -3,11 +3,11 @@ import { FormattedMessage } from 'react-intl'
 
 import { Button } from '@/components/ui/button'
 import { message } from '@/i18n/src/messages'
-import { cn } from '@/lib/utils'
-import { SystemFilterButtonContainer } from '@/modules/systems/components/filters/SystemsFilterButton.cont'
-import { SystemsTable } from '@/modules/systems/components/table/Systems.table'
 import { TABLE_IDS } from '@/types/constants/tableIds'
 import type { CodebookType } from '@/types/responses/codebook'
+import type { SystemDetail } from '@/types/responses/systems'
+
+import { SystemSelect } from '../SystemSelect'
 
 interface SystemModalContentProps {
   onSelect: (item: CodebookType | null) => void
@@ -18,43 +18,35 @@ export function SystemModalContent({
   onSelect,
   onClose
 }: SystemModalContentProps) {
-  const [selectedSystem, setSelectedSystem] = useState<CodebookType | null>(
-    null
-  )
+  const [selectedSystem, setSelectedSystem] = useState<
+    SystemDetail | undefined
+  >(undefined)
+
+  const handleSystemSelect = (system: SystemDetail | undefined) => {
+    setSelectedSystem(system)
+  }
+
+  const handleConfirm = () => {
+    if (selectedSystem) {
+      // Convert SystemDetail to CodebookType for backward compatibility
+      const codebookItem: CodebookType = {
+        name: selectedSystem.name,
+        uid: selectedSystem.uid
+      }
+      onSelect(codebookItem)
+      onClose?.()
+    }
+  }
 
   return (
-    <div className="flex flex-col">
-      <div className="max-h-[400px] overflow-hidden">
-        <SystemsTable
-          tableId={TABLE_IDS.SYSTEM_SELECTION_MODAL}
-          hideButtons={true}
-          className={'overflow-y-auto relative h-[400px]'}
-          LeftSearchBarElement={() => (
-            <SystemFilterButtonContainer
-              tableId={TABLE_IDS.SYSTEM_SELECTION_MODAL}
-              enableQueryURL={false}
-            />
-          )}
-          settings={{
-            enableRowSelection: true,
-            enableQueryURL: false
-          }}
-          getRowProps={row => ({
-            onClick: () => {
-              setSelectedSystem({
-                name: row.original.name,
-                uid: row.original.uid
-              })
-            },
-            className: cn(
-              selectedSystem?.uid === row.original.uid &&
-                'bg-orange-200 dark:bg-orange-600 hover:bg-orange-200 dark:hover:bg-orange-600',
-              'cursor-pointer'
-            )
-          })}
-        />
-      </div>
-      <div className="flex justify-end gap-2 mt-4 pt-4 border-t">
+    <div className="flex flex-col gap-4">
+      <SystemSelect
+        selectedSystem={selectedSystem}
+        onSelect={handleSystemSelect}
+        tableId={TABLE_IDS.SYSTEM_SELECTION_MODAL}
+        className="h-[785px] overflow-y-auto"
+      />
+      <div className="flex justify-end gap-2 pt-4 border-t">
         <Button
           type="button"
           variant={'outline'}
@@ -67,10 +59,7 @@ export function SystemModalContent({
         <Button
           type="button"
           disabled={!selectedSystem}
-          onClick={() => {
-            onSelect(selectedSystem)
-            onClose?.()
-          }}
+          onClick={handleConfirm}
         >
           <FormattedMessage id={message.common.buttons.continue} />
         </Button>
