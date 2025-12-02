@@ -16,8 +16,10 @@ import type {
 } from '@/modules/orderItem/types/form'
 import { SelectSystemComboBox } from '@/modules/shared/form/systemSelect/SelectSystem.combo'
 import type { CodebookType } from '@/types/responses/codebook'
+import type { SystemDetail } from '@/types/responses/systems'
 
 import { OrderLineConfigRow } from '../components/OrderLineConfigRow'
+import { SystemHierarchyBreadcrumb } from '../components/SystemHierarchyBreadcrumb.comp'
 import useOrderLineFormFields from '../OrderLineForm.fields'
 
 /**
@@ -48,6 +50,10 @@ export const OrderLineStep3SystemConfig = () => {
   const globalParentSystem = useWatch({
     control,
     name: 'globalParentSystem'
+  })
+  const globalParentSystemPath = useWatch({
+    control,
+    name: 'globalParentSystemPath'
   })
   const name = useWatch({ control, name: 'name' })
   const quantity = useWatch({ control, name: 'quantity' }) || 1
@@ -98,6 +104,15 @@ export const OrderLineStep3SystemConfig = () => {
     [fields, setValue, replace]
   )
 
+  // Callback: Handle system detail change to capture parentPath
+  const handleSystemDetailChange = useCallback(
+    (system: SystemDetail) => {
+      // Store parentPath for breadcrumb display
+      setValue('globalParentSystemPath', system.parentPath || null)
+    },
+    [setValue]
+  )
+
   // Callback: Handle system type change (new vs existing)
   const handleSystemTypeChange = useCallback(
     (
@@ -129,12 +144,21 @@ export const OrderLineStep3SystemConfig = () => {
     <Grid className="pt-2">
       <Col sm="full">
         <div className="mb-6">
+          {/* System hierarchy breadcrumbs */}
+          <SystemHierarchyBreadcrumb
+            parentPath={globalParentSystemPath || null}
+            currentSystem={globalParentSystem || null}
+            className="mb-3"
+          />
+
+          {/* System selector */}
           <SelectSystemComboBox
             selectSystemField={{
               ...formFields.parentSystem,
               name: 'globalParentSystem'
             }}
             onChange={handleParentSystemChange}
+            onSystemDetailChange={handleSystemDetailChange}
           />
           <p className="text-sm text-muted-foreground mt-1">
             This parent system will be applied to all order lines

@@ -71,6 +71,7 @@ export interface OrderLineWizardFormType extends OrderLineFormType {
   // Wizard-specific fields (UI state only, not submitted to backend)
   _selectedCatalogueItem?: any
   globalParentSystem?: CodebookType | null
+  globalParentSystemPath?: CodebookType[] | null
   systemConfigs?: OrderLineSystemConfig[]
 }
 

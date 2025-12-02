@@ -12,11 +12,13 @@ import { SystemSelect } from '../SystemSelect'
 interface SystemModalContentProps {
   onSelect: (item: CodebookType | null) => void
   onClose?: () => void
+  onSystemDetailSelect?: (system: SystemDetail) => void
 }
 
 export function SystemModalContent({
   onSelect,
-  onClose
+  onClose,
+  onSystemDetailSelect
 }: SystemModalContentProps) {
   const [selectedSystem, setSelectedSystem] = useState<
     SystemDetail | undefined
@@ -34,6 +36,8 @@ export function SystemModalContent({
         uid: selectedSystem.uid
       }
       onSelect(codebookItem)
+      // Call optional callback with full SystemDetail (includes parentPath)
+      onSystemDetailSelect?.(selectedSystem)
       onClose?.()
     }
   }
