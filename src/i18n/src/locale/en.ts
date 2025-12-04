@@ -908,12 +908,37 @@ export const messages = {
     form: {
       status: { label: 'Status', placeholder: 'Select Status' },
       name: { label: 'Name', placeholder: 'Name' },
-      location: { label: 'Location', placeholder: 'Select Location' }
+      location: { label: 'Location', placeholder: 'Select Location' },
+      operationalState: {
+        label: 'Operational State',
+        placeholder: 'Select Operational State',
+        lastUpdated: 'Last updated:',
+        viewHistory: 'View History',
+        noPermission: 'Only Area Managers can edit this field',
+        values: {
+          IN_OPERATION: 'In operation',
+          OVERNIGHT_STANDBY: 'Overnight standby',
+          EXPERIMENTAL_TECHNOLOGY_STANDBY: 'Experimental technology standby',
+          EXPERIMENTAL_TECHNOLOGY_SAFE_STATE:
+            'Experimental technology safe state',
+          ALL_TECHNOLOGY_SHUTDOWN: 'All technology Shutdown',
+          POWER_SHUTDOWN: 'Power shutdown'
+        }
+      }
     },
     nestedForm: {
       role: { label: 'Select role' },
       employee: { label: 'Select employee' },
       team: { label: 'Select team' }
+    },
+    operationalStateHistory: {
+      title: 'Operational State History',
+      dateTime: 'Date/Time',
+      previousState: 'Previous State',
+      newState: 'New State',
+      changedBy: 'Changed By',
+      noHistory: 'No history available',
+      close: 'Close'
     }
   },
   orderItem: { head: 'ELI Panda - Order Item' },

@@ -6,19 +6,24 @@ import { navigateBack } from '@/utils'
 
 import { useRoomCardStore } from '../store/useRoomCardStore'
 import type { RoomCardFormType } from '../types/form'
-import { updateRoomCardVariables } from '../utils'
+import { hasOperationalStateChanged, updateRoomCardVariables } from '../utils'
 import { useRoomCard } from './useRoomCard'
 
 const updateRoomCardMutation = gql(`
   mutation UpdateRoomCardMutation(
     $where: RoomCardWhere
     $update: RoomCardUpdateInput
+    $node: String
+    $nodeUid: String
+    $action: String
   ) {
     updateRoomCards(where: $where, update: $update) {
       roomCards {
         purityClass
         name
         status
+        operationalState
+        operationalStateLastUpdated
         prescribedClothing
         entryToHvacTent
         cleaningScheduleDate
@@ -62,17 +67,40 @@ const updateRoomCardMutation = gql(`
         }
       }
     }
+    updatedByResolver(
+      node: $node
+      nodeUid: $nodeUid
+      action: $action
+    )
+  }
+`)
+
+const updateOperationalStateMutation = gql(`
+  mutation UpdateOperationalStateMutation(
+    $node: String
+    $nodeUid: String
+    $action: String
+    $previousState: String
+    $newState: String
+  ) {
+    updatedByResolver(
+      node: $node
+      nodeUid: $nodeUid
+      action: $action
+      previousState: $previousState
+      newState: $newState
+    )
   }
 `)
 
 export const useRoomCardUpdate = (roomCardUid?: string) => {
-  // const [update] = useMutation(updateRoomCardMutation, {
-  // refetchQueries: ['RoomCards', 'RoomCard']
-  // })
-
   const { mutateAsync: update } = useGraphQLMutation(updateRoomCardMutation)
-  const { roomCard: roomCardOrigin } = useRoomCard(roomCardUid)
-  const { refetch } = useRoomCards()
+  const { mutateAsync: updateOpState } = useGraphQLMutation(
+    updateOperationalStateMutation
+  )
+  const { roomCard: roomCardOrigin, refetch: refetchRoomCard } =
+    useRoomCard(roomCardUid)
+  const { refetch: refetchRoomCards } = useRoomCards()
 
   const {
     deleteHallContacts,
@@ -86,45 +114,78 @@ export const useRoomCardUpdate = (roomCardUid?: string) => {
   const updateRoomCard = (
     roomCardForm: RoomCardFormType,
     saveAndExit: boolean
-  ) =>
-    update(
-      updateRoomCardVariables({
-        uid: roomCardUid,
-        roomCard: roomCardForm,
-        deleteHallContacts,
-        disconnectDeptContacts,
-        disconnectTeams,
-        newDeptContacts,
-        newHallContacts,
-        newTeams,
-        disconnectLocations: roomCardOrigin?.locations
-          ?.filter(
-            originLocation =>
-              !roomCardForm.locations?.some(
-                location => originLocation.uid === location.uid
-              )
-          )
-          .map(location => ({
-            uid: location.uid,
-            code: location.code,
-            name: location.name
-          })) as Codebooktree[],
-        newLocations: roomCardForm.locations
-          ?.filter(
-            location =>
-              !roomCardOrigin?.locations?.some(
-                originLocation => originLocation.uid === location.uid
-              )
-          )
-          .map(location => ({
-            uid: location.uid,
-            code: location.code,
-            name: location.name
-          })) as Codebooktree[]
-      }),
+  ) => {
+    const variables = updateRoomCardVariables({
+      uid: roomCardUid,
+      roomCard: roomCardForm,
+      deleteHallContacts,
+      disconnectDeptContacts,
+      disconnectTeams,
+      newDeptContacts,
+      newHallContacts,
+      newTeams,
+      originalOperationalState: roomCardOrigin?.operationalState,
+      disconnectLocations: roomCardOrigin?.locations
+        ?.filter(
+          originLocation =>
+            !roomCardForm.locations?.some(
+              location => originLocation.uid === location.uid
+            )
+        )
+        .map(location => ({
+          uid: location.uid,
+          code: location.code,
+          name: location.name
+        })) as Codebooktree[],
+      newLocations: roomCardForm.locations
+        ?.filter(
+          location =>
+            !roomCardOrigin?.locations?.some(
+              originLocation => originLocation.uid === location.uid
+            )
+        )
+        .map(location => ({
+          uid: location.uid,
+          code: location.code,
+          name: location.name
+        })) as Codebooktree[]
+    })
+
+    // Prepare data for UPDATE action (without previousState/newState)
+    const updateData = {
+      node: 'RoomCard',
+      nodeUid: roomCardUid || '',
+      action: 'UPDATE'
+    }
+
+    return update(
       {
-        onSuccess: () => {
-          refetch()
+        ...variables,
+        ...updateData
+      },
+      {
+        onSuccess: async () => {
+          // If operational state changed, create a separate history entry
+          if (
+            hasOperationalStateChanged(
+              roomCardOrigin?.operationalState,
+              roomCardForm.operationalState
+            )
+          ) {
+            await updateOpState({
+              node: 'RoomCard',
+              nodeUid: roomCardUid || '',
+              action: 'OPERATION_STATE',
+              previousState: roomCardOrigin?.operationalState || '',
+              newState: roomCardForm.operationalState || ''
+            })
+          }
+
+          // Refetch room card detail to update roomCardOrigin for next save
+          await refetchRoomCard()
+          // Refetch room cards list
+          refetchRoomCards()
+
           if (saveAndExit) {
             navigateBack()
           }
@@ -133,6 +194,7 @@ export const useRoomCardUpdate = (roomCardUid?: string) => {
         // refetchQueries: [roomCardsQuery, roomCardQuery]
       }
     )
+  }
 
   return { updateRoomCard }
 }

@@ -9,6 +9,8 @@ export const roomCardQuery = gql(`
     roomCards(where: $where) {
       name
       status
+      operationalState
+      operationalStateLastUpdated
       purityClass
       prescribedClothing
       entryToHvacTent
@@ -58,7 +60,7 @@ export const roomCardQuery = gql(`
 `)
 
 export const useRoomCard = (roomCardUid?: string) => {
-  const { data, error, isLoading } = useGraphQL(roomCardQuery, {
+  const { data, error, isLoading, refetch } = useGraphQL(roomCardQuery, {
     variables: {
       where: { uid: roomCardUid }
     }
@@ -70,5 +72,5 @@ export const useRoomCard = (roomCardUid?: string) => {
     }
   }, [error])
 
-  return { roomCard: data?.roomCards[0], error, loading: isLoading }
+  return { roomCard: data?.roomCards[0], error, loading: isLoading, refetch }
 }

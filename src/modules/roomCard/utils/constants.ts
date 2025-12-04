@@ -1,4 +1,4 @@
-import type { RoomCardStatus } from '@/types/gql/graphql'
+import type { OperationalState, RoomCardStatus } from '@/types/gql/graphql'
 
 export const cleanRooms = [
   {
@@ -65,3 +65,19 @@ export const statusColorMapping = (status: RoomCardStatus) => [
   status === 'CLEAN_MODE' && 'bg-lime-200 dark:bg-lime-600',
   status === 'IN_PREPARATION_MODE' && 'bg-orange-300 dark:bg-orange-600'
 ]
+
+export const operationalStateColorMapping = (
+  state?: OperationalState | null
+) => {
+  if (!state) return 'bg-gray-200 dark:bg-gray-600'
+  return [
+    state === 'IN_OPERATION' && 'bg-green-200 dark:bg-green-500',
+    state === 'OVERNIGHT_STANDBY' && 'bg-blue-200 dark:bg-blue-500',
+    state === 'EXPERIMENTAL_TECHNOLOGY_STANDBY' &&
+      'bg-yellow-200 dark:bg-yellow-500',
+    state === 'EXPERIMENTAL_TECHNOLOGY_SAFE_STATE' &&
+      'bg-orange-200 dark:bg-orange-500',
+    state === 'ALL_TECHNOLOGY_SHUTDOWN' && 'bg-red-300 dark:bg-red-600',
+    state === 'POWER_SHUTDOWN' && 'bg-gray-400 dark:bg-gray-700'
+  ]
+}
