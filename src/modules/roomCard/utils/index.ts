@@ -24,6 +24,21 @@ export const formatDateTime = (dateString?: string | null): string => {
   }).format(date)
 }
 
+/**
+ * Checks if operational state has actually changed by comparing original and current values
+ * Treats null and undefined as equivalent (both represent "no value")
+ */
+export const hasOperationalStateChanged = (
+  original: OperationalState | null | undefined,
+  current: OperationalState | null | undefined
+): boolean => {
+  // Normalize null and undefined to null for consistent comparison
+  const normalizedOriginal = original || null
+  const normalizedCurrent = current || null
+
+  return normalizedOriginal !== normalizedCurrent
+}
+
 type RoomCardUpdateType = {
   roomCard: RoomCardFormType
   newHallContacts: HallContactPerson[]

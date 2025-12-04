@@ -6,7 +6,7 @@ import { navigateBack } from '@/utils'
 
 import { useRoomCardStore } from '../store/useRoomCardStore'
 import type { RoomCardFormType } from '../types/form'
-import { updateRoomCardVariables } from '../utils'
+import { hasOperationalStateChanged, updateRoomCardVariables } from '../utils'
 import { useRoomCard } from './useRoomCard'
 
 const updateRoomCardMutation = gql(`
@@ -16,11 +16,6 @@ const updateRoomCardMutation = gql(`
     $node: String
     $nodeUid: String
     $action: String
-    $opStateNode: String
-    $opStateNodeUid: String
-    $opStateAction: String
-    $opStatePreviousState: String
-    $opStateNewState: String
   ) {
     updateRoomCards(where: $where, update: $update) {
       roomCards {
@@ -77,20 +72,35 @@ const updateRoomCardMutation = gql(`
       nodeUid: $nodeUid
       action: $action
     )
-    operationalStateHistory: updatedByResolver(
-      node: $opStateNode
-      nodeUid: $opStateNodeUid
-      action: $opStateAction
-      previousState: $opStatePreviousState
-      newState: $opStateNewState
+  }
+`)
+
+const updateOperationalStateMutation = gql(`
+  mutation UpdateOperationalStateMutation(
+    $node: String
+    $nodeUid: String
+    $action: String
+    $previousState: String
+    $newState: String
+  ) {
+    updatedByResolver(
+      node: $node
+      nodeUid: $nodeUid
+      action: $action
+      previousState: $previousState
+      newState: $newState
     )
   }
 `)
 
 export const useRoomCardUpdate = (roomCardUid?: string) => {
   const { mutateAsync: update } = useGraphQLMutation(updateRoomCardMutation)
-  const { roomCard: roomCardOrigin } = useRoomCard(roomCardUid)
-  const { refetch } = useRoomCards()
+  const { mutateAsync: updateOpState } = useGraphQLMutation(
+    updateOperationalStateMutation
+  )
+  const { roomCard: roomCardOrigin, refetch: refetchRoomCard } =
+    useRoomCard(roomCardUid)
+  const { refetch: refetchRoomCards } = useRoomCards()
 
   const {
     deleteHallContacts,
@@ -148,32 +158,34 @@ export const useRoomCardUpdate = (roomCardUid?: string) => {
       action: 'UPDATE'
     }
 
-    // Prepare data for OPERATION_STATE action (with previousState/newState)
-    const opStateData = variables.operationalStateChanged
-      ? {
-          opStateNode: 'RoomCard',
-          opStateNodeUid: roomCardUid || '',
-          opStateAction: 'OPERATION_STATE',
-          opStatePreviousState: variables.originalOperationalState || '',
-          opStateNewState: roomCardForm.operationalState || ''
-        }
-      : {
-          opStateNode: null,
-          opStateNodeUid: null,
-          opStateAction: null,
-          opStatePreviousState: null,
-          opStateNewState: null
-        }
-
     return update(
       {
         ...variables,
-        ...updateData,
-        ...opStateData
+        ...updateData
       },
       {
-        onSuccess: () => {
-          refetch()
+        onSuccess: async () => {
+          // If operational state changed, create a separate history entry
+          if (
+            hasOperationalStateChanged(
+              roomCardOrigin?.operationalState,
+              roomCardForm.operationalState
+            )
+          ) {
+            await updateOpState({
+              node: 'RoomCard',
+              nodeUid: roomCardUid || '',
+              action: 'OPERATION_STATE',
+              previousState: roomCardOrigin?.operationalState || '',
+              newState: roomCardForm.operationalState || ''
+            })
+          }
+
+          // Refetch room card detail to update roomCardOrigin for next save
+          await refetchRoomCard()
+          // Refetch room cards list
+          refetchRoomCards()
+
           if (saveAndExit) {
             navigateBack()
           }
