@@ -9,6 +9,8 @@ export const roomCardQuery = gql(`
     roomCards(where: $where) {
       name
       status
+      operationalState
+      operationalStateLastUpdated
       purityClass
       prescribedClothing
       entryToHvacTent

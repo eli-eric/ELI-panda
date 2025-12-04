@@ -1,6 +1,12 @@
 type Mutation {
   createSparePartRelation(fromSystemIds: [ID!]!, toSystemIds: [ID!]!): String
-  updatedByResolver(node: String, nodeUid: String, action: String): String
+  updatedByResolver(
+    node: String
+    nodeUid: String
+    action: String
+    previousState: String
+    newState: String
+  ): String
   itemOriginatedResolver(itemUid: String, systemOriginatedUid: String): String
   systemMovedFromResolver(systemFromUid: String, systemUid: String): String
   moveSystem(systemUid: ID!, newParentUid: ID!, oldParentUid: ID): String
@@ -24,6 +30,15 @@ enum RoomCardStatus {
   DIRTY_MODE
   CLEAN_MODE
   IN_PREPARATION_MODE
+}
+
+enum OperationalState {
+  IN_OPERATION
+  OVERNIGHT_STANDBY
+  EXPERIMENTAL_TECHNOLOGY_STANDBY
+  EXPERIMENTAL_TECHNOLOGY_SAFE_STATE
+  ALL_TECHNOLOGY_SHUTDOWN
+  POWER_SHUTDOWN
 }
 
 type ContactPersonRole @authentication {
@@ -78,6 +93,8 @@ type RoomCard @authentication {
   uid: ID! @id
   name: String!
   status: RoomCardStatus!
+  operationalState: OperationalState
+  operationalStateLastUpdated: DateTime
   contactPersonsHall: [HallContactPerson!]!
     @relationship(type: "HAS_CONTACT_PERSON_HALL", direction: OUT)
   contactPersonsDept: [Employee!]!
@@ -100,6 +117,12 @@ type RoomCard @authentication {
   compressedAirDistributionClient: String
   nitrogenCentralDistributionClient: String
   maxPressureInColdDistributionClient: String
+  updatedBy: [User!]!
+    @relationship(
+      type: "WAS_UPDATED_BY"
+      direction: OUT
+      properties: "wasUpdatedBy"
+    )
 }
 
 type Team @authentication {
@@ -241,12 +264,15 @@ type SchemaMigration @authentication {
 interface wasUpdatedBy @relationshipProperties {
   at: DateTime! @timestamp
   action: Actions!
+  previousState: String
+  newState: String
 }
 
 enum Actions {
   INSERT
   UPDATE
   DELETE
+  OPERATION_STATE
 }
 
 interface IsSpareFor @relationshipProperties {

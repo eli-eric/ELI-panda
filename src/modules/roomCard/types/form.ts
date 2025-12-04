@@ -2,6 +2,7 @@ import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGra
 import type {
   CleaningScheduleDay,
   ContactPersonRole,
+  OperationalState,
   PrescribedClothing,
   PurityClass,
   RoomCardStatus
@@ -23,6 +24,7 @@ export type ContactPersonsHall = {
 
 export type RoomCardFormType = {
   status: RoomCardStatus
+  operationalState?: OperationalState | null
   name: string
   contactPersonsHall: ContactPersonsHall[]
   contactPersonsDept: EmployeeType[]

@@ -32,6 +32,7 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
     defaultValues: {
       name: roomCard?.name as string,
       status: roomCard?.status,
+      operationalState: roomCard?.operationalState,
       contactPersonsDept: roomCard?.contactPersonsDept as any,
       contactPersonsHall: roomCard?.contactPersonsHall as any,
       teams: roomCard?.teams as any,
@@ -66,6 +67,7 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
   const { clear } = useRoomCardStore()
 
   const status = watch('status')
+  const operationalState = watch('operationalState')
   const teams = watch('teams')
   const contactPersonsHall = watch('contactPersonsHall')
   const contactPersonsDept = watch('contactPersonsDept')
@@ -118,6 +120,9 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
       <RoomCardComponent
         formMethods={formMethods}
         status={status}
+        operationalState={operationalState}
+        operationalStateLastUpdated={roomCard?.operationalStateLastUpdated}
+        roomCardUid={roomCardUid}
         onSubmitAndExit={onSubmitAndExit}
         onSubmit={onSubmit}
         contactPersonsHall={contactPersonsHall}

@@ -3,6 +3,7 @@ import { z } from 'zod'
 import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
 import type {
   CleaningScheduleDay,
+  OperationalState,
   PrescribedClothing,
   PurityClass,
   RoomCardStatus
@@ -17,6 +18,7 @@ export const roomCardSchema = z.object({
     data => typeof data === 'string',
     'Status is required'
   ),
+  operationalState: z.custom<OperationalState>().nullable().optional(),
   name: z.string().min(1, 'Name is required'),
   teams: z
     .array(z.custom<CodebookType>())

@@ -4,7 +4,19 @@ import type { JWT } from 'next-auth/jwt'
 
 const updatedByResolver = async (
   _source: unknown,
-  { node, nodeUid, action }: { node: string; nodeUid: string; action: string },
+  {
+    node,
+    nodeUid,
+    action,
+    previousState,
+    newState
+  }: {
+    node: string
+    nodeUid: string
+    action: string
+    previousState?: string
+    newState?: string
+  },
   context: {
     executor: { executionContext: Driver }
     authorization: { isAuthenticated: boolean; jwt: JWT }
@@ -24,16 +36,45 @@ const updatedByResolver = async (
   try {
     transaction = session.beginTransaction()
 
+    // Build properties object conditionally
+    const properties: Record<string, any> = {
+      action: '$action',
+      at: 'datetime()'
+    }
+
+    if (previousState !== undefined && previousState !== null) {
+      properties.previousState = '$previousState'
+    }
+
+    if (newState !== undefined && newState !== null) {
+      properties.newState = '$newState'
+    }
+
+    const propsString = Object.entries(properties)
+      .map(([key, value]) => `${key}: ${value}`)
+      .join(', ')
+
     const createRelationQuery = `
         MATCH (a:${node}), (u:User)
         WHERE a.uid = $nodeUid AND u.uid = $userUid
-        CREATE (a)-[r:WAS_UPDATED_BY { action: $action, at: datetime() }]->(u)
+        CREATE (a)-[r:WAS_UPDATED_BY { ${propsString} }]->(u)
         `
-    await transaction.run(createRelationQuery, {
+
+    const params: Record<string, any> = {
       nodeUid,
       userUid: context.authorization.jwt.sub,
       action
-    })
+    }
+
+    if (previousState !== undefined && previousState !== null) {
+      params.previousState = previousState
+    }
+
+    if (newState !== undefined && newState !== null) {
+      params.newState = newState
+    }
+
+    await transaction.run(createRelationQuery, params)
 
     await transaction.commit()
 
