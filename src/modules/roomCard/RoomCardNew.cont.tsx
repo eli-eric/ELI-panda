@@ -1,34 +1,56 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import { Suspense, useEffect } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
+import ErrorPage from '@/components/error/ErrorPage'
+import { Form } from '@/components/form/Form'
+import { HeaderWithButtons } from '@/components/header/HeaderWithButtons'
+import Card from '@/components/layout/Card'
+import { CardContent } from '@/components/ui/card'
+import ProgressBarComponent from '@/components/progress-bar.comp'
+import usePermission from '@/hooks/usePermission'
+import { FILE_TYPE } from '@/modules/shared/fileManager/types'
 import { PATH } from '@/types/constants/paths'
+import { ROLE } from '@/types/constants/roles'
+import { RoomCardStatus } from '@/types/gql/graphql'
 
-import { useRoomCards } from '../roomCards/hooks/useRoomCards'
+import FileManager from '../shared/fileManager/FileManager'
+import { RoomCardInfoCard } from './components/RoomCardInfoCard'
+import { RoomCardBuildingMaintenanceCard } from './components/table/RoomCardBuildingMaintenanceCard'
+import { RoomCardCleanRoomsCard } from './components/table/RoomCardCleanRoomsCard'
+import { RoomCardContactsCard } from './components/table/RoomCardContactsCard'
+import { RoomCardLocationsCard } from './components/table/RoomCardLocationsCard'
 import {
   makeRoomCardsCreateData,
   useRoomCardCreate
 } from './hooks/useRoomCardCreate'
-import { RoomCardComponent } from './RoomCard.comp'
 import { roomCardSchema } from './schemas/roomCard.schema'
 import { useRoomCardStore } from './store/useRoomCardStore'
 import type { RoomCardFormType } from './types/form'
+import { useRoomCards } from '../roomCards/hooks/useRoomCards'
 
 export const RoomCardNewContainer = () => {
+  const canEdit = usePermission([ROLE.ROOM_CARD_EDIT])
   const formMethods = useForm<RoomCardFormType>({
-    resolver: zodResolver(roomCardSchema)
+    resolver: zodResolver(roomCardSchema),
+    defaultValues: {
+      status: RoomCardStatus.CleanMode
+    }
   })
   const { refetch } = useRoomCards()
 
   const router = useRouter()
   const { watch, handleSubmit } = formMethods
   const { createRoomCard } = useRoomCardCreate()
+
+  const status = watch('status') || RoomCardStatus.CleanMode
+  const operationalState = watch('operationalState')
   const contactPersonsHall = watch('contactPersonsHall')
-  const status = watch('status')
-  const teams = watch('teams')
   const contactPersonsDept = watch('contactPersonsDept')
+  const teams = watch('teams')
   const locations = watch('locations')
 
   const { clear } = useRoomCardStore()
@@ -43,13 +65,11 @@ export const RoomCardNewContainer = () => {
             PATH.ROOM_CARD + '/' + data?.createRoomCards?.roomCards[0].uid
           )
         }
-        // TODO
-        //refetchQueries: ['RoomCards', 'RoomCard']
       }),
       {
-        loading: 'Saving room card...',
-        success: 'Room card was successfully updated',
-        error: 'Error while saving room card'
+        loading: 'Creating room card...',
+        success: 'Room card was successfully created',
+        error: 'Error while creating room card'
       }
     )
   })
@@ -63,27 +83,59 @@ export const RoomCardNewContainer = () => {
         }
       }),
       {
-        loading: 'Saving room card...',
-        success: 'Room card was successfully updated',
-        error: 'Error while saving room card'
+        loading: 'Creating room card...',
+        success: 'Room card was successfully created',
+        error: 'Error while creating room card'
       }
     )
   })
 
+  const fields = {
+    name: {
+      name: 'name',
+      disabled: !canEdit
+    },
+    status: {
+      name: 'status',
+      disabled: !canEdit
+    },
+    operationalState: {
+      name: 'operationalState',
+      disabled: !canEdit
+    }
+  }
+
   return (
-    <div className="relative h-screen overflow-auto">
-      <RoomCardComponent
-        {...{
-          formMethods,
-          status,
-          onSubmitAndExit,
-          onSubmit,
-          contactPersonsHall,
-          contactPersonsDept,
-          teams,
-          locations
-        }}
+    <Form formMethods={formMethods} enableLeaveWarning={true}>
+      <HeaderWithButtons
+        loading={false}
+        editRole={ROLE.ROOM_CARD_EDIT}
+        onSubmit={onSubmit}
+        onSubmitAndExit={onSubmitAndExit}
+        title="Create New Room Card"
+        isFormDirty={formMethods.formState.isDirty}
       />
-    </div>
+
+      <div className="container mx-auto max-w-7xl px-4 space-y-6 py-6">
+        <RoomCardInfoCard
+          fields={fields}
+          status={status}
+          operationalState={operationalState}
+          operationalStateLastUpdated={null}
+        />
+
+        <RoomCardContactsCard
+          contactPersonsHall={contactPersonsHall || []}
+          contactPersonsDept={contactPersonsDept || []}
+          teams={teams}
+        />
+
+        <RoomCardLocationsCard locations={locations} />
+
+        <RoomCardCleanRoomsCard />
+
+        <RoomCardBuildingMaintenanceCard />
+      </div>
+    </Form>
   )
 }

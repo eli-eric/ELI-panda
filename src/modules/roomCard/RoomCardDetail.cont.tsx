@@ -5,18 +5,27 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import ErrorPage from '@/components/error/ErrorPage'
+import { Form } from '@/components/form/Form'
+import { HeaderWithButtons } from '@/components/header/HeaderWithButtons'
 import Card from '@/components/layout/Card'
 import LoaderComponent from '@/components/loader.comp'
 import ProgressBarComponent from '@/components/progress-bar.comp'
+import { CardContent } from '@/components/ui/card'
 import usePermission from '@/hooks/usePermission'
 import { FILE_TYPE } from '@/modules/shared/fileManager/types'
 import { ROLE } from '@/types/constants/roles'
 import type { PrescribedClothing } from '@/types/gql/graphql'
 
 import FileManager from '../shared/fileManager/FileManager'
+import { OperationalStateHistoryButton } from './components/OperationalStateHistoryButton'
+import { RoomCardInfoCard } from './components/RoomCardInfoCard'
+import { RoomCardBuildingMaintenanceCard } from './components/table/RoomCardBuildingMaintenanceCard'
+import { RoomCardCleanRoomsCard } from './components/table/RoomCardCleanRoomsCard'
+import { RoomCardContactsCard } from './components/table/RoomCardContactsCard'
+import { RoomCardLocationsCard } from './components/table/RoomCardLocationsCard'
+import { useCanEditOperationalState } from './hooks/useCanEditOperationalState'
 import { useRoomCard } from './hooks/useRoomCard'
 import { useRoomCardUpdate } from './hooks/useRoomCardUpdate'
-import { RoomCardComponent } from './RoomCard.comp'
 import { roomCardSchema } from './schemas/roomCard.schema'
 import { useRoomCardStore } from './store/useRoomCardStore'
 import type { RoomCardFormType } from './types/form'
@@ -73,6 +82,10 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
   const contactPersonsDept = watch('contactPersonsDept')
   const locations = watch('locations')
 
+  const canEditOperationalState = useCanEditOperationalState(
+    contactPersonsHall || []
+  )
+
   useEffect(() => () => clear(), [clear])
 
   const onSubmit = handleSubmit((roomCard: RoomCardFormType) => {
@@ -113,34 +126,71 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
     )
   })
 
+  const fields = {
+    name: {
+      name: 'name',
+      disabled: !canEdit
+    },
+    status: {
+      name: 'status',
+      disabled: !canEdit
+    },
+    operationalState: {
+      name: 'operationalState',
+      disabled: !canEditOperationalState
+    }
+  }
+
   if (loading) return <LoaderComponent />
 
   return (
-    <div className="relative h-screen overflow-auto">
-      <RoomCardComponent
-        formMethods={formMethods}
-        status={status}
-        operationalState={operationalState}
-        operationalStateLastUpdated={roomCard?.operationalStateLastUpdated}
-        roomCardUid={roomCardUid}
-        onSubmitAndExit={onSubmitAndExit}
+    <Form formMethods={formMethods} enableLeaveWarning={true}>
+      <HeaderWithButtons
+        loading={false}
+        editRole={ROLE.ROOM_CARD_EDIT}
         onSubmit={onSubmit}
-        contactPersonsHall={contactPersonsHall}
-        contactPersonsDept={contactPersonsDept}
-        teams={teams}
-        locations={locations}
+        onSubmitAndExit={onSubmitAndExit}
+        title={`Room Card: ${roomCard?.name || roomCardUid}`}
+        isFormDirty={formMethods.formState.isDirty}
+        customElement={
+          <OperationalStateHistoryButton roomCardUid={roomCardUid} />
+        }
       />
-      <Card className="flex flex-col justify-between">
-        <Suspense fallback={<ProgressBarComponent />}>
-          <ErrorBoundary fallback={<ErrorPage />}>
-            <FileManager
-              itemType={FILE_TYPE.ROOM_CARD}
-              uid={roomCardUid}
-              hasEditRole={canEdit}
-            />
-          </ErrorBoundary>
-        </Suspense>
-      </Card>
-    </div>
+
+      <div className="container mx-auto max-w-7xl px-4 space-y-6 py-6">
+        <RoomCardInfoCard
+          fields={fields}
+          status={status}
+          operationalState={operationalState}
+          operationalStateLastUpdated={roomCard?.operationalStateLastUpdated}
+        />
+
+        <RoomCardContactsCard
+          contactPersonsHall={contactPersonsHall}
+          contactPersonsDept={contactPersonsDept}
+          teams={teams}
+        />
+
+        <RoomCardLocationsCard locations={locations} />
+
+        <RoomCardCleanRoomsCard />
+
+        <RoomCardBuildingMaintenanceCard />
+
+        <Card>
+          <CardContent className="pt-6">
+            <Suspense fallback={<ProgressBarComponent />}>
+              <ErrorBoundary fallback={<ErrorPage />}>
+                <FileManager
+                  itemType={FILE_TYPE.ROOM_CARD}
+                  uid={roomCardUid}
+                  hasEditRole={canEdit}
+                />
+              </ErrorBoundary>
+            </Suspense>
+          </CardContent>
+        </Card>
+      </div>
+    </Form>
   )
 }

@@ -44,7 +44,8 @@ export const useOperationalStateHistory = (roomCardUid?: string) => {
     variables: {
       roomCardUid: roomCardUid || ''
     },
-    enabled: !!roomCardUid
+    enabled: !!roomCardUid,
+    refetchOnMount: 'always'
   })
 
   useEffect(() => {
