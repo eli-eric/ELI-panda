@@ -12,6 +12,11 @@ export const roomCardsQuery = gql(`
       name
       purityClass
       status
+      operationalState {
+        code
+        name
+        uid
+      }
       prescribedClothing
       entryToHvacTent
       cleaningScheduleDays

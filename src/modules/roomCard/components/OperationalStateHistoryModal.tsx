@@ -3,8 +3,10 @@ import type { FC } from 'react'
 import { useMemo } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
 
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { message } from '@/i18n/src/messages'
+import { cn } from '@/lib/utils'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import { PandaTableV2 } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
 
@@ -13,8 +15,10 @@ import {
   useOperationalStateHistory
 } from '../hooks/useOperationalStateHistory'
 import { formatDateTime } from '../utils'
+import { getOperationalStateDotColor } from '../utils/statusColors'
 
 const messages = message.roomCardsPage.operationalStateHistory
+const stateMessages = message.roomCardsPage.form.operationalState.values
 
 type HistoryItem = ParsedHistoryItem
 
@@ -44,21 +48,49 @@ export const OperationalStateHistoryModal: FC<Props> = ({
         id: 'previousState',
         accessorKey: 'previousState',
         header: fm({ id: messages.previousState }),
-        size: 200,
-        cell: ({ getValue }) => getValue() || '-'
+        size: 300,
+        cell: ({ getValue }) => {
+          const value = getValue()
+          return (
+            <Badge
+              className={cn(
+                'text-gray-900 dark:text-white',
+                getOperationalStateDotColor(value as any)
+              )}
+            >
+              {value ? (
+                <FormattedMessage id={stateMessages[value as string]} />
+              ) : (
+                '—'
+              )}
+            </Badge>
+          )
+        }
       },
       {
         id: 'newState',
         accessorKey: 'newState',
         header: fm({ id: messages.newState }),
-        size: 200,
-        cell: ({ getValue }) => getValue() || '-'
+        size: 300,
+        cell: ({ getValue }) => (
+          <Badge
+            className={cn(
+              'text-gray-900 dark:text-white',
+              getOperationalStateDotColor(getValue() as any)
+            )}
+          >
+            <FormattedMessage
+              id={stateMessages[getValue() as string]}
+              defaultMessage={'uknown'}
+            />
+          </Badge>
+        )
       },
       {
         id: 'changedBy',
-        accessorFn: row => `${row.changedBy.firstName} ${row.changedBy.lastName}`,
-        header: fm({ id: messages.changedBy }),
-        size: 200
+        accessorFn: row =>
+          `${row.changedBy.firstName} ${row.changedBy.lastName}`,
+        header: fm({ id: messages.changedBy })
       }
     ],
     [fm]
@@ -91,7 +123,7 @@ export const OperationalStateHistoryModal: FC<Props> = ({
             tableId="operational-state-history"
             data={history}
             skeletonRowCount={5}
-            className="relative overflow-y-scroll scrollbar-style"
+            className="relative overflow-y-scroll scrollbar-style w-full"
             settings={{
               enableQueryURL: false,
               enableColumnHiding: false,
