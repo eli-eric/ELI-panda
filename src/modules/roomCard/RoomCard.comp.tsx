@@ -38,4 +38,3 @@ export const RoomCardComponent: FC<Props> = ({
     </div>
   )
 }
-

@@ -1,4 +1,5 @@
-import type { OperationalState, RoomCardStatus } from '@/types/gql/graphql'
+import type { RoomCardStatus } from '@/types/gql/graphql'
+import type { CodebookType } from '@/types/responses/codebook'
 
 /**
  * Get status badge color classes (for Badge component background)
@@ -33,27 +34,36 @@ export const getStatusLabel = (status: RoomCardStatus): string => {
   }
 }
 
+export const getOperationalStateLabel = (
+  state?: CodebookType | null
+): string => {
+  // Return name directly from codebook if available
+  if (state?.name) return state.name
+  return 'Unknown State'
+}
+
 /**
  * Get operational state dot color (for small indicator)
+ * Uses code from codebook to determine color
  */
 export const getOperationalStateDotColor = (
-  state?: OperationalState | null
+  state?: CodebookType | null
 ): string => {
-  if (!state) return 'bg-gray-400 dark:bg-gray-500'
+  if (!state?.code) return 'bg-gray-400 dark:bg-gray-500'
 
-  switch (state) {
-    case 'IN_OPERATION':
-      return 'bg-green-500 dark:bg-green-400'
-    case 'OVERNIGHT_STANDBY':
-      return 'bg-blue-500 dark:bg-blue-400'
-    case 'EXPERIMENTAL_TECHNOLOGY_STANDBY':
-      return 'bg-yellow-500 dark:bg-yellow-400'
-    case 'EXPERIMENTAL_TECHNOLOGY_SAFE_STATE':
+  switch (state.code) {
+    case 'OS1':
+      return 'bg-green-700 dark:bg-green-700'
+    case 'OS2':
+      return 'bg-green-500 dark:bg-green-500'
+    case 'OS3':
+      return 'bg-yellow-500 dark:bg-yellow-500'
+    case 'OS4':
       return 'bg-orange-500 dark:bg-orange-400'
-    case 'ALL_TECHNOLOGY_SHUTDOWN':
-      return 'bg-red-500 dark:bg-red-400'
-    case 'POWER_SHUTDOWN':
-      return 'bg-gray-600 dark:bg-gray-500'
+    case 'OS5':
+      return 'bg-red-400 dark:bg-red-400'
+    case 'OS6':
+      return 'bg-red-700 dark:bg-red-700'
     default:
       return 'bg-gray-400 dark:bg-gray-500'
   }

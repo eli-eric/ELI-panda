@@ -15,7 +15,6 @@ import {
 import { formatDateTime } from '../utils'
 
 const messages = message.roomCardsPage.operationalStateHistory
-const stateMessages = message.roomCardsPage.form.operationalState.values
 
 type HistoryItem = ParsedHistoryItem
 
@@ -46,23 +45,14 @@ export const OperationalStateHistoryModal: FC<Props> = ({
         accessorKey: 'previousState',
         header: fm({ id: messages.previousState }),
         size: 200,
-        cell: ({ getValue }) => {
-          const value = getValue()
-          return value ? (
-            <FormattedMessage id={stateMessages[value as string]} />
-          ) : (
-            '-'
-          )
-        }
+        cell: ({ getValue }) => getValue() || '-'
       },
       {
         id: 'newState',
         accessorKey: 'newState',
         header: fm({ id: messages.newState }),
         size: 200,
-        cell: ({ getValue }) => (
-          <FormattedMessage id={stateMessages[getValue() as string]} />
-        )
+        cell: ({ getValue }) => getValue() || '-'
       },
       {
         id: 'changedBy',

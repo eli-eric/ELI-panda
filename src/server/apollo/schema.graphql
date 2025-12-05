@@ -32,15 +32,6 @@ enum RoomCardStatus {
   IN_PREPARATION_MODE
 }
 
-enum OperationalState {
-  IN_OPERATION
-  OVERNIGHT_STANDBY
-  EXPERIMENTAL_TECHNOLOGY_STANDBY
-  EXPERIMENTAL_TECHNOLOGY_SAFE_STATE
-  ALL_TECHNOLOGY_SHUTDOWN
-  POWER_SHUTDOWN
-}
-
 type ContactPersonRole @authentication {
   uid: ID! @id
   name: String!
@@ -89,11 +80,18 @@ enum PurityClass {
   ISO_8
 }
 
+type OperationalState @authentication {
+  uid: ID! @id
+  name: String!
+  code: String!
+}
+
 type RoomCard @authentication {
   uid: ID! @id
   name: String!
   status: RoomCardStatus!
   operationalState: OperationalState
+    @relationship(type: "HAS_OPERATIONAL_STATE", direction: OUT)
   operationalStateLastUpdated: DateTime
   contactPersonsHall: [HallContactPerson!]!
     @relationship(type: "HAS_CONTACT_PERSON_HALL", direction: OUT)

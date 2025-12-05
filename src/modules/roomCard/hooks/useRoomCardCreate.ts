@@ -15,36 +15,44 @@ const createRoomCardMutation = gql(`
   }
 `)
 
-export const makeRoomCardsCreateData = (formData: RoomCardFormType) => ({
-  input: [
-    {
-      ...formData,
-      name: formData?.name ? formData?.name : '',
-      cleaningScheduleDate: formData?.cleaningScheduleDate
-        ? formData?.cleaningScheduleDate
-        : undefined,
-      contactPersonsHall: {
-        create: formData?.contactPersonsHall.map(contactPerson => ({
-          node: {
-            employee: connectN(contactPerson.employee?.uid),
-            role: connectN(contactPerson.role?.uid)
-          }
-        }))
-      },
-      contactPersonsDept: {
-        connect: formData?.contactPersonsDept.map(contactPerson =>
-          whereN(contactPerson.uid)
-        )
-      },
-      teams: {
-        connect: formData?.teams.map(team => whereN(team.uid))
-      },
-      locations: {
-        connect: formData?.locations.map(location => whereN(location.uid))
+export const makeRoomCardsCreateData = (formData: RoomCardFormType) => {
+  // Destructure operationalState to handle it separately
+  const { operationalState, ...rest } = formData
+
+  return {
+    input: [
+      {
+        ...rest,
+        name: formData?.name ? formData?.name : '',
+        cleaningScheduleDate: formData?.cleaningScheduleDate
+          ? formData?.cleaningScheduleDate
+          : undefined,
+        operationalState: operationalState?.uid
+          ? { connect: { where: { node: { uid: operationalState.uid } } } }
+          : undefined,
+        contactPersonsHall: {
+          create: formData?.contactPersonsHall.map(contactPerson => ({
+            node: {
+              employee: connectN(contactPerson.employee?.uid),
+              role: connectN(contactPerson.role?.uid)
+            }
+          }))
+        },
+        contactPersonsDept: {
+          connect: formData?.contactPersonsDept.map(contactPerson =>
+            whereN(contactPerson.uid)
+          )
+        },
+        teams: {
+          connect: formData?.teams.map(team => whereN(team.uid))
+        },
+        locations: {
+          connect: formData?.locations.map(location => whereN(location.uid))
+        }
       }
-    }
-  ]
-})
+    ]
+  }
+}
 
 export const useRoomCardCreate = () => {
   //TODO     refetchQueries: ['RoomCards', 'RoomCard']
