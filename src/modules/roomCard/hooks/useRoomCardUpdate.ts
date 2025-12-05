@@ -180,8 +180,8 @@ export const useRoomCardUpdate = (roomCardUid?: string) => {
               node: 'RoomCard',
               nodeUid: roomCardUid || '',
               action: 'OPERATION_STATE',
-              previousState: roomCardOrigin?.operationalState?.name || '',
-              newState: roomCardForm.operationalState?.name || ''
+              previousState: roomCardOrigin?.operationalState?.code || '',
+              newState: roomCardForm.operationalState?.code || ''
             })
           }
 

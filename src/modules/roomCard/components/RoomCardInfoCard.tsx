@@ -91,7 +91,7 @@ export const RoomCardInfoCard = ({
                 <Badge
                   className={cn(
                     'text-gray-900 dark:text-white',
-                    getOperationalStateDotColor(operationalState)
+                    getOperationalStateDotColor(operationalState?.code)
                   )}
                 >
                   {getOperationalStateLabel(operationalState)}

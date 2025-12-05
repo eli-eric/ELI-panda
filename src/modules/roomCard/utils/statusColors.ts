@@ -46,24 +46,20 @@ export const getOperationalStateLabel = (
  * Get operational state dot color (for small indicator)
  * Uses code from codebook to determine color
  */
-export const getOperationalStateDotColor = (
-  state?: CodebookType | null
-): string => {
-  if (!state?.code) return 'bg-gray-400 dark:bg-gray-500'
-
-  switch (state.code) {
+export const getOperationalStateDotColor = (state?: string): string => {
+  switch (state) {
     case 'OS1':
-      return 'bg-green-700 dark:bg-green-700'
+      return 'bg-green-500 dark:bg-green-800'
     case 'OS2':
-      return 'bg-green-500 dark:bg-green-500'
+      return 'bg-green-300 dark:bg-green-600'
     case 'OS3':
-      return 'bg-yellow-500 dark:bg-yellow-500'
+      return 'bg-yellow-400 dark:bg-yellow-600'
     case 'OS4':
-      return 'bg-orange-500 dark:bg-orange-400'
+      return 'bg-orange-400 dark:bg-orange-500'
     case 'OS5':
-      return 'bg-red-400 dark:bg-red-400'
+      return 'bg-red-500 text-white dark:bg-red-500'
     case 'OS6':
-      return 'bg-red-700 dark:bg-red-700'
+      return 'bg-red-700 text-white dark:bg-red-800'
     default:
       return 'bg-gray-400 dark:bg-gray-500'
   }

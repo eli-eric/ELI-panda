@@ -16,12 +16,13 @@ export const OperationalStateHistoryButton = ({ roomCardUid }: Props) => {
   const { openModal } = useDynamicModalStore()
 
   const handleOpenHistory = () => {
-    openModal('sheet', {
+    openModal('dialog', {
       id: 'operational-state-history',
       component: OperationalStateHistoryModal,
       props: {
         title: 'Operational State History',
-        roomCardUid
+        roomCardUid,
+        size: 'xl'
       }
     })
   }

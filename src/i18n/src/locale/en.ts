@@ -916,13 +916,12 @@ export const messages = {
         viewHistory: 'View History',
         noPermission: 'Only Area Managers can edit this field',
         values: {
-          IN_OPERATION: 'In operation',
-          OVERNIGHT_STANDBY: 'Overnight standby',
-          EXPERIMENTAL_TECHNOLOGY_STANDBY: 'Experimental technology standby',
-          EXPERIMENTAL_TECHNOLOGY_SAFE_STATE:
-            'Experimental technology safe state',
-          ALL_TECHNOLOGY_SHUTDOWN: 'All technology Shutdown',
-          POWER_SHUTDOWN: 'Power shutdown'
+          OS1: 'OS1: In operation',
+          OS2: 'OS2: Overnight standby',
+          OS3: 'OS3: Experimental technology standby',
+          OS4: 'OS4: Experimental technology safe state',
+          OS5: 'OS5: All technology Shutdown',
+          OS6: 'OS6: Power shutdown'
         }
       }
     },
