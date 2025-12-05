@@ -2,6 +2,7 @@ import type { CellContext } from '@tanstack/react-table'
 import Link from 'next/link'
 
 import { TableActionsButtons } from '@/components/Buttons'
+import { Button } from '@/components/ui/button'
 import usePermission from '@/hooks/usePermission'
 import useWarningModal from '@/hooks/useWarningModal'
 import { PATH } from '@/types/constants/paths'
@@ -31,13 +32,10 @@ export const LocationCell = ({
 
   return (
     <div className="flex items-center">
-      <Link
-        href={PATH.ROOM_CARD + '/' + original.uid}
-        className={
-          'text-blue-700 dark:text-gray-200 dark:underline cursor-pointer hover:underline'
-        }
-      >
-        <span>{getValue()}</span>
+      <Link href={PATH.ROOM_CARD + '/' + original.uid}>
+        <Button variant="link">
+          <span>{getValue()}</span>
+        </Button>
       </Link>
       {editPersmission && (
         <TableActionsButtons onDeleteClick={onDeleteClick} canEdit={true} />
