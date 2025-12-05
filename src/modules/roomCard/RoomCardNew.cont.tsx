@@ -1,23 +1,17 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/router'
-import { Suspense, useEffect } from 'react'
-import { ErrorBoundary } from 'react-error-boundary'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import ErrorPage from '@/components/error/ErrorPage'
 import { Form } from '@/components/form/Form'
 import { HeaderWithButtons } from '@/components/header/HeaderWithButtons'
-import Card from '@/components/layout/Card'
-import { CardContent } from '@/components/ui/card'
-import ProgressBarComponent from '@/components/progress-bar.comp'
 import usePermission from '@/hooks/usePermission'
-import { FILE_TYPE } from '@/modules/shared/fileManager/types'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 import { RoomCardStatus } from '@/types/gql/graphql'
 
-import FileManager from '../shared/fileManager/FileManager'
+import { useRoomCards } from '../roomCards/hooks/useRoomCards'
 import { RoomCardInfoCard } from './components/RoomCardInfoCard'
 import { RoomCardBuildingMaintenanceCard } from './components/table/RoomCardBuildingMaintenanceCard'
 import { RoomCardCleanRoomsCard } from './components/table/RoomCardCleanRoomsCard'
@@ -30,7 +24,6 @@ import {
 import { roomCardSchema } from './schemas/roomCard.schema'
 import { useRoomCardStore } from './store/useRoomCardStore'
 import type { RoomCardFormType } from './types/form'
-import { useRoomCards } from '../roomCards/hooks/useRoomCards'
 
 export const RoomCardNewContainer = () => {
   const canEdit = usePermission([ROLE.ROOM_CARD_EDIT])

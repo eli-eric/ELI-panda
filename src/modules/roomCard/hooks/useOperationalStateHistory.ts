@@ -3,7 +3,6 @@ import { toast } from 'sonner'
 
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
 import { gql } from '@/types/gql'
-import type { OperationalState } from '@/types/gql/graphql'
 
 export const roomCardHistoryQuery = gql(`
   query RoomCardHistoryQuery($roomCardUid: ID!) {
@@ -28,8 +27,8 @@ export const roomCardHistoryQuery = gql(`
 
 export interface ParsedHistoryItem {
   uid: string
-  previousState: OperationalState | null
-  newState: OperationalState
+  previousState: string | null
+  newState: string
   changedAt: string
   changedBy: {
     uid: string
@@ -65,8 +64,8 @@ export const useOperationalStateHistory = (roomCardUid?: string) => {
 
     return sortedEdges.map((edge, index) => ({
       uid: `${edge.node.uid}-${index}`,
-      previousState: (edge.previousState as OperationalState) || null,
-      newState: edge.newState as OperationalState,
+      previousState: edge.previousState || null,
+      newState: edge.newState || '',
       changedAt: edge.at,
       changedBy: edge.node
     })) as ParsedHistoryItem[]

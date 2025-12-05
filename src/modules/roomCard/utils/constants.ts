@@ -1,4 +1,5 @@
-import type { OperationalState, RoomCardStatus } from '@/types/gql/graphql'
+import type { RoomCardStatus } from '@/types/gql/graphql'
+import type { CodebookType } from '@/types/responses/codebook'
 
 export const cleanRooms = [
   {
@@ -67,17 +68,17 @@ export const statusColorMapping = (status: RoomCardStatus) => [
 ]
 
 export const operationalStateColorMapping = (
-  state?: OperationalState | null
+  state?: CodebookType | null
 ) => {
-  if (!state) return 'bg-gray-200 dark:bg-gray-600'
+  if (!state?.code) return 'bg-gray-200 dark:bg-gray-600'
   return [
-    state === 'IN_OPERATION' && 'bg-green-200 dark:bg-green-500',
-    state === 'OVERNIGHT_STANDBY' && 'bg-blue-200 dark:bg-blue-500',
-    state === 'EXPERIMENTAL_TECHNOLOGY_STANDBY' &&
+    state.code === 'IN_OPERATION' && 'bg-green-200 dark:bg-green-500',
+    state.code === 'OVERNIGHT_STANDBY' && 'bg-blue-200 dark:bg-blue-500',
+    state.code === 'EXPERIMENTAL_TECHNOLOGY_STANDBY' &&
       'bg-yellow-200 dark:bg-yellow-500',
-    state === 'EXPERIMENTAL_TECHNOLOGY_SAFE_STATE' &&
+    state.code === 'EXPERIMENTAL_TECHNOLOGY_SAFE_STATE' &&
       'bg-orange-200 dark:bg-orange-500',
-    state === 'ALL_TECHNOLOGY_SHUTDOWN' && 'bg-red-300 dark:bg-red-600',
-    state === 'POWER_SHUTDOWN' && 'bg-gray-400 dark:bg-gray-700'
+    state.code === 'ALL_TECHNOLOGY_SHUTDOWN' && 'bg-red-300 dark:bg-red-600',
+    state.code === 'POWER_SHUTDOWN' && 'bg-gray-400 dark:bg-gray-700'
   ]
 }

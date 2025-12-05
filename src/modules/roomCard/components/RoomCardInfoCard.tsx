@@ -3,21 +3,23 @@ import { FormattedMessage } from 'react-intl'
 import { Input } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
 import { Badge } from '@/components/ui/badge'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
-import { OperationalState, RoomCardStatus } from '@/types/gql/graphql'
+import { RoomCardStatus } from '@/types/gql/graphql'
+import type { CodebookType } from '@/types/responses/codebook'
 
 import { formatDateTime } from '../utils'
 import {
   getOperationalStateDotColor,
+  getOperationalStateLabel,
   getStatusBadgeColor,
   getStatusLabel
 } from '../utils/statusColors'
+import { OperationalStateHistoryButton } from './OperationalStateHistoryButton'
 
 const messages = message.roomCardsPage.form
-const OPERATIONAL_STATES = Object.values(OperationalState)
 const statuses = Object.values(RoomCardStatus).map(value => value)
 
 interface RoomCardInfoCardProps {
@@ -27,29 +29,20 @@ interface RoomCardInfoCardProps {
     operationalState: any
   }
   status: RoomCardStatus
-  operationalState?: OperationalState | null
+  operationalState?: CodebookType | null
   operationalStateLastUpdated?: string | null
+  roomCardUid?: string
 }
 
 export const RoomCardInfoCard = ({
   fields,
   status,
   operationalState,
-  operationalStateLastUpdated
+  operationalStateLastUpdated,
+  roomCardUid
 }: RoomCardInfoCardProps) => {
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-        <CardTitle>Room Card Information</CardTitle>
-        <Badge
-          className={cn(
-            'text-gray-900 dark:text-white',
-            getStatusBadgeColor(status)
-          )}
-        >
-          {getStatusLabel(status)}
-        </Badge>
-      </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Name Field */}
@@ -69,6 +62,14 @@ export const RoomCardInfoCard = ({
           <div className="space-y-2">
             <Label htmlFor="status" className="text-base font-medium">
               Status
+              <Badge
+                className={cn(
+                  'text-gray-900 dark:text-white',
+                  getStatusBadgeColor(status)
+                )}
+              >
+                {getStatusLabel(status)}
+              </Badge>
             </Label>
             <Listbox
               {...fields.status}
@@ -82,24 +83,25 @@ export const RoomCardInfoCard = ({
           {/* Operational State Field */}
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <div
-                className={cn(
-                  'w-2 h-2 rounded-full',
-                  getOperationalStateDotColor(operationalState)
-                )}
-              />
               <Label
                 htmlFor="operationalState"
                 className="text-base font-medium"
               >
                 <FormattedMessage id={messages.operationalState.label} />
+                <Badge
+                  className={cn(
+                    'text-gray-900 dark:text-white',
+                    getOperationalStateDotColor(operationalState)
+                  )}
+                >
+                  {getOperationalStateLabel(operationalState)}
+                </Badge>
               </Label>
             </div>
             <Listbox
               {...fields.operationalState}
               id="operationalState"
               className="w-full"
-              customOptions={OPERATIONAL_STATES}
             />
           </div>
 
@@ -107,10 +109,15 @@ export const RoomCardInfoCard = ({
           {operationalStateLastUpdated && (
             <div className="space-y-2">
               <Label className="text-base font-medium">Last Updated</Label>
-              <p className="text-sm text-muted-foreground pt-2">
-                <FormattedMessage id={messages.operationalState.lastUpdated} />{' '}
-                {formatDateTime(operationalStateLastUpdated)}
-              </p>
+              <div className="flex gap-2">
+                <p className="text-sm text-muted-foreground pt-2">
+                  <FormattedMessage
+                    id={messages.operationalState.lastUpdated}
+                  />
+                  {formatDateTime(operationalStateLastUpdated)}
+                </p>
+                <OperationalStateHistoryButton roomCardUid={roomCardUid} />
+              </div>
             </div>
           )}
         </div>

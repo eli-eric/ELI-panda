@@ -13,11 +13,12 @@ import ProgressBarComponent from '@/components/progress-bar.comp'
 import { CardContent } from '@/components/ui/card'
 import usePermission from '@/hooks/usePermission'
 import { FILE_TYPE } from '@/modules/shared/fileManager/types'
+import { CODEBOOK } from '@/types/constants/codebook'
 import { ROLE } from '@/types/constants/roles'
 import type { PrescribedClothing } from '@/types/gql/graphql'
+import type { CodebookType } from '@/types/responses/codebook'
 
 import FileManager from '../shared/fileManager/FileManager'
-import { OperationalStateHistoryButton } from './components/OperationalStateHistoryButton'
 import { RoomCardInfoCard } from './components/RoomCardInfoCard'
 import { RoomCardBuildingMaintenanceCard } from './components/table/RoomCardBuildingMaintenanceCard'
 import { RoomCardCleanRoomsCard } from './components/table/RoomCardCleanRoomsCard'
@@ -41,7 +42,7 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
     defaultValues: {
       name: roomCard?.name as string,
       status: roomCard?.status,
-      operationalState: roomCard?.operationalState,
+      operationalState: roomCard?.operationalState as CodebookType | null,
       contactPersonsDept: roomCard?.contactPersonsDept as any,
       contactPersonsHall: roomCard?.contactPersonsHall as any,
       teams: roomCard?.teams as any,
@@ -137,7 +138,8 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
     },
     operationalState: {
       name: 'operationalState',
-      disabled: !canEditOperationalState
+      disabled: !canEditOperationalState,
+      codebook: CODEBOOK.OPERATIONAL_STATE
     }
   }
 
@@ -152,9 +154,6 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
         onSubmitAndExit={onSubmitAndExit}
         title={`Room Card: ${roomCard?.name || roomCardUid}`}
         isFormDirty={formMethods.formState.isDirty}
-        customElement={
-          <OperationalStateHistoryButton roomCardUid={roomCardUid} />
-        }
       />
 
       <div className="container mx-auto max-w-7xl px-4 space-y-6 py-6">
@@ -163,6 +162,7 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
           status={status}
           operationalState={operationalState}
           operationalStateLastUpdated={roomCard?.operationalStateLastUpdated}
+          roomCardUid={roomCardUid}
         />
 
         <RoomCardContactsCard

@@ -22,7 +22,11 @@ const updateRoomCardMutation = gql(`
         purityClass
         name
         status
-        operationalState
+      operationalState {
+        name
+        uid
+        code 
+      }
         operationalStateLastUpdated
         prescribedClothing
         entryToHvacTent
@@ -176,8 +180,8 @@ export const useRoomCardUpdate = (roomCardUid?: string) => {
               node: 'RoomCard',
               nodeUid: roomCardUid || '',
               action: 'OPERATION_STATE',
-              previousState: roomCardOrigin?.operationalState || '',
-              newState: roomCardForm.operationalState || ''
+              previousState: roomCardOrigin?.operationalState?.name || '',
+              newState: roomCardForm.operationalState?.name || ''
             })
           }
 
