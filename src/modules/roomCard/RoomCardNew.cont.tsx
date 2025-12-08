@@ -41,9 +41,6 @@ export const RoomCardNewContainer = () => {
 
   const status = watch('status') || RoomCardStatus.CleanMode
   const operationalState = watch('operationalState')
-  const contactPersonsHall = watch('contactPersonsHall')
-  const contactPersonsDept = watch('contactPersonsDept')
-  const teams = watch('teams')
   const locations = watch('locations')
 
   const { clear } = useRoomCardStore()
@@ -117,11 +114,7 @@ export const RoomCardNewContainer = () => {
           operationalStateLastUpdated={null}
         />
 
-        <RoomCardContactsCard
-          contactPersonsHall={contactPersonsHall || []}
-          contactPersonsDept={contactPersonsDept || []}
-          teams={teams}
-        />
+        <RoomCardContactsCard />
 
         <RoomCardLocationsCard locations={locations} />
 

@@ -30,13 +30,11 @@ const GET_CONTACT_PERSON_ROLES = gql(`
 interface ContactHallModalProps {
   onSubmit?: (data: ContactHallFormData) => void
   onClose?: () => void
-  existingEmployeeUids?: string[]
 }
 
 export const ContactHallModalContainer = ({
   onSubmit,
-  onClose,
-  existingEmployeeUids = []
+  onClose
 }: ContactHallModalProps) => {
   const [employeeUid, setEmployeeUid] = useState<string | null>(null)
   const [loadedEmployee, setLoadedEmployee] = useState<any>(null)
@@ -44,23 +42,7 @@ export const ContactHallModalContainer = ({
   const { data } = useGraphQL(GET_CONTACT_PERSON_ROLES)
 
   const formMethods = useForm<ContactHallFormData>({
-    resolver: zodResolver(
-      contactHallSchema.refine(
-        data => {
-          if (
-            data.employee &&
-            existingEmployeeUids.includes(data.employee.uid)
-          ) {
-            return false
-          }
-          return true
-        },
-        {
-          message: 'Cannot select the same employee twice',
-          path: ['employee']
-        }
-      )
-    ),
+    resolver: zodResolver(contactHallSchema),
     defaultValues: {
       role: null,
       employee: null

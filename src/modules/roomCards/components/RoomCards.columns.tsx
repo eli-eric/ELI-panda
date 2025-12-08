@@ -1,6 +1,5 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
-import { useIntl } from 'react-intl'
 
 import { Tooltip } from '@/components/Tooltip'
 import { Badge } from '@/components/ui/badge'
@@ -16,7 +15,6 @@ import {
 import { LocationCell } from './LocationCell'
 
 export const useRoomCardsColumns = () => {
-  const { formatMessage: fm } = useIntl()
   const columns = useMemo(
     (): ColumnDef<RoomCard, any>[] => [
       {
@@ -98,7 +96,6 @@ export const useRoomCardsColumns = () => {
         id: 'prescribedClothing',
         cell: ({ getValue }) => {
           const value = getValue()
-          console.log('prescribedClothing value:', value)
 
           return (
             <div>
@@ -176,7 +173,7 @@ export const useRoomCardsColumns = () => {
         size: 250
       }
     ],
-    [fm]
+    []
   )
 
   return columns

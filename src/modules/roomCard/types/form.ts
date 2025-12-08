@@ -25,10 +25,7 @@ export type RoomCardFormType = {
   status: RoomCardStatus
   operationalState?: CodebookType | null
   name: string
-  contactPersonsHall: ContactPersonsHall[]
-  contactPersonsDept: EmployeeType[]
   locations: Codebooktree[]
-  teams: CodebookType[]
   purityClass: PurityClass
   prescribedClothing: PrescribedClothing[]
   entryToHvacTent: string

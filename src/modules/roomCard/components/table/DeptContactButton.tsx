@@ -7,15 +7,15 @@ import {
 import usePermission from '@/hooks/usePermission'
 import { ROLE } from '@/types/constants/roles'
 
-import { useContactHallModal } from './hooks/useContactHallModal'
+import { useContactDeptModal } from './hooks/useContactDeptModal'
 
 interface Props {
   roomCardUid?: string
 }
 
-export const ContactHallButton = ({ roomCardUid }: Props) => {
+export const DeptContactButton = ({ roomCardUid }: Props) => {
   const canEdit = usePermission([ROLE.ROOM_CARD_EDIT])
-  const openContactHallModal = useContactHallModal(roomCardUid)
+  const openContactDeptModal = useContactDeptModal(roomCardUid)
 
   if (!canEdit) return null
 
@@ -34,5 +34,5 @@ export const ContactHallButton = ({ roomCardUid }: Props) => {
     )
   }
 
-  return <PlusButton type="button" onClick={openContactHallModal} />
+  return <PlusButton type="button" onClick={openContactDeptModal} />
 }

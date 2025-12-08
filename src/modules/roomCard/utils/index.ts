@@ -1,14 +1,8 @@
 import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
-import type {
-  Employee,
-  RoomCardUpdateInput,
-  RoomCardWhere,
-  Team
-} from '@/types/gql/graphql'
+import type { RoomCardUpdateInput, RoomCardWhere } from '@/types/gql/graphql'
 import type { CodebookType } from '@/types/responses/codebook'
 import { whereN } from '@/utils/graphql/mutations'
 
-import type { HallContactPerson } from '../store/useRoomCardStore'
 import type { RoomCardFormType } from '../types/form'
 
 /**
@@ -42,26 +36,20 @@ export const hasOperationalStateChanged = (
 
 type RoomCardUpdateType = {
   roomCard: RoomCardFormType
-  newHallContacts: HallContactPerson[]
-  deleteHallContacts: HallContactPerson[]
-  newTeams: Team[]
-  disconnectTeams: Team[]
-  newDeptContacts: Employee[]
-  disconnectDeptContacts: Employee[]
   disconnectLocations: Codebooktree[]
   newLocations: Codebooktree[]
   uid?: string
   originalOperationalState?: CodebookType | null
 }
+
+/**
+ * Creates variables for RoomCard update mutation.
+ * Note: Contacts (Hall, Dept, Teams) are now handled via separate direct mutations.
+ * Only locations are managed through the form update.
+ */
 export const updateRoomCardVariables = ({
   uid,
   roomCard,
-  newDeptContacts,
-  disconnectDeptContacts,
-  newHallContacts,
-  deleteHallContacts,
-  newTeams,
-  disconnectTeams,
   newLocations,
   disconnectLocations,
   originalOperationalState
@@ -71,8 +59,10 @@ export const updateRoomCardVariables = ({
   operationalStateChanged: boolean
   originalOperationalState?: CodebookType | null
 } => {
-  const operationalStateChanged =
-    hasOperationalStateChanged(originalOperationalState, roomCard.operationalState)
+  const operationalStateChanged = hasOperationalStateChanged(
+    originalOperationalState,
+    roomCard.operationalState
+  )
 
   return {
     where: {
@@ -112,43 +102,8 @@ export const updateRoomCardVariables = ({
       ...(operationalStateChanged && {
         operationalStateLastUpdated: new Date().toISOString()
       }),
-      contactPersonsDept: [
-        {
-          connect: newDeptContacts
-            .filter(deptContact => deptContact?.uid)
-            .map(deptContact => whereN(deptContact.uid)),
-          disconnect: disconnectDeptContacts
-            .filter(deptContact => deptContact?.uid)
-            .map(deptContact => whereN(deptContact.uid))
-        }
-      ],
-      contactPersonsHall: [
-        {
-          delete: deleteHallContacts
-            .filter(hallContact => hallContact?.uid) // CRITICAL: Only delete items with valid uid
-            .map(hallContact => whereN(hallContact.uid)),
-          create: newHallContacts.map(hallContact => ({
-            node: {
-              employee: {
-                connect: whereN(hallContact?.employee?.uid)
-              },
-              role: {
-                connect: whereN(hallContact?.role?.uid)
-              }
-            }
-          }))
-        }
-      ],
-      teams: [
-        {
-          connect: newTeams
-            .filter(team => team?.uid)
-            .map(team => whereN(team.uid)),
-          disconnect: disconnectTeams
-            .filter(team => team?.uid)
-            .map(team => whereN(team.uid))
-        }
-      ],
+      // Contacts are now handled via separate mutations - NOT included here
+      // contactPersonsDept, contactPersonsHall, teams - removed
       locations: [
         {
           connect: newLocations

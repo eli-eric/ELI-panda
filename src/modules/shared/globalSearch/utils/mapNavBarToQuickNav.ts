@@ -1,7 +1,7 @@
 import type { ElementType } from 'react'
 
-import type { ROLE } from '@/types/constants/roles'
 import type { NavigationType } from '@/types/constants/paths'
+import type { ROLE } from '@/types/constants/roles'
 
 export interface QuickNavItem {
   title: string

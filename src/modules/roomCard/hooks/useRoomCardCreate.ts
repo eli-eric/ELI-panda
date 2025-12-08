@@ -1,6 +1,5 @@
 import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
 import { gql } from '@/types/gql'
-import { connectN } from '@/utils/graphql/mutations'
 
 import { whereN } from '../../../utils/graphql/mutations'
 import type { RoomCardFormType } from '../types/form'
@@ -16,8 +15,10 @@ const createRoomCardMutation = gql(`
 `)
 
 export const makeRoomCardsCreateData = (formData: RoomCardFormType) => {
-  // Destructure operationalState to handle it separately
-  const { operationalState, ...rest } = formData
+  // Destructure fields that need special handling
+  // Contacts (Hall, Dept, Teams) are NOT part of the form - they can only be
+  // added after the RoomCard is created (via direct mutations)
+  const { operationalState, locations: _locations, ...rest } = formData
 
   return {
     input: [
@@ -30,24 +31,8 @@ export const makeRoomCardsCreateData = (formData: RoomCardFormType) => {
         operationalState: operationalState?.uid
           ? { connect: { where: { node: { uid: operationalState.uid } } } }
           : undefined,
-        contactPersonsHall: {
-          create: formData?.contactPersonsHall.map(contactPerson => ({
-            node: {
-              employee: connectN(contactPerson.employee?.uid),
-              role: connectN(contactPerson.role?.uid)
-            }
-          }))
-        },
-        contactPersonsDept: {
-          connect: formData?.contactPersonsDept.map(contactPerson =>
-            whereN(contactPerson.uid)
-          )
-        },
-        teams: {
-          connect: formData?.teams.map(team => whereN(team.uid))
-        },
         locations: {
-          connect: formData?.locations.map(location => whereN(location.uid))
+          connect: formData?.locations?.map(location => whereN(location.uid)) || []
         }
       }
     ]
