@@ -67,6 +67,25 @@ const updateHallContactMutation = gql(`
   }
 `)
 
+// Mutation for connecting/disconnecting locations
+const updateLocationMutation = gql(`
+  mutation UpdateLocation(
+    $where: RoomCardWhere
+    $update: RoomCardUpdateInput
+  ) {
+    updateRoomCards(where: $where, update: $update) {
+      roomCards {
+        uid
+        locations {
+          uid
+          code
+          name
+        }
+      }
+    }
+  }
+`)
+
 /**
  * Hook for connecting a department contact to a room card
  */
@@ -239,4 +258,58 @@ export const useDeleteHallContact = (roomCardUid: string) => {
   }
 
   return { deleteHallContact, isPending }
+}
+
+/**
+ * Hook for connecting a location to a room card
+ */
+export const useConnectLocation = (roomCardUid: string) => {
+  const queryClient = useQueryClient()
+  const { mutateAsync, isPending } = useGraphQLMutation(updateLocationMutation)
+
+  const connectLocation = async (locationUid: string) => {
+    await mutateAsync({
+      where: { uid: roomCardUid },
+      update: {
+        locations: [
+          {
+            connect: [whereN(locationUid)]
+          }
+        ]
+      }
+    })
+
+    queryClient.invalidateQueries({
+      queryKey: ['RoomCardLocationsQuery', { where: { uid: roomCardUid } }]
+    })
+  }
+
+  return { connectLocation, isPending }
+}
+
+/**
+ * Hook for disconnecting a location from a room card
+ */
+export const useDisconnectLocation = (roomCardUid: string) => {
+  const queryClient = useQueryClient()
+  const { mutateAsync, isPending } = useGraphQLMutation(updateLocationMutation)
+
+  const disconnectLocation = async (locationUid: string) => {
+    await mutateAsync({
+      where: { uid: roomCardUid },
+      update: {
+        locations: [
+          {
+            disconnect: [whereN(locationUid)]
+          }
+        ]
+      }
+    })
+
+    queryClient.invalidateQueries({
+      queryKey: ['RoomCardLocationsQuery', { where: { uid: roomCardUid } }]
+    })
+  }
+
+  return { disconnectLocation, isPending }
 }

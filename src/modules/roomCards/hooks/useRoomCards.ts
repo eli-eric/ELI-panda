@@ -36,7 +36,7 @@ export const roomCardsQuery = gql(`
 
 export const useRoomCards = () => {
   const [search] = useQueryState('search')
-  const { data, isLoading, error, refetch } = useGraphQL(roomCardsQuery, {
+  const { data, isFetching, error, refetch } = useGraphQL(roomCardsQuery, {
     variables: {
       where: {
         name_CONTAINS: search || ''
@@ -50,5 +50,5 @@ export const useRoomCards = () => {
     }
   }, [error])
 
-  return { roomCards: data?.roomCards, loading: isLoading, error, refetch }
+  return { roomCards: data?.roomCards, loading: isFetching, error, refetch }
 }

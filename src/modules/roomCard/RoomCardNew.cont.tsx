@@ -1,6 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
@@ -22,7 +21,6 @@ import {
   useRoomCardCreate
 } from './hooks/useRoomCardCreate'
 import { roomCardSchema } from './schemas/roomCard.schema'
-import { useRoomCardStore } from './store/useRoomCardStore'
 import type { RoomCardFormType } from './types/form'
 
 export const RoomCardNewContainer = () => {
@@ -41,10 +39,6 @@ export const RoomCardNewContainer = () => {
 
   const status = watch('status') || RoomCardStatus.CleanMode
   const operationalState = watch('operationalState')
-  const locations = watch('locations')
-
-  const { clear } = useRoomCardStore()
-  useEffect(() => () => clear(), [clear])
 
   const onSubmit = handleSubmit(data => {
     toast.promise(
@@ -116,7 +110,7 @@ export const RoomCardNewContainer = () => {
 
         <RoomCardContactsCard />
 
-        <RoomCardLocationsCard locations={locations} />
+        <RoomCardLocationsCard />
 
         <RoomCardCleanRoomsCard />
 

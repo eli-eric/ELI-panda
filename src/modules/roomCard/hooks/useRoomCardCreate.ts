@@ -1,7 +1,6 @@
 import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
 import { gql } from '@/types/gql'
 
-import { whereN } from '../../../utils/graphql/mutations'
 import type { RoomCardFormType } from '../types/form'
 
 const createRoomCardMutation = gql(`
@@ -16,9 +15,9 @@ const createRoomCardMutation = gql(`
 
 export const makeRoomCardsCreateData = (formData: RoomCardFormType) => {
   // Destructure fields that need special handling
-  // Contacts (Hall, Dept, Teams) are NOT part of the form - they can only be
+  // Contacts (Hall, Dept, Teams) and Locations are NOT part of the form - they can only be
   // added after the RoomCard is created (via direct mutations)
-  const { operationalState, locations: _locations, ...rest } = formData
+  const { operationalState, ...rest } = formData
 
   return {
     input: [
@@ -30,10 +29,7 @@ export const makeRoomCardsCreateData = (formData: RoomCardFormType) => {
           : undefined,
         operationalState: operationalState?.uid
           ? { connect: { where: { node: { uid: operationalState.uid } } } }
-          : undefined,
-        locations: {
-          connect: formData?.locations?.map(location => whereN(location.uid)) || []
-        }
+          : undefined
       }
     ]
   }

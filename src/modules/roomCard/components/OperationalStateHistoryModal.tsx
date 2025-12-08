@@ -50,7 +50,8 @@ export const OperationalStateHistoryModal: FC<Props> = ({
         header: fm({ id: messages.previousState }),
         size: 300,
         cell: ({ getValue }) => {
-          const value = getValue()
+          const value = getValue() as string
+          const messageId = value ? stateMessages[value] : undefined
           return (
             <Badge
               className={cn(
@@ -58,11 +59,7 @@ export const OperationalStateHistoryModal: FC<Props> = ({
                 getOperationalStateDotColor(value as any)
               )}
             >
-              {value ? (
-                <FormattedMessage id={stateMessages[value as string]} />
-              ) : (
-                '—'
-              )}
+              {messageId ? <FormattedMessage id={messageId} /> : value || '—'}
             </Badge>
           )
         }
@@ -72,19 +69,20 @@ export const OperationalStateHistoryModal: FC<Props> = ({
         accessorKey: 'newState',
         header: fm({ id: messages.newState }),
         size: 300,
-        cell: ({ getValue }) => (
-          <Badge
-            className={cn(
-              'text-gray-900 dark:text-white',
-              getOperationalStateDotColor(getValue() as any)
-            )}
-          >
-            <FormattedMessage
-              id={stateMessages[getValue() as string]}
-              defaultMessage={'uknown'}
-            />
-          </Badge>
-        )
+        cell: ({ getValue }) => {
+          const value = getValue() as string
+          const messageId = value ? stateMessages[value] : undefined
+          return (
+            <Badge
+              className={cn(
+                'text-gray-900 dark:text-white',
+                getOperationalStateDotColor(value as any)
+              )}
+            >
+              {messageId ? <FormattedMessage id={messageId} /> : value || '—'}
+            </Badge>
+          )
+        }
       },
       {
         id: 'changedBy',
@@ -112,7 +110,7 @@ export const OperationalStateHistoryModal: FC<Props> = ({
   return (
     <div className="flex h-full flex-col space-y-4">
       <div className="flex-1 overflow-hidden">
-        {history.length === 0 && !loading ? (
+        {history?.length === 0 && !loading ? (
           <div className="text-center py-8 text-gray-500">
             <FormattedMessage id={messages.noHistory} />
           </div>

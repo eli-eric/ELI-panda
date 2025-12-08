@@ -1,23 +1,22 @@
 import type { FC } from 'react'
 
-import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
 import { Heading } from '@/components/layout/Heading'
 import { Table } from '@/components/ui/table'
 import usePermission from '@/hooks/usePermission'
 import { ROLE } from '@/types/constants/roles'
 
+import { useRoomCardLocations } from '../../hooks/useRoomCardContacts'
 import { AddLocationButton } from './AddLocationButton'
 import { useRoomCardsColumns } from './RoomCard.columns'
 
 type Props = {
-  locations?: Codebooktree[]
+  roomCardUid?: string
 }
 
-export const RoomCardLocationsCard: FC<Props> = ({ locations }) => {
-  const { locationColumns } = useRoomCardsColumns()
+export const RoomCardLocationsCard: FC<Props> = ({ roomCardUid }) => {
+  const { locationColumns } = useRoomCardsColumns(roomCardUid)
+  const { locations } = useRoomCardLocations(roomCardUid)
   const editPermission = usePermission([ROLE.ROOM_CARD_EDIT])
-
-  const safeLocations = locations || []
 
   return (
     <div>
@@ -27,13 +26,13 @@ export const RoomCardLocationsCard: FC<Props> = ({ locations }) => {
         textColor="text-orange-500"
         showBorder={false}
       >
-        {editPermission && <AddLocationButton />}
+        {editPermission && <AddLocationButton roomCardUid={roomCardUid} />}
       </Heading>
       <Table<any>
         {...{
           columns: locationColumns,
           rowClassName: 'relative group/row',
-          data: safeLocations
+          data: locations
         }}
       />
     </div>

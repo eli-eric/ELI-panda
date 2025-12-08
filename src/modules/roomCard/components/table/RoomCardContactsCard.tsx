@@ -14,9 +14,11 @@ type Props = {
 }
 
 export const RoomCardContactsCard: FC<Props> = ({ roomCardUid }) => {
-  const { contactPersonsDept } = useRoomCardContactsDept(roomCardUid)
-  const { contactPersonsHall } = useRoomCardContactsHall(roomCardUid)
-  const { teams } = useRoomCardTeams(roomCardUid)
+  const { contactPersonsDept, isFetching: contactPersDeptFetching } =
+    useRoomCardContactsDept(roomCardUid)
+  const { contactPersonsHall, isFetching: contactPersonHallFetching } =
+    useRoomCardContactsHall(roomCardUid)
+  const { teams, teamsFetching } = useRoomCardTeams(roomCardUid)
 
   const { columnsContactHall, columnsContactDept, columnsTeam } =
     useRoomCardsColumns(roomCardUid)

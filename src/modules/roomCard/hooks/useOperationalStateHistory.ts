@@ -39,7 +39,7 @@ export interface ParsedHistoryItem {
 }
 
 export const useOperationalStateHistory = (roomCardUid?: string) => {
-  const { data, error, isLoading } = useGraphQL(roomCardHistoryQuery, {
+  const { data, error, isFetching } = useGraphQL(roomCardHistoryQuery, {
     variables: {
       roomCardUid: roomCardUid || ''
     },
@@ -54,6 +54,7 @@ export const useOperationalStateHistory = (roomCardUid?: string) => {
   }, [error])
 
   const history = useMemo(() => {
+    if (isFetching) return undefined
     const edges = data?.roomCards[0]?.updatedByConnection?.edges
     if (!edges) return []
 
@@ -69,11 +70,11 @@ export const useOperationalStateHistory = (roomCardUid?: string) => {
       changedAt: edge.at,
       changedBy: edge.node
     })) as ParsedHistoryItem[]
-  }, [data])
+  }, [data, isFetching])
 
   return {
     history,
     error,
-    loading: isLoading
+    loading: isFetching
   }
 }

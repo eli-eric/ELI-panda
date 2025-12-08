@@ -55,11 +55,26 @@ const roomCardTeamsQuery = gql(`
 `)
 
 /**
+ * Query for fetching locations for a room card
+ */
+const roomCardLocationsQuery = gql(`
+  query RoomCardLocationsQuery($where: RoomCardWhere) {
+    roomCards(where: $where) {
+      locations {
+        uid
+        code
+        name
+      }
+    }
+  }
+`)
+
+/**
  * Hook for fetching department contacts for a room card.
  * Used by RoomCardContactsCard to display Dept contacts table.
  */
 export const useRoomCardContactsDept = (roomCardUid?: string) => {
-  const { data, refetch, isLoading } = useGraphQL(roomCardContactsDeptQuery, {
+  const { data, refetch, isFetching } = useGraphQL(roomCardContactsDeptQuery, {
     variables: { where: { uid: roomCardUid } },
     enabled: !!roomCardUid
   })
@@ -67,7 +82,7 @@ export const useRoomCardContactsDept = (roomCardUid?: string) => {
   return {
     contactPersonsDept: data?.roomCards[0]?.contactPersonsDept || [],
     refetch,
-    isLoading
+    isFetching
   }
 }
 
@@ -76,7 +91,7 @@ export const useRoomCardContactsDept = (roomCardUid?: string) => {
  * Used by RoomCardContactsCard to display Hall contacts table.
  */
 export const useRoomCardContactsHall = (roomCardUid?: string) => {
-  const { data, refetch, isLoading } = useGraphQL(roomCardContactsHallQuery, {
+  const { data, refetch, isFetching } = useGraphQL(roomCardContactsHallQuery, {
     variables: { where: { uid: roomCardUid } },
     enabled: !!roomCardUid
   })
@@ -84,7 +99,7 @@ export const useRoomCardContactsHall = (roomCardUid?: string) => {
   return {
     contactPersonsHall: data?.roomCards[0]?.contactPersonsHall || [],
     refetch,
-    isLoading
+    isFetching
   }
 }
 
@@ -93,7 +108,7 @@ export const useRoomCardContactsHall = (roomCardUid?: string) => {
  * Used by RoomCardContactsCard to display Teams table.
  */
 export const useRoomCardTeams = (roomCardUid?: string) => {
-  const { data, refetch, isLoading } = useGraphQL(roomCardTeamsQuery, {
+  const { data, refetch, isFetching } = useGraphQL(roomCardTeamsQuery, {
     variables: { where: { uid: roomCardUid } },
     enabled: !!roomCardUid
   })
@@ -101,6 +116,23 @@ export const useRoomCardTeams = (roomCardUid?: string) => {
   return {
     teams: data?.roomCards[0]?.teams || [],
     refetch,
-    isLoading
+    isFetching
+  }
+}
+
+/**
+ * Hook for fetching locations for a room card.
+ * Used by RoomCardLocationsCard to display Locations table.
+ */
+export const useRoomCardLocations = (roomCardUid?: string) => {
+  const { data, refetch, isFetching } = useGraphQL(roomCardLocationsQuery, {
+    variables: { where: { uid: roomCardUid } },
+    enabled: !!roomCardUid
+  })
+
+  return {
+    locations: data?.roomCards[0]?.locations || [],
+    refetch,
+    isFetching
   }
 }
