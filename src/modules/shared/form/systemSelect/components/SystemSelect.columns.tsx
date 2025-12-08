@@ -2,11 +2,11 @@ import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 
 import { Checkbox } from '@/components/ui/checkbox'
+import { IconCell } from '@/modules/systems/components/table/cells/IconCell'
 import { SystemNameCell } from '@/modules/systems/components/table/cells/SystemNameCell'
 import { useSubsystems } from '@/modules/systems/hooks/useSubsystems'
+import type { ITEM_USAGE } from '@/modules/systems/types/constants'
 import type { SystemDetail } from '@/types/responses/systems'
-import { IconCell } from '@/modules/systems/components/table/cells/IconCell'
-import { ITEM_USAGE } from '@/modules/systems/types/constants'
 
 interface SystemSelectColumnsProps {
   tableId: string
