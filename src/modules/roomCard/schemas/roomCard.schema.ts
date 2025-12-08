@@ -9,30 +9,21 @@ import type {
 } from '@/types/gql/graphql'
 import type { CodebookType } from '@/types/responses/codebook'
 
-import type { ContactPersonsHall, EmployeeType } from '../types/form'
-
 export const roomCardSchema = z.object({
-  // Required fields - matching Yup validation
+  // Required fields
   status: z.custom<RoomCardStatus>(
     data => typeof data === 'string',
     'Status is required'
   ),
   operationalState: z.custom<CodebookType>().nullable().optional(),
   name: z.string().min(1, 'Name is required'),
-  teams: z
-    .array(z.custom<CodebookType>())
-    .min(1, 'At least one team is required'),
-  contactPersonsHall: z
-    .array(z.custom<ContactPersonsHall>())
-    .min(1, 'At least one Hall contact is required'),
-  contactPersonsDept: z
-    .array(z.custom<EmployeeType>())
-    .min(1, 'At least one department contact is required'),
+  // Contacts (Hall, Dept, Teams) are now managed via direct GraphQL mutations
+  // and are no longer part of the form validation
   locations: z
     .array(z.custom<Codebooktree>())
     .min(1, 'At least one location is required'),
 
-  // Fields that exist in RoomCardFormType - not optional in the type
+  // Fields that exist in RoomCardFormType
   purityClass: z.custom<PurityClass>(),
   prescribedClothing: z.array(z.custom<PrescribedClothing>()),
   entryToHvacTent: z.string(),

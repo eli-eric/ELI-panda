@@ -4,7 +4,6 @@ import { useRoomCards } from '@/modules/roomCards/hooks/useRoomCards'
 import { gql } from '@/types/gql'
 import { navigateBack } from '@/utils'
 
-import { useRoomCardStore } from '../store/useRoomCardStore'
 import type { RoomCardFormType } from '../types/form'
 import { hasOperationalStateChanged, updateRoomCardVariables } from '../utils'
 import { useRoomCard } from './useRoomCard'
@@ -106,28 +105,15 @@ export const useRoomCardUpdate = (roomCardUid?: string) => {
     useRoomCard(roomCardUid)
   const { refetch: refetchRoomCards } = useRoomCards()
 
-  const {
-    deleteHallContacts,
-    disconnectDeptContacts,
-    disconnectTeams,
-    newDeptContacts,
-    newHallContacts,
-    newTeams
-  } = useRoomCardStore()
-
   const updateRoomCard = (
     roomCardForm: RoomCardFormType,
     saveAndExit: boolean
   ) => {
+    // Contacts are now handled separately via direct mutations
+    // Only locations are managed through form state
     const variables = updateRoomCardVariables({
       uid: roomCardUid,
       roomCard: roomCardForm,
-      deleteHallContacts,
-      disconnectDeptContacts,
-      disconnectTeams,
-      newDeptContacts,
-      newHallContacts,
-      newTeams,
       originalOperationalState: roomCardOrigin?.operationalState,
       disconnectLocations: roomCardOrigin?.locations
         ?.filter(

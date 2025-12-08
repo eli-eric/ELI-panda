@@ -19,36 +19,18 @@ const messages = message.common.buttons
 interface ContactDeptModalProps {
   onSubmit?: (data: ContactDeptFormData) => void
   onClose?: () => void
-  existingEmployeeUids?: string[]
 }
 
 export const ContactDeptModalContainer = ({
   onSubmit,
-  onClose,
-  existingEmployeeUids = []
+  onClose
 }: ContactDeptModalProps) => {
   const [employeeUid, setEmployeeUid] = useState<string | null>(null)
   const [loadedEmployee, setLoadedEmployee] = useState<any>(null)
   const { employee, isLoading: employeeLoading } = useEmployee(employeeUid)
 
   const formMethods = useForm<ContactDeptFormData>({
-    resolver: zodResolver(
-      contactDeptSchema.refine(
-        data => {
-          if (
-            data.employee &&
-            existingEmployeeUids.includes(data.employee.uid)
-          ) {
-            return false
-          }
-          return true
-        },
-        {
-          message: 'Cannot select the same employee twice',
-          path: ['employee']
-        }
-      )
-    ),
+    resolver: zodResolver(contactDeptSchema),
     defaultValues: {
       employee: null
     }

@@ -12,7 +12,7 @@ export const roomCardQuery = gql(`
       operationalState {
         name
         uid
-        code 
+        code
       }
       operationalStateLastUpdated
       purityClass
@@ -31,33 +31,10 @@ export const roomCardQuery = gql(`
       compressedAirDistributionClient
       nitrogenCentralDistributionClient
       maxPressureInColdDistributionClient
-      contactPersonsHall {
-        uid
-        role {
-          uid
-          name
-        }
-        employee {
-          uid
-          fullName
-          phone1
-          phone2
-        }
-      }
-      contactPersonsDept {
-        uid
-        fullName
-        phone1
-        phone2
-      }
       locations {
         code
         uid
         name
-      }
-      teams {
-        name
-        uid
       }
     }
   }

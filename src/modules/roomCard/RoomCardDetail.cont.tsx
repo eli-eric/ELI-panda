@@ -43,9 +43,6 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
       name: roomCard?.name as string,
       status: roomCard?.status,
       operationalState: roomCard?.operationalState as CodebookType | null,
-      contactPersonsDept: roomCard?.contactPersonsDept as any,
-      contactPersonsHall: roomCard?.contactPersonsHall as any,
-      teams: roomCard?.teams as any,
       locations: roomCard?.locations as any,
       purityClass: roomCard?.purityClass as any,
       prescribedClothing: roomCard?.prescribedClothing as PrescribedClothing[],
@@ -78,14 +75,9 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
 
   const status = watch('status')
   const operationalState = watch('operationalState')
-  const teams = watch('teams')
-  const contactPersonsHall = watch('contactPersonsHall')
-  const contactPersonsDept = watch('contactPersonsDept')
   const locations = watch('locations')
 
-  const canEditOperationalState = useCanEditOperationalState(
-    contactPersonsHall || []
-  )
+  const canEditOperationalState = useCanEditOperationalState(roomCardUid)
 
   useEffect(() => () => clear(), [clear])
 
@@ -165,11 +157,7 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
           roomCardUid={roomCardUid}
         />
 
-        <RoomCardContactsCard
-          contactPersonsHall={contactPersonsHall}
-          contactPersonsDept={contactPersonsDept}
-          teams={teams}
-        />
+        <RoomCardContactsCard roomCardUid={roomCardUid} />
 
         <RoomCardLocationsCard locations={locations} />
 
