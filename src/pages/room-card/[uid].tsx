@@ -4,8 +4,6 @@ import { Fragment } from 'react'
 import { useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 
-import LoaderComponent from '@/components/loader.comp'
-import { useRoomCard } from '@/modules/roomCard/hooks/useRoomCard'
 import { RoomCardDetailContainer } from '@/modules/roomCard/RoomCardDetail.cont'
 
 const messages = message.roomCardsPage
@@ -17,11 +15,8 @@ interface Props {
 
 const RoomCardDetail: NextPage = ({ roomCardUid }: Props) => {
   const intl = useIntl()
-  const { roomCard, loading } = useRoomCard(roomCardUid)
 
-  if (loading) {
-    return <LoaderComponent />
-  }
+  if (!roomCardUid) return null
 
   return (
     <Fragment>
@@ -30,9 +25,7 @@ const RoomCardDetail: NextPage = ({ roomCardUid }: Props) => {
         <meta name="description" content="...." />
       </Head>
 
-      {roomCard && roomCardUid && (
-        <RoomCardDetailContainer roomCardUid={roomCardUid} />
-      )}
+      <RoomCardDetailContainer key={roomCardUid} roomCardUid={roomCardUid} />
     </Fragment>
   )
 }
