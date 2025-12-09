@@ -38,11 +38,11 @@ export const LocationCell = ({
 
   return (
     <div className="flex items-center w-full justify-between">
-      <Link href={PATH.ROOM_CARD + '/' + original.uid} prefetch={true}>
-        <Button variant="link">
-          <span>{getValue()}</span>
-        </Button>
-      </Link>
+      <Button variant="link" asChild>
+        <Link href={PATH.ROOM_CARD + '/' + original.uid} prefetch={true}>
+          {getValue()}
+        </Link>
+      </Button>
       {editPersmission && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

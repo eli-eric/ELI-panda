@@ -31,21 +31,20 @@ export const useSpareForColumns = (tableId?: string) => {
         id: 'name',
         cell: ({ getValue, row: { original } }) => (
           <SystemPathTooltip parentPath={original.parentPath}>
-            <Link href={PATH.SYSTEM + '/' + original.uid}>
-              <Button
-                variant={'link'}
-                title={getValue()}
-                size={'sm'}
-                className={cn(
-                  original?.sp_coverage != null &&
-                    original.sp_coverage < 1 &&
-                    'text-red-500 dark:text-red-500',
-                  'text-inherit hover:underline h-4 font-sm cursor-pointer'
-                )}
-              >
-                {getValue()}
-              </Button>
-            </Link>
+            <Button
+              variant={'link'}
+              title={getValue()}
+              size={'sm'}
+              className={cn(
+                original?.sp_coverage != null &&
+                  original.sp_coverage < 1 &&
+                  'text-red-500 dark:text-red-500',
+                'text-inherit hover:underline h-4 font-sm cursor-pointer'
+              )}
+              asChild
+            >
+              <Link href={PATH.SYSTEM + '/' + original.uid}>{getValue()}</Link>
+            </Button>
           </SystemPathTooltip>
         )
       },
