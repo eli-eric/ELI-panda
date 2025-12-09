@@ -1,3 +1,5 @@
+import { keepPreviousData } from '@tanstack/react-query'
+
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
 import { gql } from '@/types/gql'
 
@@ -76,7 +78,8 @@ const roomCardLocationsQuery = gql(`
 export const useRoomCardContactsDept = (roomCardUid?: string) => {
   const { data, refetch, isFetching } = useGraphQL(roomCardContactsDeptQuery, {
     variables: { where: { uid: roomCardUid } },
-    enabled: !!roomCardUid
+    enabled: !!roomCardUid,
+    placeholderData: keepPreviousData
   })
 
   return {
@@ -93,7 +96,8 @@ export const useRoomCardContactsDept = (roomCardUid?: string) => {
 export const useRoomCardContactsHall = (roomCardUid?: string) => {
   const { data, refetch, isFetching } = useGraphQL(roomCardContactsHallQuery, {
     variables: { where: { uid: roomCardUid } },
-    enabled: !!roomCardUid
+    enabled: !!roomCardUid,
+    placeholderData: keepPreviousData
   })
 
   return {
@@ -110,7 +114,8 @@ export const useRoomCardContactsHall = (roomCardUid?: string) => {
 export const useRoomCardTeams = (roomCardUid?: string) => {
   const { data, refetch, isFetching } = useGraphQL(roomCardTeamsQuery, {
     variables: { where: { uid: roomCardUid } },
-    enabled: !!roomCardUid
+    enabled: !!roomCardUid,
+    placeholderData: keepPreviousData
   })
 
   return {
@@ -127,7 +132,8 @@ export const useRoomCardTeams = (roomCardUid?: string) => {
 export const useRoomCardLocations = (roomCardUid?: string) => {
   const { data, refetch, isFetching } = useGraphQL(roomCardLocationsQuery, {
     variables: { where: { uid: roomCardUid } },
-    enabled: !!roomCardUid
+    enabled: !!roomCardUid,
+    placeholderData: keepPreviousData
   })
 
   return {
