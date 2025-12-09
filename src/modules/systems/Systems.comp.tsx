@@ -14,6 +14,7 @@ interface Props {
   hideButtons?: boolean
   RightSearchBarElement?: () => JSX.Element
   LeftSearchBarElement?: () => JSX.Element
+  isGlobalSearch?: boolean
 }
 
 export const SystemsComponent: FC<Props> = ({
@@ -24,7 +25,8 @@ export const SystemsComponent: FC<Props> = ({
   className,
   hideButtons = false,
   LeftSearchBarElement,
-  RightSearchBarElement
+  RightSearchBarElement,
+  isGlobalSearch
 }: Props) => {
   return (
     <TableLayoutContainer className={className}>
@@ -32,6 +34,7 @@ export const SystemsComponent: FC<Props> = ({
         hideButtons={hideButtons}
         enableDragAndDrop={enableDragAndDrop}
         tableId={tableId}
+        isGlobalSearch={isGlobalSearch}
         RightSearchBarElement={RightSearchBarElement}
         LeftSearchBarElement={LeftSearchBarElement}
         pageSizeDefault={50}

@@ -31,7 +31,8 @@ export const TABLE_IDS = {
   // Item assignment & moving
   ASSIGN_ITEM_SYSTEMS: 'assign-item-systems',
   DESTINATION_SYSTEMS: 'destination-systems',
-  OLD_ITEM_DESTINATION_SYSTEMS: 'old-item-destination-systems'
+  OLD_ITEM_DESTINATION_SYSTEMS: 'old-item-destination-systems',
+  SYSTEM_SELECTION_MODAL: 'system-select'
 } as const
 
 // Type for table IDs

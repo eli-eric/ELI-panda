@@ -8,8 +8,18 @@ const codebookSchema = z.object({
   code: z.string().optional()
 })
 
-// Order Line form validation schema
-export const orderLineSchema = z
+// System configuration schema for Step 3
+const systemConfigSchema = z.object({
+  index: z.number(),
+  itemName: z.string(),
+  parentSystem: codebookSchema.nullable(),
+  systemType: z.enum(['new', 'existing']),
+  systemName: z.string(),
+  selectedSystem: codebookSchema.optional().nullable()
+})
+
+// Order Line Wizard form validation schema (includes wizard-specific fields)
+export const orderLineWizardSchema = z
   .object({
     // Metadata fields (prefixed with _ to indicate they're not submitted to backend)
     // Used for UI state management and persistence during wizard navigation
@@ -28,8 +38,15 @@ export const orderLineSchema = z
 
     // Codebook fields
     system: codebookSchema.optional().nullable(),
-    itemUsage: codebookSchema.optional().nullable()
+    itemUsage: codebookSchema.optional().nullable(),
+
+    // Wizard-specific fields (Step 3 system configuration)
+    globalParentSystem: codebookSchema.optional().nullable(),
+    systemConfigs: z.array(systemConfigSchema).optional()
   })
   .passthrough()
 
-export type OrderLineFormData = z.infer<typeof orderLineSchema>
+// Alias for compatibility
+export const orderLineSchema = orderLineWizardSchema
+
+export type OrderLineFormData = z.infer<typeof orderLineWizardSchema>

@@ -1,63 +1,53 @@
 import { useCallback } from 'react'
-import { useFieldArray, useFormContext } from 'react-hook-form'
+import { toast } from 'sonner'
 
 import type { ModalSize } from '@/components/ui/dialog'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
-import type { ContactPersonRole, Employee } from '@/types/gql/graphql'
 
-import { useRoomCardStore } from '../../../store/useRoomCardStore'
+import { useCreateHallContact } from '../../../hooks/useContactMutations'
+import { useRoomCardContactsHall } from '../../../hooks/useRoomCardContacts'
 import { ContactHallModalContainer } from '../ContactHallModal.cont'
 import type { ContactHallFormData } from '../schemas/contactHall.schema'
 
-export const useContactHallModal = () => {
+export const useContactHallModal = (roomCardUid?: string) => {
   const { openModal, closeModal } = useDynamicModalStore()
-  const { setNewHallContact } = useRoomCardStore()
-  const { control } = useFormContext()
-  const { append, fields } = useFieldArray({
-    control,
-    name: 'contactPersonsHall'
-  })
+  const { createHallContact } = useCreateHallContact(roomCardUid || '')
+  const { contactPersonsHall } = useRoomCardContactsHall(roomCardUid)
 
   return useCallback(() => {
-    // Get existing employee UIDs to prevent duplicates
-    const existingEmployeeUids = fields
-      .map((field: any) => field?.employee?.uid)
-      .filter(Boolean)
-
     const modalId = openModal('dialog', {
       id: 'contact-hall',
       component: ContactHallModalContainer,
       props: {
         title: 'Add Contact Person (Hall)',
-        size: 'l' as ModalSize,
-        existingEmployeeUids
+        size: 'l' as ModalSize
       },
       onClose: () => {
         // Cleanup if needed
       },
-      onSubmit: (data: ContactHallFormData) => {
-        if (data.employee && data.role) {
-          // Add to form array with full employee data
-          append({
-            employee: {
-              ...(data.employee as any),
-              facilityConnection: null,
-              userConnection: null
-            },
-            role: data.role,
-            uuid: crypto.randomUUID()
-          })
+      onSubmit: async (data: ContactHallFormData) => {
+        if (data.employee && data.role && roomCardUid) {
+          // Check for duplicate (same employee + same role combination) using fresh data
+          const isDuplicate = contactPersonsHall.some(
+            (contact: any) =>
+              contact?.employee?.uid === data.employee?.uid &&
+              contact?.role?.uid === data.role?.uid
+          )
 
-          // Track in store for API update
-          setNewHallContact({
-            employee: data.employee as Employee,
-            role: data.role as ContactPersonRole
-          })
+          if (isDuplicate) {
+            toast.error('This employee with this role already exists')
+            return
+          }
 
-          // Close modal
-          closeModal(modalId)
+          try {
+            await createHallContact(data.employee.uid, data.role.uid)
+            toast.success('Contact person added')
+            closeModal(modalId)
+          } catch {
+            toast.error('Failed to add contact person')
+          }
         }
       }
     })
-  }, [openModal, closeModal, fields, append, setNewHallContact])
+  }, [openModal, closeModal, roomCardUid, contactPersonsHall, createHallContact])
 }

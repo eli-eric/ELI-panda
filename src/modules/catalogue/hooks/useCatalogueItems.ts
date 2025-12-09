@@ -1,4 +1,8 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import {
+  keepPreviousData,
+  useQuery,
+  useQueryClient
+} from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useIntl } from 'react-intl'
 import { toast } from 'sonner'
@@ -23,6 +27,7 @@ export const useCatalogueItems = (tableId = 'catalogueItems') => {
   } = useQuery({
     queryKey,
     queryFn: queryFetcher<CatalogueItemsResponse>('catalogueItems'),
+    placeholderData: keepPreviousData,
     refetchOnMount: true
   })
 
@@ -44,5 +49,10 @@ export const useCatalogueItems = (tableId = 'catalogueItems') => {
       queryKey
     })
 
-  return { catalogueItems: data, loading, error, refetch }
+  return {
+    catalogueItems: data,
+    loading,
+    error,
+    refetch
+  }
 }

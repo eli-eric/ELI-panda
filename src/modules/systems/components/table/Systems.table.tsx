@@ -29,6 +29,7 @@ interface Props {
   settings?: PandaTableSettings<SystemDetail>
   RightSearchBarElement?: () => JSX.Element
   LeftSearchBarElement?: () => JSX.Element
+  isGlobalSearch?: boolean
 }
 
 export const SystemsTable = ({
@@ -41,7 +42,8 @@ export const SystemsTable = ({
   enableDragAndDrop,
   LeftSearchBarElement,
   RightSearchBarElement,
-  collapseOnUnMount
+  collapseOnUnMount,
+  isGlobalSearch = false
 }: Props) => {
   const { systems, loading } = useSystems(tableId)
   const { columns, pending } = useSystemsColumns({
@@ -89,6 +91,7 @@ export const SystemsTable = ({
       <MemoizedSearchBar
         tableId={tableId}
         useQuery={settings?.enableQueryURL}
+        isGlobalSearch={isGlobalSearch}
         left={
           !hideButtons && !enableDragAndDrop ? (
             <SearchBarButtons />
@@ -104,6 +107,7 @@ export const SystemsTable = ({
         table={table}
         loading={loading || pending}
         tableId={tableId}
+        skeletonRowCount={pageSizeDefault}
         getRowProps={getRowProps}
         settings={{
           ...settings,

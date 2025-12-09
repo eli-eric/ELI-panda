@@ -13,7 +13,6 @@ interface Props {
   row: Row<any>
   getRowProps: (row: Row<any>) => Record<string, any>
   virtualPaddingLeft?: string
-  loading: boolean
 }
 
 export const TableRowComponent: FC<Props> = ({
@@ -21,8 +20,7 @@ export const TableRowComponent: FC<Props> = ({
   measureElement,
   row,
   getRowProps,
-  virtualPaddingLeft,
-  loading
+  virtualPaddingLeft
 }) => {
   const { className, ...rest } = getRowProps(row)
   const visibleCells = row.getVisibleCells()
@@ -60,13 +58,7 @@ export const TableRowComponent: FC<Props> = ({
         <td style={{ display: 'flex', width: virtualPaddingLeft }} />
       ) : null}
       {visibleCells.map((cell, index) => (
-        <RowCellComponent
-          key={cell.id}
-          cell={cell}
-          row={row}
-          loading={loading}
-          index={index}
-        />
+        <RowCellComponent key={cell.id} cell={cell} row={row} index={index} />
       ))}
     </tr>
   )

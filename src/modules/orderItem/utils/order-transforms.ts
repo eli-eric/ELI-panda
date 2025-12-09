@@ -7,26 +7,16 @@ import type {
 } from '../types/form'
 
 /**
- * Adds uuid property to orderLines and serviceLines for frontend use.
- * uuid is used as a fallback identifier when uid is not available.
+ * Adds React Hook Form data to orderLines and serviceLines if needed.
+ * Note: React Hook Form automatically adds 'id' field via useFieldArray.
  */
 export const addUuidsToOrderData = (
   orderDetail: OrderDetailFormType
 ): OrderDetailFormType => {
   return {
     ...orderDetail,
-    orderLines:
-      orderDetail?.orderLines &&
-      orderDetail.orderLines.map(orderLine => ({
-        ...orderLine,
-        uuid: orderLine.uid
-      })),
-    serviceLines:
-      orderDetail?.serviceLines &&
-      orderDetail.serviceLines.map(serviceLine => ({
-        ...serviceLine,
-        uuid: serviceLine.uid
-      })),
+    orderLines: orderDetail?.orderLines,
+    serviceLines: orderDetail?.serviceLines,
     orderDate: orderDetail?.orderDate,
     orderStatus: orderDetail?.orderStatus || {
       uid: 'c5ef9d00-ac38-44c1-b48a-fde0d7095c54',
@@ -36,24 +26,24 @@ export const addUuidsToOrderData = (
 }
 
 /**
- * Removes uuid property from orderLines and serviceLines before submitting to backend.
- * Backend doesn't need uuid, it's a helper property for frontend only.
+ * Removes React Hook Form's internal 'id' field from orderLines and serviceLines before submitting to backend.
+ * Backend doesn't need React Hook Form's id, it's an internal field for array management.
  */
-const removeUuidsFromLines = <T extends { uuid?: string }>(
+const removeUuidsFromLines = <T extends Record<string, any>>(
   lines: T[] | undefined
-): Omit<T, 'uuid'>[] | undefined => {
+): T[] | undefined => {
   if (!lines) return undefined
 
   return lines.map(line => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { uuid, ...rest } = line
-    return rest
+    const { id, ...rest } = line
+    return rest as T
   })
 }
 
 /**
  * Prepares order data for backend submission:
- * - Removes uuid from orderLines and serviceLines
+ * - Removes React Hook Form's internal 'id' field from orderLines and serviceLines
  * - Converts orderDate to the correct format
  */
 export const prepareOrderForSubmit = (

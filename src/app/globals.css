@@ -188,6 +188,38 @@
     position: relative;
     z-index: 0;
   }
+
+  /* Simple scrollbar styles - dark/light mode only */
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--border);
+    border-radius: 6px;
+  }
+
+  /* Dark mode scrollbar */
+  .dark ::-webkit-scrollbar-thumb {
+    background-color: oklch(1 0 0 / 20%);
+  }
+
+  /* Firefox scrollbar */
+  @supports (scrollbar-color: auto) {
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+
+    .dark * {
+      scrollbar-color: oklch(1 0 0 / 20%) transparent;
+    }
+  }
 }
 
 input[type='number']::-webkit-outer-spin-button,

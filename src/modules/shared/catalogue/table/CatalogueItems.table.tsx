@@ -1,5 +1,5 @@
 import type { Row } from '@tanstack/react-table'
-import { createContext, useEffect } from 'react'
+import { useEffect } from 'react'
 
 import type { GetCategoriesQuery } from '@/types/gql/graphql'
 import type { CatalogueItemsResponse } from '@/types/responses/catalogue'
@@ -20,13 +20,8 @@ interface CatalogueTableProps {
   enableFiltering?: boolean
   setCategoryFilter?: (value: CodebookType) => void
   getRowProps?: (row: Row<any>) => GetRowPropsReturnType
+  pageSize?: number
 }
-
-export const CatalogueTableContext = createContext<{
-  isHoveringId: number | undefined | string
-}>({
-  isHoveringId: undefined
-})
 
 export const CatalogueTable = ({
   hideButtons,
@@ -36,6 +31,7 @@ export const CatalogueTable = ({
   getRowProps,
   categoryList,
   loading,
+  pageSize = 10,
   setCategoryFilter
 }: CatalogueTableProps) => {
   const columns = useCatalogueItemsColumns({
@@ -72,6 +68,7 @@ export const CatalogueTable = ({
       loading={loading}
       tableId={tableId}
       getRowProps={getRowProps}
+      skeletonRowCount={pageSize}
       data={catalogueItems?.data}
       className={'relative overflow-y-scroll scrollbar-style text-sm'}
       settings={{

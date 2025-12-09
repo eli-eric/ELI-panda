@@ -12,19 +12,26 @@ export const useOrderLine = () => {
   //  set the order lines to the form
   const setOrderLine = (orderLine: OrderLineFormType) => {
     const dataToSave = { ...orderLine }
-    if (orderLine.uuid) {
-      const index = fields.findIndex(item => item.uuid === orderLine.uuid)
-      update(index, dataToSave)
+
+    // If order line has uid (from DB), it's an UPDATE
+    if (orderLine.uid) {
+      const index = fields.findIndex(item => item.uid === orderLine.uid)
+      if (index !== -1) {
+        update(index, dataToSave)
+      }
     } else {
-      dataToSave.uuid = crypto.randomUUID()
+      // New order line - INSERT at position 0
+      // React Hook Form will automatically add 'id' field
       insert(0, dataToSave)
     }
   }
   //  delete the order line from the form
-  const deleteOrderLine = (orderLine: OrderLineFormType) => {
-    const index = fields.findIndex(item => item.uuid === orderLine.uuid)
-    remove(index)
+  const deleteOrderLine = (orderLine: OrderLineFormType & { id: string }) => {
+    const index = fields.findIndex(item => item.id === orderLine.id)
+    if (index !== -1) {
+      remove(index)
+    }
   }
 
-  return { setOrderLine, deleteOrderLine }
+  return { setOrderLine, deleteOrderLine, fields }
 }

@@ -1,27 +1,53 @@
-import { Fragment } from 'react'
-import { useFieldArray, useFormContext } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { PlusButton } from '@/components/Buttons'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger
+} from '@/components/ui/tooltip'
 import { useLocationSelectionModal } from '@/modules/shared/form/location/hooks/useLocationSelectionModal'
 import type { CodebookType } from '@/types/responses/codebook'
 
-import { useRoomCardStore } from '../../store/useRoomCardStore'
+import { useConnectLocation } from '../../hooks/useContactMutations'
+import { useRoomCardLocations } from '../../hooks/useRoomCardContacts'
 
-export const AddLocationButton = () => {
-  const { control } = useFormContext()
-  const { append, fields } = useFieldArray({ control, name: 'locations' })
+interface Props {
+  roomCardUid?: string
+}
+
+export const AddLocationButton = ({ roomCardUid }: Props) => {
   const { openLocationModal } = useLocationSelectionModal()
-  const { setNewLocation } = useRoomCardStore()
+  const { connectLocation, isPending } = useConnectLocation(roomCardUid || '')
+  const { locations } = useRoomCardLocations(roomCardUid)
 
-  const addLocation = (item?: CodebookType | null) => {
-    if (item) {
-      if (fields.find((field: any) => field.uid === item.uid)) {
-        toast.error('Location already exists')
-        return
-      }
-      append(item)
-      setNewLocation(item)
+  // In create mode (no roomCardUid), show disabled button with tooltip
+  if (!roomCardUid) {
+    return (
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <span>
+            <PlusButton type="button" disabled />
+          </span>
+        </TooltipTrigger>
+        <TooltipContent>Save the Room Card first to add locations</TooltipContent>
+      </Tooltip>
+    )
+  }
+
+  const addLocation = async (item?: CodebookType | null) => {
+    if (!item) return
+
+    if (locations.some(loc => loc.uid === item.uid)) {
+      toast.error('Location already exists')
+      return
+    }
+
+    try {
+      await connectLocation(item.uid)
+      toast.success('Location added')
+    } catch {
+      toast.error('Failed to add location')
     }
   }
 
@@ -30,8 +56,10 @@ export const AddLocationButton = () => {
   }
 
   return (
-    <Fragment>
-      <PlusButton type="button" onClick={handleOpenLocationModal} />
-    </Fragment>
+    <PlusButton
+      type="button"
+      onClick={handleOpenLocationModal}
+      disabled={isPending}
+    />
   )
 }

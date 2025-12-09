@@ -1,8 +1,6 @@
 import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
 import { gql } from '@/types/gql'
-import { connectN } from '@/utils/graphql/mutations'
 
-import { whereN } from '../../../utils/graphql/mutations'
 import type { RoomCardFormType } from '../types/form'
 
 const createRoomCardMutation = gql(`
@@ -15,36 +13,27 @@ const createRoomCardMutation = gql(`
   }
 `)
 
-export const makeRoomCardsCreateData = (formData: RoomCardFormType) => ({
-  input: [
-    {
-      ...formData,
-      name: formData?.name ? formData?.name : '',
-      cleaningScheduleDate: formData?.cleaningScheduleDate
-        ? formData?.cleaningScheduleDate
-        : undefined,
-      contactPersonsHall: {
-        create: formData?.contactPersonsHall.map(contactPerson => ({
-          node: {
-            employee: connectN(contactPerson.employee?.uid),
-            role: connectN(contactPerson.role?.uid)
-          }
-        }))
-      },
-      contactPersonsDept: {
-        connect: formData?.contactPersonsDept.map(contactPerson =>
-          whereN(contactPerson.uid)
-        )
-      },
-      teams: {
-        connect: formData?.teams.map(team => whereN(team.uid))
-      },
-      locations: {
-        connect: formData?.locations.map(location => whereN(location.uid))
+export const makeRoomCardsCreateData = (formData: RoomCardFormType) => {
+  // Destructure fields that need special handling
+  // Contacts (Hall, Dept, Teams) and Locations are NOT part of the form - they can only be
+  // added after the RoomCard is created (via direct mutations)
+  const { operationalState, ...rest } = formData
+
+  return {
+    input: [
+      {
+        ...rest,
+        name: formData?.name ? formData?.name : '',
+        cleaningScheduleDate: formData?.cleaningScheduleDate
+          ? formData?.cleaningScheduleDate
+          : undefined,
+        operationalState: operationalState?.uid
+          ? { connect: { where: { node: { uid: operationalState.uid } } } }
+          : undefined
       }
-    }
-  ]
-})
+    ]
+  }
+}
 
 export const useRoomCardCreate = () => {
   //TODO     refetchQueries: ['RoomCards', 'RoomCard']

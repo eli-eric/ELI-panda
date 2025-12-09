@@ -1,70 +1,88 @@
 import type { CellContext } from '@tanstack/react-table'
-import { useFieldArray, useFormContext } from 'react-hook-form'
+import { MoreVertical, Trash2 } from 'lucide-react'
+import { useCallback, useState } from 'react'
+import { toast } from 'sonner'
 
-import { TableDeleteButton } from '@/components/Buttons'
+import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
 import usePermission from '@/hooks/usePermission'
+import useWarningModal from '@/hooks/useWarningModal'
 import { ROLE } from '@/types/constants/roles'
 
 interface Props extends CellContext<any, any> {
-  formName: string
-  setDeleteItem?: (item: any) => void
-  removeNewItem?: (uuid: string) => void
+  onDelete?: (item: any) => Promise<void>
+  warningMessage?: string
+  roomCardUid?: string
 }
 
 export const CellWithDelete = ({
   row,
   getValue,
-  formName,
-  setDeleteItem,
-  removeNewItem
+  onDelete,
+  warningMessage,
+  roomCardUid
 }: Props) => {
-  const { control } = useFormContext()
-  const { remove, fields } = useFieldArray({ control, name: formName })
-  const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
+  const editPermission = usePermission([ROLE.ROOM_CARD_EDIT])
+  const withWarningModal = useWarningModal()
+  const [isDeleting, setIsDeleting] = useState(false)
 
-  // Use row.index from TanStack Table - this is always correct and in sync
-  const rowIndex = row.index
-  const item = fields[rowIndex]
+  const item = row.original
 
-  const onDeleteClick = () => {
-    // Defensive check: ensure index is valid
-    if (rowIndex >= 0 && rowIndex < fields.length) {
-      const itemToDelete: any = item
+  const onDeleteClick = useCallback(async () => {
+    if (!onDelete || !roomCardUid) return
 
-      // Remove from form array using the correct index
-      remove(rowIndex)
-
-      // Check if this is a DB item (has uid) or newly added item (has uuid only)
-      if (itemToDelete?.uid) {
-        // Item from DB - track for deletion in API
-        if (setDeleteItem) {
-          setDeleteItem(itemToDelete)
-        }
-      } else if (itemToDelete?.uuid && removeNewItem) {
-        // Newly added item - remove from "to be created" list
-        removeNewItem(itemToDelete.uuid)
-      } else {
-        //eslint-disable-next-line no-console
-        console.warn(
-          `Item has neither uid nor uuid:`,
-          itemToDelete,
-          `in ${formName}`
-        )
-      }
-    } else {
-      //eslint-disable-next-line no-console
-      console.warn(
-        `Delete failed: Invalid index ${rowIndex} for ${formName}. Fields length: ${fields.length}`
-      )
+    setIsDeleting(true)
+    try {
+      await onDelete(item)
+      toast.success('Item removed')
+    } catch {
+      toast.error('Failed to remove item')
+    } finally {
+      setIsDeleting(false)
     }
+  }, [item, onDelete, roomCardUid])
+
+  const handleDeleteWithConfirmation = useCallback(() => {
+    const message =
+      warningMessage || 'Are you sure you want to remove this item?'
+    withWarningModal(onDeleteClick, message)()
+  }, [withWarningModal, onDeleteClick, warningMessage])
+
+  // In create mode (no roomCardUid), don't show actions
+  if (!roomCardUid) {
+    return <span>{getValue()}</span>
   }
 
   return (
-    <div className="flex items-center">
-      {editPersmission && (
-        <div className="relative right-1">
-          <TableDeleteButton onClick={onDeleteClick} />
-        </div>
+    <div className="flex items-center gap-1">
+      {editPermission && (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="sm"
+              aria-label="Row actions"
+              className="h-8 w-8 p-0"
+              disabled={isDeleting}
+            >
+              <MoreVertical className="h-4 w-4 text-muted-foreground" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" sideOffset={4}>
+            <DropdownMenuItem
+              onClick={handleDeleteWithConfirmation}
+              className="cursor-pointer text-destructive focus:text-destructive"
+            >
+              <Trash2 className="h-4 w-4 mr-2" />
+              Remove
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       )}
       <span>{getValue()}</span>
     </div>

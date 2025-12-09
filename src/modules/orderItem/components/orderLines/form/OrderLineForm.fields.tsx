@@ -22,7 +22,12 @@ const useOrderLineFormFields = (enabled: boolean) =>
     },
     system: {
       name: 'system',
-      label: form.systemName.label,
+      label: 'System',
+      rounded: 'rounded-md'
+    },
+    parentSystem: {
+      name: 'parentSystem',
+      label: form.parentSystem.label,
       rounded: 'rounded-md',
       required: true
     },

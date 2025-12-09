@@ -2,6 +2,9 @@ import type { Row, Table } from '@tanstack/react-table'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import React, { useCallback } from 'react'
 
+import { isEmptyArray } from '@/lib/predicates/data'
+import { isDefined, isUndefined } from '@/lib/predicates/type-guards'
+
 import { TableFoot } from '../pandaTable/components/TableFoot'
 import {
   defaultPropGetter,
@@ -13,6 +16,7 @@ import { HeaderCellDNDComponent } from './components/HeaderCell.dnd'
 import { TableContainer } from './components/Table.cont'
 import { TableRowComponent } from './components/TableRow.comp'
 import { TableRowDNDComponent } from './components/TableRow.dnd'
+import { TableSkeletonRows } from './components/TableSkeletonRows'
 
 interface Props<T> {
   settings?: PandaTableSettings<T>
@@ -21,7 +25,7 @@ interface Props<T> {
   data?: T[]
   loading?: boolean
   getRowProps?: (row: Row<T>) => GetRowPropsReturnType
-
+  skeletonRowCount?: number
   tableId: string
   table: Table<T>
 }
@@ -29,12 +33,13 @@ interface Props<T> {
 export function PandaTableV2<T>({
   data,
   table,
-  loading = false,
   settings,
   tableHeading,
+  loading = false,
   className,
   tableId,
-  getRowProps = defaultPropGetter
+  getRowProps = defaultPropGetter,
+  skeletonRowCount = 5
 }: Props<T>) {
   const {
     enableFooter = false,
@@ -77,6 +82,12 @@ export function PandaTableV2<T>({
 
   const virtualRows = getVirtualItems()
 
+  // Distinguish between initial load and refetching
+  // Initial load: data is undefined (not yet loaded) - show skeleton
+  // Refetching: data exists (array, even if empty) AND currently loading - show dimming + pulse
+  const isInitialLoad = isUndefined(data)
+  const isRefetching = isDefined(data) && loading
+
   return (
     <TableContainer
       table={table}
@@ -86,8 +97,9 @@ export function PandaTableV2<T>({
       tableContainerRef={tableContainerRef}
       enablePagination={enablePagination}
       itemsTotalCount={data?.length}
-      isLoading={loading && !data}
-      isEmpty={data?.length === 0}
+      isLoading={isInitialLoad}
+      isRefetching={isRefetching}
+      isEmpty={data && isEmptyArray(data)}
     >
       <thead className="sticky top-0 z-10 bg-background/95 backdrop-blur backdrop-filter">
         {table.getHeaderGroups().map(headerGroup => {
@@ -123,11 +135,19 @@ export function PandaTableV2<T>({
       <tbody
         style={{
           display: 'grid',
-          height: `${rowVirtualizer.getTotalSize()}px`, //tells scrollbar how big the table is
+          height: isInitialLoad
+            ? `${skeletonRowCount * 49}px`
+            : `${rowVirtualizer.getTotalSize()}px`, //tells scrollbar how big the table is
           position: 'relative' //needed for absolute positioning of rows
         }}
       >
-        {data &&
+        {isInitialLoad ? (
+          <TableSkeletonRows
+            headers={table.getHeaderGroups()[0]?.headers || []}
+            rowCount={skeletonRowCount}
+          />
+        ) : (
+          data &&
           virtualRows.map(virtualRow => {
             const row = rows[virtualRow.index] as Row<any>
             return getRowProps(row).dropsettings ? (
@@ -137,7 +157,6 @@ export function PandaTableV2<T>({
                 getRowProps={getRowProps}
                 virtualRow={virtualRow}
                 measureElement={measureElement}
-                loading={loading}
                 tableId={tableId}
               />
             ) : (
@@ -147,10 +166,10 @@ export function PandaTableV2<T>({
                 getRowProps={getRowProps}
                 virtualRow={virtualRow}
                 measureElement={measureElement}
-                loading={loading}
               />
             )
-          })}
+          })
+        )}
       </tbody>
       {enableFooter && <TableFoot getFooterGroups={table.getFooterGroups} />}
     </TableContainer>

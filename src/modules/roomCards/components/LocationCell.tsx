@@ -1,7 +1,14 @@
 import type { CellContext } from '@tanstack/react-table'
+import { MoreVertical, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 
-import { TableActionsButtons } from '@/components/Buttons'
+import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
 import usePermission from '@/hooks/usePermission'
 import useWarningModal from '@/hooks/useWarningModal'
 import { PATH } from '@/types/constants/paths'
@@ -30,17 +37,34 @@ export const LocationCell = ({
   const onDeleteClick = () => withWarningModal(handleDelete)()
 
   return (
-    <div className="flex items-center">
-      <Link
-        href={PATH.ROOM_CARD + '/' + original.uid}
-        className={
-          'text-blue-700 dark:text-gray-200 dark:underline cursor-pointer hover:underline'
-        }
-      >
-        <span>{getValue()}</span>
+    <div className="flex items-center w-full justify-between">
+      <Link href={PATH.ROOM_CARD + '/' + original.uid}>
+        <Button variant="link">
+          <span>{getValue()}</span>
+        </Button>
       </Link>
       {editPersmission && (
-        <TableActionsButtons onDeleteClick={onDeleteClick} canEdit={true} />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="sm"
+              aria-label="Row actions"
+              className="h-8 w-8 p-0"
+            >
+              <MoreVertical className="h-4 w-4 text-muted-foreground" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" sideOffset={4}>
+            <DropdownMenuItem
+              onClick={onDeleteClick}
+              className="cursor-pointer text-destructive focus:text-destructive"
+            >
+              <Trash2 className="h-4 w-4 mr-2" />
+              Remove
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       )}
     </div>
   )

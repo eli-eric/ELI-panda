@@ -96,6 +96,7 @@ const CatalogueContainer = () => {
           setCategoryFilter={setCategoryFilter}
           catalogueItems={catalogueItems}
           loading={loading}
+          pageSize={50}
           categoryList={catalogueCategories}
         />
         <Pagination
