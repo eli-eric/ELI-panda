@@ -25,7 +25,7 @@ export const useTeamModal = (roomCardUid?: string) => {
       onSubmit: async (data: TeamFormData) => {
         if (data.team && roomCardUid) {
           // Check for duplicate using fresh data
-          const isDuplicate = teams.some(
+          const isDuplicate = teams?.some(
             (team: any) => team?.uid === data.team?.uid
           )
 

@@ -28,7 +28,7 @@ export const useContactHallModal = (roomCardUid?: string) => {
       onSubmit: async (data: ContactHallFormData) => {
         if (data.employee && data.role && roomCardUid) {
           // Check for duplicate (same employee + same role combination) using fresh data
-          const isDuplicate = contactPersonsHall.some(
+          const isDuplicate = contactPersonsHall?.some(
             (contact: any) =>
               contact?.employee?.uid === data.employee?.uid &&
               contact?.role?.uid === data.role?.uid
@@ -50,5 +50,11 @@ export const useContactHallModal = (roomCardUid?: string) => {
         }
       }
     })
-  }, [openModal, closeModal, roomCardUid, contactPersonsHall, createHallContact])
+  }, [
+    openModal,
+    closeModal,
+    roomCardUid,
+    contactPersonsHall,
+    createHallContact
+  ])
 }
