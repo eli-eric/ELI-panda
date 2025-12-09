@@ -9,7 +9,6 @@ import {
   type SortingState,
   useReactTable
 } from '@tanstack/react-table'
-import { Database } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 
 import { isDefined, isUndefined } from '@/lib/predicates/type-guards'
@@ -162,15 +161,6 @@ export function Table<T extends object>({
     autoResetPageIndex: false // Prevent automatic page reset when data changes
   })
 
-  // If there's no data and not in any loading state, show empty message
-  if (tableData.length === 0 && !isInitialLoad && !isRefetching && !skipEmptyMessage) {
-    return (
-      <div className="w-full flex flex-col items-center justify-center p-8 text-muted-foreground border border-border rounded-md">
-        <Database className="h-10 w-10 mb-2 text-muted-foreground/50" />
-        <span className="text-sm">{emptyMessage}</span>
-      </div>
-    )
-  }
 
   // Filter className to find scroll and width related classes
   const extractedScrollClasses =
@@ -243,6 +233,7 @@ export function Table<T extends object>({
               rowClassName={rowClassName}
               getRowProps={getRowProps}
               skipEmptyMessage={skipEmptyMessage}
+              emptyMessage={emptyMessage}
             />
             {enableFooter && (
               <TableFooter table={table} footerClassName={footerClassName} />
