@@ -34,13 +34,14 @@ export const useContactDeptModal = (roomCardUid?: string) => {
             return
           }
 
-          try {
-            await connectDeptContact(data.employee.uid)
-            toast.success('Contact person added')
-            closeModal(modalId)
-          } catch {
-            toast.error('Failed to add contact person')
-          }
+          toast.promise(connectDeptContact(data.employee.uid), {
+            loading: 'Adding contact person (Dept)...',
+            success: () => {
+              closeModal(modalId)
+              return 'Contact person (Dept) added'
+            },
+            error: 'Failed to add contact person'
+          })
         }
       },
       onClose: () => {

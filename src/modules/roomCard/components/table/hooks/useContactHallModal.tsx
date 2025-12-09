@@ -39,13 +39,14 @@ export const useContactHallModal = (roomCardUid?: string) => {
             return
           }
 
-          try {
-            await createHallContact(data.employee.uid, data.role.uid)
-            toast.success('Contact person added')
-            closeModal(modalId)
-          } catch {
-            toast.error('Failed to add contact person')
-          }
+          toast.promise(createHallContact(data.employee.uid, data.role.uid), {
+            loading: 'Adding contact person (Hall)...',
+            success: () => {
+              closeModal(modalId)
+              return 'Contact person (Hall) added'
+            },
+            error: 'Failed to add contact person'
+          })
         }
       }
     })

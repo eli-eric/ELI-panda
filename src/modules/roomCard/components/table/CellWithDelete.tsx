@@ -14,10 +14,17 @@ import usePermission from '@/hooks/usePermission'
 import useWarningModal from '@/hooks/useWarningModal'
 import { ROLE } from '@/types/constants/roles'
 
+interface ToastMessages {
+  loading?: string
+  success?: string
+  error?: string
+}
+
 interface Props extends CellContext<any, any> {
   onDelete?: (item: any) => Promise<void>
   warningMessage?: string
   roomCardUid?: string
+  toastMessages?: ToastMessages
 }
 
 export const CellWithDelete = ({
@@ -25,7 +32,8 @@ export const CellWithDelete = ({
   getValue,
   onDelete,
   warningMessage,
-  roomCardUid
+  roomCardUid,
+  toastMessages
 }: Props) => {
   const editPermission = usePermission([ROLE.ROOM_CARD_EDIT])
   const withWarningModal = useWarningModal()
@@ -37,15 +45,13 @@ export const CellWithDelete = ({
     if (!onDelete || !roomCardUid) return
 
     setIsDeleting(true)
-    try {
-      await onDelete(item)
-      toast.success('Item removed')
-    } catch {
-      toast.error('Failed to remove item')
-    } finally {
-      setIsDeleting(false)
-    }
-  }, [item, onDelete, roomCardUid])
+    toast.promise(onDelete(item), {
+      loading: toastMessages?.loading ?? 'Removing...',
+      success: toastMessages?.success ?? 'Item removed',
+      error: toastMessages?.error ?? 'Failed to remove item',
+      finally: () => setIsDeleting(false)
+    })
+  }, [item, onDelete, roomCardUid, toastMessages])
 
   const handleDeleteWithConfirmation = useCallback(() => {
     const message =
