@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Suspense } from 'react'
+import { Suspense, useCallback, useState } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -34,7 +34,7 @@ interface Props {
   roomCardUid: string
 }
 
-export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
+const RoomCardDetailContent = ({ roomCardUid }: Props) => {
   const { roomCard, loading } = useRoomCard(roomCardUid)
   const canEdit = usePermission([ROLE.ROOM_CARD_EDIT])
   const formMethods = useForm<RoomCardFormType>({
@@ -174,5 +174,26 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
         </Card>
       </div>
     </Form>
+  )
+}
+
+export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
+  const [errorState, setErrorState] = useState<Error | null>(null)
+
+  const handleError = useCallback((error: Error) => {
+    // eslint-disable-next-line no-console
+    console.error('Error in RoomCardDetailContainer:', error)
+    setErrorState(error)
+    toast.error(`An error occurred: ${error.message}`)
+  }, [])
+
+  if (errorState) {
+    return <ErrorPage />
+  }
+
+  return (
+    <ErrorBoundary FallbackComponent={ErrorPage} onError={handleError}>
+      <RoomCardDetailContent roomCardUid={roomCardUid} />
+    </ErrorBoundary>
   )
 }
