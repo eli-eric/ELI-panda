@@ -103,6 +103,12 @@ export const RoomCardInfoCard = ({
               id="operationalState"
               className="w-full"
             />
+            {fields.operationalState.disabled && (
+              <p className="text-sm text-red-500">
+                This field can only be edited by Area Manager or Area Manager -
+                Deputy
+              </p>
+            )}
           </div>
 
           {/* Last Updated */}

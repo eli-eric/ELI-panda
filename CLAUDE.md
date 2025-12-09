@@ -109,6 +109,49 @@ Each feature module follows this structure:
 - **GraphQL operations**: Generated types with codegen, custom hooks for queries/mutations
 - **Table implementations**: Custom PandaTable components with filtering, sorting, and pagination
 - **Modal management**: Dynamic modal system using `useDynamicModalStore` with shadcn/ui Dialog and Sheet components
+- **Toast notifications for mutations**: Use `toast.promise` from sonner for all async mutations to show loading/success/error states
+
+### Toast Pattern for Mutations
+
+Always use `toast.promise` for mutations to provide consistent user feedback with loading, success, and error states:
+
+```typescript
+// Basic usage
+toast.promise(createItem(data), {
+  loading: 'Creating item...',
+  success: 'Item created',
+  error: 'Failed to create item'
+})
+
+// With callback on success (e.g., closing modal, navigation)
+toast.promise(updateItem(data), {
+  loading: 'Updating item...',
+  success: () => {
+    closeModal()
+    return 'Item updated'
+  },
+  error: 'Failed to update item'
+})
+
+// With finally callback (e.g., resetting loading state)
+toast.promise(deleteItem(uid), {
+  loading: 'Removing item...',
+  success: 'Item removed',
+  error: 'Failed to remove item',
+  finally: () => setIsDeleting(false)
+})
+```
+
+**Note:** For validation errors (e.g., duplicate detection) that occur _before_ the mutation, use `toast.error()` directly:
+
+```typescript
+if (isDuplicate) {
+  toast.error('This item already exists')
+  return
+}
+
+toast.promise(addItem(data), { ... })
+```
 
 ## Clean Code Principles
 

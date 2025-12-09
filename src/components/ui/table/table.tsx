@@ -12,6 +12,7 @@ import {
 import { Database } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 
+import { isDefined, isUndefined } from '@/lib/predicates/type-guards'
 import { cn } from '@/lib/utils'
 
 import { TableBody } from './table-body'
@@ -47,6 +48,12 @@ export function Table<T extends object>({
 }: TableProps<T>) {
   // Ensure data is always an array
   const tableData = Array.isArray(data) ? data : []
+
+  // Distinguish between initial load and refetching
+  // Initial load: data is undefined (not yet loaded) - show skeleton
+  // Refetching: data exists (array, even if empty) AND currently loading - show dimming + pulse
+  const isInitialLoad = isUndefined(data)
+  const isRefetching = isDefined(data) && loading
 
   // Sorting state
   const [sorting, setSorting] = useState<SortingState>([])
@@ -155,8 +162,8 @@ export function Table<T extends object>({
     autoResetPageIndex: false // Prevent automatic page reset when data changes
   })
 
-  // If there's no data and not loading, show empty message
-  if (tableData.length === 0 && !loading && !skipEmptyMessage) {
+  // If there's no data and not in any loading state, show empty message
+  if (tableData.length === 0 && !isInitialLoad && !isRefetching && !skipEmptyMessage) {
     return (
       <div className="w-full flex flex-col items-center justify-center p-8 text-muted-foreground border border-border rounded-md">
         <Database className="h-10 w-10 mb-2 text-muted-foreground/50" />
@@ -216,7 +223,12 @@ export function Table<T extends object>({
           }
         >
           {/* The table itself - use table-fixed to respect column sizes */}
-          <table className="w-full min-w-full caption-bottom text-sm table-fixed">
+          <table
+            className={cn(
+              'w-full min-w-full caption-bottom text-sm table-fixed',
+              isRefetching && 'opacity-60 animate-pulse'
+            )}
+          >
             <TableHeader
               table={table}
               enableSorting={enableSorting}
@@ -226,7 +238,7 @@ export function Table<T extends object>({
             <TableBody
               table={table}
               columns={columns}
-              loading={loading}
+              loading={isInitialLoad}
               skeletonRowCount={skeletonRowCount}
               rowClassName={rowClassName}
               getRowProps={getRowProps}

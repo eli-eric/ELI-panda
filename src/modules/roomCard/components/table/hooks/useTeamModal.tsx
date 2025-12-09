@@ -34,13 +34,14 @@ export const useTeamModal = (roomCardUid?: string) => {
             return
           }
 
-          try {
-            await connectTeam(data.team.uid)
-            toast.success('Team added')
-            closeModal(modalId)
-          } catch {
-            toast.error('Failed to add team')
-          }
+          toast.promise(connectTeam(data.team.uid), {
+            loading: 'Adding team...',
+            success: () => {
+              closeModal(modalId)
+              return 'Team added'
+            },
+            error: 'Failed to add team'
+          })
         }
       },
       onClose: () => {

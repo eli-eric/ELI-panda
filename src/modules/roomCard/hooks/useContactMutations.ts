@@ -91,7 +91,9 @@ const updateLocationMutation = gql(`
  */
 export const useConnectDeptContact = (roomCardUid: string) => {
   const queryClient = useQueryClient()
-  const { mutateAsync, isPending } = useGraphQLMutation(updateDeptContactMutation)
+  const { mutateAsync, isPending } = useGraphQLMutation(
+    updateDeptContactMutation
+  )
 
   const connectDeptContact = async (employeeUid: string) => {
     await mutateAsync({
@@ -119,7 +121,9 @@ export const useConnectDeptContact = (roomCardUid: string) => {
  */
 export const useDisconnectDeptContact = (roomCardUid: string) => {
   const queryClient = useQueryClient()
-  const { mutateAsync, isPending } = useGraphQLMutation(updateDeptContactMutation)
+  const { mutateAsync, isPending } = useGraphQLMutation(
+    updateDeptContactMutation
+  )
 
   const disconnectDeptContact = async (employeeUid: string) => {
     await mutateAsync({
@@ -200,7 +204,9 @@ export const useDisconnectTeam = (roomCardUid: string) => {
  */
 export const useCreateHallContact = (roomCardUid: string) => {
   const queryClient = useQueryClient()
-  const { mutateAsync, isPending } = useGraphQLMutation(updateHallContactMutation)
+  const { mutateAsync, isPending } = useGraphQLMutation(
+    updateHallContactMutation
+  )
 
   const createHallContact = async (employeeUid: string, roleUid: string) => {
     await mutateAsync({
@@ -238,7 +244,9 @@ export const useCreateHallContact = (roomCardUid: string) => {
  */
 export const useDeleteHallContact = (roomCardUid: string) => {
   const queryClient = useQueryClient()
-  const { mutateAsync, isPending } = useGraphQLMutation(updateHallContactMutation)
+  const { mutateAsync, isPending } = useGraphQLMutation(
+    updateHallContactMutation
+  )
 
   const deleteHallContact = async (hallContactUid: string) => {
     await mutateAsync({
