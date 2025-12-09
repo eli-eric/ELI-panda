@@ -36,13 +36,15 @@ const Custom404Page: NextPage = (): JSX.Element => {
                 </p>
               </div>
               <div className="mt-10 flex space-x-3 sm:border-l sm:border-transparent sm:pl-6">
-                <Link
-                  href={status === 'authenticated' ? PATH.DASHBOARD : PATH.ROOT}
-                >
-                  <Button>
-                    <FormattedMessage id={common.buttons.home} />
-                  </Button>
-                </Link>
+                <Button asChild>
+                  <Link
+                    href={status === 'authenticated' ? PATH.DASHBOARD : PATH.ROOT}
+                  >
+                    <span>
+                      <FormattedMessage id={common.buttons.home} />
+                    </span>
+                  </Link>
+                </Button>
               </div>
             </div>
           </main>

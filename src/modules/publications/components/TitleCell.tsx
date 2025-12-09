@@ -67,11 +67,11 @@ export const TitleCell: FC<TitleCellProps> = ({
       )}
       <div className="flex-1 min-w-0 flex items-center justify-start">
         <Tooltip content={title}>
-          <Link href={`${PATH.PUBLICATION}/${uid}`}>
-            <Button variant="link" className="cursor-pointer">
+          <Button variant="link" className="cursor-pointer" asChild>
+            <Link href={`${PATH.PUBLICATION}/${uid}`}>
               {truncateString(title, 40)}
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         </Tooltip>
       </div>
     </div>

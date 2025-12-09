@@ -148,6 +148,7 @@ export interface TableBodyProps<T extends object> {
   rowClassName?: string
   getRowProps?: GetRowProps<T>
   skipEmptyMessage?: boolean
+  emptyMessage?: ReactNode
 }
 
 export interface TablePaginationProps<T extends object> {

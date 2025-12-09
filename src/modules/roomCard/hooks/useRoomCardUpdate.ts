@@ -1,5 +1,6 @@
+import { useQueryClient } from '@tanstack/react-query'
+
 import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
-import { useRoomCards } from '@/modules/roomCards/hooks/useRoomCards'
 import { gql } from '@/types/gql'
 import { navigateBack } from '@/utils'
 
@@ -17,18 +18,20 @@ const updateRoomCardMutation = gql(`
   ) {
     updateRoomCards(where: $where, update: $update) {
       roomCards {
+        uid
         purityClass
         name
         status
-      operationalState {
-        name
-        uid
-        code 
-      }
+        operationalState {
+          name
+          uid
+          code
+        }
         operationalStateLastUpdated
         prescribedClothing
         entryToHvacTent
         cleaningScheduleDate
+        cleaningScheduleDays
         additionalRequirements
         coolingWater
         indoorEnvironmentQuality
@@ -40,7 +43,13 @@ const updateRoomCardMutation = gql(`
         compressedAirDistributionClient
         nitrogenCentralDistributionClient
         maxPressureInColdDistributionClient
+        locations {
+          uid
+          code
+          name
+        }
         contactPersonsHall {
+          uid
           role {
             uid
             name
@@ -91,13 +100,12 @@ const updateOperationalStateMutation = gql(`
 `)
 
 export const useRoomCardUpdate = (roomCardUid?: string) => {
+  const queryClient = useQueryClient()
   const { mutateAsync: update } = useGraphQLMutation(updateRoomCardMutation)
   const { mutateAsync: updateOpState } = useGraphQLMutation(
     updateOperationalStateMutation
   )
-  const { roomCard: roomCardOrigin, refetch: refetchRoomCard } =
-    useRoomCard(roomCardUid)
-  const { refetch: refetchRoomCards } = useRoomCards()
+  const { roomCard: roomCardOrigin } = useRoomCard(roomCardUid)
 
   const updateRoomCard = (
     roomCardForm: RoomCardFormType,
@@ -123,7 +131,43 @@ export const useRoomCardUpdate = (roomCardUid?: string) => {
         ...updateData
       },
       {
-        onSuccess: async () => {
+        onSuccess: async data => {
+          const updatedRoomCard = data.updateRoomCards.roomCards[0]
+
+          // Update RoomCardQuery cache with server response
+          queryClient.setQueriesData(
+            { queryKey: ['RoomCardQuery'] },
+            (old: any) => {
+              if (!old?.roomCards?.[0]) return old
+              return {
+                ...old,
+                roomCards: [{ ...old.roomCards[0], ...updatedRoomCard }]
+              }
+            }
+          )
+
+          // Update RoomCardsQuery cache with server response
+          queryClient.setQueriesData(
+            { queryKey: ['RoomCardsQuery'] },
+            (old: any) => {
+              if (!old?.roomCards) return old
+              return {
+                ...old,
+                roomCards: old.roomCards.map((rc: any) =>
+                  rc.uid === roomCardUid
+                    ? { ...rc, ...updatedRoomCard }
+                    : rc
+                )
+              }
+            }
+          )
+
+          // Invalidate to trigger background refetch for fresh data
+          queryClient.invalidateQueries({
+            queryKey: ['RoomCardsQuery'],
+            refetchType: 'none'
+          })
+
           // If operational state changed, create a separate history entry
           if (
             hasOperationalStateChanged(
@@ -140,17 +184,10 @@ export const useRoomCardUpdate = (roomCardUid?: string) => {
             })
           }
 
-          // Refetch room card detail to update roomCardOrigin for next save
-          await refetchRoomCard()
-          // Refetch room cards list
-          refetchRoomCards()
-
           if (saveAndExit) {
             navigateBack()
           }
         }
-        //TODO: add refetchQueries
-        // refetchQueries: [roomCardsQuery, roomCardQuery]
       }
     )
   }

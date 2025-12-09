@@ -18,7 +18,8 @@ export function TableBody<T extends object>({
   skeletonRowCount = 5,
   rowClassName,
   getRowProps,
-  skipEmptyMessage
+  skipEmptyMessage,
+  emptyMessage
 }: TableBodyProps<T>) {
   const { formatMessage: fm } = useIntl()
   // Check if there are any rows to display
@@ -88,7 +89,7 @@ export function TableBody<T extends object>({
             colSpan={columns.length}
             className="p-6 text-center text-muted-foreground"
           >
-            {fm({ id: message.common.ui.noDataAvailable })}
+            {emptyMessage ?? fm({ id: message.common.ui.noDataAvailable })}
           </td>
         </tr>
       </tbody>

@@ -8,7 +8,6 @@ import ErrorPage from '@/components/error/ErrorPage'
 import { Form } from '@/components/form/Form'
 import { HeaderWithButtons } from '@/components/header/HeaderWithButtons'
 import Card from '@/components/layout/Card'
-import LoaderComponent from '@/components/loader.comp'
 import ProgressBarComponent from '@/components/progress-bar.comp'
 import { CardContent } from '@/components/ui/card'
 import usePermission from '@/hooks/usePermission'
@@ -19,6 +18,7 @@ import type { PrescribedClothing } from '@/types/gql/graphql'
 import type { CodebookType } from '@/types/responses/codebook'
 
 import FileManager from '../shared/fileManager/FileManager'
+import { RoomCardDetailSkeleton } from './components/RoomCardDetail.skeleton'
 import { RoomCardInfoCard } from './components/RoomCardInfoCard'
 import { RoomCardBuildingMaintenanceCard } from './components/table/RoomCardBuildingMaintenanceCard'
 import { RoomCardCleanRoomsCard } from './components/table/RoomCardCleanRoomsCard'
@@ -34,36 +34,42 @@ interface Props {
   roomCardUid: string
 }
 
-const RoomCardDetailContent = ({ roomCardUid }: Props) => {
-  const { roomCard, loading } = useRoomCard(roomCardUid)
+type RoomCardData = NonNullable<ReturnType<typeof useRoomCard>['roomCard']>
+
+interface RoomCardFormProps {
+  roomCard: RoomCardData
+  roomCardUid: string
+}
+
+const RoomCardForm = ({ roomCard, roomCardUid }: RoomCardFormProps) => {
   const canEdit = usePermission([ROLE.ROOM_CARD_EDIT])
   const formMethods = useForm<RoomCardFormType>({
     defaultValues: {
-      name: roomCard?.name as string,
-      status: roomCard?.status,
-      operationalState: roomCard?.operationalState as CodebookType | null,
-      purityClass: roomCard?.purityClass as any,
-      prescribedClothing: roomCard?.prescribedClothing as PrescribedClothing[],
-      entryToHvacTent: roomCard?.entryToHvacTent as string,
-      additionalRequirements: roomCard?.additionalRequirements as string,
-      cleaningScheduleDays: roomCard?.cleaningScheduleDays as any,
-      cleaningScheduleDate: (roomCard?.cleaningScheduleDate as string) || '',
-      coolingWater: roomCard?.coolingWater as string,
-      indoorEnvironmentQuality: roomCard?.indoorEnvironmentQuality as string,
-      compressedAirDistribution: roomCard?.compressedAirDistribution as string,
+      name: roomCard.name as string,
+      status: roomCard.status,
+      operationalState: roomCard.operationalState as CodebookType | null,
+      purityClass: roomCard.purityClass as any,
+      prescribedClothing: roomCard.prescribedClothing as PrescribedClothing[],
+      entryToHvacTent: roomCard.entryToHvacTent as string,
+      additionalRequirements: roomCard.additionalRequirements as string,
+      cleaningScheduleDays: roomCard.cleaningScheduleDays as any,
+      cleaningScheduleDate: (roomCard.cleaningScheduleDate as string) || '',
+      coolingWater: roomCard.coolingWater as string,
+      indoorEnvironmentQuality: roomCard.indoorEnvironmentQuality as string,
+      compressedAirDistribution: roomCard.compressedAirDistribution as string,
       nitrogenCentralDistribution:
-        roomCard?.nitrogenCentralDistribution as string,
+        roomCard.nitrogenCentralDistribution as string,
       maxPressureInColdDistribution:
-        roomCard?.maxPressureInColdDistribution as string,
-      coolingWaterClient: roomCard?.coolingWaterClient as string,
+        roomCard.maxPressureInColdDistribution as string,
+      coolingWaterClient: roomCard.coolingWaterClient as string,
       indoorEnvironmentQualityClient:
-        roomCard?.indoorEnvironmentQualityClient as string,
+        roomCard.indoorEnvironmentQualityClient as string,
       compressedAirDistributionClient:
-        roomCard?.compressedAirDistributionClient as string,
+        roomCard.compressedAirDistributionClient as string,
       nitrogenCentralDistributionClient:
-        roomCard?.nitrogenCentralDistributionClient as string,
+        roomCard.nitrogenCentralDistributionClient as string,
       maxPressureInColdDistributionClient:
-        roomCard?.maxPressureInColdDistributionClient as string
+        roomCard.maxPressureInColdDistributionClient as string
     },
     resolver: zodResolver(roomCardSchema)
   })
@@ -75,13 +81,13 @@ const RoomCardDetailContent = ({ roomCardUid }: Props) => {
 
   const canEditOperationalState = useCanEditOperationalState(roomCardUid)
 
-  const onSubmit = handleSubmit((roomCard: RoomCardFormType) => {
+  const onSubmit = handleSubmit((formData: RoomCardFormType) => {
     toast.promise(
       updateRoomCard(
         {
-          ...roomCard,
-          cleaningScheduleDate: roomCard?.cleaningScheduleDate
-            ? roomCard.cleaningScheduleDate
+          ...formData,
+          cleaningScheduleDate: formData.cleaningScheduleDate
+            ? formData.cleaningScheduleDate
             : null
         },
         false
@@ -94,13 +100,13 @@ const RoomCardDetailContent = ({ roomCardUid }: Props) => {
     )
   })
 
-  const onSubmitAndExit = handleSubmit((roomCard: RoomCardFormType) => {
+  const onSubmitAndExit = handleSubmit((formData: RoomCardFormType) => {
     toast.promise(
       updateRoomCard(
         {
-          ...roomCard,
-          cleaningScheduleDate: roomCard?.cleaningScheduleDate
-            ? roomCard.cleaningScheduleDate
+          ...formData,
+          cleaningScheduleDate: formData.cleaningScheduleDate
+            ? formData.cleaningScheduleDate
             : null
         },
         true
@@ -129,8 +135,6 @@ const RoomCardDetailContent = ({ roomCardUid }: Props) => {
     }
   }
 
-  if (loading) return <LoaderComponent />
-
   return (
     <Form formMethods={formMethods} enableLeaveWarning={true}>
       <HeaderWithButtons
@@ -138,7 +142,7 @@ const RoomCardDetailContent = ({ roomCardUid }: Props) => {
         editRole={ROLE.ROOM_CARD_EDIT}
         onSubmit={onSubmit}
         onSubmitAndExit={onSubmitAndExit}
-        title={`Room Card: ${roomCard?.name || roomCardUid}`}
+        title={`Room Card: ${roomCard.name || roomCardUid}`}
         isFormDirty={formMethods.formState.isDirty}
       />
 
@@ -147,7 +151,7 @@ const RoomCardDetailContent = ({ roomCardUid }: Props) => {
           fields={fields}
           status={status}
           operationalState={operationalState}
-          operationalStateLastUpdated={roomCard?.operationalStateLastUpdated}
+          operationalStateLastUpdated={roomCard.operationalStateLastUpdated}
           roomCardUid={roomCardUid}
         />
 
@@ -175,6 +179,16 @@ const RoomCardDetailContent = ({ roomCardUid }: Props) => {
       </div>
     </Form>
   )
+}
+
+const RoomCardDetailContent = ({ roomCardUid }: Props) => {
+  const { roomCard, loading } = useRoomCard(roomCardUid)
+
+  if (loading || !roomCard) {
+    return <RoomCardDetailSkeleton />
+  }
+
+  return <RoomCardForm roomCard={roomCard} roomCardUid={roomCardUid} />
 }
 
 export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
