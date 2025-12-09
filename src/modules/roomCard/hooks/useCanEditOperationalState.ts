@@ -38,10 +38,12 @@ export const useCanEditOperationalState = (roomCardUid?: string): boolean => {
 
   if (!userEmployeeUid) return false
 
-  return contactPersonsHall.some(
-    contact =>
-      contact.employee.uid === userEmployeeUid &&
-      (contact.role?.name === 'Area Manager' ||
-        contact.role?.name === 'Area Manager - Deputy')
+  return (
+    contactPersonsHall?.some(
+      contact =>
+        contact.employee.uid === userEmployeeUid &&
+        (contact.role?.name === 'Area Manager' ||
+          contact.role?.name === 'Area Manager - Deputy')
+    ) ?? false
   )
 }

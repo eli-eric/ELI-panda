@@ -95,6 +95,11 @@ export const useRoomCardsColumns = (roomCardUid?: string) => {
                 onDelete={handleDeleteHallContact}
                 warningMessage="Remove contact person (Hall)?"
                 roomCardUid={roomCardUid}
+                toastMessages={{
+                  loading: 'Removing contact person (Hall)...',
+                  success: 'Contact person (Hall) removed',
+                  error: 'Failed to remove contact person'
+                }}
               />
             )
           },
@@ -148,6 +153,11 @@ export const useRoomCardsColumns = (roomCardUid?: string) => {
                 onDelete={handleDeleteDeptContact}
                 warningMessage="Remove contact person (Dept)?"
                 roomCardUid={roomCardUid}
+                toastMessages={{
+                  loading: 'Removing contact person (Dept)...',
+                  success: 'Contact person (Dept) removed',
+                  error: 'Failed to remove contact person'
+                }}
               />
             ),
             size: 200
@@ -190,6 +200,11 @@ export const useRoomCardsColumns = (roomCardUid?: string) => {
             onDelete={handleDeleteTeam}
             warningMessage="Remove team?"
             roomCardUid={roomCardUid}
+            toastMessages={{
+              loading: 'Removing team...',
+              success: 'Team removed',
+              error: 'Failed to remove team'
+            }}
           />
         )
       }
@@ -254,6 +269,11 @@ export const useRoomCardsColumns = (roomCardUid?: string) => {
             onDelete={handleDeleteLocation}
             warningMessage="Remove location?"
             roomCardUid={roomCardUid}
+            toastMessages={{
+              loading: 'Removing location...',
+              success: 'Location removed',
+              error: 'Failed to remove location'
+            }}
           />
         )
       },

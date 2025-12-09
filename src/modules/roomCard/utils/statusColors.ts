@@ -46,8 +46,8 @@ export const getOperationalStateLabel = (
  * Get operational state dot color (for small indicator)
  * Uses code from codebook to determine color
  */
-export const getOperationalStateDotColor = (state?: string): string => {
-  switch (state) {
+export const getOperationalStateDotColor = (code?: string): string => {
+  switch (code) {
     case 'OS1':
       return 'bg-green-500 dark:bg-green-800'
     case 'OS2':

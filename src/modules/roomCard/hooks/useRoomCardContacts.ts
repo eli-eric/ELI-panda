@@ -1,3 +1,5 @@
+import { keepPreviousData } from '@tanstack/react-query'
+
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
 import { gql } from '@/types/gql'
 
@@ -76,11 +78,12 @@ const roomCardLocationsQuery = gql(`
 export const useRoomCardContactsDept = (roomCardUid?: string) => {
   const { data, refetch, isFetching } = useGraphQL(roomCardContactsDeptQuery, {
     variables: { where: { uid: roomCardUid } },
-    enabled: !!roomCardUid
+    enabled: !!roomCardUid,
+    placeholderData: keepPreviousData
   })
 
   return {
-    contactPersonsDept: data?.roomCards[0]?.contactPersonsDept || [],
+    contactPersonsDept: data?.roomCards[0]?.contactPersonsDept,
     refetch,
     isFetching
   }
@@ -93,11 +96,12 @@ export const useRoomCardContactsDept = (roomCardUid?: string) => {
 export const useRoomCardContactsHall = (roomCardUid?: string) => {
   const { data, refetch, isFetching } = useGraphQL(roomCardContactsHallQuery, {
     variables: { where: { uid: roomCardUid } },
-    enabled: !!roomCardUid
+    enabled: !!roomCardUid,
+    placeholderData: keepPreviousData
   })
 
   return {
-    contactPersonsHall: data?.roomCards[0]?.contactPersonsHall || [],
+    contactPersonsHall: data?.roomCards[0]?.contactPersonsHall,
     refetch,
     isFetching
   }
@@ -110,11 +114,12 @@ export const useRoomCardContactsHall = (roomCardUid?: string) => {
 export const useRoomCardTeams = (roomCardUid?: string) => {
   const { data, refetch, isFetching } = useGraphQL(roomCardTeamsQuery, {
     variables: { where: { uid: roomCardUid } },
-    enabled: !!roomCardUid
+    enabled: !!roomCardUid,
+    placeholderData: keepPreviousData
   })
 
   return {
-    teams: data?.roomCards[0]?.teams || [],
+    teams: data?.roomCards[0]?.teams,
     refetch,
     isFetching
   }
@@ -127,11 +132,12 @@ export const useRoomCardTeams = (roomCardUid?: string) => {
 export const useRoomCardLocations = (roomCardUid?: string) => {
   const { data, refetch, isFetching } = useGraphQL(roomCardLocationsQuery, {
     variables: { where: { uid: roomCardUid } },
-    enabled: !!roomCardUid
+    enabled: !!roomCardUid,
+    placeholderData: keepPreviousData
   })
 
   return {
-    locations: data?.roomCards[0]?.locations || [],
+    locations: data?.roomCards[0]?.locations,
     refetch,
     isFetching
   }

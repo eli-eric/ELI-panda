@@ -43,12 +43,11 @@ export const AddLocationButton = ({ roomCardUid }: Props) => {
       return
     }
 
-    try {
-      await connectLocation(item.uid)
-      toast.success('Location added')
-    } catch {
-      toast.error('Failed to add location')
-    }
+    toast.promise(connectLocation(item.uid), {
+      loading: 'Adding location...',
+      success: 'Location added',
+      error: 'Failed to add location'
+    })
   }
 
   const handleOpenLocationModal = () => {
