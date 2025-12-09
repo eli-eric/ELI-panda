@@ -25,7 +25,7 @@ export const useContactDeptModal = (roomCardUid?: string) => {
       onSubmit: async (data: ContactDeptFormData) => {
         if (data.employee && roomCardUid) {
           // Check for duplicate using fresh data
-          const isDuplicate = contactPersonsDept.some(
+          const isDuplicate = contactPersonsDept?.some(
             (contact: any) => contact?.uid === data.employee?.uid
           )
 
@@ -48,5 +48,11 @@ export const useContactDeptModal = (roomCardUid?: string) => {
         // Cleanup if needed
       }
     })
-  }, [openModal, closeModal, roomCardUid, contactPersonsDept, connectDeptContact])
+  }, [
+    openModal,
+    closeModal,
+    roomCardUid,
+    contactPersonsDept,
+    connectDeptContact
+  ])
 }

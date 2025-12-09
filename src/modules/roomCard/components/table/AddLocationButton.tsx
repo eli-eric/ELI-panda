@@ -30,7 +30,9 @@ export const AddLocationButton = ({ roomCardUid }: Props) => {
             <PlusButton type="button" disabled />
           </span>
         </TooltipTrigger>
-        <TooltipContent>Save the Room Card first to add locations</TooltipContent>
+        <TooltipContent>
+          Save the Room Card first to add locations
+        </TooltipContent>
       </Tooltip>
     )
   }
@@ -38,7 +40,7 @@ export const AddLocationButton = ({ roomCardUid }: Props) => {
   const addLocation = async (item?: CodebookType | null) => {
     if (!item) return
 
-    if (locations.some(loc => loc.uid === item.uid)) {
+    if (locations?.some(loc => loc.uid === item.uid)) {
       toast.error('Location already exists')
       return
     }
