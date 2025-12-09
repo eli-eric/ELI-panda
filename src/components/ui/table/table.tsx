@@ -9,6 +9,7 @@ import {
   type SortingState,
   useReactTable
 } from '@tanstack/react-table'
+import { Database } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 
 import { cn } from '@/lib/utils'
@@ -38,6 +39,7 @@ export function Table<T extends object>({
   enablePinning = false,
   defaultPageSize = 10,
   loading = false,
+  skeletonRowCount = 5,
   skipEmptyMessage = false,
   emptyMessage = 'No data available',
   fixedHeight,
@@ -156,8 +158,9 @@ export function Table<T extends object>({
   // If there's no data and not loading, show empty message
   if (tableData.length === 0 && !loading && !skipEmptyMessage) {
     return (
-      <div className="w-full flex items-center justify-center p-8 text-muted-foreground border border-border rounded-md">
-        {emptyMessage}
+      <div className="w-full flex flex-col items-center justify-center p-8 text-muted-foreground border border-border rounded-md">
+        <Database className="h-10 w-10 mb-2 text-muted-foreground/50" />
+        <span className="text-sm">{emptyMessage}</span>
       </div>
     )
   }
@@ -224,6 +227,7 @@ export function Table<T extends object>({
               table={table}
               columns={columns}
               loading={loading}
+              skeletonRowCount={skeletonRowCount}
               rowClassName={rowClassName}
               getRowProps={getRowProps}
               skipEmptyMessage={skipEmptyMessage}

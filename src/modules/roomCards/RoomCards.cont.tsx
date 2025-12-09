@@ -59,7 +59,8 @@ export const RoomCardsContainer = () => {
         table={table}
         tableId={tableId}
         loading={loading}
-        data={(roomCards || []) as RoomCard[]}
+        data={roomCards as RoomCard[]}
+        skeletonRowCount={50}
         settings={{
           enableSorting: true,
           manualSorting: false,

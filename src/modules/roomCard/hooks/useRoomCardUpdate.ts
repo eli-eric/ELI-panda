@@ -1,4 +1,3 @@
-import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
 import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
 import { useRoomCards } from '@/modules/roomCards/hooks/useRoomCards'
 import { gql } from '@/types/gql'
@@ -59,11 +58,6 @@ const updateRoomCardMutation = gql(`
           phone1
           phone2
         }
-        locations {
-          code
-          uid
-          name
-        }
         teams {
           name
           uid
@@ -109,36 +103,11 @@ export const useRoomCardUpdate = (roomCardUid?: string) => {
     roomCardForm: RoomCardFormType,
     saveAndExit: boolean
   ) => {
-    // Contacts are now handled separately via direct mutations
-    // Only locations are managed through form state
+    // Contacts and Locations are now handled separately via direct mutations
     const variables = updateRoomCardVariables({
       uid: roomCardUid,
       roomCard: roomCardForm,
-      originalOperationalState: roomCardOrigin?.operationalState,
-      disconnectLocations: roomCardOrigin?.locations
-        ?.filter(
-          originLocation =>
-            !roomCardForm.locations?.some(
-              location => originLocation.uid === location.uid
-            )
-        )
-        .map(location => ({
-          uid: location.uid,
-          code: location.code,
-          name: location.name
-        })) as Codebooktree[],
-      newLocations: roomCardForm.locations
-        ?.filter(
-          location =>
-            !roomCardOrigin?.locations?.some(
-              originLocation => originLocation.uid === location.uid
-            )
-        )
-        .map(location => ({
-          uid: location.uid,
-          code: location.code,
-          name: location.name
-        })) as Codebooktree[]
+      originalOperationalState: roomCardOrigin?.operationalState
     })
 
     // Prepare data for UPDATE action (without previousState/newState)

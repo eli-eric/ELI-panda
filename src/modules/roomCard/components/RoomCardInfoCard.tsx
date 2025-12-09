@@ -108,7 +108,9 @@ export const RoomCardInfoCard = ({
           {/* Last Updated */}
           {operationalStateLastUpdated && (
             <div className="space-y-2">
-              <Label className="text-base font-medium">Last Updated</Label>
+              <Label className="text-base font-medium">
+                Last Updated Operational State
+              </Label>
               <div className="flex gap-2">
                 <p className="text-sm text-muted-foreground pt-2">
                   <FormattedMessage

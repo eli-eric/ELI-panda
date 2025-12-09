@@ -1,7 +1,5 @@
-import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
 import type { RoomCardUpdateInput, RoomCardWhere } from '@/types/gql/graphql'
 import type { CodebookType } from '@/types/responses/codebook'
-import { whereN } from '@/utils/graphql/mutations'
 
 import type { RoomCardFormType } from '../types/form'
 
@@ -36,22 +34,17 @@ export const hasOperationalStateChanged = (
 
 type RoomCardUpdateType = {
   roomCard: RoomCardFormType
-  disconnectLocations: Codebooktree[]
-  newLocations: Codebooktree[]
   uid?: string
   originalOperationalState?: CodebookType | null
 }
 
 /**
  * Creates variables for RoomCard update mutation.
- * Note: Contacts (Hall, Dept, Teams) are now handled via separate direct mutations.
- * Only locations are managed through the form update.
+ * Note: Contacts (Hall, Dept, Teams) and Locations are now handled via separate direct mutations.
  */
 export const updateRoomCardVariables = ({
   uid,
   roomCard,
-  newLocations,
-  disconnectLocations,
   originalOperationalState
 }: RoomCardUpdateType): {
   where: RoomCardWhere
@@ -101,19 +94,8 @@ export const updateRoomCardVariables = ({
       },
       ...(operationalStateChanged && {
         operationalStateLastUpdated: new Date().toISOString()
-      }),
-      // Contacts are now handled via separate mutations - NOT included here
-      // contactPersonsDept, contactPersonsHall, teams - removed
-      locations: [
-        {
-          connect: newLocations
-            .filter(location => location?.uid)
-            .map(location => whereN(location.uid)),
-          disconnect: disconnectLocations
-            .filter(location => location?.uid)
-            .map(location => whereN(location.uid))
-        }
-      ]
+      })
+      // Contacts and Locations are now handled via separate mutations - NOT included here
     },
     operationalStateChanged,
     originalOperationalState

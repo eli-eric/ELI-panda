@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Suspense, useEffect } from 'react'
+import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -28,7 +28,6 @@ import { useCanEditOperationalState } from './hooks/useCanEditOperationalState'
 import { useRoomCard } from './hooks/useRoomCard'
 import { useRoomCardUpdate } from './hooks/useRoomCardUpdate'
 import { roomCardSchema } from './schemas/roomCard.schema'
-import { useRoomCardStore } from './store/useRoomCardStore'
 import type { RoomCardFormType } from './types/form'
 
 interface Props {
@@ -43,7 +42,6 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
       name: roomCard?.name as string,
       status: roomCard?.status,
       operationalState: roomCard?.operationalState as CodebookType | null,
-      locations: roomCard?.locations as any,
       purityClass: roomCard?.purityClass as any,
       prescribedClothing: roomCard?.prescribedClothing as PrescribedClothing[],
       entryToHvacTent: roomCard?.entryToHvacTent as string,
@@ -71,15 +69,11 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
   })
   const { watch, handleSubmit } = formMethods
   const { updateRoomCard } = useRoomCardUpdate(roomCardUid)
-  const { clear } = useRoomCardStore()
 
   const status = watch('status')
   const operationalState = watch('operationalState')
-  const locations = watch('locations')
 
   const canEditOperationalState = useCanEditOperationalState(roomCardUid)
-
-  useEffect(() => () => clear(), [clear])
 
   const onSubmit = handleSubmit((roomCard: RoomCardFormType) => {
     toast.promise(
@@ -159,7 +153,7 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
 
         <RoomCardContactsCard roomCardUid={roomCardUid} />
 
-        <RoomCardLocationsCard locations={locations} />
+        <RoomCardLocationsCard roomCardUid={roomCardUid} />
 
         <RoomCardCleanRoomsCard />
 

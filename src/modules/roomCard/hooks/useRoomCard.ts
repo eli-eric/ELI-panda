@@ -31,11 +31,6 @@ export const roomCardQuery = gql(`
       compressedAirDistributionClient
       nitrogenCentralDistributionClient
       maxPressureInColdDistributionClient
-      locations {
-        code
-        uid
-        name
-      }
     }
   }
 `)

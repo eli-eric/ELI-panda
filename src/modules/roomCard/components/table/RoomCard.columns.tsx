@@ -10,9 +10,9 @@ import { formatPhoneNumber } from '@/utils/formatters'
 import {
   useDeleteHallContact,
   useDisconnectDeptContact,
+  useDisconnectLocation,
   useDisconnectTeam
 } from '../../hooks/useContactMutations'
-import { useRoomCardStore } from '../../store/useRoomCardStore'
 import { CellInput } from './CellInput'
 import { CellWithDelete } from './CellWithDelete'
 import { ContactHallButton } from './ContactHallButton'
@@ -32,9 +32,7 @@ export const useRoomCardsColumns = (roomCardUid?: string) => {
   const { deleteHallContact } = useDeleteHallContact(roomCardUid || '')
   const { disconnectDeptContact } = useDisconnectDeptContact(roomCardUid || '')
   const { disconnectTeam } = useDisconnectTeam(roomCardUid || '')
-
-  // Location store (locations still use form-based approach)
-  const { removeNewLocation } = useRoomCardStore()
+  const { disconnectLocation } = useDisconnectLocation(roomCardUid || '')
 
   // Delete handlers
   const handleDeleteHallContact = useCallback(
@@ -64,6 +62,15 @@ export const useRoomCardsColumns = (roomCardUid?: string) => {
     [disconnectTeam]
   )
 
+  const handleDeleteLocation = useCallback(
+    async (item: Codebooktree) => {
+      if (item.uid) {
+        await disconnectLocation(item.uid)
+      }
+    },
+    [disconnectLocation]
+  )
+
   const columnsContactHall = useMemo(
     (): ColumnDef<HallContactPerson, any>[] => [
       {
@@ -85,7 +92,6 @@ export const useRoomCardsColumns = (roomCardUid?: string) => {
             cell: props => (
               <CellWithDelete
                 {...props}
-                formName="contactPersonsHall"
                 onDelete={handleDeleteHallContact}
                 warningMessage="Remove contact person (Hall)?"
                 roomCardUid={roomCardUid}
@@ -139,7 +145,6 @@ export const useRoomCardsColumns = (roomCardUid?: string) => {
             cell: props => (
               <CellWithDelete
                 {...props}
-                formName="contactPersonsDept"
                 onDelete={handleDeleteDeptContact}
                 warningMessage="Remove contact person (Dept)?"
                 roomCardUid={roomCardUid}
@@ -182,7 +187,6 @@ export const useRoomCardsColumns = (roomCardUid?: string) => {
         cell: props => (
           <CellWithDelete
             {...props}
-            formName="teams"
             onDelete={handleDeleteTeam}
             warningMessage="Remove team?"
             roomCardUid={roomCardUid}
@@ -245,7 +249,12 @@ export const useRoomCardsColumns = (roomCardUid?: string) => {
         accessorFn: ({ name }) => name,
         id: 'name',
         cell: props => (
-          <CellWithDelete {...props} formName="locations" roomCardUid={roomCardUid} />
+          <CellWithDelete
+            {...props}
+            onDelete={handleDeleteLocation}
+            warningMessage="Remove location?"
+            roomCardUid={roomCardUid}
+          />
         )
       },
       {
@@ -254,7 +263,7 @@ export const useRoomCardsColumns = (roomCardUid?: string) => {
         id: 'code'
       }
     ],
-    [roomCardUid]
+    [roomCardUid, handleDeleteLocation]
   )
 
   return {

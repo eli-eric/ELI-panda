@@ -1,6 +1,5 @@
 import { z } from 'zod'
 
-import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
 import type {
   CleaningScheduleDay,
   PrescribedClothing,
@@ -17,11 +16,8 @@ export const roomCardSchema = z.object({
   ),
   operationalState: z.custom<CodebookType>().nullable().optional(),
   name: z.string().min(1, 'Name is required'),
-  // Contacts (Hall, Dept, Teams) are now managed via direct GraphQL mutations
+  // Contacts (Hall, Dept, Teams) and Locations are now managed via direct GraphQL mutations
   // and are no longer part of the form validation
-  locations: z
-    .array(z.custom<Codebooktree>())
-    .min(1, 'At least one location is required'),
 
   // Fields that exist in RoomCardFormType
   purityClass: z.custom<PurityClass>(),

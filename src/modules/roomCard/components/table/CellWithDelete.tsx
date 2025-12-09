@@ -1,14 +1,20 @@
 import type { CellContext } from '@tanstack/react-table'
+import { MoreVertical, Trash2 } from 'lucide-react'
 import { useCallback, useState } from 'react'
 import { toast } from 'sonner'
 
-import { TableDeleteButton } from '@/components/Buttons'
+import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
 import usePermission from '@/hooks/usePermission'
 import useWarningModal from '@/hooks/useWarningModal'
 import { ROLE } from '@/types/constants/roles'
 
 interface Props extends CellContext<any, any> {
-  formName: string
   onDelete?: (item: any) => Promise<void>
   warningMessage?: string
   roomCardUid?: string
@@ -17,7 +23,6 @@ interface Props extends CellContext<any, any> {
 export const CellWithDelete = ({
   row,
   getValue,
-  formName,
   onDelete,
   warningMessage,
   roomCardUid
@@ -48,20 +53,36 @@ export const CellWithDelete = ({
     withWarningModal(onDeleteClick, message)()
   }, [withWarningModal, onDeleteClick, warningMessage])
 
-  // In create mode (no roomCardUid), don't show delete button
+  // In create mode (no roomCardUid), don't show actions
   if (!roomCardUid) {
     return <span>{getValue()}</span>
   }
 
   return (
-    <div className="flex items-center">
+    <div className="flex items-center gap-1">
       {editPermission && (
-        <div className="relative right-1">
-          <TableDeleteButton
-            onClick={handleDeleteWithConfirmation}
-            disabled={isDeleting}
-          />
-        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="sm"
+              aria-label="Row actions"
+              className="h-8 w-8 p-0"
+              disabled={isDeleting}
+            >
+              <MoreVertical className="h-4 w-4 text-muted-foreground" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" sideOffset={4}>
+            <DropdownMenuItem
+              onClick={handleDeleteWithConfirmation}
+              className="cursor-pointer text-destructive focus:text-destructive"
+            >
+              <Trash2 className="h-4 w-4 mr-2" />
+              Remove
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       )}
       <span>{getValue()}</span>
     </div>

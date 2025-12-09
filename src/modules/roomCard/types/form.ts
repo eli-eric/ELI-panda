@@ -1,4 +1,3 @@
-import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
 import type {
   CleaningScheduleDay,
   ContactPersonRole,
@@ -25,7 +24,6 @@ export type RoomCardFormType = {
   status: RoomCardStatus
   operationalState?: CodebookType | null
   name: string
-  locations: Codebooktree[]
   purityClass: PurityClass
   prescribedClothing: PrescribedClothing[]
   entryToHvacTent: string

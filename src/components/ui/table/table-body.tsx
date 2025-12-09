@@ -15,6 +15,7 @@ export function TableBody<T extends object>({
   table,
   columns,
   loading,
+  skeletonRowCount = 5,
   rowClassName,
   getRowProps,
   skipEmptyMessage
@@ -27,7 +28,7 @@ export function TableBody<T extends object>({
     // Create skeleton rows that match the structure of actual data rows
     return (
       <tbody>
-        {Array.from({ length: 5 }).map((_, rowIndex) => (
+        {Array.from({ length: skeletonRowCount }).map((_, rowIndex) => (
           <tr
             key={`skeleton-row-${rowIndex}`}
             className={cn(
@@ -162,7 +163,7 @@ export function TableBody<T extends object>({
                 position: isPinned ? 'sticky' : undefined,
                 left: isPinned === 'left' ? `${leftOffset}px` : undefined,
                 right: isPinned === 'right' ? `${rightOffset}px` : undefined,
-                zIndex: isPinned ? 21 : 20
+                zIndex: isPinned ? 21 : undefined
               }
 
               return (
