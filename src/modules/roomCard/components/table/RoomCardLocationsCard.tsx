@@ -15,7 +15,7 @@ type Props = {
 
 export const RoomCardLocationsCard: FC<Props> = ({ roomCardUid }) => {
   const { locationColumns } = useRoomCardsColumns(roomCardUid)
-  const { locations } = useRoomCardLocations(roomCardUid)
+  const { locations, isFetching } = useRoomCardLocations(roomCardUid)
   const editPermission = usePermission([ROLE.ROOM_CARD_EDIT])
 
   return (
@@ -32,7 +32,9 @@ export const RoomCardLocationsCard: FC<Props> = ({ roomCardUid }) => {
         {...{
           columns: locationColumns,
           rowClassName: 'relative group/row',
-          data: locations
+          data: locations,
+          loading: isFetching,
+          skeletonRowCount: 3
         }}
       />
     </div>

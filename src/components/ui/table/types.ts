@@ -93,6 +93,12 @@ export interface TableProps<T extends object> {
   loading?: boolean
 
   /**
+   * Number of skeleton rows to display when loading.
+   * @default 5
+   */
+  skeletonRowCount?: number
+
+  /**
    * Message to display when there is no data.
    * @default "No data available"
    */
@@ -136,6 +142,7 @@ export interface TableBodyProps<T extends object> {
   table: any
   columns: any[]
   loading?: boolean
+  skeletonRowCount?: number
   rowClassName?: string
   getRowProps?: GetRowProps<T>
   skipEmptyMessage?: boolean

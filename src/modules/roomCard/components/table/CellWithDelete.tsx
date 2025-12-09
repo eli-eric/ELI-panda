@@ -59,8 +59,7 @@ export const CellWithDelete = ({
   }
 
   return (
-    <div className="flex items-center justify-between">
-      <span>{getValue()}</span>
+    <div className="flex items-center gap-1">
       {editPermission && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -85,6 +84,7 @@ export const CellWithDelete = ({
           </DropdownMenuContent>
         </DropdownMenu>
       )}
+      <span>{getValue()}</span>
     </div>
   )
 }

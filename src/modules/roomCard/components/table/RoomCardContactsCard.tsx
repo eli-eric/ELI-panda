@@ -18,46 +18,54 @@ export const RoomCardContactsCard: FC<Props> = ({ roomCardUid }) => {
     useRoomCardContactsDept(roomCardUid)
   const { contactPersonsHall, isFetching: contactPersonHallFetching } =
     useRoomCardContactsHall(roomCardUid)
-  const { teams, teamsFetching } = useRoomCardTeams(roomCardUid)
+  const { teams, isFetching: teamsFetching } = useRoomCardTeams(roomCardUid)
 
   const { columnsContactHall, columnsContactDept, columnsTeam } =
     useRoomCardsColumns(roomCardUid)
 
   return (
-    <div className="flex flex-col xl:flex-row xl:justify-between gap-4">
-      <Table<any>
-        {...{
-          columns: columnsContactHall,
-          data: contactPersonsHall,
-          skipEmptyMessage: true,
-          rowClassName: 'relative group/row',
-          className: 'min-w-[450px]',
-          enableSorting: false,
-          enableFiltering: false
-        }}
-      />
-      <Table<any>
-        {...{
-          columns: columnsContactDept,
-          data: contactPersonsDept,
-          skipEmptyMessage: true,
-          rowClassName: 'relative group/row',
-          className: 'min-w-[300px]',
-          enableSorting: false,
-          enableFiltering: false
-        }}
-      />
-      <Table<any>
-        {...{
-          columns: columnsTeam,
-          data: teams,
-          skipEmptyMessage: true,
-          rowClassName: 'relative group/row',
-          className: 'min-w-[300px]',
-          enableSorting: false,
-          enableFiltering: false
-        }}
-      />
+    <div className="flex gap-2">
+      <div>
+        <Table<any>
+          {...{
+            columns: columnsContactHall,
+            data: contactPersonsHall,
+            rowClassName: 'relative group/row',
+            enableSorting: false,
+            enableFiltering: false,
+            loading: contactPersonHallFetching,
+            skeletonRowCount: 3
+          }}
+        />
+      </div>
+
+      <div>
+        <Table<any>
+          {...{
+            columns: columnsContactDept,
+            data: contactPersonsDept,
+            rowClassName: 'relative group/row',
+            enableSorting: false,
+            enableFiltering: false,
+            loading: contactPersDeptFetching,
+            skeletonRowCount: 3
+          }}
+        />
+      </div>
+
+      <div>
+        <Table<any>
+          {...{
+            columns: columnsTeam,
+            data: teams,
+            rowClassName: 'relative group/row',
+            enableSorting: false,
+            enableFiltering: false,
+            loading: teamsFetching,
+            skeletonRowCount: 3
+          }}
+        />
+      </div>
     </div>
   )
 }
