@@ -73,16 +73,17 @@ const DefaultItemForm = () => {
               { url: preparedUrl }
             )}
           >
-            <Link href={preparedUrl} target="_blank" rel="noopener noreferrer">
-              <Button
-                type="button"
-                variant="link"
-                size="sm"
-                className="h-9 px-2"
-              >
+            <Button
+              type="button"
+              variant="link"
+              size="sm"
+              className="h-9 px-2"
+              asChild
+            >
+              <Link href={preparedUrl} target="_blank" rel="noopener noreferrer">
                 <ExternalLink className="h-4 w-4" />
-              </Button>
-            </Link>
+              </Link>
+            </Button>
           </Tooltip>
         ) : (
           <Tooltip content={fm({ id: form.manuFacturerUrl.tooltip.enterUrl })}>

@@ -1,6 +1,5 @@
 import type { ColumnDef } from '@tanstack/react-table'
-import { Info } from 'lucide-react'
-import { Edit, Trash2 } from 'lucide-react'
+import { Edit, Info, Trash2 } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { Fragment, useMemo } from 'react'
 import { useIntl } from 'react-intl'
@@ -11,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import { DeliveryStatusBadge } from '@/components/ui/delivery-status-badge'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
+import { useOrderLineContext } from '@/modules/orderItem/context'
 import useOrderDetail from '@/modules/orderItem/hooks/useOrderDetail'
 import type { OrderLineFormType } from '@/modules/orderItem/types/form'
 import { PATH } from '@/types/constants/paths'
@@ -27,16 +27,13 @@ import { DeliveredAllButton } from './deliver-all.button'
 const messages = message.ordersPage.orderLines.orderLinesTable.header
 
 const OrderLineActionButtons = ({
-  orderLine,
-  deleteOrderLine,
-  setOrderLine
+  orderLine
 }: {
   orderLine: OrderLineFormType & { id: string }
-  deleteOrderLine: (orderLine: OrderLineFormType & { id: string }) => void
-  setOrderLine: (orderLine: OrderLineFormType) => void
 }) => {
   const { formatMessage } = useIntl()
   const { openEditSheet } = useOrderLineEditSheet()
+  const { setOrderLine, deleteOrderLine } = useOrderLineContext()
 
   const withWarning = useWarningModal(
     formatMessage(
@@ -83,16 +80,11 @@ const OrderLineActionButtons = ({
   )
 }
 
-const useOrderLinesColumns = ({
-  deleteOrderLine,
-  setOrderLine
-}: {
-  deleteOrderLine: (orderLine: OrderLineFormType & { id: string }) => void
-  setOrderLine: (orderLine: OrderLineFormType) => void
-}) => {
+const useOrderLinesColumns = () => {
   const uid = useRouter().query.uid as string
   const { disabledEdit } = useOrderDetail()
   const { formatMessage } = useIntl()
+
   const columns = useMemo((): ColumnDef<OrderLineFormType, any>[] => {
     const cols: ColumnDef<OrderLineFormType, any>[] = [
       {
@@ -109,11 +101,7 @@ const useOrderLinesColumns = ({
           uid ? (
             <div className="flex items-center gap-2">
               <DeliveryStatusBadge isDelivered={getValue() || false} />
-              <OrderisDeliveredAction
-                orderLine={original}
-                checked={getValue()}
-                setOrderLine={setOrderLine}
-              />
+              <OrderisDeliveredAction orderLine={original} checked={getValue()} />
             </div>
           ) : null,
         size: 160,
@@ -174,9 +162,7 @@ const useOrderLinesColumns = ({
         header: formatMessage({ id: messages.eun }),
         accessorKey: 'eun',
         enablePinning: false,
-        cell: ({ row: { original } }) => (
-          <PrintEunButton orderLine={original} />
-        ),
+        cell: ({ row: { original } }) => <PrintEunButton orderLine={original} />,
         size: 150
       },
       {
@@ -256,8 +242,6 @@ const useOrderLinesColumns = ({
           !disabledEdit ? (
             <OrderLineActionButtons
               orderLine={original as OrderLineFormType & { id: string }}
-              deleteOrderLine={deleteOrderLine}
-              setOrderLine={setOrderLine}
             />
           ) : null,
         size: 100,
@@ -271,7 +255,7 @@ const useOrderLinesColumns = ({
       }
     ]
     return cols
-  }, [disabledEdit, uid, formatMessage, deleteOrderLine, setOrderLine])
+  }, [disabledEdit, uid, formatMessage])
 
   return columns
 }

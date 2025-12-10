@@ -65,11 +65,11 @@ export const usePublicationColumns = () => {
         header: 'Web Link',
         accessorFn: row => row.webLink,
         cell: ({ getValue }) => (
-          <Link href={getValue() || ''} target="_blank">
-            <Button variant="link" className="cursor-pointer">
+          <Button variant="link" className="cursor-pointer" asChild>
+            <Link href={getValue() || ''} target="_blank">
               {fm({ id: message.common.publications.clickHere })}
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         )
       },
       {

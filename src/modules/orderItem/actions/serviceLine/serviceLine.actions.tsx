@@ -9,24 +9,23 @@ import { Tooltip } from '@/components/Tooltip'
 import usePermission from '@/hooks/usePermission'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
+import { useServiceLineContext } from '@/modules/orderItem/context'
 import { useServiceLineDeliver } from '@/modules/orderItem/hooks/useServiceDelivery'
 import { useServiceDeliveryAll } from '@/modules/orderItem/hooks/useServiceDeliveryAll'
-import { useServiceLine } from '@/modules/orderItem/hooks/useServiceLine'
 import type { ServiceLine } from '@/modules/orderItem/types/form'
-import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { ROLE } from '@/types/constants/roles'
 import { createMessageValues } from '@/utils/formatters'
 
-import { ServiceLineEditSheet } from '../../components/serviceLines/components/ServiceLineEditSheet.comp'
+import { useServiceLineEditSheet } from '../../components/serviceLines/hooks/useServiceLineEditSheet'
 
 export const ServiceLineActionButtons = ({
   serviceLine
 }: {
-  serviceLine: ServiceLine
+  serviceLine: ServiceLine & { id: string }
 }) => {
   const { formatMessage: fm } = useIntl()
-  const { deleteServiceLine, setServiceLine } = useServiceLine()
-  const { openModal, closeModal } = useDynamicModalStore()
+  const { deleteServiceLine, setServiceLine } = useServiceLineContext()
+  const { openEditSheet } = useServiceLineEditSheet()
   const withWarning = useWarningModal(
     fm(
       { id: message.ordersPage.serviceLines.deleteModal.message },
@@ -68,7 +67,9 @@ export const ServiceLineActionButtons = ({
         <Button
           variant="ghost"
           size="sm"
-          onClick={openEditSheet}
+          onClick={() =>
+            openEditSheet(serviceLine, data => setServiceLine(data))
+          }
           className="h-8 w-8 p-0 hover:bg-accent"
         >
           <Edit className="h-4 w-4" />
@@ -82,7 +83,7 @@ export const ServiceLineActionButtons = ({
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => withWarning(deleteServiceLine)(serviceLine.uuid)}
+          onClick={() => withWarning(deleteServiceLine)(serviceLine.id)}
           className="h-8 w-8 p-0 hover:bg-accent hover:text-destructive"
         >
           <Trash2 className="h-4 w-4" />
@@ -148,7 +149,8 @@ export const ServiceLinePriceFooter = ({
 }
 
 export const DeliveredAllButton = () => {
-  const { handleDelivery, isPending } = useServiceDeliveryAll()
+  const { setServiceLine } = useServiceLineContext()
+  const { handleDelivery, isPending } = useServiceDeliveryAll(setServiceLine)
   const hasRole = usePermission([ROLE.ORDERS_DELIVERY_EDIT, ROLE.ORDERS_EDIT])
   const { formatMessage: fm } = useIntl()
 

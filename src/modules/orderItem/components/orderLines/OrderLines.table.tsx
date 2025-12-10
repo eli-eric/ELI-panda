@@ -6,7 +6,7 @@ import { Tooltip } from '@/components/Tooltip'
 import { Table } from '@/components/ui/table/table'
 import { message } from '@/i18n/src/messages'
 
-import { useOrderLine } from '../../hooks/useOrderLine'
+import { useOrderLineContext } from '../../context'
 import useOrderLinesColumns from './components/OrderLines.columns'
 import { useOrderLineModal } from './form/OrderLineForm.cont'
 
@@ -18,17 +18,11 @@ interface OrderLinesTableProps {
 
 const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
   const { openOrderLineModal } = useOrderLineModal()
-
-  // Use fields from useOrderLine - this ensures same 'id' values for delete
-  const { setOrderLine, deleteOrderLine, fields } = useOrderLine()
-
-  // Pass functions to columns to avoid creating new useFieldArray instances
-  const columns = useOrderLinesColumns({ deleteOrderLine, setOrderLine })
+  const { setOrderLine, fields } = useOrderLineContext()
+  const columns = useOrderLinesColumns()
 
   const handleOpenOrderLineForm = () => {
     openOrderLineModal(orderLine => {
-      // Wizard already converted systemConfigs to individual order lines
-      // Just add the prepared order line to the form
       setOrderLine(orderLine)
     })
   }
