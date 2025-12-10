@@ -33,6 +33,30 @@ export const ServiceLineActionButtons = ({
     )
   )
 
+  const submit = (data: ServiceLine, modalId: string) => {
+    setServiceLine({
+      ...data,
+      price: Number(data.price),
+      details: Array.isArray(data.details) ? data.details : []
+    })
+    closeModal(modalId)
+  }
+
+  const openEditSheet = () => {
+    const modalId = openModal('sheet', {
+      id: `service-line-edit-${serviceLine.uuid}`,
+      component: ServiceLineEditSheet,
+      props: {
+        title: fm({ id: message.ordersPage.serviceLines.titles.edit }),
+        serviceLine
+      },
+      onSubmit: (data: ServiceLine) => {
+        submit(data, modalId)
+      }
+      // NOTE: No onClose callback needed - closeModal is already handled by DynamicModalProvider
+    })
+  }
+
   return (
     <div className="flex items-center gap-1">
       <Tooltip
