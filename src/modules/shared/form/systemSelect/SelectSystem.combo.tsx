@@ -5,6 +5,7 @@ import { ModalSelect } from '@/components/form/ModalSelect'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps, Option } from '@/types/form'
 import type { CodebookType } from '@/types/responses/codebook'
+import type { SystemDetail } from '@/types/responses/systems'
 
 import { useSystemSelectionModal } from './hooks/useSystemSelectionModal'
 
@@ -14,6 +15,7 @@ export const SelectSystemComboBox = ({
   disabled,
   onChange,
   onSelect,
+  onSystemDetailChange,
   isFilter = false
 }: {
   selectSystemField: FieldProps & {
@@ -24,6 +26,7 @@ export const SelectSystemComboBox = ({
   disabled?: boolean
   onChange?: (value?: any) => void
   onSelect?: (item?: CodebookType | null) => void
+  onSystemDetailChange?: (system: SystemDetail) => void
   isFilter?: boolean
 }) => {
   const formContext = useFormContext()
@@ -41,7 +44,7 @@ export const SelectSystemComboBox = ({
   )
 
   const handleOpenModal = () => {
-    openSystemModal(handleSystemSelect)
+    openSystemModal(handleSystemSelect, onSystemDetailChange)
   }
 
   return (

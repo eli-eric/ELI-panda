@@ -1,7 +1,5 @@
 import type { ColumnDef } from '@tanstack/react-table'
-import { Info } from 'lucide-react'
-import { Edit, Trash2 } from 'lucide-react'
-import Link from 'next/link'
+import { Edit, Info, Trash2 } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { Fragment, useMemo } from 'react'
 import { useIntl } from 'react-intl'
@@ -12,8 +10,8 @@ import { Button } from '@/components/ui/button'
 import { DeliveryStatusBadge } from '@/components/ui/delivery-status-badge'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
+import { useOrderLineContext } from '@/modules/orderItem/context'
 import useOrderDetail from '@/modules/orderItem/hooks/useOrderDetail'
-import { useOrderLine } from '@/modules/orderItem/hooks/useOrderLine'
 import type { OrderLineFormType } from '@/modules/orderItem/types/form'
 import { PATH } from '@/types/constants/paths'
 import { createMessageValues } from '@/utils/formatters'
@@ -31,11 +29,11 @@ const messages = message.ordersPage.orderLines.orderLinesTable.header
 const OrderLineActionButtons = ({
   orderLine
 }: {
-  orderLine: OrderLineFormType
+  orderLine: OrderLineFormType & { id: string }
 }) => {
   const { formatMessage } = useIntl()
-  const { deleteOrderLine, setOrderLine } = useOrderLine()
   const { openEditSheet } = useOrderLineEditSheet()
+  const { setOrderLine, deleteOrderLine } = useOrderLineContext()
 
   const withWarning = useWarningModal(
     formatMessage(
@@ -86,6 +84,7 @@ const useOrderLinesColumns = () => {
   const uid = useRouter().query.uid as string
   const { disabledEdit } = useOrderDetail()
   const { formatMessage } = useIntl()
+
   const columns = useMemo((): ColumnDef<OrderLineFormType, any>[] => {
     const cols: ColumnDef<OrderLineFormType, any>[] = [
       {
@@ -102,10 +101,7 @@ const useOrderLinesColumns = () => {
           uid ? (
             <div className="flex items-center gap-2">
               <DeliveryStatusBadge isDelivered={getValue() || false} />
-              <OrderisDeliveredAction
-                orderLine={original}
-                checked={getValue()}
-              />
+              <OrderisDeliveredAction orderLine={original} checked={getValue()} />
             </div>
           ) : null,
         size: 160,
@@ -128,7 +124,20 @@ const useOrderLinesColumns = () => {
         header: formatMessage({ id: messages.name }),
         accessorKey: 'name',
         enablePinning: true,
-        cell: ({ getValue }) => <div className="break-words">{getValue()}</div>,
+        cell: ({
+          getValue,
+          row: {
+            original: { system }
+          }
+        }) =>
+          system ? (
+            <NewTabLink
+              href={PATH.SYSTEM + '/' + system?.uid}
+              value={getValue()}
+            />
+          ) : (
+            <div className="break-words">{getValue()}</div>
+          ),
         size: 280
       },
       {
@@ -153,9 +162,7 @@ const useOrderLinesColumns = () => {
         header: formatMessage({ id: messages.eun }),
         accessorKey: 'eun',
         enablePinning: false,
-        cell: ({ row: { original } }) => (
-          <PrintEunButton orderLine={original} />
-        ),
+        cell: ({ row: { original } }) => <PrintEunButton orderLine={original} />,
         size: 150
       },
       {
@@ -198,20 +205,15 @@ const useOrderLinesColumns = () => {
         enablePinning: false
       },
       {
-        header: formatMessage({ id: messages.system }),
-        accessorFn: row => row.system?.name,
+        header: formatMessage({ id: messages.parentSystem }),
+        accessorFn: row => row.parentSystem?.name,
         size: 240,
         enablePinning: false,
         cell: ({ getValue, row: { original } }) => (
-          <Link
-            className="link"
-            href={PATH.SYSTEM + '/' + original.system?.uid}
-            target="_blank"
-          >
-            <Button type="button" variant="link" className="cursor-pointer">
-              <span>{getValue()?.split('-')[0]}</span>
-            </Button>
-          </Link>
+          <NewTabLink
+            href={PATH.SYSTEM + '/' + original.parentSystem?.uid}
+            value={getValue()?.split(' - ')[0]}
+          />
         )
       },
       {
@@ -227,13 +229,10 @@ const useOrderLinesColumns = () => {
         enablePinning: false,
         size: 240,
         cell: ({ getValue, row: { original } }) => (
-          <Link
-            className="link"
-            href={PATH.ORDER + '/' + original.serviceOrderUid}
-            target="_blank"
-          >
-            <span>{getValue()?.split('-')[0]}</span>
-          </Link>
+          <NewTabLink
+            href={PATH.SYSTEM + '/' + original.parentSystem?.uid}
+            value={getValue()?.split('-')[0]}
+          />
         )
       },
       {
@@ -241,7 +240,9 @@ const useOrderLinesColumns = () => {
         header: '',
         cell: ({ row: { original } }) =>
           !disabledEdit ? (
-            <OrderLineActionButtons orderLine={original} />
+            <OrderLineActionButtons
+              orderLine={original as OrderLineFormType & { id: string }}
+            />
           ) : null,
         size: 100,
         meta: {

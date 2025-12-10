@@ -1,8 +1,9 @@
 import { Search } from 'lucide-react'
 import { useQueryState } from 'next-usequerystate'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useDeferredValue, useEffect, useRef, useState } from 'react'
 
 import { PlusButton, RefreshButton } from '@/components/Buttons'
+import { GlobalSearchTrigger } from '@/components/search/GlobalSearchTrigger'
 import { Tooltip } from '@/components/Tooltip'
 import { Input } from '@/components/ui/input'
 import { SidebarTrigger } from '@/components/ui/sidebar'
@@ -16,6 +17,7 @@ interface Props {
   right?: JSX.Element
   tableId: string
   onChange?: (value: string) => void
+  isGlobalSearch?: boolean
 }
 
 export const SearchBar = ({
@@ -23,7 +25,8 @@ export const SearchBar = ({
   left,
   right,
   tableId,
-  onChange
+  onChange,
+  isGlobalSearch = false
 }: Props) => {
   const [querySearch, setQuerySearch] = useQueryState('search', {
     history: 'replace'
@@ -31,11 +34,22 @@ export const SearchBar = ({
 
   const { setSearch, instances, setSearchValue } = useTableStateStore()
   const searchInstance = querySearch || instances[tableId]?.search
-  const value = instances[tableId]?.searchBarValue
+  const storeValue = instances[tableId]?.searchBarValue
+
+  // Use deferred value for non-blocking store updates
+  const deferredStoreValue = useDeferredValue(storeValue || '')
+
+  // Local state for immediate input responsiveness
+  const [localValue, setLocalValue] = useState(deferredStoreValue)
 
   const onChangeRef = useRef(onChange)
 
   const [mounted, setMounted] = useState(false)
+
+  // Sync local value with deferred store value
+  useEffect(() => {
+    setLocalValue(deferredStoreValue)
+  }, [deferredStoreValue])
 
   useEffect(() => {
     if (!mounted) {
@@ -48,17 +62,17 @@ export const SearchBar = ({
     const delayInputTimeoutId = setTimeout(() => {
       if (mounted) {
         if (onChangeRef.current) {
-          onChangeRef.current(value || '')
+          onChangeRef.current(localValue || '')
         }
-        setSearch(tableId, value)
+        setSearch(tableId, localValue)
         if (useQuery) {
-          setQuerySearch(value || '', { shallow: true })
+          setQuerySearch(localValue || '', { shallow: true })
         }
       }
     }, 500)
     return () => clearTimeout(delayInputTimeoutId)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value])
+  }, [localValue])
 
   return (
     <div
@@ -71,21 +85,31 @@ export const SearchBar = ({
           <div className="flex items-center gap-2 flex-shrink-0">{left}</div>
         )}
 
-        <div className="flex-1">
-          <div className="relative max-w-md">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              value={value || ''}
-              onChange={e => {
-                setSearchValue(tableId, e.target.value)
-              }}
-              placeholder="Search..."
-              className="pl-10"
-              type="search"
-              name="search"
-            />
+        {isGlobalSearch ? (
+          <div className="flex-1">
+            <div className="relative max-w-md">
+              <GlobalSearchTrigger size="sm" />
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="flex-1">
+            <div className="relative max-w-md">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                value={localValue}
+                onChange={e => {
+                  const newValue = e.target.value
+                  setLocalValue(newValue) // Immediate local update (no lag)
+                  setSearchValue(tableId, newValue) // Deferred store update
+                }}
+                placeholder="Search..."
+                className="pl-10"
+                type="search"
+                name="search"
+              />
+            </div>
+          </div>
+        )}
 
         {right && (
           <div className="flex items-center gap-2 flex-shrink-0">{right}</div>

@@ -1,15 +1,20 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
-import { useIntl } from 'react-intl'
 
+import { Tooltip } from '@/components/Tooltip'
 import { Badge } from '@/components/ui/badge'
-import { message } from '@/i18n/src/messages'
+import { cn } from '@/lib/utils'
 import type { RoomCard } from '@/types/gql/graphql'
 
+import {
+  getOperationalStateDotColor,
+  getOperationalStateLabel,
+  getStatusBadgeColor,
+  getStatusLabel
+} from '../../roomCard/utils/statusColors'
 import { LocationCell } from './LocationCell'
 
 export const useRoomCardsColumns = () => {
-  const { formatMessage: fm } = useIntl()
   const columns = useMemo(
     (): ColumnDef<RoomCard, any>[] => [
       {
@@ -23,7 +28,41 @@ export const useRoomCardsColumns = () => {
       {
         header: 'Status',
         accessorFn: row => row?.status,
-        id: 'status'
+        id: 'status',
+        size: 150,
+        cell: ({ getValue }) => {
+          const status = getValue()
+          return (
+            <Badge
+              className={cn(
+                'text-gray-900 dark:text-white',
+                getStatusBadgeColor(status)
+              )}
+            >
+              {getStatusLabel(status)}
+            </Badge>
+          )
+        }
+      },
+      {
+        header: 'Operational State',
+        accessorFn: row => row?.operationalState,
+        id: 'operationalState',
+        size: 300,
+        cell: ({ getValue }) => {
+          const state = getValue()
+          if (!state) return '-'
+          return (
+            <Badge
+              className={cn(
+                'text-gray-900 dark:text-white',
+                getOperationalStateDotColor(state?.code)
+              )}
+            >
+              {getOperationalStateLabel(state)}
+            </Badge>
+          )
+        }
       },
       {
         header: 'Loactions',
@@ -33,12 +72,14 @@ export const useRoomCardsColumns = () => {
         cell: ({ getValue }) => (
           <div>
             {getValue()?.map(location => (
-              <Badge key={location.code}>
-                {fm(
-                  { id: message.common.roomCards.locationFormat },
-                  { name: location.name, code: location.code }
-                )}
-              </Badge>
+              <Tooltip key={location.code} content={location.name}>
+                <Badge
+                  key={location.code}
+                  className="mb-1 mr-1 bg-gray-200 dark:bg-gray-600 text-gray-900 dark:text-white"
+                >
+                  {location.code}
+                </Badge>
+              </Tooltip>
             ))}
           </div>
         )
@@ -51,7 +92,24 @@ export const useRoomCardsColumns = () => {
       {
         header: 'Prescribed clothing',
         accessorFn: row => row?.prescribedClothing,
-        id: 'prescribedClothing'
+        size: 400,
+        id: 'prescribedClothing',
+        cell: ({ getValue }) => {
+          const value = getValue()
+
+          return (
+            <div>
+              {value.map((item: string, index: number) => (
+                <Badge
+                  key={index}
+                  className="mb-1 mr-1 bg-blue-200 dark:bg-blue-600 text-gray-900 dark:text-white"
+                >
+                  {item}
+                </Badge>
+              ))}
+            </div>
+          )
+        }
       },
       {
         header: 'Entry to HVAC tent',
@@ -61,11 +119,28 @@ export const useRoomCardsColumns = () => {
       {
         header: 'Cleaning schedule',
         accessorFn: row => row?.cleaningScheduleDays,
-        id: 'cleaningShedule'
+        id: 'cleaningShedule',
+        size: 300,
+        cell: ({ getValue }) => {
+          const value = getValue()
+          return (
+            <div>
+              {value.map((item: string, index: number) => (
+                <Badge
+                  key={index}
+                  className="mb-1 mr-1 bg-purple-200 dark:bg-purple-600 text-gray-900 dark:text-white"
+                >
+                  {item}
+                </Badge>
+              ))}
+            </div>
+          )
+        }
       },
       {
         header: 'Additional requirements',
         accessorFn: row => row?.additionalRequirements,
+        size: 200,
         id: 'additionalRequirements'
       },
       {
@@ -82,6 +157,7 @@ export const useRoomCardsColumns = () => {
       {
         header: 'Copressed air distribution',
         accessorFn: row => row?.compressedAirDistribution,
+        size: 250,
         id: 'compressedAirDistribution'
       },
       {
@@ -97,7 +173,7 @@ export const useRoomCardsColumns = () => {
         size: 250
       }
     ],
-    [fm]
+    []
   )
 
   return columns

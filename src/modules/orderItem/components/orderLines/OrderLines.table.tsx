@@ -1,5 +1,4 @@
-import { Fragment, useMemo } from 'react'
-import { useFormContext, useWatch } from 'react-hook-form'
+import { Fragment } from 'react'
 
 import { PlusButton } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
@@ -7,7 +6,7 @@ import { Tooltip } from '@/components/Tooltip'
 import { Table } from '@/components/ui/table/table'
 import { message } from '@/i18n/src/messages'
 
-import { useOrderLine } from '../../hooks/useOrderLine'
+import { useOrderLineContext } from '../../context'
 import useOrderLinesColumns from './components/OrderLines.columns'
 import { useOrderLineModal } from './form/OrderLineForm.cont'
 
@@ -18,36 +17,13 @@ interface OrderLinesTableProps {
 }
 
 const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
-  const columns = useOrderLinesColumns()
-  const { control } = useFormContext()
   const { openOrderLineModal } = useOrderLineModal()
-  const { setOrderLine } = useOrderLine()
-
-  // Používáme useWatch s memoizací k efektivnější práci s daty
-  const orderLinesData = useWatch({ control, name: 'orderLines' })
-
-  // Memoizujeme data pro předcházení zbytečným re-renderům
-  // Už nepoužíváme neefektivní JSON.stringify
-  const orderLines = useMemo(
-    () => orderLinesData,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [JSON.stringify(orderLinesData)]
-  )
+  const { setOrderLine, fields } = useOrderLineContext()
+  const columns = useOrderLinesColumns()
 
   const handleOpenOrderLineForm = () => {
-    openOrderLineModal(data => {
-      const quantity = data.quantity || 1
-
-      // Vytvoříme tolik kopií order line, kolik je zadáno v quantity
-      for (let i = 0; i < quantity; i++) {
-        const orderLineToAdd = {
-          ...data,
-          // Odebereme uuid, aby setOrderLine věděl, že má vytvořit novou položku
-          uuid: undefined,
-          quantity: 1 // Každá order line má quantity 1
-        }
-        setOrderLine(orderLineToAdd)
-      }
+    openOrderLineModal(orderLine => {
+      setOrderLine(orderLine)
     })
   }
 
@@ -67,7 +43,7 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
       <div className="w-full overflow-hidden">
         <Table
           columns={columns}
-          data={orderLines}
+          data={fields}
           enablePagination
           enableFiltering
           enableFooter

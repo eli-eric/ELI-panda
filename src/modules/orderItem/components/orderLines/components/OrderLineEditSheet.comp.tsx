@@ -51,8 +51,8 @@ export const OrderLineEditSheet = ({
       notes: orderLine?.notes || '',
       location: orderLine?.location || undefined,
       system: orderLine?.system || undefined,
+      parentSystem: orderLine?.parentSystem || undefined,
       itemUsage: orderLine?.itemUsage || undefined,
-      uuid: orderLine?.uuid || '',
       uid: orderLine?.uid || '',
       eun: orderLine?.eun || '',
       isDelivered: orderLine?.isDelivered || false,
@@ -84,9 +84,9 @@ export const OrderLineEditSheet = ({
             {/* Item Information */}
             <div className="space-y-4">
               <div className="space-y-4">
-                <Input {...formFields.name} />
+                <Input {...formFields.name} disabled={true} />
 
-                <Input {...formFields.catalogueNumber} />
+                <Input {...formFields.catalogueNumber} disabled={true} />
 
                 <InputAmountCurrency
                   amountName={formFields.price.name}
@@ -112,6 +112,11 @@ export const OrderLineEditSheet = ({
               </h3>
 
               <div className="space-y-4">
+                <SelectSystemComboBox
+                  selectSystemField={{ ...formFields.parentSystem }}
+                  disabled={true}
+                />
+
                 <SelectSystemComboBox
                   selectSystemField={{ ...formFields.system }}
                   disabled={true}

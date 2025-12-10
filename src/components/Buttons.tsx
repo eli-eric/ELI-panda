@@ -44,6 +44,7 @@ interface ButtonProps {
   text?: string
   onClick?: () => void
   children?: React.ReactNode
+  asChild?: boolean
 }
 
 export const Button = ({
@@ -57,6 +58,7 @@ export const Button = ({
   testid,
   type = 'button',
   onClick,
+  asChild,
   ...restProps
 }: ButtonProps) => (
   <ShadcnButton
@@ -71,11 +73,18 @@ export const Button = ({
     )}
     data-testid={testid}
     onClick={onClick}
+    asChild={asChild}
     {...restProps}
   >
-    {loading && <ButtonLoaderComponent />}
-    {children}
-    {text && <FormattedMessage id={text} />}
+    {asChild ? (
+      children
+    ) : (
+      <>
+        {loading && <ButtonLoaderComponent />}
+        {children}
+        {text && <FormattedMessage id={text} />}
+      </>
+    )}
   </ShadcnButton>
 )
 

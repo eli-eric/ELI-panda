@@ -1,5 +1,6 @@
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import type { CodebookType } from '@/types/responses/codebook'
+import type { SystemDetail } from '@/types/responses/systems'
 
 import { SystemModalContent } from '../components/system-modal-content'
 
@@ -11,7 +12,8 @@ export const useSystemSelectionModal = () => {
   const { openModal } = useDynamicModalStore()
 
   const openSystemModal = (
-    onSelect?: (system: CodebookType | null) => void
+    onSelect?: (system: CodebookType | null) => void,
+    onSystemDetailSelect?: (system: SystemDetail) => void
   ) => {
     // Use custom ID for consistent modal management
     const modalId = openModal('dialog', {
@@ -20,7 +22,8 @@ export const useSystemSelectionModal = () => {
       props: {
         title: 'Select System',
         size: 'xl' as const,
-        onSelect: onSelect || (() => {})
+        onSelect: onSelect || (() => {}),
+        onSystemDetailSelect
       }
     })
 

@@ -50,6 +50,7 @@ const OrdersContainer = () => {
           {...{
             table,
             settings: tableSettings,
+            skeletonRowCount: 50,
             getRowProps: () => ({
               className: 'font-bold'
             }),

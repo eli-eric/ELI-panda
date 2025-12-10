@@ -18,31 +18,16 @@ const messages = message.common.buttons
 interface TeamModalProps {
   onSubmit?: (data: TeamFormData) => void
   onClose?: () => void
-  existingTeamUids?: string[]
 }
 
 export const TeamModalContainer = ({
   onSubmit,
-  onClose,
-  existingTeamUids = []
+  onClose
 }: TeamModalProps) => {
   const { teams } = useTeams()
 
   const formMethods = useForm<TeamFormData>({
-    resolver: zodResolver(
-      teamSchema.refine(
-        data => {
-          if (data.team && existingTeamUids.includes(data.team.uid)) {
-            return false
-          }
-          return true
-        },
-        {
-          message: 'Team already selected',
-          path: ['team']
-        }
-      )
-    ),
+    resolver: zodResolver(teamSchema),
     defaultValues: {
       team: null
     }

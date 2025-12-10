@@ -12,11 +12,11 @@ import {
   SidebarMenuItem
 } from '@/components/ui/sidebar'
 import { message } from '@/i18n/src/messages'
+import { cn } from '@/lib/utils'
 import {
   useGlobalSearchShortcut,
   useOpenGlobalSearch
 } from '@/modules/shared/globalSearch'
-import { cn } from '@/lib/utils'
 
 export function SidebarSearch() {
   const { formatMessage: fm } = useIntl()

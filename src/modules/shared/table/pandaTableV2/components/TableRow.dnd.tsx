@@ -15,7 +15,6 @@ interface Props {
   row: Row<any>
   getRowProps: (row: Row<any>) => GetRowPropsReturnType
   virtualPaddingLeft?: string
-  loading: boolean
   tableId: string
 }
 
@@ -25,7 +24,6 @@ export const TableRowDNDComponent: FC<Props> = ({
   row,
   getRowProps,
   virtualPaddingLeft,
-  loading,
   tableId
 }) => {
   const { className, dropsettings, ...rest } = getRowProps(row)
@@ -83,13 +81,7 @@ export const TableRowDNDComponent: FC<Props> = ({
           <td style={{ display: 'flex', width: virtualPaddingLeft }} />
         ) : null}
         {visibleCells.map((cell, index) => (
-          <RowCellComponent
-            key={cell.id}
-            cell={cell}
-            row={row}
-            loading={loading}
-            index={index}
-          />
+          <RowCellComponent key={cell.id} cell={cell} row={row} index={index} />
         ))}
       </div>
     </tr>

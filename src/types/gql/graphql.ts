@@ -25,6 +25,7 @@ export type Scalars = {
 export enum Actions {
   Delete = 'DELETE',
   Insert = 'INSERT',
+  OperationState = 'OPERATION_STATE',
   Update = 'UPDATE'
 }
 
@@ -4303,6 +4304,12 @@ export type CreateLocationsMutationResponse = {
   locations: Array<Location>;
 };
 
+export type CreateOperationalStatesMutationResponse = {
+  __typename?: 'CreateOperationalStatesMutationResponse';
+  info: CreateInfo;
+  operationalStates: Array<OperationalState>;
+};
+
 export type CreateOrdersMutationResponse = {
   __typename?: 'CreateOrdersMutationResponse';
   info: CreateInfo;
@@ -5849,6 +5856,16 @@ export type HallContactPersonRoomCardNodeAggregationWhereInput = {
   nitrogenCentralDistribution_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   nitrogenCentralDistribution_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   nitrogenCentralDistribution_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  operationalStateLastUpdated_MAX_EQUAL?: InputMaybe<Scalars['DateTime']['input']>;
+  operationalStateLastUpdated_MAX_GT?: InputMaybe<Scalars['DateTime']['input']>;
+  operationalStateLastUpdated_MAX_GTE?: InputMaybe<Scalars['DateTime']['input']>;
+  operationalStateLastUpdated_MAX_LT?: InputMaybe<Scalars['DateTime']['input']>;
+  operationalStateLastUpdated_MAX_LTE?: InputMaybe<Scalars['DateTime']['input']>;
+  operationalStateLastUpdated_MIN_EQUAL?: InputMaybe<Scalars['DateTime']['input']>;
+  operationalStateLastUpdated_MIN_GT?: InputMaybe<Scalars['DateTime']['input']>;
+  operationalStateLastUpdated_MIN_GTE?: InputMaybe<Scalars['DateTime']['input']>;
+  operationalStateLastUpdated_MIN_LT?: InputMaybe<Scalars['DateTime']['input']>;
+  operationalStateLastUpdated_MIN_LTE?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
 export type HallContactPersonRoomCardRelationship = {
@@ -5878,6 +5895,7 @@ export type HallContactPersonRoomCardRoomCardNodeAggregateSelection = {
   name: StringAggregateSelectionNonNullable;
   nitrogenCentralDistribution: StringAggregateSelectionNullable;
   nitrogenCentralDistributionClient: StringAggregateSelectionNullable;
+  operationalStateLastUpdated: DateTimeAggregateSelectionNullable;
   uid: IdAggregateSelectionNonNullable;
 };
 
@@ -8040,6 +8058,7 @@ export type LocationRoomCardRoomCardsNodeAggregateSelection = {
   name: StringAggregateSelectionNonNullable;
   nitrogenCentralDistribution: StringAggregateSelectionNullable;
   nitrogenCentralDistributionClient: StringAggregateSelectionNullable;
+  operationalStateLastUpdated: DateTimeAggregateSelectionNullable;
   uid: IdAggregateSelectionNonNullable;
 };
 
@@ -8298,6 +8317,16 @@ export type LocationRoomCardsNodeAggregationWhereInput = {
   nitrogenCentralDistribution_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   nitrogenCentralDistribution_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   nitrogenCentralDistribution_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  operationalStateLastUpdated_MAX_EQUAL?: InputMaybe<Scalars['DateTime']['input']>;
+  operationalStateLastUpdated_MAX_GT?: InputMaybe<Scalars['DateTime']['input']>;
+  operationalStateLastUpdated_MAX_GTE?: InputMaybe<Scalars['DateTime']['input']>;
+  operationalStateLastUpdated_MAX_LT?: InputMaybe<Scalars['DateTime']['input']>;
+  operationalStateLastUpdated_MAX_LTE?: InputMaybe<Scalars['DateTime']['input']>;
+  operationalStateLastUpdated_MIN_EQUAL?: InputMaybe<Scalars['DateTime']['input']>;
+  operationalStateLastUpdated_MIN_GT?: InputMaybe<Scalars['DateTime']['input']>;
+  operationalStateLastUpdated_MIN_GTE?: InputMaybe<Scalars['DateTime']['input']>;
+  operationalStateLastUpdated_MIN_LT?: InputMaybe<Scalars['DateTime']['input']>;
+  operationalStateLastUpdated_MIN_LTE?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
 export type LocationRoomCardsRelationship = {
@@ -8534,6 +8563,7 @@ export type Mutation = {
   createItems: CreateItemsMutationResponse;
   createLinks: CreateLinksMutationResponse;
   createLocations: CreateLocationsMutationResponse;
+  createOperationalStates: CreateOperationalStatesMutationResponse;
   createOrders: CreateOrdersMutationResponse;
   createParentPathItems: CreateParentPathItemsMutationResponse;
   createRoles: CreateRolesMutationResponse;
@@ -8567,6 +8597,7 @@ export type Mutation = {
   deleteItems: DeleteInfo;
   deleteLinks: DeleteInfo;
   deleteLocations: DeleteInfo;
+  deleteOperationalStates: DeleteInfo;
   deleteOrders: DeleteInfo;
   deleteParentPathItems: DeleteInfo;
   deleteRoles: DeleteInfo;
@@ -8602,6 +8633,7 @@ export type Mutation = {
   updateItems: UpdateItemsMutationResponse;
   updateLinks: UpdateLinksMutationResponse;
   updateLocations: UpdateLocationsMutationResponse;
+  updateOperationalStates: UpdateOperationalStatesMutationResponse;
   updateOrders: UpdateOrdersMutationResponse;
   updateParentPathItems: UpdateParentPathItemsMutationResponse;
   updateRoles: UpdateRolesMutationResponse;
@@ -8691,6 +8723,11 @@ export type MutationCreateLinksArgs = {
 
 export type MutationCreateLocationsArgs = {
   input: Array<LocationCreateInput>;
+};
+
+
+export type MutationCreateOperationalStatesArgs = {
+  input: Array<OperationalStateCreateInput>;
 };
 
 
@@ -8866,6 +8903,11 @@ export type MutationDeleteLinksArgs = {
 export type MutationDeleteLocationsArgs = {
   delete?: InputMaybe<LocationDeleteInput>;
   where?: InputMaybe<LocationWhere>;
+};
+
+
+export type MutationDeleteOperationalStatesArgs = {
+  where?: InputMaybe<OperationalStateWhere>;
 };
 
 
@@ -9109,6 +9151,12 @@ export type MutationUpdateLocationsArgs = {
 };
 
 
+export type MutationUpdateOperationalStatesArgs = {
+  update?: InputMaybe<OperationalStateUpdateInput>;
+  where?: InputMaybe<OperationalStateWhere>;
+};
+
+
 export type MutationUpdateOrdersArgs = {
   connect?: InputMaybe<OrderConnectInput>;
   create?: InputMaybe<OrderRelationInput>;
@@ -9263,8 +9311,87 @@ export type MutationUpdateZonesArgs = {
 
 export type MutationUpdatedByResolverArgs = {
   action?: InputMaybe<Scalars['String']['input']>;
+  newState?: InputMaybe<Scalars['String']['input']>;
   node?: InputMaybe<Scalars['String']['input']>;
   nodeUid?: InputMaybe<Scalars['String']['input']>;
+  previousState?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type OperationalState = {
+  __typename?: 'OperationalState';
+  code: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  uid: Scalars['ID']['output'];
+};
+
+export type OperationalStateAggregateSelection = {
+  __typename?: 'OperationalStateAggregateSelection';
+  code: StringAggregateSelectionNonNullable;
+  count: Scalars['Int']['output'];
+  name: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
+};
+
+export type OperationalStateConnectWhere = {
+  node: OperationalStateWhere;
+};
+
+export type OperationalStateCreateInput = {
+  code: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+};
+
+export type OperationalStateEdge = {
+  __typename?: 'OperationalStateEdge';
+  cursor: Scalars['String']['output'];
+  node: OperationalState;
+};
+
+export type OperationalStateOptions = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  /** Specify one or more OperationalStateSort objects to sort OperationalStates by. The sorts will be applied in the order in which they are arranged in the array. */
+  sort?: InputMaybe<Array<OperationalStateSort>>;
+};
+
+/** Fields to sort OperationalStates by. The order in which sorts are applied is not guaranteed when specifying many fields in one OperationalStateSort object. */
+export type OperationalStateSort = {
+  code?: InputMaybe<SortDirection>;
+  name?: InputMaybe<SortDirection>;
+  uid?: InputMaybe<SortDirection>;
+};
+
+export type OperationalStateUpdateInput = {
+  code?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type OperationalStateWhere = {
+  AND?: InputMaybe<Array<OperationalStateWhere>>;
+  NOT?: InputMaybe<OperationalStateWhere>;
+  OR?: InputMaybe<Array<OperationalStateWhere>>;
+  code?: InputMaybe<Scalars['String']['input']>;
+  code_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  code_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  code_IN?: InputMaybe<Array<Scalars['String']['input']>>;
+  code_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  name_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  name_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  name_IN?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  uid?: InputMaybe<Scalars['ID']['input']>;
+  uid_CONTAINS?: InputMaybe<Scalars['ID']['input']>;
+  uid_ENDS_WITH?: InputMaybe<Scalars['ID']['input']>;
+  uid_IN?: InputMaybe<Array<Scalars['ID']['input']>>;
+  uid_STARTS_WITH?: InputMaybe<Scalars['ID']['input']>;
+};
+
+export type OperationalStatesConnection = {
+  __typename?: 'OperationalStatesConnection';
+  edges: Array<OperationalStateEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
 };
 
 export type Order = {
@@ -9760,6 +9887,9 @@ export type Query = {
   locations: Array<Location>;
   locationsAggregate: LocationAggregateSelection;
   locationsConnection: LocationsConnection;
+  operationalStates: Array<OperationalState>;
+  operationalStatesAggregate: OperationalStateAggregateSelection;
+  operationalStatesConnection: OperationalStatesConnection;
   orders: Array<Order>;
   ordersAggregate: OrderAggregateSelection;
   ordersConnection: OrdersConnection;
@@ -10080,6 +10210,25 @@ export type QueryLocationsConnectionArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   sort?: InputMaybe<Array<InputMaybe<LocationSort>>>;
   where?: InputMaybe<LocationWhere>;
+};
+
+
+export type QueryOperationalStatesArgs = {
+  options?: InputMaybe<OperationalStateOptions>;
+  where?: InputMaybe<OperationalStateWhere>;
+};
+
+
+export type QueryOperationalStatesAggregateArgs = {
+  where?: InputMaybe<OperationalStateWhere>;
+};
+
+
+export type QueryOperationalStatesConnectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<InputMaybe<OperationalStateSort>>>;
+  where?: InputMaybe<OperationalStateWhere>;
 };
 
 
@@ -10759,6 +10908,10 @@ export type RoomCard = {
   name: Scalars['String']['output'];
   nitrogenCentralDistribution?: Maybe<Scalars['String']['output']>;
   nitrogenCentralDistributionClient?: Maybe<Scalars['String']['output']>;
+  operationalState?: Maybe<OperationalState>;
+  operationalStateAggregate?: Maybe<RoomCardOperationalStateOperationalStateAggregationSelection>;
+  operationalStateConnection: RoomCardOperationalStateConnection;
+  operationalStateLastUpdated?: Maybe<Scalars['DateTime']['output']>;
   prescribedClothing?: Maybe<Array<PrescribedClothing>>;
   purityClass?: Maybe<PurityClass>;
   status: RoomCardStatus;
@@ -10766,6 +10919,9 @@ export type RoomCard = {
   teamsAggregate?: Maybe<RoomCardTeamTeamsAggregationSelection>;
   teamsConnection: RoomCardTeamsConnection;
   uid: Scalars['ID']['output'];
+  updatedBy: Array<User>;
+  updatedByAggregate?: Maybe<RoomCardUserUpdatedByAggregationSelection>;
+  updatedByConnection: RoomCardUpdatedByConnection;
 };
 
 
@@ -10835,6 +10991,28 @@ export type RoomCardLocationsConnectionArgs = {
 };
 
 
+export type RoomCardOperationalStateArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  options?: InputMaybe<OperationalStateOptions>;
+  where?: InputMaybe<OperationalStateWhere>;
+};
+
+
+export type RoomCardOperationalStateAggregateArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  where?: InputMaybe<OperationalStateWhere>;
+};
+
+
+export type RoomCardOperationalStateConnectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<RoomCardOperationalStateConnectionSort>>;
+  where?: InputMaybe<RoomCardOperationalStateConnectionWhere>;
+};
+
+
 export type RoomCardTeamsArgs = {
   directed?: InputMaybe<Scalars['Boolean']['input']>;
   options?: InputMaybe<TeamOptions>;
@@ -10856,6 +11034,28 @@ export type RoomCardTeamsConnectionArgs = {
   where?: InputMaybe<RoomCardTeamsConnectionWhere>;
 };
 
+
+export type RoomCardUpdatedByArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  options?: InputMaybe<UserOptions>;
+  where?: InputMaybe<UserWhere>;
+};
+
+
+export type RoomCardUpdatedByAggregateArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  where?: InputMaybe<UserWhere>;
+};
+
+
+export type RoomCardUpdatedByConnectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<RoomCardUpdatedByConnectionSort>>;
+  where?: InputMaybe<RoomCardUpdatedByConnectionWhere>;
+};
+
 export type RoomCardAggregateSelection = {
   __typename?: 'RoomCardAggregateSelection';
   additionalRequirements: StringAggregateSelectionNullable;
@@ -10872,6 +11072,7 @@ export type RoomCardAggregateSelection = {
   name: StringAggregateSelectionNonNullable;
   nitrogenCentralDistribution: StringAggregateSelectionNullable;
   nitrogenCentralDistributionClient: StringAggregateSelectionNullable;
+  operationalStateLastUpdated: DateTimeAggregateSelectionNullable;
   uid: IdAggregateSelectionNonNullable;
 };
 
@@ -10879,7 +11080,9 @@ export type RoomCardConnectInput = {
   contactPersonsDept?: InputMaybe<Array<RoomCardContactPersonsDeptConnectFieldInput>>;
   contactPersonsHall?: InputMaybe<Array<RoomCardContactPersonsHallConnectFieldInput>>;
   locations?: InputMaybe<Array<RoomCardLocationsConnectFieldInput>>;
+  operationalState?: InputMaybe<RoomCardOperationalStateConnectFieldInput>;
   teams?: InputMaybe<Array<RoomCardTeamsConnectFieldInput>>;
+  updatedBy?: InputMaybe<Array<RoomCardUpdatedByConnectFieldInput>>;
 };
 
 export type RoomCardConnectWhere = {
@@ -11232,24 +11435,31 @@ export type RoomCardCreateInput = {
   name: Scalars['String']['input'];
   nitrogenCentralDistribution?: InputMaybe<Scalars['String']['input']>;
   nitrogenCentralDistributionClient?: InputMaybe<Scalars['String']['input']>;
+  operationalState?: InputMaybe<RoomCardOperationalStateFieldInput>;
+  operationalStateLastUpdated?: InputMaybe<Scalars['DateTime']['input']>;
   prescribedClothing?: InputMaybe<Array<PrescribedClothing>>;
   purityClass?: InputMaybe<PurityClass>;
   status: RoomCardStatus;
   teams?: InputMaybe<RoomCardTeamsFieldInput>;
+  updatedBy?: InputMaybe<RoomCardUpdatedByFieldInput>;
 };
 
 export type RoomCardDeleteInput = {
   contactPersonsDept?: InputMaybe<Array<RoomCardContactPersonsDeptDeleteFieldInput>>;
   contactPersonsHall?: InputMaybe<Array<RoomCardContactPersonsHallDeleteFieldInput>>;
   locations?: InputMaybe<Array<RoomCardLocationsDeleteFieldInput>>;
+  operationalState?: InputMaybe<RoomCardOperationalStateDeleteFieldInput>;
   teams?: InputMaybe<Array<RoomCardTeamsDeleteFieldInput>>;
+  updatedBy?: InputMaybe<Array<RoomCardUpdatedByDeleteFieldInput>>;
 };
 
 export type RoomCardDisconnectInput = {
   contactPersonsDept?: InputMaybe<Array<RoomCardContactPersonsDeptDisconnectFieldInput>>;
   contactPersonsHall?: InputMaybe<Array<RoomCardContactPersonsHallDisconnectFieldInput>>;
   locations?: InputMaybe<Array<RoomCardLocationsDisconnectFieldInput>>;
+  operationalState?: InputMaybe<RoomCardOperationalStateDisconnectFieldInput>;
   teams?: InputMaybe<Array<RoomCardTeamsDisconnectFieldInput>>;
+  updatedBy?: InputMaybe<Array<RoomCardUpdatedByDisconnectFieldInput>>;
 };
 
 export type RoomCardEdge = {
@@ -11415,6 +11625,127 @@ export type RoomCardLocationsUpdateFieldInput = {
   where?: InputMaybe<RoomCardLocationsConnectionWhere>;
 };
 
+export type RoomCardOperationalStateAggregateInput = {
+  AND?: InputMaybe<Array<RoomCardOperationalStateAggregateInput>>;
+  NOT?: InputMaybe<RoomCardOperationalStateAggregateInput>;
+  OR?: InputMaybe<Array<RoomCardOperationalStateAggregateInput>>;
+  count?: InputMaybe<Scalars['Int']['input']>;
+  count_GT?: InputMaybe<Scalars['Int']['input']>;
+  count_GTE?: InputMaybe<Scalars['Int']['input']>;
+  count_LT?: InputMaybe<Scalars['Int']['input']>;
+  count_LTE?: InputMaybe<Scalars['Int']['input']>;
+  node?: InputMaybe<RoomCardOperationalStateNodeAggregationWhereInput>;
+};
+
+export type RoomCardOperationalStateConnectFieldInput = {
+  /** Whether or not to overwrite any matching relationship with the new properties. */
+  overwrite?: Scalars['Boolean']['input'];
+  where?: InputMaybe<OperationalStateConnectWhere>;
+};
+
+export type RoomCardOperationalStateConnection = {
+  __typename?: 'RoomCardOperationalStateConnection';
+  edges: Array<RoomCardOperationalStateRelationship>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type RoomCardOperationalStateConnectionSort = {
+  node?: InputMaybe<OperationalStateSort>;
+};
+
+export type RoomCardOperationalStateConnectionWhere = {
+  AND?: InputMaybe<Array<RoomCardOperationalStateConnectionWhere>>;
+  NOT?: InputMaybe<RoomCardOperationalStateConnectionWhere>;
+  OR?: InputMaybe<Array<RoomCardOperationalStateConnectionWhere>>;
+  node?: InputMaybe<OperationalStateWhere>;
+};
+
+export type RoomCardOperationalStateCreateFieldInput = {
+  node: OperationalStateCreateInput;
+};
+
+export type RoomCardOperationalStateDeleteFieldInput = {
+  where?: InputMaybe<RoomCardOperationalStateConnectionWhere>;
+};
+
+export type RoomCardOperationalStateDisconnectFieldInput = {
+  where?: InputMaybe<RoomCardOperationalStateConnectionWhere>;
+};
+
+export type RoomCardOperationalStateFieldInput = {
+  connect?: InputMaybe<RoomCardOperationalStateConnectFieldInput>;
+  create?: InputMaybe<RoomCardOperationalStateCreateFieldInput>;
+};
+
+export type RoomCardOperationalStateNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<RoomCardOperationalStateNodeAggregationWhereInput>>;
+  NOT?: InputMaybe<RoomCardOperationalStateNodeAggregationWhereInput>;
+  OR?: InputMaybe<Array<RoomCardOperationalStateNodeAggregationWhereInput>>;
+  code_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  code_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  name_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type RoomCardOperationalStateOperationalStateAggregationSelection = {
+  __typename?: 'RoomCardOperationalStateOperationalStateAggregationSelection';
+  count: Scalars['Int']['output'];
+  node?: Maybe<RoomCardOperationalStateOperationalStateNodeAggregateSelection>;
+};
+
+export type RoomCardOperationalStateOperationalStateNodeAggregateSelection = {
+  __typename?: 'RoomCardOperationalStateOperationalStateNodeAggregateSelection';
+  code: StringAggregateSelectionNonNullable;
+  name: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
+};
+
+export type RoomCardOperationalStateRelationship = {
+  __typename?: 'RoomCardOperationalStateRelationship';
+  cursor: Scalars['String']['output'];
+  node: OperationalState;
+};
+
+export type RoomCardOperationalStateUpdateConnectionInput = {
+  node?: InputMaybe<OperationalStateUpdateInput>;
+};
+
+export type RoomCardOperationalStateUpdateFieldInput = {
+  connect?: InputMaybe<RoomCardOperationalStateConnectFieldInput>;
+  create?: InputMaybe<RoomCardOperationalStateCreateFieldInput>;
+  delete?: InputMaybe<RoomCardOperationalStateDeleteFieldInput>;
+  disconnect?: InputMaybe<RoomCardOperationalStateDisconnectFieldInput>;
+  update?: InputMaybe<RoomCardOperationalStateUpdateConnectionInput>;
+  where?: InputMaybe<RoomCardOperationalStateConnectionWhere>;
+};
+
 export type RoomCardOptions = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -11426,7 +11757,9 @@ export type RoomCardRelationInput = {
   contactPersonsDept?: InputMaybe<Array<RoomCardContactPersonsDeptCreateFieldInput>>;
   contactPersonsHall?: InputMaybe<Array<RoomCardContactPersonsHallCreateFieldInput>>;
   locations?: InputMaybe<Array<RoomCardLocationsCreateFieldInput>>;
+  operationalState?: InputMaybe<RoomCardOperationalStateCreateFieldInput>;
   teams?: InputMaybe<Array<RoomCardTeamsCreateFieldInput>>;
+  updatedBy?: InputMaybe<Array<RoomCardUpdatedByCreateFieldInput>>;
 };
 
 /** Fields to sort RoomCards by. The order in which sorts are applied is not guaranteed when specifying many fields in one RoomCardSort object. */
@@ -11445,6 +11778,7 @@ export type RoomCardSort = {
   name?: InputMaybe<SortDirection>;
   nitrogenCentralDistribution?: InputMaybe<SortDirection>;
   nitrogenCentralDistributionClient?: InputMaybe<SortDirection>;
+  operationalStateLastUpdated?: InputMaybe<SortDirection>;
   purityClass?: InputMaybe<SortDirection>;
   status?: InputMaybe<SortDirection>;
   uid?: InputMaybe<SortDirection>;
@@ -11583,10 +11917,249 @@ export type RoomCardUpdateInput = {
   name?: InputMaybe<Scalars['String']['input']>;
   nitrogenCentralDistribution?: InputMaybe<Scalars['String']['input']>;
   nitrogenCentralDistributionClient?: InputMaybe<Scalars['String']['input']>;
+  operationalState?: InputMaybe<RoomCardOperationalStateUpdateFieldInput>;
+  operationalStateLastUpdated?: InputMaybe<Scalars['DateTime']['input']>;
   prescribedClothing?: InputMaybe<Array<PrescribedClothing>>;
   purityClass?: InputMaybe<PurityClass>;
   status?: InputMaybe<RoomCardStatus>;
   teams?: InputMaybe<Array<RoomCardTeamsUpdateFieldInput>>;
+  updatedBy?: InputMaybe<Array<RoomCardUpdatedByUpdateFieldInput>>;
+};
+
+export type RoomCardUpdatedByAggregateInput = {
+  AND?: InputMaybe<Array<RoomCardUpdatedByAggregateInput>>;
+  NOT?: InputMaybe<RoomCardUpdatedByAggregateInput>;
+  OR?: InputMaybe<Array<RoomCardUpdatedByAggregateInput>>;
+  count?: InputMaybe<Scalars['Int']['input']>;
+  count_GT?: InputMaybe<Scalars['Int']['input']>;
+  count_GTE?: InputMaybe<Scalars['Int']['input']>;
+  count_LT?: InputMaybe<Scalars['Int']['input']>;
+  count_LTE?: InputMaybe<Scalars['Int']['input']>;
+  edge?: InputMaybe<RoomCardUpdatedByEdgeAggregationWhereInput>;
+  node?: InputMaybe<RoomCardUpdatedByNodeAggregationWhereInput>;
+};
+
+export type RoomCardUpdatedByConnectFieldInput = {
+  connect?: InputMaybe<Array<UserConnectInput>>;
+  edge: WasUpdatedByCreateInput;
+  /** Whether or not to overwrite any matching relationship with the new properties. */
+  overwrite?: Scalars['Boolean']['input'];
+  where?: InputMaybe<UserConnectWhere>;
+};
+
+export type RoomCardUpdatedByConnection = {
+  __typename?: 'RoomCardUpdatedByConnection';
+  edges: Array<RoomCardUpdatedByRelationship>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type RoomCardUpdatedByConnectionSort = {
+  edge?: InputMaybe<WasUpdatedBySort>;
+  node?: InputMaybe<UserSort>;
+};
+
+export type RoomCardUpdatedByConnectionWhere = {
+  AND?: InputMaybe<Array<RoomCardUpdatedByConnectionWhere>>;
+  NOT?: InputMaybe<RoomCardUpdatedByConnectionWhere>;
+  OR?: InputMaybe<Array<RoomCardUpdatedByConnectionWhere>>;
+  edge?: InputMaybe<WasUpdatedByWhere>;
+  node?: InputMaybe<UserWhere>;
+};
+
+export type RoomCardUpdatedByCreateFieldInput = {
+  edge: WasUpdatedByCreateInput;
+  node: UserCreateInput;
+};
+
+export type RoomCardUpdatedByDeleteFieldInput = {
+  delete?: InputMaybe<UserDeleteInput>;
+  where?: InputMaybe<RoomCardUpdatedByConnectionWhere>;
+};
+
+export type RoomCardUpdatedByDisconnectFieldInput = {
+  disconnect?: InputMaybe<UserDisconnectInput>;
+  where?: InputMaybe<RoomCardUpdatedByConnectionWhere>;
+};
+
+export type RoomCardUpdatedByEdgeAggregationWhereInput = {
+  AND?: InputMaybe<Array<RoomCardUpdatedByEdgeAggregationWhereInput>>;
+  NOT?: InputMaybe<RoomCardUpdatedByEdgeAggregationWhereInput>;
+  OR?: InputMaybe<Array<RoomCardUpdatedByEdgeAggregationWhereInput>>;
+  at_MAX_EQUAL?: InputMaybe<Scalars['DateTime']['input']>;
+  at_MAX_GT?: InputMaybe<Scalars['DateTime']['input']>;
+  at_MAX_GTE?: InputMaybe<Scalars['DateTime']['input']>;
+  at_MAX_LT?: InputMaybe<Scalars['DateTime']['input']>;
+  at_MAX_LTE?: InputMaybe<Scalars['DateTime']['input']>;
+  at_MIN_EQUAL?: InputMaybe<Scalars['DateTime']['input']>;
+  at_MIN_GT?: InputMaybe<Scalars['DateTime']['input']>;
+  at_MIN_GTE?: InputMaybe<Scalars['DateTime']['input']>;
+  at_MIN_LT?: InputMaybe<Scalars['DateTime']['input']>;
+  at_MIN_LTE?: InputMaybe<Scalars['DateTime']['input']>;
+  newState_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  newState_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  newState_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  newState_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  newState_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  newState_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  newState_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  newState_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  newState_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  newState_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  newState_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  newState_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  newState_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  newState_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  newState_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  previousState_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  previousState_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  previousState_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  previousState_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  previousState_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  previousState_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  previousState_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  previousState_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  previousState_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  previousState_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  previousState_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  previousState_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  previousState_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  previousState_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  previousState_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type RoomCardUpdatedByFieldInput = {
+  connect?: InputMaybe<Array<RoomCardUpdatedByConnectFieldInput>>;
+  create?: InputMaybe<Array<RoomCardUpdatedByCreateFieldInput>>;
+};
+
+export type RoomCardUpdatedByNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<RoomCardUpdatedByNodeAggregationWhereInput>>;
+  NOT?: InputMaybe<RoomCardUpdatedByNodeAggregationWhereInput>;
+  OR?: InputMaybe<Array<RoomCardUpdatedByNodeAggregationWhereInput>>;
+  email_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  email_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  email_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  email_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  email_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  email_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  email_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  email_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  email_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  email_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  firstName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  firstName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  firstName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  firstName_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  firstName_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  firstName_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  firstName_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  firstName_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  firstName_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  firstName_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  lastName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  lastName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  lastName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  lastName_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  lastName_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  lastName_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  lastName_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  lastName_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  lastName_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  lastName_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  passwordHash_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  passwordHash_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  passwordHash_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  passwordHash_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  passwordHash_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  username_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  username_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  username_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  username_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  username_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  username_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  username_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  username_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  username_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  username_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  username_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  username_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  username_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  username_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  username_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type RoomCardUpdatedByRelationship = WasUpdatedBy & {
+  __typename?: 'RoomCardUpdatedByRelationship';
+  action: Actions;
+  at: Scalars['DateTime']['output'];
+  cursor: Scalars['String']['output'];
+  newState?: Maybe<Scalars['String']['output']>;
+  node: User;
+  previousState?: Maybe<Scalars['String']['output']>;
+};
+
+export type RoomCardUpdatedByUpdateConnectionInput = {
+  edge?: InputMaybe<WasUpdatedByUpdateInput>;
+  node?: InputMaybe<UserUpdateInput>;
+};
+
+export type RoomCardUpdatedByUpdateFieldInput = {
+  connect?: InputMaybe<Array<RoomCardUpdatedByConnectFieldInput>>;
+  create?: InputMaybe<Array<RoomCardUpdatedByCreateFieldInput>>;
+  delete?: InputMaybe<Array<RoomCardUpdatedByDeleteFieldInput>>;
+  disconnect?: InputMaybe<Array<RoomCardUpdatedByDisconnectFieldInput>>;
+  update?: InputMaybe<RoomCardUpdatedByUpdateConnectionInput>;
+  where?: InputMaybe<RoomCardUpdatedByConnectionWhere>;
+};
+
+export type RoomCardUserUpdatedByAggregationSelection = {
+  __typename?: 'RoomCardUserUpdatedByAggregationSelection';
+  count: Scalars['Int']['output'];
+  edge?: Maybe<RoomCardUserUpdatedByEdgeAggregateSelection>;
+  node?: Maybe<RoomCardUserUpdatedByNodeAggregateSelection>;
+};
+
+export type RoomCardUserUpdatedByEdgeAggregateSelection = {
+  __typename?: 'RoomCardUserUpdatedByEdgeAggregateSelection';
+  at: DateTimeAggregateSelectionNonNullable;
+  newState: StringAggregateSelectionNullable;
+  previousState: StringAggregateSelectionNullable;
+};
+
+export type RoomCardUserUpdatedByNodeAggregateSelection = {
+  __typename?: 'RoomCardUserUpdatedByNodeAggregateSelection';
+  email: StringAggregateSelectionNonNullable;
+  firstName: StringAggregateSelectionNonNullable;
+  lastName: StringAggregateSelectionNonNullable;
+  passwordHash: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
+  username: StringAggregateSelectionNonNullable;
 };
 
 export type RoomCardWhere = {
@@ -11717,6 +12290,17 @@ export type RoomCardWhere = {
   nitrogenCentralDistribution_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
   nitrogenCentralDistribution_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   nitrogenCentralDistribution_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  operationalState?: InputMaybe<OperationalStateWhere>;
+  operationalStateAggregate?: InputMaybe<RoomCardOperationalStateAggregateInput>;
+  operationalStateConnection?: InputMaybe<RoomCardOperationalStateConnectionWhere>;
+  operationalStateConnection_NOT?: InputMaybe<RoomCardOperationalStateConnectionWhere>;
+  operationalStateLastUpdated?: InputMaybe<Scalars['DateTime']['input']>;
+  operationalStateLastUpdated_GT?: InputMaybe<Scalars['DateTime']['input']>;
+  operationalStateLastUpdated_GTE?: InputMaybe<Scalars['DateTime']['input']>;
+  operationalStateLastUpdated_IN?: InputMaybe<Array<InputMaybe<Scalars['DateTime']['input']>>>;
+  operationalStateLastUpdated_LT?: InputMaybe<Scalars['DateTime']['input']>;
+  operationalStateLastUpdated_LTE?: InputMaybe<Scalars['DateTime']['input']>;
+  operationalState_NOT?: InputMaybe<OperationalStateWhere>;
   prescribedClothing?: InputMaybe<Array<PrescribedClothing>>;
   prescribedClothing_INCLUDES?: InputMaybe<PrescribedClothing>;
   purityClass?: InputMaybe<PurityClass>;
@@ -11745,6 +12329,23 @@ export type RoomCardWhere = {
   uid_ENDS_WITH?: InputMaybe<Scalars['ID']['input']>;
   uid_IN?: InputMaybe<Array<Scalars['ID']['input']>>;
   uid_STARTS_WITH?: InputMaybe<Scalars['ID']['input']>;
+  updatedByAggregate?: InputMaybe<RoomCardUpdatedByAggregateInput>;
+  /** Return RoomCards where all of the related RoomCardUpdatedByConnections match this filter */
+  updatedByConnection_ALL?: InputMaybe<RoomCardUpdatedByConnectionWhere>;
+  /** Return RoomCards where none of the related RoomCardUpdatedByConnections match this filter */
+  updatedByConnection_NONE?: InputMaybe<RoomCardUpdatedByConnectionWhere>;
+  /** Return RoomCards where one of the related RoomCardUpdatedByConnections match this filter */
+  updatedByConnection_SINGLE?: InputMaybe<RoomCardUpdatedByConnectionWhere>;
+  /** Return RoomCards where some of the related RoomCardUpdatedByConnections match this filter */
+  updatedByConnection_SOME?: InputMaybe<RoomCardUpdatedByConnectionWhere>;
+  /** Return RoomCards where all of the related Users match this filter */
+  updatedBy_ALL?: InputMaybe<UserWhere>;
+  /** Return RoomCards where none of the related Users match this filter */
+  updatedBy_NONE?: InputMaybe<UserWhere>;
+  /** Return RoomCards where one of the related Users match this filter */
+  updatedBy_SINGLE?: InputMaybe<UserWhere>;
+  /** Return RoomCards where some of the related Users match this filter */
+  updatedBy_SOME?: InputMaybe<UserWhere>;
 };
 
 export type RoomCardsConnection = {
@@ -14507,7 +15108,9 @@ export type SystemInterfaceUpdatedByRelationship = WasUpdatedBy & {
   action: Actions;
   at: Scalars['DateTime']['output'];
   cursor: Scalars['String']['output'];
+  newState?: Maybe<Scalars['String']['output']>;
   node: User;
+  previousState?: Maybe<Scalars['String']['output']>;
 };
 
 export type SystemInterfaceUpdatedByUpdateConnectionInput = {
@@ -16987,6 +17590,36 @@ export type SystemUpdatedByEdgeAggregationWhereInput = {
   at_MIN_GTE?: InputMaybe<Scalars['DateTime']['input']>;
   at_MIN_LT?: InputMaybe<Scalars['DateTime']['input']>;
   at_MIN_LTE?: InputMaybe<Scalars['DateTime']['input']>;
+  newState_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  newState_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  newState_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  newState_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  newState_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  newState_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  newState_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  newState_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  newState_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  newState_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  newState_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  newState_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  newState_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  newState_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  newState_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  previousState_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  previousState_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  previousState_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  previousState_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  previousState_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  previousState_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  previousState_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  previousState_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  previousState_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  previousState_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  previousState_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  previousState_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  previousState_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  previousState_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  previousState_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type SystemUpdatedByNodeAggregationWhereInput = {
@@ -17080,6 +17713,8 @@ export type SystemUserUpdatedByAggregationSelection = {
 export type SystemUserUpdatedByEdgeAggregateSelection = {
   __typename?: 'SystemUserUpdatedByEdgeAggregateSelection';
   at: DateTimeAggregateSelectionNonNullable;
+  newState: StringAggregateSelectionNullable;
+  previousState: StringAggregateSelectionNullable;
 };
 
 export type SystemUserUpdatedByNodeAggregateSelection = {
@@ -17793,6 +18428,12 @@ export type UpdateLocationsMutationResponse = {
   __typename?: 'UpdateLocationsMutationResponse';
   info: UpdateInfo;
   locations: Array<Location>;
+};
+
+export type UpdateOperationalStatesMutationResponse = {
+  __typename?: 'UpdateOperationalStatesMutationResponse';
+  info: UpdateInfo;
+  operationalStates: Array<OperationalState>;
 };
 
 export type UpdateOrdersMutationResponse = {
@@ -19894,19 +20535,27 @@ export type IsServicedByWhere = {
 export type WasUpdatedBy = {
   action: Actions;
   at: Scalars['DateTime']['output'];
+  newState?: Maybe<Scalars['String']['output']>;
+  previousState?: Maybe<Scalars['String']['output']>;
 };
 
 export type WasUpdatedByCreateInput = {
   action: Actions;
+  newState?: InputMaybe<Scalars['String']['input']>;
+  previousState?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type WasUpdatedBySort = {
   action?: InputMaybe<SortDirection>;
   at?: InputMaybe<SortDirection>;
+  newState?: InputMaybe<SortDirection>;
+  previousState?: InputMaybe<SortDirection>;
 };
 
 export type WasUpdatedByUpdateInput = {
   action?: InputMaybe<Actions>;
+  newState?: InputMaybe<Scalars['String']['input']>;
+  previousState?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type WasUpdatedByWhere = {
@@ -19921,6 +20570,16 @@ export type WasUpdatedByWhere = {
   at_IN?: InputMaybe<Array<Scalars['DateTime']['input']>>;
   at_LT?: InputMaybe<Scalars['DateTime']['input']>;
   at_LTE?: InputMaybe<Scalars['DateTime']['input']>;
+  newState?: InputMaybe<Scalars['String']['input']>;
+  newState_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  newState_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  newState_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  newState_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  previousState?: InputMaybe<Scalars['String']['input']>;
+  previousState_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  previousState_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  previousState_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  previousState_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateFilterMutationMutationVariables = Exact<{
@@ -20068,12 +20727,86 @@ export type GetContactPersonRolesQueryVariables = Exact<{ [key: string]: never; 
 
 export type GetContactPersonRolesQuery = { __typename?: 'Query', contactPersonRoles: Array<{ __typename?: 'ContactPersonRole', uid: string, name: string }> };
 
+export type CurrentUserQueryQueryVariables = Exact<{
+  where?: InputMaybe<UserWhere>;
+}>;
+
+
+export type CurrentUserQueryQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', uid: string, employee?: { __typename?: 'Employee', uid: string } | null }> };
+
+export type UpdateDeptContactMutationVariables = Exact<{
+  where?: InputMaybe<RoomCardWhere>;
+  update?: InputMaybe<RoomCardUpdateInput>;
+}>;
+
+
+export type UpdateDeptContactMutation = { __typename?: 'Mutation', updateRoomCards: { __typename?: 'UpdateRoomCardsMutationResponse', roomCards: Array<{ __typename?: 'RoomCard', uid: string, contactPersonsDept: Array<{ __typename?: 'Employee', uid: string, fullName?: string | null }> }> } };
+
+export type UpdateTeamMutationVariables = Exact<{
+  where?: InputMaybe<RoomCardWhere>;
+  update?: InputMaybe<RoomCardUpdateInput>;
+}>;
+
+
+export type UpdateTeamMutation = { __typename?: 'Mutation', updateRoomCards: { __typename?: 'UpdateRoomCardsMutationResponse', roomCards: Array<{ __typename?: 'RoomCard', uid: string, teams: Array<{ __typename?: 'Team', uid: string, name: string }> }> } };
+
+export type UpdateHallContactMutationVariables = Exact<{
+  where?: InputMaybe<RoomCardWhere>;
+  update?: InputMaybe<RoomCardUpdateInput>;
+}>;
+
+
+export type UpdateHallContactMutation = { __typename?: 'Mutation', updateRoomCards: { __typename?: 'UpdateRoomCardsMutationResponse', roomCards: Array<{ __typename?: 'RoomCard', uid: string, contactPersonsHall: Array<{ __typename?: 'HallContactPerson', uid: string, role?: { __typename?: 'ContactPersonRole', uid: string, name: string } | null, employee: { __typename?: 'Employee', uid: string, fullName?: string | null, phone1?: string | null, phone2?: string | null } }> }> } };
+
+export type UpdateLocationMutationVariables = Exact<{
+  where?: InputMaybe<RoomCardWhere>;
+  update?: InputMaybe<RoomCardUpdateInput>;
+}>;
+
+
+export type UpdateLocationMutation = { __typename?: 'Mutation', updateRoomCards: { __typename?: 'UpdateRoomCardsMutationResponse', roomCards: Array<{ __typename?: 'RoomCard', uid: string, locations: Array<{ __typename?: 'Location', uid: string, code?: string | null, name: string }> }> } };
+
+export type RoomCardHistoryQueryQueryVariables = Exact<{
+  roomCardUid: Scalars['ID']['input'];
+}>;
+
+
+export type RoomCardHistoryQueryQuery = { __typename?: 'Query', roomCards: Array<{ __typename?: 'RoomCard', updatedByConnection: { __typename?: 'RoomCardUpdatedByConnection', edges: Array<{ __typename?: 'RoomCardUpdatedByRelationship', at: any, action: Actions, previousState?: string | null, newState?: string | null, node: { __typename?: 'User', uid: string, firstName: string, lastName: string, email: string } }> } }> };
+
 export type RoomCardQueryQueryVariables = Exact<{
   where?: InputMaybe<RoomCardWhere>;
 }>;
 
 
-export type RoomCardQueryQuery = { __typename?: 'Query', roomCards: Array<{ __typename?: 'RoomCard', name: string, status: RoomCardStatus, purityClass?: PurityClass | null, prescribedClothing?: Array<PrescribedClothing> | null, entryToHvacTent?: string | null, cleaningScheduleDate?: any | null, cleaningScheduleDays?: Array<CleaningScheduleDay> | null, additionalRequirements?: string | null, coolingWater?: string | null, indoorEnvironmentQuality?: string | null, compressedAirDistribution?: string | null, nitrogenCentralDistribution?: string | null, maxPressureInColdDistribution?: string | null, coolingWaterClient?: string | null, indoorEnvironmentQualityClient?: string | null, compressedAirDistributionClient?: string | null, nitrogenCentralDistributionClient?: string | null, maxPressureInColdDistributionClient?: string | null, contactPersonsHall: Array<{ __typename?: 'HallContactPerson', uid: string, role?: { __typename?: 'ContactPersonRole', uid: string, name: string } | null, employee: { __typename?: 'Employee', uid: string, fullName?: string | null, phone1?: string | null, phone2?: string | null } }>, contactPersonsDept: Array<{ __typename?: 'Employee', uid: string, fullName?: string | null, phone1?: string | null, phone2?: string | null }>, locations: Array<{ __typename?: 'Location', code?: string | null, uid: string, name: string }>, teams: Array<{ __typename?: 'Team', name: string, uid: string }> }> };
+export type RoomCardQueryQuery = { __typename?: 'Query', roomCards: Array<{ __typename?: 'RoomCard', name: string, status: RoomCardStatus, operationalStateLastUpdated?: any | null, purityClass?: PurityClass | null, prescribedClothing?: Array<PrescribedClothing> | null, entryToHvacTent?: string | null, cleaningScheduleDate?: any | null, cleaningScheduleDays?: Array<CleaningScheduleDay> | null, additionalRequirements?: string | null, coolingWater?: string | null, indoorEnvironmentQuality?: string | null, compressedAirDistribution?: string | null, nitrogenCentralDistribution?: string | null, maxPressureInColdDistribution?: string | null, coolingWaterClient?: string | null, indoorEnvironmentQualityClient?: string | null, compressedAirDistributionClient?: string | null, nitrogenCentralDistributionClient?: string | null, maxPressureInColdDistributionClient?: string | null, operationalState?: { __typename?: 'OperationalState', name: string, uid: string, code: string } | null }> };
+
+export type RoomCardContactsDeptQueryQueryVariables = Exact<{
+  where?: InputMaybe<RoomCardWhere>;
+}>;
+
+
+export type RoomCardContactsDeptQueryQuery = { __typename?: 'Query', roomCards: Array<{ __typename?: 'RoomCard', contactPersonsDept: Array<{ __typename?: 'Employee', uid: string, fullName?: string | null, phone1?: string | null, phone2?: string | null }> }> };
+
+export type RoomCardContactsHallQueryQueryVariables = Exact<{
+  where?: InputMaybe<RoomCardWhere>;
+}>;
+
+
+export type RoomCardContactsHallQueryQuery = { __typename?: 'Query', roomCards: Array<{ __typename?: 'RoomCard', contactPersonsHall: Array<{ __typename?: 'HallContactPerson', uid: string, role?: { __typename?: 'ContactPersonRole', uid: string, name: string } | null, employee: { __typename?: 'Employee', uid: string, fullName?: string | null, phone1?: string | null, phone2?: string | null } }> }> };
+
+export type RoomCardTeamsQueryQueryVariables = Exact<{
+  where?: InputMaybe<RoomCardWhere>;
+}>;
+
+
+export type RoomCardTeamsQueryQuery = { __typename?: 'Query', roomCards: Array<{ __typename?: 'RoomCard', teams: Array<{ __typename?: 'Team', uid: string, name: string }> }> };
+
+export type RoomCardLocationsQueryQueryVariables = Exact<{
+  where?: InputMaybe<RoomCardWhere>;
+}>;
+
+
+export type RoomCardLocationsQueryQuery = { __typename?: 'Query', roomCards: Array<{ __typename?: 'RoomCard', locations: Array<{ __typename?: 'Location', uid: string, code?: string | null, name: string }> }> };
 
 export type CreateRoomCardsMutationVariables = Exact<{
   input: Array<RoomCardCreateInput> | RoomCardCreateInput;
@@ -20085,10 +20818,24 @@ export type CreateRoomCardsMutation = { __typename?: 'Mutation', createRoomCards
 export type UpdateRoomCardMutationMutationVariables = Exact<{
   where?: InputMaybe<RoomCardWhere>;
   update?: InputMaybe<RoomCardUpdateInput>;
+  node?: InputMaybe<Scalars['String']['input']>;
+  nodeUid?: InputMaybe<Scalars['String']['input']>;
+  action?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type UpdateRoomCardMutationMutation = { __typename?: 'Mutation', updateRoomCards: { __typename?: 'UpdateRoomCardsMutationResponse', roomCards: Array<{ __typename?: 'RoomCard', purityClass?: PurityClass | null, name: string, status: RoomCardStatus, prescribedClothing?: Array<PrescribedClothing> | null, entryToHvacTent?: string | null, cleaningScheduleDate?: any | null, additionalRequirements?: string | null, coolingWater?: string | null, indoorEnvironmentQuality?: string | null, compressedAirDistribution?: string | null, nitrogenCentralDistribution?: string | null, maxPressureInColdDistribution?: string | null, coolingWaterClient?: string | null, indoorEnvironmentQualityClient?: string | null, compressedAirDistributionClient?: string | null, nitrogenCentralDistributionClient?: string | null, maxPressureInColdDistributionClient?: string | null, contactPersonsHall: Array<{ __typename?: 'HallContactPerson', role?: { __typename?: 'ContactPersonRole', uid: string, name: string } | null, employee: { __typename?: 'Employee', uid: string, fullName?: string | null, phone1?: string | null, phone2?: string | null } }>, contactPersonsDept: Array<{ __typename?: 'Employee', uid: string, fullName?: string | null, phone1?: string | null, phone2?: string | null }>, locations: Array<{ __typename?: 'Location', code?: string | null, uid: string, name: string }>, teams: Array<{ __typename?: 'Team', name: string, uid: string }> }> } };
+export type UpdateRoomCardMutationMutation = { __typename?: 'Mutation', updatedByResolver?: string | null, updateRoomCards: { __typename?: 'UpdateRoomCardsMutationResponse', roomCards: Array<{ __typename?: 'RoomCard', uid: string, purityClass?: PurityClass | null, name: string, status: RoomCardStatus, operationalStateLastUpdated?: any | null, prescribedClothing?: Array<PrescribedClothing> | null, entryToHvacTent?: string | null, cleaningScheduleDate?: any | null, cleaningScheduleDays?: Array<CleaningScheduleDay> | null, additionalRequirements?: string | null, coolingWater?: string | null, indoorEnvironmentQuality?: string | null, compressedAirDistribution?: string | null, nitrogenCentralDistribution?: string | null, maxPressureInColdDistribution?: string | null, coolingWaterClient?: string | null, indoorEnvironmentQualityClient?: string | null, compressedAirDistributionClient?: string | null, nitrogenCentralDistributionClient?: string | null, maxPressureInColdDistributionClient?: string | null, operationalState?: { __typename?: 'OperationalState', name: string, uid: string, code: string } | null, locations: Array<{ __typename?: 'Location', uid: string, code?: string | null, name: string }>, contactPersonsHall: Array<{ __typename?: 'HallContactPerson', uid: string, role?: { __typename?: 'ContactPersonRole', uid: string, name: string } | null, employee: { __typename?: 'Employee', uid: string, fullName?: string | null, phone1?: string | null, phone2?: string | null } }>, contactPersonsDept: Array<{ __typename?: 'Employee', uid: string, fullName?: string | null, phone1?: string | null, phone2?: string | null }>, teams: Array<{ __typename?: 'Team', name: string, uid: string }> }> } };
+
+export type UpdateOperationalStateMutationMutationVariables = Exact<{
+  node?: InputMaybe<Scalars['String']['input']>;
+  nodeUid?: InputMaybe<Scalars['String']['input']>;
+  action?: InputMaybe<Scalars['String']['input']>;
+  previousState?: InputMaybe<Scalars['String']['input']>;
+  newState?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type UpdateOperationalStateMutationMutation = { __typename?: 'Mutation', updatedByResolver?: string | null };
 
 export type TeamsQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -20108,7 +20855,7 @@ export type RoomCardsQueryQueryVariables = Exact<{
 }>;
 
 
-export type RoomCardsQueryQuery = { __typename?: 'Query', roomCards: Array<{ __typename?: 'RoomCard', uid: string, name: string, purityClass?: PurityClass | null, status: RoomCardStatus, prescribedClothing?: Array<PrescribedClothing> | null, entryToHvacTent?: string | null, cleaningScheduleDays?: Array<CleaningScheduleDay> | null, additionalRequirements?: string | null, coolingWater?: string | null, indoorEnvironmentQuality?: string | null, compressedAirDistribution?: string | null, nitrogenCentralDistribution?: string | null, maxPressureInColdDistribution?: string | null, locations: Array<{ __typename?: 'Location', code?: string | null, name: string }> }> };
+export type RoomCardsQueryQuery = { __typename?: 'Query', roomCards: Array<{ __typename?: 'RoomCard', uid: string, name: string, purityClass?: PurityClass | null, status: RoomCardStatus, prescribedClothing?: Array<PrescribedClothing> | null, entryToHvacTent?: string | null, cleaningScheduleDays?: Array<CleaningScheduleDay> | null, additionalRequirements?: string | null, coolingWater?: string | null, indoorEnvironmentQuality?: string | null, compressedAirDistribution?: string | null, nitrogenCentralDistribution?: string | null, maxPressureInColdDistribution?: string | null, operationalState?: { __typename?: 'OperationalState', code: string, name: string, uid: string } | null, locations: Array<{ __typename?: 'Location', code?: string | null, name: string }> }> };
 
 export type LocationsQueryQueryVariables = Exact<{
   where?: InputMaybe<LocationWhere>;
@@ -20303,12 +21050,23 @@ export const DisconnectRelatedItemMutationDocument = {"kind":"Document","definit
 export const RelatedCatalogueItemsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"RelatedCatalogueItems"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"CatalogueItemWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogueItems"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"relatedCatalogueItems"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"catalogueCategory"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}},{"kind":"Field","name":{"kind":"Name","value":"supplier"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"catalogueNumber"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"manufacturerUrl"}}]}}]}}]}}]} as unknown as DocumentNode<RelatedCatalogueItemsQuery, RelatedCatalogueItemsQueryVariables>;
 export const RelatedCatalogueItemsForDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"RelatedCatalogueItemsFor"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"CatalogueItemWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogueItems"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"relatedCatalogueItemsFor"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"catalogueCategory"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}},{"kind":"Field","name":{"kind":"Name","value":"supplier"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"catalogueNumber"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"manufacturerUrl"}}]}}]}}]}}]} as unknown as DocumentNode<RelatedCatalogueItemsForQuery, RelatedCatalogueItemsForQueryVariables>;
 export const GetContactPersonRolesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetContactPersonRoles"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"contactPersonRoles"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<GetContactPersonRolesQuery, GetContactPersonRolesQueryVariables>;
-export const RoomCardQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"RoomCardQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"RoomCardWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"roomCards"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"purityClass"}},{"kind":"Field","name":{"kind":"Name","value":"prescribedClothing"}},{"kind":"Field","name":{"kind":"Name","value":"entryToHvacTent"}},{"kind":"Field","name":{"kind":"Name","value":"cleaningScheduleDate"}},{"kind":"Field","name":{"kind":"Name","value":"cleaningScheduleDays"}},{"kind":"Field","name":{"kind":"Name","value":"additionalRequirements"}},{"kind":"Field","name":{"kind":"Name","value":"coolingWater"}},{"kind":"Field","name":{"kind":"Name","value":"indoorEnvironmentQuality"}},{"kind":"Field","name":{"kind":"Name","value":"compressedAirDistribution"}},{"kind":"Field","name":{"kind":"Name","value":"nitrogenCentralDistribution"}},{"kind":"Field","name":{"kind":"Name","value":"maxPressureInColdDistribution"}},{"kind":"Field","name":{"kind":"Name","value":"coolingWaterClient"}},{"kind":"Field","name":{"kind":"Name","value":"indoorEnvironmentQualityClient"}},{"kind":"Field","name":{"kind":"Name","value":"compressedAirDistributionClient"}},{"kind":"Field","name":{"kind":"Name","value":"nitrogenCentralDistributionClient"}},{"kind":"Field","name":{"kind":"Name","value":"maxPressureInColdDistributionClient"}},{"kind":"Field","name":{"kind":"Name","value":"contactPersonsHall"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"role"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"employee"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"phone1"}},{"kind":"Field","name":{"kind":"Name","value":"phone2"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"contactPersonsDept"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"phone1"}},{"kind":"Field","name":{"kind":"Name","value":"phone2"}}]}},{"kind":"Field","name":{"kind":"Name","value":"locations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"teams"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}}]}}]}}]} as unknown as DocumentNode<RoomCardQueryQuery, RoomCardQueryQueryVariables>;
+export const CurrentUserQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CurrentUserQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"UserWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"employee"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}}]}}]}}]} as unknown as DocumentNode<CurrentUserQueryQuery, CurrentUserQueryQueryVariables>;
+export const UpdateDeptContactDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateDeptContact"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"RoomCardWhere"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"update"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"RoomCardUpdateInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateRoomCards"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}},{"kind":"Argument","name":{"kind":"Name","value":"update"},"value":{"kind":"Variable","name":{"kind":"Name","value":"update"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"roomCards"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"contactPersonsDept"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}}]}}]}}]}}]}}]} as unknown as DocumentNode<UpdateDeptContactMutation, UpdateDeptContactMutationVariables>;
+export const UpdateTeamDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateTeam"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"RoomCardWhere"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"update"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"RoomCardUpdateInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateRoomCards"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}},{"kind":"Argument","name":{"kind":"Name","value":"update"},"value":{"kind":"Variable","name":{"kind":"Name","value":"update"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"roomCards"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"teams"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]}}]} as unknown as DocumentNode<UpdateTeamMutation, UpdateTeamMutationVariables>;
+export const UpdateHallContactDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateHallContact"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"RoomCardWhere"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"update"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"RoomCardUpdateInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateRoomCards"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}},{"kind":"Argument","name":{"kind":"Name","value":"update"},"value":{"kind":"Variable","name":{"kind":"Name","value":"update"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"roomCards"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"contactPersonsHall"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"role"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"employee"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"phone1"}},{"kind":"Field","name":{"kind":"Name","value":"phone2"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<UpdateHallContactMutation, UpdateHallContactMutationVariables>;
+export const UpdateLocationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateLocation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"RoomCardWhere"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"update"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"RoomCardUpdateInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateRoomCards"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}},{"kind":"Argument","name":{"kind":"Name","value":"update"},"value":{"kind":"Variable","name":{"kind":"Name","value":"update"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"roomCards"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"locations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]}}]} as unknown as DocumentNode<UpdateLocationMutation, UpdateLocationMutationVariables>;
+export const RoomCardHistoryQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"RoomCardHistoryQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"roomCardUid"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"roomCards"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"uid"},"value":{"kind":"Variable","name":{"kind":"Name","value":"roomCardUid"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updatedByConnection"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"edge"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"action"},"value":{"kind":"EnumValue","value":"OPERATION_STATE"}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"at"}},{"kind":"Field","name":{"kind":"Name","value":"action"}},{"kind":"Field","name":{"kind":"Name","value":"previousState"}},{"kind":"Field","name":{"kind":"Name","value":"newState"}},{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"email"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<RoomCardHistoryQueryQuery, RoomCardHistoryQueryQueryVariables>;
+export const RoomCardQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"RoomCardQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"RoomCardWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"roomCards"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"operationalState"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}},{"kind":"Field","name":{"kind":"Name","value":"operationalStateLastUpdated"}},{"kind":"Field","name":{"kind":"Name","value":"purityClass"}},{"kind":"Field","name":{"kind":"Name","value":"prescribedClothing"}},{"kind":"Field","name":{"kind":"Name","value":"entryToHvacTent"}},{"kind":"Field","name":{"kind":"Name","value":"cleaningScheduleDate"}},{"kind":"Field","name":{"kind":"Name","value":"cleaningScheduleDays"}},{"kind":"Field","name":{"kind":"Name","value":"additionalRequirements"}},{"kind":"Field","name":{"kind":"Name","value":"coolingWater"}},{"kind":"Field","name":{"kind":"Name","value":"indoorEnvironmentQuality"}},{"kind":"Field","name":{"kind":"Name","value":"compressedAirDistribution"}},{"kind":"Field","name":{"kind":"Name","value":"nitrogenCentralDistribution"}},{"kind":"Field","name":{"kind":"Name","value":"maxPressureInColdDistribution"}},{"kind":"Field","name":{"kind":"Name","value":"coolingWaterClient"}},{"kind":"Field","name":{"kind":"Name","value":"indoorEnvironmentQualityClient"}},{"kind":"Field","name":{"kind":"Name","value":"compressedAirDistributionClient"}},{"kind":"Field","name":{"kind":"Name","value":"nitrogenCentralDistributionClient"}},{"kind":"Field","name":{"kind":"Name","value":"maxPressureInColdDistributionClient"}}]}}]}}]} as unknown as DocumentNode<RoomCardQueryQuery, RoomCardQueryQueryVariables>;
+export const RoomCardContactsDeptQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"RoomCardContactsDeptQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"RoomCardWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"roomCards"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"contactPersonsDept"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"phone1"}},{"kind":"Field","name":{"kind":"Name","value":"phone2"}}]}}]}}]}}]} as unknown as DocumentNode<RoomCardContactsDeptQueryQuery, RoomCardContactsDeptQueryQueryVariables>;
+export const RoomCardContactsHallQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"RoomCardContactsHallQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"RoomCardWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"roomCards"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"contactPersonsHall"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"role"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"employee"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"phone1"}},{"kind":"Field","name":{"kind":"Name","value":"phone2"}}]}}]}}]}}]}}]} as unknown as DocumentNode<RoomCardContactsHallQueryQuery, RoomCardContactsHallQueryQueryVariables>;
+export const RoomCardTeamsQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"RoomCardTeamsQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"RoomCardWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"roomCards"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"teams"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<RoomCardTeamsQueryQuery, RoomCardTeamsQueryQueryVariables>;
+export const RoomCardLocationsQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"RoomCardLocationsQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"RoomCardWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"roomCards"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"locations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<RoomCardLocationsQueryQuery, RoomCardLocationsQueryQueryVariables>;
 export const CreateRoomCardsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateRoomCards"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"RoomCardCreateInput"}}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createRoomCards"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"roomCards"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}}]}}]}}]} as unknown as DocumentNode<CreateRoomCardsMutation, CreateRoomCardsMutationVariables>;
-export const UpdateRoomCardMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateRoomCardMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"RoomCardWhere"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"update"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"RoomCardUpdateInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateRoomCards"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}},{"kind":"Argument","name":{"kind":"Name","value":"update"},"value":{"kind":"Variable","name":{"kind":"Name","value":"update"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"roomCards"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"purityClass"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"prescribedClothing"}},{"kind":"Field","name":{"kind":"Name","value":"entryToHvacTent"}},{"kind":"Field","name":{"kind":"Name","value":"cleaningScheduleDate"}},{"kind":"Field","name":{"kind":"Name","value":"additionalRequirements"}},{"kind":"Field","name":{"kind":"Name","value":"coolingWater"}},{"kind":"Field","name":{"kind":"Name","value":"indoorEnvironmentQuality"}},{"kind":"Field","name":{"kind":"Name","value":"compressedAirDistribution"}},{"kind":"Field","name":{"kind":"Name","value":"nitrogenCentralDistribution"}},{"kind":"Field","name":{"kind":"Name","value":"maxPressureInColdDistribution"}},{"kind":"Field","name":{"kind":"Name","value":"coolingWaterClient"}},{"kind":"Field","name":{"kind":"Name","value":"indoorEnvironmentQualityClient"}},{"kind":"Field","name":{"kind":"Name","value":"compressedAirDistributionClient"}},{"kind":"Field","name":{"kind":"Name","value":"nitrogenCentralDistributionClient"}},{"kind":"Field","name":{"kind":"Name","value":"maxPressureInColdDistributionClient"}},{"kind":"Field","name":{"kind":"Name","value":"contactPersonsHall"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"role"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"employee"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"phone1"}},{"kind":"Field","name":{"kind":"Name","value":"phone2"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"contactPersonsDept"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"phone1"}},{"kind":"Field","name":{"kind":"Name","value":"phone2"}}]}},{"kind":"Field","name":{"kind":"Name","value":"locations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"teams"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}}]}}]}}]}}]} as unknown as DocumentNode<UpdateRoomCardMutationMutation, UpdateRoomCardMutationMutationVariables>;
+export const UpdateRoomCardMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateRoomCardMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"RoomCardWhere"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"update"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"RoomCardUpdateInput"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"node"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"nodeUid"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"action"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateRoomCards"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}},{"kind":"Argument","name":{"kind":"Name","value":"update"},"value":{"kind":"Variable","name":{"kind":"Name","value":"update"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"roomCards"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"purityClass"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"operationalState"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}},{"kind":"Field","name":{"kind":"Name","value":"operationalStateLastUpdated"}},{"kind":"Field","name":{"kind":"Name","value":"prescribedClothing"}},{"kind":"Field","name":{"kind":"Name","value":"entryToHvacTent"}},{"kind":"Field","name":{"kind":"Name","value":"cleaningScheduleDate"}},{"kind":"Field","name":{"kind":"Name","value":"cleaningScheduleDays"}},{"kind":"Field","name":{"kind":"Name","value":"additionalRequirements"}},{"kind":"Field","name":{"kind":"Name","value":"coolingWater"}},{"kind":"Field","name":{"kind":"Name","value":"indoorEnvironmentQuality"}},{"kind":"Field","name":{"kind":"Name","value":"compressedAirDistribution"}},{"kind":"Field","name":{"kind":"Name","value":"nitrogenCentralDistribution"}},{"kind":"Field","name":{"kind":"Name","value":"maxPressureInColdDistribution"}},{"kind":"Field","name":{"kind":"Name","value":"coolingWaterClient"}},{"kind":"Field","name":{"kind":"Name","value":"indoorEnvironmentQualityClient"}},{"kind":"Field","name":{"kind":"Name","value":"compressedAirDistributionClient"}},{"kind":"Field","name":{"kind":"Name","value":"nitrogenCentralDistributionClient"}},{"kind":"Field","name":{"kind":"Name","value":"maxPressureInColdDistributionClient"}},{"kind":"Field","name":{"kind":"Name","value":"locations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"contactPersonsHall"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"role"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"employee"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"phone1"}},{"kind":"Field","name":{"kind":"Name","value":"phone2"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"contactPersonsDept"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"phone1"}},{"kind":"Field","name":{"kind":"Name","value":"phone2"}}]}},{"kind":"Field","name":{"kind":"Name","value":"teams"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"updatedByResolver"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"node"},"value":{"kind":"Variable","name":{"kind":"Name","value":"node"}}},{"kind":"Argument","name":{"kind":"Name","value":"nodeUid"},"value":{"kind":"Variable","name":{"kind":"Name","value":"nodeUid"}}},{"kind":"Argument","name":{"kind":"Name","value":"action"},"value":{"kind":"Variable","name":{"kind":"Name","value":"action"}}}]}]}}]} as unknown as DocumentNode<UpdateRoomCardMutationMutation, UpdateRoomCardMutationMutationVariables>;
+export const UpdateOperationalStateMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateOperationalStateMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"node"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"nodeUid"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"action"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"previousState"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"newState"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updatedByResolver"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"node"},"value":{"kind":"Variable","name":{"kind":"Name","value":"node"}}},{"kind":"Argument","name":{"kind":"Name","value":"nodeUid"},"value":{"kind":"Variable","name":{"kind":"Name","value":"nodeUid"}}},{"kind":"Argument","name":{"kind":"Name","value":"action"},"value":{"kind":"Variable","name":{"kind":"Name","value":"action"}}},{"kind":"Argument","name":{"kind":"Name","value":"previousState"},"value":{"kind":"Variable","name":{"kind":"Name","value":"previousState"}}},{"kind":"Argument","name":{"kind":"Name","value":"newState"},"value":{"kind":"Variable","name":{"kind":"Name","value":"newState"}}}]}]}}]} as unknown as DocumentNode<UpdateOperationalStateMutationMutation, UpdateOperationalStateMutationMutationVariables>;
 export const TeamsQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"TeamsQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"teams"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<TeamsQueryQuery, TeamsQueryQueryVariables>;
 export const DeleteRoomCardsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteRoomCards"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"deleteHallContactPeopleWhere"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"HallContactPersonWhere"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"RoomCardWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteRoomCards"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodesDeleted"}}]}},{"kind":"Field","name":{"kind":"Name","value":"deleteHallContactPeople"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"deleteHallContactPeopleWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodesDeleted"}}]}}]}}]} as unknown as DocumentNode<DeleteRoomCardsMutation, DeleteRoomCardsMutationVariables>;
-export const RoomCardsQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"RoomCardsQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"RoomCardWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"roomCards"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"purityClass"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"prescribedClothing"}},{"kind":"Field","name":{"kind":"Name","value":"entryToHvacTent"}},{"kind":"Field","name":{"kind":"Name","value":"cleaningScheduleDays"}},{"kind":"Field","name":{"kind":"Name","value":"additionalRequirements"}},{"kind":"Field","name":{"kind":"Name","value":"coolingWater"}},{"kind":"Field","name":{"kind":"Name","value":"indoorEnvironmentQuality"}},{"kind":"Field","name":{"kind":"Name","value":"compressedAirDistribution"}},{"kind":"Field","name":{"kind":"Name","value":"nitrogenCentralDistribution"}},{"kind":"Field","name":{"kind":"Name","value":"maxPressureInColdDistribution"}},{"kind":"Field","name":{"kind":"Name","value":"locations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<RoomCardsQueryQuery, RoomCardsQueryQueryVariables>;
+export const RoomCardsQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"RoomCardsQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"RoomCardWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"roomCards"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"purityClass"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"operationalState"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}},{"kind":"Field","name":{"kind":"Name","value":"prescribedClothing"}},{"kind":"Field","name":{"kind":"Name","value":"entryToHvacTent"}},{"kind":"Field","name":{"kind":"Name","value":"cleaningScheduleDays"}},{"kind":"Field","name":{"kind":"Name","value":"additionalRequirements"}},{"kind":"Field","name":{"kind":"Name","value":"coolingWater"}},{"kind":"Field","name":{"kind":"Name","value":"indoorEnvironmentQuality"}},{"kind":"Field","name":{"kind":"Name","value":"compressedAirDistribution"}},{"kind":"Field","name":{"kind":"Name","value":"nitrogenCentralDistribution"}},{"kind":"Field","name":{"kind":"Name","value":"maxPressureInColdDistribution"}},{"kind":"Field","name":{"kind":"Name","value":"locations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<RoomCardsQueryQuery, RoomCardsQueryQueryVariables>;
 export const LocationsQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"LocationsQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"LocationWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"locations"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"subLocations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}}]}}]}}]} as unknown as DocumentNode<LocationsQueryQuery, LocationsQueryQueryVariables>;
 export const SubLocationsQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SubLocationsQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"LocationWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"locations"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"subLocations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"subLocations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}}]}}]}}]}}]} as unknown as DocumentNode<SubLocationsQueryQuery, SubLocationsQueryQueryVariables>;
 export const SystemTypeQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SystemTypeQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"systemTypesWhere"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"SystemTypeWhere"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"SystemTypeGroupWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"systemTypeGroups"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}},{"kind":"Argument","name":{"kind":"Name","value":"options"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"sort"},"value":{"kind":"ListValue","values":[{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"name"},"value":{"kind":"EnumValue","value":"ASC"}}]}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"systemTypes"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"systemTypesWhere"}}},{"kind":"Argument","name":{"kind":"Name","value":"options"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"sort"},"value":{"kind":"ListValue","values":[{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"name"},"value":{"kind":"EnumValue","value":"ASC"}}]}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}}]}}]}}]} as unknown as DocumentNode<SystemTypeQueryQuery, SystemTypeQueryQueryVariables>;

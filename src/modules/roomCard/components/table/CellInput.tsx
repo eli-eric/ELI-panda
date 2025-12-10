@@ -104,15 +104,15 @@ type Props = {
 }
 
 const PurityClassSelect = ({ code }: Props) => {
-  const { register } = useFormContext()
+  const { register, getValues } = useFormContext()
   const purityClass = Object.values(PurityClass).map(value => value)
   const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
   return (
     <select
       className="select-reset select-custom w-full"
+      defaultValue={getValues(code) ?? ''}
       {...register(code)}
       disabled={!editPersmission}
-      name={code}
     >
       {purityClass.map((purityClass, index) => (
         <option key={index}>{purityClass}</option>
@@ -122,14 +122,14 @@ const PurityClassSelect = ({ code }: Props) => {
 }
 
 const DefaultInput = ({ code }: Props) => {
-  const { register } = useFormContext()
+  const { register, getValues } = useFormContext()
   const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
   return (
     <input
       className="w-full text-xs px-0 border-0 bg-inherit py-1"
+      defaultValue={getValues(code) ?? ''}
       {...register(code)}
       disabled={!editPersmission}
-      name={code}
     />
   )
 }

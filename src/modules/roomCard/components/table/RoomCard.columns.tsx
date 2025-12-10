@@ -1,20 +1,22 @@
 import type { ColumnDef } from '@tanstack/react-table'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useIntl } from 'react-intl'
 
-import { PlusButton } from '@/components/Buttons'
 import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
-import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
-import { ROLE } from '@/types/constants/roles'
 import type { Employee, HallContactPerson, Team } from '@/types/gql/graphql'
 import { formatPhoneNumber } from '@/utils/formatters'
 
-import { useRoomCardStore } from '../../store/useRoomCardStore'
+import {
+  useDeleteHallContact,
+  useDisconnectDeptContact,
+  useDisconnectLocation,
+  useDisconnectTeam
+} from '../../hooks/useContactMutations'
 import { CellInput } from './CellInput'
 import { CellWithDelete } from './CellWithDelete'
 import { ContactHallButton } from './ContactHallButton'
-import { useContactDeptModal } from './hooks/useContactDeptModal'
+import { DeptContactButton } from './DeptContactButton'
 import { TeamButton } from './TeamButton'
 
 export type RoomCardProperties = {
@@ -23,20 +25,51 @@ export type RoomCardProperties = {
   code: string
 }
 
-export const useRoomCardsColumns = () => {
+export const useRoomCardsColumns = (roomCardUid?: string) => {
   const { formatMessage: fm } = useIntl()
-  const canEdit = usePermission([ROLE.ROOM_CARD_EDIT])
-  const openContactDeptModal = useContactDeptModal()
 
-  const {
-    setDeleteHallContact,
-    setDisconnectDeptContact,
-    setDisconnectTeam,
-    removeNewHallContact,
-    removeNewDeptContact,
-    removeNewTeam,
-    removeNewLocation
-  } = useRoomCardStore()
+  // Mutation hooks for delete operations
+  const { deleteHallContact } = useDeleteHallContact(roomCardUid || '')
+  const { disconnectDeptContact } = useDisconnectDeptContact(roomCardUid || '')
+  const { disconnectTeam } = useDisconnectTeam(roomCardUid || '')
+  const { disconnectLocation } = useDisconnectLocation(roomCardUid || '')
+
+  // Delete handlers
+  const handleDeleteHallContact = useCallback(
+    async (item: HallContactPerson) => {
+      if (item.uid) {
+        await deleteHallContact(item.uid)
+      }
+    },
+    [deleteHallContact]
+  )
+
+  const handleDeleteDeptContact = useCallback(
+    async (item: Employee) => {
+      if (item.uid) {
+        await disconnectDeptContact(item.uid)
+      }
+    },
+    [disconnectDeptContact]
+  )
+
+  const handleDeleteTeam = useCallback(
+    async (item: Team) => {
+      if (item.uid) {
+        await disconnectTeam(item.uid)
+      }
+    },
+    [disconnectTeam]
+  )
+
+  const handleDeleteLocation = useCallback(
+    async (item: Codebooktree) => {
+      if (item.uid) {
+        await disconnectLocation(item.uid)
+      }
+    },
+    [disconnectLocation]
+  )
 
   const columnsContactHall = useMemo(
     (): ColumnDef<HallContactPerson, any>[] => [
@@ -46,7 +79,7 @@ export const useRoomCardsColumns = () => {
           return (
             <div className="flex items-center justify-between px-2 w-full">
               <span>{fm({ id: message.common.roomCard.contactHall })}</span>
-              <ContactHallButton />
+              <ContactHallButton roomCardUid={roomCardUid} />
             </div>
           )
         },
@@ -59,35 +92,42 @@ export const useRoomCardsColumns = () => {
             cell: props => (
               <CellWithDelete
                 {...props}
-                formName="contactPersonsHall"
-                setDeleteItem={setDeleteHallContact}
-                removeNewItem={removeNewHallContact}
+                onDelete={handleDeleteHallContact}
+                warningMessage="Remove contact person (Hall)?"
+                roomCardUid={roomCardUid}
+                toastMessages={{
+                  loading: 'Removing contact person (Hall)...',
+                  success: 'Contact person (Hall) removed',
+                  error: 'Failed to remove contact person'
+                }}
               />
             )
           },
           {
             id: 'fullName',
-            accessorFn: ({ employee: { fullName } }) => fullName,
+            accessorFn: ({ employee }) => employee?.fullName,
             meta: { noHeader: true },
             size: 200
           },
           {
             id: 'phone',
-            accessorFn: ({ employee: { phone1: p1, phone2: p2 } }) => {
-              const phoneArr = [p1, p2].filter(Boolean)
+            accessorFn: ({ employee }) => {
+              const phoneArr = [employee?.phone1, employee?.phone2].filter(
+                Boolean
+              )
               return phoneArr
             },
             meta: { noHeader: true },
             size: 150,
             cell: ({ getValue }) =>
-              getValue()?.map((phone, index) => (
+              getValue()?.map((phone: string, index: number) => (
                 <div key={index}>{formatPhoneNumber(phone)}</div>
               ))
           }
         ]
       }
     ],
-    [fm, setDeleteHallContact, removeNewHallContact]
+    [fm, roomCardUid, handleDeleteHallContact]
   )
 
   const columnsContactDept = useMemo(
@@ -97,9 +137,7 @@ export const useRoomCardsColumns = () => {
           return (
             <div className="flex items-center justify-between px-2 w-full">
               <span>{fm({ id: message.common.roomCard.contactDept })}</span>
-              {canEdit && (
-                <PlusButton type="button" onClick={openContactDeptModal} />
-              )}
+              <DeptContactButton roomCardUid={roomCardUid} />
             </div>
           )
         },
@@ -112,9 +150,14 @@ export const useRoomCardsColumns = () => {
             cell: props => (
               <CellWithDelete
                 {...props}
-                formName="contactPersonsDept"
-                setDeleteItem={setDisconnectDeptContact}
-                removeNewItem={removeNewDeptContact}
+                onDelete={handleDeleteDeptContact}
+                warningMessage="Remove contact person (Dept)?"
+                roomCardUid={roomCardUid}
+                toastMessages={{
+                  loading: 'Removing contact person (Dept)...',
+                  success: 'Contact person (Dept) removed',
+                  error: 'Failed to remove contact person'
+                }}
               />
             ),
             size: 200
@@ -128,20 +171,14 @@ export const useRoomCardsColumns = () => {
             meta: { noHeader: true },
             size: 150,
             cell: ({ getValue }) =>
-              getValue().map((phone, index) => (
+              getValue().map((phone: string, index: number) => (
                 <div key={index}>{formatPhoneNumber(phone)}</div>
               ))
           }
         ]
       }
     ],
-    [
-      fm,
-      setDisconnectDeptContact,
-      removeNewDeptContact,
-      canEdit,
-      openContactDeptModal
-    ]
+    [fm, roomCardUid, handleDeleteDeptContact]
   )
 
   const columnsTeam = useMemo(
@@ -151,7 +188,7 @@ export const useRoomCardsColumns = () => {
           return (
             <div className="flex items-center justify-between px-2 w-full">
               <span>{fm({ id: message.common.roomCard.team })}</span>
-              <TeamButton />
+              <TeamButton roomCardUid={roomCardUid} />
             </div>
           )
         },
@@ -160,14 +197,19 @@ export const useRoomCardsColumns = () => {
         cell: props => (
           <CellWithDelete
             {...props}
-            formName="teams"
-            setDeleteItem={setDisconnectTeam}
-            removeNewItem={removeNewTeam}
+            onDelete={handleDeleteTeam}
+            warningMessage="Remove team?"
+            roomCardUid={roomCardUid}
+            toastMessages={{
+              loading: 'Removing team...',
+              success: 'Team removed',
+              error: 'Failed to remove team'
+            }}
           />
         )
       }
     ],
-    [fm, setDisconnectTeam, removeNewTeam]
+    [fm, roomCardUid, handleDeleteTeam]
   )
 
   const columnsCleanRooms = useMemo(
@@ -191,6 +233,7 @@ export const useRoomCardsColumns = () => {
     ],
     []
   )
+
   const buildingMaintenanceColumns = useMemo(
     (): ColumnDef<RoomCardProperties, any>[] => [
       {
@@ -213,6 +256,7 @@ export const useRoomCardsColumns = () => {
     ],
     []
   )
+
   const locationColumns = useMemo(
     (): ColumnDef<Codebooktree, any>[] => [
       {
@@ -222,8 +266,14 @@ export const useRoomCardsColumns = () => {
         cell: props => (
           <CellWithDelete
             {...props}
-            formName="locations"
-            removeNewItem={removeNewLocation}
+            onDelete={handleDeleteLocation}
+            warningMessage="Remove location?"
+            roomCardUid={roomCardUid}
+            toastMessages={{
+              loading: 'Removing location...',
+              success: 'Location removed',
+              error: 'Failed to remove location'
+            }}
           />
         )
       },
@@ -233,7 +283,7 @@ export const useRoomCardsColumns = () => {
         id: 'code'
       }
     ],
-    [removeNewLocation]
+    [roomCardUid, handleDeleteLocation]
   )
 
   return {

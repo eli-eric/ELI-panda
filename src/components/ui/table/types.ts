@@ -32,8 +32,10 @@ export interface TableProps<T extends object> {
 
   /**
    * The data to be displayed in the table.
+   * When undefined, shows skeleton loading state.
+   * When defined (even empty array) with loading=true, shows refetching pulse effect.
    */
-  data: T[]
+  data?: T[]
 
   /**
    * Additional CSS class for the table container.
@@ -93,6 +95,12 @@ export interface TableProps<T extends object> {
   loading?: boolean
 
   /**
+   * Number of skeleton rows to display when loading.
+   * @default 5
+   */
+  skeletonRowCount?: number
+
+  /**
    * Message to display when there is no data.
    * @default "No data available"
    */
@@ -136,9 +144,11 @@ export interface TableBodyProps<T extends object> {
   table: any
   columns: any[]
   loading?: boolean
+  skeletonRowCount?: number
   rowClassName?: string
   getRowProps?: GetRowProps<T>
   skipEmptyMessage?: boolean
+  emptyMessage?: ReactNode
 }
 
 export interface TablePaginationProps<T extends object> {

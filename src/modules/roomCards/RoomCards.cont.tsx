@@ -2,12 +2,12 @@ import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
-import { cn } from '@/lib/utils'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
+import type { RoomCard } from '@/types/gql/graphql'
 
-import { statusColorMapping } from '../roomCard/utils/constants'
-import { PandaTable } from '../shared/table/pandaTable/PandaTable'
+import { usePandaTable } from '../shared/table/pandaTable/hooks/usePandaTable'
+import { PandaTableV2 } from '../shared/table/pandaTableV2/PandaTableV2'
 import { SearchBar, SearchBarButtonsComponent } from '../shared/table/SearchBar'
 import { useRoomCardsColumns } from './components/RoomCards.columns'
 import { useRoomCards } from './hooks/useRoomCards'
@@ -19,6 +19,18 @@ export const RoomCardsContainer = () => {
 
   const columns = useRoomCardsColumns()
 
+  const table = usePandaTable({
+    tableId,
+    columns,
+    data: (roomCards || []) as RoomCard[],
+    settings: {
+      enableSorting: true,
+      manualSorting: false,
+      enableColumnReordering: false,
+      enableColumnHiding: true
+    }
+  })
+
   useEffect(() => {
     roomCards?.forEach(roomCard => {
       router.prefetch(`${PATH.ROOM_CARD}/${roomCard.uid}`)
@@ -26,7 +38,7 @@ export const RoomCardsContainer = () => {
   }, [roomCards, router])
 
   return (
-    <TableLayoutContainer>
+    <TableLayoutContainer deps={[roomCards]}>
       <SearchBar
         {...{
           left: (
@@ -43,24 +55,20 @@ export const RoomCardsContainer = () => {
           tableId
         }}
       />
-      <PandaTable
-        {...{
-          tableId,
-          getRowProps: ({ original: { status } }) => ({
-            className: cn(...statusColorMapping(status))
-          }),
-          loading,
-          error,
-          data: roomCards,
-          settings: {
-            enableSorting: true,
-            manualSorting: false,
-            enableColumnReordering: false,
-            enableColumnHiding: true
-          },
-          columns,
-          className: 'relative overflow-x-auto scrollbar-style'
+      <PandaTableV2
+        table={table}
+        tableId={tableId}
+        loading={loading}
+        data={roomCards as RoomCard[]}
+        skeletonRowCount={50}
+        settings={{
+          enableSorting: true,
+          manualSorting: false,
+          enableColumnReordering: false,
+          enableColumnHiding: true,
+          enablePagination: true
         }}
+        className="relative overflow-x-auto scrollbar-style"
       />
     </TableLayoutContainer>
   )

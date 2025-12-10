@@ -119,7 +119,7 @@ export const messages = {
       updating: 'Updating...',
       shortcutHint: 'Press {shortcut} to open global search',
       search: 'Search',
-      searchPlaceholder: 'Search...'
+      searchPlaceholder: 'Global search...'
     },
     environmentWarning: {
       title: 'WARNING!',
@@ -441,7 +441,10 @@ export const messages = {
           label: 'Manufacturer Number',
           placeholder: 'Manufacturer Number'
         },
-        itemUID: { label: 'Item UUID', placeholder: 'Item UUID' },
+        itemUID: {
+          label: 'Catalogue item UUID',
+          placeholder: 'Catalogue item UUID'
+        },
         manuFacturerUrl: {
           label: 'Supplier/Manufacturer Url',
           placeholder: 'Supplier/Manufacturer Url',
@@ -829,6 +832,10 @@ export const messages = {
         name: { label: 'Name', placeholder: 'Name' },
         catalogueNumber: { label: 'Part Number', placeholder: 'Part Number' },
         systemName: { label: 'Parent System', placeholder: 'Parent System' },
+        parentSystem: {
+          label: 'Parent System (for all)',
+          placeholder: 'Select parent system'
+        },
         price: { label: 'Price', placeholder: '0.00' },
         quantity: { label: 'Quantity', placeholder: 'Quantity' },
         location: { label: 'Location', placeholder: 'Location' },
@@ -847,7 +854,8 @@ export const messages = {
           actions: 'Actions',
           name: 'Name',
           catalogueNumber: 'Part Number',
-          system: 'Parent System',
+          system: 'System',
+          parentSystem: 'Parent System',
           price: 'Price',
           location: 'Location',
           itemUsage: 'Item Usage',
@@ -880,6 +888,9 @@ export const messages = {
           },
           step2: {
             title: 'Order Details'
+          },
+          step3: {
+            title: 'System Configuration'
           }
         }
       }
@@ -897,12 +908,36 @@ export const messages = {
     form: {
       status: { label: 'Status', placeholder: 'Select Status' },
       name: { label: 'Name', placeholder: 'Name' },
-      location: { label: 'Location', placeholder: 'Select Location' }
+      location: { label: 'Location', placeholder: 'Select Location' },
+      operationalState: {
+        label: 'Operational State',
+        placeholder: 'Select Operational State',
+        lastUpdated: 'Last updated:',
+        viewHistory: 'View History',
+        noPermission: 'Only Area Managers can edit this field',
+        values: {
+          OS1: 'OS1: In operation',
+          OS2: 'OS2: Overnight standby',
+          OS3: 'OS3: Experimental technology standby',
+          OS4: 'OS4: Experimental technology safe state',
+          OS5: 'OS5: All technology Shutdown',
+          OS6: 'OS6: Power shutdown'
+        }
+      }
     },
     nestedForm: {
       role: { label: 'Select role' },
       employee: { label: 'Select employee' },
       team: { label: 'Select team' }
+    },
+    operationalStateHistory: {
+      title: 'Operational State History',
+      dateTime: 'Date/Time',
+      previousState: 'Previous State',
+      newState: 'New State',
+      changedBy: 'Changed By',
+      noHistory: 'No history available',
+      close: 'Close'
     }
   },
   orderItem: { head: 'ELI Panda - Order Item' },

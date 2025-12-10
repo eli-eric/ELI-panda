@@ -1,5 +1,5 @@
 import type { Row } from '@tanstack/react-table'
-import { Edit, MoreVertical, Trash2 } from 'lucide-react'
+import { Edit, MoreVertical, Printer, Trash2 } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type { FC, PropsWithChildren } from 'react'
 import { Fragment } from 'react'
@@ -21,7 +21,7 @@ import usePermission from '@/hooks/usePermission'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
-import { useOrderLine } from '@/modules/orderItem/hooks/useOrderLine'
+import { useOrderLineContext } from '@/modules/orderItem/context'
 import type { OrderLineFormType } from '@/modules/orderItem/types/form'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { ROLE } from '@/types/constants/roles'
@@ -56,10 +56,10 @@ export const ButtonsWrapperNew: FC<
 export const OrderLineActionButtons = ({
   orderLine
 }: {
-  orderLine: OrderLineFormType
+  orderLine: OrderLineFormType & { id?: string }
 }) => {
   const { formatMessage: fm } = useIntl()
-  const { deleteOrderLine, setOrderLine } = useOrderLine()
+  const { deleteOrderLine, setOrderLine } = useOrderLineContext()
   const { openEditSheet } = useOrderLineEditSheet()
   const withWarning = useWarningModal(
     fm(
@@ -95,7 +95,12 @@ export const OrderLineActionButtons = ({
           {fm({ id: message.common.buttons.edit })}
         </DropdownMenuItem>
         <DropdownMenuItem
-          onClick={() => withWarning(deleteOrderLine)(orderLine)}
+          onClick={() =>
+            orderLine.id &&
+            withWarning(deleteOrderLine)(
+              orderLine as OrderLineFormType & { id: string }
+            )
+          }
           className="cursor-pointer text-destructive focus:text-destructive"
         >
           <Trash2 className="h-4 w-4 mr-2" />
@@ -114,12 +119,12 @@ export const OrderisDeliveredAction = ({
   checked?: boolean
 }) => {
   const uid = useRouter().query.uid as string
+  const { setOrderLine } = useOrderLineContext()
   const { orderLineDelivery } = useEndpoint({
     uid: uid,
-    itemUid: orderLine.uid
+    itemUid: orderLine.uid!
   })
   const hasRole = usePermission([ROLE.ORDERS_DELIVERY_EDIT, ROLE.ORDERS_EDIT])
-  const { setOrderLine } = useOrderLine()
   const { openModal } = useDynamicModalStore()
 
   const { submit } = useSubmit<OrderLineFormType>({
@@ -203,21 +208,29 @@ export const PrintEunButton = ({
     }
   })
 
+  if (!orderLine.eun) {
+    return null
+  }
+
   return (
-    <Tooltip
-      content={fm({ id: message.ordersPage.orderLines.printEunTooltip })}
-    >
-      <Button
-        type="button"
-        variant={'link'}
-        className="cursor-pointer"
-        onClick={() => {
-          submit()
-        }}
+    <div className="flex items-center gap-2">
+      <span>{orderLine.eun}</span>
+      <Tooltip
+        content={fm({ id: message.ordersPage.orderLines.printEunTooltip })}
       >
-        <span>{orderLine.eun}</span>
-      </Button>
-    </Tooltip>
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          className="h-6 w-6 p-0 hover:text-primary"
+          onClick={() => {
+            submit()
+          }}
+        >
+          <Printer className="h-4 w-4" />
+        </Button>
+      </Tooltip>
+    </div>
   )
 }
 

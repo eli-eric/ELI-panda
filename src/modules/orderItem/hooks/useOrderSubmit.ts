@@ -89,7 +89,20 @@ export const useOrderSubmit = (formReset: (t: any) => void) => {
     }
 
   const submit = (data: OrderDetailFormType, saveAndExit: boolean) => {
-    mutate(data, {
+    // Transform data before sending to API
+    const transformedData = {
+      ...data,
+      serviceLines: data.serviceLines?.map(line => ({
+        ...line,
+        price: Number(line.price)
+      })),
+      orderLines: data.orderLines?.map(line => ({
+        ...line,
+        price: line.price != null ? Number(line.price) : undefined
+      }))
+    }
+
+    mutate(transformedData, {
       onSuccess: handleOnSuccess(saveAndExit)
     })
   }

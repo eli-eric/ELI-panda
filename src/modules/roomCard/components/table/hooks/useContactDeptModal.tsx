@@ -1,55 +1,58 @@
 import { useCallback } from 'react'
-import { useFieldArray, useFormContext } from 'react-hook-form'
+import { toast } from 'sonner'
 
 import type { ModalSize } from '@/components/ui/dialog'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
-import type { Employee } from '@/types/gql/graphql'
 
-import { useRoomCardStore } from '../../../store/useRoomCardStore'
+import { useConnectDeptContact } from '../../../hooks/useContactMutations'
+import { useRoomCardContactsDept } from '../../../hooks/useRoomCardContacts'
 import { ContactDeptModalContainer } from '../ContactDeptModal.cont'
 import type { ContactDeptFormData } from '../schemas/contactDept.schema'
 
-export const useContactDeptModal = () => {
+export const useContactDeptModal = (roomCardUid?: string) => {
   const { openModal, closeModal } = useDynamicModalStore()
-  const { setNewDeptContact } = useRoomCardStore()
-  const { control } = useFormContext()
-  const { append, fields } = useFieldArray({
-    control,
-    name: 'contactPersonsDept'
-  })
+  const { connectDeptContact } = useConnectDeptContact(roomCardUid || '')
+  const { contactPersonsDept } = useRoomCardContactsDept(roomCardUid)
 
   return useCallback(() => {
-    // Get existing employee UIDs to prevent duplicates
-    const existingEmployeeUids = fields
-      .map((field: any) => field?.uid)
-      .filter(Boolean)
-
     const modalId = openModal('dialog', {
       id: 'contact-dept',
       component: ContactDeptModalContainer,
       props: {
         title: 'Add Contact Person (Dept)',
-        size: 'l' as ModalSize,
-        existingEmployeeUids,
-        onSubmit: (data: ContactDeptFormData) => {
-          if (data.employee) {
-            // Add to form array with full employee data
-            append({
-              ...(data.employee as any),
-              uuid: crypto.randomUUID()
-            })
+        size: 'l' as ModalSize
+      },
+      onSubmit: async (data: ContactDeptFormData) => {
+        if (data.employee && roomCardUid) {
+          // Check for duplicate using fresh data
+          const isDuplicate = contactPersonsDept?.some(
+            (contact: any) => contact?.uid === data.employee?.uid
+          )
 
-            // Track in store for API update
-            setNewDeptContact(data.employee as Employee)
-
-            // Close modal
-            closeModal(modalId)
+          if (isDuplicate) {
+            toast.error('This employee is already added')
+            return
           }
+
+          toast.promise(connectDeptContact(data.employee.uid), {
+            loading: 'Adding contact person (Dept)...',
+            success: () => {
+              closeModal(modalId)
+              return 'Contact person (Dept) added'
+            },
+            error: 'Failed to add contact person'
+          })
         }
       },
       onClose: () => {
         // Cleanup if needed
       }
     })
-  }, [openModal, closeModal, fields, append, setNewDeptContact])
+  }, [
+    openModal,
+    closeModal,
+    roomCardUid,
+    contactPersonsDept,
+    connectDeptContact
+  ])
 }

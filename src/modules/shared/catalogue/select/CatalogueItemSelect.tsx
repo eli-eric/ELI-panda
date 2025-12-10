@@ -151,6 +151,7 @@ export const CatalogueItemSelect = ({
           categoryList={catalogueCategories}
           catalogueItems={catalogueItems}
           pinnedData={pinnedData}
+          pageSizeDefault={pageSizeDefault}
         />
       </div>
 
