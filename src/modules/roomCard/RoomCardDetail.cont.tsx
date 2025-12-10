@@ -139,7 +139,7 @@ const RoomCardForm = ({ roomCard, roomCardUid }: RoomCardFormProps) => {
     <Form formMethods={formMethods} enableLeaveWarning={true}>
       <HeaderWithButtons
         loading={false}
-        editRole={ROLE.ROOM_CARD_EDIT}
+        editRole={ROLE.ROOM_CARD_VIEW}
         onSubmit={onSubmit}
         onSubmitAndExit={onSubmitAndExit}
         title={`Room Card: ${roomCard.name || roomCardUid}`}
