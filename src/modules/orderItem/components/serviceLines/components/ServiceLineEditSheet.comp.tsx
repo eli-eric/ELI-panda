@@ -4,14 +4,15 @@ import { useCallback, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 
-import { Button } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
 import { Input, TextArea } from '@/components/form/inputs'
 import { InputAmountCurrency } from '@/components/form/inputs/components/InputAmountCurrency.comp'
 import Listbox from '@/components/form/Listbox'
+import { SheetFormButtons } from '@/components/sheet-form-buttons'
 import { message } from '@/i18n/src/messages'
 import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
 import type { ServiceLine } from '@/modules/orderItem/types/form'
+import { ROLE } from '@/types/constants/roles'
 
 import { DetailPropertiesList } from '../form/details/detail-properties.list'
 import { useServiceLineFields } from '../form/hooks/useServiceLineFields'
@@ -59,7 +60,7 @@ export const ServiceLineEditSheet: FC<ServiceLineEditSheetProps> = ({
     [onSubmit]
   )
 
-  const handleCancel = useCallback(() => {
+  const handleExit = useCallback(() => {
     formMethods.reset()
     onClose?.()
   }, [formMethods, onClose])
@@ -88,67 +89,57 @@ export const ServiceLineEditSheet: FC<ServiceLineEditSheetProps> = ({
   }, [details])
 
   return (
-    <div className="flex h-full flex-col">
-      <div className="flex-1 overflow-y-auto p-6">
-        <Form formMethods={formMethods}>
-          <div className="space-y-6">
-            {/* Basic Information */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-medium">
-                {fm({
-                  id: 'ordersPage.serviceLines.wizard.steps.step1.title',
-                  defaultMessage: 'Basic Information'
-                })}
-              </h3>
+    <Form formMethods={formMethods} className="space-y-4">
+      <SheetFormButtons
+        editRole={ROLE.ORDERS_EDIT}
+        onSubmit={formMethods.handleSubmit(handleSubmit)}
+        onExit={handleExit}
+        isFormDirty={formMethods.formState.isDirty}
+        saveLabel={fm({
+          id: 'ordersPage.serviceLines.update',
+          defaultMessage: 'Update Service Line'
+        })}
+        exitLabel={fm({ id: message.common.buttons.cancel })}
+      />
 
-              <div className="space-y-4">
-                <Input {...fields.name} />
-
-                <Listbox {...fields.serviceType} disabled />
-
-                <InputAmountCurrency
-                  amountName={fields.price.name}
-                  label={fields.price.label}
-                  currencyName={fields.currency.name}
-                />
-
-                <TextArea {...fields.notes} />
-              </div>
-            </div>
-
-            {/* Details Properties */}
-            {detailsMap.size > 0 && (
-              <div className="space-y-4">
-                <h3 className="text-lg font-medium">
-                  {fm({
-                    id: 'ordersPage.serviceLines.properties',
-                    defaultMessage: 'Properties'
-                  })}
-                </h3>
-                <DetailPropertiesList groupMap={detailsMap} disabled={false} />
-              </div>
-            )}
-          </div>
-        </Form>
-      </div>
-
-      {/* Footer Actions */}
-      <div className="border-t bg-background p-6">
-        <div className="flex justify-end gap-3">
-          <Button type="button" variant="outline" onClick={handleCancel}>
-            {fm({ id: message.common.buttons.cancel })}
-          </Button>
-          <Button
-            type="button"
-            onClick={formMethods.handleSubmit(handleSubmit)}
-          >
+      <div className="space-y-6">
+        {/* Basic Information */}
+        <div className="space-y-4">
+          <h3 className="text-lg font-medium">
             {fm({
-              id: 'ordersPage.serviceLines.update',
-              defaultMessage: 'Update Service Line'
+              id: 'ordersPage.serviceLines.wizard.steps.step1.title',
+              defaultMessage: 'Basic Information'
             })}
-          </Button>
+          </h3>
+
+          <div className="space-y-4">
+            <Input {...fields.name} />
+
+            <Listbox {...fields.serviceType} disabled />
+
+            <InputAmountCurrency
+              amountName={fields.price.name}
+              label={fields.price.label}
+              currencyName={fields.currency.name}
+            />
+
+            <TextArea {...fields.notes} />
+          </div>
         </div>
+
+        {/* Details Properties */}
+        {detailsMap.size > 0 && (
+          <div className="space-y-4">
+            <h3 className="text-lg font-medium">
+              {fm({
+                id: 'ordersPage.serviceLines.properties',
+                defaultMessage: 'Properties'
+              })}
+            </h3>
+            <DetailPropertiesList groupMap={detailsMap} disabled={false} />
+          </div>
+        )}
       </div>
-    </div>
+    </Form>
   )
 }
