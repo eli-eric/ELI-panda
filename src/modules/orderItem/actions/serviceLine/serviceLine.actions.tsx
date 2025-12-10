@@ -147,8 +147,14 @@ export const ServiceLinePriceFooter = ({
   )
 }
 
-export const DeliveredAllButton = () => {
-  const { handleDelivery, isPending } = useServiceDeliveryAll()
+interface DeliveredAllButtonProps {
+  setServiceLine: (serviceLine: ServiceLine) => void
+}
+
+export const DeliveredAllButton = ({
+  setServiceLine
+}: DeliveredAllButtonProps) => {
+  const { handleDelivery, isPending } = useServiceDeliveryAll(setServiceLine)
   const hasRole = usePermission([ROLE.ORDERS_DELIVERY_EDIT, ROLE.ORDERS_EDIT])
   const { formatMessage: fm } = useIntl()
 

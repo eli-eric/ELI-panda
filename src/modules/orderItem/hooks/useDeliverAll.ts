@@ -1,6 +1,6 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import type { AxiosError, AxiosResponse } from 'axios'
-import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { queryMutate } from '@/utils/fetcher'
@@ -9,17 +9,15 @@ import type { OrderLineFormType } from '../types/form'
 import { useDeliveryHandler } from './useDeliveryHandler'
 import useOrderDetail from './useOrderDetail'
 
-export const useDeliverAll = () => {
-  const { uid, refetch } = useOrderDetail()
+export const useDeliverAll = (
+  setOrderLine: (line: OrderLineFormType) => void
+) => {
+  const { uid, refetch, queryKey } = useOrderDetail()
   const { control } = useFormContext()
   const { handleSuccessfulDelivery } = useDeliveryHandler()
+  const queryClient = useQueryClient()
 
   const orderLines = useWatch({ control, name: 'orderLines' })
-
-  const { update, fields } = useFieldArray({
-    control,
-    name: 'orderLines'
-  })
 
   const { mutate, isPending } = useMutation({
     mutationFn: queryMutate<OrderLineFormType[], string[]>(
@@ -39,7 +37,9 @@ export const useDeliverAll = () => {
   })
 
   const onSuccess = (data: AxiosResponse<OrderLineFormType[]>) => {
-    handleSuccessfulDelivery(data.data, { fields, update, refetch })
+    handleSuccessfulDelivery(data.data, { setOrderLine, refetch })
+    queryClient.invalidateQueries({ queryKey })
+    queryClient.invalidateQueries({ queryKey: ['orders'] })
     toast.success('Order all delivered successfully')
   }
 

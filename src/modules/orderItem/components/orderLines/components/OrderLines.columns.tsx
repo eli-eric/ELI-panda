@@ -100,7 +100,7 @@ const useOrderLinesColumns = ({
           return (
             <div className="flex items-center justify-between px-2 w-full">
               <span>{formatMessage({ id: message.common.ui.status })}</span>
-              <DeliveredAllButton />
+              <DeliveredAllButton setOrderLine={setOrderLine} />
             </div>
           )
         },

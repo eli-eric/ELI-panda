@@ -5,6 +5,7 @@ import { Heading } from '@/components/layout/Heading'
 import { Table } from '@/components/ui/table/table'
 import { message } from '@/i18n/src/messages'
 
+import { useServiceLine } from '../../hooks/useServiceLine'
 import type { ServiceLine } from '../../types/form'
 import { useServiceLinesColumns } from './service-lines.columns'
 import { ServiceLinesAddButton } from './service-lines-add-button'
@@ -19,6 +20,7 @@ export const ServiceLinesContainer = ({
   disabledEdit
 }: OrderLinesTableProps) => {
   const { control } = useFormContext()
+  const { setServiceLine } = useServiceLine()
 
   const serviceLinesData = useWatch({ control, name: 'serviceLines' })
 
@@ -29,7 +31,7 @@ export const ServiceLinesContainer = ({
   }, [serviceLinesData])
 
   // Memoize columns to prevent unnecessary re-renders
-  const serviceLinesColumns = useServiceLinesColumns()
+  const serviceLinesColumns = useServiceLinesColumns({ setServiceLine })
 
   return (
     <div className="pt-4">

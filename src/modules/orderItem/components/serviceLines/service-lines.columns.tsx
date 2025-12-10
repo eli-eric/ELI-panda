@@ -21,7 +21,11 @@ const messages = message.ordersPage.serviceLines.columns
 
 //TODO: NA akci isDelivered se duplikuji service lines, need to fix this!!!!!!!!!!!!!
 
-export const useServiceLinesColumns = () => {
+export const useServiceLinesColumns = ({
+  setServiceLine
+}: {
+  setServiceLine: (serviceLine: ServiceLine) => void
+}) => {
   const { formatMessage } = useIntl()
   const { disabledEdit } = useOrderDetail()
   const columns = useMemo((): ColumnDef<ServiceLine, any>[] => {
@@ -32,7 +36,7 @@ export const useServiceLinesColumns = () => {
           return (
             <div className="flex items-center justify-between px-2 w-full">
               <span>{formatMessage({ id: message.common.ui.status })}</span>
-              <DeliveredAllButton />
+              <DeliveredAllButton setServiceLine={setServiceLine} />
             </div>
           )
         },
@@ -159,7 +163,7 @@ export const useServiceLinesColumns = () => {
       }
     ]
     return cols
-  }, [formatMessage, disabledEdit])
+  }, [formatMessage, disabledEdit, setServiceLine])
 
   return columns
 }
