@@ -27,6 +27,7 @@ export const useServiceLineEditSheet = () => {
         onSave?.({
           ...serviceLine,
           ...data,
+          price: Number(data.price),
           details: Array.isArray(data.details) ? data.details : []
         } as ServiceLine & { id: string })
         if (modalIdRef.current) closeModal(modalIdRef.current)
