@@ -37,14 +37,17 @@ export const ServiceLineProvider = ({ children }: { children: ReactNode }) => {
       const currentFields = fieldsRef.current
       const dataToSave = { ...serviceLine }
 
+      // UPDATE: hledáme nejdřív podle id (z RHF), pak podle uid (z API)
+      let index = -1
       if (serviceLine.id) {
-        // UPDATE: hledáme podle id z RHF
-        const index = currentFields.findIndex(
-          item => item.id === serviceLine.id
-        )
-        if (index !== -1) {
-          update(index, dataToSave)
-        }
+        index = currentFields.findIndex(item => item.id === serviceLine.id)
+      }
+      if (index === -1 && serviceLine.uid) {
+        index = currentFields.findIndex(item => item.uid === serviceLine.uid)
+      }
+
+      if (index !== -1) {
+        update(index, dataToSave)
       } else {
         // INSERT: nový záznam
         if (!dataToSave.uuid) {
