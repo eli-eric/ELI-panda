@@ -103,7 +103,7 @@ export const ServiceLinePriceFooter = ({
   rows: Row<ServiceLine>[]
 }) => {
   const total = rows.reduce(
-    (sum, { original: { price } }) => sum + (price || 0),
+    (sum, { original: { price } }) => sum + (Number(price) || 0),
     0
   )
   const totalCurrencyRows = rows.filter(
