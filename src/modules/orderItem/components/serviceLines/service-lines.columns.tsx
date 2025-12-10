@@ -17,17 +17,13 @@ import {
   ServiceLinePriceFooter
 } from '../../actions'
 import useOrderDetail from '../../hooks/useOrderDetail'
+
 const messages = message.ordersPage.serviceLines.columns
 
-//TODO: NA akci isDelivered se duplikuji service lines, need to fix this!!!!!!!!!!!!!
-
-export const useServiceLinesColumns = ({
-  setServiceLine
-}: {
-  setServiceLine: (serviceLine: ServiceLine) => void
-}) => {
+export const useServiceLinesColumns = () => {
   const { formatMessage } = useIntl()
   const { disabledEdit } = useOrderDetail()
+
   const columns = useMemo((): ColumnDef<ServiceLine, any>[] => {
     const cols: ColumnDef<ServiceLine, any>[] = [
       {
@@ -36,7 +32,7 @@ export const useServiceLinesColumns = ({
           return (
             <div className="flex items-center justify-between px-2 w-full">
               <span>{formatMessage({ id: message.common.ui.status })}</span>
-              <DeliveredAllButton setServiceLine={setServiceLine} />
+              <DeliveredAllButton />
             </div>
           )
         },
@@ -47,10 +43,7 @@ export const useServiceLinesColumns = ({
         cell: ({ getValue, row: { original } }) => (
           <div className="flex items-center gap-2">
             <DeliveryStatusBadge isDelivered={getValue() || false} />
-            <ServiceDeliveryAction
-              serviceLine={original}
-              checked={getValue()}
-            />
+            <ServiceDeliveryAction serviceLine={original} checked={getValue()} />
           </div>
         ),
         enablePinning: false,
@@ -154,7 +147,11 @@ export const useServiceLinesColumns = ({
           enableReorder: false
         },
         cell: ({ row: { original } }) =>
-          !disabledEdit ? <ServiceLineActions serviceLine={original} /> : null,
+          !disabledEdit ? (
+            <ServiceLineActions
+              serviceLine={original as ServiceLine & { id: string }}
+            />
+          ) : null,
         size: 100,
         enableSorting: false,
         enablePinning: false,
@@ -163,7 +160,7 @@ export const useServiceLinesColumns = ({
       }
     ]
     return cols
-  }, [formatMessage, disabledEdit, setServiceLine])
+  }, [formatMessage, disabledEdit])
 
   return columns
 }

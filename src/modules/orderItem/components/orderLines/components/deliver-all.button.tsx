@@ -3,17 +3,12 @@ import { CheckCircle } from 'lucide-react'
 import { Button } from '@/components/Buttons'
 import { Tooltip } from '@/components/Tooltip'
 import usePermission from '@/hooks/usePermission'
+import { useOrderLineContext } from '@/modules/orderItem/context'
 import { useDeliverAll } from '@/modules/orderItem/hooks/useDeliverAll'
-import type { OrderLineFormType } from '@/modules/orderItem/types/form'
 import { ROLE } from '@/types/constants/roles'
 
-interface DeliveredAllButtonProps {
-  setOrderLine: (orderLine: OrderLineFormType) => void
-}
-
-export const DeliveredAllButton = ({
-  setOrderLine
-}: DeliveredAllButtonProps) => {
+export const DeliveredAllButton = () => {
+  const { setOrderLine } = useOrderLineContext()
   const { handleDelivery, isPending } = useDeliverAll(setOrderLine)
 
   const hasRole = usePermission([ROLE.ORDERS_DELIVERY_EDIT, ROLE.ORDERS_EDIT])
@@ -21,6 +16,7 @@ export const DeliveredAllButton = ({
   const handleClick = () => {
     handleDelivery()
   }
+
   return (
     <Tooltip content="Deliver all items">
       <Button

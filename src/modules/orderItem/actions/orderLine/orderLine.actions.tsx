@@ -21,7 +21,7 @@ import usePermission from '@/hooks/usePermission'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
-import { useOrderLine } from '@/modules/orderItem/hooks/useOrderLine'
+import { useOrderLineContext } from '@/modules/orderItem/context'
 import type { OrderLineFormType } from '@/modules/orderItem/types/form'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { ROLE } from '@/types/constants/roles'
@@ -59,7 +59,7 @@ export const OrderLineActionButtons = ({
   orderLine: OrderLineFormType & { id?: string }
 }) => {
   const { formatMessage: fm } = useIntl()
-  const { deleteOrderLine, setOrderLine } = useOrderLine()
+  const { deleteOrderLine, setOrderLine } = useOrderLineContext()
   const { openEditSheet } = useOrderLineEditSheet()
   const withWarning = useWarningModal(
     fm(
@@ -113,14 +113,13 @@ export const OrderLineActionButtons = ({
 
 export const OrderisDeliveredAction = ({
   orderLine,
-  checked,
-  setOrderLine
+  checked
 }: {
   orderLine: OrderLineFormType
   checked?: boolean
-  setOrderLine: (orderLine: OrderLineFormType) => void
 }) => {
   const uid = useRouter().query.uid as string
+  const { setOrderLine } = useOrderLineContext()
   const { orderLineDelivery } = useEndpoint({
     uid: uid,
     itemUid: orderLine.uid!

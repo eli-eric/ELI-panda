@@ -9,54 +9,29 @@ import { Tooltip } from '@/components/Tooltip'
 import usePermission from '@/hooks/usePermission'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
+import { useServiceLineContext } from '@/modules/orderItem/context'
 import { useServiceLineDeliver } from '@/modules/orderItem/hooks/useServiceDelivery'
 import { useServiceDeliveryAll } from '@/modules/orderItem/hooks/useServiceDeliveryAll'
-import { useServiceLine } from '@/modules/orderItem/hooks/useServiceLine'
 import type { ServiceLine } from '@/modules/orderItem/types/form'
-import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { ROLE } from '@/types/constants/roles'
 import { createMessageValues } from '@/utils/formatters'
 
-import { ServiceLineEditSheet } from '../../components/serviceLines/components/ServiceLineEditSheet.comp'
+import { useServiceLineEditSheet } from '../../components/serviceLines/hooks/useServiceLineEditSheet'
 
 export const ServiceLineActionButtons = ({
   serviceLine
 }: {
-  serviceLine: ServiceLine
+  serviceLine: ServiceLine & { id: string }
 }) => {
   const { formatMessage: fm } = useIntl()
-  const { deleteServiceLine, setServiceLine } = useServiceLine()
-  const { openModal, closeModal } = useDynamicModalStore()
+  const { deleteServiceLine, setServiceLine } = useServiceLineContext()
+  const { openEditSheet } = useServiceLineEditSheet()
   const withWarning = useWarningModal(
     fm(
       { id: message.ordersPage.serviceLines.deleteModal.message },
       createMessageValues({ name: serviceLine.name })
     )
   )
-
-  const submit = (data: ServiceLine, modalId: string) => {
-    setServiceLine({
-      ...data,
-      details: Array.isArray(data.details) ? data.details : []
-    })
-    closeModal(modalId)
-  }
-
-  const openEditSheet = () => {
-    const modalId = openModal('sheet', {
-      id: `service-line-edit-${serviceLine.uuid}`,
-      component: ServiceLineEditSheet,
-      props: {
-        title: fm({ id: message.ordersPage.serviceLines.titles.edit }),
-        serviceLine,
-        onClose: () => closeModal(modalId)
-      },
-      onSubmit: (data: ServiceLine) => {
-        submit(data, modalId)
-      },
-      onClose: () => closeModal(modalId)
-    })
-  }
 
   return (
     <div className="flex items-center gap-1">
@@ -68,7 +43,9 @@ export const ServiceLineActionButtons = ({
         <Button
           variant="ghost"
           size="sm"
-          onClick={openEditSheet}
+          onClick={() =>
+            openEditSheet(serviceLine, data => setServiceLine(data))
+          }
           className="h-8 w-8 p-0 hover:bg-accent"
         >
           <Edit className="h-4 w-4" />
@@ -82,7 +59,7 @@ export const ServiceLineActionButtons = ({
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => withWarning(deleteServiceLine)(serviceLine.uuid)}
+          onClick={() => withWarning(deleteServiceLine)(serviceLine.id)}
           className="h-8 w-8 p-0 hover:bg-accent hover:text-destructive"
         >
           <Trash2 className="h-4 w-4" />
@@ -147,13 +124,8 @@ export const ServiceLinePriceFooter = ({
   )
 }
 
-interface DeliveredAllButtonProps {
-  setServiceLine: (serviceLine: ServiceLine) => void
-}
-
-export const DeliveredAllButton = ({
-  setServiceLine
-}: DeliveredAllButtonProps) => {
+export const DeliveredAllButton = () => {
+  const { setServiceLine } = useServiceLineContext()
   const { handleDelivery, isPending } = useServiceDeliveryAll(setServiceLine)
   const hasRole = usePermission([ROLE.ORDERS_DELIVERY_EDIT, ROLE.ORDERS_EDIT])
   const { formatMessage: fm } = useIntl()

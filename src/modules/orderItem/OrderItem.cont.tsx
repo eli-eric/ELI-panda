@@ -18,6 +18,7 @@ import OrderFormComponent from './components/form/OrderForm.comp'
 import { schema } from './components/form/OrderForm.schema'
 import OrderLinesTable from './components/orderLines/OrderLines.table'
 import { ServiceLinesContainer } from './components/serviceLines/service-lines.cont'
+import { OrderLineProvider, ServiceLineProvider } from './context'
 import useOrderDetail from './hooks/useOrderDetail'
 import { useOrderSubmit } from './hooks/useOrderSubmit'
 import type { OrderDetailFormType } from './types/form'
@@ -92,41 +93,47 @@ export const OrderItemContainer = () => {
       formMethods={formMethods}
       enableLeaveWarning={true}
     >
-      <HeaderWithButtons
-        loading={loading}
-        editRole={ROLE.ORDERS_EDIT}
-        onSubmit={formMethods.handleSubmit(onSubmit)}
-        onSubmitAndExit={formMethods.handleSubmit(onSubmitAndExit)}
-        title={uid ? `Order ${orderDetail?.name || uid}` : 'Create New Order'}
-      />
+      <OrderLineProvider>
+        <ServiceLineProvider>
+          <HeaderWithButtons
+            loading={loading}
+            editRole={ROLE.ORDERS_EDIT}
+            onSubmit={formMethods.handleSubmit(onSubmit)}
+            onSubmitAndExit={formMethods.handleSubmit(onSubmitAndExit)}
+            title={
+              uid ? `Order ${orderDetail?.name || uid}` : 'Create New Order'
+            }
+          />
 
-      <div className="w-full px-4 sm:px-6 lg:px-8 ">
-        <div className="grid grid-cols-1 min-[1200px]:grid-cols-4 gap-6">
-          {/* Left: Form card (1/3) */}
-          <div className="lg:col-span-1 py-4 sm:py-6">
-            <MemoizedOrderFormComponent />
-          </div>
+          <div className="w-full px-4 sm:px-6 lg:px-8 ">
+            <div className="grid grid-cols-1 min-[1200px]:grid-cols-4 gap-6">
+              {/* Left: Form card (1/3) */}
+              <div className="lg:col-span-1 py-4 sm:py-6">
+                <MemoizedOrderFormComponent />
+              </div>
 
-          {/* Right: Tables + Files (2/3) */}
-          <div className="lg:col-span-3 py-4 sm:py-6 min-[1200px]:h-[calc(100vh-8rem)] min-[1200px]:overflow-y-auto min-[1200px]:overflow-x-hidden">
-            <div className="space-y-6 pr-2">
-              <MemoizedOrderLinesTable disabledEdit={disabledEdit} />
-              <MemoizedServiceLinesContainer disabledEdit={disabledEdit} />
-              {uid && (
-                <ErrorBoundary fallback={<ErrorPage />}>
-                  <Suspense fallback={<ProgressBarComponent />}>
-                    <MemoizedFileManager
-                      itemType={FILE_TYPE.ORDER}
-                      uid={uid}
-                      hasEditRole={!disabledEdit}
-                    />
-                  </Suspense>
-                </ErrorBoundary>
-              )}
+              {/* Right: Tables + Files (2/3) */}
+              <div className="lg:col-span-3 py-4 sm:py-6 min-[1200px]:h-[calc(100vh-8rem)] min-[1200px]:overflow-y-auto min-[1200px]:overflow-x-hidden">
+                <div className="space-y-6 pr-2">
+                  <MemoizedOrderLinesTable disabledEdit={disabledEdit} />
+                  <MemoizedServiceLinesContainer disabledEdit={disabledEdit} />
+                  {uid && (
+                    <ErrorBoundary fallback={<ErrorPage />}>
+                      <Suspense fallback={<ProgressBarComponent />}>
+                        <MemoizedFileManager
+                          itemType={FILE_TYPE.ORDER}
+                          uid={uid}
+                          hasEditRole={!disabledEdit}
+                        />
+                      </Suspense>
+                    </ErrorBoundary>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+        </ServiceLineProvider>
+      </OrderLineProvider>
     </Form>
   )
 }
