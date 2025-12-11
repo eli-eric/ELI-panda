@@ -78,6 +78,8 @@ export const getEndpoints = ({
     systemsMove: `/systems/move`,
     publication: `/publication${uidPart}`,
     publications: `/publications${query}`,
+    researcher: `/researcher${uidPart}`,
+    researchers: `/researchers${query}`,
     generateUUID: '/uuid/v4',
     serviceType: `/catalogue/service/type${uidPart}`,
     serviceTypeList: `/catalogue/service/types${query}`,
