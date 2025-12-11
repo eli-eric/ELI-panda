@@ -7,8 +7,8 @@ import {
   Library,
   ShoppingCart,
   Table,
-  Users
-} from 'lucide-react'
+  Users,
+  UserSearch} from 'lucide-react'
 
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
@@ -83,6 +83,12 @@ export const OTHERS_NAV_ITEMS: NavigationItem[] = [
     icon: Table
   },
   {
+    title: 'Researchers',
+    url: PATH.RESEARCHERS,
+    role: ROLE.PUBLICATIONS_EDIT,
+    icon: UserSearch
+  },
+  {
     title: 'Administration',
     url: PATH.ADMIN_USERS,
     role: ROLE.ADMIN,
@@ -110,7 +116,8 @@ export const PROTECTED_PATHS = [
   PATH.PUBLICATIONS,
   PATH.PUBLICATION,
   PATH.SERVICES,
-  PATH.SERVICE
+  PATH.SERVICE,
+  PATH.RESEARCHERS
 ]
 
 export const PATH_ROLES_CONFIG: Record<PATH, ROLE[]> = {
@@ -155,5 +162,6 @@ export const PATH_ROLES_CONFIG: Record<PATH, ROLE[]> = {
   [PATH.LAYOUT]: [],
   [PATH.SYSTEM_ITEM]: [ROLE.SYSTEM_EDIT, ROLE.SYSTEMS_VIEW],
   [PATH.SYSTEMS_MULTI_MOVE]: [ROLE.SYSTEM_EDIT],
+  [PATH.RESEARCHERS]: [ROLE.PUBLICATIONS_EDIT],
   [PATH.NOT_FOUND]: []
 }
