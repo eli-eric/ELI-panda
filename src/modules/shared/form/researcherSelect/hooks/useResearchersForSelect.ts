@@ -17,7 +17,7 @@ export const useResearchersForSelect = (tableId: string) => {
   const query = useQueryManager(tableId)
 
   return useQuery({
-    queryKey: ['researchers-select', { query: { ...query.query } }],
+    queryKey: ['researchers-select', { query: query.query }],
     queryFn: queryFetcher<ResearchersResponse>('researchers'),
     placeholderData: keepPreviousData
   })
