@@ -86,7 +86,7 @@ export const usePublicationFields = () => {
       label: form.eliAuthors.label,
       rounded: 'rounded-md',
       name: 'eliAuthors',
-      disabled
+      disabled: true // Deprecated: kept for backward compatibility, now using EliAuthorsSelectComponent
     },
     eliAuthorsCount: {
       label: form.eliAuthorsCount.label,
