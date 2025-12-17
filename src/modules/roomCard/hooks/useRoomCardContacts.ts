@@ -83,7 +83,11 @@ export const useRoomCardContactsDept = (roomCardUid?: string) => {
   })
 
   return {
-    contactPersonsDept: data?.roomCards[0]?.contactPersonsDept,
+    contactPersonsDept: !roomCardUid
+      ? []
+      : data
+        ? (data.roomCards[0]?.contactPersonsDept ?? [])
+        : undefined,
     refetch,
     isFetching
   }
@@ -101,7 +105,11 @@ export const useRoomCardContactsHall = (roomCardUid?: string) => {
   })
 
   return {
-    contactPersonsHall: data?.roomCards[0]?.contactPersonsHall,
+    contactPersonsHall: !roomCardUid
+      ? []
+      : data
+        ? (data.roomCards[0]?.contactPersonsHall ?? [])
+        : undefined,
     refetch,
     isFetching
   }
@@ -119,7 +127,11 @@ export const useRoomCardTeams = (roomCardUid?: string) => {
   })
 
   return {
-    teams: data?.roomCards[0]?.teams,
+    teams: !roomCardUid
+      ? []
+      : data
+        ? (data.roomCards[0]?.teams ?? [])
+        : undefined,
     refetch,
     isFetching
   }
@@ -137,7 +149,11 @@ export const useRoomCardLocations = (roomCardUid?: string) => {
   })
 
   return {
-    locations: data?.roomCards[0]?.locations,
+    locations: !roomCardUid
+      ? []
+      : data
+        ? (data.roomCards[0]?.locations ?? [])
+        : undefined,
     refetch,
     isFetching
   }

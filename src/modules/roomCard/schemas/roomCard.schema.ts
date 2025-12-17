@@ -21,7 +21,7 @@ export const roomCardSchema = z.object({
 
   // Fields that exist in RoomCardFormType
   purityClass: z.custom<PurityClass>(),
-  prescribedClothing: z.array(z.custom<PrescribedClothing>()),
+  prescribedClothing: z.array(z.custom<PrescribedClothing>()).optional(),
   entryToHvacTent: z.string(),
   additionalRequirements: z.string(),
   cleaningScheduleDays: z.array(z.custom<CleaningScheduleDay>()).optional(),

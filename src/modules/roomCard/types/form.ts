@@ -25,7 +25,7 @@ export type RoomCardFormType = {
   operationalState?: CodebookType | null
   name: string
   purityClass: PurityClass
-  prescribedClothing: PrescribedClothing[]
+  prescribedClothing?: PrescribedClothing[]
   entryToHvacTent: string
   cleaningScheduleDate?: string | null
   cleaningScheduleDays?: CleaningScheduleDay[]
