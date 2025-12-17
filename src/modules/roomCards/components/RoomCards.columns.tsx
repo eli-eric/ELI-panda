@@ -99,7 +99,7 @@ export const useRoomCardsColumns = () => {
 
           return (
             <div>
-              {value.map((item: string, index: number) => (
+              {value?.map((item: string, index: number) => (
                 <Badge
                   key={index}
                   className="mb-1 mr-1 bg-blue-200 dark:bg-blue-600 text-gray-900 dark:text-white"
@@ -125,7 +125,7 @@ export const useRoomCardsColumns = () => {
           const value = getValue()
           return (
             <div>
-              {value.map((item: string, index: number) => (
+              {value?.map((item: string, index: number) => (
                 <Badge
                   key={index}
                   className="mb-1 mr-1 bg-purple-200 dark:bg-purple-600 text-gray-900 dark:text-white"

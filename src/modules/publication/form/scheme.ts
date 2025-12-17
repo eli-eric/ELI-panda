@@ -5,6 +5,16 @@ const codebookSchema = z.object({
   name: z.string().min(1, 'Name is required')
 })
 
+/**
+ * Schema for selected researcher (ELI Author).
+ * Stores minimal data needed for display and API submission.
+ */
+const selectedResearcherSchema = z.object({
+  uid: z.string().min(1),
+  firstName: z.string().min(1),
+  lastName: z.string().min(1)
+})
+
 const authorsDepartmentSchema = z.object({
   department: codebookSchema.nullable().refine(val => val !== null, {
     message: 'Department is required'
@@ -28,7 +38,10 @@ export const publicationPeerReviewedSchema = z.object({
     const num = Number(val)
     return !isNaN(num) && num > 0 && Number.isInteger(num)
   }, 'Must be a positive integer'),
-  eliAuthors: z.string().min(1, 'ELI Authors is required'),
+  eliAuthors: z.string().optional(), // Deprecated: kept for backward compatibility
+  eliResearchers: z
+    .array(selectedResearcherSchema)
+    .min(1, 'At least one ELI Author is required'),
   eliAuthorsCount: z.union([z.string(), z.number()]).refine(val => {
     const num = Number(val)
     return !isNaN(num) && num > 0 && Number.isInteger(num)
@@ -103,7 +116,10 @@ export const publicationOtherSchema = z.object({
     const num = Number(val)
     return !isNaN(num) && num > 0 && Number.isInteger(num)
   }, 'Must be a positive integer'),
-  eliAuthors: z.string().min(1, 'ELI Authors is required'),
+  eliAuthors: z.string().optional(), // Deprecated: kept for backward compatibility
+  eliResearchers: z
+    .array(selectedResearcherSchema)
+    .min(1, 'At least one ELI Author is required'),
   eliAuthorsCount: z.union([z.string(), z.number()]).refine(val => {
     const num = Number(val)
     return !isNaN(num) && num > 0 && Number.isInteger(num)
