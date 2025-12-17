@@ -11,6 +11,7 @@ import { usePublicationFields } from '../hooks/usePublicationFields'
 import type { MEDIA_TYPE_CODE } from '../types/constants'
 import { mediaTypeOptions } from '../types/constants'
 import { DepartmentsComponent } from './departments.comp'
+import { EliAuthorsSelectComponent } from './eli-authors-select.comp'
 import { PublishingCountryListbox } from './publishing-country.listbox'
 import { WebLinkField } from './web-link.field'
 
@@ -77,6 +78,9 @@ export const PublicationFormComponent = () => {
         </Col>
         <Col lg={12}>
           <TextArea {...fields.eliAuthors} />
+        </Col>
+        <Col lg={12}>
+          <EliAuthorsSelectComponent />
         </Col>
         <Col lg={12}>
           <DepartmentsComponent />

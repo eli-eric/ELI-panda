@@ -32,7 +32,10 @@ export const TABLE_IDS = {
   ASSIGN_ITEM_SYSTEMS: 'assign-item-systems',
   DESTINATION_SYSTEMS: 'destination-systems',
   OLD_ITEM_DESTINATION_SYSTEMS: 'old-item-destination-systems',
-  SYSTEM_SELECTION_MODAL: 'system-select'
+  SYSTEM_SELECTION_MODAL: 'system-select',
+
+  // Researcher selection
+  RESEARCHER_SELECT_MODAL: 'researcher-select-modal'
 } as const
 
 // Type for table IDs

@@ -1,3 +1,4 @@
+import type { SelectedResearcher } from '@/modules/shared/form/researcherSelect'
 import type { CodebookType } from '@/types/responses/codebook'
 
 export interface Publication {
@@ -13,7 +14,8 @@ export interface Publication {
   title: string
   allAuthors: string
   allAuthorsCount: number
-  eliAuthors: string
+  eliAuthors?: string // Deprecated: kept for backward compatibility
+  eliResearchers: SelectedResearcher[]
   eliAuthorsCount: number
   authorsDepartments: AuthorsDepartment[]
   longJournalTitle: string

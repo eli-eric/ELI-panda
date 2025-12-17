@@ -966,7 +966,12 @@ export const messages = {
       title: { label: 'Title* (R06)', placeholder: 'Title' },
       allAuthors: { label: 'All Authors list*' },
       allAuthorsCount: { label: 'All Authors Count (R10)*' },
-      eliAuthors: { label: 'ELI Authors list*' },
+      eliAuthors: {
+        label: 'ELI Authors*',
+        addButton: 'Add Eli Author',
+        noSelection: 'No ELI Authors selected',
+        modalTitle: 'Select ELI Authors'
+      },
       eliAuthorsCount: { label: 'ELI Authors Count (R11)' },
       longJournalTitle: { label: 'Long Journal Title (R16)*' },
       shortJournalTitle: { label: 'Short Journal Title' },
