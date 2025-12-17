@@ -5,7 +5,7 @@ import type { CodebookType } from '@/types/responses/codebook'
  * Get status badge color classes (for Badge component background)
  * Uses original color palette from statusColorMapping
  */
-export const getStatusBadgeColor = (status: RoomCardStatus): string => {
+export const getStatusBadgeColor = (status?: RoomCardStatus): string => {
   switch (status) {
     case 'DIRTY_MODE':
       return 'bg-red-200 hover:bg-red-300 dark:bg-red-500 dark:hover:bg-red-600'
@@ -21,7 +21,7 @@ export const getStatusBadgeColor = (status: RoomCardStatus): string => {
 /**
  * Get status label text (formatted for display)
  */
-export const getStatusLabel = (status: RoomCardStatus): string => {
+export const getStatusLabel = (status?: RoomCardStatus): string => {
   switch (status) {
     case 'DIRTY_MODE':
       return 'Dirty Mode'
@@ -30,7 +30,7 @@ export const getStatusLabel = (status: RoomCardStatus): string => {
     case 'IN_PREPARATION_MODE':
       return 'In Preparation'
     default:
-      return status
+      return 'Unknown Status'
   }
 }
 
