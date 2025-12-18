@@ -1,3 +1,4 @@
+import { isFeatureEnabled } from '@/config/featureFlags'
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
 import { useAccessControl } from '@/hooks/useAccessControl'
 import { message } from '@/i18n/src/messages'
@@ -15,6 +16,9 @@ export const usePublicationFields = () => {
   const { mediaType } = useMediaTypeStore()
 
   const isPeerReviewed = mediaType === MEDIA_TYPE_CODE.PeerReviewedArticle
+  const isResearcherPickerEnabled = isFeatureEnabled(
+    'enableEliAuthorsResearcherPicker'
+  )
 
   return useMakeFormFields({
     code: {
@@ -86,14 +90,18 @@ export const usePublicationFields = () => {
       label: form.eliAuthors.label,
       rounded: 'rounded-md',
       name: 'eliAuthors',
-      disabled: true // Deprecated: kept for backward compatibility, now using EliAuthorsSelectComponent
+      // When researcher picker is enabled, this field is auto-generated and disabled
+      // When disabled (production), user can edit manually
+      disabled: isResearcherPickerEnabled || disabled
     },
     eliAuthorsCount: {
       label: form.eliAuthorsCount.label,
       rounded: 'rounded-md',
       name: 'eliAuthorsCount',
       type: 'number',
-      disabled: true
+      // When researcher picker is enabled, count is auto-calculated
+      // When disabled (production), user can edit manually
+      disabled: isResearcherPickerEnabled || disabled
     },
     longJournalTitle: {
       label: form.longJournalTitle.label,
