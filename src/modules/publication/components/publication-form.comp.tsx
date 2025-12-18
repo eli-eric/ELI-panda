@@ -3,6 +3,7 @@ import Listbox from '@/components/form/Listbox'
 import { RadioSelect } from '@/components/form/radio-select.comp'
 import { Col, Grid } from '@/components/grid/Grid'
 import Card from '@/components/layout/Card'
+import { isFeatureEnabled } from '@/config/featureFlags'
 import { useAccessControl } from '@/hooks/useAccessControl'
 import { ROLE } from '@/types/constants/roles'
 
@@ -79,9 +80,11 @@ export const PublicationFormComponent = () => {
         <Col lg={12}>
           <TextArea {...fields.eliAuthors} />
         </Col>
-        <Col lg={12}>
-          <EliAuthorsSelectComponent />
-        </Col>
+        {isFeatureEnabled('enableEliAuthorsResearcherPicker') && (
+          <Col lg={12}>
+            <EliAuthorsSelectComponent />
+          </Col>
+        )}
         <Col lg={12}>
           <DepartmentsComponent />
         </Col>
