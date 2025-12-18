@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+import { isFeatureEnabled } from '@/config/featureFlags'
+
 const codebookSchema = z.object({
   uid: z.string().min(1, 'UID is required'),
   name: z.string().min(1, 'Name is required')
@@ -14,6 +16,23 @@ const selectedResearcherSchema = z.object({
   firstName: z.string().min(1),
   lastName: z.string().min(1)
 })
+
+/**
+ * Conditional validation for ELI Authors fields based on feature flag.
+ * - When researcher picker is enabled: eliResearchers is required, eliAuthors is optional
+ * - When disabled (production): eliAuthors is required, eliResearchers is optional
+ */
+const isResearcherPickerEnabled = isFeatureEnabled(
+  'enableEliAuthorsResearcherPicker'
+)
+
+const eliAuthorsSchema = isResearcherPickerEnabled
+  ? z.string().optional()
+  : z.string().min(1, 'ELI Authors is required')
+
+const eliResearchersSchema = isResearcherPickerEnabled
+  ? z.array(selectedResearcherSchema).min(1, 'At least one ELI Author is required')
+  : z.array(selectedResearcherSchema).optional()
 
 const authorsDepartmentSchema = z.object({
   department: codebookSchema.nullable().refine(val => val !== null, {
@@ -38,10 +57,8 @@ export const publicationPeerReviewedSchema = z.object({
     const num = Number(val)
     return !isNaN(num) && num > 0 && Number.isInteger(num)
   }, 'Must be a positive integer'),
-  eliAuthors: z.string().optional(), // Deprecated: kept for backward compatibility
-  eliResearchers: z
-    .array(selectedResearcherSchema)
-    .min(1, 'At least one ELI Author is required'),
+  eliAuthors: eliAuthorsSchema,
+  eliResearchers: eliResearchersSchema,
   eliAuthorsCount: z.union([z.string(), z.number()]).refine(val => {
     const num = Number(val)
     return !isNaN(num) && num > 0 && Number.isInteger(num)
@@ -116,10 +133,8 @@ export const publicationOtherSchema = z.object({
     const num = Number(val)
     return !isNaN(num) && num > 0 && Number.isInteger(num)
   }, 'Must be a positive integer'),
-  eliAuthors: z.string().optional(), // Deprecated: kept for backward compatibility
-  eliResearchers: z
-    .array(selectedResearcherSchema)
-    .min(1, 'At least one ELI Author is required'),
+  eliAuthors: eliAuthorsSchema,
+  eliResearchers: eliResearchersSchema,
   eliAuthorsCount: z.union([z.string(), z.number()]).refine(val => {
     const num = Number(val)
     return !isNaN(num) && num > 0 && Number.isInteger(num)

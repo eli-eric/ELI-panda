@@ -25,12 +25,19 @@ interface FeatureFlags {
    * Allows users to assign spare parts to systems
    */
   enableSparePartsAssignment: boolean
+
+  /**
+   * Enable ELI Authors selection via researcher picker modal
+   * When disabled, uses legacy TextArea input for eliAuthors
+   */
+  enableEliAuthorsResearcherPicker: boolean
 }
 
 export const featureFlags: FeatureFlags = {
   enableHttpLogging: false,
   enableMutationLogging: false,
-  enableSparePartsAssignment: !isProductionEnvironment()
+  enableSparePartsAssignment: !isProductionEnvironment(),
+  enableEliAuthorsResearcherPicker: false
 }
 
 /**
