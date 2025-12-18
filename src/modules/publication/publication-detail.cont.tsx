@@ -65,25 +65,28 @@ export const PublicationDetailContainer: FC<Props> = ({
 
   const { mutate, isPending } = usePublicationMutation()
 
-  const onSuccessfulSubmit = () => {
-    queryClient.invalidateQueries({ queryKey: [publicationsTableId] })
+  const onSuccessfulSubmit = async () => {
+    await queryClient.invalidateQueries({ queryKey: [publicationsTableId] })
+    await queryClient.invalidateQueries({
+      queryKey: ['publication', { uid: publication?.uid }]
+    })
     refetch?.()
   }
 
   const onSubmit = formMethods.handleSubmit(data => {
     const formattedData = formatFormData(data)
     mutate(formattedData, {
-      onSuccess: ({ data }) => {
+      onSuccess: async ({ data }) => {
+        await onSuccessfulSubmit()
         router.push(PATH.PUBLICATION + '/' + data.uid)
-        onSuccessfulSubmit()
       }
     })
   })
 
   const onSubmitAndExit = formMethods.handleSubmit(data => {
     mutate(formatFormData(data), {
-      onSuccess: () => {
-        onSuccessfulSubmit()
+      onSuccess: async () => {
+        await onSuccessfulSubmit()
         router.push(PATH.PUBLICATIONS)
       }
     })
