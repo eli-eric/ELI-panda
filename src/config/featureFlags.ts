@@ -37,7 +37,7 @@ export const featureFlags: FeatureFlags = {
   enableHttpLogging: false,
   enableMutationLogging: false,
   enableSparePartsAssignment: !isProductionEnvironment(),
-  enableEliAuthorsResearcherPicker: false
+  enableEliAuthorsResearcherPicker: !isProductionEnvironment()
 }
 
 /**
