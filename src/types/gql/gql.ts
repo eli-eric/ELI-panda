@@ -60,7 +60,6 @@ const documents = {
     "\nmutation UpdateSystems($disconnect: SystemDisconnectInput, $where: SystemWhere) {\n  updateSystems(disconnect: $disconnect, where: $where) {\n    systems {\n      sparePartsConnection {\n        edges {\n          coverage\n          node {\n            name\n            parentPath {\n              name \n              uid \n            }\n            location {\n              code\n              name\n            }\n          }\n        }\n      }\n    }\n  }\n}": types.UpdateSystemsDocument,
     "\n  mutation AddSystemEmployee($where: SystemWhere, $update: SystemUpdateInput!) {\n    updateSystems(where: $where, update: $update) {\n      systems {\n        uid\n      }\n    }\n  }\n": types.AddSystemEmployeeDocument,
     "\n  mutation RemoveSystemEmployee($where: SystemWhere, $update: SystemUpdateInput!) {\n    updateSystems(where: $where, update: $update) {\n      systems {\n        uid\n      }\n    }\n  }\n": types.RemoveSystemEmployeeDocument,
-    "\n  query SystemEmployees($where: SystemWhere) {\n    systems(where: $where) {\n      uid\n      operators {\n        uid\n        fullName\n      }\n      maintainedBy {\n        uid\n        fullName\n      }\n    }\n  }\n": types.SystemEmployeesDocument,
     "\n  query SubSystemDetail($where: SystemWhere) {\n    systems(where: $where) {\n      uid\n      name\n      systemLevel\n      location {\n        uid\n        name\n      }\n      physicalItem {\n        uid\n        name\n        itemUsage {\n          uid\n          name\n        }\n      }\n      sp_coverage\n      minimalSpareParstCount\n  }\n   }\n": types.SubSystemDetailDocument,
     "\n  query SystemDetail($where: SystemWhere) {\n    systems(where: $where) {\n      ...SystemDetail\n  }\n   }\n": types.SystemDetailDocument,
     "\n  mutation ClearSystemCodeMutation(\n    $where: SystemWhere\n    $update: SystemUpdateInput\n  ) {\n    updateSystems(where: $where, update: $update) {\n      systems {\n        systemCode\n      }\n    }\n  }\n": types.ClearSystemCodeMutationDocument,
@@ -280,10 +279,6 @@ export function gql(source: "\n  mutation AddSystemEmployee($where: SystemWhere,
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  mutation RemoveSystemEmployee($where: SystemWhere, $update: SystemUpdateInput!) {\n    updateSystems(where: $where, update: $update) {\n      systems {\n        uid\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation RemoveSystemEmployee($where: SystemWhere, $update: SystemUpdateInput!) {\n    updateSystems(where: $where, update: $update) {\n      systems {\n        uid\n      }\n    }\n  }\n"];
-/**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function gql(source: "\n  query SystemEmployees($where: SystemWhere) {\n    systems(where: $where) {\n      uid\n      operators {\n        uid\n        fullName\n      }\n      maintainedBy {\n        uid\n        fullName\n      }\n    }\n  }\n"): (typeof documents)["\n  query SystemEmployees($where: SystemWhere) {\n    systems(where: $where) {\n      uid\n      operators {\n        uid\n        fullName\n      }\n      maintainedBy {\n        uid\n        fullName\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -7,13 +7,14 @@ import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
 import { SelectLocationCombo } from '@/modules/shared/form/location/SelectLocation.combo'
 import { SystemTypeComboBox } from '@/modules/shared/form/systemType/SelectSystemType.combo'
+import type { Employee } from '@/types/gql/graphql'
 import { SystemLevel } from '@/types/gql/graphql'
 
 import {
   useAddSystemEmployee,
-  useRemoveSystemEmployee,
-  useSystemEmployees
+  useRemoveSystemEmployee
 } from '../../../hooks/employees'
+import { useSystemDetail } from '../../../hooks/useSystemDetail'
 import { EmployeeTable } from '../../table/Employee.table'
 import useSystemFormFields from '../SystemForm.fields'
 import { SystemCodeButton } from './SystemCodeGenerate.button'
@@ -33,9 +34,10 @@ export const SystemMainForm = ({
   const systemLevel = useWatch({ control, name: 'systemLevel' })
   const systemLevels = Object.values(SystemLevel).map(level => level)
 
-  // Fetch employees data separately (only in edit mode)
-  const { operators, maintainedBy, refetch, isLoading } =
-    useSystemEmployees(systemUid)
+  // Get employees data from systemDetail (only available in edit mode)
+  const { systemDetail, refetch, loading: isLoading } = useSystemDetail()
+  const operators = (systemDetail?.operators ?? []) as Employee[]
+  const maintainedBy = (systemDetail?.maintainedBy ?? []) as Employee[]
 
   // Mutation hooks for operators
   const { addEmployee: addOperator } = useAddSystemEmployee(
