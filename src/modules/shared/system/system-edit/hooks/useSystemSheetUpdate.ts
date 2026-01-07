@@ -17,11 +17,7 @@ import { useRecalculate } from '../../../../systemItem/hooks/useRecalculate'
 import { makeSystemInputBody } from '../../../../systemItem/hooks/utils'
 import { useSystemItemStore } from '../../../../systemItem/store/useSystemItemStore'
 import type { SystemDetailFormType } from '../../../../systemItem/types/form'
-import {
-  getUniqueByUid,
-  showErrorToast,
-  showSuccessToast
-} from '../../../../systemItem/utils/hookHelpers'
+import { showErrorToast, showSuccessToast } from '../../../../systemItem/utils/hookHelpers'
 
 // Identical to useSystemUpdate, but can be further customized for sheet edit if needed
 const systemDetailMutation = gql(`
@@ -97,11 +93,8 @@ export const useSystemSheetUpdate = ({
     uid
   })
 
-  const {
-    selectedPhysicalSystem,
-    setSelectedPhysicalSystem,
-    clear: clearStore
-  } = useSystemItemStore()
+  const { selectedPhysicalSystem, setSelectedPhysicalSystem } =
+    useSystemItemStore()
 
   const onFinish = () => {
     setSelectedPhysicalSystem(undefined)
@@ -140,61 +133,14 @@ export const useSystemSheetUpdate = ({
   )
 
   function updateSystemQuery(systemForm: SystemDetailFormType) {
-    // Get latest data directly from the store to avoid stale closure values
-    const storeData = useSystemItemStore.getState()
-    const {
-      newOperators,
-      newMaintainedBy,
-      disconnectOperators,
-      disconnectMaintainedBy
-    } = storeData
-
-    // Get operators from both form and store
-    const formOperators = systemForm?.operators || []
-    const allOperators = [...formOperators, ...newOperators]
-    const uniqueOperators = getUniqueByUid(allOperators)
-
-    // Get maintainedBy from both form and store
-    const formMaintainedBy = systemForm?.maintainedBy || []
-    const allMaintainedBy = [...formMaintainedBy, ...newMaintainedBy]
-    const uniqueMaintainedBy = getUniqueByUid(allMaintainedBy)
-
-    // Extract UIDs from disconnect arrays to prevent duplicate node connections
-    const disconnectOperatorUids = disconnectOperators.map(op => op.uid)
-    const disconnectMaintainedByUids = disconnectMaintainedBy.map(
-      emp => emp.uid
-    )
-
-    // Make sure we don't try to connect and disconnect the same node
-    const filteredOperators = uniqueOperators.filter(
-      op => !disconnectOperatorUids.includes(op.uid)
-    )
-    const filteredMaintainedBy = uniqueMaintainedBy.filter(
-      emp => !disconnectMaintainedByUids.includes(emp.uid)
-    )
+    // Note: operators and maintainedBy are now handled separately via
+    // useAddSystemEmployee and useRemoveSystemEmployee hooks.
+    // They are no longer part of the main system update mutation.
 
     const updatePayload = {
       where: { uid },
       update: {
-        ...makeSystemInputBody({ systemForm, systemDetail, physicalItem }),
-        operators: [
-          {
-            connect: filteredOperators.map(operator => whereN(operator.uid)),
-            disconnect: disconnectOperators.map(operator =>
-              whereN(operator.uid)
-            )
-          }
-        ],
-        maintainedBy: [
-          {
-            connect: filteredMaintainedBy.map(maintainedBy =>
-              whereN(maintainedBy.uid)
-            ),
-            disconnect: disconnectMaintainedBy.map(maintainedBy =>
-              whereN(maintainedBy.uid)
-            )
-          }
-        ]
+        ...makeSystemInputBody({ systemForm, systemDetail, physicalItem })
       },
       updateItemsWhere: {
         uid: selectedPhysicalSystem?.physicalItem?.uid
@@ -226,7 +172,6 @@ export const useSystemSheetUpdate = ({
 
     update(updatePayload, {
       onSuccess: response => {
-        clearStore()
         onCompleted(response)
         if (systemForm.physicalItem?.properties) {
           mutateProperties(systemForm.physicalItem?.properties)

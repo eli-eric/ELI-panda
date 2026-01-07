@@ -318,7 +318,7 @@ export const SystemForm: FC<PropsWithChildren> = ({ children }) => {
           )}
         >
           <CardContent>
-            <SystemMainForm>
+            <SystemMainForm systemUid={uid}>
               <MemoizedSystemGallery
                 ref={systemImageRef}
                 setValue={formMethods.setValue}

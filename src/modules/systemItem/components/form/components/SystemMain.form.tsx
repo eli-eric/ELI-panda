@@ -7,32 +7,64 @@ import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
 import { SelectLocationCombo } from '@/modules/shared/form/location/SelectLocation.combo'
 import { SystemTypeComboBox } from '@/modules/shared/form/systemType/SelectSystemType.combo'
-import { useSystemItemStore } from '@/modules/systemItem/store/useSystemItemStore'
 import { SystemLevel } from '@/types/gql/graphql'
 
+import {
+  useAddSystemEmployee,
+  useRemoveSystemEmployee,
+  useSystemEmployees
+} from '../../../hooks/employees'
 import { EmployeeTable } from '../../table/Employee.table'
 import useSystemFormFields from '../SystemForm.fields'
 import { SystemCodeButton } from './SystemCodeGenerate.button'
 
 interface SystemFormComponentProps {
+  systemUid?: string
   children?: React.ReactNode
 }
 
-export const SystemMainForm = ({ children }: SystemFormComponentProps) => {
+export const SystemMainForm = ({
+  systemUid,
+  children
+}: SystemFormComponentProps) => {
   const fields = useSystemFormFields()
-  const {
-    setNewMaintainedBy,
-    setDisconnectMaintainedBy,
-    setNewOperator,
-    setDisconnectOperator
-  } = useSystemItemStore()
   const { control } = useFormContext()
 
   const systemLevel = useWatch({ control, name: 'systemLevel' })
-
-  const maintainedBy = useWatch({ control, name: 'maintainedBy' })
-  const operators = useWatch({ control, name: 'operators' })
   const systemLevels = Object.values(SystemLevel).map(level => level)
+
+  // Fetch employees data separately (only in edit mode)
+  const { operators, maintainedBy, refetch, isLoading } =
+    useSystemEmployees(systemUid)
+
+  // Mutation hooks for operators
+  const { addEmployee: addOperator } = useAddSystemEmployee(
+    systemUid,
+    'operators',
+    { onSuccess: refetch }
+  )
+  const { removeEmployee: removeOperator } = useRemoveSystemEmployee(
+    systemUid,
+    'operators',
+    { onSuccess: refetch }
+  )
+
+  // Mutation hooks for maintainedBy
+  const { addEmployee: addMaintainedBy } = useAddSystemEmployee(
+    systemUid,
+    'maintainedBy',
+    { onSuccess: refetch }
+  )
+  const { removeEmployee: removeMaintainedBy } = useRemoveSystemEmployee(
+    systemUid,
+    'maintainedBy',
+    { onSuccess: refetch }
+  )
+
+  // Show employee tables only in edit mode (when systemUid exists)
+  // and when system level is not SubsystemsAndParts
+  const showEmployeeTables =
+    systemUid && systemLevel !== SystemLevel.SubsystemsAndParts
 
   return (
     <div className="space-y-6">
@@ -91,26 +123,26 @@ export const SystemMainForm = ({ children }: SystemFormComponentProps) => {
         <Col sm={3} md={6}>
           <Combobox {...fields.responsible} />
         </Col>
-        {systemLevel !== SystemLevel.SubsystemsAndParts && (
+        {showEmployeeTables && (
           <Fragment>
             <Col sm={3} md={6}>
               <EmployeeTable
-                name="operators"
                 className="w-full"
                 data={operators}
                 header={'Authorized Operators'}
-                setNewEmployee={setNewOperator}
-                setDisconnectEmployee={setDisconnectOperator}
+                onAdd={async emp => addOperator(emp.uid)}
+                onRemove={removeOperator}
+                isLoading={isLoading}
               />
             </Col>
             <Col sm={3} md={6}>
               <EmployeeTable
-                name="maintainedBy"
                 className="w-full"
                 data={maintainedBy}
                 header={'Maintained By'}
-                setNewEmployee={setNewMaintainedBy}
-                setDisconnectEmployee={setDisconnectMaintainedBy}
+                onAdd={async emp => addMaintainedBy(emp.uid)}
+                onRemove={removeMaintainedBy}
+                isLoading={isLoading}
               />
             </Col>
           </Fragment>
