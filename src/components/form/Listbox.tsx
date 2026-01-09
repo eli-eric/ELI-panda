@@ -1,3 +1,4 @@
+import { X } from 'lucide-react'
 import React, { useEffect, useMemo } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useIntl } from 'react-intl'
@@ -148,47 +149,62 @@ const Listbox = ({
               </Label>
             )}
 
-            <Select
-              value={currentValue}
-              onValueChange={value => {
-                const processedValue = handleChange(value)
-                field.onChange(processedValue)
-                onChange && onChange(processedValue)
-              }}
-              disabled={disabled}
-            >
-              <SelectTrigger
-                className={cn(
-                  'w-full',
-                  error && 'border-destructive',
-                  isFilter && field.value && 'border-2 border-lime-500'
-                )}
-                onClick={onClick}
-                aria-invalid={error ? 'true' : 'false'}
+            <div className="relative">
+              <Select
+                value={currentValue}
+                onValueChange={value => {
+                  const processedValue = handleChange(value)
+                  field.onChange(processedValue)
+                  onChange && onChange(processedValue)
+                }}
+                disabled={disabled}
               >
-                <SelectValue
-                  placeholder={
-                    placeholder ||
-                    (customOptions && allowEmptyOption
-                      ? emptyOption
-                      : 'Select an option')
-                  }
-                />
-              </SelectTrigger>
+                <SelectTrigger
+                  className={cn(
+                    'w-full',
+                    error && 'border-destructive',
+                    isFilter && field.value && 'border-2 border-lime-500'
+                  )}
+                  onClick={onClick}
+                  aria-invalid={error ? 'true' : 'false'}
+                >
+                  <SelectValue
+                    placeholder={
+                      placeholder ||
+                      (customOptions && allowEmptyOption
+                        ? emptyOption
+                        : 'Select an option')
+                    }
+                  />
+                </SelectTrigger>
 
-              <SelectContent>
-                {options
-                  ?.filter(item => item.uid && item.uid.trim() !== '')
-                  .map(item => (
-                    <SelectItem
-                      key={item.uid || crypto.randomUUID()}
-                      value={item.uid}
-                    >
-                      {item.name}
-                    </SelectItem>
-                  ))}
-              </SelectContent>
-            </Select>
+                <SelectContent>
+                  {options
+                    ?.filter(item => item.uid && item.uid.trim() !== '')
+                    .map(item => (
+                      <SelectItem
+                        key={item.uid || crypto.randomUUID()}
+                        value={item.uid}
+                      >
+                        {item.name}
+                      </SelectItem>
+                    ))}
+                </SelectContent>
+              </Select>
+
+              {field.value && !disabled && (
+                <button
+                  type="button"
+                  className="absolute right-8 top-1/2 -translate-y-1/2 cursor-pointer opacity-50 hover:opacity-100"
+                  onClick={() => {
+                    field.onChange(null)
+                    onChange && onChange(null)
+                  }}
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              )}
+            </div>
 
             {error && (
               <p className="text-sm text-destructive">{error.message}</p>

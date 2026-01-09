@@ -7,32 +7,66 @@ import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
 import { SelectLocationCombo } from '@/modules/shared/form/location/SelectLocation.combo'
 import { SystemTypeComboBox } from '@/modules/shared/form/systemType/SelectSystemType.combo'
-import { useSystemItemStore } from '@/modules/systemItem/store/useSystemItemStore'
+import type { Employee } from '@/types/gql/graphql'
 import { SystemLevel } from '@/types/gql/graphql'
 
+import {
+  useAddSystemEmployee,
+  useRemoveSystemEmployee
+} from '../../../hooks/employees'
+import { useSystemDetail } from '../../../hooks/useSystemDetail'
 import { EmployeeTable } from '../../table/Employee.table'
 import useSystemFormFields from '../SystemForm.fields'
 import { SystemCodeButton } from './SystemCodeGenerate.button'
 
 interface SystemFormComponentProps {
+  systemUid?: string
   children?: React.ReactNode
 }
 
-export const SystemMainForm = ({ children }: SystemFormComponentProps) => {
+export const SystemMainForm = ({
+  systemUid,
+  children
+}: SystemFormComponentProps) => {
   const fields = useSystemFormFields()
-  const {
-    setNewMaintainedBy,
-    setDisconnectMaintainedBy,
-    setNewOperator,
-    setDisconnectOperator
-  } = useSystemItemStore()
   const { control } = useFormContext()
 
   const systemLevel = useWatch({ control, name: 'systemLevel' })
-
-  const maintainedBy = useWatch({ control, name: 'maintainedBy' })
-  const operators = useWatch({ control, name: 'operators' })
   const systemLevels = Object.values(SystemLevel).map(level => level)
+
+  // Get employees data from systemDetail (only available in edit mode)
+  const { systemDetail, refetch, loading: isLoading } = useSystemDetail()
+  const operators = (systemDetail?.operators ?? []) as Employee[]
+  const maintainedBy = (systemDetail?.maintainedBy ?? []) as Employee[]
+
+  // Mutation hooks for operators
+  const { addEmployee: addOperator } = useAddSystemEmployee(
+    systemUid,
+    'operators',
+    { onSuccess: refetch }
+  )
+  const { removeEmployee: removeOperator } = useRemoveSystemEmployee(
+    systemUid,
+    'operators',
+    { onSuccess: refetch }
+  )
+
+  // Mutation hooks for maintainedBy
+  const { addEmployee: addMaintainedBy } = useAddSystemEmployee(
+    systemUid,
+    'maintainedBy',
+    { onSuccess: refetch }
+  )
+  const { removeEmployee: removeMaintainedBy } = useRemoveSystemEmployee(
+    systemUid,
+    'maintainedBy',
+    { onSuccess: refetch }
+  )
+
+  // Show employee tables only in edit mode (when systemUid exists)
+  // and when system level is not SubsystemsAndParts
+  const showEmployeeTables =
+    systemUid && systemLevel !== SystemLevel.SubsystemsAndParts
 
   return (
     <div className="space-y-6">
@@ -91,26 +125,26 @@ export const SystemMainForm = ({ children }: SystemFormComponentProps) => {
         <Col sm={3} md={6}>
           <Combobox {...fields.responsible} />
         </Col>
-        {systemLevel !== SystemLevel.SubsystemsAndParts && (
+        {showEmployeeTables && (
           <Fragment>
             <Col sm={3} md={6}>
               <EmployeeTable
-                name="operators"
                 className="w-full"
                 data={operators}
                 header={'Authorized Operators'}
-                setNewEmployee={setNewOperator}
-                setDisconnectEmployee={setDisconnectOperator}
+                onAdd={async emp => addOperator(emp.uid)}
+                onRemove={removeOperator}
+                isLoading={isLoading}
               />
             </Col>
             <Col sm={3} md={6}>
               <EmployeeTable
-                name="maintainedBy"
                 className="w-full"
                 data={maintainedBy}
                 header={'Maintained By'}
-                setNewEmployee={setNewMaintainedBy}
-                setDisconnectEmployee={setDisconnectMaintainedBy}
+                onAdd={async emp => addMaintainedBy(emp.uid)}
+                onRemove={removeMaintainedBy}
+                isLoading={isLoading}
               />
             </Col>
           </Fragment>

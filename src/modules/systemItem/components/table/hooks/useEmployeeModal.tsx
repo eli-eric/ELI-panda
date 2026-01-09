@@ -1,5 +1,4 @@
 import { useCallback } from 'react'
-import { useFieldArray, useFormContext } from 'react-hook-form'
 
 import type { ModalSize } from '@/components/ui/dialog'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
@@ -9,27 +8,17 @@ import { EmployeeModalContainer } from '../EmployeeModal.cont'
 import type { EmployeeFormData } from '../schemas/employee.schema'
 
 interface UseEmployeeModalProps {
-  fieldName: string
-  onEmployeeAdded: (employee: Employee) => void
+  existingEmployeeUids: string[]
+  onEmployeeSelected: (employee: Employee) => void | Promise<void>
 }
 
 export const useEmployeeModal = ({
-  fieldName,
-  onEmployeeAdded
+  existingEmployeeUids,
+  onEmployeeSelected
 }: UseEmployeeModalProps) => {
   const { openModal, closeModal } = useDynamicModalStore()
-  const { control } = useFormContext()
-  const { append, fields } = useFieldArray({
-    control,
-    name: fieldName
-  })
 
   return useCallback(() => {
-    // Get existing employee UIDs to prevent duplicates
-    const existingEmployeeUids = fields
-      .map((field: any) => field?.uid)
-      .filter(Boolean)
-
     const modalId = openModal('dialog', {
       id: 'employee-add',
       component: EmployeeModalContainer,
@@ -38,22 +27,12 @@ export const useEmployeeModal = ({
         size: 'l' as ModalSize,
         existingEmployeeUids
       },
-      onClose: () => {
-        // Cleanup if needed
-      },
-      onSubmit: (data: EmployeeFormData) => {
-        console.log('Employee modal submitted data:', data)
+      onSubmit: async (data: EmployeeFormData) => {
         if (data.employee) {
-          // Add to form array with full employee data
-          append(data.employee as any)
-
-          // Notify parent via callback
-          onEmployeeAdded(data.employee as Employee)
-
-          // Close modal
+          await onEmployeeSelected(data.employee as Employee)
           closeModal(modalId)
         }
       }
     })
-  }, [openModal, closeModal, fields, append, onEmployeeAdded])
+  }, [openModal, closeModal, existingEmployeeUids, onEmployeeSelected])
 }
