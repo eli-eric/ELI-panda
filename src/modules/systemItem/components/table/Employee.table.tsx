@@ -1,72 +1,95 @@
 import type { ColumnDef } from '@tanstack/react-table'
-import { memo, useMemo } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 
-import { PlusButton } from '@/components/Buttons'
+import { PlusButton, TableDeleteButton } from '@/components/Buttons'
 import { Table } from '@/components/ui/table'
 import usePermission from '@/hooks/usePermission'
+import useWarningModal from '@/hooks/useWarningModal'
 import { cn } from '@/lib/utils'
 import { ROLE } from '@/types/constants/roles'
 import type { Employee } from '@/types/gql/graphql'
 
-import { CellWithDelete } from './CellWithDelete'
 import { useEmployeeModal } from './hooks/useEmployeeModal'
 
-interface Props {
-  name: string
+interface EmployeeTableProps {
   header: string
-  setNewEmployee: (employee: Employee) => void
-  setDisconnectEmployee: (employee: Employee) => void
   data: Employee[]
+  onAdd: (employee: Employee) => void | Promise<void>
+  onRemove: (employeeUid: string) => void | Promise<void>
+  existingEmployeeUids?: string[]
+  isLoading?: boolean
   className?: string
 }
 
 export const EmployeeTable = memo(
   ({
-    name,
     header,
-    setNewEmployee,
-    setDisconnectEmployee,
     data,
+    onAdd,
+    onRemove,
+    existingEmployeeUids,
+    isLoading = false,
     className
-  }: Props) => {
+  }: EmployeeTableProps) => {
     const canEdit = usePermission([ROLE.SYSTEM_EDIT])
+    const withWarningModal = useWarningModal()
+
+    const allExistingUids = useMemo(() => {
+      const dataUids = data.map(e => e.uid).filter(Boolean) as string[]
+      return [...new Set([...dataUids, ...(existingEmployeeUids ?? [])])]
+    }, [data, existingEmployeeUids])
+
     const openEmployeeModal = useEmployeeModal({
-      fieldName: name,
-      onEmployeeAdded: setNewEmployee
+      existingEmployeeUids: allExistingUids,
+      onEmployeeSelected: onAdd
     })
 
-    const columnsOperators = useMemo(
-      (): ColumnDef<{ fullName: string }, any>[] => [
+    const handleDelete = useCallback(
+      (employee: Employee) => {
+        const message = `Are you sure you want to remove ${employee.fullName}?`
+        withWarningModal(() => onRemove(employee.uid), message)()
+      },
+      [withWarningModal, onRemove]
+    )
+
+    const columns = useMemo(
+      (): ColumnDef<Employee>[] => [
         {
-          header: () => {
-            return (
-              <div className="flex justify-between w-full items-center">
-                <span className="text-sm font-semibold">{header}</span>
-                {canEdit && (
-                  <PlusButton type="button" onClick={openEmployeeModal} />
-                )}
-              </div>
-            )
-          },
+          header: () => (
+            <div className="flex justify-between w-full items-center">
+              <span className="text-sm font-semibold">{header}</span>
+              {canEdit && (
+                <PlusButton
+                  type="button"
+                  onClick={openEmployeeModal}
+                  disabled={isLoading}
+                />
+              )}
+            </div>
+          ),
           accessorKey: 'fullName',
           enableSorting: false,
-          cell: props => (
-            <CellWithDelete
-              {...props}
-              name={name}
-              setDeleteItem={setDisconnectEmployee}
-            />
+          cell: ({ row, getValue }) => (
+            <div className="flex items-center w-full justify-between pr-3">
+              <span>{getValue<string>()}</span>
+              {canEdit && (
+                <TableDeleteButton
+                  className="text-orange-400 dark:text-orange-500"
+                  onClick={() => handleDelete(row.original)}
+                />
+              )}
+            </div>
           ),
           size: 563
         }
       ],
-      [setDisconnectEmployee, header, name, canEdit, openEmployeeModal]
+      [header, canEdit, openEmployeeModal, isLoading, handleDelete]
     )
 
     return (
-      <Table<any>
-        columns={columnsOperators}
-        skipEmptyMessage={true}
+      <Table<Employee>
+        columns={columns}
+        skipEmptyMessage
         data={data}
         headerClassName="whitespace-nowrap sticky"
         rowClassName="whitespace-nowrap group/row"

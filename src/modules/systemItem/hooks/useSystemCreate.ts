@@ -15,15 +15,8 @@ import type { SystemsResponse } from '@/types/responses/systems'
 import { navigateBack } from '@/utils'
 import { connectN, whereC, whereN } from '@/utils/graphql/mutations'
 
-import { useSystemItemStore } from '../store/useSystemItemStore'
 import type { SystemDetailFormType } from '../types/form'
-import {
-  combineAndDeduplicateUsers,
-  createConnections,
-  showErrorToast,
-  showSuccessToast,
-  validateSystemForm
-} from '../utils/hookHelpers'
+import { showErrorToast, showSuccessToast, validateSystemForm } from '../utils/hookHelpers'
 
 const createSystemMutation = gql(`
   mutation CreateSystems($input: [SystemCreateInput!]!) {
@@ -44,12 +37,6 @@ export const useSystemCreate = (
   const queryClient = useQueryClient()
   const parentUid = router.query.parentUid as string | undefined
   const { data: session } = useSession()
-
-  const {
-    newOperators,
-    newMaintainedBy,
-    clear: clearStore
-  } = useSystemItemStore()
 
   // Handle navigation logic
   const handleNavigation = useCallback(
@@ -121,36 +108,16 @@ export const useSystemCreate = (
     ({ createSystems: { systems } }, saveAndExit?: boolean) => {
       const responseUid = systems[0].uid
       const body = systems[0]
-
-      clearStore()
       handleImageUpload(responseUid, body, saveAndExit)
     },
-    [clearStore, handleImageUpload]
-  )
-
-  // Combine and deduplicate operators and maintainedBy
-  const getCombinedOperators = useCallback(
-    (formOperators: any[] | null | undefined = []) => {
-      return combineAndDeduplicateUsers(formOperators, newOperators)
-    },
-    [newOperators]
-  )
-
-  const getCombinedMaintainedBy = useCallback(
-    (formMaintainedBy: any[] | null | undefined = []) => {
-      return combineAndDeduplicateUsers(formMaintainedBy, newMaintainedBy)
-    },
-    [newMaintainedBy]
+    [handleImageUpload]
   )
 
   // Build the mutation payload
+  // Note: operators and maintainedBy can be added after system creation
+  // via the separate useAddSystemEmployee hook
   const buildPayload = useCallback(
     (systemForm: SystemDetailFormType) => {
-      const uniqueOperators = getCombinedOperators(systemForm.operators)
-      const uniqueMaintainedBy = getCombinedMaintainedBy(
-        systemForm.maintainedBy
-      )
-
       return {
         input: [
           {
@@ -172,8 +139,6 @@ export const useSystemCreate = (
             location: connectN(systemForm?.location?.uid),
             zone: connectN(systemForm?.zone?.uid),
             responsible: connectN(systemForm?.responsible?.uid),
-            operators: createConnections(uniqueOperators),
-            maintainedBy: createConnections(uniqueMaintainedBy),
             updatedBy: {
               connect: [
                 {
@@ -186,13 +151,7 @@ export const useSystemCreate = (
         ]
       }
     },
-    [
-      parentUid,
-      session?.user?.facilityCode,
-      session?.user?.uid,
-      getCombinedOperators,
-      getCombinedMaintainedBy
-    ]
+    [parentUid, session?.user?.facilityCode, session?.user?.uid]
   )
 
   const { mutate: create, isPending } = useGraphQLMutation(
