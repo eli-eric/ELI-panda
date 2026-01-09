@@ -1,6 +1,6 @@
 'use client'
 
-import { Check, ChevronsUpDown, Plus } from 'lucide-react'
+import { Check, ChevronsUpDown, Plus, X } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import React, { useMemo, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
@@ -126,75 +126,90 @@ const Combobox = ({
             )}
 
             <div className="flex gap-2">
-              <Popover open={open} onOpenChange={setOpen}>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    aria-expanded={open}
-                    onClick={() => {
-                      setOpen(!open)
-                    }}
+              <div className="relative flex-1">
+                <Popover open={open} onOpenChange={setOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={open}
+                      onClick={() => {
+                        setOpen(!open)
+                      }}
+                      className={cn(
+                        'w-full justify-between',
+                        !field.value && 'text-muted-foreground',
+                        error && 'border-destructive',
+                        field.value && !disabled && 'pr-12'
+                      )}
+                      disabled={disabled}
+                    >
+                      <span className="truncate">
+                        {field.value?.name || placeholder || 'Select option...'}
+                      </span>
+                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent
                     className={cn(
-                      'flex-1 justify-between',
-                      !field.value && 'text-muted-foreground',
-                      error && 'border-destructive'
+                      'w-[var(--radix-popover-trigger-width)] p-0',
+                      position === 'top' && 'mb-2'
                     )}
-                    disabled={disabled}
+                    side={position === 'top' ? 'top' : 'bottom'}
                   >
-                    {field.value?.name || placeholder || 'Select option...'}
-                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent
-                  className={cn(
-                    'w-[var(--radix-popover-trigger-width)] p-0',
-                    position === 'top' && 'mb-2'
-                  )}
-                  side={position === 'top' ? 'top' : 'bottom'}
-                >
-                  <Command>
-                    <CommandInput
-                      placeholder={`Search ${label || customLabel || 'items'}...`}
-                      value={query}
-                      onValueChange={setQuery}
-                    />
-                    <CommandList>
-                      <CommandEmpty>
-                        {fm({ id: messages.noResults })}
-                      </CommandEmpty>
-                      <CommandGroup>
-                        {options?.data?.map(item => (
-                          <CommandItem
-                            key={item.uid}
-                            value={item.name}
-                            onSelect={() => handleSelect(field, item)}
-                          >
-                            <Check
-                              className={cn(
-                                'mr-2 h-4 w-4',
-                                field.value?.uid === item.uid
-                                  ? 'opacity-100'
-                                  : 'opacity-0'
-                              )}
-                            />
-                            {item.name}
-                          </CommandItem>
-                        ))}
-                        {field.value && (
-                          <CommandItem
-                            value=""
-                            onSelect={() => handleClear(field)}
-                            className="text-muted-foreground"
-                          >
-                            {fm({ id: message.common.ui.clearSelection })}
-                          </CommandItem>
-                        )}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
+                    <Command>
+                      <CommandInput
+                        placeholder={`Search ${label || customLabel || 'items'}...`}
+                        value={query}
+                        onValueChange={setQuery}
+                      />
+                      <CommandList>
+                        <CommandEmpty>
+                          {fm({ id: messages.noResults })}
+                        </CommandEmpty>
+                        <CommandGroup>
+                          {options?.data?.map(item => (
+                            <CommandItem
+                              key={item.uid}
+                              value={item.name}
+                              onSelect={() => handleSelect(field, item)}
+                            >
+                              <Check
+                                className={cn(
+                                  'mr-2 h-4 w-4',
+                                  field.value?.uid === item.uid
+                                    ? 'opacity-100'
+                                    : 'opacity-0'
+                                )}
+                              />
+                              {item.name}
+                            </CommandItem>
+                          ))}
+                          {field.value && (
+                            <CommandItem
+                              value=""
+                              onSelect={() => handleClear(field)}
+                              className="text-muted-foreground"
+                            >
+                              {fm({ id: message.common.ui.clearSelection })}
+                            </CommandItem>
+                          )}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+
+                {field.value && !disabled && (
+                  <button
+                    type="button"
+                    className="absolute right-8 top-1/2 -translate-y-1/2 opacity-50 hover:opacity-100 cursor-pointer"
+                    onClick={() => handleClear(field)}
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                )}
+              </div>
 
               {hasAddPermission && (
                 <Button
