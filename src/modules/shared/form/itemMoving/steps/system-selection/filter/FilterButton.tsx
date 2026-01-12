@@ -82,7 +82,7 @@ export const FilterButton = ({
             tableId={tableId}
             enableQueryURL={enableQueryURL}
             resetForm={formMethods.reset}
-            defaulFormValues={defValues}
+            defaultFormValues={defValues}
           />
         }
         panelTitle="System Filters"
