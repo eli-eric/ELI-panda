@@ -151,7 +151,7 @@ export const FilterSaveSettings = ({
   const openSaveFilterModal = () => {
     filterModalIdRef.current = openModal('dialog', {
       id: 'filter-save-settings',
-      component: () => (
+      component: ({ onSubmit, onClose }) => (
         <Form formMethods={inputFormMethods}>
           <Input
             placeholder="Type filter name"
@@ -159,6 +159,14 @@ export const FilterSaveSettings = ({
             rounded="rounded-md"
             customLabel="Filter Name"
           />
+          <div className="flex justify-end gap-2 pt-4">
+            <Button variant="secondary" onClick={onClose}>
+              {fm({ id: message.common.buttons.cancel })}
+            </Button>
+            <Button onClick={onSubmit}>
+              {fm({ id: message.common.buttons.save })}
+            </Button>
+          </div>
         </Form>
       ),
       props: {
