@@ -2,16 +2,21 @@ import { X } from 'lucide-react'
 import { useState } from 'react'
 import { FormattedMessage } from 'react-intl'
 
+import { PlusButton } from '@/components/Buttons'
+import { Tooltip } from '@/components/Tooltip'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
+import { useOpenResearcherForm } from '@/modules/researchers/hooks/useOpenResearcherForm'
 import type { Researcher } from '@/modules/researchers/types/researcher.types'
 import { Pagination } from '@/modules/shared/table/Pagination'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import type { PandaTableSettings } from '@/modules/shared/table/pandaTable/PandaTable'
 import { PandaTableV2 } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
 import { SearchBar } from '@/modules/shared/table/SearchBar'
+import { ROLE } from '@/types/constants/roles'
 
 import { useResearchersForSelect } from '../hooks/useResearchersForSelect'
 import type {
@@ -53,8 +58,15 @@ export const ResearcherModalContent: React.FC<ResearcherModalContentProps> = ({
     useState<SelectedResearcher[]>(initialSelected)
 
   // Fetch researchers using table state (search, pagination)
-  const { data, isFetching: isLoading } = useResearchersForSelect(TABLE_ID)
+  const { data, isFetching: isLoading, refetch } =
+    useResearchersForSelect(TABLE_ID)
   const researchers = data?.data
+
+  // Permission check for creating researchers
+  const canCreate = usePermission([ROLE.PUBLICATIONS_EDIT])
+
+  // Open researcher creation form
+  const { openResearcherForm } = useOpenResearcherForm({ onSuccess: refetch })
 
   // Toggle researcher selection (works for both Researcher and SelectedResearcher)
   const handleToggle = (researcher: Researcher | SelectedResearcher) => {
@@ -126,7 +138,19 @@ export const ResearcherModalContent: React.FC<ResearcherModalContentProps> = ({
       )}
 
       {/* Search bar */}
-      <SearchBar tableId={TABLE_ID} useQuery={false} />
+      <SearchBar
+        tableId={TABLE_ID}
+        useQuery={false}
+        right={
+          canCreate ? (
+            <Tooltip content="Create New Researcher">
+              <div>
+                <PlusButton onClick={openResearcherForm} />
+              </div>
+            </Tooltip>
+          ) : undefined
+        }
+      />
 
       {/* Researchers table */}
       <div className="h-[350px] overflow-hidden border rounded-md">
