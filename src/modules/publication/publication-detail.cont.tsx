@@ -57,6 +57,7 @@ export const PublicationDetailContainer: FC<Props> = ({
   const formMethods = useForm<any>({
     defaultValues: publication ? formatPublication(publication) : defaultValues,
     resolver: zodResolver(
+      //TODO: mediaTypeCb should be used to determine the schema some constants somewhere
       mediaType === MEDIA_TYPE_CODE.PeerReviewedArticle
         ? publicationPeerReviewedSchema
         : publicationOtherSchema

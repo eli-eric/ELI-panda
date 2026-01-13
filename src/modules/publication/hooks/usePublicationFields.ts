@@ -27,11 +27,25 @@ export const usePublicationFields = () => {
       rounded: 'rounded-md',
       disabled
     },
+    mediaTypeCb: {
+      label: form.mediaTypeCb.label,
+      name: 'mediaTypeCb',
+      rounded: 'rounded-md',
+      disabled,
+      codebook: CODEBOOK.MEDIA_TYPE
+    },
     experimentalSystem: {
       label: form.experimentalSystem.label,
       name: 'experimentalSystem',
       rounded: 'rounded-md',
-      disabled
+      disabled: true
+    },
+    experimentalSystemCb: {
+      label: form.experimentalSystemCb.label,
+      name: 'expermentalSystemCb',
+      rounded: 'rounded-md',
+      disabled,
+      codebook: CODEBOOK.EXPERIMENTAL_SYSTEM
     },
     userCall: {
       label: form.userCall.label,
@@ -45,6 +59,12 @@ export const usePublicationFields = () => {
       label: form.userExperiment.label,
       rounded: 'rounded-md',
       name: 'userExperiment',
+      disabled: true
+    },
+    userExperimentCb: {
+      label: form.userExperimentCb.label,
+      name: 'userExperimentCb',
+      rounded: 'rounded-md',
       disabled,
       codebook: CODEBOOK.USER_EXPERIMENT
     },
@@ -204,6 +224,19 @@ export const usePublicationFields = () => {
       rounded: 'rounded-md',
       label: form.grant.label,
       name: 'grant',
+      disabled: true
+    },
+    grantCb: {
+      label: form.grantCb.label,
+      name: 'grantCb',
+      rounded: 'rounded-md',
+      disabled,
+      codebook: CODEBOOK.GRANT
+    },
+    foreignGrant: {
+      label: form.foreignGrant.label,
+      rounded: 'rounded-md',
+      name: 'foreignGrant',
       disabled
     },
     wosNumber: {
@@ -235,6 +268,7 @@ export const usePublicationFields = () => {
       placeholder: form.publishingCountry.placeholder,
       rounded: 'rounded-md',
       name: 'publishingCountry',
+      CODEBOOK: CODEBOOK.COUNTRY,
       disabled
     },
     language: {

@@ -3,11 +3,17 @@ import type { CodebookType } from '@/types/responses/codebook'
 
 export interface Publication {
   uid?: string
+  /** @deprecated use mediaTypeCb */
   mediaType: string
+  mediaTypeCb?: CodebookType
   code: string
+  /** @deprecated use experimentalSystemCb */
   experimentalSystem?: string
+  experimentalSystemCb?: CodebookType
   userCall?: CodebookType
-  userExperiment?: CodebookType
+  /**  @deprecated use userExperimentCb */
+  userExperiment?: string
+  userExperimentCb?: CodebookType
   doi?: string
   webLink?: string
   openAccessType: CodebookType
@@ -32,7 +38,10 @@ export interface Publication {
   abstract: string
   keywords: string
   oecdFord?: string
+  /**  @deprecated use grantCb */
   grant?: string
+  grantCb?: CodebookType
+  foreignGrant?: string
   wosNumber?: string
   issn?: string
   eissn?: string

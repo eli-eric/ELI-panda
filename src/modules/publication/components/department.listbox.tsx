@@ -6,8 +6,8 @@ import { message } from '@/i18n/src/messages'
 import { CODEBOOK } from '@/types/constants/codebook'
 
 const { form } = message.publication
-
-const allowedDepartments = ['86', '87', '88', '89', '91', '96', '97']
+// TODO: need to refactored with a proper codebook filter mechanism or based on Facility
+const allowedDepartments = ['86', '87', '88', '89', '91', '96', '97', 'T –']
 
 type DepartmentListboxProps = {
   name: string

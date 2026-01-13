@@ -33,13 +33,15 @@ export const usePublicationColumns = () => {
       {
         id: 'mediaType',
         header: 'Media Type',
-        accessorFn: row => MEDIA_TYPE_MAP[row.mediaType],
+        accessorFn: row =>
+          row.mediaTypeCb?.name || MEDIA_TYPE_MAP[row.mediaType || ''],
         size: 200
       },
       {
         id: 'experimentalSystem',
         header: 'Experimental System',
-        accessorFn: row => row.experimentalSystem,
+        accessorFn: row =>
+          row.experimentalSystemCb?.name || row.experimentalSystem,
         size: 230
       },
       {
@@ -51,7 +53,7 @@ export const usePublicationColumns = () => {
       {
         id: 'userExperiment',
         header: 'User Experiment',
-        accessorFn: row => row?.userExperiment?.name,
+        accessorFn: row => row?.userExperimentCb?.name || row.userExperiment,
         size: 200
       },
       {
@@ -200,7 +202,16 @@ export const usePublicationColumns = () => {
         id: 'grant',
         header: 'Grant',
         size: 300,
-        accessorFn: row => row.grant,
+        accessorFn: row => row.grantCb?.name || row.grant,
+        cell: ({ getValue }) => (
+          <ShortCell value={getValue()} numberOfChars={40} />
+        )
+      },
+      {
+        id: 'foreignGrant',
+        header: 'Foreign Grant',
+        size: 300,
+        accessorFn: row => row.foreignGrant,
         cell: ({ getValue }) => (
           <ShortCell value={getValue()} numberOfChars={40} />
         )

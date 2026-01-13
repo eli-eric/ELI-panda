@@ -1,16 +1,11 @@
+import Combobox from '@/components/form/Combobox'
 import { Input, TextArea } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
-import { RadioSelect } from '@/components/form/radio-select.comp'
 import { Col, Grid } from '@/components/grid/Grid'
 import Card from '@/components/layout/Card'
 import { isFeatureEnabled } from '@/config/featureFlags'
-import { useAccessControl } from '@/hooks/useAccessControl'
-import { ROLE } from '@/types/constants/roles'
 
-import { useMediaTypeStore } from '../hooks/useMediaTypeStore'
 import { usePublicationFields } from '../hooks/usePublicationFields'
-import type { MEDIA_TYPE_CODE } from '../types/constants'
-import { mediaTypeOptions } from '../types/constants'
 import { DepartmentsComponent } from './departments.comp'
 import { EliAuthorsSelectComponent } from './eli-authors-select.comp'
 import { PublishingCountryListbox } from './publishing-country.listbox'
@@ -28,36 +23,24 @@ export type Publication = {
 
 export const PublicationFormComponent = () => {
   const fields = usePublicationFields()
-  const { setMediaType } = useMediaTypeStore()
-  const disabled = !useAccessControl(ROLE.PUBLICATIONS_EDIT)()
-
-  const handleChangeMediaType = (mediaType: string) => {
-    setMediaType(mediaType as MEDIA_TYPE_CODE)
-  }
 
   return (
     <Card className="py-6">
       <Grid>
-        <Col lg={3}>
-          <RadioSelect
-            disabled={disabled}
-            name={'mediaType'}
-            options={mediaTypeOptions}
-            defaultValue={mediaTypeOptions[0].value}
-            onChange={handleChangeMediaType}
-          />
+        <Col lg={6}>
+          <Listbox {...fields.mediaTypeCb} />
         </Col>
-        <Col lg={9}>
+        <Col lg={6}>
           <Input {...fields.code} />
         </Col>
         <Col lg={4}>
-          <Listbox {...fields.userCall} />
+          <Listbox {...fields.userCall} allowEmptyOption />
         </Col>
         <Col lg={4}>
-          <Input {...fields.userExperiment} />
+          <Combobox {...fields.userExperimentCb} />
         </Col>
         <Col lg={4}>
-          <Input {...fields.experimentalSystem} />
+          <Combobox {...fields.experimentalSystemCb} />
         </Col>
         <Col lg={4}>
           <Input {...fields.doi} />
@@ -130,17 +113,20 @@ export const PublicationFormComponent = () => {
         <Col lg={4}>
           <Input {...fields.dateOfPublication} />
         </Col>
-        <Col lg={6}>
+        <Col lg={12}>
           <TextArea {...fields.abstract} />
         </Col>
-        <Col lg={6}>
+        <Col lg={12}>
           <TextArea {...fields.keywords} />
         </Col>
-        <Col lg={6}>
+        <Col lg={4}>
           <Input {...fields.oecdFord} />
         </Col>
-        <Col lg={6}>
-          <Input {...fields.grant} />
+        <Col lg={4}>
+          <Combobox {...fields.grantCb} />
+        </Col>
+        <Col lg={4}>
+          <Input {...fields.foreignGrant} />
         </Col>
         <Col lg={2}>
           <Input {...fields.wosNumber} />
