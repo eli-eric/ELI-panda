@@ -1,15 +1,13 @@
 import {
   createContext,
+  type ReactNode,
   useCallback,
   useContext,
-  useRef,
-  type ReactNode
-} from 'react'
+  useRef} from 'react'
 import {
+  type FieldArrayWithId,
   useFieldArray,
-  useFormContext,
-  type FieldArrayWithId
-} from 'react-hook-form'
+  useFormContext} from 'react-hook-form'
 
 import type { OrderDetailFormType, OrderLineFormType } from '../types/form'
 

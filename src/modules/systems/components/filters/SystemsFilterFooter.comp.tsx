@@ -36,7 +36,7 @@ export const SystemsFilterFooter = ({
         tableId={tableId}
         enableQueryURL={enableQueryURL}
         resetForm={resetForm}
-        defaulFormValues={defaultFormValues}
+        defaultFormValues={defaultFormValues}
       />
       <Button
         type="button"

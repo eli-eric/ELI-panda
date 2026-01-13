@@ -36,7 +36,7 @@ export const OrdersFilterFooter = ({
         tableId={tableId}
         enableQueryURL={enableQueryURL}
         resetForm={resetForm}
-        defaulFormValues={defaultFormValues}
+        defaultFormValues={defaultFormValues}
       />
       <Button
         type="button"
