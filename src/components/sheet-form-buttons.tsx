@@ -70,11 +70,17 @@ export const SheetFormButtons = ({
         </div>
         {disabledEdit && (
           <div className="flex gap-2">
-            <Button size="sm" onClick={handleSubmit} disabled={loading}>
+            <Button
+              type="button"
+              size="sm"
+              onClick={handleSubmit}
+              disabled={loading}
+            >
               {loading && <Loader2 className="size-3 animate-spin mr-2" />}
               {saveLabel}
             </Button>
             <Button
+              type="button"
               size="sm"
               onClick={handleExit}
               disabled={loading}
