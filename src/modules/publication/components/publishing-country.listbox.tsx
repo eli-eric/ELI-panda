@@ -4,6 +4,7 @@ import { CODEBOOK } from '@/types/constants/codebook'
 
 import { usePublicationFields } from '../hooks/usePublicationFields'
 
+// TODO: this should be filtered on api, decide where to store this business logic
 const allowedCountries = [
   'AU',
   'CN',
@@ -19,7 +20,9 @@ const allowedCountries = [
   'PL',
   'RO',
   'TW',
-  'US'
+  'US',
+  'IT',
+  'RS'
 ]
 
 export function PublishingCountryListbox() {

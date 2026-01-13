@@ -948,11 +948,17 @@ export const messages = {
     addDepartmentButton: '+ Add Another ELI Department',
     form: {
       department: { label: 'ELI Department*', placeholder: 'Select' },
+      mediaTypeCb: { label: 'Media Type*', placeholder: 'Select' },
       authorsCount: { label: 'ELI Department Authors Count*' },
       code: { label: 'Code*', placeholder: 'Code' },
-      experimentalSystem: { label: 'Experimental System' },
+      experimentalSystem: { label: 'Experimental System @deprecated' },
+      experimentalSystemCb: {
+        label: 'Experimental System',
+        placeholder: 'Select'
+      },
       userCall: { label: 'User Call', placeholder: 'Select' },
-      userExperiment: { label: 'User Experiment' },
+      userExperiment: { label: 'User Experiment @deprecated' },
+      userExperimentCb: { label: 'User Experiment', placeholder: 'Select' },
       doi: {
         label: 'DOI (R87)*',
         labelOptional: 'DOI (R87)'
@@ -994,7 +1000,9 @@ export const messages = {
       abstract: { label: 'Abstract*' },
       keywords: { label: 'Keywords (R13)*' },
       oecdFord: { label: 'OECD/FORD (R04)*', labelOptional: 'OECD/FORD (R04)' },
-      grant: { label: 'Grant' },
+      grant: { label: 'Grant @deprecated' },
+      grantCb: { label: 'Grant', placeholder: 'Select' },
+      foreignGrant: { label: 'Foreign Grant', placeholder: 'Foreign Grant' },
       wosNumber: { label: 'WOS Number (R67)' },
       issn: { label: 'ISSN (R14)', placeholder: 'ISSN' },
       eissn: { label: 'e-ISSN (R15)', placeholder: 'e-ISSN' },

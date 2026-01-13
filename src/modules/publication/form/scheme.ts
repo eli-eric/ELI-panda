@@ -31,7 +31,9 @@ const eliAuthorsSchema = isResearcherPickerEnabled
   : z.string().min(1, 'ELI Authors is required')
 
 const eliResearchersSchema = isResearcherPickerEnabled
-  ? z.array(selectedResearcherSchema).min(1, 'At least one ELI Author is required')
+  ? z
+      .array(selectedResearcherSchema)
+      .min(1, 'At least one ELI Author is required')
   : z.array(selectedResearcherSchema).optional()
 
 const authorsDepartmentSchema = z.object({
@@ -86,10 +88,15 @@ export const publicationPeerReviewedSchema = z.object({
 
   // Optional fields
   mediaType: z.string().min(1, 'Media Type is required'),
+  mediaTypeCb: codebookSchema.refine(val => val, {
+    message: 'Media Type is required'
+  }),
   shortJournalTitle: z.string().optional(),
   experimentalSystem: z.string().optional(),
+  experimentalSystemCb: codebookSchema.nullable().optional(),
   userCall: codebookSchema.nullable().optional(),
   userExperiment: z.string().optional(),
+  userExperimentCb: codebookSchema.nullable().optional(),
   webLink: z.string().optional(),
   issue: z
     .union([z.string(), z.number()])
@@ -113,6 +120,8 @@ export const publicationPeerReviewedSchema = z.object({
   quartilBasis: z.string().optional(),
   quartil: z.string().nullable().optional(),
   grant: z.string().optional(),
+  grantCb: codebookSchema.nullable().optional(),
+  foreignGrant: z.string().optional(),
   wosNumber: z.string().optional(),
   issn: z.string().optional(),
   eissn: z.string().optional(),
@@ -157,12 +166,17 @@ export const publicationOtherSchema = z.object({
 
   // Optional fields (different from peer-reviewed)
   mediaType: z.string().optional(),
+  mediaTypeCb: codebookSchema.optional().refine(val => val !== undefined, {
+    message: 'Media Type is required'
+  }),
   doi: z.string().optional(), // Optional for Other articles
   volume: z.union([z.string(), z.number()]).optional(), // Optional for Other articles
   oecdFord: z.string().optional(), // Optional for Other articles
   experimentalSystem: z.string().optional(),
+  experimentalSystemCb: codebookSchema.nullable().optional(),
   userCall: codebookSchema.nullable().optional(),
   userExperiment: z.string().optional(),
+  userExperimentCb: codebookSchema.nullable().optional(),
   webLink: z.string().optional(),
   issue: z.union([z.string(), z.number()]).optional(),
   impactFactor: z
@@ -178,6 +192,8 @@ export const publicationOtherSchema = z.object({
   quartilBasis: z.string().optional(),
   quartil: z.string().nullable().optional(),
   grant: z.string().optional(),
+  grantCb: codebookSchema.nullable().optional(),
+  foreignGrant: z.string().optional(),
   wosNumber: z.string().optional(),
   issn: z.string().optional(),
   eissn: z.string().optional(),
