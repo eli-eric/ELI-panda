@@ -34,7 +34,7 @@ export const CatalogueSelectFilterFooter = ({
         tableId={tableId}
         enableQueryURL={false}
         resetForm={resetForm}
-        defaulFormValues={defaultFormValues}
+        defaultFormValues={defaultFormValues}
       />
       <Button
         type="button"
