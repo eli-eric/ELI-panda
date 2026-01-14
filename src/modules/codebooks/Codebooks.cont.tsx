@@ -1,116 +1,107 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useQueryState } from 'next-usequerystate'
-import type { FC } from 'react'
-import { Fragment, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useCallback } from 'react'
+import { useIntl } from 'react-intl'
 
-import { PlusButton } from '@/components/Buttons'
-import { Form } from '@/components/form/Form'
-import Listbox from '@/components/form/Listbox'
-import { PageHead } from '@/components/layout/PageHead'
-import LoaderComponent from '@/components/loader.comp'
-import { useCodebook } from '@/hooks/fetch/useCodebook'
-import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
+import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import type { CODEBOOK } from '@/types/constants/codebook'
-import type {
-  CodebookType,
-  CodebookTypeResponse
-} from '@/types/responses/codebook'
-import { queryFetcher } from '@/utils/fetcher'
+import type { CodebookType } from '@/types/responses/codebook'
 
-import CodebookTable from './components/CodebookTable'
+import { CodebookAddFormContainer } from './components/CodebookAddForm.cont'
+import { CodebookDetail } from './components/CodebookDetail'
+import { CodebookEmptyState } from './components/CodebookEmptyState'
+import { CodebookSidebar } from './components/CodebookSidebar'
+import { useCodebookList } from './hooks/useCodebookList'
+import { useCodebookValueMutations } from './hooks/useCodebookValueMutations'
+import { useCodebookValues } from './hooks/useCodebookValues'
 
-const { selectCodebookForm } = message.codebooksPage
-interface Props {
-  selectedCodebook?: string
-}
-export const CodebooksContainer: FC<Props> = () => {
-  const [lastAddedUUID, setLastAddedUUID] = useState<string>()
+const SIDEBAR_WIDTH = 280
 
-  const [selectedCodebookQuery, setSelectedCoodebookQuery] =
+export const CodebooksContainer = () => {
+  const { formatMessage: fm } = useIntl()
+  const [selectedCodebook, setSelectedCodebook] =
     useQueryState('selectedCodebook')
+  const { openModal, closeModal } = useModalGlobalStore()
 
-  const formMethods = useForm<{ codebook?: { uid: CODEBOOK; name: CODEBOOK } }>(
-    {
-      defaultValues: {
-        codebook: {
-          uid: selectedCodebookQuery as CODEBOOK,
-          name: selectedCodebookQuery as CODEBOOK
-        }
-      }
-    }
+  const { data: codebookList, isLoading: isLoadingList } = useCodebookList()
+  const {
+    data: values,
+    isLoading: isLoadingValues,
+    queryKey
+  } = useCodebookValues(selectedCodebook as CODEBOOK)
+
+  const mutations = useCodebookValueMutations({
+    codebookType: selectedCodebook as CODEBOOK,
+    queryKey
+  })
+
+  const withWarningModal = useWarningModal()
+
+  const handleSelect = useCallback(
+    (code: string) => {
+      setSelectedCodebook(code)
+    },
+    [setSelectedCodebook]
   )
 
-  const { queryKey } = useCodebook(selectedCodebookQuery as CODEBOOK, {
-    limit: 5000
-  })
+  const handleAdd = useCallback(() => {
+    if (!selectedCodebook) return
 
-  const queryClient = useQueryClient()
+    openModal('dialog1', {
+      component: CodebookAddFormContainer,
+      props: {
+        title: fm({ id: message.codebooksPage.addForm.title }),
+        codebookType: selectedCodebook as CODEBOOK,
+        queryKey,
+        onSuccess: () => closeModal('dialog1'),
+        onCancel: () => closeModal('dialog1')
+      }
+    })
+  }, [selectedCodebook, queryKey, openModal, closeModal, fm])
 
-  const { data, isLoading } = useQuery({
-    queryKey: ['codebooks', { query: { editable: 'true' } }],
-    queryFn: queryFetcher<{ code: string; type: string }[]>('codebooks')
-  })
+  const handleUpdate = useCallback(
+    async (uid: string, name: string) => {
+      await mutations.update({ uid, name })
+    },
+    [mutations]
+  )
 
-  const fields = useMakeFormFields({
-    codebook: {
-      name: 'codebook',
-      placeholder: selectCodebookForm.codebook.placeholder,
-      rounded: 'rounded-md'
-    }
-  })
-
-  const handleAddNewCodebookValue = () => {
-    const id = crypto.randomUUID()
-    queryClient.setQueryData<CodebookTypeResponse>(
-      queryKey,
-      prev =>
-        prev
-          ? {
-              ...prev,
-              data: [{ name: '', uid: '', uuid: id }, ...(prev.data || [])]
-            }
-          : {
-              metadata: { code: '', type: '' },
-              data: [{ name: '', uid: '', uuid: id }]
-            },
-      { updatedAt: Date.now() }
-    )
-    setLastAddedUUID(id)
-  }
-
-  if (isLoading) return <LoaderComponent />
-
-  if (!data) return null
+  const handleDelete = useCallback(
+    (value: CodebookType) => {
+      withWarningModal(
+        () => mutations.delete(value.uid),
+        fm({ id: message.codebooksPage.deleteConfirm }, { name: value.name })
+      )()
+    },
+    [withWarningModal, mutations, fm]
+  )
 
   return (
-    <Fragment>
-      <PageHead>
-        <PlusButton
-          onClick={handleAddNewCodebookValue}
-          disabled={!selectedCodebookQuery}
+    <div className="flex h-[calc(100vh-4rem)]">
+      <div style={{ width: SIDEBAR_WIDTH }} className="flex-shrink-0">
+        <CodebookSidebar
+          codebooks={codebookList ?? []}
+          selectedCodebook={selectedCodebook}
+          onSelect={handleSelect}
+          isLoading={isLoadingList}
         />
-        <Form {...{ formMethods }}>
-          <Listbox
-            {...fields.codebook}
-            placeholder="Select codebook..."
-            className={'w-72'}
-            onChange={(v: CodebookType) => {
-              setSelectedCoodebookQuery(v?.uid || null)
-            }}
-            codebookResponse={data?.map(code => ({
-              name: code.code,
-              uid: code.code
-            }))}
+      </div>
+
+      <div className="flex-1 overflow-auto">
+        {selectedCodebook ? (
+          <CodebookDetail
+            codebookCode={selectedCodebook}
+            data={values?.data ?? []}
+            isLoading={isLoadingValues}
+            onAdd={handleAdd}
+            onUpdate={handleUpdate}
+            onDelete={handleDelete}
           />
-        </Form>
-      </PageHead>
-      <CodebookTable
-        queryKey={queryKey}
-        lastAddedUUID={lastAddedUUID}
-        selectedCodebookQuery={selectedCodebookQuery}
-      />
-    </Fragment>
+        ) : (
+          <CodebookEmptyState />
+        )}
+      </div>
+    </div>
   )
 }

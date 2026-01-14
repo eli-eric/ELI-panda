@@ -93,15 +93,23 @@ export function TablePagination<T extends object>({
         </button>
       </div>
 
-      <div className="flex items-center gap-2">
-        <span className="text-sm text-foreground">
-          {fm({ id: message.common.ui.rowsPerPage })}
+      <div className="flex items-center gap-4">
+        <span className="text-sm text-muted-foreground">
+          {fm(
+            { id: message.common.ui.totalRows },
+            { count: table.getFilteredRowModel().rows.length }
+          )}
         </span>
-        <PageSizeDropdown
-          value={table.getState().pagination.pageSize}
-          onChange={value => table.setPageSize(value)}
-          pageSizeOptions={pageSizeOptions}
-        />
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-foreground">
+            {fm({ id: message.common.ui.rowsPerPage })}
+          </span>
+          <PageSizeDropdown
+            value={table.getState().pagination.pageSize}
+            onChange={value => table.setPageSize(value)}
+            pageSizeOptions={pageSizeOptions}
+          />
+        </div>
       </div>
     </div>
   )
