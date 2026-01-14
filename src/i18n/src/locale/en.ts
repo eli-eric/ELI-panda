@@ -59,6 +59,7 @@ export const messages = {
       page: 'Page',
       of: 'of',
       rowsPerPage: 'Rows per page',
+      totalRows: '{count} rows',
       search: 'Search',
       modified: 'Modified',
       modifiedShort: 'M',
@@ -901,6 +902,52 @@ export const messages = {
       codebook: {
         placeholder: 'select codebook'
       }
+    },
+    sidebar: {
+      searchPlaceholder: 'Search codebook...'
+    },
+    table: {
+      name: 'Name',
+      uid: 'UID',
+      searchPlaceholder: 'Search values...',
+      noMatchingValues: 'No values match the search',
+      emptyCodebook: 'Codebook is empty'
+    },
+    detail: {
+      manageValues: 'Manage codebook values',
+      addValue: 'Add value',
+      infoTooltip:
+        'Click on a value name to edit it inline. Confirm with the checkmark button or press Enter. Cancel with the X button or press Escape.'
+    },
+    emptyState: {
+      title: 'Select a codebook',
+      description:
+        'Select a codebook from the list on the left to view and edit values.'
+    },
+    addForm: {
+      title: 'Add value',
+      nameLabel: 'Name *',
+      namePlaceholder: 'Enter value name'
+    },
+    actions: {
+      label: 'Actions',
+      delete: 'Delete'
+    },
+    toast: {
+      addingValue: 'Adding value...',
+      valueAdded: 'Value added',
+      failedToAdd: 'Failed to add value',
+      savingChanges: 'Saving changes...',
+      changesSaved: 'Changes saved',
+      failedToSave: 'Failed to save changes',
+      deletingValue: 'Deleting value...',
+      valueDeleted: 'Value deleted',
+      failedToDelete: 'Failed to delete value'
+    },
+    deleteConfirm: 'Are you sure you want to delete "{name}"?',
+    validation: {
+      nameRequired: 'Name is required',
+      nameTooLong: 'Name must be at most 255 characters'
     }
   },
   roomCardsPage: {
