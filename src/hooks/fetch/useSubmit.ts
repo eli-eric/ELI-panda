@@ -18,6 +18,7 @@ interface UseSubmitProps<T> {
   onError?: (error: AxiosError) => void
 }
 
+/** @deprecated Use useMutation from react-query instead */
 export const useSubmit = <T>({
   endpoint,
   method,

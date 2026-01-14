@@ -69,6 +69,7 @@ interface Props<T extends object> {
 
 export const defaultPropGetter = () => ({})
 
+/** @deprecated use PandaTableV2 or src/components/ui/table instead */
 export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(
   <T extends object>(
     {
