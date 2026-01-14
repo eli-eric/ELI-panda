@@ -7,13 +7,8 @@ import { message } from 'src/i18n/src/messages'
 import { CodebooksContainer } from '@/modules/codebooks/Codebooks.cont'
 
 const messages = message.orderItem
-interface Props {
-  selectedCodebook?: string
-}
 
-const CodeBookEditorPage: NextPage = ({
-  selectedCodebook
-}: Props): JSX.Element => {
+const CodeBookEditorPage: NextPage = (): JSX.Element => {
   const intl = useIntl()
 
   return (
@@ -22,13 +17,9 @@ const CodeBookEditorPage: NextPage = ({
         <title>{intl.formatMessage({ id: messages.head })}</title>
         <meta name="description" content="...." />
       </Head>
-      <CodebooksContainer selectedCodebook={selectedCodebook} />
+      <CodebooksContainer />
     </Fragment>
   )
 }
-
-CodeBookEditorPage.getInitialProps = ({ query }) => ({
-  selectedCodebook: query.selectedCodebook
-})
 
 export default CodeBookEditorPage
