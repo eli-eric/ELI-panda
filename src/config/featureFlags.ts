@@ -5,7 +5,10 @@
  * These flags are useful for development, debugging, and gradual feature rollouts.
  */
 
-import { isProductionEnvironment } from '@/lib/environment/utils'
+import {
+  isLocalEnvironment,
+  isProductionEnvironment
+} from '@/lib/environment/utils'
 
 interface FeatureFlags {
   /**
@@ -31,13 +34,20 @@ interface FeatureFlags {
    * When disabled, uses legacy TextArea input for eliAuthors
    */
   enableEliAuthorsResearcherPicker: boolean
+
+  /**
+   * Enable detailed GraphQL request/response logging
+   * Logs user context, request body, and response data
+   */
+  enableGraphqlLogging: boolean
 }
 
 export const featureFlags: FeatureFlags = {
   enableHttpLogging: false,
   enableMutationLogging: false,
   enableSparePartsAssignment: !isProductionEnvironment(),
-  enableEliAuthorsResearcherPicker: !isProductionEnvironment()
+  enableEliAuthorsResearcherPicker: !isProductionEnvironment(),
+  enableGraphqlLogging: !isLocalEnvironment()
 }
 
 /**
