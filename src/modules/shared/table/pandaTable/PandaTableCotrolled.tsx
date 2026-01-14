@@ -34,10 +34,11 @@ interface Props {
   data: any
   loading?: boolean
   getRowProps?: (row: Row<any>) => GetRowPropsReturnType
-
   tableId: string
   table: Table<any>
 }
+
+/** @deprecated use PandaTableV2 or src/components/ui/table instead */
 export const PandaTableControlled = ({
   settings,
   className,
