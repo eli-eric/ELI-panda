@@ -48,18 +48,18 @@ export const NAV_ITEMS: NavigationItem[] = [
   {
     title: 'Control Systems',
     url: PATH.CONTROL_SYSTEMS,
-    role: ROLE.CONTROL_SYSTEMS_VIEW,
+    role: ROLE.BASICS,
     icon: Cpu,
     items: [
       {
         title: 'Overview',
         url: PATH.CONTROL_SYSTEMS,
-        role: ROLE.CONTROL_SYSTEMS_VIEW
+        role: ROLE.BASICS
       },
       {
         title: 'Create System Codes',
         url: PATH.CONTROL_SYSTEMS_CREATE,
-        role: ROLE.CONTROL_SYSTEMS_EDIT
+        role: ROLE.BASICS
       }
     ]
   },
@@ -185,10 +185,7 @@ export const PATH_ROLES_CONFIG: Record<PATH, ROLE[]> = {
   [PATH.SYSTEM_ITEM]: [ROLE.SYSTEM_EDIT, ROLE.SYSTEMS_VIEW],
   [PATH.SYSTEMS_MULTI_MOVE]: [ROLE.SYSTEM_EDIT],
   [PATH.RESEARCHERS]: [ROLE.PUBLICATIONS_EDIT],
-  [PATH.CONTROL_SYSTEMS]: [
-    ROLE.CONTROL_SYSTEMS_VIEW,
-    ROLE.CONTROL_SYSTEMS_EDIT
-  ],
+  [PATH.CONTROL_SYSTEMS]: [ROLE.BASICS],
   [PATH.CONTROL_SYSTEMS_CREATE]: [ROLE.CONTROL_SYSTEMS_EDIT],
   [PATH.NOT_FOUND]: []
 }
