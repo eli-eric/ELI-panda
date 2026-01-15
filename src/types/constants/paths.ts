@@ -1,5 +1,6 @@
 import {
   BookOpen,
+  Cpu,
   CreditCard,
   Home,
   Layers3,
@@ -45,6 +46,8 @@ export enum PATH {
   SERVICES = '/services',
   SERVICE = '/service',
   RESEARCHERS = '/researchers',
+  CONTROL_SYSTEMS = '/control-systems/overview',
+  CONTROL_SYSTEMS_CREATE = '/control-systems/system-codes-create',
   NOT_FOUND = '/404'
 }
 
@@ -90,6 +93,23 @@ export const NAV_BAR_CONFIG: NavigationType[] = [
     ],
     role: ROLE.SYSTEMS_VIEW,
     Icon: LayoutGrid
+  },
+  {
+    name: 'Control Systems',
+    links: [
+      {
+        path: PATH.CONTROL_SYSTEMS,
+        name: 'Overview',
+        role: ROLE.CONTROL_SYSTEMS_VIEW
+      },
+      {
+        path: PATH.CONTROL_SYSTEMS_CREATE,
+        name: 'Create System Codes',
+        role: ROLE.CONTROL_SYSTEMS_EDIT
+      }
+    ],
+    role: ROLE.CONTROL_SYSTEMS_VIEW,
+    Icon: Cpu
   },
   {
     name: 'Catalogue',
@@ -167,7 +187,9 @@ export const PROTECTED_PATHS = [
   PATH.SERVICE,
   PATH.SERVICES,
   PATH.LAYOUT,
-  PATH.RESEARCHERS
+  PATH.RESEARCHERS,
+  PATH.CONTROL_SYSTEMS,
+  PATH.CONTROL_SYSTEMS_CREATE
 ]
 
 export const PATH_ROLES_CONFIG: Record<PATH, ROLE[]> = {
@@ -212,6 +234,11 @@ export const PATH_ROLES_CONFIG: Record<PATH, ROLE[]> = {
   [PATH.SERVICES]: [ROLE.SERVICE_VIEW, ROLE.SERVICE_EDIT, ROLE.BASICS],
   [PATH.SERVICE]: [ROLE.SERVICE_VIEW, ROLE.SERVICE_EDIT, ROLE.BASICS],
   [PATH.RESEARCHERS]: [ROLE.PUBLICATIONS_EDIT],
+  [PATH.CONTROL_SYSTEMS]: [
+    ROLE.CONTROL_SYSTEMS_VIEW,
+    ROLE.CONTROL_SYSTEMS_EDIT
+  ],
+  [PATH.CONTROL_SYSTEMS_CREATE]: [ROLE.CONTROL_SYSTEMS_EDIT],
   [PATH.NOT_FOUND]: [],
   [PATH.ROOT]: []
 }

@@ -1164,6 +1164,46 @@ export const messages = {
     title: 'Manage Services',
     addNewService: 'Add New Service'
   },
+  controlSystems: {
+    pages: {
+      overview: 'Control Systems Overview',
+      create: 'Create System Codes'
+    },
+    columns: {
+      systemCode: 'System Code',
+      name: 'Name',
+      location: 'Location',
+      zone: 'Zone',
+      updatedBy: 'Updated By',
+      createdBy: 'Created By',
+      status: 'Status'
+    },
+    form: {
+      zone: 'Zone',
+      systemType: 'System Type',
+      batch: 'Batch Count',
+      batchPlaceholder: 'Number of system codes to create'
+    },
+    toast: {
+      creating: 'Creating system codes...',
+      created: 'System codes created successfully',
+      failedToCreate: 'Failed to create system codes',
+      previewing: 'Loading preview...',
+      previewFailed: 'Failed to load preview'
+    },
+    buttons: {
+      create: 'Create System Codes',
+      preview: 'Preview'
+    },
+    preview: {
+      badge: 'Preview',
+      createdBadge: 'Created'
+    },
+    emptyState: {
+      title: 'No system codes found',
+      description: 'No system codes match your current filters.'
+    }
+  },
   catalogue: {
     category: {
       badge: 'category',
