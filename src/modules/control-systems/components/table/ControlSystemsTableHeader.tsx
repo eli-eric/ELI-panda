@@ -1,16 +1,21 @@
-import { Search } from 'lucide-react'
+import { Plus, Search } from 'lucide-react'
+import Link from 'next/link'
 import { useMemo } from 'react'
 import { useIntl } from 'react-intl'
 
 import Combobox from '@/components/form/Combobox'
 import { Form } from '@/components/form/Form'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useFormFilter, useFormFilterState } from '@/hooks/form/useFormFilters'
+import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
 import { FilterBadges } from '@/modules/shared/form/FilterBadges'
 import { SystemTypeComboBox } from '@/modules/shared/form/systemType/SelectSystemType.combo'
 import { SearchBarWrapper } from '@/modules/shared/table/SearchBarWrapper'
 import { CODEBOOK } from '@/types/constants/codebook'
+import { PATH } from '@/types/constants/paths'
+import { ROLE } from '@/types/constants/roles'
 import type { CodebookType } from '@/types/responses/codebook'
 
 type ControlSystemsFilterType = {
@@ -29,6 +34,7 @@ export const ControlSystemsTableHeader = ({
   enableQueryURL = true
 }: Props) => {
   const { formatMessage: fm } = useIntl()
+  const canCreate = usePermission([ROLE.CONTROL_SYSTEMS_EDIT])
 
   const defaultValues = useMemo<ControlSystemsFilterType>(
     () => ({
@@ -99,6 +105,19 @@ export const ControlSystemsTableHeader = ({
         <div className="flex-shrink-0">
           <FilterBadges tableId={tableId} enableQueryURL={enableQueryURL} />
         </div>
+
+        {/* Spacer to push button to the right */}
+        <div className="flex-1" />
+
+        {/* Create button */}
+        {canCreate && (
+          <Button asChild size="sm">
+            <Link href={PATH.CONTROL_SYSTEMS_CREATE}>
+              <Plus className="mr-2 h-4 w-4" />
+              {fm({ id: message.controlSystems.buttons.create })}
+            </Link>
+          </Button>
+        )}
       </SearchBarWrapper>
     </Form>
   )
