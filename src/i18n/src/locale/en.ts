@@ -1197,7 +1197,9 @@ export const messages = {
     },
     preview: {
       badge: 'Preview',
-      createdBadge: 'Created'
+      createdBadge: 'Created',
+      emptyTitle: 'No preview available',
+      emptyDescription: 'Fill in the form to preview system codes that will be created.'
     },
     emptyState: {
       title: 'No system codes found',
