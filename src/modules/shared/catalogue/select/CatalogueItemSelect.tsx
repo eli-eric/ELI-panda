@@ -7,7 +7,7 @@ import useTableStateStore from '@/store/useTableStateStore'
 import type { CatalogueItem } from '@/types/responses/catalogue'
 
 import { FilterBadges } from '../../form/FilterBadges'
-import { Pagination } from '../../table/Pagination'
+import { PaginationV2 as Pagination } from '../../table/PaginationV2'
 import { SearchBar } from '../../table/SearchBar'
 import { CatalogueItemSelectTable } from './CatalogueItemSelect.table'
 import { CatalogueSelectFilterButton } from './filter/CatalogueSelectFilterButton'

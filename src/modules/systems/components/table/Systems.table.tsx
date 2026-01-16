@@ -1,7 +1,7 @@
 import type { Row } from '@tanstack/react-table'
 import { Fragment, memo, useCallback, useEffect } from 'react'
 
-import { Pagination } from '@/modules/shared/table/Pagination'
+import { PaginationV2 as Pagination } from '@/modules/shared/table/PaginationV2'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import type {
   GetRowPropsReturnType,

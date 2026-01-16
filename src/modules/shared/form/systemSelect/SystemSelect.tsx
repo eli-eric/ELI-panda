@@ -6,7 +6,7 @@ import { useSystems } from '@/modules/systems/hooks/useSystems'
 import useTableStateStore from '@/store/useTableStateStore'
 import type { SystemDetail } from '@/types/responses/systems'
 
-import { Pagination } from '../../table/Pagination'
+import { PaginationV2 as Pagination } from '../../table/PaginationV2'
 import { SearchBar } from '../../table/SearchBar'
 import { FilterBadges } from '../FilterBadges'
 import { SystemSelectTable } from './components/SystemSelect.table'

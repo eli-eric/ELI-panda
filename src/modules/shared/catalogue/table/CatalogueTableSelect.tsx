@@ -6,7 +6,7 @@ import { useCategoryList } from '@/modules/catalogue/hooks/useCategoryList'
 import useTableStateStore from '@/store/useTableStateStore'
 import type { CatalogueItem } from '@/types/responses/catalogue'
 
-import { Pagination } from '../../table/Pagination'
+import { PaginationV2 as Pagination } from '../../table/PaginationV2'
 import { SearchBar } from '../../table/SearchBar'
 import { CatalogueTableSelectComponent } from './CatalogueTableSelect.table'
 

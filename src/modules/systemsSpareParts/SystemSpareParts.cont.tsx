@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils'
 import type { SystemDetail } from '@/types/responses/systems'
 
 import { FilterBadges } from '../shared/form/FilterBadges'
-import { Pagination } from '../shared/table/Pagination'
+import { PaginationV2 as Pagination } from '../shared/table/PaginationV2'
 import { usePandaTable } from '../shared/table/pandaTable/hooks/usePandaTable'
 import { useRowSelection } from '../shared/table/pandaTable/hooks/useRowSelection'
 import type { PandaTableSettings } from '../shared/table/pandaTable/PandaTable'
