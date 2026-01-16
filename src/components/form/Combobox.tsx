@@ -125,8 +125,8 @@ const Combobox = ({
               <Label>{customLabel ? customLabel : label}</Label>
             )}
 
-            <div className="flex gap-2">
-              <div className="relative flex-1">
+            <div className="flex gap-2 min-w-0">
+              <div className="relative flex-1 min-w-0 overflow-hidden">
                 <Popover open={open} onOpenChange={setOpen}>
                   <PopoverTrigger asChild>
                     <Button
@@ -137,14 +137,14 @@ const Combobox = ({
                         setOpen(!open)
                       }}
                       className={cn(
-                        'w-full justify-between',
+                        'w-full justify-between overflow-hidden',
                         !field.value && 'text-muted-foreground',
                         error && 'border-destructive',
                         field.value && !disabled && 'pr-12'
                       )}
                       disabled={disabled}
                     >
-                      <span className="truncate">
+                      <span className="truncate text-left min-w-0 flex-1">
                         {field.value?.name || placeholder || 'Select option...'}
                       </span>
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />

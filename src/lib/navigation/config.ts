@@ -1,5 +1,6 @@
 import {
   Cog,
+  Cpu,
   CreditCard,
   Home,
   Layers,
@@ -8,7 +9,8 @@ import {
   ShoppingCart,
   Table,
   Users,
-  UserSearch} from 'lucide-react'
+  UserSearch
+} from 'lucide-react'
 
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
@@ -40,6 +42,24 @@ export const NAV_ITEMS: NavigationItem[] = [
         title: 'Multi Move',
         url: PATH.SYSTEMS_MULTI_MOVE,
         role: ROLE.SYSTEM_EDIT
+      }
+    ]
+  },
+  {
+    title: 'Control Systems',
+    url: PATH.CONTROL_SYSTEMS,
+    role: ROLE.BASICS,
+    icon: Cpu,
+    items: [
+      {
+        title: 'Overview',
+        url: PATH.CONTROL_SYSTEMS,
+        role: ROLE.BASICS
+      },
+      {
+        title: 'Create System Codes',
+        url: PATH.CONTROL_SYSTEMS_CREATE,
+        role: ROLE.BASICS
       }
     ]
   },
@@ -117,7 +137,9 @@ export const PROTECTED_PATHS = [
   PATH.PUBLICATION,
   PATH.SERVICES,
   PATH.SERVICE,
-  PATH.RESEARCHERS
+  PATH.RESEARCHERS,
+  PATH.CONTROL_SYSTEMS,
+  PATH.CONTROL_SYSTEMS_CREATE
 ]
 
 export const PATH_ROLES_CONFIG: Record<PATH, ROLE[]> = {
@@ -163,5 +185,7 @@ export const PATH_ROLES_CONFIG: Record<PATH, ROLE[]> = {
   [PATH.SYSTEM_ITEM]: [ROLE.SYSTEM_EDIT, ROLE.SYSTEMS_VIEW],
   [PATH.SYSTEMS_MULTI_MOVE]: [ROLE.SYSTEM_EDIT],
   [PATH.RESEARCHERS]: [ROLE.PUBLICATIONS_EDIT],
+  [PATH.CONTROL_SYSTEMS]: [ROLE.BASICS],
+  [PATH.CONTROL_SYSTEMS_CREATE]: [ROLE.BASICS],
   [PATH.NOT_FOUND]: []
 }

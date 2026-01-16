@@ -3,7 +3,7 @@ import { useSession } from 'next-auth/react'
 import { useCallback, useMemo } from 'react'
 
 import { useDebounce } from '@/hooks/useDebounce'
-import { NAV_BAR_CONFIG } from '@/types/constants/paths'
+import { NAV_ITEMS, OTHERS_NAV_ITEMS } from '@/lib/navigation/config'
 
 import { useGlobalSearch } from '../hooks/useGlobalSearch'
 import { useGlobalSearchShortcut } from '../hooks/useGlobalSearchShortcut'
@@ -34,7 +34,11 @@ export const GlobalSearchCommandContainer = () => {
 
   // Quick navigation items filtered by user permissions
   const quickNavItems = useMemo(
-    () => mapNavBarToQuickNav(NAV_BAR_CONFIG, session?.user?.roles),
+    () =>
+      mapNavBarToQuickNav(
+        [...NAV_ITEMS, ...OTHERS_NAV_ITEMS],
+        session?.user?.roles
+      ),
     [session?.user?.roles]
   )
 

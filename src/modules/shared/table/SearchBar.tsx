@@ -6,10 +6,11 @@ import { PlusButton, RefreshButton } from '@/components/Buttons'
 import { GlobalSearchTrigger } from '@/components/search/GlobalSearchTrigger'
 import { Tooltip } from '@/components/Tooltip'
 import { Input } from '@/components/ui/input'
-import { SidebarTrigger } from '@/components/ui/sidebar'
 import usePermission from '@/hooks/usePermission'
 import useTableStateStore from '@/store/useTableStateStore'
 import type { ROLE } from '@/types/constants/roles'
+
+import { SearchBarWrapper } from './SearchBarWrapper'
 
 interface Props {
   useQuery?: boolean
@@ -75,47 +76,41 @@ export const SearchBar = ({
   }, [localValue])
 
   return (
-    <div
-      id="search-bar"
-      className="sticky top-0 z-10 bg-background border-b px-4 py-2"
-    >
-      <div className="flex items-center gap-4">
-        <SidebarTrigger />
-        {left && (
-          <div className="flex items-center gap-2 flex-shrink-0">{left}</div>
-        )}
+    <SearchBarWrapper>
+      {left && (
+        <div className="flex items-center gap-2 flex-shrink-0">{left}</div>
+      )}
 
-        {isGlobalSearch ? (
-          <div className="flex-1">
-            <div className="relative max-w-md">
-              <GlobalSearchTrigger size="sm" />
-            </div>
+      {isGlobalSearch ? (
+        <div className="flex-1">
+          <div className="relative max-w-md">
+            <GlobalSearchTrigger size="sm" />
           </div>
-        ) : (
-          <div className="flex-1">
-            <div className="relative max-w-md">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                value={localValue}
-                onChange={e => {
-                  const newValue = e.target.value
-                  setLocalValue(newValue) // Immediate local update (no lag)
-                  setSearchValue(tableId, newValue) // Deferred store update
-                }}
-                placeholder="Search..."
-                className="pl-10"
-                type="search"
-                name="search"
-              />
-            </div>
+        </div>
+      ) : (
+        <div className="flex-1">
+          <div className="relative max-w-md">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              value={localValue}
+              onChange={e => {
+                const newValue = e.target.value
+                setLocalValue(newValue) // Immediate local update (no lag)
+                setSearchValue(tableId, newValue) // Deferred store update
+              }}
+              placeholder="Search..."
+              className="pl-10"
+              type="search"
+              name="search"
+            />
           </div>
-        )}
+        </div>
+      )}
 
-        {right && (
-          <div className="flex items-center gap-2 flex-shrink-0">{right}</div>
-        )}
-      </div>
-    </div>
+      {right && (
+        <div className="flex items-center gap-2 flex-shrink-0">{right}</div>
+      )}
+    </SearchBarWrapper>
   )
 }
 

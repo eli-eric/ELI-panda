@@ -2,12 +2,9 @@ import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { getToken } from 'next-auth/jwt'
 
-import {
-  PATH,
-  PATH_ROLES_CONFIG,
-  PROTECTED_PATHS
-} from '@/types/constants/paths'
+import { PATH } from '@/types/constants/paths'
 
+import { PATH_ROLES_CONFIG, PROTECTED_PATHS } from './lib/navigation/config'
 import { APP_BASE_URL } from './types/constants/common'
 
 // Precompute protected path entries sorted by length (longest first)
@@ -74,6 +71,7 @@ export async function middleware(request: NextRequest) {
 
     if (!currentPath) {
       // Path is in PROTECTED_PATHS but not in PATH_ROLES_CONFIG
+      // eslint-disable-next-line no-console
       console.warn('[Security] Protected path not found in roles config:', {
         path: pathname,
         timestamp: new Date().toISOString()
@@ -87,6 +85,7 @@ export async function middleware(request: NextRequest) {
 
     if (!matchRolesToPath) {
       // Log unauthorized access attempts for security audit
+      // eslint-disable-next-line no-console
       console.warn('[Security] Unauthorized access attempt:', {
         user: user.email || user.name || 'unknown',
         roles: user.roles,

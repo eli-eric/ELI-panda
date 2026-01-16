@@ -153,6 +153,82 @@ if (isDuplicate) {
 toast.promise(addItem(data), { ... })
 ```
 
+## Data Fetching Patterns
+
+Use TanStack Query with `queryFetcher` and `queryMutate` utilities from `@/utils/fetcher`.
+
+### Core Utilities
+
+**`queryFetcher<T>(endpointType)`** - Factory pro query funkce:
+- `endpointType` - klíč z `getEndpoints()` (např. `'publication'`, `'codebook'`)
+- Parametry se automaticky extrahují z `queryKey[1]` a předávají do `getEndpoints()`
+- Vrací `QueryFunction` kompatibilní s TanStack Query
+
+**`queryMutate<TResponse, TVariables>(endpointType, method, uid?, isDefaultUrl?, endpointVariables?, responseType?)`** - Factory pro mutace:
+- `endpointType` - klíč z `getEndpoints()`
+- `method` - `'post'` | `'put'` | `'delete'`
+- `endpointVariables` - objekt s parametry pro endpoint (např. `{ path: 'resource/123' }`)
+- Vrací `MutateFunction` kompatibilní s TanStack Query
+
+### Query Hook Pattern
+
+```typescript
+import { useQuery } from '@tanstack/react-query'
+import type { AxiosError } from 'axios'
+
+import type { QueryFetcherKey } from '@/utils/fetcher'
+import { queryFetcher } from '@/utils/fetcher'
+
+export const usePublication = (uid?: string) => {
+  return useQuery<Publication, AxiosError, Publication, QueryFetcherKey>({
+    queryKey: ['publication', { uid }],
+    queryFn: queryFetcher<Publication>('publication'),
+    enabled: !!uid
+  })
+}
+```
+
+**Key rules:**
+- Always specify all 4 generic types: `<TData, AxiosError, TData, QueryFetcherKey>`
+- Query key: `['endpointType', { params }]` - params se automaticky předají do `getEndpoints()`
+- Use `enabled` for conditional fetching
+
+### Mutation Hook Pattern
+
+```typescript
+const createMutation = useMutation({
+  mutationFn: queryMutate<ResponseType, RequestType>('endpoint', 'post'),
+  onSuccess: () => queryClient.invalidateQueries({ queryKey })
+})
+
+// Pro dynamické cesty použij endpointVariables
+const updateMutation = useMutation({
+  mutationFn: ({ uid, ...data }) => {
+    const mutateFn = queryMutate<ResponseType, RequestType>(
+      'endpoint', 'put', undefined, false, { path: `resource/${uid}` }
+    )
+    return mutateFn(data)
+  },
+  onSuccess: invalidate
+})
+
+// Wrapper s toast notifikací
+const create = async (data: RequestType) => {
+  const promise = createMutation.mutateAsync(data)
+  toast.promise(promise, {
+    loading: fm({ id: message.toast.creating }),
+    success: fm({ id: message.toast.created }),
+    error: fm({ id: message.toast.failedToCreate })
+  })
+  return promise
+}
+```
+
+**Key rules:**
+- Always invalidate related queries on success
+- Wrap with `toast.promise` for user feedback
+- Use `mutateAsync` (not `mutate`) when wrapping with toast
+
 ## Clean Code Principles
 
 Follow these principles when writing code:
