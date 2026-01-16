@@ -12,7 +12,7 @@ export const codebookTypeSchema = z.object({
 export const systemCodeResultSchema = z.object({
   uid: z.string().optional(),
   name: z.string(),
-  systemCode: z.string(),
+  code: z.string(),
   location: codebookTypeSchema.optional().nullable(),
   zone: codebookTypeSchema,
   createdBy: z.string().optional().nullable(),

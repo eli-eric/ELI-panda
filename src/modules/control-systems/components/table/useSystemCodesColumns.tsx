@@ -14,8 +14,8 @@ export const useSystemCodesColumns = () => {
     (): ColumnDef<SystemCodeResult>[] => [
       {
         header: fm({ id: message.controlSystems.columns.systemCode }),
-        accessorKey: 'systemCode',
-        id: 'systemCode',
+        accessorKey: 'code',
+        id: 'code',
         size: 150,
         enableSorting: true
       },
@@ -23,14 +23,19 @@ export const useSystemCodesColumns = () => {
         header: fm({ id: message.controlSystems.columns.name }),
         accessorKey: 'name',
         id: 'name',
-        size: 250,
-        enableSorting: true
+        size: 300,
+        enableSorting: true,
+        cell: ({ row }) => (
+          <Tooltip content={row.original.name}>
+            <span className="truncate">{row.original.name}</span>
+          </Tooltip>
+        )
       },
       {
         header: fm({ id: message.controlSystems.columns.location }),
         accessorFn: row => row.location?.name,
         id: 'location',
-        size: 180,
+        size: 200,
         cell: ({ row }) => {
           const location = row.original.location
           if (!location) return null
@@ -63,13 +68,13 @@ export const useSystemCodesColumns = () => {
         header: fm({ id: message.controlSystems.columns.updatedBy }),
         accessorKey: 'updatedBy',
         id: 'updatedBy',
-        size: 150
+        size: 250
       },
       {
         header: fm({ id: message.controlSystems.columns.createdBy }),
         accessorKey: 'createdBy',
         id: 'createdBy',
-        size: 150
+        size: 250
       }
     ],
     [fm]

@@ -29,11 +29,11 @@ export const usePreviewTableColumns = () => {
         size: 100
       },
       {
-        accessorKey: 'systemCode',
+        accessorKey: 'code',
         header: fm({ id: message.controlSystems.columns.systemCode }),
-        cell: ({ row }) => (
+        cell: ({ getValue }) => (
           <code className="rounded bg-muted px-1.5 py-0.5 text-xs">
-            {row.original.systemCode}
+            {getValue<string>()}
           </code>
         ),
         size: 150
