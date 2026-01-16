@@ -1,9 +1,12 @@
 import type { ColumnDef } from '@tanstack/react-table'
+import Link from 'next/link'
 import { useMemo } from 'react'
 import { useIntl } from 'react-intl'
 
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { message } from '@/i18n/src/messages'
+import { PATH } from '@/types/constants/paths'
 
 import type { SystemCodeResult } from '../../types'
 
@@ -31,11 +34,28 @@ export const usePreviewTableColumns = () => {
       {
         accessorKey: 'code',
         header: fm({ id: message.controlSystems.columns.systemCode }),
-        cell: ({ getValue }) => (
-          <code className="rounded bg-muted px-1.5 py-0.5 text-xs">
-            {getValue<string>()}
-          </code>
-        ),
+        cell: ({ row, getValue }) => {
+          const code = getValue<string>()
+          const uid = row.original.uid
+
+          const codeElement = (
+            <code className="rounded bg-muted px-1.5 py-0.5 text-xs">
+              {code}
+            </code>
+          )
+
+          if (uid) {
+            return (
+              <Button variant="link" className="h-auto p-0" asChild>
+                <Link href={`${PATH.SYSTEM}/${uid}`} target="_blank">
+                  {codeElement}
+                </Link>
+              </Button>
+            )
+          }
+
+          return codeElement
+        },
         size: 150
       },
       {

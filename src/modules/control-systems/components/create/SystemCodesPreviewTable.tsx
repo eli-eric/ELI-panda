@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 import { useIntl } from 'react-intl'
 
-import { Skeleton } from '@/components/ui/skeleton'
 import { Table } from '@/components/ui/table/table'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
@@ -37,19 +36,8 @@ export const SystemCodesPreviewTable = ({
     return [...created, ...preview]
   }, [createdData, previewData])
 
-  if (isLoading) {
-    return (
-      <div className="space-y-4">
-        <div className="space-y-2">
-          {[...Array(5)].map((_, i) => (
-            <Skeleton key={i} className="h-12 w-full" />
-          ))}
-        </div>
-      </div>
-    )
-  }
-
-  if (tableData.length === 0) {
+  // Show custom empty state when not loading and no data
+  if (!isLoading && tableData.length === 0) {
     return (
       <div className="flex h-full items-center justify-center text-muted-foreground">
         <div className="text-center">
@@ -63,9 +51,10 @@ export const SystemCodesPreviewTable = ({
   return (
     <Table
       columns={columns}
-      data={tableData}
+      data={tableData.length > 0 ? tableData : undefined}
+      loading={isLoading}
       enablePagination
-      defaultPageSize={10}
+      defaultPageSize={100}
       getRowProps={row => ({
         className: cn({
           'opacity-60': row.isPreview

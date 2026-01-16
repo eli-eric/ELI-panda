@@ -28,7 +28,7 @@ const SystemCodesCreateContainer = () => {
 
   const handleSubmit = useCallback(
     async (values: SystemCodesFormValues) => {
-      if (!values.zone || !values.systemType) return
+      if (!values.zone || !values.systemType) return false
 
       const response = await create({
         zone: values.zone,
@@ -41,7 +41,9 @@ const SystemCodesCreateContainer = () => {
         setCreatedData(prev => [...prev, ...response.data])
         // Clear preview params to remove preview rows
         setPreviewParams(null)
+        return true
       }
+      return false
     },
     [create]
   )

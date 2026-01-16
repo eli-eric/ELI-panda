@@ -15,7 +15,7 @@ interface Props {
   isPreviewLoading: boolean
   isPending: boolean
   onPreview: (values: SystemCodesFormValues) => void
-  onSubmit: (values: SystemCodesFormValues) => void
+  onSubmit: (values: SystemCodesFormValues) => Promise<boolean>
 }
 
 export const SystemCodesCreateComponent = ({

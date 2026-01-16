@@ -18,7 +18,7 @@ import { systemCodesFormSchema } from './SystemCodesForm.schema'
 
 interface Props {
   onPreview: (values: SystemCodesFormValues) => void
-  onSubmit: (values: SystemCodesFormValues) => void
+  onSubmit: (values: SystemCodesFormValues) => Promise<boolean>
   isPending?: boolean
 }
 
@@ -40,7 +40,7 @@ export const SystemCodesForm = ({ onPreview, onSubmit, isPending }: Props) => {
     mode: 'onChange'
   })
 
-  const { watch, handleSubmit, formState, register } = formMethods
+  const { watch, handleSubmit, formState, register, reset } = formMethods
   const { isValid, errors } = formState
 
   // Watch form values for preview
@@ -61,10 +61,13 @@ export const SystemCodesForm = ({ onPreview, onSubmit, isPending }: Props) => {
   }, [debouncedZoneUid, debouncedSystemTypeUid, debouncedBatch, zone, systemType, onPreview])
 
   const handleFormSubmit = useCallback(
-    (values: SystemCodesFormValues) => {
-      onSubmit(values)
+    async (values: SystemCodesFormValues) => {
+      const success = await onSubmit(values)
+      if (success) {
+        reset()
+      }
     },
-    [onSubmit]
+    [onSubmit, reset]
   )
 
   return (
