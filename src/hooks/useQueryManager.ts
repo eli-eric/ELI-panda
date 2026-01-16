@@ -2,6 +2,7 @@ import { useQueryState } from 'next-usequerystate'
 import { useMemo } from 'react'
 
 import useTableStateStore from '@/store/useTableStateStore'
+import { toLegacyPagination } from '@/types/pagination'
 import type { CodebookType } from '@/types/responses/codebook'
 
 interface Query {
@@ -29,11 +30,31 @@ export default function useQueryManager(tableId: string): { query: Query } {
 
   const [searchQuery] = useQueryState('search')
   const [pageQuery] = useQueryState('page')
+  const [pageSizeQuery] = useQueryState('pageSize')
 
   const sorting = instances[tableId]?.sortByQueryString || ''
 
-  const pagination =
-    instances[tableId]?.pagination || `{"page":${pageQuery || 1},"pageSize":50}`
+  // Support both new typed format and legacy JSON string format
+  // Priority: 1. New paginationState, 2. Legacy pagination string, 3. URL params, 4. Default
+  const pagination = useMemo(() => {
+    // Priority 1: New typed format from store
+    const paginationState = instances[tableId]?.paginationState
+    if (paginationState) {
+      return toLegacyPagination(paginationState)
+    }
+
+    // Priority 2: Legacy format from store
+    const legacyPagination = instances[tableId]?.pagination
+    if (legacyPagination) {
+      return legacyPagination
+    }
+
+    // Priority 3: URL params with defaults
+    const page = pageQuery ? parseInt(pageQuery, 10) : 1
+    const pageSize = pageSizeQuery ? parseInt(pageSizeQuery, 10) : 50
+    return `{"page":${page},"pageSize":${pageSize}}`
+  }, [instances, tableId, pageQuery, pageSizeQuery])
+
   const search = instances[tableId]?.search || searchQuery || ''
 
   //columnFilter merge with categoryFilter
