@@ -14,6 +14,7 @@ import type {
   OrderLineSystemConfig,
   OrderLineWizardFormType
 } from '@/modules/orderItem/types/form'
+import { parseSerialNumbers } from '@/modules/orderItem/utils/parseSerialNumbers'
 import { SelectSystemComboBox } from '@/modules/shared/form/systemSelect/SelectSystem.combo'
 import type { CodebookType } from '@/types/responses/codebook'
 import type { SystemDetail } from '@/types/responses/systems'
@@ -57,6 +58,11 @@ export const OrderLineStep3SystemConfig = () => {
   })
   const name = useWatch({ control, name: 'name' })
   const quantity = useWatch({ control, name: 'quantity' }) || 1
+  const serialNumbers = useWatch({ control, name: 'serialNumbers' })
+
+  // Parse serial numbers if provided
+  const parsedSerialNumbers = parseSerialNumbers(serialNumbers)
+  const hasSerialNumbers = parsedSerialNumbers.length > 0
 
   // Ref to ensure initialization happens only once on mount
   const isInitializedRef = useRef(false)
@@ -69,19 +75,26 @@ export const OrderLineStep3SystemConfig = () => {
     isInitializedRef.current = true
 
     // Lazy initialization: only initialize if configs are empty
-    if (fields.length === 0 && quantity > 0) {
-      const newConfigs: OrderLineSystemConfig[] = []
-      for (let i = 0; i < quantity; i++) {
-        newConfigs.push({
-          index: i,
-          itemName: name || '',
-          parentSystem: globalParentSystem || null,
-          systemType: 'new',
-          systemName: name || '',
-          selectedSystem: null
-        })
+    if (fields.length === 0) {
+      // Effective count: use serial numbers count if available, otherwise quantity
+      const effectiveCount = hasSerialNumbers ? parsedSerialNumbers.length : quantity
+
+      if (effectiveCount > 0) {
+        const newConfigs: OrderLineSystemConfig[] = []
+        for (let i = 0; i < effectiveCount; i++) {
+          newConfigs.push({
+            index: i,
+            itemName: name || '',
+            parentSystem: globalParentSystem || null,
+            systemType: 'new',
+            systemName: name || '',
+            selectedSystem: null,
+            // Assign individual serial number if available
+            serialNumber: hasSerialNumbers ? parsedSerialNumbers[i] : undefined
+          })
+        }
+        replace(newConfigs)
       }
-      replace(newConfigs)
     }
     // Empty deps = runs only once on mount
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -173,6 +186,9 @@ export const OrderLineStep3SystemConfig = () => {
               <TableRow>
                 <TableHead className="w-[40px]">#</TableHead>
                 <TableHead className="min-w-[200px]">Item Name</TableHead>
+                {hasSerialNumbers && (
+                  <TableHead className="min-w-[150px]">Serial Number</TableHead>
+                )}
                 <TableHead className="min-w-[200px]">Parent System</TableHead>
                 <TableHead className="min-w-[180px]">System Type</TableHead>
                 <TableHead className="min-w-[200px]">System Name</TableHead>
@@ -185,6 +201,7 @@ export const OrderLineStep3SystemConfig = () => {
                   index={index}
                   config={field}
                   onTypeChange={handleSystemTypeChange}
+                  showSerialNumber={hasSerialNumbers}
                 />
               ))}
             </TableBody>

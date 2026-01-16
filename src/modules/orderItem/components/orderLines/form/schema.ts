@@ -15,7 +15,8 @@ const systemConfigSchema = z.object({
   parentSystem: codebookSchema.nullable(),
   systemType: z.enum(['new', 'existing']),
   systemName: z.string(),
-  selectedSystem: codebookSchema.optional().nullable()
+  selectedSystem: codebookSchema.optional().nullable(),
+  serialNumber: z.string().optional()
 })
 
 // Order Line Wizard form validation schema (includes wizard-specific fields)
@@ -31,9 +32,17 @@ export const orderLineWizardSchema = z
 
     // Optional fields with coercion
     catalogueUid: z.string().optional(),
-    price: z.coerce.number().positive().optional().nullable(),
+    price: z.preprocess(
+      val => (val === '' || val === null || val === undefined ? undefined : val),
+      z.coerce.number().positive().optional().nullable()
+    ),
     currency: z.string().default('EUR'),
-    quantity: z.coerce.number().int().positive().max(100).optional().nullable(),
+    // Use preprocess to convert empty string to undefined BEFORE coercion
+    // This prevents "" -> 0 -> fails .positive() issue
+    quantity: z.preprocess(
+      val => (val === '' || val === null || val === undefined ? undefined : val),
+      z.coerce.number().int().positive().max(100).optional().nullable()
+    ),
     serialNumbers: z.string().optional().nullable(),
 
     // Codebook fields
@@ -45,6 +54,59 @@ export const orderLineWizardSchema = z
     systemConfigs: z.array(systemConfigSchema).optional()
   })
   .passthrough()
+  .superRefine((data, ctx) => {
+    const hasQuantity =
+      data.quantity !== null && data.quantity !== undefined && data.quantity > 0
+    const hasSerialNumbers =
+      data.serialNumbers && data.serialNumbers.trim().length > 0
+
+    // Mutual exclusivity: either quantity OR serialNumbers, not both
+    if (hasQuantity && hasSerialNumbers) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Please fill either Quantity or Serial Numbers, not both',
+        path: ['serialNumbers']
+      })
+      return
+    }
+
+    // At least one must be provided
+    if (!hasQuantity && !hasSerialNumbers) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Either Quantity or Serial Numbers is required',
+        path: ['quantity']
+      })
+      return
+    }
+
+    // Validate serial numbers if provided
+    if (hasSerialNumbers) {
+      const serialNumbersStr = data.serialNumbers!
+      const parsed = serialNumbersStr
+        .split(',')
+        .map(sn => sn.trim())
+        .filter(sn => sn.length > 0)
+
+      // Check for duplicates
+      if (parsed.length !== new Set(parsed).size) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Serial numbers must be unique (no duplicates)',
+          path: ['serialNumbers']
+        })
+      }
+
+      // Check max count (same as quantity max)
+      if (parsed.length > 100) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Maximum 100 serial numbers allowed',
+          path: ['serialNumbers']
+        })
+      }
+    }
+  })
 
 // Alias for compatibility
 export const orderLineSchema = orderLineWizardSchema
