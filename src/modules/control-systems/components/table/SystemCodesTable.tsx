@@ -25,8 +25,8 @@ export const SystemCodesTable = ({
   enableQueryURL = true,
   settings
 }: Props) => {
-  const { systemCodes, loading } = useSystemCodes(tableId)
-  const { columns } = useSystemCodesColumns()
+  const { systemCodes, loading, queryKey } = useSystemCodes(tableId)
+  const { columns } = useSystemCodesColumns({ queryKey })
 
   const table = usePandaTable({
     tableId,
