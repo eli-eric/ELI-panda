@@ -33,7 +33,7 @@ export const DEFAULT_PAGINATION: PaginationState = {
 export interface PaginationSettings {
   enableQueryURL?: boolean
   total?: number
-  pageSizeDefault?: PageSizeOption
+  pageSizeDefault?: number
   pageSizeOptions?: readonly number[]
 }
 

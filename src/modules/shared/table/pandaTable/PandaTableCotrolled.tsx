@@ -3,7 +3,7 @@ import { createContext, Fragment } from 'react'
 
 import EmptyResults from '@/components/empty-section/EmptyResults'
 import ProgressBarComponent from '@/components/progress-bar.comp'
-import PaginationComponent from '@/components/table/Pagination.comp'
+import { PaginationV2 } from '@/components/table/PaginationV2.comp'
 import { cn } from '@/lib/utils'
 
 import { TableBody } from './components/TableBody'
@@ -106,17 +106,30 @@ export const PandaTableControlled = ({
         </div>
       </div>
       {enablePagination && (
-        <PaginationComponent
-          page={table.getState().pagination.pageIndex + 1}
-          pageSize={50}
-          pageNumbers={table.getPageCount()}
-          itemsTotalCount={data?.length}
-          nextPageHandler={() => {
-            table.nextPage()
+        <PaginationV2
+          pagination={{
+            page: table.getState().pagination.pageIndex + 1,
+            pageSize: 50
           }}
-          previousPageHandler={() => {
-            table.previousPage()
-          }}
+          goToPreviousPage={() => table.previousPage()}
+          goToNextPage={() => table.nextPage()}
+          goToPage={() => {}}
+          setPageSize={() => {}}
+          resetPagination={() => {}}
+          totalPages={table.getPageCount()}
+          isFirstPage={!table.getCanPreviousPage()}
+          isLastPage={!table.getCanNextPage()}
+          fromItem={
+            data?.length === 0
+              ? 0
+              : table.getState().pagination.pageIndex * 50 + 1
+          }
+          toItem={Math.min(
+            (table.getState().pagination.pageIndex + 1) * 50,
+            data?.length || 0
+          )}
+          total={data?.length || 0}
+          showPageSizeSelector={false}
         />
       )}
     </PandaTableContext.Provider>
