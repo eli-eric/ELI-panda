@@ -14,7 +14,7 @@ import type { UsePaginationReturn } from '@/types/pagination'
 import { PAGE_SIZE_OPTIONS } from '@/types/pagination'
 import { createMessageValues } from '@/utils/formatters'
 
-const text = message.cataloguePage.pagination.text
+const paginationMessages = message.cataloguePage.pagination
 
 interface PaginationV2Props extends UsePaginationReturn {
   total: number
@@ -49,7 +49,7 @@ export function PaginationV2({
         {/* Desktop: Full results text */}
         <p className="hidden sm:block text-sm text-muted-foreground">
           <FormattedMessage
-            id={text}
+            id={paginationMessages.text}
             values={createMessageValues({
               from: fromItem,
               to: toItem,
@@ -61,8 +61,7 @@ export function PaginationV2({
         {/* Mobile: Page X of Y */}
         <p className="sm:hidden text-sm text-muted-foreground">
           <FormattedMessage
-            id="pagination.pageOf"
-            defaultMessage="Page {page} of {total}"
+            id={paginationMessages.pageOf}
             values={{ page: pagination.page, total: totalPages }}
           />
         </p>
@@ -74,10 +73,7 @@ export function PaginationV2({
         {showPageSizeSelector && (
           <div className="hidden sm:flex items-center gap-2">
             <span className="text-sm text-muted-foreground">
-              <FormattedMessage
-                id="pagination.rowsPerPage"
-                defaultMessage="Rows:"
-              />
+              <FormattedMessage id={paginationMessages.rowsPerPage} />
             </span>
             <Select
               value={pagination.pageSize.toString()}

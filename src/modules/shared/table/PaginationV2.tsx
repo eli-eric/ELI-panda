@@ -30,13 +30,15 @@ export function PaginationV2({ tableId, settings }: PaginationV2Props) {
     showPageSizeSelector = true
   } = settings || {}
 
-  const paginationState = usePagination({
+  const paginationHook = usePagination({
     tableId,
     enableQueryURL,
     total,
     pageSizeDefault,
     pageSizeOptions
   })
+
+  const { pagination, resetPagination } = paginationHook
 
   // Track search/filter/sort changes to reset pagination
   const { instances } = useTableStateStore()
@@ -72,17 +74,17 @@ export function PaginationV2({ tableId, settings }: PaginationV2Props) {
       prev.sortBy !== sortBy ||
       prev.columnFilterKey !== columnFilterKey
 
-    if (hasChanged && paginationState.pagination.page !== 1) {
-      paginationState.resetPagination()
+    if (hasChanged && pagination.page !== 1) {
+      resetPagination()
     }
 
     // Update refs for next comparison
     prevValuesRef.current = { search, filter, sortBy, columnFilterKey }
-  }, [search, filter, sortBy, columnFilterKey, paginationState])
+  }, [search, filter, sortBy, columnFilterKey, pagination.page, resetPagination])
 
   return (
     <PaginationComponent
-      {...paginationState}
+      {...paginationHook}
       total={total}
       pageSizeOptions={pageSizeOptions}
       showPageSizeSelector={showPageSizeSelector}

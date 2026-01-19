@@ -160,12 +160,13 @@ export function usePagination({
  * Used by SearchBar and filter components
  */
 export function useResetPaginationOnChange(tableId: string) {
-  const { setPaginationState, instances } = useTableStateStore()
+  const setPaginationState = useTableStateStore(state => state.setPaginationState)
 
   return useCallback(() => {
-    const current = instances[tableId]?.paginationState
+    // Get current state at call time to avoid stale closure
+    const current = useTableStateStore.getState().instances[tableId]?.paginationState
     if (current && current.page !== 1) {
       setPaginationState(tableId, { ...current, page: 1 })
     }
-  }, [tableId, setPaginationState, instances])
+  }, [tableId, setPaginationState])
 }

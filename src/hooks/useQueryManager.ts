@@ -2,7 +2,7 @@ import { useQueryState } from 'next-usequerystate'
 import { useMemo } from 'react'
 
 import useTableStateStore from '@/store/useTableStateStore'
-import { toLegacyPagination } from '@/types/pagination'
+import { DEFAULT_PAGINATION, toLegacyPagination } from '@/types/pagination'
 import type { CodebookType } from '@/types/responses/codebook'
 
 interface Query {
@@ -50,8 +50,8 @@ export default function useQueryManager(tableId: string): { query: Query } {
     }
 
     // Priority 3: URL params with defaults
-    const page = pageQuery ? parseInt(pageQuery, 10) : 1
-    const pageSize = pageSizeQuery ? parseInt(pageSizeQuery, 10) : 50
+    const page = pageQuery ? parseInt(pageQuery, 10) : DEFAULT_PAGINATION.page
+    const pageSize = pageSizeQuery ? parseInt(pageSizeQuery, 10) : DEFAULT_PAGINATION.pageSize
     return `{"page":${page},"pageSize":${pageSize}}`
   }, [instances, tableId, pageQuery, pageSizeQuery])
 

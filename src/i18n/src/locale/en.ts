@@ -404,7 +404,9 @@ export const messages = {
       }
     },
     pagination: {
-      text: 'Showing <medium>{from}</medium> to <medium>{to}</medium> of <medium>{resultsCount}</medium> results'
+      text: 'Showing <medium>{from}</medium> to <medium>{to}</medium> of <medium>{resultsCount}</medium> results',
+      pageOf: 'Page {page} of {total}',
+      rowsPerPage: 'Rows:'
     },
     itemList: {
       header: {
