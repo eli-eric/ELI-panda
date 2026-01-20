@@ -27,6 +27,13 @@ export const usePublicationFields = () => {
       rounded: 'rounded-md',
       disabled
     },
+    // Disabled @deprecated field
+    mediaType: {
+      label: form.mediaType.label,
+      name: 'mediaType',
+      rounded: 'rounded-md',
+      disabled: true
+    },
     mediaTypeCb: {
       label: form.mediaTypeCb.label,
       name: 'mediaTypeCb',
@@ -34,6 +41,7 @@ export const usePublicationFields = () => {
       disabled,
       codebook: CODEBOOK.MEDIA_TYPE
     },
+    // Disabled @deprecated field
     experimentalSystem: {
       label: form.experimentalSystem.label,
       name: 'experimentalSystem',
@@ -42,7 +50,7 @@ export const usePublicationFields = () => {
     },
     experimentalSystemCb: {
       label: form.experimentalSystemCb.label,
-      name: 'expermentalSystemCb',
+      name: 'experimentalSystemCb',
       rounded: 'rounded-md',
       disabled,
       codebook: CODEBOOK.EXPERIMENTAL_SYSTEM
@@ -55,6 +63,7 @@ export const usePublicationFields = () => {
       disabled,
       codebook: CODEBOOK.USER_CALL
     },
+    // Disabled @deprecated field
     userExperiment: {
       label: form.userExperiment.label,
       rounded: 'rounded-md',
@@ -220,6 +229,7 @@ export const usePublicationFields = () => {
       name: 'oecdFord',
       disabled
     },
+    // Disabled @deprecated field
     grant: {
       rounded: 'rounded-md',
       label: form.grant.label,

@@ -1,4 +1,4 @@
-import Listbox from '@/components/form/Listbox'
+import Combobox from '@/components/form/Combobox'
 import { useCodebook } from '@/hooks/fetch/useCodebook'
 import { CODEBOOK } from '@/types/constants/codebook'
 
@@ -31,5 +31,5 @@ export function PublishingCountryListbox() {
   const filteredData = data?.data.filter(country =>
     allowedCountries.includes(country.code ?? '')
   )
-  return <Listbox {...publishingCountry} codebookResponse={filteredData} />
+  return <Combobox {...publishingCountry} />
 }

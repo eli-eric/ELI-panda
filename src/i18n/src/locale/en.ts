@@ -909,6 +909,7 @@ export const messages = {
     table: {
       name: 'Name',
       uid: 'UID',
+      code: 'Code',
       searchPlaceholder: 'Search values...',
       noMatchingValues: 'No values match the search',
       emptyCodebook: 'Codebook is empty'
@@ -995,6 +996,7 @@ export const messages = {
     addDepartmentButton: '+ Add Another ELI Department',
     form: {
       department: { label: 'ELI Department*', placeholder: 'Select' },
+      mediaType: { label: 'Media Type @deprecated' },
       mediaTypeCb: { label: 'Media Type*', placeholder: 'Select' },
       authorsCount: { label: 'ELI Department Authors Count*' },
       code: { label: 'Code*', placeholder: 'Code' },
@@ -1019,11 +1021,14 @@ export const messages = {
       title: { label: 'Title* (R06)', placeholder: 'Title' },
       allAuthors: { label: 'All Authors list*' },
       allAuthorsCount: { label: 'All Authors Count (R10)*' },
-      eliAuthors: {
+      eliAuthorsList: {
         label: 'ELI Authors*',
         addButton: 'Add Eli Author',
         noSelection: 'No ELI Authors selected',
         modalTitle: 'Select ELI Authors'
+      },
+      eliAuthors: {
+        label: 'ELI Authors @deprecated'
       },
       eliAuthorsCount: { label: 'ELI Authors Count (R11)' },
       longJournalTitle: { label: 'Long Journal Title (R16)*' },
@@ -1199,7 +1204,8 @@ export const messages = {
       badge: 'Preview',
       createdBadge: 'Created',
       emptyTitle: 'No preview available',
-      emptyDescription: 'Fill in the form to preview system codes that will be created.'
+      emptyDescription:
+        'Fill in the form to preview system codes that will be created.'
     },
     emptyState: {
       title: 'No system codes found',

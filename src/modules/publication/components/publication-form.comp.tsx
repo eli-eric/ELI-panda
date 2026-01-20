@@ -3,7 +3,6 @@ import { Input, TextArea } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
 import Card from '@/components/layout/Card'
-import { isFeatureEnabled } from '@/config/featureFlags'
 
 import { usePublicationFields } from '../hooks/usePublicationFields'
 import { DepartmentsComponent } from './departments.comp'
@@ -27,11 +26,21 @@ export const PublicationFormComponent = () => {
   return (
     <Card className="py-6">
       <Grid>
+        <Col lg={12}>
+          <Input {...fields.mediaType} />
+        </Col>
         <Col lg={6}>
           <Listbox {...fields.mediaTypeCb} />
         </Col>
         <Col lg={6}>
           <Input {...fields.code} />
+        </Col>
+        <Col lg={4}></Col>
+        <Col lg={4}>
+          <Input {...fields.userExperiment} />
+        </Col>
+        <Col lg={4}>
+          <Input {...fields.experimentalSystem} />
         </Col>
         <Col lg={4}>
           <Listbox {...fields.userCall} allowEmptyOption />
@@ -63,11 +72,9 @@ export const PublicationFormComponent = () => {
         <Col lg={12}>
           <TextArea {...fields.eliAuthors} />
         </Col>
-        {isFeatureEnabled('enableEliAuthorsResearcherPicker') && (
-          <Col lg={12}>
-            <EliAuthorsSelectComponent />
-          </Col>
-        )}
+        <Col lg={12}>
+          <EliAuthorsSelectComponent />
+        </Col>
         <Col lg={12}>
           <DepartmentsComponent />
         </Col>
@@ -119,6 +126,11 @@ export const PublicationFormComponent = () => {
         <Col lg={12}>
           <TextArea {...fields.keywords} />
         </Col>
+        <Col lg={4}></Col>
+        <Col lg={4}>
+          <Input {...fields.grant} />
+        </Col>
+        <Col lg={4}></Col>
         <Col lg={4}>
           <Input {...fields.oecdFord} />
         </Col>

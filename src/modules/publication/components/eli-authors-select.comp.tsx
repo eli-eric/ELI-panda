@@ -14,7 +14,7 @@ import {
 } from '@/modules/shared/form/researcherSelect'
 import { ROLE } from '@/types/constants/roles'
 
-const { eliAuthors: eliAuthorsMessages } = message.publication.form
+const { eliAuthorsList: eliAuthorsMessages } = message.publication.form
 
 /**
  * Component for selecting ELI Authors (researchers) in publication form.
