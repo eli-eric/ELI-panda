@@ -1,4 +1,4 @@
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 
 import { Input } from '@/components/form/inputs'
 import { InputAmountCurrency } from '@/components/form/inputs/components/InputAmountCurrency.comp'
@@ -9,11 +9,21 @@ import type { OrderLineFormType } from '@/modules/orderItem/types/form'
 import useOrderLineFormFields from '../OrderLineForm.fields'
 
 export const OrderLineStep2Form = () => {
-  const { watch } = useFormContext<OrderLineFormType>()
+  const { watch, control } = useFormContext<OrderLineFormType>()
 
   // Read from form state to determine if item is from catalogue
   const selectedCatalogueItem = watch('_selectedCatalogueItem')
   const isFromCatalogue = Boolean(selectedCatalogueItem)
+
+  // Watch both fields for mutual exclusivity indication
+  const quantity = useWatch({ control, name: 'quantity' })
+  const serialNumbers = useWatch({ control, name: 'serialNumbers' })
+
+  const hasQuantity =
+    quantity !== null && quantity !== undefined && Number(quantity) > 0
+  const hasSerialNumbers = Boolean(
+    serialNumbers && serialNumbers.trim().length > 0
+  )
 
   const formFields = useOrderLineFormFields(!isFromCatalogue)
 
@@ -36,11 +46,15 @@ export const OrderLineStep2Form = () => {
       <Col lg={4} md={6}>
         <Listbox {...formFields.itemUsage} position="top" />
       </Col>
+
+      {/* Quantity field - dimmed when serialNumbers is filled */}
       <Col md={6} lg={4}>
-        <Input {...formFields.quantity} />
+        <Input {...formFields.quantity} disabled={hasSerialNumbers} />
       </Col>
+
+      {/* Serial Numbers field - dimmed when quantity is filled */}
       <Col md={12} lg={12}>
-        <Input {...formFields.serialNumbers} />
+        <Input {...formFields.serialNumbers} disabled={hasQuantity} />
       </Col>
     </Grid>
   )

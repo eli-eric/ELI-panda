@@ -39,6 +39,8 @@ export interface OrderLineSystemConfig {
   systemName: string
   /** Selected existing system - only populated when systemType is "existing" */
   selectedSystem?: CodebookType | null
+  /** Individual serial number for this order line (parsed from comma-separated serialNumbers) */
+  serialNumber?: string
 }
 
 export interface OrderLineFormType extends FieldValues {

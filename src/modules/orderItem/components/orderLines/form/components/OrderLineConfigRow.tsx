@@ -18,18 +18,24 @@ interface OrderLineConfigRowProps {
     selectedSystem?: CodebookType,
     selectedSystemParent?: CodebookType
   ) => void
+  showSerialNumber?: boolean
 }
 
 /**
  * Single row component for order line system configuration
- * Displays: #, Item Name, Parent System, System Type, System Name
+ * Displays: #, Item Name, [Serial Number], Parent System, System Type, System Name
  */
 export const OrderLineConfigRow = memo(
-  ({ index, config, onTypeChange }: OrderLineConfigRowProps) => {
+  ({ index, config, onTypeChange, showSerialNumber }: OrderLineConfigRowProps) => {
     return (
       <TableRow>
         <TableCell className="font-medium">{index + 1}</TableCell>
         <TableCell>{config.itemName}</TableCell>
+        {showSerialNumber && (
+          <TableCell className="font-mono text-sm">
+            {config.serialNumber || '-'}
+          </TableCell>
+        )}
         <TableCell>
           {/* parentSystem is used for BOTH new and existing systems */}
           {config.parentSystem?.name || '-'}

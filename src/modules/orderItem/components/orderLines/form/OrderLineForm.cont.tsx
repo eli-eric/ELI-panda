@@ -27,7 +27,7 @@ const OrderLineModalContent = ({
     const systemConfigs = data.systemConfigs || []
 
     // Convert each system config to individual order line
-    systemConfigs.forEach(config => {
+    const orderLines = systemConfigs.map(config => {
       // Create clean OrderLineFormType without wizard fields
       const orderLine: OrderLineFormType = {
         // Copy base data from wizard
@@ -35,7 +35,8 @@ const OrderLineModalContent = ({
         catalogueNumber: data.catalogueNumber,
         price: data.price,
         currency: data.currency,
-        serialNumbers: data.serialNumbers,
+        // Use individual serial number from config (parsed from comma-separated serialNumbers)
+        serialNumber: config.serialNumber || undefined,
         location: data.location,
         itemUsage: data.itemUsage,
         notes: data.notes,
@@ -54,9 +55,11 @@ const OrderLineModalContent = ({
             : undefined
       } as OrderLineFormType
 
-      // Pass clean OrderLineFormType (no wizard fields!)
-      onSave?.(orderLine)
+      return orderLine
     })
+
+    // Save all order lines
+    orderLines.forEach(orderLine => onSave?.(orderLine))
 
     reset()
     if (currentOrderLineModalId) {
