@@ -48,18 +48,18 @@ export const NAV_ITEMS: NavigationItem[] = [
   {
     title: 'Control Systems',
     url: PATH.CONTROL_SYSTEMS,
-    role: ROLE.BASICS,
+    role: ROLE.CONTROL_SYSTEMS_VIEW,
     icon: Cpu,
     items: [
       {
         title: 'Overview',
         url: PATH.CONTROL_SYSTEMS,
-        role: ROLE.BASICS
+        role: ROLE.CONTROL_SYSTEMS_VIEW
       },
       {
         title: 'Create System Codes',
         url: PATH.CONTROL_SYSTEMS_CREATE,
-        role: ROLE.BASICS
+        role: ROLE.CONTROL_SYSTEMS_EDIT
       }
     ]
   },
