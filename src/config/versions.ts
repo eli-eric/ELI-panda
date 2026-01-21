@@ -18,8 +18,93 @@ export interface VersionData {
 }
 
 export const versionsData: VersionData = {
-  currentVersion: '2.0.1',
+  currentVersion: '2.1.0',
   releases: [
+    {
+      version: '2.1.0',
+      date: '2025-01-20',
+      title: 'Global Search, Control Systems & Dynamic Modals',
+      description:
+        'Major feature release with global search command palette, new control systems module, dynamic modal system, and enhanced UX across the application',
+      type: 'minor',
+      changes: [
+        {
+          category: 'Global Search',
+          items: [
+            'Implemented global search command palette with keyboard shortcut (Cmd/Ctrl+K)',
+            'Added search results grouped by type (Systems, Orders, Catalogue, etc.) with color-coded badges',
+            'Quick navigation menu for fast access to main sections',
+            'Persistent search state with Zustand store'
+          ]
+        },
+        {
+          category: 'Control Systems Module',
+          items: [
+            'New Control Systems module for managing system codes',
+            'Overview page with inline filters and sortable table',
+            'Create page with form validation and preview table',
+            'Edit and delete actions with permission guards'
+          ]
+        },
+        {
+          category: 'Publications - ELI Authors',
+          items: [
+            'Researcher selection modal for ELI Authors in publications',
+            'Multi-select interface with badge display for selected authors',
+            'Create new researcher directly from selection modal',
+            'Conditional validation based on ELI authorship'
+          ]
+        },
+        {
+          category: 'Dynamic Modal System',
+          items: [
+            'New dynamic modal system supporting unlimited nested modals',
+            'Automatic z-index management for proper stacking',
+            'DynamicModalProvider for centralized modal rendering',
+            'Migration from useModalGlobalStore to useDynamicModalStore'
+          ]
+        },
+        {
+          category: 'Room Card Operational States',
+          items: [
+            'Added 6 operational states with visual indicators',
+            'History tracking with user and timestamp',
+            'Permission-based editing restricted to Area Managers',
+            'State change modal with history view'
+          ]
+        },
+        {
+          category: 'Order Line Improvements',
+          items: [
+            'Multi-step wizard for order line creation',
+            'Catalogue item selection with filtering and pinned items',
+            'System configuration step with hierarchy breadcrumbs',
+            'Improved form handling and validation'
+          ]
+        },
+        {
+          category: 'User Experience',
+          items: [
+            'Codebooks UX overhaul with inline editing and pagination',
+            'Table skeleton loading states and refetching indicators',
+            'Clear button on Combobox and Listbox components',
+            'Custom scrollbar styles for dark and light modes',
+            'Customizable empty message in table body'
+          ]
+        },
+        {
+          category: 'Bug Fixes',
+          items: [
+            'Fixed service line edit sheet form handling and duplicate issues',
+            'Fixed room card stale data and skeleton loading states',
+            'Fixed publication submission query invalidation',
+            'Fixed system item employee CRUD operations',
+            'Fixed order submit price type conversion',
+            'Fixed filter operations and separation of concerns'
+          ]
+        }
+      ]
+    },
     {
       version: '2.0.1',
       date: '2025-10-24',

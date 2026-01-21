@@ -1,24 +1,24 @@
-import type { ElementType } from 'react'
+import type { LucideIcon } from 'lucide-react'
 
-import type { NavigationType } from '@/types/constants/paths'
+import type { NavigationItem } from '@/lib/navigation/types'
 import type { ROLE } from '@/types/constants/roles'
 
 export interface QuickNavItem {
   title: string
   url: string
-  icon: ElementType
+  icon: LucideIcon
   category?: string
 }
 
 /**
  * Maps navigation configuration to quick navigation items
  * Filters by user permissions and flattens submenu items
- * @param navConfig - Navigation configuration from NAV_BAR_CONFIG
+ * @param navConfig - Navigation configuration from NAV_ITEMS
  * @param userRoles - Current user's roles
  * @returns Filtered and flattened quick navigation items
  */
 export function mapNavBarToQuickNav(
-  navConfig: NavigationType[],
+  navConfig: NavigationItem[],
   userRoles?: ROLE[]
 ): QuickNavItem[] {
   if (!userRoles || userRoles.length === 0) {
@@ -33,27 +33,32 @@ export function mapNavBarToQuickNav(
       continue
     }
 
-    // If item has direct link, add it
-    if (navItem.link) {
+    // Skip items without icon (required for quick nav display)
+    if (!navItem.icon) {
+      continue
+    }
+
+    // If item has no subitems, add it as direct link
+    if (!navItem.items || navItem.items.length === 0) {
       quickNavItems.push({
-        title: navItem.name,
-        url: navItem.link,
-        icon: navItem.Icon
+        title: navItem.title,
+        url: navItem.url,
+        icon: navItem.icon
       })
     }
 
     // If item has submenu, add filtered sub-items
-    if (navItem.links) {
-      const filteredSubItems = navItem.links.filter(subItem =>
+    if (navItem.items) {
+      const filteredSubItems = navItem.items.filter(subItem =>
         userRoles.includes(subItem.role)
       )
 
       for (const subItem of filteredSubItems) {
         quickNavItems.push({
-          title: subItem.name || navItem.name,
-          url: subItem.path,
-          icon: navItem.Icon,
-          category: navItem.name
+          title: subItem.title,
+          url: subItem.url,
+          icon: navItem.icon,
+          category: navItem.title
         })
       }
     }

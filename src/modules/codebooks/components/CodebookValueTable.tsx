@@ -58,6 +58,16 @@ export const CodebookValueTable = ({
         size: 300
       },
       {
+        accessorKey: 'code',
+        header: fm({ id: message.codebooksPage.table.code }),
+        cell: ({ getValue }) => (
+          <code className="rounded bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">
+            {getValue<string | undefined>()}
+          </code>
+        ),
+        size: 200
+      },
+      {
         accessorKey: 'uid',
         header: fm({ id: message.codebooksPage.table.uid }),
         cell: ({ row }) => (

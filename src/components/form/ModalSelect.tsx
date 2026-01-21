@@ -53,13 +53,13 @@ export const ModalSelect = ({
                 disabled={disabled}
                 onClick={onClick}
                 className={cn(
-                  'w-full justify-between h-9 px-3 font-normal',
+                  'w-full justify-between h-9 px-3 font-normal overflow-hidden',
                   !value && 'text-muted-foreground',
                   error && 'border-destructive',
                   isFilter && field.value && 'border-2 border-lime-500'
                 )}
               >
-                <span className="truncate text-left">
+                <span className="truncate text-left min-w-0 flex-1">
                   {value || placeholder}
                 </span>
 

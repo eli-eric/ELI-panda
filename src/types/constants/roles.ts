@@ -20,5 +20,7 @@ export enum ROLE {
   PUBLICATIONS_VIEW = 'publications-view',
   PUBLICATIONS_EDIT = 'publications-edit',
   SERVICE_VIEW = 'catalogue-service-view',
-  SERVICE_EDIT = 'catalogue-service-edit'
+  SERVICE_EDIT = 'catalogue-service-edit',
+  CONTROL_SYSTEMS_VIEW = 'control-systems-view',
+  CONTROL_SYSTEMS_EDIT = 'control-systems-edit'
 }

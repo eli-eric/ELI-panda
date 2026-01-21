@@ -87,7 +87,7 @@ export const publicationPeerReviewedSchema = z.object({
   }),
 
   // Optional fields
-  mediaType: z.string().min(1, 'Media Type is required'),
+  mediaType: z.string().optional(),
   mediaTypeCb: codebookSchema.refine(val => val, {
     message: 'Media Type is required'
   }),

@@ -909,6 +909,7 @@ export const messages = {
     table: {
       name: 'Name',
       uid: 'UID',
+      code: 'Code',
       searchPlaceholder: 'Search values...',
       noMatchingValues: 'No values match the search',
       emptyCodebook: 'Codebook is empty'
@@ -995,6 +996,7 @@ export const messages = {
     addDepartmentButton: '+ Add Another ELI Department',
     form: {
       department: { label: 'ELI Department*', placeholder: 'Select' },
+      mediaType: { label: 'Media Type @deprecated' },
       mediaTypeCb: { label: 'Media Type*', placeholder: 'Select' },
       authorsCount: { label: 'ELI Department Authors Count*' },
       code: { label: 'Code*', placeholder: 'Code' },
@@ -1019,11 +1021,14 @@ export const messages = {
       title: { label: 'Title* (R06)', placeholder: 'Title' },
       allAuthors: { label: 'All Authors list*' },
       allAuthorsCount: { label: 'All Authors Count (R10)*' },
-      eliAuthors: {
+      eliAuthorsList: {
         label: 'ELI Authors*',
         addButton: 'Add Eli Author',
         noSelection: 'No ELI Authors selected',
         modalTitle: 'Select ELI Authors'
+      },
+      eliAuthors: {
+        label: 'ELI Authors @deprecated'
       },
       eliAuthorsCount: { label: 'ELI Authors Count (R11)' },
       longJournalTitle: { label: 'Long Journal Title (R16)*' },
@@ -1163,6 +1168,49 @@ export const messages = {
   servicesPage: {
     title: 'Manage Services',
     addNewService: 'Add New Service'
+  },
+  controlSystems: {
+    pages: {
+      overview: 'Control Systems Overview',
+      create: 'Create System Codes'
+    },
+    columns: {
+      systemCode: 'System Code',
+      name: 'Name',
+      location: 'Location',
+      zone: 'Zone',
+      updatedBy: 'Updated By',
+      createdBy: 'Created By',
+      status: 'Status'
+    },
+    form: {
+      zone: 'Zone',
+      systemType: 'System Type',
+      batch: 'Batch Count',
+      batchPlaceholder: 'Number of system codes to create'
+    },
+    toast: {
+      creating: 'Creating system codes...',
+      created: 'System codes created successfully',
+      failedToCreate: 'Failed to create system codes',
+      previewing: 'Loading preview...',
+      previewFailed: 'Failed to load preview'
+    },
+    buttons: {
+      create: 'Create System Codes',
+      preview: 'Preview'
+    },
+    preview: {
+      badge: 'Preview',
+      createdBadge: 'Created',
+      emptyTitle: 'No preview available',
+      emptyDescription:
+        'Fill in the form to preview system codes that will be created.'
+    },
+    emptyState: {
+      title: 'No system codes found',
+      description: 'No system codes match your current filters.'
+    }
   },
   catalogue: {
     category: {
