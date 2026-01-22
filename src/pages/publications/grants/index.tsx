@@ -2,16 +2,18 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import { Fragment } from 'react'
 
-const ResearchersPage: NextPage = (): JSX.Element => {
+import { GrantsContainer } from '@/modules/grants/grants.cont'
+
+const GrantsPage: NextPage = (): JSX.Element => {
   return (
     <Fragment>
       <Head>
-        <title>Researchers</title>
-        <meta name="description" content="Manage researchers" />
+        <title>Grants</title>
+        <meta name="description" content="Manage grants" />
       </Head>
-      <>GRANTS</>
+      <GrantsContainer />
     </Fragment>
   )
 }
 
-export default ResearchersPage
+export default GrantsPage
