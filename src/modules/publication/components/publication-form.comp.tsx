@@ -7,7 +7,6 @@ import Card from '@/components/layout/Card'
 import { usePublicationFields } from '../hooks/usePublicationFields'
 import { DepartmentsComponent } from './departments.comp'
 import { EliAuthorsSelectComponent } from './eli-authors-select.comp'
-import { PublishingCountryListbox } from './publishing-country.listbox'
 import { WebLinkField } from './web-link.field'
 
 export type Publication = {
@@ -135,7 +134,7 @@ export const PublicationFormComponent = () => {
           <Input {...fields.oecdFord} />
         </Col>
         <Col lg={4}>
-          <Combobox {...fields.grantCb} />
+          <div>new GRANTS logic</div>
         </Col>
         <Col lg={4}>
           <Input {...fields.foreignGrant} />
@@ -153,7 +152,7 @@ export const PublicationFormComponent = () => {
           <Input {...fields.eidScopus} />
         </Col>
         <Col lg={4}>
-          <PublishingCountryListbox />
+          <Combobox {...fields.publishingCountry} />
         </Col>
         <Col lg={12}>
           <Input

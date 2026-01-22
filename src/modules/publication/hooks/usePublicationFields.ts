@@ -278,7 +278,7 @@ export const usePublicationFields = () => {
       placeholder: form.publishingCountry.placeholder,
       rounded: 'rounded-md',
       name: 'publishingCountry',
-      CODEBOOK: CODEBOOK.COUNTRY,
+      codebook: CODEBOOK.COUNTRY,
       disabled
     },
     language: {
