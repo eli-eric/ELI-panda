@@ -1,3 +1,4 @@
+import type { SelectedGrant } from '@/modules/shared/form/grantSelect'
 import type { SelectedResearcher } from '@/modules/shared/form/researcherSelect'
 import type { CodebookType } from '@/types/responses/codebook'
 
@@ -38,9 +39,9 @@ export interface Publication {
   abstract: string
   keywords: string
   oecdFord?: string
-  /**  @deprecated use grantCb */
+  /** @deprecated use grants array */
   grant?: string
-  grantCb?: CodebookType
+  grants?: SelectedGrant[]
   foreignGrant?: string
   wosNumber?: string
   issn?: string

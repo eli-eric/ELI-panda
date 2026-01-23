@@ -1,51 +1,38 @@
 import { Plus, X } from 'lucide-react'
-import { useEffect } from 'react'
-import { useFieldArray, useFormContext } from 'react-hook-form'
-import { FormattedMessage, useIntl } from 'react-intl'
+import { useFieldArray } from 'react-hook-form'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { useAccessControl } from '@/hooks/useAccessControl'
-import { message } from '@/i18n/src/messages'
 import {
-  type SelectedResearcher,
-  useResearcherSelectionModal
-} from '@/modules/shared/form/researcherSelect'
+  type SelectedGrant,
+  useGrantSelectionModal
+} from '@/modules/shared/form/grantSelect'
 import { ROLE } from '@/types/constants/roles'
 
-const { eliAuthorsList: eliAuthorsMessages } = message.publication.form
-
 /**
- * Component for selecting ELI Authors (researchers) in publication form.
+ * Component for selecting Grants in publication form.
  *
  * Features:
- * - Displays selected researchers as removable badges
- * - "Add Eli Author" button opens selection modal
- * - Auto-updates eliAuthorsCount when selection changes
+ * - Displays selected grants as removable badges
+ * - "Add Grant" button opens selection modal
  * - Respects user permissions (PUBLICATIONS_EDIT role)
  */
-export const EliAuthorsSelectComponent = () => {
-  const { formatMessage: fm } = useIntl()
+export const GrantsSelectComponent = () => {
   const { fields, replace, remove } = useFieldArray<{
-    eliResearchers: SelectedResearcher[]
+    grants: SelectedGrant[]
   }>({
-    name: 'eliResearchers'
+    name: 'grants'
   })
 
-  const { setValue } = useFormContext()
   const disabled = !useAccessControl(ROLE.PUBLICATIONS_EDIT)()
-  const { openResearcherModal } = useResearcherSelectionModal()
-
-  // Auto-update eliAuthorsCount when researchers change
-  useEffect(() => {
-    setValue('eliAuthorsCount', fields.length)
-  }, [fields.length, setValue])
+  const { openGrantModal } = useGrantSelectionModal()
 
   const handleOpenModal = () => {
-    openResearcherModal(selected => {
+    openGrantModal(selected => {
       replace(selected)
-    }, fields as SelectedResearcher[])
+    }, fields as SelectedGrant[])
   }
 
   const handleRemove = (index: number) => {
@@ -54,16 +41,13 @@ export const EliAuthorsSelectComponent = () => {
 
   return (
     <div className="space-y-2">
-      <Label>
-        <FormattedMessage id={eliAuthorsMessages.label} />
-        <span className="ml-2 text-muted-foreground">({fields.length})</span>
-      </Label>
+      <Label>Grants</Label>
 
-      {/* Selected researchers as badges */}
+      {/* Selected grants as badges */}
       <div className="flex flex-wrap gap-2 min-h-[32px]">
         {fields.length === 0 ? (
           <span className="text-sm text-muted-foreground">
-            <FormattedMessage id={eliAuthorsMessages.noSelection} />
+            No grants selected
           </span>
         ) : (
           fields.map((field, index) => (
@@ -72,18 +56,13 @@ export const EliAuthorsSelectComponent = () => {
               variant="secondary"
               className="flex items-center gap-1 pr-1"
             >
-              <span>
-                {field.lastName}, {field.firstName}
-              </span>
+              <span>{field.name}</span>
               {!disabled && (
                 <button
                   type="button"
                   onClick={() => handleRemove(index)}
                   className="ml-1 rounded-full hover:bg-muted p-0.5"
-                  aria-label={fm(
-                    { id: 'common.remove' },
-                    { name: `${field.firstName} ${field.lastName}` }
-                  )}
+                  aria-label={`Remove ${field.name}`}
                 >
                   <X className="h-3 w-3" />
                 </button>
@@ -103,7 +82,7 @@ export const EliAuthorsSelectComponent = () => {
           className="mt-2"
         >
           <Plus className="h-4 w-4 mr-1" />
-          <FormattedMessage id={eliAuthorsMessages.addButton} />
+          Add Grant
         </Button>
       )}
     </div>

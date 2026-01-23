@@ -3,10 +3,12 @@ import { Input, TextArea } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
 import Card from '@/components/layout/Card'
+import { Separator } from '@/components/ui/separator'
 
 import { usePublicationFields } from '../hooks/usePublicationFields'
 import { DepartmentsComponent } from './departments.comp'
 import { EliAuthorsSelectComponent } from './eli-authors-select.comp'
+import { GrantsSelectComponent } from './grants-select.comp'
 import { WebLinkField } from './web-link.field'
 
 export type Publication = {
@@ -71,12 +73,15 @@ export const PublicationFormComponent = () => {
         <Col lg={12}>
           <TextArea {...fields.eliAuthors} />
         </Col>
+        <Separator className="my-4 col-span-full" />
         <Col lg={12}>
           <EliAuthorsSelectComponent />
         </Col>
+        <Separator className="my-4 col-span-full" />
         <Col lg={12}>
           <DepartmentsComponent />
         </Col>
+        <Separator className="my-4 col-span-full" />
         <Col lg={6}>
           <Input {...fields.longJournalTitle} />
         </Col>
@@ -125,19 +130,19 @@ export const PublicationFormComponent = () => {
         <Col lg={12}>
           <TextArea {...fields.keywords} />
         </Col>
-        <Col lg={4}></Col>
-        <Col lg={4}>
-          <Input {...fields.grant} />
+        <Col lg={12}>
+          <TextArea {...fields.foreignGrant} />
         </Col>
-        <Col lg={4}></Col>
+        <Col lg={12}>
+          <TextArea {...fields.grant} />
+        </Col>
+        <Separator className="my-4 col-span-full" />
+        <Col lg={12}>
+          <GrantsSelectComponent />
+        </Col>
+        <Separator className="my-4 col-span-full" />
         <Col lg={4}>
           <Input {...fields.oecdFord} />
-        </Col>
-        <Col lg={4}>
-          <div>new GRANTS logic</div>
-        </Col>
-        <Col lg={4}>
-          <Input {...fields.foreignGrant} />
         </Col>
         <Col lg={2}>
           <Input {...fields.wosNumber} />
