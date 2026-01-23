@@ -1,5 +1,7 @@
 import { Fragment } from 'react'
 
+import { useSystemStore } from '@/modules/shared/system/device-info-overlay/store/useShowDeviceStore'
+import { useSystemEditSheet } from '@/modules/shared/system/system-edit/useSystemEditSheet'
 import { Pagination } from '@/modules/shared/table/Pagination'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import type { PandaTableSettings } from '@/modules/shared/table/pandaTable/PandaTable'
@@ -27,6 +29,16 @@ export const SystemCodesTable = ({
 }: Props) => {
   const { systemCodes, loading, queryKey } = useSystemCodes(tableId)
   const { columns } = useSystemCodesColumns({ queryKey })
+  const { setUID } = useSystemStore()
+
+  const openEdit = useSystemEditSheet()
+
+  const handleRowClick = (uid?: string) => {
+    if (uid) {
+      setUID(uid)
+      openEdit()
+    }
+  }
 
   const table = usePandaTable({
     tableId,
@@ -50,6 +62,12 @@ export const SystemCodesTable = ({
         loading={loading}
         tableId={tableId}
         skeletonRowCount={pageSizeDefault}
+        getRowProps={({ original: { uid } }) => ({
+          onClick: () => {
+            handleRowClick(uid)
+          },
+          className: 'cursor-pointer hover:text-primary hover:bg-secondary/50'
+        })}
         settings={{
           ...settings,
           enableColumnReordering: true

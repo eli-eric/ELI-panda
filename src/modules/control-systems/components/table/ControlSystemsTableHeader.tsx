@@ -93,7 +93,7 @@ export const ControlSystemsTableHeader = ({
           <SystemTypeComboBox
             systemTypeField={{
               name: 'systemType',
-              label: '',
+              placeholder: fm({ id: message.controlSystems.form.systemType }),
               disabled: false
             }}
             onChange={setFilter('systemType')}
