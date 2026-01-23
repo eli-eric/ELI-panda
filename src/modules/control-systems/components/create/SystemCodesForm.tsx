@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Minus, Plus } from 'lucide-react'
 import { useCallback, useEffect, useMemo } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useIntl } from 'react-intl'
@@ -40,7 +41,7 @@ export const SystemCodesForm = ({ onPreview, onSubmit, isPending }: Props) => {
     mode: 'onChange'
   })
 
-  const { watch, handleSubmit, formState, register, reset } = formMethods
+  const { watch, handleSubmit, formState, register, reset, setValue } = formMethods
   const { isValid, errors } = formState
 
   // Watch form values for preview
@@ -98,14 +99,35 @@ export const SystemCodesForm = ({ onPreview, onSubmit, isPending }: Props) => {
         {/* Batch field */}
         <div className="space-y-2">
           <Label htmlFor="batch">{fm({ id: message.controlSystems.form.batch })}</Label>
-          <Input
-            id="batch"
-            type="number"
-            min={1}
-            max={100}
-            {...register('batch', { valueAsNumber: true })}
-            placeholder={fm({ id: message.controlSystems.form.batchPlaceholder })}
-          />
+          <div className="flex items-center gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              onClick={() => setValue('batch', Math.max(1, (Number(batch) || 1) - 1))}
+              disabled={Number(batch) <= 1}
+            >
+              <Minus className="h-4 w-4" />
+            </Button>
+            <Input
+              id="batch"
+              type="number"
+              min={1}
+              max={100}
+              className="text-center"
+              {...register('batch', { valueAsNumber: true })}
+              placeholder={fm({ id: message.controlSystems.form.batchPlaceholder })}
+            />
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              onClick={() => setValue('batch', Math.min(100, (Number(batch) || 1) + 1))}
+              disabled={Number(batch) >= 100}
+            >
+              <Plus className="h-4 w-4" />
+            </Button>
+          </div>
           {errors.batch && (
             <p className="text-sm text-destructive">{errors.batch.message}</p>
           )}
