@@ -66,7 +66,7 @@ export const SystemCodesTable = ({
           onClick: () => {
             handleRowClick(uid)
           },
-          className: 'cursor-pointer hover:text-primary hover:bg-secondary/50'
+          className: 'cursor-pointer hover:text-primary hover:bg-primary/10'
         })}
         settings={{
           ...settings,

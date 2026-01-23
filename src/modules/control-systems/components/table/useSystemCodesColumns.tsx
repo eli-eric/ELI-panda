@@ -142,6 +142,23 @@ export const useSystemCodesColumns = ({
         }
       },
       {
+        header: fm({ id: message.controlSystems.columns.parentPath }),
+        accessorFn: row =>
+          row.parentPath?.map(item => item.name).join(' / ') ?? '',
+        id: 'parentPath',
+        size: 400,
+        cell: ({ row }) => {
+          const parentPath = row.original.parentPath
+          if (!parentPath || parentPath.length === 0) return null
+          const fullPath = parentPath.map(item => item.name).join(' / ')
+          return (
+            <Tooltip content={fullPath}>
+              <span className="block truncate">{fullPath}</span>
+            </Tooltip>
+          )
+        }
+      },
+      {
         header: fm({ id: message.controlSystems.columns.updatedBy }),
         accessorKey: 'updatedBy',
         id: 'updatedBy',

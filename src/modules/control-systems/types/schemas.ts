@@ -7,6 +7,12 @@ export const codebookTypeSchema = z.object({
   code: z.string().optional().nullable()
 })
 
+// Parent path item schema
+export const parentPathItemSchema = z.object({
+  name: z.string(),
+  uid: z.string()
+})
+
 // SystemCodeResult schema - fields returned by API
 // Preview endpoint returns subset (no uid, createdBy, updatedBy, location)
 export const systemCodeResultSchema = z.object({
@@ -15,6 +21,7 @@ export const systemCodeResultSchema = z.object({
   code: z.string(),
   location: codebookTypeSchema.optional().nullable(),
   zone: codebookTypeSchema,
+  parentPath: z.array(parentPathItemSchema).optional().nullable(),
   createdBy: z.string().optional().nullable(),
   updatedBy: z.string().optional().nullable()
 })
