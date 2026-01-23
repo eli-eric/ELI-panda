@@ -1,4 +1,3 @@
-
 export enum PATH {
   ROOT = '/',
   DASHBOARD = '/dashboard',
@@ -25,11 +24,12 @@ export enum PATH {
   PROFILE_SECURITY = '/profile/security',
   PROFILE_TEAM = '/profile/team',
   LAYOUT = '/layout',
-  PUBLICATIONS = '/publications',
+  PUBLICATIONS = '/publications/overview',
+  RESEARCHERS = '/publications/researchers',
+  GRANTS = '/publications/grants',
   PUBLICATION = '/publication',
   SERVICES = '/services',
   SERVICE = '/service',
-  RESEARCHERS = '/researchers',
   CONTROL_SYSTEMS = '/control-systems/overview',
   CONTROL_SYSTEMS_CREATE = '/control-systems/system-codes-create',
   NOT_FOUND = '/404'

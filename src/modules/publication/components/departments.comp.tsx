@@ -1,14 +1,14 @@
-import { Trash2 } from 'lucide-react'
-import { Fragment, useEffect } from 'react'
-import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
+import { Plus, Trash2 } from 'lucide-react'
+import { Fragment } from 'react'
+import { useFieldArray } from 'react-hook-form'
 import { FormattedMessage, useIntl } from 'react-intl'
 
 import { Input } from '@/components/form/inputs'
+import { Button } from '@/components/ui/button'
 import { useAccessControl } from '@/hooks/useAccessControl'
 import { message } from '@/i18n/src/messages'
 import { ROLE } from '@/types/constants/roles'
 
-import { usePublicationFields } from '../hooks/usePublicationFields'
 import { DepartmentListbox } from './department.listbox'
 const { form, addDepartmentButton } = message.publication
 
@@ -18,19 +18,6 @@ export const DepartmentsComponent = () => {
     rules: { required: 'This field is required', minLength: 1 }
   })
   const disabled = !useAccessControl(ROLE.PUBLICATIONS_EDIT)()
-
-  const { setValue, control } = useFormContext()
-  const authorsDepartments = useWatch({ control, name: 'authorsDepartments' })
-
-  const { eliAuthorsCount } = usePublicationFields()
-
-  useEffect(() => {
-    const eliAuthorsCountSum = authorsDepartments.reduce((acc, curr) => {
-      const authorsCount = curr['authorsCount'] || 0
-      return Number(acc) + Number(authorsCount)
-    }, 0)
-    setValue('eliAuthorsCount', eliAuthorsCountSum)
-  }, [authorsDepartments, setValue])
 
   const handleAppend = () => {
     append({ department: null, authorsCount: 0 })
@@ -62,19 +49,18 @@ export const DepartmentsComponent = () => {
           )}
         </div>
       ))}
-      <div className="grid grid-cols-12 pt-2">
-        {!disabled && (
-          <div className="col-span-6 items-center">
-            <button
-              className="text-gray-600 underline text-sm dark:text-gray-400 hover:text-orange-400  dark:hover:text-orange-600 pt-2 pl-2"
-              onClick={handleAppend}
-            >
-              <FormattedMessage id={addDepartmentButton} />
-            </button>
-          </div>
-        )}
-        <Input {...eliAuthorsCount} className="col-span-12 pt-4" />
-      </div>
+      {!disabled && (
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={handleAppend}
+          className="mt-4"
+        >
+          <Plus className="h-4 w-4 mr-1" />
+          <FormattedMessage id={addDepartmentButton} />
+        </Button>
+      )}
     </div>
   )
 }

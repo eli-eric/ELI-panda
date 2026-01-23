@@ -20,12 +20,24 @@ import {
   publicationOtherSchema,
   publicationPeerReviewedSchema
 } from './form/scheme'
-import { useMediaTypeStore } from './hooks/useMediaTypeStore'
 import { usePublicationMutation } from './hooks/usePublicationMutation'
-import { MEDIA_TYPE_CODE } from './types/constants'
+import { MEDIA_TYPE_UID } from './types/constants'
 import type { PublicationForm } from './types/form'
 import type { Publication } from './types/responses'
 import { formatFormData, formatPublication } from './utils/formatters'
+
+/**
+ * Dynamic resolver that selects validation schema based on mediaTypeCb.uid.
+ * Defined outside component to maintain stable reference.
+ */
+const dynamicResolver = async (values: any, context: any, options: any) => {
+  const isPeerReviewed =
+    values.mediaTypeCb?.uid === MEDIA_TYPE_UID.PEER_REVIEWED_ARTICLE
+  const schema = isPeerReviewed
+    ? publicationPeerReviewedSchema
+    : publicationOtherSchema
+  return zodResolver(schema)(values, context, options)
+}
 
 const messages = message.publication
 
@@ -42,8 +54,6 @@ export const PublicationDetailContainer: FC<Props> = ({
 
   const hasEditRole = useAccessControl(ROLE.PUBLICATIONS_EDIT)()
 
-  const { mediaType } = useMediaTypeStore()
-
   const publicationsTableId = 'publications'
 
   const queryClient = useQueryClient()
@@ -56,12 +66,7 @@ export const PublicationDetailContainer: FC<Props> = ({
 
   const formMethods = useForm<any>({
     defaultValues: publication ? formatPublication(publication) : defaultValues,
-    resolver: zodResolver(
-      //TODO: mediaTypeCb should be used to determine the schema some constants somewhere
-      mediaType === MEDIA_TYPE_CODE.PeerReviewedArticle
-        ? publicationPeerReviewedSchema
-        : publicationOtherSchema
-    )
+    resolver: dynamicResolver
   })
 
   const { mutate, isPending } = usePublicationMutation()

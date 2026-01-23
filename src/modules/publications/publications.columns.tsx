@@ -200,9 +200,10 @@ export const usePublicationColumns = () => {
       },
       {
         id: 'grant',
-        header: 'Grant',
+        header: 'Grants',
         size: 300,
-        accessorFn: row => row.grantCb?.name || row.grant,
+        accessorFn: row =>
+          row.grants?.map(g => g.name).join(', ') || row.grant,
         cell: ({ getValue }) => (
           <ShortCell value={getValue()} numberOfChars={40} />
         )
