@@ -237,8 +237,8 @@ export const usePublicationFields = () => {
       disabled,
       codebook: CODEBOOK.GRANT
     },
-    foreignGrant: {
-      label: form.foreignGrant.label,
+    otherGrants: {
+      label: form.otherGrants.label,
       rounded: 'rounded-md',
       name: 'foreignGrant',
       disabled
