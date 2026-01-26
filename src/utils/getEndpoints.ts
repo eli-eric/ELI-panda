@@ -80,6 +80,8 @@ export const getEndpoints = ({
     publications: `/publications${query}`,
     researcher: `/researcher${uidPart}`,
     researchers: `/researchers${query}`,
+    grant: `/grant${uidPart}`,
+    grants: `/grants${query}`,
     generateUUID: '/uuid/v4',
     serviceType: `/catalogue/service/type${uidPart}`,
     serviceTypeList: `/catalogue/service/types${query}`,

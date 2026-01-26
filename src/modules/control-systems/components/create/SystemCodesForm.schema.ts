@@ -15,4 +15,8 @@ export const systemCodesFormSchema = z.object({
     .max(100, 'Batch cannot exceed 100')
 })
 
-export type SystemCodesFormValues = z.infer<typeof systemCodesFormSchema>
+// Input type - form state during editing (nullable fields)
+export type SystemCodesFormInput = z.input<typeof systemCodesFormSchema>
+
+// Output type - validated values after submit (non-null fields)
+export type SystemCodesFormValues = z.output<typeof systemCodesFormSchema>

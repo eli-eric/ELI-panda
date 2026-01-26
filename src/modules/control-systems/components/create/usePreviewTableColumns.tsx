@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { useMemo } from 'react'
 import { useIntl } from 'react-intl'
 
+import { Tooltip } from '@/components/Tooltip'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { message } from '@/i18n/src/messages'
@@ -68,6 +69,23 @@ export const usePreviewTableColumns = () => {
         header: fm({ id: message.controlSystems.columns.zone }),
         cell: ({ row }) => row.original.zone?.name ?? '-',
         size: 150
+      },
+      {
+        id: 'parentPath',
+        header: fm({ id: message.controlSystems.columns.parentPath }),
+        accessorFn: row =>
+          row.parentPath?.map(item => item.name).join(' / ') ?? '',
+        cell: ({ row }) => {
+          const parentPath = row.original.parentPath
+          if (!parentPath || parentPath.length === 0) return null
+          const fullPath = parentPath.map(item => item.name).join(' / ')
+          return (
+            <Tooltip content={fullPath}>
+              <span className="block truncate">{fullPath}</span>
+            </Tooltip>
+          )
+        },
+        size: 250
       }
     ],
     [fm]

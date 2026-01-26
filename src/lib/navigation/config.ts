@@ -8,8 +8,7 @@ import {
   Library,
   ShoppingCart,
   Table,
-  Users,
-  UserSearch
+  Users
 } from 'lucide-react'
 
 import { PATH } from '@/types/constants/paths'
@@ -85,7 +84,24 @@ export const NAV_ITEMS: NavigationItem[] = [
     title: 'Publications',
     url: PATH.PUBLICATIONS,
     role: ROLE.PUBLICATIONS_VIEW,
-    icon: Library
+    icon: Library,
+    items: [
+      {
+        title: 'Overview',
+        url: PATH.PUBLICATIONS,
+        role: ROLE.PUBLICATIONS_VIEW
+      },
+      {
+        title: 'Researchers',
+        url: PATH.RESEARCHERS,
+        role: ROLE.PUBLICATIONS_EDIT
+      },
+      {
+        title: 'Grants',
+        url: PATH.GRANTS,
+        role: ROLE.PUBLICATIONS_EDIT
+      }
+    ]
   },
   {
     title: 'Services',
@@ -101,12 +117,6 @@ export const OTHERS_NAV_ITEMS: NavigationItem[] = [
     url: PATH.CODEBOOKS,
     role: ROLE.BASICS,
     icon: Table
-  },
-  {
-    title: 'Researchers',
-    url: PATH.RESEARCHERS,
-    role: ROLE.PUBLICATIONS_EDIT,
-    icon: UserSearch
   },
   {
     title: 'Administration',
@@ -137,6 +147,7 @@ export const PROTECTED_PATHS = [
   PATH.PUBLICATION,
   PATH.SERVICES,
   PATH.SERVICE,
+  PATH.GRANTS,
   PATH.RESEARCHERS,
   PATH.CONTROL_SYSTEMS,
   PATH.CONTROL_SYSTEMS_CREATE
@@ -185,7 +196,11 @@ export const PATH_ROLES_CONFIG: Record<PATH, ROLE[]> = {
   [PATH.SYSTEM_ITEM]: [ROLE.SYSTEM_EDIT, ROLE.SYSTEMS_VIEW],
   [PATH.SYSTEMS_MULTI_MOVE]: [ROLE.SYSTEM_EDIT],
   [PATH.RESEARCHERS]: [ROLE.PUBLICATIONS_EDIT],
-  [PATH.CONTROL_SYSTEMS]: [ROLE.CONTROL_SYSTEMS_VIEW, ROLE.CONTROL_SYSTEMS_EDIT],
+  [PATH.CONTROL_SYSTEMS]: [
+    ROLE.CONTROL_SYSTEMS_VIEW,
+    ROLE.CONTROL_SYSTEMS_EDIT
+  ],
+  [PATH.GRANTS]: [ROLE.PUBLICATIONS_EDIT],
   [PATH.CONTROL_SYSTEMS_CREATE]: [ROLE.CONTROL_SYSTEMS_EDIT],
   [PATH.NOT_FOUND]: []
 }

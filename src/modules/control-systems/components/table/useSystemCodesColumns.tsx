@@ -14,8 +14,6 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { message } from '@/i18n/src/messages'
-import { useSystemStore } from '@/modules/shared/system/device-info-overlay/store/useShowDeviceStore'
-import { useSystemEditSheet } from '@/modules/shared/system/system-edit/useSystemEditSheet'
 import { useSystemDelete } from '@/modules/systems/hooks/useSystemDelete'
 import { PATH } from '@/types/constants/paths'
 import type { SystemDetail } from '@/types/responses/systems'
@@ -34,19 +32,10 @@ interface SystemCodeCellProps {
 
 const SystemCodeCell = ({ row, queryKey }: SystemCodeCellProps) => {
   const { code, uid, name } = row.original
-  const { setUID } = useSystemStore()
-  const openEdit = useSystemEditSheet(uid)
   const { deleteSystem } = useSystemDelete({
     system: { uid, name } as SystemDetail,
     queryKey: queryKey.length === 2 ? queryKey : undefined
   })
-
-  const handleCodeClick = () => {
-    if (uid) {
-      setUID(uid)
-      openEdit()
-    }
-  }
 
   const codeElement = (
     <code className="rounded bg-muted px-1.5 py-0.5 text-xs">{code}</code>
@@ -54,10 +43,7 @@ const SystemCodeCell = ({ row, queryKey }: SystemCodeCellProps) => {
 
   return (
     <div className="flex w-full items-center justify-between">
-      <Button variant="link" className="h-auto p-0" onClick={handleCodeClick}>
-        {codeElement}
-      </Button>
-
+      {codeElement}
       {uid && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -95,7 +81,9 @@ const SystemCodeCell = ({ row, queryKey }: SystemCodeCellProps) => {
   )
 }
 
-export const useSystemCodesColumns = ({ queryKey }: UseSystemCodesColumnsProps) => {
+export const useSystemCodesColumns = ({
+  queryKey
+}: UseSystemCodesColumnsProps) => {
   const { formatMessage: fm } = useIntl()
 
   const columns = useMemo(
@@ -149,6 +137,23 @@ export const useSystemCodesColumns = ({ queryKey }: UseSystemCodesColumnsProps) 
           return (
             <Tooltip content={zone.name}>
               <span>{zone.code || zone.name}</span>
+            </Tooltip>
+          )
+        }
+      },
+      {
+        header: fm({ id: message.controlSystems.columns.parentPath }),
+        accessorFn: row =>
+          row.parentPath?.map(item => item.name).join(' / ') ?? '',
+        id: 'parentPath',
+        size: 400,
+        cell: ({ row }) => {
+          const parentPath = row.original.parentPath
+          if (!parentPath || parentPath.length === 0) return null
+          const fullPath = parentPath.map(item => item.name).join(' / ')
+          return (
+            <Tooltip content={fullPath}>
+              <span className="block truncate">{fullPath}</span>
             </Tooltip>
           )
         }

@@ -6,6 +6,7 @@ import type { PreviewParams } from './hooks/useSystemCodesPreview'
 import { useSystemCodesPreview } from './hooks/useSystemCodesPreview'
 import { SystemCodesCreateComponent } from './SystemCodesCreate.comp'
 import type { SystemCodeResult } from './types'
+import { BATCH_LIMIT } from './types/constants'
 
 const SystemCodesCreateContainer = () => {
   const [previewParams, setPreviewParams] = useState<PreviewParams | null>(null)
@@ -33,7 +34,7 @@ const SystemCodesCreateContainer = () => {
       const response = await create({
         zone: values.zone,
         systemType: values.systemType,
-        batch: values.batch
+        batch: values.batch > BATCH_LIMIT ? BATCH_LIMIT : values.batch
       })
 
       if (response?.data) {

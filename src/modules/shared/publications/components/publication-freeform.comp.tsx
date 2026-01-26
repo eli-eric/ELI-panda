@@ -1,9 +1,9 @@
+import Combobox from '@/components/form/Combobox'
 import { Input, TextArea } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
 import { RadioSelect } from '@/components/form/radio-select.comp'
 import { useAccessControl } from '@/hooks/useAccessControl'
 import { DepartmentsComponent } from '@/modules/publication/components/departments.comp'
-import { PublishingCountryListbox } from '@/modules/publication/components/publishing-country.listbox'
 import { WebLinkField } from '@/modules/publication/components/web-link.field'
 import { useMediaTypeStore } from '@/modules/publication/hooks/useMediaTypeStore'
 import { usePublicationFields } from '@/modules/publication/hooks/usePublicationFields'
@@ -74,7 +74,7 @@ export const PublicationFreeFormComponent = () => {
       <Input {...fields.issn} />
       <Input {...fields.eissn} />
       <Input {...fields.eidScopus} />
-      <PublishingCountryListbox />
+      <Combobox {...fields.publishingCountry} />
       <Input {...fields.language} disabled={true} />
       <TextArea {...fields.note} />
     </div>
