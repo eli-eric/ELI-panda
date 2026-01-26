@@ -1,6 +1,9 @@
+import { useRouter } from 'next/router'
 import { useIntl } from 'react-intl'
 
+import { SimpleHeader } from '@/components/header/SimpleHeader'
 import { message } from '@/i18n/src/messages'
+import { PATH } from '@/types/constants/paths'
 
 import { SystemCodesForm } from './components/create/SystemCodesForm'
 import type { SystemCodesFormValues } from './components/create/SystemCodesForm.schema'
@@ -27,32 +30,42 @@ export const SystemCodesCreateComponent = ({
   onSubmit
 }: Props) => {
   const { formatMessage: fm } = useIntl()
+  const router = useRouter()
+  const onBackClick = () => {
+    router.push(PATH.CONTROL_SYSTEMS)
+  }
 
   return (
-    <div className="flex h-[calc(100vh-4rem)]">
-      {/* Form pane */}
-      <div
-        style={{ width: FORM_WIDTH }}
-        className="flex-shrink-0 border-r border-border p-6"
-      >
-        <h2 className="mb-6 text-lg font-semibold">
-          {fm({ id: message.controlSystems.pages.create })}
-        </h2>
-        <SystemCodesForm
-          onPreview={onPreview}
-          onSubmit={onSubmit}
-          isPending={isPending}
-        />
-      </div>
+    <>
+      <SimpleHeader
+        backLabel={fm({ id: message.common.buttons.back })}
+        onBack={onBackClick}
+      />
+      <div className="flex h-[calc(100vh-6.5rem)]">
+        {/* Form pane */}
+        <div
+          style={{ width: FORM_WIDTH }}
+          className="flex-shrink-0 border-r border-border p-6"
+        >
+          <h2 className="mb-6 text-lg font-semibold">
+            {fm({ id: message.controlSystems.pages.create })}
+          </h2>
+          <SystemCodesForm
+            onPreview={onPreview}
+            onSubmit={onSubmit}
+            isPending={isPending}
+          />
+        </div>
 
-      {/* Table pane */}
-      <div className="flex-1 overflow-auto p-6">
-        <SystemCodesPreviewTable
-          previewData={previewData}
-          createdData={createdData}
-          isLoading={isPreviewLoading}
-        />
+        {/* Table pane */}
+        <div className="flex-1 overflow-auto p-6">
+          <SystemCodesPreviewTable
+            previewData={previewData}
+            createdData={createdData}
+            isLoading={isPreviewLoading}
+          />
+        </div>
       </div>
-    </div>
+    </>
   )
 }

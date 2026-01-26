@@ -18,6 +18,16 @@ const selectedResearcherSchema = z.object({
 })
 
 /**
+ * Schema for selected grant.
+ * Stores minimal data needed for display and API submission.
+ */
+const selectedGrantSchema = z.object({
+  uid: z.string().min(1),
+  code: z.string().min(1),
+  name: z.string().min(1)
+})
+
+/**
  * Conditional validation for ELI Authors fields based on feature flag.
  * - When researcher picker is enabled: eliResearchers is required, eliAuthors is optional
  * - When disabled (production): eliAuthors is required, eliResearchers is optional
@@ -120,7 +130,7 @@ export const publicationPeerReviewedSchema = z.object({
   quartilBasis: z.string().optional(),
   quartil: z.string().nullable().optional(),
   grant: z.string().optional(),
-  grantCb: codebookSchema.nullable().optional(),
+  grants: z.array(selectedGrantSchema).optional(),
   foreignGrant: z.string().optional(),
   wosNumber: z.string().optional(),
   issn: z.string().optional(),
@@ -192,7 +202,7 @@ export const publicationOtherSchema = z.object({
   quartilBasis: z.string().optional(),
   quartil: z.string().nullable().optional(),
   grant: z.string().optional(),
-  grantCb: codebookSchema.nullable().optional(),
+  grants: z.array(selectedGrantSchema).optional(),
   foreignGrant: z.string().optional(),
   wosNumber: z.string().optional(),
   issn: z.string().optional(),

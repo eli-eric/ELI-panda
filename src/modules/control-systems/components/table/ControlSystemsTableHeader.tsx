@@ -18,6 +18,8 @@ import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 import type { CodebookType } from '@/types/responses/codebook'
 
+import { ONLY_ROOT_ZONES } from '../../types/constants'
+
 type ControlSystemsFilterType = {
   search: string
   zone: CodebookType | null
@@ -80,6 +82,7 @@ export const ControlSystemsTableHeader = ({
         <div className="w-56 shrink-0">
           <Combobox
             name="zone"
+            filter={ONLY_ROOT_ZONES}
             codebook={CODEBOOK.ZONE}
             label=""
             placeholder={fm({ id: message.controlSystems.form.zone })}
@@ -93,7 +96,7 @@ export const ControlSystemsTableHeader = ({
           <SystemTypeComboBox
             systemTypeField={{
               name: 'systemType',
-              label: '',
+              placeholder: fm({ id: message.controlSystems.form.systemType }),
               disabled: false
             }}
             onChange={setFilter('systemType')}

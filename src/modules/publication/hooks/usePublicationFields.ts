@@ -1,4 +1,3 @@
-import { isFeatureEnabled } from '@/config/featureFlags'
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
 import { useAccessControl } from '@/hooks/useAccessControl'
 import { message } from '@/i18n/src/messages'
@@ -16,9 +15,6 @@ export const usePublicationFields = () => {
   const { mediaType } = useMediaTypeStore()
 
   const isPeerReviewed = mediaType === MEDIA_TYPE_CODE.PeerReviewedArticle
-  const isResearcherPickerEnabled = isFeatureEnabled(
-    'enableEliAuthorsResearcherPicker'
-  )
 
   return useMakeFormFields({
     code: {
@@ -121,16 +117,14 @@ export const usePublicationFields = () => {
       name: 'eliAuthors',
       // When researcher picker is enabled, this field is auto-generated and disabled
       // When disabled (production), user can edit manually
-      disabled: isResearcherPickerEnabled || disabled
+      disabled
     },
     eliAuthorsCount: {
       label: form.eliAuthorsCount.label,
       rounded: 'rounded-md',
       name: 'eliAuthorsCount',
       type: 'number',
-      // When researcher picker is enabled, count is auto-calculated
-      // When disabled (production), user can edit manually
-      disabled: isResearcherPickerEnabled || disabled
+      disabled: true
     },
     longJournalTitle: {
       label: form.longJournalTitle.label,
@@ -278,7 +272,7 @@ export const usePublicationFields = () => {
       placeholder: form.publishingCountry.placeholder,
       rounded: 'rounded-md',
       name: 'publishingCountry',
-      CODEBOOK: CODEBOOK.COUNTRY,
+      codebook: CODEBOOK.COUNTRY,
       disabled
     },
     language: {

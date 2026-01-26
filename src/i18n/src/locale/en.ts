@@ -993,7 +993,7 @@ export const messages = {
     head: 'ELI Panda - Publication',
     pdfFileMessage:
       'In order to upload a PDF you must first fill in all mandatory fields and save the publication.',
-    addDepartmentButton: '+ Add Another ELI Department',
+    addDepartmentButton: 'Add Another ELI Department',
     form: {
       department: { label: 'ELI Department*', placeholder: 'Select' },
       mediaType: { label: 'Media Type @deprecated' },
@@ -1179,6 +1179,7 @@ export const messages = {
       name: 'Name',
       location: 'Location',
       zone: 'Zone',
+      parentPath: 'Path',
       updatedBy: 'Updated By',
       createdBy: 'Created By',
       status: 'Status'
