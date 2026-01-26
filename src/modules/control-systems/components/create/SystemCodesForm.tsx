@@ -1,10 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Minus, Plus } from 'lucide-react'
 import { useCallback, useEffect, useMemo } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 
 import Combobox from '@/components/form/Combobox'
+import { Form } from '@/components/form/Form'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -12,10 +13,12 @@ import { useDebounce } from '@/hooks/useDebounce'
 import { message } from '@/i18n/src/messages'
 import { SystemTypeComboBox } from '@/modules/shared/form/systemType/SelectSystemType.combo'
 import { CODEBOOK } from '@/types/constants/codebook'
-import type { CodebookType } from '@/types/responses/codebook'
 
-import { ONLY_ROOT_ZONES } from '../../types/constants'
-import type { SystemCodesFormValues } from './SystemCodesForm.schema'
+import { BATCH_LIMIT, ONLY_ROOT_ZONES } from '../../types/constants'
+import type {
+  SystemCodesFormInput,
+  SystemCodesFormValues
+} from './SystemCodesForm.schema'
 import { systemCodesFormSchema } from './SystemCodesForm.schema'
 
 interface Props {
@@ -24,27 +27,25 @@ interface Props {
   isPending?: boolean
 }
 
-export const SystemCodesForm = ({ onPreview, onSubmit, isPending }: Props) => {
+export const SystemCodesForm = ({ onPreview, onSubmit }: Props) => {
   const { formatMessage: fm } = useIntl()
 
-  const defaultValues = useMemo(
+  const defaultValues: SystemCodesFormInput = useMemo(
     () => ({
-      zone: null as CodebookType | null,
-      systemType: null as CodebookType | null,
+      zone: null,
+      systemType: null,
       batch: 1
     }),
     []
   )
 
-  const formMethods = useForm({
+  const formMethods = useForm<SystemCodesFormInput>({
     resolver: zodResolver(systemCodesFormSchema),
     defaultValues,
     mode: 'onChange'
   })
 
-  const { watch, handleSubmit, formState, register, reset, setValue } =
-    formMethods
-  const { isValid, errors } = formState
+  const { watch, register, reset, setValue } = formMethods
 
   // Watch form values for preview
   const zone = watch('zone')
@@ -58,6 +59,7 @@ export const SystemCodesForm = ({ onPreview, onSubmit, isPending }: Props) => {
 
   // Trigger preview when debounced values change
   useEffect(() => {
+    // Guard ensures zone and systemType are non-null before calling onPreview
     if (
       zone &&
       systemType &&
@@ -65,7 +67,11 @@ export const SystemCodesForm = ({ onPreview, onSubmit, isPending }: Props) => {
       debouncedZoneUid &&
       debouncedSystemTypeUid
     ) {
-      onPreview({ zone, systemType, batch: debouncedBatch })
+      onPreview({
+        zone,
+        systemType,
+        batch: debouncedBatch
+      } as SystemCodesFormValues)
     }
   }, [
     debouncedZoneUid,
@@ -77,8 +83,9 @@ export const SystemCodesForm = ({ onPreview, onSubmit, isPending }: Props) => {
   ])
 
   const handleFormSubmit = useCallback(
-    async (values: SystemCodesFormValues) => {
-      const success = await onSubmit(values)
+    async (values: SystemCodesFormInput) => {
+      // Zod validation ensures values are non-null at this point
+      const success = await onSubmit(values as SystemCodesFormValues)
       if (success) {
         reset()
       }
@@ -87,85 +94,87 @@ export const SystemCodesForm = ({ onPreview, onSubmit, isPending }: Props) => {
   )
 
   return (
-    <FormProvider {...formMethods}>
-      <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
-        {/* Zone field */}
-        <div className="space-y-2">
-          <Combobox
-            name="zone"
-            codebook={CODEBOOK.ZONE}
-            filter={ONLY_ROOT_ZONES}
-            label={fm({ id: message.controlSystems.form.zone })}
-            placeholder={fm({ id: message.controlSystems.form.zone })}
-          />
-        </div>
+    <Form
+      formMethods={formMethods}
+      onSubmit={handleFormSubmit}
+      className=" flex flex-col gap-4"
+    >
+      {/* Zone field */}
+      <div className="space-y-2">
+        <Combobox
+          name="zone"
+          codebook={CODEBOOK.ZONE}
+          filter={ONLY_ROOT_ZONES}
+          label={fm({ id: message.controlSystems.form.zone })}
+          placeholder={fm({ id: message.controlSystems.form.zone })}
+        />
+      </div>
 
-        {/* System Type field */}
-        <div className="space-y-2">
-          <Label>{fm({ id: message.controlSystems.form.systemType })}</Label>
-          <SystemTypeComboBox
-            systemTypeField={{
-              name: 'systemType',
-              label: '',
-              disabled: false
+      {/* System Type field */}
+      <div className="space-y-2">
+        <Label>{fm({ id: message.controlSystems.form.systemType })}</Label>
+        <SystemTypeComboBox
+          systemTypeField={{
+            name: 'systemType',
+            label: '',
+            disabled: false
+          }}
+        />
+      </div>
+
+      {/* Batch field */}
+      <div className="space-y-2">
+        <Label htmlFor="batch">
+          {fm({ id: message.controlSystems.form.batch })}
+        </Label>
+        <div className="flex items-center gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            size="icon"
+            onClick={() =>
+              setValue('batch', Math.max(1, (Number(batch) || 1) - 1))
+            }
+            disabled={Number(batch) <= 1}
+          >
+            <Minus className="h-4 w-4" />
+          </Button>
+          <Input
+            id="batch"
+            type="number"
+            min={1}
+            max={BATCH_LIMIT}
+            {...register('batch', { valueAsNumber: true })}
+            onChange={e => {
+              const value = Math.max(
+                1,
+                Math.min(BATCH_LIMIT, Number(e.target.value) || 1)
+              )
+              setValue('batch', value)
             }}
+            className="text-center"
+            placeholder={fm({
+              id: message.controlSystems.form.batchPlaceholder
+            })}
           />
+          <Button
+            type="button"
+            variant="outline"
+            size="icon"
+            onClick={() =>
+              setValue('batch', Math.min(BATCH_LIMIT, (Number(batch) || 1) + 1))
+            }
+            disabled={Number(batch) >= BATCH_LIMIT}
+          >
+            <Plus className="h-4 w-4" />
+          </Button>
         </div>
+      </div>
 
-        {/* Batch field */}
-        <div className="space-y-2">
-          <Label htmlFor="batch">
-            {fm({ id: message.controlSystems.form.batch })}
-          </Label>
-          <div className="flex items-center gap-2">
-            <Button
-              type="button"
-              variant="outline"
-              size="icon"
-              onClick={() =>
-                setValue('batch', Math.max(1, (Number(batch) || 1) - 1))
-              }
-              disabled={Number(batch) <= 1}
-            >
-              <Minus className="h-4 w-4" />
-            </Button>
-            <Input
-              id="batch"
-              type="number"
-              min={1}
-              max={100}
-              className="text-center"
-              {...register('batch', { valueAsNumber: true })}
-              placeholder={fm({
-                id: message.controlSystems.form.batchPlaceholder
-              })}
-            />
-            <Button
-              type="button"
-              variant="outline"
-              size="icon"
-              onClick={() =>
-                setValue('batch', Math.min(100, (Number(batch) || 1) + 1))
-              }
-              disabled={Number(batch) >= 100}
-            >
-              <Plus className="h-4 w-4" />
-            </Button>
-          </div>
-          {errors.batch && (
-            <p className="text-sm text-destructive">{errors.batch.message}</p>
-          )}
-        </div>
-
-        {/* Submit button */}
-        <Button
-          type="submit"
-          disabled={!isValid || isPending}
-          className="w-full"
-        >
-          {fm({ id: message.controlSystems.buttons.create })}
-        </Button>
-      </form>
-    </FormProvider>
+      {/* Submit button */}
+      <Button type="submit" className="w-full">
+        {fm({ id: message.controlSystems.buttons.create })}
+      </Button>
+    </Form>
   )
 }

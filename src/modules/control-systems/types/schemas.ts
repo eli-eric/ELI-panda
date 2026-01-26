@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+import { BATCH_LIMIT } from './constants'
+
 // Reusable codebook schema for zone, systemType, location
 export const codebookTypeSchema = z.object({
   uid: z.string(),
@@ -30,7 +32,10 @@ export const systemCodeResultSchema = z.object({
 export const systemCodeRequestSchema = z.object({
   zone: codebookTypeSchema,
   systemType: codebookTypeSchema,
-  batch: z.number().min(1, 'Batch must be at least 1')
+  batch: z
+    .number()
+    .min(1, 'Batch must be at least 1')
+    .max(BATCH_LIMIT, `Batch cannot exceed ${BATCH_LIMIT}`)
 })
 
 // Overview page response schema
@@ -43,5 +48,8 @@ export const systemCodesOverviewResponseSchema = z.object({
 export const systemCodesPreviewParamsSchema = z.object({
   zoneUid: z.string(),
   systemTypeUid: z.string(),
-  batch: z.number().min(1)
+  batch: z
+    .number()
+    .min(1)
+    .max(BATCH_LIMIT, `Batch cannot exceed ${BATCH_LIMIT}`)
 })
