@@ -96,12 +96,21 @@ export const usePublicationColumns = () => {
       },
       {
         id: 'eliAuthors',
-        header: 'ELI Authors',
+        header: 'ELI Authors(old)',
         accessorFn: row => row.eliAuthors,
         size: 300,
         cell: ({ getValue }) => (
           <ShortCell value={getValue()} numberOfChars={30} />
         )
+      },
+      {
+        id: 'eliResearchers',
+        header: 'ELI Researchers',
+        accessorFn: row =>
+          row.eliResearchers
+            .map(er => `${er.firstName} ${er.lastName}`)
+            .join('; '),
+        size: 300
       },
       {
         id: 'eliAuthorsCount',
@@ -202,17 +211,16 @@ export const usePublicationColumns = () => {
         id: 'grant',
         header: 'Grants',
         size: 300,
-        accessorFn: row =>
-          row.grants?.map(g => g.name).join(', ') || row.grant,
+        accessorFn: row => row.grants?.map(g => g.code).join('; ') || row.grant,
         cell: ({ getValue }) => (
           <ShortCell value={getValue()} numberOfChars={40} />
         )
       },
       {
-        id: 'foreignGrant',
-        header: 'Foreign Grant',
+        id: 'otherGrants',
+        header: 'Other Grants',
         size: 300,
-        accessorFn: row => row.foreignGrant,
+        accessorFn: row => row.otherGrants,
         cell: ({ getValue }) => (
           <ShortCell value={getValue()} numberOfChars={40} />
         )

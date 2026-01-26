@@ -42,7 +42,7 @@ export interface Publication {
   /** @deprecated use grants array */
   grant?: string
   grants?: SelectedGrant[]
-  foreignGrant?: string
+  otherGrants?: string
   wosNumber?: string
   issn?: string
   eissn?: string
