@@ -1179,6 +1179,7 @@ export const messages = {
       name: 'Name',
       location: 'Location',
       zone: 'Zone',
+      parentPath: 'Path',
       updatedBy: 'Updated By',
       createdBy: 'Created By',
       status: 'Status'

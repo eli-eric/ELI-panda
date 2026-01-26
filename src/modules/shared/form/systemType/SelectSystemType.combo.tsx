@@ -24,17 +24,18 @@ export const SystemTypeComboBox = ({
   isFilter?: boolean
 }) => {
   const formContext = useFormContext()
-  const setValue = formContext?.setValue
+  const { trigger, setValue } = formContext
   const { openSystemTypeModal } = useSystemTypeSelectionModal()
 
   const handleSystemTypeChange = useCallback(
     (value: CodebookType | null) => {
       if (setValue) {
         setValue(systemTypeField.name, value)
+        trigger(systemTypeField.name)
       }
       onChange?.(value)
     },
-    [setValue, systemTypeField.name, onChange]
+    [setValue, systemTypeField.name, onChange, trigger]
   )
 
   const handleOpenDialog = () => {
