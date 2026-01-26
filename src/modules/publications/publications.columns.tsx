@@ -108,7 +108,7 @@ export const usePublicationColumns = () => {
         header: 'ELI Researchers',
         accessorFn: row =>
           row.eliResearchers
-            .map(er => `${er.firstName} ${er.lastName}`)
+            ?.map(er => `${er.firstName} ${er.lastName}`)
             .join('; '),
         size: 300
       },
