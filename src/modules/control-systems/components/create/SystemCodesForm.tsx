@@ -14,6 +14,7 @@ import { SystemTypeComboBox } from '@/modules/shared/form/systemType/SelectSyste
 import { CODEBOOK } from '@/types/constants/codebook'
 import type { CodebookType } from '@/types/responses/codebook'
 
+import { ONLY_ROOT_ZONES } from '../../types/constants'
 import type { SystemCodesFormValues } from './SystemCodesForm.schema'
 import { systemCodesFormSchema } from './SystemCodesForm.schema'
 
@@ -41,7 +42,8 @@ export const SystemCodesForm = ({ onPreview, onSubmit, isPending }: Props) => {
     mode: 'onChange'
   })
 
-  const { watch, handleSubmit, formState, register, reset, setValue } = formMethods
+  const { watch, handleSubmit, formState, register, reset, setValue } =
+    formMethods
   const { isValid, errors } = formState
 
   // Watch form values for preview
@@ -56,10 +58,23 @@ export const SystemCodesForm = ({ onPreview, onSubmit, isPending }: Props) => {
 
   // Trigger preview when debounced values change
   useEffect(() => {
-    if (zone && systemType && debouncedBatch >= 1 && debouncedZoneUid && debouncedSystemTypeUid) {
+    if (
+      zone &&
+      systemType &&
+      debouncedBatch >= 1 &&
+      debouncedZoneUid &&
+      debouncedSystemTypeUid
+    ) {
       onPreview({ zone, systemType, batch: debouncedBatch })
     }
-  }, [debouncedZoneUid, debouncedSystemTypeUid, debouncedBatch, zone, systemType, onPreview])
+  }, [
+    debouncedZoneUid,
+    debouncedSystemTypeUid,
+    debouncedBatch,
+    zone,
+    systemType,
+    onPreview
+  ])
 
   const handleFormSubmit = useCallback(
     async (values: SystemCodesFormValues) => {
@@ -79,6 +94,7 @@ export const SystemCodesForm = ({ onPreview, onSubmit, isPending }: Props) => {
           <Combobox
             name="zone"
             codebook={CODEBOOK.ZONE}
+            filter={ONLY_ROOT_ZONES}
             label={fm({ id: message.controlSystems.form.zone })}
             placeholder={fm({ id: message.controlSystems.form.zone })}
           />
@@ -98,13 +114,17 @@ export const SystemCodesForm = ({ onPreview, onSubmit, isPending }: Props) => {
 
         {/* Batch field */}
         <div className="space-y-2">
-          <Label htmlFor="batch">{fm({ id: message.controlSystems.form.batch })}</Label>
+          <Label htmlFor="batch">
+            {fm({ id: message.controlSystems.form.batch })}
+          </Label>
           <div className="flex items-center gap-2">
             <Button
               type="button"
               variant="outline"
               size="icon"
-              onClick={() => setValue('batch', Math.max(1, (Number(batch) || 1) - 1))}
+              onClick={() =>
+                setValue('batch', Math.max(1, (Number(batch) || 1) - 1))
+              }
               disabled={Number(batch) <= 1}
             >
               <Minus className="h-4 w-4" />
@@ -116,13 +136,17 @@ export const SystemCodesForm = ({ onPreview, onSubmit, isPending }: Props) => {
               max={100}
               className="text-center"
               {...register('batch', { valueAsNumber: true })}
-              placeholder={fm({ id: message.controlSystems.form.batchPlaceholder })}
+              placeholder={fm({
+                id: message.controlSystems.form.batchPlaceholder
+              })}
             />
             <Button
               type="button"
               variant="outline"
               size="icon"
-              onClick={() => setValue('batch', Math.min(100, (Number(batch) || 1) + 1))}
+              onClick={() =>
+                setValue('batch', Math.min(100, (Number(batch) || 1) + 1))
+              }
               disabled={Number(batch) >= 100}
             >
               <Plus className="h-4 w-4" />
@@ -134,7 +158,11 @@ export const SystemCodesForm = ({ onPreview, onSubmit, isPending }: Props) => {
         </div>
 
         {/* Submit button */}
-        <Button type="submit" disabled={!isValid || isPending} className="w-full">
+        <Button
+          type="submit"
+          disabled={!isValid || isPending}
+          className="w-full"
+        >
           {fm({ id: message.controlSystems.buttons.create })}
         </Button>
       </form>
