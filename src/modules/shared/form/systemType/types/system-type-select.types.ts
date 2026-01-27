@@ -1,3 +1,4 @@
+import type { ModalSize } from '@/components/ui/dialog'
 import type { CodebookType } from '@/types/responses/codebook'
 
 // API response types
@@ -27,7 +28,7 @@ export interface SystemTypeTreeRow {
 // Component props
 export interface SystemTypeModalContentProps {
   title?: string
-  size?: 'sm' | 'md' | 'lg' | 'xl' | 'full'
+  size?: ModalSize
   onSelect: (systemType: CodebookType | null) => void
   onClose?: () => void
 }
