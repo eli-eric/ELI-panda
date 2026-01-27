@@ -60,6 +60,12 @@ export const SystemCodesTable = ({
         loading={loading}
         tableId={tableId}
         skeletonRowCount={pageSizeDefault}
+        getRowProps={({ original: { uid } }) => ({
+          onClick: () => {
+            handleRowClick(uid)
+          },
+          className: 'cursor-pointer hover:text-primary hover:bg-primary/10'
+        })}
         settings={{
           ...settings,
           enableColumnReordering: true

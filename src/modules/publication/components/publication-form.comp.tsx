@@ -131,7 +131,7 @@ export const PublicationFormComponent = () => {
           <TextArea {...fields.keywords} />
         </Col>
         <Col lg={12}>
-          <TextArea {...fields.foreignGrant} />
+          <TextArea {...fields.otherGrants} />
         </Col>
         <Col lg={12}>
           <TextArea {...fields.grant} />
