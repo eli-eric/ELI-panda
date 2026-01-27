@@ -1,11 +1,12 @@
-import { Fragment } from 'react'
+import { Fragment, useCallback, useRef } from 'react'
 
-import { useSystemStore } from '@/modules/shared/system/device-info-overlay/store/useShowDeviceStore'
-import { useSystemEditSheet } from '@/modules/shared/system/system-edit/useSystemEditSheet'
-import { Pagination } from '@/modules/shared/table/Pagination'
+import { PaginationV2 as Pagination } from '@/modules/shared/table/PaginationV2'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import type { PandaTableSettings } from '@/modules/shared/table/pandaTable/PandaTable'
-import { PandaTableV2 } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
+import {
+  PandaTableV2,
+  type PandaTableV2Handle
+} from '@/modules/shared/table/pandaTableV2/PandaTableV2'
 
 import { useSystemCodes } from '../../hooks/useSystemCodes'
 import type { SystemCodeResult } from '../../types'
@@ -29,16 +30,7 @@ export const SystemCodesTable = ({
 }: Props) => {
   const { systemCodes, loading, queryKey } = useSystemCodes(tableId)
   const { columns } = useSystemCodesColumns({ queryKey })
-  const { setUID } = useSystemStore()
-
-  const openEdit = useSystemEditSheet()
-
-  const handleRowClick = (uid?: string) => {
-    if (uid) {
-      setUID(uid)
-      openEdit()
-    }
-  }
+  const tableRef = useRef<PandaTableV2Handle>(null)
 
   const table = usePandaTable({
     tableId,
@@ -50,6 +42,11 @@ export const SystemCodesTable = ({
     }
   })
 
+  // Scroll table to top when page changes
+  const handlePageChange = useCallback(() => {
+    tableRef.current?.scrollToTop()
+  }, [])
+
   return (
     <Fragment>
       <ControlSystemsTableHeader
@@ -57,6 +54,7 @@ export const SystemCodesTable = ({
         enableQueryURL={enableQueryURL}
       />
       <PandaTableV2
+        ref={tableRef}
         data={systemCodes?.data}
         table={table}
         loading={loading}
@@ -81,6 +79,7 @@ export const SystemCodesTable = ({
           pageSizeDefault: pageSizeDefault,
           total: systemCodes?.totalCount
         }}
+        onPageChange={handlePageChange}
       />
     </Fragment>
   )

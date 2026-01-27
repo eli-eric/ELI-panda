@@ -1,6 +1,6 @@
 import { memo, useMemo } from 'react'
 
-import { Pagination } from '@/modules/shared/table/Pagination'
+import { PaginationV2 as Pagination } from '@/modules/shared/table/PaginationV2'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import type { PandaTableSettings } from '@/modules/shared/table/pandaTable/PandaTable'
 import { PandaTableV2 } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
