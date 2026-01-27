@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
@@ -8,7 +8,10 @@ import { FilterBadges } from '../shared/form/FilterBadges'
 import { PaginationV2 as Pagination } from '../shared/table/PaginationV2'
 import { usePandaTable } from '../shared/table/pandaTable/hooks/usePandaTable'
 import type { PandaTableSettings } from '../shared/table/pandaTable/PandaTable'
-import { PandaTableV2 } from '../shared/table/pandaTableV2/PandaTableV2'
+import {
+  PandaTableV2,
+  type PandaTableV2Handle
+} from '../shared/table/pandaTableV2/PandaTableV2'
 import { SearchBar } from '../shared/table/SearchBar'
 import { HeaderButtons } from './components/HeaderButtons'
 import { useOrderColumns } from './components/OrderColumns'
@@ -18,6 +21,7 @@ const OrdersContainer = () => {
   const { orderList, loading, error } = useOrders()
   const columns = useOrderColumns({ isReadOnly: false })
   const tableId = 'orders'
+  const tableRef = useRef<PandaTableV2Handle>(null)
 
   const tableSettings: PandaTableSettings<Order> = {
     enableSorting: true,
@@ -38,6 +42,11 @@ const OrdersContainer = () => {
     table.setColumnOrder(table.getAllLeafColumns().map(column => column.id))
   }, [columns, table])
 
+  // Scroll table to top when page changes
+  const handlePageChange = useCallback(() => {
+    tableRef.current?.scrollToTop()
+  }, [])
+
   return (
     <TableLayoutContainer>
       <SearchBar
@@ -47,6 +56,7 @@ const OrdersContainer = () => {
       />
       {!error && (
         <PandaTableV2<Order>
+          ref={tableRef}
           {...{
             table,
             settings: tableSettings,
@@ -70,7 +80,8 @@ const OrdersContainer = () => {
               pageSizeDefault: 50,
               total: orderList?.totalCount
             },
-            tableId
+            tableId,
+            onPageChange: handlePageChange
           }}
         />
       )}

@@ -145,3 +145,68 @@ export function calculateDisplayRange(
   const to = Math.min(page * pageSize, total)
   return { from, to }
 }
+
+/**
+ * Page item type for pagination display
+ * Can be a page number or ellipsis indicator
+ */
+export type PageItem = number | 'ellipsis'
+
+/**
+ * Generate array of page numbers with ellipsis for pagination display
+ *
+ * Pattern: Always show first page, last page, and ±siblings around current page
+ * Ellipsis appears when gap between ranges is > 1
+ *
+ * Examples:
+ * - Page 1 of 15: [1, 2, 3, 4, 'ellipsis', 15]
+ * - Page 7 of 15: [1, 'ellipsis', 4, 5, 6, 7, 8, 9, 10, 'ellipsis', 15]
+ * - Page 15 of 15: [1, 'ellipsis', 12, 13, 14, 15]
+ * - Page 3 of 5: [1, 2, 3, 4, 5] (no ellipsis needed)
+ *
+ * @param currentPage - Current active page (1-indexed)
+ * @param totalPages - Total number of pages
+ * @param siblingsCount - Number of pages to show on each side of current page (default 3)
+ * @returns Array of page numbers and ellipsis indicators
+ */
+export function generatePageNumbers(
+  currentPage: number,
+  totalPages: number,
+  siblingsCount: number = 3
+): PageItem[] {
+  // Handle edge case: no pages or single page
+  if (totalPages <= 1) {
+    return totalPages === 1 ? [1] : []
+  }
+
+  const pages: PageItem[] = []
+
+  // Calculate the range around current page
+  const leftBound = Math.max(2, currentPage - siblingsCount)
+  const rightBound = Math.min(totalPages - 1, currentPage + siblingsCount)
+
+  // Always add first page
+  pages.push(1)
+
+  // Add left ellipsis if there's a gap
+  if (leftBound > 2) {
+    pages.push('ellipsis')
+  }
+
+  // Add middle range (excluding first and last page which are added separately)
+  for (let i = leftBound; i <= rightBound; i++) {
+    pages.push(i)
+  }
+
+  // Add right ellipsis if there's a gap
+  if (rightBound < totalPages - 1) {
+    pages.push('ellipsis')
+  }
+
+  // Always add last page (if different from first)
+  if (totalPages > 1) {
+    pages.push(totalPages)
+  }
+
+  return pages
+}

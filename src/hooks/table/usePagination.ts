@@ -17,6 +17,8 @@ import {
 
 interface UsePaginationOptions extends PaginationSettings {
   tableId: string
+  /** Callback fired when page changes (for scroll-to-top, analytics, etc.) */
+  onPageChange?: (page: number) => void
 }
 
 /**
@@ -33,7 +35,8 @@ export function usePagination({
   enableQueryURL = false,
   total = 0,
   pageSizeDefault = 50,
-  pageSizeOptions = PAGE_SIZE_OPTIONS
+  pageSizeOptions = PAGE_SIZE_OPTIONS,
+  onPageChange
 }: UsePaginationOptions): UsePaginationReturn {
   // URL state (only used when enableQueryURL=true)
   const [pageQuery, setPageQuery] = useQueryState('page')
@@ -94,6 +97,8 @@ export function usePagination({
   // Event-driven update function (no useEffect!)
   const updatePagination = useCallback(
     (newState: PaginationState) => {
+      const pageChanged = newState.page !== pagination.page
+
       if (enableQueryURL) {
         // Update URL (source of truth)
         setPageQuery(newState.page.toString())
@@ -101,8 +106,21 @@ export function usePagination({
       }
       // Always update store for consistency and for useQueryManager to read
       setPaginationState(tableId, newState)
+
+      // Call onPageChange callback if page changed
+      if (pageChanged && onPageChange) {
+        onPageChange(newState.page)
+      }
     },
-    [enableQueryURL, setPageQuery, setPageSizeQuery, setPaginationState, tableId]
+    [
+      enableQueryURL,
+      setPageQuery,
+      setPageSizeQuery,
+      setPaginationState,
+      tableId,
+      pagination.page,
+      onPageChange
+    ]
   )
 
   // Navigation actions

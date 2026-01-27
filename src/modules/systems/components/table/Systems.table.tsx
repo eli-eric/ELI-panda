@@ -1,5 +1,5 @@
 import type { Row } from '@tanstack/react-table'
-import { Fragment, memo, useCallback, useEffect } from 'react'
+import { Fragment, memo, useCallback, useEffect, useRef } from 'react'
 
 import { PaginationV2 as Pagination } from '@/modules/shared/table/PaginationV2'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
@@ -7,7 +7,10 @@ import type {
   GetRowPropsReturnType,
   PandaTableSettings
 } from '@/modules/shared/table/pandaTable/PandaTable'
-import { PandaTableV2 } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
+import {
+  PandaTableV2,
+  type PandaTableV2Handle
+} from '@/modules/shared/table/pandaTableV2/PandaTableV2'
 import { SearchBar } from '@/modules/shared/table/SearchBar'
 import { useRecalculate } from '@/modules/systemItem/hooks/useRecalculate'
 import type { SystemDetail } from '@/types/responses/systems'
@@ -52,6 +55,7 @@ export const SystemsTable = ({
     enableDragAndDrop: enableDragAndDrop
   })
   const [recalculate] = useRecalculate({ tableId })
+  const tableRef = useRef<PandaTableV2Handle>(null)
 
   useEffect(() => {
     if (systems) {
@@ -86,6 +90,11 @@ export const SystemsTable = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [table])
 
+  // Scroll table to top when page changes
+  const handlePageChange = useCallback(() => {
+    tableRef.current?.scrollToTop()
+  }, [])
+
   return (
     <Fragment>
       <MemoizedSearchBar
@@ -103,6 +112,7 @@ export const SystemsTable = ({
         right={RightSearchBarElement && <RightSearchBarElement />}
       />
       <PandaTableV2
+        ref={tableRef}
         data={systems?.data}
         table={table}
         loading={loading || pending}
@@ -122,6 +132,7 @@ export const SystemsTable = ({
           pageSizeDefault: pageSizeDefault,
           total: systems?.totalCount
         }}
+        onPageChange={handlePageChange}
       />
     </Fragment>
   )

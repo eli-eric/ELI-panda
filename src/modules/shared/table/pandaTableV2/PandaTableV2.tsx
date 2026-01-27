@@ -1,6 +1,6 @@
 import type { Row, Table } from '@tanstack/react-table'
 import { useVirtualizer } from '@tanstack/react-virtual'
-import React, { useCallback } from 'react'
+import React, { forwardRef, useCallback, useImperativeHandle } from 'react'
 
 import { isEmptyArray } from '@/lib/predicates/data'
 import { isDefined, isUndefined } from '@/lib/predicates/type-guards'
@@ -30,17 +30,33 @@ interface Props<T> {
   table: Table<T>
 }
 
-export function PandaTableV2<T>({
-  data,
-  table,
-  settings,
-  tableHeading,
-  loading = false,
-  className,
-  tableId,
-  getRowProps = defaultPropGetter,
-  skeletonRowCount = 5
-}: Props<T>) {
+/**
+ * Imperative handle for PandaTableV2
+ * Exposes methods to control the table from parent components
+ */
+export interface PandaTableV2Handle {
+  /** Scroll the table to the top (first row) */
+  scrollToTop: () => void
+}
+
+/**
+ * Generic forwardRef wrapper for PandaTableV2
+ * Required because forwardRef doesn't preserve generic types by default
+ */
+function PandaTableV2Inner<T>(
+  {
+    data,
+    table,
+    settings,
+    tableHeading,
+    loading = false,
+    className,
+    tableId,
+    getRowProps = defaultPropGetter,
+    skeletonRowCount = 5
+  }: Props<T>,
+  ref: React.ForwardedRef<PandaTableV2Handle>
+) {
   const {
     enableFooter = false,
     enableColumnHiding = false,
@@ -52,6 +68,17 @@ export function PandaTableV2<T>({
 
   //The virtualizers need to know the scrollable container element
   const tableContainerRef = React.useRef<HTMLDivElement>(null)
+
+  // Expose imperative handle for parent components
+  useImperativeHandle(
+    ref,
+    () => ({
+      scrollToTop: () => {
+        tableContainerRef.current?.scrollTo({ top: 0, behavior: 'instant' })
+      }
+    }),
+    []
+  )
 
   //dynamic row height virtualization - alternatively you could use a simpler fixed row height strategy without the need for `measureElement`
   const rowVirtualizer = useVirtualizer({
@@ -175,3 +202,27 @@ export function PandaTableV2<T>({
     </TableContainer>
   )
 }
+
+/**
+ * PandaTableV2 with forwardRef support
+ * Use ref to access imperative methods like scrollToTop()
+ *
+ * @example
+ * ```tsx
+ * const tableRef = useRef<PandaTableV2Handle>(null)
+ *
+ * const handlePageChange = () => {
+ *   tableRef.current?.scrollToTop()
+ * }
+ *
+ * return (
+ *   <>
+ *     <PandaTableV2 ref={tableRef} ... />
+ *     <PaginationV2 onPageChange={handlePageChange} ... />
+ *   </>
+ * )
+ * ```
+ */
+export const PandaTableV2 = forwardRef(PandaTableV2Inner) as <T>(
+  props: Props<T> & { ref?: React.ForwardedRef<PandaTableV2Handle> }
+) => React.ReactElement

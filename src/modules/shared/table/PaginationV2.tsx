@@ -11,6 +11,8 @@ interface PaginationV2Props {
   settings?: PaginationSettings & {
     showPageSizeSelector?: boolean
   }
+  /** Callback fired when page changes (for scroll-to-top, analytics, etc.) */
+  onPageChange?: (page: number) => void
 }
 
 /**
@@ -21,7 +23,11 @@ interface PaginationV2Props {
  *
  * Same interface as old Pagination for drop-in replacement.
  */
-export function PaginationV2({ tableId, settings }: PaginationV2Props) {
+export function PaginationV2({
+  tableId,
+  settings,
+  onPageChange
+}: PaginationV2Props) {
   const {
     enableQueryURL,
     total = 0,
@@ -35,7 +41,8 @@ export function PaginationV2({ tableId, settings }: PaginationV2Props) {
     enableQueryURL,
     total,
     pageSizeDefault,
-    pageSizeOptions
+    pageSizeOptions,
+    onPageChange
   })
 
   const { pagination, resetPagination } = paginationHook
