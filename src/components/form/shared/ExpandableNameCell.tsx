@@ -25,8 +25,8 @@ export const ExpandableNameCell = ({
     }}
     className={cn('my-1 flex items-center')}
     onClick={e => {
-      e.stopPropagation()
       if (row.original.isExpandable || row.getCanExpand()) {
+        e.stopPropagation()
         fetchChildren && fetchChildren(row.original.uid)
         row.toggleExpanded()
       }
