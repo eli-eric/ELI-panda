@@ -1,5 +1,6 @@
 import {
   Cog,
+  Cpu,
   CreditCard,
   Image as ImageIcon,
   Keyboard,
@@ -101,6 +102,12 @@ const tiles: Tile[] = [
     link: PATH.SERVICES,
     Icon: () => <Cog className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8" />,
     role: ROLE.BASICS
+  },
+  {
+    name: 'Control Systems',
+    link: PATH.CONTROL_SYSTEMS,
+    Icon: () => <Cpu className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8" />,
+    role: ROLE.CONTROL_SYSTEMS_VIEW
   }
 ]
 
