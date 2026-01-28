@@ -1179,6 +1179,7 @@ export const messages = {
     },
     columns: {
       systemCode: 'System Code',
+      systemType: 'System Type',
       name: 'Name',
       location: 'Location',
       zone: 'Zone',

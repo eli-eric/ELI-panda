@@ -142,6 +142,12 @@ export const useSystemCodesColumns = ({
         }
       },
       {
+        header: fm({ id: message.controlSystems.columns.systemType }),
+        accessorFn: row => row.systemType?.code,
+        id: 'systemType',
+        size: 120
+      },
+      {
         header: fm({ id: message.controlSystems.columns.parentPath }),
         accessorFn: row =>
           row.parentPath?.map(item => item.name).join(' / ') ?? '',
