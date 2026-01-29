@@ -145,7 +145,7 @@ export const useSystemCodesColumns = ({
         header: fm({ id: message.controlSystems.columns.systemType }),
         accessorFn: row => row.systemType?.name,
         id: 'systemType',
-        size: 120
+        size: 150
       },
       {
         header: fm({ id: message.controlSystems.columns.parentPath }),
