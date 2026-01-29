@@ -3,7 +3,7 @@ import type { FC } from 'react'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 import { ROLE } from '@/types/constants/roles'
 
-import { Pagination } from '../shared/table/Pagination'
+import { PaginationV2 as Pagination } from '../shared/table/PaginationV2'
 import { usePandaTable } from '../shared/table/pandaTable/hooks/usePandaTable'
 import type { PandaTableSettings } from '../shared/table/pandaTable/PandaTable'
 import { PandaTableV2 } from '../shared/table/pandaTableV2/PandaTableV2'

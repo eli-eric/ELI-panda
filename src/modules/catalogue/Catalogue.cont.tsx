@@ -1,6 +1,6 @@
 import { X } from 'lucide-react'
 import { useQueryState } from 'next-usequerystate'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { useIntl } from 'react-intl'
 
 import ErrorPage from '@/components/error/ErrorPage'
@@ -13,7 +13,8 @@ import type { CodebookType } from '@/types/responses/codebook'
 import type { CatalogueItemForm } from '../catalogueItem/types/responses'
 import { CatalogueTable } from '../shared/catalogue/table/CatalogueItems.table'
 import { FilterBadges } from '../shared/form/FilterBadges'
-import { Pagination } from '../shared/table/Pagination'
+import { PaginationV2 as Pagination } from '../shared/table/PaginationV2'
+import type { PandaTableV2Handle } from '../shared/table/pandaTableV2/PandaTableV2'
 import { SearchBar } from '../shared/table/SearchBar'
 import { CatalogueBreadcrumbs } from './components/breadcrump/CatalogueBreadcrumbs'
 import { CategoryListContainer } from './components/categoryList/CategoryList.cont'
@@ -29,6 +30,8 @@ const CatalogueContainer = () => {
   const [categoryQuery, setCategoryQuery] = useQueryState('category', {
     history: 'push'
   })
+  const tableRef = useRef<PandaTableV2Handle>(null)
+
   const defValues = useMemo<CatalogueItemForm>(
     () => ({
       name: '',
@@ -54,6 +57,12 @@ const CatalogueContainer = () => {
     },
     [setCategoryQuery]
   )
+
+  // Scroll table to top when page changes
+  const handlePageChange = useCallback(() => {
+    tableRef.current?.scrollToTop()
+  }, [])
+
   const { formatMessage: fm } = useIntl()
 
   return (
@@ -92,6 +101,7 @@ const CatalogueContainer = () => {
       />
       <TableLayoutContainer deps={[open, catalogueItems, catalogueCategories]}>
         <CatalogueTable
+          ref={tableRef}
           tableId={tableId}
           setCategoryFilter={setCategoryFilter}
           catalogueItems={catalogueItems}
@@ -106,6 +116,7 @@ const CatalogueContainer = () => {
             total: catalogueItems?.totalCount,
             pageSizeDefault: 50
           }}
+          onPageChange={handlePageChange}
         />
         {error && <ErrorPage />}
       </TableLayoutContainer>

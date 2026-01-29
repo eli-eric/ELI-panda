@@ -10,12 +10,15 @@ import { createJSONStorage, persist } from 'zustand/middleware'
 import { createWithEqualityFn as create } from 'zustand/traditional'
 
 import type { QueryFilter } from '@/modules/orders/types'
+import type { PaginationState } from '@/types/pagination'
+import { toLegacyPagination } from '@/types/pagination'
 
 type SortingInstance = {
   sortBy?: SortingState
   rowSelection?: RowSelectionState
   sortByQueryString?: string
-  pagination?: string
+  pagination?: string // Legacy format - kept for backward compatibility
+  paginationState?: PaginationState // New typed format
   filter?: QueryFilter
   columnFilter?: ColumnFilter[]
   search?: string
@@ -40,6 +43,10 @@ type TableState = {
   setPagination: (
     tableId: string,
     pagination: SortingInstance['pagination']
+  ) => void
+  setPaginationState: (
+    tableId: string,
+    paginationState: SortingInstance['paginationState']
   ) => void
   reset: (tableId: string) => void
   setFilter: (tableId: string, filter: SortingInstance['filter']) => void
@@ -93,6 +100,19 @@ const useTableStateStore = create<TableState>()(
           updateInstance(tableId, 'rowSelection', rowSelection),
         setPagination: (tableId, pagination) =>
           updateInstance(tableId, 'pagination', pagination),
+        setPaginationState: (tableId, paginationState) => {
+          set(state => {
+            const instance = state.instances?.[tableId] || {}
+            instance.paginationState = paginationState
+            // Also update legacy format for backward compatibility
+            instance.pagination = paginationState
+              ? toLegacyPagination(paginationState)
+              : undefined
+            return {
+              instances: { ...state.instances, [tableId]: { ...instance } }
+            }
+          })
+        },
         setSortByQueryString: (tableId, sortByQueryString) =>
           updateInstance(tableId, 'sortByQueryString', sortByQueryString),
         setFilter: (tableId, filter) =>
@@ -118,6 +138,7 @@ const useTableStateStore = create<TableState>()(
               sortBy: undefined,
               rowSelection: undefined,
               pagination: undefined,
+              paginationState: undefined,
               filter: undefined,
               search: undefined,
               searchBarValue: undefined,

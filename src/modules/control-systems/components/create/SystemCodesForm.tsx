@@ -45,7 +45,7 @@ export const SystemCodesForm = ({ onPreview, onSubmit }: Props) => {
     mode: 'onChange'
   })
 
-  const { watch, register, reset, setValue } = formMethods
+  const { watch, register, setValue } = formMethods
 
   // Watch form values for preview
   const zone = watch('zone')
@@ -85,12 +85,9 @@ export const SystemCodesForm = ({ onPreview, onSubmit }: Props) => {
   const handleFormSubmit = useCallback(
     async (values: SystemCodesFormInput) => {
       // Zod validation ensures values are non-null at this point
-      const success = await onSubmit(values as SystemCodesFormValues)
-      if (success) {
-        reset()
-      }
+      await onSubmit(values as SystemCodesFormValues)
     },
-    [onSubmit, reset]
+    [onSubmit]
   )
 
   return (

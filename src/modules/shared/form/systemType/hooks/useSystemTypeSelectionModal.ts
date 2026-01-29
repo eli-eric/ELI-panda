@@ -15,9 +15,6 @@ export const useSystemTypeSelectionModal = () => {
       props: {
         title: 'Select System Type',
         size: 'l' as const,
-        enableFiltering: true,
-        manualFiltering: false,
-        selectParent: false,
         onSelect: onSelect || (() => {})
       }
     })
