@@ -15,304 +15,285 @@ jest.mock('@/core/http/fetchClient')
 jest.mock('sonner')
 
 const mockFetchRequest = fetchClient.fetchRequest as jest.MockedFunction<
-  typeof fetchClient.fetchRequest
+    typeof fetchClient.fetchRequest
 >
 const mockToast = toast as jest.Mocked<typeof toast>
 
 describe('useImageDelete', () => {
-  let queryClient: QueryClient
+    let queryClient: QueryClient
 
-  const createWrapper = () => {
-    queryClient = new QueryClient({
-      defaultOptions: {
-        queries: { retry: false },
-        mutations: { retry: false }
-      }
-    })
+    const createWrapper = () => {
+        queryClient = new QueryClient({
+            defaultOptions: {
+                queries: { retry: false },
+                mutations: { retry: false },
+            },
+        })
 
-    const Wrapper = ({ children }: { children: ReactNode }) =>
-      React.createElement(
-        QueryClientProvider,
-        { client: queryClient },
-        children
-      )
-    Wrapper.displayName = 'QueryClientWrapper'
-    return Wrapper
-  }
-
-  const mockImages: ImageItem[] = [
-    {
-      id: 'image-1',
-      name: 'first.jpg',
-      url: '/api/catalogue/123/image/image-1',
-      type: 'image/jpeg',
-      ts: Date.now(),
-      size: 1024
-    },
-    {
-      id: 'image-2',
-      name: 'second.png',
-      url: '/api/catalogue/123/image/image-2',
-      type: 'image/png',
-      ts: Date.now(),
-      size: 2048
+        const Wrapper = ({ children }: { children: ReactNode }) =>
+            React.createElement(QueryClientProvider, { client: queryClient }, children)
+        Wrapper.displayName = 'QueryClientWrapper'
+        return Wrapper
     }
-  ]
 
-  beforeEach(() => {
-    jest.clearAllMocks()
-  })
+    const mockImages: ImageItem[] = [
+        {
+            id: 'image-1',
+            name: 'first.jpg',
+            url: '/api/catalogue/123/image/image-1',
+            type: 'image/jpeg',
+            ts: Date.now(),
+            size: 1024,
+        },
+        {
+            id: 'image-2',
+            name: 'second.png',
+            url: '/api/catalogue/123/image/image-2',
+            type: 'image/png',
+            ts: Date.now(),
+            size: 2048,
+        },
+    ]
 
-  it('deletes image successfully', async () => {
-    const wrapper = createWrapper()
-    // Pre-populate cache with images
-    queryClient.setQueryData(['images', FILE_TYPE.CATALOGUE, '123'], mockImages)
-
-    mockFetchRequest.mockResolvedValueOnce(undefined)
-
-    const { result } = renderHook(
-      () =>
-        useImageDelete({
-          itemType: FILE_TYPE.CATALOGUE,
-          itemId: '123'
-        }),
-      { wrapper }
-    )
-
-    act(() => {
-      result.current.mutate({
-        imageId: 'image-1',
-        imageName: 'first.jpg'
-      })
+    beforeEach(() => {
+        jest.clearAllMocks()
     })
 
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+    it('deletes image successfully', async () => {
+        const wrapper = createWrapper()
+        // Pre-populate cache with images
+        queryClient.setQueryData(['images', FILE_TYPE.CATALOGUE, '123'], mockImages)
 
-    // Verify API call
-    expect(mockFetchRequest).toHaveBeenCalledWith(
-      '/api/catalogue/123/image/image-1',
-      expect.objectContaining({
-        method: 'DELETE'
-      })
-    )
+        mockFetchRequest.mockResolvedValueOnce(undefined)
 
-    // Verify success toast
-    expect(mockToast.success).toHaveBeenCalledWith('Deleted first.jpg')
+        const { result } = renderHook(
+            () =>
+                useImageDelete({
+                    itemType: FILE_TYPE.CATALOGUE,
+                    itemId: '123',
+                }),
+            { wrapper },
+        )
 
-    // Verify cache updated
-    const cacheData = queryClient.getQueryData<ImageItem[]>([
-      'images',
-      FILE_TYPE.CATALOGUE,
-      '123'
-    ])
+        act(() => {
+            result.current.mutate({
+                imageId: 'image-1',
+                imageName: 'first.jpg',
+            })
+        })
 
-    expect(cacheData).toHaveLength(1)
-    expect(cacheData?.[0].id).toBe('image-2')
-  })
+        await waitFor(() => expect(result.current.isSuccess).toBe(true))
 
-  it('shows optimistic removal immediately', async () => {
-    const wrapper = createWrapper()
-    // Pre-populate cache with images
-    queryClient.setQueryData(['images', FILE_TYPE.CATALOGUE, '123'], mockImages)
+        // Verify API call
+        expect(mockFetchRequest).toHaveBeenCalledWith(
+            '/api/catalogue/123/image/image-1',
+            expect.objectContaining({
+                method: 'DELETE',
+            }),
+        )
 
-    // Delay the API response
-    mockFetchRequest.mockImplementation(
-      () => new Promise(resolve => setTimeout(() => resolve(undefined), 100))
-    )
+        // Verify success toast
+        expect(mockToast.success).toHaveBeenCalledWith('Deleted first.jpg')
 
-    const { result } = renderHook(
-      () =>
-        useImageDelete({
-          itemType: FILE_TYPE.CATALOGUE,
-          itemId: '123'
-        }),
-      { wrapper }
-    )
+        // Verify cache updated
+        const cacheData = queryClient.getQueryData<ImageItem[]>([
+            'images',
+            FILE_TYPE.CATALOGUE,
+            '123',
+        ])
 
-    // Verify initial state
-    let cacheData = queryClient.getQueryData<ImageItem[]>([
-      'images',
-      FILE_TYPE.CATALOGUE,
-      '123'
-    ])
-    expect(cacheData).toHaveLength(2)
-
-    act(() => {
-      result.current.mutate({
-        imageId: 'image-1',
-        imageName: 'first.jpg'
-      })
+        expect(cacheData).toHaveLength(1)
+        expect(cacheData?.[0].id).toBe('image-2')
     })
 
-    // Wait for mutation to start
-    await waitFor(() => expect(result.current.isPending).toBe(true))
+    it('shows optimistic removal immediately', async () => {
+        const wrapper = createWrapper()
+        // Pre-populate cache with images
+        queryClient.setQueryData(['images', FILE_TYPE.CATALOGUE, '123'], mockImages)
 
-    // Check optimistic update
-    cacheData = queryClient.getQueryData<ImageItem[]>([
-      'images',
-      FILE_TYPE.CATALOGUE,
-      '123'
-    ])
+        // Delay the API response
+        mockFetchRequest.mockImplementation(
+            () => new Promise(resolve => setTimeout(() => resolve(undefined), 100)),
+        )
 
-    expect(cacheData).toHaveLength(1) // Removed immediately
-    expect(cacheData?.[0].id).toBe('image-2')
+        const { result } = renderHook(
+            () =>
+                useImageDelete({
+                    itemType: FILE_TYPE.CATALOGUE,
+                    itemId: '123',
+                }),
+            { wrapper },
+        )
 
-    // Wait for success
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+        // Verify initial state
+        let cacheData = queryClient.getQueryData<ImageItem[]>([
+            'images',
+            FILE_TYPE.CATALOGUE,
+            '123',
+        ])
+        expect(cacheData).toHaveLength(2)
 
-    // Final check
-    cacheData = queryClient.getQueryData<ImageItem[]>([
-      'images',
-      FILE_TYPE.CATALOGUE,
-      '123'
-    ])
+        act(() => {
+            result.current.mutate({
+                imageId: 'image-1',
+                imageName: 'first.jpg',
+            })
+        })
 
-    expect(cacheData).toHaveLength(1)
-    expect(cacheData?.[0].id).toBe('image-2')
-  })
+        // Wait for mutation to start
+        await waitFor(() => expect(result.current.isPending).toBe(true))
 
-  it('rolls back on delete error', async () => {
-    const wrapper = createWrapper()
-    // Pre-populate cache with images
-    queryClient.setQueryData(['images', FILE_TYPE.CATALOGUE, '123'], mockImages)
+        // Check optimistic update
+        cacheData = queryClient.getQueryData<ImageItem[]>(['images', FILE_TYPE.CATALOGUE, '123'])
 
-    mockFetchRequest.mockRejectedValueOnce(new Error('Delete failed'))
+        expect(cacheData).toHaveLength(1) // Removed immediately
+        expect(cacheData?.[0].id).toBe('image-2')
 
-    const { result } = renderHook(
-      () =>
-        useImageDelete({
-          itemType: FILE_TYPE.CATALOGUE,
-          itemId: '123'
-        }),
-      { wrapper }
-    )
+        // Wait for success
+        await waitFor(() => expect(result.current.isSuccess).toBe(true))
 
-    // Verify initial state
-    let cacheData = queryClient.getQueryData<ImageItem[]>([
-      'images',
-      FILE_TYPE.CATALOGUE,
-      '123'
-    ])
-    expect(cacheData).toHaveLength(2)
+        // Final check
+        cacheData = queryClient.getQueryData<ImageItem[]>(['images', FILE_TYPE.CATALOGUE, '123'])
 
-    act(() => {
-      result.current.mutate({
-        imageId: 'image-1',
-        imageName: 'first.jpg'
-      })
+        expect(cacheData).toHaveLength(1)
+        expect(cacheData?.[0].id).toBe('image-2')
     })
 
-    await waitFor(() => expect(result.current.isError).toBe(true))
+    it('rolls back on delete error', async () => {
+        const wrapper = createWrapper()
+        // Pre-populate cache with images
+        queryClient.setQueryData(['images', FILE_TYPE.CATALOGUE, '123'], mockImages)
 
-    // Verify cache was rolled back
-    cacheData = queryClient.getQueryData<ImageItem[]>([
-      'images',
-      FILE_TYPE.CATALOGUE,
-      '123'
-    ])
+        mockFetchRequest.mockRejectedValueOnce(new Error('Delete failed'))
 
-    expect(cacheData).toHaveLength(2) // Restored
-    expect(cacheData).toEqual(mockImages)
+        const { result } = renderHook(
+            () =>
+                useImageDelete({
+                    itemType: FILE_TYPE.CATALOGUE,
+                    itemId: '123',
+                }),
+            { wrapper },
+        )
 
-    expect(mockToast.error).toHaveBeenCalledWith(
-      expect.stringContaining('Failed to delete first.jpg')
-    )
-  })
+        // Verify initial state
+        let cacheData = queryClient.getQueryData<ImageItem[]>([
+            'images',
+            FILE_TYPE.CATALOGUE,
+            '123',
+        ])
+        expect(cacheData).toHaveLength(2)
 
-  it('throws error when itemId is undefined', async () => {
-    const wrapper = createWrapper()
+        act(() => {
+            result.current.mutate({
+                imageId: 'image-1',
+                imageName: 'first.jpg',
+            })
+        })
 
-    const { result } = renderHook(
-      () =>
-        useImageDelete({
-          itemType: FILE_TYPE.CATALOGUE,
-          itemId: undefined
-        }),
-      { wrapper }
-    )
+        await waitFor(() => expect(result.current.isError).toBe(true))
 
-    act(() => {
-      result.current.mutate({
-        imageId: 'image-1',
-        imageName: 'test.jpg'
-      })
+        // Verify cache was rolled back
+        cacheData = queryClient.getQueryData<ImageItem[]>(['images', FILE_TYPE.CATALOGUE, '123'])
+
+        expect(cacheData).toHaveLength(2) // Restored
+        expect(cacheData).toEqual(mockImages)
+
+        expect(mockToast.error).toHaveBeenCalledWith(
+            expect.stringContaining('Failed to delete first.jpg'),
+        )
     })
 
-    await waitFor(() => expect(result.current.isError).toBe(true))
+    it('throws error when itemId is undefined', async () => {
+        const wrapper = createWrapper()
 
-    expect(result.current.error?.message).toContain('itemId is required')
-    expect(mockFetchRequest).not.toHaveBeenCalled()
-  })
+        const { result } = renderHook(
+            () =>
+                useImageDelete({
+                    itemType: FILE_TYPE.CATALOGUE,
+                    itemId: undefined,
+                }),
+            { wrapper },
+        )
 
-  it('invalidates query after mutation settles', async () => {
-    const wrapper = createWrapper()
-    // Pre-populate cache with images
-    queryClient.setQueryData(['images', FILE_TYPE.CATALOGUE, '123'], mockImages)
+        act(() => {
+            result.current.mutate({
+                imageId: 'image-1',
+                imageName: 'test.jpg',
+            })
+        })
 
-    mockFetchRequest.mockResolvedValueOnce(undefined)
+        await waitFor(() => expect(result.current.isError).toBe(true))
 
-    const { result } = renderHook(
-      () =>
-        useImageDelete({
-          itemType: FILE_TYPE.CATALOGUE,
-          itemId: '123'
-        }),
-      { wrapper }
-    )
-
-    // Spy on invalidateQueries
-    const invalidateSpy = jest.spyOn(queryClient, 'invalidateQueries')
-
-    act(() => {
-      result.current.mutate({
-        imageId: 'image-1',
-        imageName: 'first.jpg'
-      })
+        expect(result.current.error?.message).toContain('itemId is required')
+        expect(mockFetchRequest).not.toHaveBeenCalled()
     })
 
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+    it('invalidates query after mutation settles', async () => {
+        const wrapper = createWrapper()
+        // Pre-populate cache with images
+        queryClient.setQueryData(['images', FILE_TYPE.CATALOGUE, '123'], mockImages)
 
-    // Verify invalidation was called
-    expect(invalidateSpy).toHaveBeenCalledWith({
-      queryKey: ['images', FILE_TYPE.CATALOGUE, '123']
+        mockFetchRequest.mockResolvedValueOnce(undefined)
+
+        const { result } = renderHook(
+            () =>
+                useImageDelete({
+                    itemType: FILE_TYPE.CATALOGUE,
+                    itemId: '123',
+                }),
+            { wrapper },
+        )
+
+        // Spy on invalidateQueries
+        const invalidateSpy = jest.spyOn(queryClient, 'invalidateQueries')
+
+        act(() => {
+            result.current.mutate({
+                imageId: 'image-1',
+                imageName: 'first.jpg',
+            })
+        })
+
+        await waitFor(() => expect(result.current.isSuccess).toBe(true))
+
+        // Verify invalidation was called
+        expect(invalidateSpy).toHaveBeenCalledWith({
+            queryKey: ['images', FILE_TYPE.CATALOGUE, '123'],
+        })
     })
-  })
 
-  it('handles deleting the last image', async () => {
-    const wrapper = createWrapper()
-    // Set cache with only one image
-    queryClient.setQueryData(
-      ['images', FILE_TYPE.CATALOGUE, '123'],
-      [mockImages[0]]
-    )
+    it('handles deleting the last image', async () => {
+        const wrapper = createWrapper()
+        // Set cache with only one image
+        queryClient.setQueryData(['images', FILE_TYPE.CATALOGUE, '123'], [mockImages[0]])
 
-    mockFetchRequest.mockResolvedValueOnce(undefined)
+        mockFetchRequest.mockResolvedValueOnce(undefined)
 
-    const { result } = renderHook(
-      () =>
-        useImageDelete({
-          itemType: FILE_TYPE.CATALOGUE,
-          itemId: '123'
-        }),
-      { wrapper }
-    )
+        const { result } = renderHook(
+            () =>
+                useImageDelete({
+                    itemType: FILE_TYPE.CATALOGUE,
+                    itemId: '123',
+                }),
+            { wrapper },
+        )
 
-    act(() => {
-      result.current.mutate({
-        imageId: 'image-1',
-        imageName: 'first.jpg'
-      })
+        act(() => {
+            result.current.mutate({
+                imageId: 'image-1',
+                imageName: 'first.jpg',
+            })
+        })
+
+        await waitFor(() => expect(result.current.isSuccess).toBe(true))
+
+        // Verify cache is empty
+        const cacheData = queryClient.getQueryData<ImageItem[]>([
+            'images',
+            FILE_TYPE.CATALOGUE,
+            '123',
+        ])
+
+        expect(cacheData).toHaveLength(0)
     })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-
-    // Verify cache is empty
-    const cacheData = queryClient.getQueryData<ImageItem[]>([
-      'images',
-      FILE_TYPE.CATALOGUE,
-      '123'
-    ])
-
-    expect(cacheData).toHaveLength(0)
-  })
 })

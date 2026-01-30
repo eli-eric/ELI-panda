@@ -14,55 +14,55 @@ import { useResearcherColumns } from './researchers.columns'
 import type { Researcher } from './types/researcher.types'
 
 export const ResearchersContainer: FC = () => {
-  const tableId = 'researchers'
+    const tableId = 'researchers'
 
-  const columns = useResearcherColumns()
-  const { data, refetch, isLoading } = useResearchers(tableId)
+    const columns = useResearcherColumns()
+    const { data, refetch, isLoading } = useResearchers(tableId)
 
-  const { openResearcherForm } = useOpenResearcherForm({ onSuccess: refetch })
+    const { openResearcherForm } = useOpenResearcherForm({ onSuccess: refetch })
 
-  const tableSettings: PandaTableSettings<Researcher> = {
-    enableSorting: true,
-    manualSorting: false,
-    enableColumnReordering: true,
-    enableQueryURL: true,
-    enableColumnHiding: true
-  }
+    const tableSettings: PandaTableSettings<Researcher> = {
+        enableSorting: true,
+        manualSorting: false,
+        enableColumnReordering: true,
+        enableQueryURL: true,
+        enableColumnHiding: true,
+    }
 
-  const table = usePandaTable<Researcher>({
-    tableId,
-    columns,
-    data: data?.data || [],
-    settings: tableSettings
-  })
+    const table = usePandaTable<Researcher>({
+        tableId,
+        columns,
+        data: data?.data || [],
+        settings: tableSettings,
+    })
 
-  return (
-    <TableLayoutContainer>
-      <SearchBar
-        tableId={tableId}
-        left={
-          <SearchBarButtonsComponent
-            editRole={ROLE.PUBLICATIONS_EDIT}
-            handleAdd={openResearcherForm}
-            handleRefresh={refetch}
-          />
-        }
-      />
-      <PandaTableV2
-        tableId={tableId}
-        table={table}
-        data={data?.data}
-        settings={tableSettings}
-        loading={isLoading}
-      />
-      <Pagination
-        tableId={tableId}
-        settings={{
-          enableQueryURL: true,
-          pageSizeDefault: 50,
-          total: data?.totalCount
-        }}
-      />
-    </TableLayoutContainer>
-  )
+    return (
+        <TableLayoutContainer>
+            <SearchBar
+                tableId={tableId}
+                left={
+                    <SearchBarButtonsComponent
+                        editRole={ROLE.PUBLICATIONS_EDIT}
+                        handleAdd={openResearcherForm}
+                        handleRefresh={refetch}
+                    />
+                }
+            />
+            <PandaTableV2
+                tableId={tableId}
+                table={table}
+                data={data?.data}
+                settings={tableSettings}
+                loading={isLoading}
+            />
+            <Pagination
+                tableId={tableId}
+                settings={{
+                    enableQueryURL: true,
+                    pageSizeDefault: 50,
+                    total: data?.totalCount,
+                }}
+            />
+        </TableLayoutContainer>
+    )
 }

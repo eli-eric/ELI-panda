@@ -26,55 +26,55 @@ export const roomCardHistoryQuery = gql(`
 `)
 
 export interface ParsedHistoryItem {
-  uid: string
-  previousState: string | null
-  newState: string
-  changedAt: string
-  changedBy: {
     uid: string
-    firstName: string
-    lastName: string
-    email: string
-  }
+    previousState: string | null
+    newState: string
+    changedAt: string
+    changedBy: {
+        uid: string
+        firstName: string
+        lastName: string
+        email: string
+    }
 }
 
 export const useOperationalStateHistory = (roomCardUid?: string) => {
-  const { data, error, isFetching } = useGraphQL(roomCardHistoryQuery, {
-    variables: {
-      roomCardUid: roomCardUid || ''
-    },
-    enabled: !!roomCardUid,
-    refetchOnMount: 'always'
-  })
-
-  useEffect(() => {
-    if (error) {
-      toast.error('Failed to fetch operational state history')
-    }
-  }, [error])
-
-  const history = useMemo(() => {
-    if (isFetching) return undefined
-    const edges = data?.roomCards[0]?.updatedByConnection?.edges
-    if (!edges) return []
-
-    // Sort by date DESC in the application layer
-    const sortedEdges = [...edges].sort((a, b) => {
-      return new Date(b.at).getTime() - new Date(a.at).getTime()
+    const { data, error, isFetching } = useGraphQL(roomCardHistoryQuery, {
+        variables: {
+            roomCardUid: roomCardUid || '',
+        },
+        enabled: !!roomCardUid,
+        refetchOnMount: 'always',
     })
 
-    return sortedEdges.map((edge, index) => ({
-      uid: `${edge.node.uid}-${index}`,
-      previousState: edge.previousState || null,
-      newState: edge.newState || '',
-      changedAt: edge.at,
-      changedBy: edge.node
-    })) as ParsedHistoryItem[]
-  }, [data, isFetching])
+    useEffect(() => {
+        if (error) {
+            toast.error('Failed to fetch operational state history')
+        }
+    }, [error])
 
-  return {
-    history,
-    error,
-    loading: isFetching
-  }
+    const history = useMemo(() => {
+        if (isFetching) return undefined
+        const edges = data?.roomCards[0]?.updatedByConnection?.edges
+        if (!edges) return []
+
+        // Sort by date DESC in the application layer
+        const sortedEdges = [...edges].sort((a, b) => {
+            return new Date(b.at).getTime() - new Date(a.at).getTime()
+        })
+
+        return sortedEdges.map((edge, index) => ({
+            uid: `${edge.node.uid}-${index}`,
+            previousState: edge.previousState || null,
+            newState: edge.newState || '',
+            changedAt: edge.at,
+            changedBy: edge.node,
+        })) as ParsedHistoryItem[]
+    }, [data, isFetching])
+
+    return {
+        history,
+        error,
+        loading: isFetching,
+    }
 }

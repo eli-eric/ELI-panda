@@ -8,21 +8,21 @@ import { message } from 'src/i18n/src/messages'
 const messages = message.ordersPage
 
 const NoSSROrdersCont = dynamic(() => import('@/modules/orders/Orders.cont'), {
-  ssr: false
+    ssr: false,
 })
 
 const OrdersPage: NextPage = (): JSX.Element => {
-  const intl = useIntl()
+    const intl = useIntl()
 
-  return (
-    <Fragment>
-      <Head>
-        <title>{intl.formatMessage({ id: messages.head })}</title>
-        <meta name="description" content="...." />
-      </Head>
-      <NoSSROrdersCont />
-    </Fragment>
-  )
+    return (
+        <Fragment>
+            <Head>
+                <title>{intl.formatMessage({ id: messages.head })}</title>
+                <meta name="description" content="...." />
+            </Head>
+            <NoSSROrdersCont />
+        </Fragment>
+    )
 }
 
 export default OrdersPage

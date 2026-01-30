@@ -53,13 +53,13 @@ This guide provides a comprehensive implementation plan for integrating Sentry e
 1. Create a new project at [sentry.io](https://sentry.io)
 2. Select "Next.js" as the platform
 3. Note down the following:
-   - **DSN URL**: `https://xxx@xxx.ingest.sentry.io/xxx`
-   - **Organization Slug**: Your Sentry organization name
-   - **Project Slug**: Your project name
+    - **DSN URL**: `https://xxx@xxx.ingest.sentry.io/xxx`
+    - **Organization Slug**: Your Sentry organization name
+    - **Project Slug**: Your project name
 4. Generate an Auth Token:
-   - Go to Settings → Developer Settings → Auth Tokens
-   - Create token with `project:releases` and `project:write` scopes
-   - Save this token securely
+    - Go to Settings → Developer Settings → Auth Tokens
+    - Create token with `project:releases` and `project:write` scopes
+    - Save this token securely
 
 ### 2. GitHub Secrets
 
@@ -98,35 +98,35 @@ This file enables Next.js instrumentation hooks.
 ```typescript
 // instrumentation.ts
 export async function register() {
-  if (process.env.NEXT_RUNTIME === 'nodejs') {
-    await import('./sentry.server.config')
-  }
+    if (process.env.NEXT_RUNTIME === 'nodejs') {
+        await import('./sentry.server.config')
+    }
 
-  if (process.env.NEXT_RUNTIME === 'edge') {
-    await import('./sentry.edge.config')
-  }
+    if (process.env.NEXT_RUNTIME === 'edge') {
+        await import('./sentry.edge.config')
+    }
 }
 
 export const onRequestError = async (
-  err: { digest: string } & Error,
-  request: {
-    path: string
-    method: string
-    headers: { [key: string]: string | string[] | undefined }
-  }
+    err: { digest: string } & Error,
+    request: {
+        path: string
+        method: string
+        headers: { [key: string]: string | string[] | undefined }
+    },
 ) => {
-  if (process.env.NEXT_RUNTIME === 'nodejs') {
-    const Sentry = await import('@sentry/nextjs')
-    Sentry.captureException(err, {
-      contexts: {
-        request: {
-          path: request.path,
-          method: request.method,
-          headers: request.headers
-        }
-      }
-    })
-  }
+    if (process.env.NEXT_RUNTIME === 'nodejs') {
+        const Sentry = await import('@sentry/nextjs')
+        Sentry.captureException(err, {
+            contexts: {
+                request: {
+                    path: request.path,
+                    method: request.method,
+                    headers: request.headers,
+                },
+            },
+        })
+    }
 }
 ```
 
@@ -139,60 +139,59 @@ Client-side Sentry configuration for browser runtime.
 import * as Sentry from '@sentry/nextjs'
 
 const SENTRY_DSN = process.env.NEXT_PUBLIC_SENTRY_DSN
-const ENVIRONMENT =
-  process.env.SENTRY_ENVIRONMENT || process.env.PANDA_ENV || 'production'
+const ENVIRONMENT = process.env.SENTRY_ENVIRONMENT || process.env.PANDA_ENV || 'production'
 const IS_PRODUCTION = process.env.NODE_ENV === 'production'
 
 Sentry.init({
-  dsn: SENTRY_DSN,
+    dsn: SENTRY_DSN,
 
-  // Only enable in production
-  enabled: IS_PRODUCTION,
+    // Only enable in production
+    enabled: IS_PRODUCTION,
 
-  // Environment name
-  environment: ENVIRONMENT,
+    // Environment name
+    environment: ENVIRONMENT,
 
-  // Performance Monitoring
-  tracesSampleRate: 0.1, // 10% of transactions
+    // Performance Monitoring
+    tracesSampleRate: 0.1, // 10% of transactions
 
-  // Session Replay
-  replaysSessionSampleRate: 0.1, // 10% of sessions
-  replaysOnErrorSampleRate: 1.0, // 100% of sessions with errors
+    // Session Replay
+    replaysSessionSampleRate: 0.1, // 10% of sessions
+    replaysOnErrorSampleRate: 1.0, // 100% of sessions with errors
 
-  // Integrations
-  integrations: [
-    Sentry.replayIntegration({
-      maskAllText: true,
-      blockAllMedia: true
-    }),
-    Sentry.feedbackIntegration({
-      colorScheme: 'system',
-      showBranding: false
-    }),
-    Sentry.browserTracingIntegration()
-  ],
+    // Integrations
+    integrations: [
+        Sentry.replayIntegration({
+            maskAllText: true,
+            blockAllMedia: true,
+        }),
+        Sentry.feedbackIntegration({
+            colorScheme: 'system',
+            showBranding: false,
+        }),
+        Sentry.browserTracingIntegration(),
+    ],
 
-  // Filtering
-  ignoreErrors: [
-    // Browser extensions
-    'top.GLOBALS',
-    'chrome-extension://',
-    'moz-extension://',
-    // Network errors
-    'Network request failed',
-    'NetworkError',
-    // NextAuth errors (expected during auth flow)
-    '[next-auth]'
-  ],
+    // Filtering
+    ignoreErrors: [
+        // Browser extensions
+        'top.GLOBALS',
+        'chrome-extension://',
+        'moz-extension://',
+        // Network errors
+        'Network request failed',
+        'NetworkError',
+        // NextAuth errors (expected during auth flow)
+        '[next-auth]',
+    ],
 
-  // Performance
-  beforeSend(event, hint) {
-    // Filter out events from development
-    if (!IS_PRODUCTION) {
-      return null
-    }
-    return event
-  }
+    // Performance
+    beforeSend(event, hint) {
+        // Filter out events from development
+        if (!IS_PRODUCTION) {
+            return null
+        }
+        return event
+    },
 })
 ```
 
@@ -205,51 +204,50 @@ Server-side Sentry configuration for Node.js runtime.
 import * as Sentry from '@sentry/nextjs'
 
 const SENTRY_DSN = process.env.NEXT_PUBLIC_SENTRY_DSN
-const ENVIRONMENT =
-  process.env.SENTRY_ENVIRONMENT || process.env.PANDA_ENV || 'production'
+const ENVIRONMENT = process.env.SENTRY_ENVIRONMENT || process.env.PANDA_ENV || 'production'
 const IS_PRODUCTION = process.env.NODE_ENV === 'production'
 
 Sentry.init({
-  dsn: SENTRY_DSN,
+    dsn: SENTRY_DSN,
 
-  // Only enable in production
-  enabled: IS_PRODUCTION,
+    // Only enable in production
+    enabled: IS_PRODUCTION,
 
-  // Environment name
-  environment: ENVIRONMENT,
+    // Environment name
+    environment: ENVIRONMENT,
 
-  // Performance Monitoring
-  tracesSampleRate: 0.1, // 10% of transactions
+    // Performance Monitoring
+    tracesSampleRate: 0.1, // 10% of transactions
 
-  // Integrations
-  integrations: [Sentry.httpIntegration(), Sentry.graphqlIntegration()],
+    // Integrations
+    integrations: [Sentry.httpIntegration(), Sentry.graphqlIntegration()],
 
-  // Filtering
-  ignoreErrors: [
-    // Expected GraphQL errors
-    'GraphQL error:',
-    // Auth errors (expected)
-    'Unauthorized',
-    'Authentication required'
-  ],
+    // Filtering
+    ignoreErrors: [
+        // Expected GraphQL errors
+        'GraphQL error:',
+        // Auth errors (expected)
+        'Unauthorized',
+        'Authentication required',
+    ],
 
-  // Performance
-  beforeSend(event, hint) {
-    // Filter out events from development
-    if (!IS_PRODUCTION) {
-      return null
-    }
+    // Performance
+    beforeSend(event, hint) {
+        // Filter out events from development
+        if (!IS_PRODUCTION) {
+            return null
+        }
 
-    // Add server context
-    if (event.request) {
-      event.tags = {
-        ...event.tags,
-        server: 'true'
-      }
-    }
+        // Add server context
+        if (event.request) {
+            event.tags = {
+                ...event.tags,
+                server: 'true',
+            }
+        }
 
-    return event
-  }
+        return event
+    },
 })
 ```
 
@@ -262,36 +260,35 @@ Edge runtime Sentry configuration.
 import * as Sentry from '@sentry/nextjs'
 
 const SENTRY_DSN = process.env.NEXT_PUBLIC_SENTRY_DSN
-const ENVIRONMENT =
-  process.env.SENTRY_ENVIRONMENT || process.env.PANDA_ENV || 'production'
+const ENVIRONMENT = process.env.SENTRY_ENVIRONMENT || process.env.PANDA_ENV || 'production'
 const IS_PRODUCTION = process.env.NODE_ENV === 'production'
 
 Sentry.init({
-  dsn: SENTRY_DSN,
+    dsn: SENTRY_DSN,
 
-  // Only enable in production
-  enabled: IS_PRODUCTION,
+    // Only enable in production
+    enabled: IS_PRODUCTION,
 
-  // Environment name
-  environment: ENVIRONMENT,
+    // Environment name
+    environment: ENVIRONMENT,
 
-  // Performance Monitoring (lower rate for edge)
-  tracesSampleRate: 0.05, // 5% of transactions
+    // Performance Monitoring (lower rate for edge)
+    tracesSampleRate: 0.05, // 5% of transactions
 
-  // Filtering
-  beforeSend(event, hint) {
-    if (!IS_PRODUCTION) {
-      return null
-    }
+    // Filtering
+    beforeSend(event, hint) {
+        if (!IS_PRODUCTION) {
+            return null
+        }
 
-    // Add edge context
-    event.tags = {
-      ...event.tags,
-      runtime: 'edge'
-    }
+        // Add edge context
+        event.tags = {
+            ...event.tags,
+            runtime: 'edge',
+        }
 
-    return event
-  }
+        return event
+    },
 })
 ```
 
@@ -378,82 +375,82 @@ const { withSentryConfig } = require('@sentry/nextjs')
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  swcMinify: true,
-  reactStrictMode: true,
-  output: 'standalone',
+    swcMinify: true,
+    reactStrictMode: true,
+    output: 'standalone',
 
-  // Enable instrumentation
-  experimental: {
-    instrumentationHook: true
-  },
+    // Enable instrumentation
+    experimental: {
+        instrumentationHook: true,
+    },
 
-  images: {
-    remotePatterns: [
-      {
-        hostname: 'localhost'
-      },
-      {
-        hostname: 'panda.eli-beams.eu'
-      },
-      {
-        hostname: 'api.panda.eli-beams.eu'
-      },
-      {
-        hostname: 'panda.eli-laser.eu'
-      },
-      {
-        hostname: 'panda-api.eli-laser.eu'
-      }
-    ]
-  },
+    images: {
+        remotePatterns: [
+            {
+                hostname: 'localhost',
+            },
+            {
+                hostname: 'panda.eli-beams.eu',
+            },
+            {
+                hostname: 'api.panda.eli-beams.eu',
+            },
+            {
+                hostname: 'panda.eli-laser.eu',
+            },
+            {
+                hostname: 'panda-api.eli-laser.eu',
+            },
+        ],
+    },
 
-  env: {
-    PANDA_API_GW_URL: process.env.PANDA_API_GW_URL,
-    PANDA_ENV: process.env.PANDA_ENV
-  },
+    env: {
+        PANDA_API_GW_URL: process.env.PANDA_API_GW_URL,
+        PANDA_ENV: process.env.PANDA_ENV,
+    },
 
-  webpack: config => {
-    config.experiments = { ...config.experiments, topLevelAwait: true }
-    return config
-  }
+    webpack: config => {
+        config.experiments = { ...config.experiments, topLevelAwait: true }
+        return config
+    },
 }
 
 // Sentry configuration options
 const sentryWebpackPluginOptions = {
-  // For all available options, see:
-  // https://github.com/getsentry/sentry-webpack-plugin#options
+    // For all available options, see:
+    // https://github.com/getsentry/sentry-webpack-plugin#options
 
-  org: process.env.SENTRY_ORG,
-  project: process.env.SENTRY_PROJECT,
-  authToken: process.env.SENTRY_AUTH_TOKEN,
+    org: process.env.SENTRY_ORG,
+    project: process.env.SENTRY_PROJECT,
+    authToken: process.env.SENTRY_AUTH_TOKEN,
 
-  // Only upload source maps in production builds
-  silent: false, // Can be used to suppress logs
+    // Only upload source maps in production builds
+    silent: false, // Can be used to suppress logs
 
-  // Upload source maps during build
-  widenClientFileUpload: true,
+    // Upload source maps during build
+    widenClientFileUpload: true,
 
-  // Automatically annotate React components for better error messages
-  reactComponentAnnotation: {
-    enabled: true
-  },
+    // Automatically annotate React components for better error messages
+    reactComponentAnnotation: {
+        enabled: true,
+    },
 
-  // Uncomment to route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
-  // This can increase your server load as well as your hosting bill.
-  // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of client-
-  // side errors will fail.
-  // tunnelRoute: "/monitoring",
+    // Uncomment to route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
+    // This can increase your server load as well as your hosting bill.
+    // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of client-
+    // side errors will fail.
+    // tunnelRoute: "/monitoring",
 
-  // Hides source maps from generated client bundles
-  hideSourceMaps: true,
+    // Hides source maps from generated client bundles
+    hideSourceMaps: true,
 
-  // Automatically tree-shake Sentry logger statements to reduce bundle size
-  disableLogger: true
+    // Automatically tree-shake Sentry logger statements to reduce bundle size
+    disableLogger: true,
 
-  // Enables automatic instrumentation of Vercel Cron Monitors.
-  // See the following for more information:
-  // https://docs.sentry.io/product/crons/
-  // automaticVercelMonitors: true,
+    // Enables automatic instrumentation of Vercel Cron Monitors.
+    // See the following for more information:
+    // https://docs.sentry.io/product/crons/
+    // automaticVercelMonitors: true,
 }
 
 // Wrap Next.js config with Sentry
@@ -549,43 +546,43 @@ Add Sentry environment variables to the build and runtime configuration.
 version: '3.9'
 
 networks:
-  panda-net:
-    driver: bridge
-    name: panda-net
+    panda-net:
+        driver: bridge
+        name: panda-net
 
 services:
-  panda-frontend-ui-main-app:
-    container_name: panda-frontend-ui-main-app
-    restart: unless-stopped
-    environment:
-      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
-      - MINIO_ACCESS_KEY_PROD=${MINIO_ACCESS_KEY_PROD}
-      - MINIO_SECRET_KEY_PROD=${MINIO_SECRET_KEY_PROD}
-      - NEO4J_PASSWORD=${NEO4J_PASSWORD}
-      - AZURE_AD_BEAMLINES_CLIENT_ID=${AZURE_AD_BEAMLINES_CLIENT_ID}
-      - AZURE_AD_BEAMLINES_CLIENT_SECRET=${AZURE_AD_BEAMLINES_CLIENT_SECRET}
-      - AZURE_AD_BEAMLINES_TENANT_ID=${AZURE_AD_BEAMLINES_TENANT_ID}
-      # NEW: Sentry runtime environment
-      - NEXT_PUBLIC_SENTRY_DSN=${NEXT_PUBLIC_SENTRY_DSN}
-    build:
-      context: ./
-      dockerfile: Dockerfile
-      labels:
-        - panda-frontend-ui-main-app
-      args:
-        - NEO4J_PASSWORD=${NEO4J_PASSWORD}
-        - AZURE_AD_BEAMLINES_CLIENT_ID=${AZURE_AD_BEAMLINES_CLIENT_ID}
-        - AZURE_AD_BEAMLINES_CLIENT_SECRET=${AZURE_AD_BEAMLINES_CLIENT_SECRET}
-        - AZURE_AD_BEAMLINES_TENANT_ID=${AZURE_AD_BEAMLINES_TENANT_ID}
-        # NEW: Sentry build arguments
-        - SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
-        - SENTRY_ORG=${SENTRY_ORG}
-        - SENTRY_PROJECT=${SENTRY_PROJECT}
-        - NEXT_PUBLIC_SENTRY_DSN=${NEXT_PUBLIC_SENTRY_DSN}
-    networks:
-      - panda-net
-    ports:
-      - '127.0.0.1:5000:5001'
+    panda-frontend-ui-main-app:
+        container_name: panda-frontend-ui-main-app
+        restart: unless-stopped
+        environment:
+            - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+            - MINIO_ACCESS_KEY_PROD=${MINIO_ACCESS_KEY_PROD}
+            - MINIO_SECRET_KEY_PROD=${MINIO_SECRET_KEY_PROD}
+            - NEO4J_PASSWORD=${NEO4J_PASSWORD}
+            - AZURE_AD_BEAMLINES_CLIENT_ID=${AZURE_AD_BEAMLINES_CLIENT_ID}
+            - AZURE_AD_BEAMLINES_CLIENT_SECRET=${AZURE_AD_BEAMLINES_CLIENT_SECRET}
+            - AZURE_AD_BEAMLINES_TENANT_ID=${AZURE_AD_BEAMLINES_TENANT_ID}
+            # NEW: Sentry runtime environment
+            - NEXT_PUBLIC_SENTRY_DSN=${NEXT_PUBLIC_SENTRY_DSN}
+        build:
+            context: ./
+            dockerfile: Dockerfile
+            labels:
+                - panda-frontend-ui-main-app
+            args:
+                - NEO4J_PASSWORD=${NEO4J_PASSWORD}
+                - AZURE_AD_BEAMLINES_CLIENT_ID=${AZURE_AD_BEAMLINES_CLIENT_ID}
+                - AZURE_AD_BEAMLINES_CLIENT_SECRET=${AZURE_AD_BEAMLINES_CLIENT_SECRET}
+                - AZURE_AD_BEAMLINES_TENANT_ID=${AZURE_AD_BEAMLINES_TENANT_ID}
+                # NEW: Sentry build arguments
+                - SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
+                - SENTRY_ORG=${SENTRY_ORG}
+                - SENTRY_PROJECT=${SENTRY_PROJECT}
+                - NEXT_PUBLIC_SENTRY_DSN=${NEXT_PUBLIC_SENTRY_DSN}
+        networks:
+            - panda-net
+        ports:
+            - '127.0.0.1:5000:5001'
 ```
 
 ### 5.3 Update Other Docker Compose Files
@@ -609,54 +606,54 @@ Add Sentry secrets to the production workflow.
 name: Compose up frontend on push
 
 on:
-  push:
-    branches:
-      - 'production'
+    push:
+        branches:
+            - 'production'
 
 jobs:
-  use-secret:
-    runs-on: czechia-server
-    steps:
-      - name: Show secret stats
-        run: |
-          echo "${{ secrets.NEXTAUTH_SECRET }}" | "${{ secrets.MINIO_ACCESS_KEY_PROD }}" | "${{ secrets.MINIO_SECRET_KEY_PROD }}" | "${{ secrets.NEO4J_PASSWORD }}" | "${{ secrets.AZURE_AD_BEAMLINES_CLIENT_ID }}" | "${{ secrets.AZURE_AD_BEAMLINES_CLIENT_SECRET }}" | "${{ secrets.AZURE_AD_BEAMLINES_TENANT_ID }}" | "${{ secrets.SENTRY_AUTH_TOKEN }}" | "${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}" | wc | wc
+    use-secret:
+        runs-on: czechia-server
+        steps:
+            - name: Show secret stats
+              run: |
+                  echo "${{ secrets.NEXTAUTH_SECRET }}" | "${{ secrets.MINIO_ACCESS_KEY_PROD }}" | "${{ secrets.MINIO_SECRET_KEY_PROD }}" | "${{ secrets.NEO4J_PASSWORD }}" | "${{ secrets.AZURE_AD_BEAMLINES_CLIENT_ID }}" | "${{ secrets.AZURE_AD_BEAMLINES_CLIENT_SECRET }}" | "${{ secrets.AZURE_AD_BEAMLINES_TENANT_ID }}" | "${{ secrets.SENTRY_AUTH_TOKEN }}" | "${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}" | wc | wc
 
-  unit-tests:
-    runs-on: czechia-server
-    needs: use-secret
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: Install Yarn
-        run: npm install -g yarn
-      - name: Install dependencies
-        run: yarn install
-      - name: Run unit tests
-        run: yarn test
+    unit-tests:
+        runs-on: czechia-server
+        needs: use-secret
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: 18
+            - name: Install Yarn
+              run: npm install -g yarn
+            - name: Install dependencies
+              run: yarn install
+            - name: Run unit tests
+              run: yarn test
 
-  compose-up:
-    runs-on: czechia-server
-    needs: unit-tests
-    steps:
-      - uses: actions/checkout@v3
-      - run: |
-          docker compose up -d --build
-        env:
-          NEXTAUTH_SECRET: '${{ secrets.NEXTAUTH_SECRET }}'
-          MINIO_ACCESS_KEY_DEV: '${{ secrets.MINIO_ACCESS_KEY_PROD }}'
-          MINIO_SECRET_KEY_DEV: '${{ secrets.MINIO_SECRET_KEY_PROD }}'
-          NEO4J_PASSWORD: '${{ secrets.NEO4J_PASSWORD }}'
-          AZURE_AD_BEAMLINES_CLIENT_ID: '${{ secrets.AZURE_AD_BEAMLINES_CLIENT_ID }}'
-          AZURE_AD_BEAMLINES_CLIENT_SECRET: '${{ secrets.AZURE_AD_BEAMLINES_CLIENT_SECRET }}'
-          AZURE_AD_BEAMLINES_TENANT_ID: '${{ secrets.AZURE_AD_BEAMLINES_TENANT_ID }}'
-          # NEW: Sentry environment variables
-          SENTRY_AUTH_TOKEN: '${{ secrets.SENTRY_AUTH_TOKEN }}'
-          SENTRY_ORG: '${{ secrets.SENTRY_ORG }}'
-          SENTRY_PROJECT: '${{ secrets.SENTRY_PROJECT }}'
-          NEXT_PUBLIC_SENTRY_DSN: '${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}'
+    compose-up:
+        runs-on: czechia-server
+        needs: unit-tests
+        steps:
+            - uses: actions/checkout@v3
+            - run: |
+                  docker compose up -d --build
+              env:
+                  NEXTAUTH_SECRET: '${{ secrets.NEXTAUTH_SECRET }}'
+                  MINIO_ACCESS_KEY_DEV: '${{ secrets.MINIO_ACCESS_KEY_PROD }}'
+                  MINIO_SECRET_KEY_DEV: '${{ secrets.MINIO_SECRET_KEY_PROD }}'
+                  NEO4J_PASSWORD: '${{ secrets.NEO4J_PASSWORD }}'
+                  AZURE_AD_BEAMLINES_CLIENT_ID: '${{ secrets.AZURE_AD_BEAMLINES_CLIENT_ID }}'
+                  AZURE_AD_BEAMLINES_CLIENT_SECRET: '${{ secrets.AZURE_AD_BEAMLINES_CLIENT_SECRET }}'
+                  AZURE_AD_BEAMLINES_TENANT_ID: '${{ secrets.AZURE_AD_BEAMLINES_TENANT_ID }}'
+                  # NEW: Sentry environment variables
+                  SENTRY_AUTH_TOKEN: '${{ secrets.SENTRY_AUTH_TOKEN }}'
+                  SENTRY_ORG: '${{ secrets.SENTRY_ORG }}'
+                  SENTRY_PROJECT: '${{ secrets.SENTRY_PROJECT }}'
+                  NEXT_PUBLIC_SENTRY_DSN: '${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}'
 ```
 
 ### 6.2 Update `compose-up-dev-on-push.yml`
@@ -667,33 +664,33 @@ Similar changes for dev workflow (optional - you may want to disable source maps
 name: Compose up DEV frontend on push
 
 on:
-  push:
-    branches:
-      - 'dev'
+    push:
+        branches:
+            - 'dev'
 
 jobs:
-  # ... existing jobs ...
+    # ... existing jobs ...
 
-  compose-up:
-    runs-on: czechia-server
-    needs: unit-tests
-    steps:
-      - uses: actions/checkout@v3
-      - run: |
-          docker compose -f docker-compose-dev.yml up -d --build
-        env:
-          NEXTAUTH_SECRET: '${{ secrets.NEXTAUTH_SECRET }}'
-          MINIO_ACCESS_KEY_PROD: '${{ secrets.MINIO_ACCESS_KEY_DEV }}'
-          MINIO_SECRET_KEY_PROD: '${{ secrets.MINIO_SECRET_KEY_DEV }}'
-          NEO4J_PASSWORD: '${{ secrets.NEO4J_PASSWORD }}'
-          AZURE_AD_BEAMLINES_CLIENT_ID: '${{ secrets.AZURE_AD_BEAMLINES_CLIENT_ID }}'
-          AZURE_AD_BEAMLINES_CLIENT_SECRET: '${{ secrets.AZURE_AD_BEAMLINES_CLIENT_SECRET }}'
-          AZURE_AD_BEAMLINES_TENANT_ID: '${{ secrets.AZURE_AD_BEAMLINES_TENANT_ID }}'
-          # Optional: Include Sentry for dev environment (or omit to disable)
-          # SENTRY_AUTH_TOKEN: '${{ secrets.SENTRY_AUTH_TOKEN }}'
-          # SENTRY_ORG: '${{ secrets.SENTRY_ORG }}'
-          # SENTRY_PROJECT: '${{ secrets.SENTRY_PROJECT }}'
-          # NEXT_PUBLIC_SENTRY_DSN: '${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}'
+    compose-up:
+        runs-on: czechia-server
+        needs: unit-tests
+        steps:
+            - uses: actions/checkout@v3
+            - run: |
+                  docker compose -f docker-compose-dev.yml up -d --build
+              env:
+                  NEXTAUTH_SECRET: '${{ secrets.NEXTAUTH_SECRET }}'
+                  MINIO_ACCESS_KEY_PROD: '${{ secrets.MINIO_ACCESS_KEY_DEV }}'
+                  MINIO_SECRET_KEY_PROD: '${{ secrets.MINIO_SECRET_KEY_DEV }}'
+                  NEO4J_PASSWORD: '${{ secrets.NEO4J_PASSWORD }}'
+                  AZURE_AD_BEAMLINES_CLIENT_ID: '${{ secrets.AZURE_AD_BEAMLINES_CLIENT_ID }}'
+                  AZURE_AD_BEAMLINES_CLIENT_SECRET: '${{ secrets.AZURE_AD_BEAMLINES_CLIENT_SECRET }}'
+                  AZURE_AD_BEAMLINES_TENANT_ID: '${{ secrets.AZURE_AD_BEAMLINES_TENANT_ID }}'
+                  # Optional: Include Sentry for dev environment (or omit to disable)
+                  # SENTRY_AUTH_TOKEN: '${{ secrets.SENTRY_AUTH_TOKEN }}'
+                  # SENTRY_ORG: '${{ secrets.SENTRY_ORG }}'
+                  # SENTRY_PROJECT: '${{ secrets.SENTRY_PROJECT }}'
+                  # NEXT_PUBLIC_SENTRY_DSN: '${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}'
 ```
 
 ### 6.3 Update `compose-up-test-on-push.yml`
@@ -770,17 +767,14 @@ Create `src/pages/api/sentry-test.ts`:
 import * as Sentry from '@sentry/nextjs'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  try {
-    // Test error capture
-    throw new Error('Sentry Test Error - API Route')
-  } catch (error) {
-    Sentry.captureException(error)
-    res.status(500).json({ error: 'Test error captured by Sentry' })
-  }
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+    try {
+        // Test error capture
+        throw new Error('Sentry Test Error - API Route')
+    } catch (error) {
+        Sentry.captureException(error)
+        res.status(500).json({ error: 'Test error captured by Sentry' })
+    }
 }
 ```
 
@@ -857,35 +851,35 @@ export default SentryTestPage
 
 1. **Local Testing** (optional):
 
-   ```bash
-   NODE_ENV=production yarn build
-   NODE_ENV=production yarn start
-   ```
+    ```bash
+    NODE_ENV=production yarn build
+    NODE_ENV=production yarn start
+    ```
 
-   - Navigate to `http://localhost:5001/sentry-test`
-   - Click "Test Client Error" - check Sentry dashboard for error
-   - Click "Test API Error" - check Sentry dashboard for API error
-   - Click "Open Feedback Widget" - test user feedback form
+    - Navigate to `http://localhost:5001/sentry-test`
+    - Click "Test Client Error" - check Sentry dashboard for error
+    - Click "Test API Error" - check Sentry dashboard for API error
+    - Click "Open Feedback Widget" - test user feedback form
 
 2. **Production Testing**:
-   - Deploy to production environment
-   - Navigate to `/sentry-test`
-   - Test all three buttons
-   - Verify errors appear in Sentry dashboard within 1-2 minutes
+    - Deploy to production environment
+    - Navigate to `/sentry-test`
+    - Test all three buttons
+    - Verify errors appear in Sentry dashboard within 1-2 minutes
 
 3. **Verify Source Maps**:
-   - In Sentry error details, check that stack traces show original TypeScript file names and line numbers (not minified)
-   - Example: `OrderItem.cont.tsx:123` instead of `chunk-abc123.js:1`
+    - In Sentry error details, check that stack traces show original TypeScript file names and line numbers (not minified)
+    - Example: `OrderItem.cont.tsx:123` instead of `chunk-abc123.js:1`
 
 4. **Test Session Replay**:
-   - Navigate through the application normally
-   - Trigger an error
-   - In Sentry, find the error and click "Replay" to watch the session recording
+    - Navigate through the application normally
+    - Trigger an error
+    - In Sentry, find the error and click "Replay" to watch the session recording
 
 5. **Test Performance Monitoring**:
-   - Navigate through several pages
-   - In Sentry, go to "Performance" section
-   - Verify you see transaction data for page loads and API calls
+    - Navigate through several pages
+    - In Sentry, go to "Performance" section
+    - Verify you see transaction data for page loads and API calls
 
 ---
 

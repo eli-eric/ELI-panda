@@ -18,97 +18,87 @@ import { GlobalSearchCommand } from './GlobalSearchCommand.comp'
  * Manages state, data fetching, and navigation logic
  */
 export const GlobalSearchCommandContainer = () => {
-  const router = useRouter()
-  const { data: session } = useSession()
-  const {
-    searchValue,
-    open,
-    setSearchValue,
-    setOpen,
-    clearSearch,
-    toggleOpen
-  } = useGlobalSearchStore()
+    const router = useRouter()
+    const { data: session } = useSession()
+    const { searchValue, open, setSearchValue, setOpen, clearSearch, toggleOpen } =
+        useGlobalSearchStore()
 
-  // Debounce search input to avoid excessive API calls
-  const debouncedSearch = useDebounce(searchValue, 500)
+    // Debounce search input to avoid excessive API calls
+    const debouncedSearch = useDebounce(searchValue, 500)
 
-  // Quick navigation items filtered by user permissions
-  const quickNavItems = useMemo(
-    () =>
-      mapNavBarToQuickNav(
-        [...NAV_ITEMS, ...OTHERS_NAV_ITEMS],
-        session?.user?.roles
-      ),
-    [session?.user?.roles]
-  )
+    // Quick navigation items filtered by user permissions
+    const quickNavItems = useMemo(
+        () => mapNavBarToQuickNav([...NAV_ITEMS, ...OTHERS_NAV_ITEMS], session?.user?.roles),
+        [session?.user?.roles],
+    )
 
-  // Fetch search results
-  const { data, isLoading, isFetching, error } = useGlobalSearch({
-    search: debouncedSearch,
-    enabled: open // Only fetch when modal is open
-  })
+    // Fetch search results
+    const { data, isLoading, isFetching, error } = useGlobalSearch({
+        search: debouncedSearch,
+        enabled: open, // Only fetch when modal is open
+    })
 
-  // Handle keyboard shortcut - just toggle, don't clear search
-  const handleToggle = useCallback(() => {
-    toggleOpen()
-  }, [toggleOpen])
+    // Handle keyboard shortcut - just toggle, don't clear search
+    const handleToggle = useCallback(() => {
+        toggleOpen()
+    }, [toggleOpen])
 
-  useGlobalSearchShortcut({ onToggle: handleToggle })
+    useGlobalSearchShortcut({ onToggle: handleToggle })
 
-  // Handle modal open/close - don't clear search on close
-  const handleOpenChange = useCallback(
-    (newOpen: boolean) => {
-      setOpen(newOpen)
-    },
-    [setOpen]
-  )
+    // Handle modal open/close - don't clear search on close
+    const handleOpenChange = useCallback(
+        (newOpen: boolean) => {
+            setOpen(newOpen)
+        },
+        [setOpen],
+    )
 
-  // Handle search input change
-  const handleSearchChange = useCallback(
-    (value: string) => {
-      setSearchValue(value)
-    },
-    [setSearchValue]
-  )
+    // Handle search input change
+    const handleSearchChange = useCallback(
+        (value: string) => {
+            setSearchValue(value)
+        },
+        [setSearchValue],
+    )
 
-  // Handle clear button click
-  const handleClear = useCallback(() => {
-    clearSearch()
-  }, [clearSearch])
+    // Handle clear button click
+    const handleClear = useCallback(() => {
+        clearSearch()
+    }, [clearSearch])
 
-  // Handle item selection - keep search value for quick re-search
-  const handleSelect = useCallback(
-    (item: GlobalSearchItem) => {
-      const path = getRedirectPath(item.nodeType, item.uid)
-      router.push(path)
-      setOpen(false)
-    },
-    [router, setOpen]
-  )
+    // Handle item selection - keep search value for quick re-search
+    const handleSelect = useCallback(
+        (item: GlobalSearchItem) => {
+            const path = getRedirectPath(item.nodeType, item.uid)
+            router.push(path)
+            setOpen(false)
+        },
+        [router, setOpen],
+    )
 
-  // Handle quick navigation selection - keep search value
-  const handleQuickNavSelect = useCallback(
-    (url: string) => {
-      router.push(url)
-      setOpen(false)
-    },
-    [router, setOpen]
-  )
+    // Handle quick navigation selection - keep search value
+    const handleQuickNavSelect = useCallback(
+        (url: string) => {
+            router.push(url)
+            setOpen(false)
+        },
+        [router, setOpen],
+    )
 
-  return (
-    <GlobalSearchCommand
-      open={open}
-      onOpenChange={handleOpenChange}
-      searchValue={searchValue}
-      onSearchChange={handleSearchChange}
-      onClear={handleClear}
-      results={data}
-      isLoading={isLoading}
-      isFetching={isFetching}
-      onSelect={handleSelect}
-      quickNavItems={quickNavItems}
-      onQuickNavSelect={handleQuickNavSelect}
-      error={error}
-    />
-  )
+    return (
+        <GlobalSearchCommand
+            open={open}
+            onOpenChange={handleOpenChange}
+            searchValue={searchValue}
+            onSearchChange={handleSearchChange}
+            onClear={handleClear}
+            results={data}
+            isLoading={isLoading}
+            isFetching={isFetching}
+            onSelect={handleSelect}
+            quickNavItems={quickNavItems}
+            onQuickNavSelect={handleQuickNavSelect}
+            error={error}
+        />
+    )
 }

@@ -7,18 +7,15 @@ import type { QueryFetcherKey } from '@/utils/fetcher'
 import { queryFetcher } from '@/utils/fetcher'
 
 export const useOrders = () => {
-  const { query } = useQueryManager('orders')
+    const { query } = useQueryManager('orders')
 
-  const queryKey: QueryFetcherKey = useMemo(
-    () => ['orders', { query }],
-    [query]
-  )
+    const queryKey: QueryFetcherKey = useMemo(() => ['orders', { query }], [query])
 
-  const { data, isFetching, error, refetch } = useQuery({
-    queryKey,
-    queryFn: queryFetcher<OrderListResponse>('orders'),
-    placeholderData: keepPreviousData
-  })
+    const { data, isFetching, error, refetch } = useQuery({
+        queryKey,
+        queryFn: queryFetcher<OrderListResponse>('orders'),
+        placeholderData: keepPreviousData,
+    })
 
-  return { orderList: data, loading: isFetching, error, mutate: refetch }
+    return { orderList: data, loading: isFetching, error, mutate: refetch }
 }

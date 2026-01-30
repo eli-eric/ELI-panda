@@ -9,30 +9,30 @@ import { RoomCardDetailContainer } from '@/modules/roomCard/RoomCardDetail.cont'
 const messages = message.roomCardsPage
 
 interface Props {
-  key?: string
-  roomCardUid?: string
+    key?: string
+    roomCardUid?: string
 }
 
 const RoomCardDetail: NextPage = ({ roomCardUid }: Props) => {
-  const intl = useIntl()
+    const intl = useIntl()
 
-  if (!roomCardUid) return null
+    if (!roomCardUid) return null
 
-  return (
-    <Fragment>
-      <Head>
-        <title>{intl.formatMessage({ id: messages.head })}</title>
-        <meta name="description" content="...." />
-      </Head>
+    return (
+        <Fragment>
+            <Head>
+                <title>{intl.formatMessage({ id: messages.head })}</title>
+                <meta name="description" content="...." />
+            </Head>
 
-      <RoomCardDetailContainer key={roomCardUid} roomCardUid={roomCardUid} />
-    </Fragment>
-  )
+            <RoomCardDetailContainer key={roomCardUid} roomCardUid={roomCardUid} />
+        </Fragment>
+    )
 }
 
 RoomCardDetail.getInitialProps = ({ query }) => ({
-  key: query.uid,
-  roomCardUid: query.uid
+    key: query.uid,
+    roomCardUid: query.uid,
 })
 
 export default RoomCardDetail

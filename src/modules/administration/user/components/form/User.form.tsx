@@ -25,69 +25,66 @@ const GET_FACILITIES = gql(`
 `)
 
 export const UserForm = () => {
-  const { formatMessage: fm } = useIntl()
-  const fields = useUserFormFields()
-  const { setValue, control } = useFormContext()
-  const { data, error } = useGraphQL(GET_FACILITIES)
+    const { formatMessage: fm } = useIntl()
+    const fields = useUserFormFields()
+    const { setValue, control } = useFormContext()
+    const { data, error } = useGraphQL(GET_FACILITIES)
 
-  useEffect(() => {
-    if (error) {
-      toast.error('Failed to fetch facilities')
-    }
-  }, [error])
+    useEffect(() => {
+        if (error) {
+            toast.error('Failed to fetch facilities')
+        }
+    }, [error])
 
-  const epmloyeeForm = useWatch({ control, name: 'employee' })
+    const epmloyeeForm = useWatch({ control, name: 'employee' })
 
-  const { employee } = useEmployee(epmloyeeForm?.uid)
+    const { employee } = useEmployee(epmloyeeForm?.uid)
 
-  useEffect(() => {
-    startTransition(() => {
-      if (employee) {
-        setValue('firstName', employee.firstName)
-        setValue('lastName', employee.lastName)
-        setValue('facility', {
-          uid: employee.facility.code,
-          name: employee.facility.name
+    useEffect(() => {
+        startTransition(() => {
+            if (employee) {
+                setValue('firstName', employee.firstName)
+                setValue('lastName', employee.lastName)
+                setValue('facility', {
+                    uid: employee.facility.code,
+                    name: employee.facility.name,
+                })
+            }
         })
-      }
-    })
-  }, [employee, setValue])
+    }, [employee, setValue])
 
-  const generatePasswordHandler = () => {
-    const password = generatePassword()
-    setValue('password', password)
-    setValue('confirmPassword', password)
-  }
+    const generatePasswordHandler = () => {
+        const password = generatePassword()
+        setValue('password', password)
+        setValue('confirmPassword', password)
+    }
 
-  return (
-    <Grid>
-      <Col md={6}>
-        <Combobox
-          {...fields.employee}
-          filter={[{ key: 'all', value: 'true' }]}
-        />
-      </Col>
-      <Col md={6} className="items-center sm:pl-2 pt-4">
-        <CheckBox {...fields.isEnabled} />
-      </Col>
-      <Col md={6}>
-        <Input {...fields.firstName} />
-      </Col>
-      <Col md={6}>
-        <Input {...fields.lastName} />
-      </Col>
-      <Col md={6}>
-        <Input {...fields.email} type="email" />
-      </Col>
-      <Col md={6}>
-        <Listbox
-          {...fields.facility}
-          codebookResponse={data?.facilities.map(value => ({
-            name: value.name,
-            uid: value.code
-          }))}
-        />
-      </Col>
-    </Grid>
-  )
+    return (
+        <Grid>
+            <Col md={6}>
+                <Combobox {...fields.employee} filter={[{ key: 'all', value: 'true' }]} />
+            </Col>
+            <Col md={6} className="items-center sm:pl-2 pt-4">
+                <CheckBox {...fields.isEnabled} />
+            </Col>
+            <Col md={6}>
+                <Input {...fields.firstName} />
+            </Col>
+            <Col md={6}>
+                <Input {...fields.lastName} />
+            </Col>
+            <Col md={6}>
+                <Input {...fields.email} type="email" />
+            </Col>
+            <Col md={6}>
+                <Listbox
+                    {...fields.facility}
+                    codebookResponse={data?.facilities.map(value => ({
+                        name: value.name,
+                        uid: value.code,
+                    }))}
+                />
+            </Col>
+        </Grid>
+    )
 }

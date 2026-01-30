@@ -6,10 +6,10 @@ import { queryFetcher } from '@/utils/fetcher'
 import type { PublicationsResponse } from '../types/responses'
 
 export const usePublications = (tableId: string) => {
-  const query = useQueryManager(tableId)
+    const query = useQueryManager(tableId)
 
-  return useQuery({
-    queryKey: ['publications', { query: query.query }],
-    queryFn: queryFetcher<PublicationsResponse>('publications')
-  })
+    return useQuery({
+        queryKey: ['publications', { query: query.query }],
+        queryFn: queryFetcher<PublicationsResponse>('publications'),
+    })
 }

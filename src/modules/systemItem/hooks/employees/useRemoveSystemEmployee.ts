@@ -17,35 +17,35 @@ const removeEmployeeMutation = gql(`
 `)
 
 interface UseRemoveSystemEmployeeOptions {
-  onSuccess?: () => void
+    onSuccess?: () => void
 }
 
 export const useRemoveSystemEmployee = (
-  systemUid: string | undefined,
-  employeeType: EmployeeType,
-  options?: UseRemoveSystemEmployeeOptions
+    systemUid: string | undefined,
+    employeeType: EmployeeType,
+    options?: UseRemoveSystemEmployeeOptions,
 ) => {
-  const { mutateAsync, isPending } = useGraphQLMutation(removeEmployeeMutation)
+    const { mutateAsync, isPending } = useGraphQLMutation(removeEmployeeMutation)
 
-  const removeEmployee = async (employeeUid: string) => {
-    if (!systemUid) {
-      toast.error('System UID is required')
-      return
+    const removeEmployee = async (employeeUid: string) => {
+        if (!systemUid) {
+            toast.error('System UID is required')
+            return
+        }
+
+        const update = {
+            [employeeType]: [{ disconnect: [whereN(employeeUid)] }],
+        }
+
+        toast.promise(mutateAsync({ where: { uid: systemUid }, update }), {
+            loading: 'Removing employee...',
+            success: () => {
+                options?.onSuccess?.()
+                return 'Employee removed'
+            },
+            error: 'Failed to remove employee',
+        })
     }
 
-    const update = {
-      [employeeType]: [{ disconnect: [whereN(employeeUid)] }]
-    }
-
-    toast.promise(mutateAsync({ where: { uid: systemUid }, update }), {
-      loading: 'Removing employee...',
-      success: () => {
-        options?.onSuccess?.()
-        return 'Employee removed'
-      },
-      error: 'Failed to remove employee'
-    })
-  }
-
-  return { removeEmployee, isRemoving: isPending }
+    return { removeEmployee, isRemoving: isPending }
 }

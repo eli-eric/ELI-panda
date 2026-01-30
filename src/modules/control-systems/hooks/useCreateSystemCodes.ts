@@ -8,27 +8,24 @@ import { queryMutate } from '@/utils/fetcher'
 import type { SystemCodeRequest, SystemCodeResult } from '../types'
 
 export const useCreateSystemCodes = () => {
-  const { formatMessage: fm } = useIntl()
+    const { formatMessage: fm } = useIntl()
 
-  const createMutation = useMutation({
-    mutationFn: queryMutate<SystemCodeResult[], SystemCodeRequest>(
-      'systemCodesCreate',
-      'post'
-    )
-  })
-
-  const create = async (data: SystemCodeRequest) => {
-    const promise = createMutation.mutateAsync(data)
-    toast.promise(promise, {
-      loading: fm({ id: message.controlSystems.toast.creating }),
-      success: fm({ id: message.controlSystems.toast.created }),
-      error: fm({ id: message.controlSystems.toast.failedToCreate })
+    const createMutation = useMutation({
+        mutationFn: queryMutate<SystemCodeResult[], SystemCodeRequest>('systemCodesCreate', 'post'),
     })
-    return promise
-  }
 
-  return {
-    create,
-    isPending: createMutation.isPending
-  }
+    const create = async (data: SystemCodeRequest) => {
+        const promise = createMutation.mutateAsync(data)
+        toast.promise(promise, {
+            loading: fm({ id: message.controlSystems.toast.creating }),
+            success: fm({ id: message.controlSystems.toast.created }),
+            error: fm({ id: message.controlSystems.toast.failedToCreate }),
+        })
+        return promise
+    }
+
+    return {
+        create,
+        isPending: createMutation.isPending,
+    }
 }

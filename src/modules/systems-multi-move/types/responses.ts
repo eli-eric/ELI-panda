@@ -1,4 +1,4 @@
 export interface MoveSystemsBody {
-  systemsToMoveUids: string[]
-  targetParentSystemUid: string
+    systemsToMoveUids: string[]
+    targetParentSystemUid: string
 }

@@ -9,16 +9,16 @@ import { PublicationDetailContainer } from '@/modules/publication/publication-de
 const messages = message.publication
 
 const PublicationDetailPage: NextPage = (): JSX.Element => {
-  const intl = useIntl()
-  return (
-    <Fragment>
-      <Head>
-        <title>{intl.formatMessage({ id: messages.head })}</title>
-        <meta name="description" content="...." />
-      </Head>
-      <PublicationDetailContainer />
-    </Fragment>
-  )
+    const intl = useIntl()
+    return (
+        <Fragment>
+            <Head>
+                <title>{intl.formatMessage({ id: messages.head })}</title>
+                <meta name="description" content="...." />
+            </Head>
+            <PublicationDetailContainer />
+        </Fragment>
+    )
 }
 
 export default PublicationDetailPage

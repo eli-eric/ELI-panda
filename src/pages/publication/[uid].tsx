@@ -9,20 +9,20 @@ import { PublicationUpdateContainer } from '@/modules/publication/publication-up
 const messages = message.publication
 
 const PublicationDetailPage: NextPage = (): JSX.Element => {
-  const intl = useIntl()
-  return (
-    <Fragment>
-      <Head>
-        <title>{intl.formatMessage({ id: messages.head })}</title>
-        <meta name="description" content="...." />
-      </Head>
-      <PublicationUpdateContainer />
-    </Fragment>
-  )
+    const intl = useIntl()
+    return (
+        <Fragment>
+            <Head>
+                <title>{intl.formatMessage({ id: messages.head })}</title>
+                <meta name="description" content="...." />
+            </Head>
+            <PublicationUpdateContainer />
+        </Fragment>
+    )
 }
 
 PublicationDetailPage.getInitialProps = ({ query }) => ({
-  key: query.uid
+    key: query.uid,
 })
 
 export default PublicationDetailPage

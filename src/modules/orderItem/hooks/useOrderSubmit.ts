@@ -15,97 +15,96 @@ import useOrderDetail from './useOrderDetail'
  * Updates cache and invalidates relevant queries
  */
 const updateCacheAndInvalidate = async (
-  queryClient: ReturnType<typeof useQueryClient>,
-  queryKey: QueryFetcherKey,
-  orderDetail: OrderDetailFormType
+    queryClient: ReturnType<typeof useQueryClient>,
+    queryKey: QueryFetcherKey,
+    orderDetail: OrderDetailFormType,
 ) => {
-  // Immediate cache update for order detail
-  queryClient.setQueryData(queryKey, orderDetail)
+    // Immediate cache update for order detail
+    queryClient.setQueryData(queryKey, orderDetail)
 
-  // Invalidate all relevant queries (await to ensure completion)
-  await Promise.all([
-    queryClient.invalidateQueries({ queryKey }),
-    queryClient.invalidateQueries({ queryKey: ['orders'] })
-  ])
+    // Invalidate all relevant queries (await to ensure completion)
+    await Promise.all([
+        queryClient.invalidateQueries({ queryKey }),
+        queryClient.invalidateQueries({ queryKey: ['orders'] }),
+    ])
 }
 
 /**
  * Handles navigation and displays notifications after successful save
  */
 const handleNavigation = (
-  router: ReturnType<typeof useRouter>,
-  saveAndExit: boolean,
-  orderDetail: OrderDetailFormType,
-  currentUid: string | undefined
+    router: ReturnType<typeof useRouter>,
+    saveAndExit: boolean,
+    orderDetail: OrderDetailFormType,
+    currentUid: string | undefined,
 ) => {
-  if (saveAndExit) {
-    router.push(PATH.ORDERS)
-  } else {
-    // After creating a new order, redirect to its detail
-    if (!currentUid) {
-      router.push(PATH.ORDER + '/' + orderDetail.uid)
+    if (saveAndExit) {
+        router.push(PATH.ORDERS)
+    } else {
+        // After creating a new order, redirect to its detail
+        if (!currentUid) {
+            router.push(PATH.ORDER + '/' + orderDetail.uid)
+        }
+        toast.success('Order was successfully saved.')
     }
-    toast.success('Order was successfully saved.')
-  }
 }
 
 export const useOrderSubmit = (formReset: (t: any) => void) => {
-  const router = useRouter()
-  const { uid, queryKey } = useOrderDetail()
+    const router = useRouter()
+    const { uid, queryKey } = useOrderDetail()
 
-  const queryClient = useQueryClient()
+    const queryClient = useQueryClient()
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: queryMutate<OrderDetailFormType, OrderDetailFormType>(
-      'order',
-      uid ? 'put' : 'post',
-      uid
-    ),
-    onError: (e: AxiosError) => {
-      if (e.response?.status === 409) {
-        toast.error(
-          'Order was updated by another user. Please refresh the page. And try again.'
-        )
-      } else {
-        toast.error(e.message)
-      }
-    }
-  })
-
-  const handleOnSuccess =
-    (saveAndExit: boolean) =>
-    async (data: AxiosResponse<OrderDetailFormType, any>) => {
-      const orderDetail = data.data
-
-      // Prepare data for form reset (add uuid)
-      const resetData = addUuidsToOrderData(orderDetail)
-      formReset(resetData)
-
-      // Cache management
-      await updateCacheAndInvalidate(queryClient, queryKey, orderDetail)
-
-      // Navigation and UI feedback
-      handleNavigation(router, saveAndExit, orderDetail, uid)
-    }
-
-  const submit = (data: OrderDetailFormType, saveAndExit: boolean) => {
-    // Transform data before sending to API
-    const transformedData = {
-      ...data,
-      serviceLines: data.serviceLines?.map(line => ({
-        ...line,
-        price: Number(line.price)
-      })),
-      orderLines: data.orderLines?.map(line => ({
-        ...line,
-        price: line.price != null ? Number(line.price) : undefined
-      }))
-    }
-
-    mutate(transformedData, {
-      onSuccess: handleOnSuccess(saveAndExit)
+    const { mutate, isPending } = useMutation({
+        mutationFn: queryMutate<OrderDetailFormType, OrderDetailFormType>(
+            'order',
+            uid ? 'put' : 'post',
+            uid,
+        ),
+        onError: (e: AxiosError) => {
+            if (e.response?.status === 409) {
+                toast.error(
+                    'Order was updated by another user. Please refresh the page. And try again.',
+                )
+            } else {
+                toast.error(e.message)
+            }
+        },
     })
-  }
 
-  return { loading: isPending, submit }
+    const handleOnSuccess =
+        (saveAndExit: boolean) => async (data: AxiosResponse<OrderDetailFormType, any>) => {
+            const orderDetail = data.data
+
+            // Prepare data for form reset (add uuid)
+            const resetData = addUuidsToOrderData(orderDetail)
+            formReset(resetData)
+
+            // Cache management
+            await updateCacheAndInvalidate(queryClient, queryKey, orderDetail)
+
+            // Navigation and UI feedback
+            handleNavigation(router, saveAndExit, orderDetail, uid)
+        }
+
+    const submit = (data: OrderDetailFormType, saveAndExit: boolean) => {
+        // Transform data before sending to API
+        const transformedData = {
+            ...data,
+            serviceLines: data.serviceLines?.map(line => ({
+                ...line,
+                price: Number(line.price),
+            })),
+            orderLines: data.orderLines?.map(line => ({
+                ...line,
+                price: line.price != null ? Number(line.price) : undefined,
+            })),
+        }
+
+        mutate(transformedData, {
+            onSuccess: handleOnSuccess(saveAndExit),
+        })
+    }
+
+    return { loading: isPending, submit }
 }

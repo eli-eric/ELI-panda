@@ -7,22 +7,22 @@ import { Fragment, useEffect } from 'react'
 import LoaderComponent from '@/components/loader.comp'
 
 const SignOut: NextPage = (): JSX.Element => {
-  const { status } = useSession()
-  const router = useRouter()
+    const { status } = useSession()
+    const router = useRouter()
 
-  useEffect(() => {
-    if (status === 'unauthenticated') router.push('/')
-    if (status === 'authenticated') signOut({ redirect: false })
-  }, [status, router])
+    useEffect(() => {
+        if (status === 'unauthenticated') router.push('/')
+        if (status === 'authenticated') signOut({ redirect: false })
+    }, [status, router])
 
-  return (
-    <Fragment>
-      <Head>
-        <meta name="description" content="...." />
-      </Head>
-      <LoaderComponent />
-    </Fragment>
-  )
+    return (
+        <Fragment>
+            <Head>
+                <meta name="description" content="...." />
+            </Head>
+            <LoaderComponent />
+        </Fragment>
+    )
 }
 
 export default SignOut

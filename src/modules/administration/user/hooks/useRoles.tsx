@@ -15,13 +15,13 @@ const GET_ROLES = gql(`
 `)
 
 export const useRoles = () => {
-  const { data, error } = useGraphQL(GET_ROLES)
+    const { data, error } = useGraphQL(GET_ROLES)
 
-  useEffect(() => {
-    if (error) {
-      toast.error('Failed to fetch roles')
-    }
-  }, [error])
+    useEffect(() => {
+        if (error) {
+            toast.error('Failed to fetch roles')
+        }
+    }, [error])
 
-  return data?.roles || []
+    return data?.roles || []
 }

@@ -10,10 +10,10 @@ import { filterNavigationByPermission } from '@/lib/navigation/utils'
  * @returns Filtered navigation items that user has access to
  */
 export function useFilteredNavigation(items: NavigationItem[]) {
-  const { data } = useSession()
+    const { data } = useSession()
 
-  return useMemo(
-    () => filterNavigationByPermission(items, data?.user?.roles),
-    [items, data?.user?.roles]
-  )
+    return useMemo(
+        () => filterNavigationByPermission(items, data?.user?.roles),
+        [items, data?.user?.roles],
+    )
 }

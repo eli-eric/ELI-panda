@@ -11,54 +11,45 @@ import { queryFetcher } from '@/utils/fetcher'
 import type { OrderDetailFormType } from '../types/form'
 
 const useOrderDetail = () => {
-  const router = useRouter()
-  const uid = router.query.uid as string | undefined
+    const router = useRouter()
+    const uid = router.query.uid as string | undefined
 
-  // Memoizujeme endpoint, aby nedocházelo k zbytečným re-renderům
-  const { order: orderEndpoint } = useEndpoint({ uid })
+    // Memoizujeme endpoint, aby nedocházelo k zbytečným re-renderům
+    const { order: orderEndpoint } = useEndpoint({ uid })
 
-  // Memoizujeme queryKey pro zamezení zbytečných re-fetchů
-  const queryKey = useMemo<QueryFetcherKey>(() => ['order', { uid }], [uid])
+    // Memoizujeme queryKey pro zamezení zbytečných re-fetchů
+    const queryKey = useMemo<QueryFetcherKey>(() => ['order', { uid }], [uid])
 
-  const { data, isLoading, error, refetch } = useQuery({
-    queryKey,
-    queryFn: queryFetcher<OrderDetailFormType>('order'),
-    enabled: !!uid,
-    refetchOnMount: true,
-    // Snížené staleTime pro zajištění aktuálních dat po uložení
-    staleTime: 5 * 1000 // 5 sekund
-  })
+    const { data, isLoading, error, refetch } = useQuery({
+        queryKey,
+        queryFn: queryFetcher<OrderDetailFormType>('order'),
+        enabled: !!uid,
+        refetchOnMount: true,
+        // Snížené staleTime pro zajištění aktuálních dat po uložení
+        staleTime: 5 * 1000, // 5 sekund
+    })
 
-  const { data: session } = useSession()
+    const { data: session } = useSession()
 
-  // Memoizujeme výslednou hodnotu disabledEdit
-  const disabledEdit = useMemo(
-    () => !session?.user.roles.includes(ROLE.ORDERS_EDIT),
-    [session?.user.roles]
-  )
+    // Memoizujeme výslednou hodnotu disabledEdit
+    const disabledEdit = useMemo(
+        () => !session?.user.roles.includes(ROLE.ORDERS_EDIT),
+        [session?.user.roles],
+    )
 
-  // Memoizujeme návratový objekt, aby měl vždy stejnou referenční identitu
-  return useMemo(() => {
-    return {
-      orderDetail: data,
-      loading: isLoading,
-      error,
-      queryKey,
-      disabledEdit,
-      uid,
-      orderEndpoint,
-      refetch
-    }
-  }, [
-    data,
-    isLoading,
-    error,
-    queryKey,
-    disabledEdit,
-    uid,
-    orderEndpoint,
-    refetch
-  ])
+    // Memoizujeme návratový objekt, aby měl vždy stejnou referenční identitu
+    return useMemo(() => {
+        return {
+            orderDetail: data,
+            loading: isLoading,
+            error,
+            queryKey,
+            disabledEdit,
+            uid,
+            orderEndpoint,
+            refetch,
+        }
+    }, [data, isLoading, error, queryKey, disabledEdit, uid, orderEndpoint, refetch])
 }
 
 export default useOrderDetail

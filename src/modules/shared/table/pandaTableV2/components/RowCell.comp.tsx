@@ -8,44 +8,44 @@ import { cn } from '@/lib/utils'
 import styles from './RowCell.module.css'
 
 interface Props {
-  cell: Cell<any, unknown>
-  row: Row<any>
-  index: number
+    cell: Cell<any, unknown>
+    row: Row<any>
+    index: number
 }
 export const RowCellComponent: FC<Props> = ({ cell, row, index }) => {
-  const stickyCellsSize = useMemo(() => {
-    let size = 0
-    for (let i = 0; i < index; i++) {
-      const cell = row.getAllCells()[i]
-      if (cell.column.columnDef.meta?.sticky) {
-        size += cell.column.getSize()
-      }
-    }
-    return size
-  }, [index, row])
+    const stickyCellsSize = useMemo(() => {
+        let size = 0
+        for (let i = 0; i < index; i++) {
+            const cell = row.getAllCells()[i]
+            if (cell.column.columnDef.meta?.sticky) {
+                size += cell.column.getSize()
+            }
+        }
+        return size
+    }, [index, row])
 
-  return (
-    <td
-      key={cell.id}
-      style={
-        {
-          width: cell.column.getSize(),
-          '--left': cell.column.columnDef.meta?.sticky
-            ? `${index === 0 ? 0 : stickyCellsSize}px`
-            : undefined
-        } as React.CSSProperties
-      }
-      className={cn(
-        'flex items-center',
-        'border-r border-b border-border pl-3 pr-3',
-        cell.column.columnDef.meta?.sticky
-          ? 'sticky z-30 backdrop-blur-2xl backdrop-filter border-r pt-1 pb-1'
-          : '',
-        styles.cell,
-        cell.column.columnDef.meta?.className
-      )}
-    >
-      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-    </td>
-  )
+    return (
+        <td
+            key={cell.id}
+            style={
+                {
+                    width: cell.column.getSize(),
+                    '--left': cell.column.columnDef.meta?.sticky
+                        ? `${index === 0 ? 0 : stickyCellsSize}px`
+                        : undefined,
+                } as React.CSSProperties
+            }
+            className={cn(
+                'flex items-center',
+                'border-r border-b border-border pl-3 pr-3',
+                cell.column.columnDef.meta?.sticky
+                    ? 'sticky z-30 backdrop-blur-2xl backdrop-filter border-r pt-1 pb-1'
+                    : '',
+                styles.cell,
+                cell.column.columnDef.meta?.className,
+            )}
+        >
+            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+        </td>
+    )
 }

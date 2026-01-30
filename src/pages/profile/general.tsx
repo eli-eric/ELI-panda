@@ -10,22 +10,19 @@ import { UserProfileLayout } from '@/components/user-profile/UserProfile.layout'
 const messages = message.profilePage
 
 const ProfileGeneralPage: NextPage = (): JSX.Element => {
-  const intl = useIntl()
+    const intl = useIntl()
 
-  return (
-    <Fragment>
-      <Head>
-        <title>{intl.formatMessage({ id: messages.head })}</title>
-        <meta name="description" content="...." />
-      </Head>
-      <UserProfileLayout
-        title={messages.general.title}
-        subTitle={messages.general.subTitle}
-      >
-        <UserProfileCard />
-      </UserProfileLayout>
-    </Fragment>
-  )
+    return (
+        <Fragment>
+            <Head>
+                <title>{intl.formatMessage({ id: messages.head })}</title>
+                <meta name="description" content="...." />
+            </Head>
+            <UserProfileLayout title={messages.general.title} subTitle={messages.general.subTitle}>
+                <UserProfileCard />
+            </UserProfileLayout>
+        </Fragment>
+    )
 }
 
 export default ProfileGeneralPage

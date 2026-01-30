@@ -31,42 +31,39 @@ const systemDetailQuery = gql(`
 `)
 
 export const useSystemParent = () => {
-  const router = useRouter()
-  const uid = router.query.parentUid as string | undefined
+    const router = useRouter()
+    const uid = router.query.parentUid as string | undefined
 
-  const { system: systemEndpoint } = useEndpoint({ uid })
+    const { system: systemEndpoint } = useEndpoint({ uid })
 
-  const { data, error, isLoading, refetch } = useGraphQL(systemDetailQuery, {
-    variables: {
-      where: { uid }
-    },
-    enabled: !!uid
-  })
+    const { data, error, isLoading, refetch } = useGraphQL(systemDetailQuery, {
+        variables: {
+            where: { uid },
+        },
+        enabled: !!uid,
+    })
 
-  const getParentPath = () => {
-    if (!data?.systems[0]?.parentPath) {
-      return []
+    const getParentPath = () => {
+        if (!data?.systems[0]?.parentPath) {
+            return []
+        }
+        const parentPath = data?.systems[0]?.parentPath.map((item: any) => ({
+            uid: item.uid,
+            name: item.name,
+            systemLevel: item.systemLevel,
+        }))
+        return [...parentPath, { uid: data?.systems[0]?.uid, name: data?.systems[0]?.name }]
     }
-    const parentPath = data?.systems[0]?.parentPath.map((item: any) => ({
-      uid: item.uid,
-      name: item.name,
-      systemLevel: item.systemLevel
-    }))
-    return [
-      ...parentPath,
-      { uid: data?.systems[0]?.uid, name: data?.systems[0]?.name }
-    ]
-  }
-  // Check if parentPath is not empty and map it to the desired format
+    // Check if parentPath is not empty and map it to the desired format
 
-  const parentPath = getParentPath()
+    const parentPath = getParentPath()
 
-  return {
-    parentSystem: data?.systems[0],
-    parentPath,
-    loading: isLoading,
-    error,
-    refetch,
-    systemEndpoint
-  }
+    return {
+        parentSystem: data?.systems[0],
+        parentPath,
+        loading: isLoading,
+        error,
+        refetch,
+        systemEndpoint,
+    }
 }

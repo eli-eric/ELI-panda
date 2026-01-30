@@ -9,17 +9,17 @@ import { OrderItemContainer } from '@/modules/orderItem/OrderItem.cont'
 const messages = message.orderItem
 
 const OrderItemPage: NextPage = (): JSX.Element => {
-  const intl = useIntl()
+    const intl = useIntl()
 
-  return (
-    <Fragment>
-      <Head>
-        <title>{intl.formatMessage({ id: messages.head })}</title>
-        <meta name="description" content="...." />
-      </Head>
-      <OrderItemContainer />
-    </Fragment>
-  )
+    return (
+        <Fragment>
+            <Head>
+                <title>{intl.formatMessage({ id: messages.head })}</title>
+                <meta name="description" content="...." />
+            </Head>
+            <OrderItemContainer />
+        </Fragment>
+    )
 }
 
 export default OrderItemPage

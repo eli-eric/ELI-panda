@@ -9,16 +9,16 @@ import { ServiceTypeContainer } from '@/modules/serviceTypeItem/ServiceType.cont
 const messages = message.service
 
 const ServiceDetailPage: NextPage = () => {
-  const intl = useIntl()
-  return (
-    <Fragment>
-      <Head>
-        <title>{intl.formatMessage({ id: messages.head })}</title>
-        <meta name="description" content="...." />
-      </Head>
-      <ServiceTypeContainer />
-    </Fragment>
-  )
+    const intl = useIntl()
+    return (
+        <Fragment>
+            <Head>
+                <title>{intl.formatMessage({ id: messages.head })}</title>
+                <meta name="description" content="...." />
+            </Head>
+            <ServiceTypeContainer />
+        </Fragment>
+    )
 }
 
 export default ServiceDetailPage

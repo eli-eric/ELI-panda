@@ -12,46 +12,48 @@ import { PATH } from '@/types/constants/paths'
 const { common } = message
 
 const Custom404Page: NextPage = (): JSX.Element => {
-  const { status } = useSession()
-  return (
-    <Fragment>
-      <div className="min-h-full bg-white dark:bg-gray-800 py-16 px-6 sm:py-24 md:grid md:place-items-center lg:px-8">
-        <div className="mx-auto max-w-max">
-          <div className="flex shrink-0 justify-center pb-12">
-            <div className="inline-flex">
-              <EliLogoComponent customClass="h-18 w-auto" />
+    const { status } = useSession()
+    return (
+        <Fragment>
+            <div className="min-h-full bg-white dark:bg-gray-800 py-16 px-6 sm:py-24 md:grid md:place-items-center lg:px-8">
+                <div className="mx-auto max-w-max">
+                    <div className="flex shrink-0 justify-center pb-12">
+                        <div className="inline-flex">
+                            <EliLogoComponent customClass="h-18 w-auto" />
+                        </div>
+                    </div>
+                    <main className="sm:flex">
+                        <p className="text-4xl font-bold tracking-tight text-orange-500 sm:text-5xl">
+                            <FormattedMessage id={common.custom404.title} />
+                        </p>
+                        <div className="sm:ml-6">
+                            <div className="sm:border-l sm:border-gray-200 sm:pl-6">
+                                <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-200 sm:text-5xl">
+                                    <FormattedMessage id={common.custom404.notFound} />
+                                </h1>
+                                <p className="mt-1 text-base text-gray-500">
+                                    <FormattedMessage id={common.custom404.message} />
+                                </p>
+                            </div>
+                            <div className="mt-10 flex space-x-3 sm:border-l sm:border-transparent sm:pl-6">
+                                <Button asChild>
+                                    <Link
+                                        href={
+                                            status === 'authenticated' ? PATH.DASHBOARD : PATH.ROOT
+                                        }
+                                    >
+                                        <span>
+                                            <FormattedMessage id={common.buttons.home} />
+                                        </span>
+                                    </Link>
+                                </Button>
+                            </div>
+                        </div>
+                    </main>
+                </div>
             </div>
-          </div>
-          <main className="sm:flex">
-            <p className="text-4xl font-bold tracking-tight text-orange-500 sm:text-5xl">
-              <FormattedMessage id={common.custom404.title} />
-            </p>
-            <div className="sm:ml-6">
-              <div className="sm:border-l sm:border-gray-200 sm:pl-6">
-                <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-200 sm:text-5xl">
-                  <FormattedMessage id={common.custom404.notFound} />
-                </h1>
-                <p className="mt-1 text-base text-gray-500">
-                  <FormattedMessage id={common.custom404.message} />
-                </p>
-              </div>
-              <div className="mt-10 flex space-x-3 sm:border-l sm:border-transparent sm:pl-6">
-                <Button asChild>
-                  <Link
-                    href={status === 'authenticated' ? PATH.DASHBOARD : PATH.ROOT}
-                  >
-                    <span>
-                      <FormattedMessage id={common.buttons.home} />
-                    </span>
-                  </Link>
-                </Button>
-              </div>
-            </div>
-          </main>
-        </div>
-      </div>
-    </Fragment>
-  )
+        </Fragment>
+    )
 }
 
 export default Custom404Page

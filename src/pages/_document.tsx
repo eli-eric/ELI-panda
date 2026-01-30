@@ -1,12 +1,12 @@
 import Document, { Head, Html, Main, NextScript } from 'next/document'
 class MyDocument extends Document {
-  render() {
-    return (
-      <Html lang="en">
-        <Head title="Eli Panda - ">
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
+    render() {
+        return (
+            <Html lang="en">
+                <Head title="Eli Panda - ">
+                    <script
+                        dangerouslySetInnerHTML={{
+                            __html: `
                 (function() {
                   const theme = localStorage.getItem('theme');
                   const themeObj = JSON.parse(theme);
@@ -16,17 +16,17 @@ class MyDocument extends Document {
                     document.documentElement.classList.remove('dark');
                   }
                 })();
-              `
-            }}
-          ></script>
-        </Head>
-        <body className="bg-background">
-          <Main />
-          <NextScript />
-        </body>
-      </Html>
-    )
-  }
+              `,
+                        }}
+                    ></script>
+                </Head>
+                <body className="bg-background">
+                    <Main />
+                    <NextScript />
+                </body>
+            </Html>
+        )
+    }
 }
 
 export default MyDocument

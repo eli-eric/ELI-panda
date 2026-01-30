@@ -13,25 +13,25 @@ import type { SystemTypeTreeRow } from '../types/system-type-select.types'
  * @param search - Current search term for highlighting
  */
 export const useSystemTypeSelectColumns = (search: string) => {
-  return useMemo(
-    (): ColumnDef<SystemTypeTreeRow, any>[] => [
-      {
-        id: 'name',
-        header: 'Name',
-        accessorKey: 'name',
-        size: 300,
-        cell: ({ row, getValue }) => (
-          <ExpandableNameCell row={row} getValue={getValue} filterName={search} />
-        )
-      },
-      {
-        id: 'code',
-        header: 'Code',
-        accessorKey: 'code',
-        size: 100,
-        cell: ({ getValue }) => highlightText(getValue() || '', search)
-      }
-    ],
-    [search]
-  )
+    return useMemo(
+        (): ColumnDef<SystemTypeTreeRow, any>[] => [
+            {
+                id: 'name',
+                header: 'Name',
+                accessorKey: 'name',
+                size: 300,
+                cell: ({ row, getValue }) => (
+                    <ExpandableNameCell row={row} getValue={getValue} filterName={search} />
+                ),
+            },
+            {
+                id: 'code',
+                header: 'Code',
+                accessorKey: 'code',
+                size: 100,
+                cell: ({ getValue }) => highlightText(getValue() || '', search),
+            },
+        ],
+        [search],
+    )
 }

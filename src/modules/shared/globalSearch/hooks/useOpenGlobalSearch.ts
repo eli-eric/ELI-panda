@@ -8,11 +8,11 @@ import { useGlobalSearchStore } from '../store/useGlobalSearchStore'
  * @returns Callback function that opens the global search modal
  */
 export const useOpenGlobalSearch = () => {
-  const setOpen = useGlobalSearchStore(state => state.setOpen)
+    const setOpen = useGlobalSearchStore(state => state.setOpen)
 
-  const openGlobalSearch = useCallback(() => {
-    setOpen(true)
-  }, [setOpen])
+    const openGlobalSearch = useCallback(() => {
+        setOpen(true)
+    }, [setOpen])
 
-  return openGlobalSearch
+    return openGlobalSearch
 }

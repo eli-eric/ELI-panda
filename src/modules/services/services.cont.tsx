@@ -14,26 +14,26 @@ import { ServiceList } from './components/serviceTypes/ServiceList'
 import { useServiceTypeList } from './hooks/useServiceTypeList'
 
 export const ServicesContainer: FC = () => {
-  const { formatMessage: fm } = useIntl()
-  const { data, isLoading } = useServiceTypeList()
+    const { formatMessage: fm } = useIntl()
+    const { data, isLoading } = useServiceTypeList()
 
-  const disabled = !usePermission([ROLE.SERVICE_EDIT])
-  const actionButton = (
-    <Button asChild>
-      <Link href={PATH.SERVICE}>
-        <Plus className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-        {fm({ id: message.servicesPage.addNewService })}
-      </Link>
-    </Button>
-  )
+    const disabled = !usePermission([ROLE.SERVICE_EDIT])
+    const actionButton = (
+        <Button asChild>
+            <Link href={PATH.SERVICE}>
+                <Plus className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                {fm({ id: message.servicesPage.addNewService })}
+            </Link>
+        </Button>
+    )
 
-  return (
-    <PageLayout
-      title={fm({ id: message.servicesPage.title })}
-      actionButton={disabled ? null : actionButton}
-      isPending={isLoading}
-    >
-      {data && <ServiceList services={data} />}
-    </PageLayout>
-  )
+    return (
+        <PageLayout
+            title={fm({ id: message.servicesPage.title })}
+            actionButton={disabled ? null : actionButton}
+            isPending={isLoading}
+        >
+            {data && <ServiceList services={data} />}
+        </PageLayout>
+    )
 }

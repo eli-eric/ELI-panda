@@ -1,15 +1,15 @@
 import { create } from 'zustand'
 
 interface SystemContext {
-  blockedEdit: boolean
-  setBlockedEdit: (blockedEdit: boolean) => void
+    blockedEdit: boolean
+    setBlockedEdit: (blockedEdit: boolean) => void
 }
 
 const defaultState = {
-  blockedEdit: false
+    blockedEdit: false,
 }
 
 export const useSystemContext = create<SystemContext>(set => ({
-  ...defaultState,
-  setBlockedEdit: blockedEdit => set(() => ({ blockedEdit }))
+    ...defaultState,
+    setBlockedEdit: blockedEdit => set(() => ({ blockedEdit })),
 }))

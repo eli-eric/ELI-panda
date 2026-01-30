@@ -1,7 +1,4 @@
-import type {
-  PublicationOtherFormData,
-  PublicationPeerReviewedFormData
-} from '../form/scheme'
+import type { PublicationOtherFormData, PublicationPeerReviewedFormData } from '../form/scheme'
 
 // Export properly inferred types from Zod schemas
 export type PublicationPeerReviewedForm = PublicationPeerReviewedFormData

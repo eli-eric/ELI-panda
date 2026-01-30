@@ -10,11 +10,11 @@ export { useGlobalSearchShortcut } from './hooks/useGlobalSearchShortcut'
 export { useOpenGlobalSearch } from './hooks/useOpenGlobalSearch'
 export { useGlobalSearchStore } from './store/useGlobalSearchStore'
 export type {
-  GlobalSearchItem,
-  GlobalSearchQuery,
-  GlobalSearchResponse,
-  NodeType,
-  NodeTypeConfig
+    GlobalSearchItem,
+    GlobalSearchQuery,
+    GlobalSearchResponse,
+    NodeType,
+    NodeTypeConfig,
 } from './types'
 export { getNodeTypeConfig } from './utils/getNodeTypeConfig'
 export { getRedirectPath } from './utils/getRedirectPath'

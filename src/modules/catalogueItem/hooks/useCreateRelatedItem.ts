@@ -17,10 +17,10 @@ const CREATE_RELATED_ITEM = gql(`
 `)
 
 export const useCreateRelatedItem = () => {
-  const { mutate, isPending } = useGraphQLMutation(CREATE_RELATED_ITEM)
+    const { mutate, isPending } = useGraphQLMutation(CREATE_RELATED_ITEM)
 
-  return {
-    createRelatedItem: mutate,
-    loading: isPending
-  }
+    return {
+        createRelatedItem: mutate,
+        loading: isPending,
+    }
 }

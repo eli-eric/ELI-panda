@@ -8,51 +8,49 @@ import { queryFetcher } from '@/utils/fetcher'
 import type { SystemGraphResponse } from './types'
 
 interface Props {
-  uid: string
-  setData: Dispatch<SetStateAction<SystemGraphResponse | undefined>>
-  relationships?: string[]
+    uid: string
+    setData: Dispatch<SetStateAction<SystemGraphResponse | undefined>>
+    relationships?: string[]
 }
 
 export const NodeFilters: FC<Props> = ({ uid, setData, relationships }) => {
-  const { data } = useQuery({
-    queryKey: ['systemGraph', { uid }],
-    queryFn: queryFetcher<SystemGraphResponse>('generalGraph')
-  })
+    const { data } = useQuery({
+        queryKey: ['systemGraph', { uid }],
+        queryFn: queryFetcher<SystemGraphResponse>('generalGraph'),
+    })
 
-  const { control } = useFormContext()
+    const { control } = useFormContext()
 
-  const filter = useWatch({
-    control: control,
-    name: 'relationships'
-  })
+    const filter = useWatch({
+        control: control,
+        name: 'relationships',
+    })
 
-  useEffect(() => {
-    if (data) {
-      const filteredLinks = data.links.filter(
-        link => filter && filter[link.relationship]
-      )
-      setData({
-        nodes: data.nodes.filter(node =>
-          filteredLinks.some(
-            link => link.source === node.uid || link.target === node.uid
-          )
-        ),
+    useEffect(() => {
+        if (data) {
+            const filteredLinks = data.links.filter(link => filter && filter[link.relationship])
+            setData({
+                nodes: data.nodes.filter(node =>
+                    filteredLinks.some(
+                        link => link.source === node.uid || link.target === node.uid,
+                    ),
+                ),
 
-        links: filteredLinks
-      })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filter])
+                links: filteredLinks,
+            })
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [filter])
 
-  return (
-    <div className="flex flex-col h-full border rounded-md pr-4 pl-4 pt-4 gap-y-1">
-      {relationships?.map(relationship => (
-        <CheckBox
-          key={relationship}
-          label={relationship}
-          name={`relationships.${relationship}`}
-        />
-      ))}
-    </div>
-  )
+    return (
+        <div className="flex flex-col h-full border rounded-md pr-4 pl-4 pt-4 gap-y-1">
+            {relationships?.map(relationship => (
+                <CheckBox
+                    key={relationship}
+                    label={relationship}
+                    name={`relationships.${relationship}`}
+                />
+            ))}
+        </div>
+    )
 }

@@ -8,10 +8,10 @@ import { message } from '@/i18n/src/messages'
 import type { ImageItem } from '../types'
 
 interface ImageActionsProps {
-  currentImage?: ImageItem
-  hasEditRole?: boolean
-  disabled?: boolean
-  onDelete?: (imageId: string, imageName: string) => void
+    currentImage?: ImageItem
+    hasEditRole?: boolean
+    disabled?: boolean
+    onDelete?: (imageId: string, imageName: string) => void
 }
 
 /**
@@ -23,40 +23,40 @@ interface ImageActionsProps {
  * - Permission-based visibility
  */
 export const ImageActions = ({
-  currentImage,
-  hasEditRole = false,
-  disabled = false,
-  onDelete
+    currentImage,
+    hasEditRole = false,
+    disabled = false,
+    onDelete,
 }: ImageActionsProps) => {
-  const { formatMessage: fm } = useIntl()
-  const withWarnModal = useWarningModal()
+    const { formatMessage: fm } = useIntl()
+    const withWarnModal = useWarningModal()
 
-  if (!hasEditRole || !currentImage) {
-    return null
-  }
+    if (!hasEditRole || !currentImage) {
+        return null
+    }
 
-  const handleDelete = () => {
-    if (!onDelete || !currentImage) return
+    const handleDelete = () => {
+        if (!onDelete || !currentImage) return
 
-    withWarnModal(
-      () => onDelete(currentImage.id, currentImage.name),
-      `${fm({ id: message.common.imageGallery.confirmDelete })} ${currentImage.name}?`
-    )()
-  }
+        withWarnModal(
+            () => onDelete(currentImage.id, currentImage.name),
+            `${fm({ id: message.common.imageGallery.confirmDelete })} ${currentImage.name}?`,
+        )()
+    }
 
-  return (
-    <div className="flex items-center gap-1">
-      <Button
-        type="button"
-        variant="ghost"
-        size="sm"
-        onClick={handleDelete}
-        disabled={disabled}
-        className="h-6 text-xs px-2 text-destructive hover:text-destructive hover:bg-destructive/20"
-      >
-        <Trash2 className="h-3 w-3 mr-1" />
-        {fm({ id: message.common.imageGallery.delete })}
-      </Button>
-    </div>
-  )
+    return (
+        <div className="flex items-center gap-1">
+            <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={handleDelete}
+                disabled={disabled}
+                className="h-6 text-xs px-2 text-destructive hover:text-destructive hover:bg-destructive/20"
+            >
+                <Trash2 className="h-3 w-3 mr-1" />
+                {fm({ id: message.common.imageGallery.delete })}
+            </Button>
+        </div>
+    )
 }

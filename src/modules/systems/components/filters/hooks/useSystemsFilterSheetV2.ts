@@ -6,10 +6,10 @@ import type { DisabledFields } from '../SystemsFilterButton.cont'
 import { SystemsFilterSheet } from '../SystemsFilterSheet.cont'
 
 interface UseSystemsFilterSheetProps {
-  tableId?: string
-  enableQueryURL?: boolean
-  disabledFields?: DisabledFields
-  side?: 'top' | 'right' | 'bottom' | 'left'
+    tableId?: string
+    enableQueryURL?: boolean
+    disabledFields?: DisabledFields
+    side?: 'top' | 'right' | 'bottom' | 'left'
 }
 
 /**
@@ -20,33 +20,33 @@ interface UseSystemsFilterSheetProps {
  * Returns modalId for potential manual closing if needed
  */
 export const useSystemsFilterSheetV2 = () => {
-  const { openModal } = useDynamicModalStore()
+    const { openModal } = useDynamicModalStore()
 
-  const openFilterSheet = useCallback(
-    ({
-      tableId = 'systems',
-      enableQueryURL = true,
-      disabledFields,
-      side = 'left'
-    }: UseSystemsFilterSheetProps = {}) => {
-      // Open with custom ID for easy reference
-      const modalId = openModal('sheet', {
-        id: `system-filters-${tableId}`,
-        component: SystemsFilterSheet,
-        props: {
-          title: 'System Filters',
-          size: 'l',
-          side,
-          tableId,
-          enableQueryURL,
-          disabledFields
-        }
-      })
+    const openFilterSheet = useCallback(
+        ({
+            tableId = 'systems',
+            enableQueryURL = true,
+            disabledFields,
+            side = 'left',
+        }: UseSystemsFilterSheetProps = {}) => {
+            // Open with custom ID for easy reference
+            const modalId = openModal('sheet', {
+                id: `system-filters-${tableId}`,
+                component: SystemsFilterSheet,
+                props: {
+                    title: 'System Filters',
+                    size: 'l',
+                    side,
+                    tableId,
+                    enableQueryURL,
+                    disabledFields,
+                },
+            })
 
-      return modalId
-    },
-    [openModal]
-  )
+            return modalId
+        },
+        [openModal],
+    )
 
-  return openFilterSheet
+    return openFilterSheet
 }

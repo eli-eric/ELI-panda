@@ -91,9 +91,9 @@ const { openModal, closeModal } = useDynamicModalStore()
 
 // Open with custom ID
 openModal('dialog', {
-  id: 'user-edit-modal',
-  component: UserEditForm,
-  props: { title: 'Edit User', userId: 123 }
+    id: 'user-edit-modal',
+    component: UserEditForm,
+    props: { title: 'Edit User', userId: 123 },
 })
 
 // Close by custom ID
@@ -101,6 +101,7 @@ closeModal('user-edit-modal')
 ```
 
 **Benefits of custom IDs:**
+
 - Easy to reference modals from anywhere in the app
 - Prevent duplicate modals (opening same ID twice won't create a duplicate)
 - Cleaner debugging and state management
@@ -113,6 +114,7 @@ Choose the appropriate modal type based on your use case:
 ### Dialog
 
 **Use for:**
+
 - Confirmations and alerts
 - Simple forms requiring user attention
 - Primary actions that block workflow
@@ -121,19 +123,20 @@ Choose the appropriate modal type based on your use case:
 ```typescript
 // Dialog for confirmation
 openModal('dialog', {
-  id: 'delete-confirmation',
-  component: DeleteConfirmation,
-  props: {
-    title: 'Confirm Deletion',
-    description: 'This action cannot be undone',
-    size: 'sm'
-  }
+    id: 'delete-confirmation',
+    component: DeleteConfirmation,
+    props: {
+        title: 'Confirm Deletion',
+        description: 'This action cannot be undone',
+        size: 'sm',
+    },
 })
 ```
 
 ### Sheet
 
 **Use for:**
+
 - Filters and advanced search
 - Multi-step forms
 - Detailed views and information panels
@@ -142,18 +145,19 @@ openModal('dialog', {
 ```typescript
 // Sheet for filters
 openModal('sheet', {
-  id: 'system-filters',
-  component: SystemFilters,
-  props: {
-    title: 'Filter Systems',
-    side: 'left' // or 'right', 'top', 'bottom'
-  }
+    id: 'system-filters',
+    component: SystemFilters,
+    props: {
+        title: 'Filter Systems',
+        side: 'left', // or 'right', 'top', 'bottom'
+    },
 })
 ```
 
 ### Size Options
 
 **Dialog sizes:**
+
 - `sm` - Small (max-w-sm) - Confirmations, simple alerts
 - `md` - Medium (max-w-md) - Default, simple forms
 - `lg` - Large (max-w-lg) - Complex forms
@@ -161,6 +165,7 @@ openModal('sheet', {
 - `full` - Full Screen (max-w-full) - Tables, extensive data
 
 **Sheet sizes:**
+
 - Sheets use the `side` prop instead of `size`
 - Width/height is determined by content and screen size
 
@@ -171,17 +176,17 @@ The system automatically handles nested modals with proper z-index layering:
 ```typescript
 // Open spare assignment wizard
 const wizardId = openModal('dialog', {
-  id: 'spare-wizard',
-  component: SpareWizardComponent,
-  props: { title: 'Assign Spare Part', size: 'xl' }
+    id: 'spare-wizard',
+    component: SpareWizardComponent,
+    props: { title: 'Assign Spare Part', size: 'xl' },
 })
 // Z-index: 50 (overlay), 51 (content)
 
 // Inside wizard, open filter sheet
 const filterId = openModal('sheet', {
-  id: 'system-filters',
-  component: FilterComponent,
-  props: { title: 'Filter Systems', side: 'left' }
+    id: 'system-filters',
+    component: FilterComponent,
+    props: { title: 'Filter Systems', side: 'left' },
 })
 // Z-index: 52 (overlay), 53 (content) ← Automatically higher!
 
@@ -218,7 +223,7 @@ closeAllModals()
 // Get modal instance by ID
 const modal = getModalById('my-modal-id')
 if (modal) {
-  console.log('Modal exists:', modal.type, modal.props)
+    console.log('Modal exists:', modal.type, modal.props)
 }
 ```
 
@@ -286,17 +291,17 @@ console.log(`${openModals.length} modals open`)
 ```typescript
 // ✅ Good - accessible and clear
 openModal('dialog', {
-  component: MyContent,
-  props: {
-    title: 'Edit User Profile',
-    description: 'Update your personal information'
-  }
+    component: MyContent,
+    props: {
+        title: 'Edit User Profile',
+        description: 'Update your personal information',
+    },
 })
 
 // ❌ Bad - no title
 openModal('dialog', {
-  component: MyContent,
-  props: {}
+    component: MyContent,
+    props: {},
 })
 ```
 
@@ -305,27 +310,31 @@ openModal('dialog', {
 ```typescript
 // ✅ Good - handles all user actions
 const modalId = openModal('dialog', {
-  component: EditForm,
-  props: { /* ... */ },
-  onSubmit: (data) => {
-    saveData(data)
-    closeModal(modalId)
-  },
-  onClose: () => {
-    // Cleanup if needed
-    console.log('Modal closed without submit')
-  }
+    component: EditForm,
+    props: {
+        /* ... */
+    },
+    onSubmit: data => {
+        saveData(data)
+        closeModal(modalId)
+    },
+    onClose: () => {
+        // Cleanup if needed
+        console.log('Modal closed without submit')
+    },
 })
 
 // ❌ Bad - only handles submit
 const modalId = openModal('dialog', {
-  component: EditForm,
-  props: { /* ... */ },
-  onSubmit: (data) => {
-    saveData(data)
-    closeModal(modalId)
-  }
-  // Missing onClose handler
+    component: EditForm,
+    props: {
+        /* ... */
+    },
+    onSubmit: data => {
+        saveData(data)
+        closeModal(modalId)
+    },
+    // Missing onClose handler
 })
 ```
 
@@ -334,19 +343,19 @@ const modalId = openModal('dialog', {
 ```typescript
 // ✅ Good - size matches content
 openModal('dialog', {
-  component: SimpleConfirmation,
-  props: { title: 'Delete?', size: 'sm' }
+    component: SimpleConfirmation,
+    props: { title: 'Delete?', size: 'sm' },
 })
 
 openModal('dialog', {
-  component: ComplexForm,
-  props: { title: 'Create Order', size: 'xl' }
+    component: ComplexForm,
+    props: { title: 'Create Order', size: 'xl' },
 })
 
 // ❌ Bad - size doesn't match content
 openModal('dialog', {
-  component: SimpleConfirmation,
-  props: { title: 'Delete?', size: 'full' } // Too large!
+    component: SimpleConfirmation,
+    props: { title: 'Delete?', size: 'full' }, // Too large!
 })
 ```
 
@@ -355,9 +364,11 @@ openModal('dialog', {
 ```typescript
 // ✅ Good - easy to reference
 openModal('sheet', {
-  id: 'global-search',
-  component: GlobalSearch,
-  props: { /* ... */ }
+    id: 'global-search',
+    component: GlobalSearch,
+    props: {
+        /* ... */
+    },
 })
 
 // Later, from anywhere:
@@ -365,8 +376,10 @@ closeModal('global-search')
 
 // ❌ Bad - hard to track
 const modalId = openModal('sheet', {
-  component: GlobalSearch,
-  props: { /* ... */ }
+    component: GlobalSearch,
+    props: {
+        /* ... */
+    },
 })
 // Lost reference to modalId
 ```
@@ -376,20 +389,24 @@ const modalId = openModal('sheet', {
 ```typescript
 // ✅ Good - cleans up resources
 openModal('dialog', {
-  component: VideoPlayer,
-  props: { /* ... */ },
-  onClose: () => {
-    stopVideo()
-    clearCache()
-    unsubscribeFromUpdates()
-  }
+    component: VideoPlayer,
+    props: {
+        /* ... */
+    },
+    onClose: () => {
+        stopVideo()
+        clearCache()
+        unsubscribeFromUpdates()
+    },
 })
 
 // ❌ Bad - no cleanup
 openModal('dialog', {
-  component: VideoPlayer,
-  props: { /* ... */ }
-  // Missing cleanup - video keeps playing!
+    component: VideoPlayer,
+    props: {
+        /* ... */
+    },
+    // Missing cleanup - video keeps playing!
 })
 ```
 
@@ -401,26 +418,27 @@ openModal('dialog', {
 const { openModal, closeModal } = useDynamicModalStore()
 
 const handleDelete = () => {
-  const modalId = openModal('dialog', {
-    id: 'delete-confirmation',
-    component: ConfirmationDialog,
-    props: {
-      title: 'Delete System',
-      description: 'Are you sure you want to delete this system? This action cannot be undone.',
-      confirmText: 'Delete',
-      cancelText: 'Cancel',
-      variant: 'destructive',
-      size: 'sm'
-    },
-    onSubmit: async () => {
-      await deleteSystem(systemId)
-      closeModal(modalId)
-      toast.success('System deleted')
-    },
-    onClose: () => {
-      console.log('Delete cancelled')
-    }
-  })
+    const modalId = openModal('dialog', {
+        id: 'delete-confirmation',
+        component: ConfirmationDialog,
+        props: {
+            title: 'Delete System',
+            description:
+                'Are you sure you want to delete this system? This action cannot be undone.',
+            confirmText: 'Delete',
+            cancelText: 'Cancel',
+            variant: 'destructive',
+            size: 'sm',
+        },
+        onSubmit: async () => {
+            await deleteSystem(systemId)
+            closeModal(modalId)
+            toast.success('System deleted')
+        },
+        onClose: () => {
+            console.log('Delete cancelled')
+        },
+    })
 }
 ```
 
@@ -430,19 +448,19 @@ const handleDelete = () => {
 const { openModal, closeModal } = useDynamicModalStore()
 
 const handleOpenFilters = () => {
-  openModal('sheet', {
-    id: 'system-filters',
-    component: SystemFilterSheet,
-    props: {
-      title: 'Filter Systems',
-      side: 'left',
-      initialFilters: filters,
-      onApply: (newFilters) => {
-        setFilters(newFilters)
-        closeModal('system-filters')
-      }
-    }
-  })
+    openModal('sheet', {
+        id: 'system-filters',
+        component: SystemFilterSheet,
+        props: {
+            title: 'Filter Systems',
+            side: 'left',
+            initialFilters: filters,
+            onApply: newFilters => {
+                setFilters(newFilters)
+                closeModal('system-filters')
+            },
+        },
+    })
 }
 ```
 
@@ -452,25 +470,25 @@ const handleOpenFilters = () => {
 const { openModal, closeModal } = useDynamicModalStore()
 
 const handleOpenWizard = () => {
-  const modalId = openModal('dialog', {
-    id: 'spare-assignment-wizard',
-    component: SpareAssignmentWizard,
-    props: {
-      title: 'Assign Spare Part',
-      size: 'xl',
-      systemId: currentSystemId
-    },
-    onSubmit: async (data) => {
-      await assignSparePart(data)
-      closeModal(modalId)
-      toast.success('Spare part assigned')
-      refetchData()
-    },
-    onClose: () => {
-      // Reset wizard state if needed
-      resetWizardState()
-    }
-  })
+    const modalId = openModal('dialog', {
+        id: 'spare-assignment-wizard',
+        component: SpareAssignmentWizard,
+        props: {
+            title: 'Assign Spare Part',
+            size: 'xl',
+            systemId: currentSystemId,
+        },
+        onSubmit: async data => {
+            await assignSparePart(data)
+            closeModal(modalId)
+            toast.success('Spare part assigned')
+            refetchData()
+        },
+        onClose: () => {
+            // Reset wizard state if needed
+            resetWizardState()
+        },
+    })
 }
 ```
 
@@ -538,13 +556,16 @@ function MyApp({ Component, pageProps }) {
 ### Modal Not Appearing
 
 Check:
+
 1. Is `DynamicModalProvider` included in the app?
 2. Is the component being passed correctly?
 3. Are there any console errors?
 
 ```typescript
 // Debug: Check if modal was created
-const modalId = openModal('dialog', { /* ... */ })
+const modalId = openModal('dialog', {
+    /* ... */
+})
 console.log('Modal ID:', modalId)
 
 const modal = getModalById(modalId)
@@ -569,11 +590,13 @@ Ensure you're calling `closeModal` with the correct ID:
 
 ```typescript
 // ✅ Good - correct ID
-const modalId = openModal('dialog', { /* ... */ })
+const modalId = openModal('dialog', {
+    /* ... */
+})
 closeModal(modalId)
 
 // ✅ Good - custom ID
-openModal('dialog', { id: 'my-modal', /* ... */ })
+openModal('dialog', { id: 'my-modal' /* ... */ })
 closeModal('my-modal')
 
 // ❌ Bad - wrong ID
@@ -591,8 +614,10 @@ import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 const { dialog1, setDialog1 } = useModalGlobalStore()
 
 setDialog1({
-  component: MyComponent,
-  props: { /* ... */ }
+    component: MyComponent,
+    props: {
+        /* ... */
+    },
 })
 ```
 
@@ -605,8 +630,10 @@ import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 const { openModal, closeModal } = useDynamicModalStore()
 
 const modalId = openModal('dialog', {
-  component: MyComponent,
-  props: { /* ... */ }
+    component: MyComponent,
+    props: {
+        /* ... */
+    },
 })
 
 // Close when done
@@ -614,6 +641,7 @@ closeModal(modalId)
 ```
 
 **Migration Benefits:**
+
 - No more "slot" limitations (dialog1, dialog2, etc.)
 - Automatic z-index management
 - Better TypeScript support
@@ -625,29 +653,29 @@ closeModal(modalId)
 type ModalType = 'dialog' | 'sheet'
 
 interface ModalOptions<P = any> {
-  id?: string
-  component: React.ComponentType<P>
-  props: P
-  onSubmit?: (...args: any[]) => void
-  onClose?: () => void
+    id?: string
+    component: React.ComponentType<P>
+    props: P
+    onSubmit?: (...args: any[]) => void
+    onClose?: () => void
 }
 
 interface ModalInstance<P = any> {
-  id: string
-  type: ModalType
-  component: React.ComponentType<P>
-  props: P
-  onSubmit?: (...args: any[]) => void
-  onClose?: () => void
-  zIndex: number
+    id: string
+    type: ModalType
+    component: React.ComponentType<P>
+    props: P
+    onSubmit?: (...args: any[]) => void
+    onClose?: () => void
+    zIndex: number
 }
 
 interface DynamicModalStore {
-  modals: Map<string, ModalInstance>
-  openModal: <P>(type: ModalType, options: ModalOptions<P>) => string
-  closeModal: (id: string) => void
-  closeAllModals: () => void
-  bringToFront: (id: string) => void
-  getModalById: (id: string) => ModalInstance | undefined
+    modals: Map<string, ModalInstance>
+    openModal: <P>(type: ModalType, options: ModalOptions<P>) => string
+    closeModal: (id: string) => void
+    closeAllModals: () => void
+    bringToFront: (id: string) => void
+    getModalById: (id: string) => ModalInstance | undefined
 }
 ```

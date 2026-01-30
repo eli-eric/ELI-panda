@@ -14,89 +14,86 @@ import { useSystemDetail } from '@/modules/systemItem/hooks/useSystemDetail'
 import { PATH } from '@/types/constants/paths'
 
 interface Props {
-  key?: string
-  itemUid?: string
+    key?: string
+    itemUid?: string
 }
 
 const SystemItemRedirectPage: NextPage = ({ itemUid }: Props) => {
-  const router = useRouter()
+    const router = useRouter()
 
-  const { loading, error, systemDetail } = useSystemDetail(
-    { itemUid },
-    data => {
-      const uid = data?.systems[0]?.uid
-      if (uid) {
-        router.push(PATH.SYSTEM + '/' + uid)
-      }
+    const { loading, error, systemDetail } = useSystemDetail({ itemUid }, data => {
+        const uid = data?.systems[0]?.uid
+        if (uid) {
+            router.push(PATH.SYSTEM + '/' + uid)
+        }
+    })
+
+    if (loading) {
+        return <LoaderComponent />
     }
-  )
 
-  if (loading) {
-    return <LoaderComponent />
-  }
+    if (error) {
+        return <ErrorPage />
+    }
 
-  if (error) {
-    return <ErrorPage />
-  }
-
-  return (
-    <Fragment>
-      <Head>
-        <title>
-          <FormattedMessage id={messages.common.pages.systemNotFound} />
-        </title>
-        <meta name="description" content="...." />
-      </Head>
-      {!systemDetail ? (
-        <div className="min-h-full bg-white dark:bg-gray-800 py-16 px-6 sm:py-24 md:grid md:place-items-center lg:px-8">
-          <div className="mx-auto max-w-max">
-            <div className="flex shrink-0 justify-center pb-12">
-              <div className="inline-flex">
-                <EliLogoComponent customClass="h-18 w-auto" />
-              </div>
-            </div>
-            <main className="sm:flex">
-              <p className="text-4xl font-bold tracking-tight text-orange-500 sm:text-5xl">
-                <FormattedMessage id={messages.common.recordNotFound.title} />
-              </p>
-              <div className="sm:ml-6">
-                <div className="sm:border-l sm:border-gray-200 sm:pl-6">
-                  <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-200 sm:text-5xl">
-                    <FormattedMessage
-                      id={messages.common.pages.systemNotFound}
-                    />
-                  </h1>
-                  <p className="mt-1 text-base text-gray-500">
-                    <FormattedMessage
-                      id={messages.common.pages.systemNotFoundMessage}
-                    />
-                  </p>
+    return (
+        <Fragment>
+            <Head>
+                <title>
+                    <FormattedMessage id={messages.common.pages.systemNotFound} />
+                </title>
+                <meta name="description" content="...." />
+            </Head>
+            {!systemDetail ? (
+                <div className="min-h-full bg-white dark:bg-gray-800 py-16 px-6 sm:py-24 md:grid md:place-items-center lg:px-8">
+                    <div className="mx-auto max-w-max">
+                        <div className="flex shrink-0 justify-center pb-12">
+                            <div className="inline-flex">
+                                <EliLogoComponent customClass="h-18 w-auto" />
+                            </div>
+                        </div>
+                        <main className="sm:flex">
+                            <p className="text-4xl font-bold tracking-tight text-orange-500 sm:text-5xl">
+                                <FormattedMessage id={messages.common.recordNotFound.title} />
+                            </p>
+                            <div className="sm:ml-6">
+                                <div className="sm:border-l sm:border-gray-200 sm:pl-6">
+                                    <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-200 sm:text-5xl">
+                                        <FormattedMessage
+                                            id={messages.common.pages.systemNotFound}
+                                        />
+                                    </h1>
+                                    <p className="mt-1 text-base text-gray-500">
+                                        <FormattedMessage
+                                            id={messages.common.pages.systemNotFoundMessage}
+                                        />
+                                    </p>
+                                </div>
+                                <div className="mt-10 flex space-x-3 sm:border-l sm:border-transparent sm:pl-6">
+                                    <Link
+                                        href={
+                                            status === 'authenticated' ? PATH.DASHBOARD : PATH.ROOT
+                                        }
+                                    >
+                                        <Button>
+                                            <FormattedMessage id={messages.common.buttons.home} />
+                                        </Button>
+                                    </Link>
+                                </div>
+                            </div>
+                        </main>
+                    </div>
                 </div>
-                <div className="mt-10 flex space-x-3 sm:border-l sm:border-transparent sm:pl-6">
-                  <Link
-                    href={
-                      status === 'authenticated' ? PATH.DASHBOARD : PATH.ROOT
-                    }
-                  >
-                    <Button>
-                      <FormattedMessage id={messages.common.buttons.home} />
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-            </main>
-          </div>
-        </div>
-      ) : (
-        <LoaderComponent />
-      )}
-    </Fragment>
-  )
+            ) : (
+                <LoaderComponent />
+            )}
+        </Fragment>
+    )
 }
 
 SystemItemRedirectPage.getInitialProps = ({ query }) => ({
-  key: query.itemUid,
-  itemUid: query.itemUid
+    key: query.itemUid,
+    itemUid: query.itemUid,
 })
 
 export default SystemItemRedirectPage

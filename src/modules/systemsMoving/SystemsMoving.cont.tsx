@@ -14,126 +14,120 @@ import { useSystemMovingDialog } from './hooks/useSystemMovingDialog'
 import { useSystemMovingStore } from './store/useSystemMovingStore'
 
 interface SystemsMovingType extends SystemDetail {
-  tableId: string
+    tableId: string
 }
 
 export type SystemMovingFormType = {
-  name: string
-  description?: string
-  responsible?: CodebookType
-  systemType?: CodebookType
-  systemCode?: string
-  zone?: CodebookType
-  location?: CodebookType
+    name: string
+    description?: string
+    responsible?: CodebookType
+    systemType?: CodebookType
+    systemCode?: string
+    zone?: CodebookType
+    location?: CodebookType
 }
 
 const SystemsMovingContainer = () => {
-  const { tableIdLeft, tableIdRight, setChildSystem, setParentSystem } =
-    useSystemMovingStore()
-  const openSystemMovingDialog = useSystemMovingDialog()
+    const { tableIdLeft, tableIdRight, setChildSystem, setParentSystem } = useSystemMovingStore()
+    const openSystemMovingDialog = useSystemMovingDialog()
 
-  const onDropHandler = useCallback(
-    (from: SystemsMovingType, to: SystemsMovingType) => {
-      const isNotAllowedToMove =
-        to.parentPath?.some(parent => parent.uid === from.uid) ||
-        from.uid === to.uid ||
-        false
-      if (isNotAllowedToMove) {
-        toast.error('System cannot be moved under itself or its sub-systems')
-        return
-      }
-      setChildSystem(from)
-      setParentSystem(to)
-      openSystemMovingDialog(from, to)
-    },
-    [setChildSystem, setParentSystem, openSystemMovingDialog]
-  )
+    const onDropHandler = useCallback(
+        (from: SystemsMovingType, to: SystemsMovingType) => {
+            const isNotAllowedToMove =
+                to.parentPath?.some(parent => parent.uid === from.uid) ||
+                from.uid === to.uid ||
+                false
+            if (isNotAllowedToMove) {
+                toast.error('System cannot be moved under itself or its sub-systems')
+                return
+            }
+            setChildSystem(from)
+            setParentSystem(to)
+            openSystemMovingDialog(from, to)
+        },
+        [setChildSystem, setParentSystem, openSystemMovingDialog],
+    )
 
-  const [showLeft, setShowLeft] = useState(true)
-  const toggleLeft = useCallback(() => setShowLeft(prev => !prev), [])
+    const [showLeft, setShowLeft] = useState(true)
+    const toggleLeft = useCallback(() => setShowLeft(prev => !prev), [])
 
-  const [showRight, setShowRight] = useState(true)
-  const toggleRight = useCallback(() => setShowRight(prev => !prev), [])
+    const [showRight, setShowRight] = useState(true)
+    const toggleRight = useCallback(() => setShowRight(prev => !prev), [])
 
-  return (
-    <Fragment>
-      <div
-        className={cn(
-          'grid',
-          showLeft && showRight ? 'grid-cols-2' : 'grid-cols-1'
-        )}
-      >
-        {showLeft && (
-          <SystemsComponent
-            tableId={tableIdLeft}
-            hideButtons={false}
-            enableDragAndDrop={true}
-            className="border-r-4 border-gray-400"
-            dropsettings={{ onDropHandler, accept: 'system' }}
-            enableQueryURL={false}
-            LeftSearchBarElement={() => (
-              <SystemFilterButtonContainer
-                tableId={tableIdLeft}
-                enableQueryURL={false}
-              />
-            )}
-            RightSearchBarElement={() => (
-              <>
-                <FilterBadges tableId={tableIdLeft} />
-                {showRight ? (
-                  <Tooltip content="Hide systems window">
-                    <div>
-                      <MinusButton onClick={toggleLeft} />
-                    </div>
-                  </Tooltip>
-                ) : (
-                  <Tooltip content="Show systems window">
-                    <div>
-                      <PlusButton onClick={toggleRight} />
-                    </div>
-                  </Tooltip>
+    return (
+        <Fragment>
+            <div className={cn('grid', showLeft && showRight ? 'grid-cols-2' : 'grid-cols-1')}>
+                {showLeft && (
+                    <SystemsComponent
+                        tableId={tableIdLeft}
+                        hideButtons={false}
+                        enableDragAndDrop={true}
+                        className="border-r-4 border-gray-400"
+                        dropsettings={{ onDropHandler, accept: 'system' }}
+                        enableQueryURL={false}
+                        LeftSearchBarElement={() => (
+                            <SystemFilterButtonContainer
+                                tableId={tableIdLeft}
+                                enableQueryURL={false}
+                            />
+                        )}
+                        RightSearchBarElement={() => (
+                            <>
+                                <FilterBadges tableId={tableIdLeft} />
+                                {showRight ? (
+                                    <Tooltip content="Hide systems window">
+                                        <div>
+                                            <MinusButton onClick={toggleLeft} />
+                                        </div>
+                                    </Tooltip>
+                                ) : (
+                                    <Tooltip content="Show systems window">
+                                        <div>
+                                            <PlusButton onClick={toggleRight} />
+                                        </div>
+                                    </Tooltip>
+                                )}
+                            </>
+                        )}
+                    />
                 )}
-              </>
-            )}
-          />
-        )}
-        {showRight && (
-          <SystemsComponent
-            tableId={tableIdRight}
-            hideButtons={false}
-            enableDragAndDrop={true}
-            dropsettings={{ onDropHandler: onDropHandler, accept: 'system' }}
-            LeftSearchBarElement={() => (
-              <SystemFilterButtonContainer
-                panelSlide="right"
-                tableId={tableIdRight}
-                enableQueryURL={false}
-              />
-            )}
-            enableQueryURL={false}
-            RightSearchBarElement={() => (
-              <>
-                <FilterBadges tableId={tableIdRight} />
-                {showLeft ? (
-                  <Tooltip content="Hide systems window">
-                    <div>
-                      <MinusButton onClick={toggleRight} />
-                    </div>
-                  </Tooltip>
-                ) : (
-                  <Tooltip content="Show systems window">
-                    <div>
-                      <PlusButton onClick={toggleLeft} />
-                    </div>
-                  </Tooltip>
+                {showRight && (
+                    <SystemsComponent
+                        tableId={tableIdRight}
+                        hideButtons={false}
+                        enableDragAndDrop={true}
+                        dropsettings={{ onDropHandler: onDropHandler, accept: 'system' }}
+                        LeftSearchBarElement={() => (
+                            <SystemFilterButtonContainer
+                                panelSlide="right"
+                                tableId={tableIdRight}
+                                enableQueryURL={false}
+                            />
+                        )}
+                        enableQueryURL={false}
+                        RightSearchBarElement={() => (
+                            <>
+                                <FilterBadges tableId={tableIdRight} />
+                                {showLeft ? (
+                                    <Tooltip content="Hide systems window">
+                                        <div>
+                                            <MinusButton onClick={toggleRight} />
+                                        </div>
+                                    </Tooltip>
+                                ) : (
+                                    <Tooltip content="Show systems window">
+                                        <div>
+                                            <PlusButton onClick={toggleLeft} />
+                                        </div>
+                                    </Tooltip>
+                                )}
+                            </>
+                        )}
+                    />
                 )}
-              </>
-            )}
-          />
-        )}
-      </div>
-    </Fragment>
-  )
+            </div>
+        </Fragment>
+    )
 }
 
 export default SystemsMovingContainer

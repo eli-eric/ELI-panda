@@ -76,21 +76,21 @@ const roomCardLocationsQuery = gql(`
  * Used by RoomCardContactsCard to display Dept contacts table.
  */
 export const useRoomCardContactsDept = (roomCardUid?: string) => {
-  const { data, refetch, isFetching } = useGraphQL(roomCardContactsDeptQuery, {
-    variables: { where: { uid: roomCardUid } },
-    enabled: !!roomCardUid,
-    placeholderData: keepPreviousData
-  })
+    const { data, refetch, isFetching } = useGraphQL(roomCardContactsDeptQuery, {
+        variables: { where: { uid: roomCardUid } },
+        enabled: !!roomCardUid,
+        placeholderData: keepPreviousData,
+    })
 
-  return {
-    contactPersonsDept: !roomCardUid
-      ? []
-      : data
-        ? (data.roomCards[0]?.contactPersonsDept ?? [])
-        : undefined,
-    refetch,
-    isFetching
-  }
+    return {
+        contactPersonsDept: !roomCardUid
+            ? []
+            : data
+              ? (data.roomCards[0]?.contactPersonsDept ?? [])
+              : undefined,
+        refetch,
+        isFetching,
+    }
 }
 
 /**
@@ -98,21 +98,21 @@ export const useRoomCardContactsDept = (roomCardUid?: string) => {
  * Used by RoomCardContactsCard to display Hall contacts table.
  */
 export const useRoomCardContactsHall = (roomCardUid?: string) => {
-  const { data, refetch, isFetching } = useGraphQL(roomCardContactsHallQuery, {
-    variables: { where: { uid: roomCardUid } },
-    enabled: !!roomCardUid,
-    placeholderData: keepPreviousData
-  })
+    const { data, refetch, isFetching } = useGraphQL(roomCardContactsHallQuery, {
+        variables: { where: { uid: roomCardUid } },
+        enabled: !!roomCardUid,
+        placeholderData: keepPreviousData,
+    })
 
-  return {
-    contactPersonsHall: !roomCardUid
-      ? []
-      : data
-        ? (data.roomCards[0]?.contactPersonsHall ?? [])
-        : undefined,
-    refetch,
-    isFetching
-  }
+    return {
+        contactPersonsHall: !roomCardUid
+            ? []
+            : data
+              ? (data.roomCards[0]?.contactPersonsHall ?? [])
+              : undefined,
+        refetch,
+        isFetching,
+    }
 }
 
 /**
@@ -120,21 +120,17 @@ export const useRoomCardContactsHall = (roomCardUid?: string) => {
  * Used by RoomCardContactsCard to display Teams table.
  */
 export const useRoomCardTeams = (roomCardUid?: string) => {
-  const { data, refetch, isFetching } = useGraphQL(roomCardTeamsQuery, {
-    variables: { where: { uid: roomCardUid } },
-    enabled: !!roomCardUid,
-    placeholderData: keepPreviousData
-  })
+    const { data, refetch, isFetching } = useGraphQL(roomCardTeamsQuery, {
+        variables: { where: { uid: roomCardUid } },
+        enabled: !!roomCardUid,
+        placeholderData: keepPreviousData,
+    })
 
-  return {
-    teams: !roomCardUid
-      ? []
-      : data
-        ? (data.roomCards[0]?.teams ?? [])
-        : undefined,
-    refetch,
-    isFetching
-  }
+    return {
+        teams: !roomCardUid ? [] : data ? (data.roomCards[0]?.teams ?? []) : undefined,
+        refetch,
+        isFetching,
+    }
 }
 
 /**
@@ -142,19 +138,15 @@ export const useRoomCardTeams = (roomCardUid?: string) => {
  * Used by RoomCardLocationsCard to display Locations table.
  */
 export const useRoomCardLocations = (roomCardUid?: string) => {
-  const { data, refetch, isFetching } = useGraphQL(roomCardLocationsQuery, {
-    variables: { where: { uid: roomCardUid } },
-    enabled: !!roomCardUid,
-    placeholderData: keepPreviousData
-  })
+    const { data, refetch, isFetching } = useGraphQL(roomCardLocationsQuery, {
+        variables: { where: { uid: roomCardUid } },
+        enabled: !!roomCardUid,
+        placeholderData: keepPreviousData,
+    })
 
-  return {
-    locations: !roomCardUid
-      ? []
-      : data
-        ? (data.roomCards[0]?.locations ?? [])
-        : undefined,
-    refetch,
-    isFetching
-  }
+    return {
+        locations: !roomCardUid ? [] : data ? (data.roomCards[0]?.locations ?? []) : undefined,
+        refetch,
+        isFetching,
+    }
 }

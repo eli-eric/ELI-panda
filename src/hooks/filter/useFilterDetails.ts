@@ -18,24 +18,24 @@ const GET_FILTERS = gql(`
 `)
 
 export const useFilterDetails = (tableId: string, filterUid?: string) => {
-  const user = useSession().data?.user
-  const { data, refetch, error } = useGraphQL(GET_FILTERS, {
-    variables: {
-      userSettingsWhere: {
-        user: {
-          uid: user?.uid
+    const user = useSession().data?.user
+    const { data, refetch, error } = useGraphQL(GET_FILTERS, {
+        variables: {
+            userSettingsWhere: {
+                user: {
+                    uid: user?.uid,
+                },
+                key_CONTAINS: `filter-${tableId}`,
+                ...(filterUid && { uid: filterUid }),
+            },
         },
-        key_CONTAINS: `filter-${tableId}`,
-        ...(filterUid && { uid: filterUid })
-      }
-    }
-  })
+    })
 
-  useEffect(() => {
-    if (error) {
-      toast.error('Failed to fetch filters')
-    }
-  }, [error])
+    useEffect(() => {
+        if (error) {
+            toast.error('Failed to fetch filters')
+        }
+    }, [error])
 
-  return { filters: data?.userSettings, refetch }
+    return { filters: data?.userSettings, refetch }
 }

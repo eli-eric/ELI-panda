@@ -13,66 +13,66 @@ import type { SystemDetail } from '@/types/responses/systems'
 import { useSystemsItemsColumns } from './useSystemItemsColumns'
 
 export const ItemsSelectTable = () => {
-  const tableId = TABLE_IDS.SERVICE_LINE_ITEMS_SELECT
+    const tableId = TABLE_IDS.SERVICE_LINE_ITEMS_SELECT
 
-  // Memoizujeme nastavení tabulky, aby nedocházelo k zbytečným re-renderům
-  const settings = useMemo<PandaTableSettings<SystemDetail>>(
-    () => ({
-      enableMultiRowSelection: true,
-      enableColumnHiding: true,
-      enableColumnReordering: false,
-      enableQueryURL: false,
-      enableRowSelection: row => !!row.original.physicalItem?.uid
-    }),
-    []
-  )
+    // Memoizujeme nastavení tabulky, aby nedocházelo k zbytečným re-renderům
+    const settings = useMemo<PandaTableSettings<SystemDetail>>(
+        () => ({
+            enableMultiRowSelection: true,
+            enableColumnHiding: true,
+            enableColumnReordering: false,
+            enableQueryURL: false,
+            enableRowSelection: row => !!row.original.physicalItem?.uid,
+        }),
+        [],
+    )
 
-  const columns = useSystemsItemsColumns({ tableId })
+    const columns = useSystemsItemsColumns({ tableId })
 
-  const { systems } = useSystems(tableId)
+    const { systems } = useSystems(tableId)
 
-  const table = usePandaTable({
-    tableId,
-    settings,
-    data: systems?.data,
-    columns: columns.columns,
-    getSubRows: original => original.subSystems ?? []
-  })
+    const table = usePandaTable({
+        tableId,
+        settings,
+        data: systems?.data,
+        columns: columns.columns,
+        getSubRows: original => original.subSystems ?? [],
+    })
 
-  // Memoizujeme další props pro komponenty
-  const paginationSettings = useMemo(
-    () => ({
-      enableQueryURL: settings?.enableQueryURL,
-      pageSizeDefault: 50,
-      total: systems?.totalCount
-    }),
-    [settings?.enableQueryURL, systems?.totalCount]
-  )
+    // Memoizujeme další props pro komponenty
+    const paginationSettings = useMemo(
+        () => ({
+            enableQueryURL: settings?.enableQueryURL,
+            pageSizeDefault: 50,
+            total: systems?.totalCount,
+        }),
+        [settings?.enableQueryURL, systems?.totalCount],
+    )
 
-  // Optimalizujeme renderování komponenty
-  return (
-    <div>
-      <SearchBar
-        tableId={tableId}
-        useQuery={settings?.enableQueryURL}
-        left={
-          <SystemFilterButtonContainer
-            disabledFields={{ category: true }}
-            tableId={tableId}
-            enableQueryURL={settings?.enableQueryURL}
-          />
-        }
-      />
-      <PandaTableV2
-        data={systems?.data}
-        className="overflow-y-auto relative h-[423px]"
-        table={table}
-        tableId={tableId}
-        settings={settings}
-      />
-      <Pagination tableId={tableId} settings={paginationSettings} />
-    </div>
-  )
+    // Optimalizujeme renderování komponenty
+    return (
+        <div>
+            <SearchBar
+                tableId={tableId}
+                useQuery={settings?.enableQueryURL}
+                left={
+                    <SystemFilterButtonContainer
+                        disabledFields={{ category: true }}
+                        tableId={tableId}
+                        enableQueryURL={settings?.enableQueryURL}
+                    />
+                }
+            />
+            <PandaTableV2
+                data={systems?.data}
+                className="overflow-y-auto relative h-[423px]"
+                table={table}
+                tableId={tableId}
+                settings={settings}
+            />
+            <Pagination tableId={tableId} settings={paginationSettings} />
+        </div>
+    )
 }
 
 // Export optimalizované komponenty

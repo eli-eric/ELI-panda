@@ -9,17 +9,17 @@ import AuthFormComponent from '@/modules/auth/auth-form.comp'
 const messages = message.authPage
 
 const LoginPage: NextPage = (): JSX.Element => {
-  const intl = useIntl()
+    const intl = useIntl()
 
-  return (
-    <Fragment>
-      <Head>
-        <title>{intl.formatMessage({ id: messages.head })}</title>
-        <meta name="description" content="...." />
-      </Head>
-      <AuthFormComponent />
-    </Fragment>
-  )
+    return (
+        <Fragment>
+            <Head>
+                <title>{intl.formatMessage({ id: messages.head })}</title>
+                <meta name="description" content="...." />
+            </Head>
+            <AuthFormComponent />
+        </Fragment>
+    )
 }
 
 export default LoginPage

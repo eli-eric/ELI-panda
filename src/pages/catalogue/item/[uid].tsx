@@ -12,35 +12,31 @@ import { useCatalogueItem } from '@/modules/catalogueItem/hooks/useItem'
 const messages = message.cataloguePage
 
 const ItemContainer = ({ uid }: { uid?: string }) => {
-  const { item, error } = useCatalogueItem()
-  if (error) return <ErrorPage />
-  return (
-    <Fragment>
-      {item ? <CatalogueItemContainer uid={uid} /> : <LoaderComponent />}
-    </Fragment>
-  )
+    const { item, error } = useCatalogueItem()
+    if (error) return <ErrorPage />
+    return <Fragment>{item ? <CatalogueItemContainer uid={uid} /> : <LoaderComponent />}</Fragment>
 }
 
 interface Props {
-  uid?: string
+    uid?: string
 }
 
 const CatalogueItemDetailPage: NextPage = ({ uid }: Props) => {
-  const intl = useIntl()
-  return (
-    <Fragment>
-      <Head>
-        <title>{intl.formatMessage({ id: messages.head })}</title>
-        <meta name="description" content="...." />
-      </Head>
-      <ItemContainer uid={uid} />
-    </Fragment>
-  )
+    const intl = useIntl()
+    return (
+        <Fragment>
+            <Head>
+                <title>{intl.formatMessage({ id: messages.head })}</title>
+                <meta name="description" content="...." />
+            </Head>
+            <ItemContainer uid={uid} />
+        </Fragment>
+    )
 }
 
 CatalogueItemDetailPage.getInitialProps = ({ query }) => ({
-  key: query.uid,
-  uid: query.uid
+    key: query.uid,
+    uid: query.uid,
 })
 
 export default CatalogueItemDetailPage

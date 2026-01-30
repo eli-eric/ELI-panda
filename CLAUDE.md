@@ -118,27 +118,27 @@ Always use `toast.promise` for mutations to provide consistent user feedback wit
 ```typescript
 // Basic usage
 toast.promise(createItem(data), {
-  loading: 'Creating item...',
-  success: 'Item created',
-  error: 'Failed to create item'
+    loading: 'Creating item...',
+    success: 'Item created',
+    error: 'Failed to create item',
 })
 
 // With callback on success (e.g., closing modal, navigation)
 toast.promise(updateItem(data), {
-  loading: 'Updating item...',
-  success: () => {
-    closeModal()
-    return 'Item updated'
-  },
-  error: 'Failed to update item'
+    loading: 'Updating item...',
+    success: () => {
+        closeModal()
+        return 'Item updated'
+    },
+    error: 'Failed to update item',
 })
 
 // With finally callback (e.g., resetting loading state)
 toast.promise(deleteItem(uid), {
-  loading: 'Removing item...',
-  success: 'Item removed',
-  error: 'Failed to remove item',
-  finally: () => setIsDeleting(false)
+    loading: 'Removing item...',
+    success: 'Item removed',
+    error: 'Failed to remove item',
+    finally: () => setIsDeleting(false),
 })
 ```
 
@@ -160,11 +160,13 @@ Use TanStack Query with `queryFetcher` and `queryMutate` utilities from `@/utils
 ### Core Utilities
 
 **`queryFetcher<T>(endpointType)`** - Factory pro query funkce:
+
 - `endpointType` - klíč z `getEndpoints()` (např. `'publication'`, `'codebook'`)
 - Parametry se automaticky extrahují z `queryKey[1]` a předávají do `getEndpoints()`
 - Vrací `QueryFunction` kompatibilní s TanStack Query
 
 **`queryMutate<TResponse, TVariables>(endpointType, method, uid?, isDefaultUrl?, endpointVariables?, responseType?)`** - Factory pro mutace:
+
 - `endpointType` - klíč z `getEndpoints()`
 - `method` - `'post'` | `'put'` | `'delete'`
 - `endpointVariables` - objekt s parametry pro endpoint (např. `{ path: 'resource/123' }`)
@@ -180,15 +182,16 @@ import type { QueryFetcherKey } from '@/utils/fetcher'
 import { queryFetcher } from '@/utils/fetcher'
 
 export const usePublication = (uid?: string) => {
-  return useQuery<Publication, AxiosError, Publication, QueryFetcherKey>({
-    queryKey: ['publication', { uid }],
-    queryFn: queryFetcher<Publication>('publication'),
-    enabled: !!uid
-  })
+    return useQuery<Publication, AxiosError, Publication, QueryFetcherKey>({
+        queryKey: ['publication', { uid }],
+        queryFn: queryFetcher<Publication>('publication'),
+        enabled: !!uid,
+    })
 }
 ```
 
 **Key rules:**
+
 - Always specify all 4 generic types: `<TData, AxiosError, TData, QueryFetcherKey>`
 - Query key: `['endpointType', { params }]` - params se automaticky předají do `getEndpoints()`
 - Use `enabled` for conditional fetching
@@ -197,34 +200,39 @@ export const usePublication = (uid?: string) => {
 
 ```typescript
 const createMutation = useMutation({
-  mutationFn: queryMutate<ResponseType, RequestType>('endpoint', 'post'),
-  onSuccess: () => queryClient.invalidateQueries({ queryKey })
+    mutationFn: queryMutate<ResponseType, RequestType>('endpoint', 'post'),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey }),
 })
 
 // Pro dynamické cesty použij endpointVariables
 const updateMutation = useMutation({
-  mutationFn: ({ uid, ...data }) => {
-    const mutateFn = queryMutate<ResponseType, RequestType>(
-      'endpoint', 'put', undefined, false, { path: `resource/${uid}` }
-    )
-    return mutateFn(data)
-  },
-  onSuccess: invalidate
+    mutationFn: ({ uid, ...data }) => {
+        const mutateFn = queryMutate<ResponseType, RequestType>(
+            'endpoint',
+            'put',
+            undefined,
+            false,
+            { path: `resource/${uid}` },
+        )
+        return mutateFn(data)
+    },
+    onSuccess: invalidate,
 })
 
 // Wrapper s toast notifikací
 const create = async (data: RequestType) => {
-  const promise = createMutation.mutateAsync(data)
-  toast.promise(promise, {
-    loading: fm({ id: message.toast.creating }),
-    success: fm({ id: message.toast.created }),
-    error: fm({ id: message.toast.failedToCreate })
-  })
-  return promise
+    const promise = createMutation.mutateAsync(data)
+    toast.promise(promise, {
+        loading: fm({ id: message.toast.creating }),
+        success: fm({ id: message.toast.created }),
+        error: fm({ id: message.toast.failedToCreate }),
+    })
+    return promise
 }
 ```
 
 **Key rules:**
+
 - Always invalidate related queries on success
 - Wrap with `toast.promise` for user feedback
 - Use `mutateAsync` (not `mutate`) when wrapping with toast
@@ -234,51 +242,51 @@ const create = async (data: RequestType) => {
 Follow these principles when writing code:
 
 - **Single Responsibility Principle**: Each function, component, and module should have one clear purpose
-  - Components should focus on presentation or logic, not both (use container/component pattern)
-  - Functions should do one thing well
-  - Hooks should manage one aspect of state or behavior
+    - Components should focus on presentation or logic, not both (use container/component pattern)
+    - Functions should do one thing well
+    - Hooks should manage one aspect of state or behavior
 
 - **DRY (Don't Repeat Yourself)**: Extract reusable logic
-  - Repeated logic → custom hooks
-  - Repeated UI patterns → shared components
-  - Repeated conditions → predicate functions
-  - Repeated constants → constants files
+    - Repeated logic → custom hooks
+    - Repeated UI patterns → shared components
+    - Repeated conditions → predicate functions
+    - Repeated constants → constants files
 
 - **Meaningful Names**: Use descriptive names that reveal intent
-  - Functions: `getUserById`, `calculateTotal`, `validateEmail`
-  - Components: `UserProfileCard`, `OrderSummary`, `SystemFilterSheet`
-  - Predicates: `isEmpty`, `hasPermission`, `canEdit`, `shouldShowStep`
-  - Avoid abbreviations unless widely understood (e.g., `fm` for `formatMessage`)
+    - Functions: `getUserById`, `calculateTotal`, `validateEmail`
+    - Components: `UserProfileCard`, `OrderSummary`, `SystemFilterSheet`
+    - Predicates: `isEmpty`, `hasPermission`, `canEdit`, `shouldShowStep`
+    - Avoid abbreviations unless widely understood (e.g., `fm` for `formatMessage`)
 
 - **Small Functions**: Keep functions focused and concise
-  - Aim for functions under 20 lines
-  - Extract complex logic into helper functions
-  - Use early returns to reduce nesting
+    - Aim for functions under 20 lines
+    - Extract complex logic into helper functions
+    - Use early returns to reduce nesting
 
 - **Early Returns**: Use guard clauses to reduce nesting
 
-  ```typescript
-  // ✅ Good - early returns
-  function processUser(user: User | null) {
-    if (!user) return null
-    if (!user.isActive) return null
-    return user.profile
-  }
-  ```
+    ```typescript
+    // ✅ Good - early returns
+    function processUser(user: User | null) {
+        if (!user) return null
+        if (!user.isActive) return null
+        return user.profile
+    }
+    ```
 
 - **Type Safety**: Leverage TypeScript for compile-time safety
-  - Use strict mode
-  - Avoid `any` - use `unknown` when type is truly unknown
-  - Use type guards and predicates for runtime type narrowing
-  - Prefer interfaces for object shapes, types for unions/intersections
+    - Use strict mode
+    - Avoid `any` - use `unknown` when type is truly unknown
+    - Use type guards and predicates for runtime type narrowing
+    - Prefer interfaces for object shapes, types for unions/intersections
 
 - **Predicates for Logic**: Extract boolean conditions to named predicate functions
-  ```typescript
-  // ✅ Good - self-documenting
-  if (hasEditPermission(user, resource) && isResourceActive(resource)) {
-    // ...
-  }
-  ```
+    ```typescript
+    // ✅ Good - self-documenting
+    if (hasEditPermission(user, resource) && isResourceActive(resource)) {
+        // ...
+    }
+    ```
 
 ## Detailed Documentation
 

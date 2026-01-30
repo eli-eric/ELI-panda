@@ -6,57 +6,57 @@ import { cn } from '@/lib/utils'
 import { SystemsTable } from './components/table/Systems.table'
 
 interface Props {
-  enableQueryURL?: boolean
-  enableDragAndDrop?: boolean
-  tableId?: string
-  dropsettings?: any
-  className?: string
-  hideButtons?: boolean
-  RightSearchBarElement?: () => JSX.Element
-  LeftSearchBarElement?: () => JSX.Element
-  isGlobalSearch?: boolean
+    enableQueryURL?: boolean
+    enableDragAndDrop?: boolean
+    tableId?: string
+    dropsettings?: any
+    className?: string
+    hideButtons?: boolean
+    RightSearchBarElement?: () => JSX.Element
+    LeftSearchBarElement?: () => JSX.Element
+    isGlobalSearch?: boolean
 }
 
 export const SystemsComponent: FC<Props> = ({
-  enableQueryURL = true,
-  enableDragAndDrop,
-  tableId = 'systems',
-  dropsettings,
-  className,
-  hideButtons = false,
-  LeftSearchBarElement,
-  RightSearchBarElement,
-  isGlobalSearch
+    enableQueryURL = true,
+    enableDragAndDrop,
+    tableId = 'systems',
+    dropsettings,
+    className,
+    hideButtons = false,
+    LeftSearchBarElement,
+    RightSearchBarElement,
+    isGlobalSearch,
 }: Props) => {
-  return (
-    <TableLayoutContainer className={className}>
-      <SystemsTable
-        hideButtons={hideButtons}
-        enableDragAndDrop={enableDragAndDrop}
-        tableId={tableId}
-        isGlobalSearch={isGlobalSearch}
-        RightSearchBarElement={RightSearchBarElement}
-        LeftSearchBarElement={LeftSearchBarElement}
-        pageSizeDefault={50}
-        className={'relative overflow-scroll scrollbar-style'}
-        getRowProps={({ original }) => ({
-          className: cn(
-            original?.physicalItem && 'font-bold',
-            original?.statistics?.sp_coverage != null &&
-              original.statistics.sp_coverage < 1 &&
-              'text-red-500 dark:text-red-500 font-bold'
-          ),
-          dropsettings
-        })}
-        settings={{
-          enableSorting: true,
-          enableColumnHiding: true,
-          enableFiltering: true,
-          manualFiltering: true,
-          enableQueryURL: enableQueryURL,
-          enableColumnReordering: false
-        }}
-      />
-    </TableLayoutContainer>
-  )
+    return (
+        <TableLayoutContainer className={className}>
+            <SystemsTable
+                hideButtons={hideButtons}
+                enableDragAndDrop={enableDragAndDrop}
+                tableId={tableId}
+                isGlobalSearch={isGlobalSearch}
+                RightSearchBarElement={RightSearchBarElement}
+                LeftSearchBarElement={LeftSearchBarElement}
+                pageSizeDefault={50}
+                className={'relative overflow-scroll scrollbar-style'}
+                getRowProps={({ original }) => ({
+                    className: cn(
+                        original?.physicalItem && 'font-bold',
+                        original?.statistics?.sp_coverage != null &&
+                            original.statistics.sp_coverage < 1 &&
+                            'text-red-500 dark:text-red-500 font-bold',
+                    ),
+                    dropsettings,
+                })}
+                settings={{
+                    enableSorting: true,
+                    enableColumnHiding: true,
+                    enableFiltering: true,
+                    manualFiltering: true,
+                    enableQueryURL: enableQueryURL,
+                    enableColumnReordering: false,
+                }}
+            />
+        </TableLayoutContainer>
+    )
 }

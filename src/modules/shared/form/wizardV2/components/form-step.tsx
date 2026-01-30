@@ -4,20 +4,20 @@ import type { WizardField } from '../types'
 import { StepField } from './step-field'
 
 interface FormStepProps {
-  fields?: WizardField[]
-  component?: React.ReactElement
+    fields?: WizardField[]
+    component?: React.ReactElement
 }
 
 export default function FormStep({ fields, component }: FormStepProps) {
-  if (component) {
-    return component
-  }
+    if (component) {
+        return component
+    }
 
-  return (
-    <Grid>
-      {fields?.map(field => (
-        <StepField key={field.field.name} field={field} />
-      ))}
-    </Grid>
-  )
+    return (
+        <Grid>
+            {fields?.map(field => (
+                <StepField key={field.field.name} field={field} />
+            ))}
+        </Grid>
+    )
 }

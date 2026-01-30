@@ -8,26 +8,26 @@ import { ROLE } from '@/types/constants/roles'
 const { form } = message.cataloguePage.itemDetail
 
 export const useItemCreateFormFields = () => {
-  const disabled = !usePermission([ROLE.CATALOGUE_EDIT])
+    const disabled = !usePermission([ROLE.CATALOGUE_EDIT])
 
-  return useMakeFormFields({
-    name: {
-      name: 'name',
-      label: form.name.label,
-      placeholder: form.name.placeholder,
-      rounded: 'rounded-md'
-    },
-    catalogueNumber: {
-      name: 'catalogueNumber',
-      label: form.catalogueNumber.label,
-      placeholder: form.catalogueNumber.placeholder,
-      rounded: 'rounded-md'
-    },
-    category: {
-      name: 'category',
-      disabled,
-      rounded: 'rounded-md',
-      codebook: CODEBOOK.CATALOGUE_CATEGORY
-    }
-  })
+    return useMakeFormFields({
+        name: {
+            name: 'name',
+            label: form.name.label,
+            placeholder: form.name.placeholder,
+            rounded: 'rounded-md',
+        },
+        catalogueNumber: {
+            name: 'catalogueNumber',
+            label: form.catalogueNumber.label,
+            placeholder: form.catalogueNumber.placeholder,
+            rounded: 'rounded-md',
+        },
+        category: {
+            name: 'category',
+            disabled,
+            rounded: 'rounded-md',
+            codebook: CODEBOOK.CATALOGUE_CATEGORY,
+        },
+    })
 }

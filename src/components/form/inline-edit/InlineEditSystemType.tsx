@@ -8,38 +8,38 @@ import type { CodebookType } from '@/types/responses/codebook'
 import { InlineEditModalSelect } from './InlineEditModalSelect'
 
 interface InlineEditSystemTypeProps extends FieldProps {
-  onChange?: (value?: any) => void
+    onChange?: (value?: any) => void
 }
 
 export const InlineEditSystemType = ({
-  name,
-  label,
-  disabled,
-  onChange
+    name,
+    label,
+    disabled,
+    onChange,
 }: InlineEditSystemTypeProps) => {
-  const formContext = useFormContext()
-  const { openSystemTypeModal } = useSystemTypeSelectionModal()
+    const formContext = useFormContext()
+    const { openSystemTypeModal } = useSystemTypeSelectionModal()
 
-  const handleSystemTypeChange = useCallback(
-    (value: CodebookType | null) => {
-      formContext.setValue(name, value)
-      onChange?.(value)
-    },
-    [onChange, name, formContext]
-  )
+    const handleSystemTypeChange = useCallback(
+        (value: CodebookType | null) => {
+            formContext.setValue(name, value)
+            onChange?.(value)
+        },
+        [onChange, name, formContext],
+    )
 
-  const handleOpenModal = () => {
-    openSystemTypeModal(handleSystemTypeChange)
-  }
+    const handleOpenModal = () => {
+        openSystemTypeModal(handleSystemTypeChange)
+    }
 
-  return (
-    <InlineEditModalSelect
-      name={name}
-      label={label}
-      disabled={disabled}
-      onClick={handleOpenModal}
-      onClear={() => handleSystemTypeChange(null)}
-      placeholder="Click to select system type"
-    />
-  )
+    return (
+        <InlineEditModalSelect
+            name={name}
+            label={label}
+            disabled={disabled}
+            onClick={handleOpenModal}
+            onClear={() => handleSystemTypeChange(null)}
+            placeholder="Click to select system type"
+        />
+    )
 }

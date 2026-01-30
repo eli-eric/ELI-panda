@@ -96,13 +96,13 @@ yarn build 2>&1 | grep "file.tsx" -A 2
 ```typescript
 // /src/i18n/src/locale/en.ts
 export const messages = {
-  common: {
-    ui: {
-      // ... existující
-      deleteOrder: 'Delete Order', // ← NOVÝ překlad
-      confirmDelete: 'Are you sure?'
-    }
-  }
+    common: {
+        ui: {
+            // ... existující
+            deleteOrder: 'Delete Order', // ← NOVÝ překlad
+            confirmDelete: 'Are you sure?',
+        },
+    },
 }
 ```
 
@@ -119,11 +119,11 @@ import { message } from '@/i18n/src/messages'
 
 ```typescript
 export const MyComponent = () => {
-  const { formatMessage: fm } = useIntl()
-  // nebo plný název:
-  // const { formatMessage } = useIntl()
+    const { formatMessage: fm } = useIntl()
+    // nebo plný název:
+    // const { formatMessage } = useIntl()
 
-  // ... zbytek komponenty
+    // ... zbytek komponenty
 }
 ```
 
@@ -212,14 +212,14 @@ const { formatMessage: fm } = useIntl()
 
 // PŘED:
 const columns = [
-  { id: 'title', header: 'Title' },
-  { id: 'code', header: 'Code' }
+    { id: 'title', header: 'Title' },
+    { id: 'code', header: 'Code' },
 ]
 
 // PO:
 const columns = [
-  { id: 'title', header: fm({ id: message.publicationsPage.columns.title }) },
-  { id: 'code', header: fm({ id: message.publicationsPage.columns.code }) }
+    { id: 'title', header: fm({ id: message.publicationsPage.columns.title }) },
+    { id: 'code', header: fm({ id: message.publicationsPage.columns.code }) },
 ]
 ```
 
@@ -232,8 +232,8 @@ const { formatMessage: fm } = useIntl()
 
 // Pro text s placeholdery použij formatMessage přímo:
 const deleteMessage = fm(
-  { id: message.ordersPage.deleteModal.message },
-  { name: orderName } // dynamické hodnoty
+    { id: message.ordersPage.deleteModal.message },
+    { name: orderName }, // dynamické hodnoty
 )
 ```
 
@@ -348,42 +348,42 @@ export const StatusBadge = ({ isActive }) => {
 ### ⚡ Vysoká priorita (nejvíce používané komponenty)
 
 1. **Table komponenty** - používané napříč aplikací
-   - `src/components/ui/table/table-pagination.tsx`
-   - `src/components/ui/table/table-body.tsx`
-   - `src/components/ui/table/table-header.tsx`
+    - `src/components/ui/table/table-pagination.tsx`
+    - `src/components/ui/table/table-body.tsx`
+    - `src/components/ui/table/table-header.tsx`
 
 2. **Layout komponenty**
-   - `src/components/ui/sidebar.tsx`
-   - `src/components/ui/sheet.tsx`
-   - `src/components/ui/carousel.tsx`
+    - `src/components/ui/sidebar.tsx`
+    - `src/components/ui/sheet.tsx`
+    - `src/components/ui/carousel.tsx`
 
 3. **Form komponenty**
-   - `src/components/form/inputs/` - různé input komponenty
-   - `src/components/ui/form/` - form UI elementy
+    - `src/components/form/inputs/` - různé input komponenty
+    - `src/components/ui/form/` - form UI elementy
 
 ### 🔶 Střední priorita
 
 4. **Feature moduly - Orders**
-   - `src/modules/orders/` - všechny komponenty
-   - `src/modules/orderItem/` - order item komponenty
+    - `src/modules/orders/` - všechny komponenty
+    - `src/modules/orderItem/` - order item komponenty
 
 5. **Feature moduly - Catalogue**
-   - `src/modules/catalogue/components/categoryEdit/`
-   - `src/modules/catalogueItem/`
+    - `src/modules/catalogue/components/categoryEdit/`
+    - `src/modules/catalogueItem/`
 
 6. **Administration**
-   - `src/modules/administration/user/`
-   - `src/modules/administration/changePassword/`
+    - `src/modules/administration/user/`
+    - `src/modules/administration/changePassword/`
 
 ### 🔷 Nízká priorita (časově náročné nebo málo používané)
 
 7. **Velké soubory s mnoha stringy**
-   - `src/modules/publications/publications.columns.tsx` (34 headers)
-   - Tyto soubory mají mnoho column definic
+    - `src/modules/publications/publications.columns.tsx` (34 headers)
+    - Tyto soubory mají mnoho column definic
 
 8. **Privacy a Auth**
-   - `src/app/(public)/panda-native/privacy/`
-   - `src/modules/auth/`
+    - `src/app/(public)/panda-native/privacy/`
+    - `src/modules/auth/`
 
 ## 🔍 Často používané překlady (již existují v en.ts)
 
@@ -516,9 +516,9 @@ Když přidáváš novou sekci do en.ts, přidej komentář vysvětlující úč
 ```typescript
 // Orders module - table actions and modals
 ordersPage: {
-  actions: {
-    deleteOrder: 'Delete Order'
-  }
+    actions: {
+        deleteOrder: 'Delete Order'
+    }
 }
 ```
 
@@ -579,15 +579,15 @@ git commit -m "fix: replace hardcoded strings with i18n in table-pagination"
 
 ```json
 {
-  "rules": {
-    "react/jsx-no-literals": [
-      "warn",
-      {
-        "noStrings": true,
-        "ignoreProps": true
-      }
-    ]
-  }
+    "rules": {
+        "react/jsx-no-literals": [
+            "warn",
+            {
+                "noStrings": true,
+                "ignoreProps": true
+            }
+        ]
+    }
 }
 ```
 

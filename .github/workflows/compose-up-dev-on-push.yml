@@ -1,52 +1,52 @@
 name: Compose up DEV frontend on push
 
 on:
-  push:
-    branches:
-      - 'dev'
+    push:
+        branches:
+            - 'dev'
 
 jobs:
-  use-secret:
-    runs-on: czechia-server
-    env:
-      NEXTAUTH_SECRET: '${{ secrets.NEXTAUTH_SECRET }}'
-      MINIO_ACCESS_KEY_PROD: '${{ secrets.MINIO_ACCESS_KEY_DEV }}'
-      MINIO_SECRET_KEY_PROD: '${{ secrets.MINIO_SECRET_KEY_DEV }}'
-      NEO4J_PASSWORD: '${{ secrets.NEO4J_PASSWORD }}'
-      AZURE_AD_BEAMLINES_CLIENT_ID: '${{ secrets.AZURE_AD_BEAMLINES_CLIENT_ID }}'
-      AZURE_AD_BEAMLINES_CLIENT_SECRET: '${{ secrets.AZURE_AD_BEAMLINES_CLIENT_SECRET }}'
-      AZURE_AD_BEAMLINES_TENANT_ID: '${{ secrets.AZURE_AD_BEAMLINES_TENANT_ID }}'
-    steps:
-      - name: Show secret stats
-        run: |
-          echo "${{ secrets.NEXTAUTH_SECRET }}" | "${{ secrets.MINIO_ACCESS_KEY_DEV }}" | "${{ secrets.MINIO_SECRET_KEY_DEV }}" | "${{ secrets.NEO4J_PASSWORD }}" | "${{ secrets.AZURE_AD_BEAMLINES_CLIENT_ID }}" | "${{ secrets.AZURE_AD_BEAMLINES_CLIENT_SECRET }}" | "${{ secrets.AZURE_AD_BEAMLINES_TENANT_ID }}" | wc
-  unit-tests:
-    runs-on: czechia-server
-    needs: use-secret
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: Install Yarn
-        run: npm install -g yarn
-      - name: Install dependencies
-        run: yarn install
-      - name: Run unit tests
-        run: yarn test
-  compose-up:
-    runs-on: czechia-server
-    needs: unit-tests
-    steps:
-      - uses: actions/checkout@v3
-      - run: |
-          docker compose -f docker-compose-dev.yml up -d --build
+    use-secret:
+        runs-on: czechia-server
         env:
-          NEXTAUTH_SECRET: '${{ secrets.NEXTAUTH_SECRET }}'
-          MINIO_ACCESS_KEY_PROD: '${{ secrets.MINIO_ACCESS_KEY_DEV }}'
-          MINIO_SECRET_KEY_PROD: '${{ secrets.MINIO_SECRET_KEY_DEV }}'
-          NEO4J_PASSWORD: '${{ secrets.NEO4J_PASSWORD }}'
-          AZURE_AD_BEAMLINES_CLIENT_ID: '${{ secrets.AZURE_AD_BEAMLINES_CLIENT_ID }}'
-          AZURE_AD_BEAMLINES_CLIENT_SECRET: '${{ secrets.AZURE_AD_BEAMLINES_CLIENT_SECRET }}'
-          AZURE_AD_BEAMLINES_TENANT_ID: '${{ secrets.AZURE_AD_BEAMLINES_TENANT_ID }}'
+            NEXTAUTH_SECRET: '${{ secrets.NEXTAUTH_SECRET }}'
+            MINIO_ACCESS_KEY_PROD: '${{ secrets.MINIO_ACCESS_KEY_DEV }}'
+            MINIO_SECRET_KEY_PROD: '${{ secrets.MINIO_SECRET_KEY_DEV }}'
+            NEO4J_PASSWORD: '${{ secrets.NEO4J_PASSWORD }}'
+            AZURE_AD_BEAMLINES_CLIENT_ID: '${{ secrets.AZURE_AD_BEAMLINES_CLIENT_ID }}'
+            AZURE_AD_BEAMLINES_CLIENT_SECRET: '${{ secrets.AZURE_AD_BEAMLINES_CLIENT_SECRET }}'
+            AZURE_AD_BEAMLINES_TENANT_ID: '${{ secrets.AZURE_AD_BEAMLINES_TENANT_ID }}'
+        steps:
+            - name: Show secret stats
+              run: |
+                  echo "${{ secrets.NEXTAUTH_SECRET }}" | "${{ secrets.MINIO_ACCESS_KEY_DEV }}" | "${{ secrets.MINIO_SECRET_KEY_DEV }}" | "${{ secrets.NEO4J_PASSWORD }}" | "${{ secrets.AZURE_AD_BEAMLINES_CLIENT_ID }}" | "${{ secrets.AZURE_AD_BEAMLINES_CLIENT_SECRET }}" | "${{ secrets.AZURE_AD_BEAMLINES_TENANT_ID }}" | wc
+    unit-tests:
+        runs-on: czechia-server
+        needs: use-secret
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: 18
+            - name: Install Yarn
+              run: npm install -g yarn
+            - name: Install dependencies
+              run: yarn install
+            - name: Run unit tests
+              run: yarn test
+    compose-up:
+        runs-on: czechia-server
+        needs: unit-tests
+        steps:
+            - uses: actions/checkout@v3
+            - run: |
+                  docker compose -f docker-compose-dev.yml up -d --build
+              env:
+                  NEXTAUTH_SECRET: '${{ secrets.NEXTAUTH_SECRET }}'
+                  MINIO_ACCESS_KEY_PROD: '${{ secrets.MINIO_ACCESS_KEY_DEV }}'
+                  MINIO_SECRET_KEY_PROD: '${{ secrets.MINIO_SECRET_KEY_DEV }}'
+                  NEO4J_PASSWORD: '${{ secrets.NEO4J_PASSWORD }}'
+                  AZURE_AD_BEAMLINES_CLIENT_ID: '${{ secrets.AZURE_AD_BEAMLINES_CLIENT_ID }}'
+                  AZURE_AD_BEAMLINES_CLIENT_SECRET: '${{ secrets.AZURE_AD_BEAMLINES_CLIENT_SECRET }}'
+                  AZURE_AD_BEAMLINES_TENANT_ID: '${{ secrets.AZURE_AD_BEAMLINES_TENANT_ID }}'
