@@ -12,7 +12,7 @@ const SystemEditContainer = lazy(() =>
   }))
 )
 
-export const useSystemEditSheet = (directUid?: string) => {
+export const useSystemEditSheet = () => {
   const { openModal } = useDynamicModalStore()
   const { uid: storeUid } = useSystemStore()
   const { reset: resetFormState } = useModalFormStateStore()
@@ -39,8 +39,8 @@ export const useSystemEditSheet = (directUid?: string) => {
     [withWarningModal]
   )
 
-  return () => {
-    const uid = directUid || storeUid
+  return (openUid?: string) => {
+    const uid = storeUid || openUid
 
     if (!uid) {
       // eslint-disable-next-line no-console

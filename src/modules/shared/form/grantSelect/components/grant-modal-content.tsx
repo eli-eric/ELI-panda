@@ -1,5 +1,5 @@
 import { X } from 'lucide-react'
-import { useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { FormattedMessage } from 'react-intl'
 
 import { PlusButton } from '@/components/Buttons'
@@ -9,12 +9,15 @@ import { Button } from '@/components/ui/button'
 import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
-import type { Grant } from '@/modules/grants/types/grant.types'
 import { useOpenGrantForm } from '@/modules/grants/hooks/useOpenGrantForm'
-import { Pagination } from '@/modules/shared/table/Pagination'
+import type { Grant } from '@/modules/grants/types/grant.types'
+import { PaginationV2 as Pagination } from '@/modules/shared/table/PaginationV2'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import type { PandaTableSettings } from '@/modules/shared/table/pandaTable/PandaTable'
-import { PandaTableV2 } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
+import {
+  PandaTableV2,
+  type PandaTableV2Handle
+} from '@/modules/shared/table/pandaTableV2/PandaTableV2'
 import { SearchBar } from '@/modules/shared/table/SearchBar'
 import { ROLE } from '@/types/constants/roles'
 
@@ -56,6 +59,7 @@ export const GrantModalContent: React.FC<GrantModalContentProps> = ({
   // Local state for multi-selection
   const [selectedGrants, setSelectedGrants] =
     useState<SelectedGrant[]>(initialSelected)
+  const tableRef = useRef<PandaTableV2Handle>(null)
 
   // Fetch grants using table state (search, pagination)
   const { data, isFetching: isLoading, refetch } = useGrantsForSelect(TABLE_ID)
@@ -106,6 +110,11 @@ export const GrantModalContent: React.FC<GrantModalContentProps> = ({
     onClose?.()
   }
 
+  // Scroll table to top when page changes
+  const handlePageChange = useCallback(() => {
+    tableRef.current?.scrollToTop()
+  }, [])
+
   return (
     <div className="flex flex-col gap-3">
       {/* Selected grants badges */}
@@ -152,6 +161,7 @@ export const GrantModalContent: React.FC<GrantModalContentProps> = ({
       {/* Grants table */}
       <div className="h-[350px] overflow-hidden border rounded-md">
         <PandaTableV2
+          ref={tableRef}
           tableId={TABLE_ID}
           table={table}
           data={grants}
@@ -177,6 +187,7 @@ export const GrantModalContent: React.FC<GrantModalContentProps> = ({
           pageSizeDefault: 50,
           total: data?.totalCount
         }}
+        onPageChange={handlePageChange}
       />
 
       {/* Footer buttons */}

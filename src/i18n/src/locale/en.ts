@@ -404,7 +404,10 @@ export const messages = {
       }
     },
     pagination: {
-      text: 'Showing <medium>{from}</medium> to <medium>{to}</medium> of <medium>{resultsCount}</medium> results'
+      text: 'Showing <medium>{from}</medium> to <medium>{to}</medium> of <medium>{resultsCount}</medium> results',
+      pageOf: 'Page {page} of {total}',
+      rowsPerPage: 'Rows:',
+      totalResults: '{count} results'
     },
     itemList: {
       header: {
@@ -1054,7 +1057,7 @@ export const messages = {
       oecdFord: { label: 'OECD/FORD (R04)*', labelOptional: 'OECD/FORD (R04)' },
       grant: { label: 'Grant @deprecated' },
       grantCb: { label: 'Grant', placeholder: 'Select' },
-      foreignGrant: { label: 'Foreign Grant', placeholder: 'Foreign Grant' },
+      otherGrants: { label: 'Other Grants', placeholder: 'Other Grants' },
       wosNumber: { label: 'WOS Number (R67)' },
       issn: { label: 'ISSN (R14)', placeholder: 'ISSN' },
       eissn: { label: 'e-ISSN (R15)', placeholder: 'e-ISSN' },
@@ -1176,6 +1179,7 @@ export const messages = {
     },
     columns: {
       systemCode: 'System Code',
+      systemType: 'System Type',
       name: 'Name',
       location: 'Location',
       zone: 'Zone',

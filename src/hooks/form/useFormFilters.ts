@@ -142,31 +142,18 @@ export const useFormFilterState = ({
     false
   )
   const [, setQueryPage] = useQueryState('page', { history: 'replace' })
-  const { setPagination, setSearch, setSearchValue, instances } =
+  const { setPaginationState, setSearch, setSearchValue, instances } =
     useTableStateStore()
 
   const [, setQuerySearch] = useQueryState('search', { history: 'replace' })
 
   const clearPageAndSearch = useCallback(() => {
-    // Preserve existing pageSize from store, only reset page to 1
-    // This prevents overwriting custom pageSize (e.g., 10) with hardcoded 50
-    const currentPagination = instances[tableId]?.pagination
-    let pageSize = 50 // Default fallback for backward compatibility
+    // Read from paginationState (new format) - this is what useQueryManager reads
+    const currentState = instances[tableId]?.paginationState
+    const pageSize = currentState?.pageSize || 50
 
-    if (currentPagination) {
-      try {
-        const parsed = JSON.parse(currentPagination)
-        pageSize = parsed.pageSize || 50
-      } catch (e) {
-        // Invalid JSON, use default
-        console.warn(
-          `Failed to parse pagination for tableId ${tableId}:`,
-          currentPagination
-        )
-      }
-    }
-
-    setPagination(tableId, `{"page":1,"pageSize":${pageSize}}`)
+    // Use setPaginationState - updates BOTH paginationState AND legacy pagination
+    setPaginationState(tableId, { page: 1, pageSize })
     setSearch(tableId, '')
     setSearchValue(tableId, '')
     if (enableQueryUrl) {
@@ -174,7 +161,7 @@ export const useFormFilterState = ({
       setQuerySearch(null, { shallow: true })
     }
   }, [
-    setPagination,
+    setPaginationState,
     setSearch,
     setSearchValue,
     tableId,

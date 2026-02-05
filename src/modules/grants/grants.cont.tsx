@@ -1,12 +1,15 @@
-import type { FC } from 'react'
+import { type FC,useCallback, useRef } from 'react'
 
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 import { ROLE } from '@/types/constants/roles'
 
-import { Pagination } from '../shared/table/Pagination'
+import { PaginationV2 as Pagination } from '../shared/table/PaginationV2'
 import { usePandaTable } from '../shared/table/pandaTable/hooks/usePandaTable'
 import type { PandaTableSettings } from '../shared/table/pandaTable/PandaTable'
-import { PandaTableV2 } from '../shared/table/pandaTableV2/PandaTableV2'
+import {
+  PandaTableV2,
+  type PandaTableV2Handle
+} from '../shared/table/pandaTableV2/PandaTableV2'
 import { SearchBar, SearchBarButtonsComponent } from '../shared/table/SearchBar'
 import { useGrantColumns } from './grants.columns'
 import { useGrants } from './hooks/useGrants'
@@ -15,6 +18,7 @@ import type { Grant } from './types/grant.types'
 
 export const GrantsContainer: FC = () => {
   const tableId = 'grants'
+  const tableRef = useRef<PandaTableV2Handle>(null)
 
   const columns = useGrantColumns()
   const { data, refetch, isLoading } = useGrants(tableId)
@@ -36,6 +40,11 @@ export const GrantsContainer: FC = () => {
     settings: tableSettings
   })
 
+  // Scroll table to top when page changes
+  const handlePageChange = useCallback(() => {
+    tableRef.current?.scrollToTop()
+  }, [])
+
   return (
     <TableLayoutContainer>
       <SearchBar
@@ -49,6 +58,7 @@ export const GrantsContainer: FC = () => {
         }
       />
       <PandaTableV2
+        ref={tableRef}
         tableId={tableId}
         table={table}
         data={data?.data}
@@ -62,6 +72,7 @@ export const GrantsContainer: FC = () => {
           pageSizeDefault: 50,
           total: data?.totalCount
         }}
+        onPageChange={handlePageChange}
       />
     </TableLayoutContainer>
   )

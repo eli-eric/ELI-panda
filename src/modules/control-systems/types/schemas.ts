@@ -22,7 +22,8 @@ export const systemCodeResultSchema = z.object({
   name: z.string(),
   code: z.string(),
   location: codebookTypeSchema.optional().nullable(),
-  zone: codebookTypeSchema,
+  systemType: codebookTypeSchema.optional().nullable(),
+  zone: codebookTypeSchema.optional().nullable(),
   parentPath: z.array(parentPathItemSchema).optional().nullable(),
   createdBy: z.string().optional().nullable(),
   updatedBy: z.string().optional().nullable()
