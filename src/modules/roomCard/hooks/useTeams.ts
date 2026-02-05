@@ -13,13 +13,13 @@ const teamsQuery = gql(`
 `)
 
 export const useTeams = () => {
-  const { data, isLoading, error } = useGraphQL(teamsQuery)
+    const { data, isLoading, error } = useGraphQL(teamsQuery)
 
-  useEffect(() => {
-    if (error) {
-      toast.error('Failed to fetch teams')
-    }
-  }, [error])
+    useEffect(() => {
+        if (error) {
+            toast.error('Failed to fetch teams')
+        }
+    }, [error])
 
-  return { teams: data?.teams, loading: isLoading, error }
+    return { teams: data?.teams, loading: isLoading, error }
 }

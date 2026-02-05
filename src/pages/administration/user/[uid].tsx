@@ -11,45 +11,45 @@ import { useUserDetail } from '@/modules/administration/user/hooks/useUserDetail
 import type { UserQueryQuery } from '@/types/gql/graphql'
 
 interface Props {
-  userUid?: string
+    userUid?: string
 }
 
 type EditUserContextType = {
-  userDetail?: UserQueryQuery['users'][0]
-  refetch: () => void
+    userDetail?: UserQueryQuery['users'][0]
+    refetch: () => void
 }
 
 export const EditUserContext = createContext<EditUserContextType>({
-  userDetail: undefined,
-  refetch: () => {}
+    userDetail: undefined,
+    refetch: () => {},
 })
 
 const EditUserPage: NextPage = ({ userUid }: Props): React.ReactElement => {
-  //const intl = useIntl()
-  const { userDetail, refetch, loading } = useUserDetail(userUid)
-  const roles = useRoles()
+    //const intl = useIntl()
+    const { userDetail, refetch, loading } = useUserDetail(userUid)
+    const roles = useRoles()
 
-  if (loading && roles.length === 0 && !userDetail) {
-    return <LoaderComponent />
-  }
+    if (loading && roles.length === 0 && !userDetail) {
+        return <LoaderComponent />
+    }
 
-  return (
-    <Fragment>
-      <Head>
-        <title>
-          <FormattedMessage id={messages.common.pages.administration} />
-        </title>
-        <meta name="description" content="...." />
-      </Head>
-      <EditUserContext.Provider value={{ userDetail, refetch }}>
-        {userDetail && <EditUserContainer userUid={userUid} roles={roles} />}
-      </EditUserContext.Provider>
-    </Fragment>
-  )
+    return (
+        <Fragment>
+            <Head>
+                <title>
+                    <FormattedMessage id={messages.common.pages.administration} />
+                </title>
+                <meta name="description" content="...." />
+            </Head>
+            <EditUserContext.Provider value={{ userDetail, refetch }}>
+                {userDetail && <EditUserContainer userUid={userUid} roles={roles} />}
+            </EditUserContext.Provider>
+        </Fragment>
+    )
 }
 
 EditUserPage.getInitialProps = ({ query }) => ({
-  userUid: query.uid as string
+    userUid: query.uid as string,
 })
 
 export default EditUserPage

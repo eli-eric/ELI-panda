@@ -23,81 +23,80 @@ import useSystemFormFields from '../SystemForm.fields'
 import { ItemProperties } from './ItemProperties'
 import { OrderInformation } from './orderInfo/OrderInformation'
 
-const propertyMessage =
-  message.systemsPage.systemDetail.form.physicalItem.general.properties
+const propertyMessage = message.systemsPage.systemDetail.form.physicalItem.general.properties
 
 export const PhysicalItemForm = ({ uid }: { uid: string }) => {
-  const fields = useSystemFormFields()
+    const fields = useSystemFormFields()
 
-  const { catalogueItem, physicalItem, systemDetail } = useSystemDetail()
+    const { catalogueItem, physicalItem, systemDetail } = useSystemDetail()
 
-  const { data: properties } = useItemProperties(uid)
+    const { data: properties } = useItemProperties(uid)
 
-  const description = catalogueItem?.description
-  const canEdit = usePermission([ROLE.SYSTEM_EDIT])
+    const description = catalogueItem?.description
+    const canEdit = usePermission([ROLE.SYSTEM_EDIT])
 
-  return (
-    <Grid>
-      <Col sm={3} md={3}>
-        <Input {...fields.partNumber} />
-      </Col>
-      <Col sm={3} md={3}>
-        <Combobox {...fields.catalogueSupplier} />
-      </Col>
-      <Col sm={3} md={3}>
-        <Input {...fields.eun} />
-      </Col>
-      <Col sm={3} md={3}>
-        <Input {...fields.serialNumber} />
-      </Col>
-      {description && (
-        <Col sm="full" className="flex-col">
-          <FormattedMessage
-            id={propertyMessage.title}
-            values={createMessageValues({ title: 'Description' })}
-          />
-          <Paragraph>{description}</Paragraph>
-        </Col>
-      )}
-      <Col sm="full" className="w-full">
-        <ItemPropertiesViewer
-          catalogueItem={physicalItem?.catalogueItem}
-          serviceItems={physicalItem?.serviceItemsConnection.edges}
-        />
-      </Col>
-      <Col sm="full" className="w-full">
-        <ItemProperties properties={properties} />
-      </Col>
-      <Col sm={3} md={4}>
-        <Listbox {...fields.itemUsage} />
-      </Col>
-      <Col sm={3} md={4}>
-        <Listbox {...fields.procurementStatus} />
-      </Col>
-      <Col sm={3} md={4}>
-        <Listbox {...fields.itemConditionStatus} />
-      </Col>
-      <Col sm="full">
-        <TextArea {...fields.itemNotes} />
-      </Col>
-      <Col sm="full" className="w-full">
-        {systemDetail?.physicalItem && (
-          <OrderInformation physicalItem={systemDetail.physicalItem} />
-        )}
-      </Col>
+    return (
+        <Grid>
+            <Col sm={3} md={3}>
+                <Input {...fields.partNumber} />
+            </Col>
+            <Col sm={3} md={3}>
+                <Combobox {...fields.catalogueSupplier} />
+            </Col>
+            <Col sm={3} md={3}>
+                <Input {...fields.eun} />
+            </Col>
+            <Col sm={3} md={3}>
+                <Input {...fields.serialNumber} />
+            </Col>
+            {description && (
+                <Col sm="full" className="flex-col">
+                    <FormattedMessage
+                        id={propertyMessage.title}
+                        values={createMessageValues({ title: 'Description' })}
+                    />
+                    <Paragraph>{description}</Paragraph>
+                </Col>
+            )}
+            <Col sm="full" className="w-full">
+                <ItemPropertiesViewer
+                    catalogueItem={physicalItem?.catalogueItem}
+                    serviceItems={physicalItem?.serviceItemsConnection.edges}
+                />
+            </Col>
+            <Col sm="full" className="w-full">
+                <ItemProperties properties={properties} />
+            </Col>
+            <Col sm={3} md={4}>
+                <Listbox {...fields.itemUsage} />
+            </Col>
+            <Col sm={3} md={4}>
+                <Listbox {...fields.procurementStatus} />
+            </Col>
+            <Col sm={3} md={4}>
+                <Listbox {...fields.itemConditionStatus} />
+            </Col>
+            <Col sm="full">
+                <TextArea {...fields.itemNotes} />
+            </Col>
+            <Col sm="full" className="w-full">
+                {systemDetail?.physicalItem && (
+                    <OrderInformation physicalItem={systemDetail.physicalItem} />
+                )}
+            </Col>
 
-      <Col sm="full" className="flex-col">
-        <ErrorBoundary fallback={<ErrorPage />}>
-          <Suspense fallback={<ProgressBarComponent />}>
-            <FileManager
-              itemType={FILE_TYPE.ITEM}
-              customTitle="Physical Item Files"
-              uid={uid}
-              hasEditRole={canEdit}
-            />
-          </Suspense>
-        </ErrorBoundary>
-      </Col>
-    </Grid>
-  )
+            <Col sm="full" className="flex-col">
+                <ErrorBoundary fallback={<ErrorPage />}>
+                    <Suspense fallback={<ProgressBarComponent />}>
+                        <FileManager
+                            itemType={FILE_TYPE.ITEM}
+                            customTitle="Physical Item Files"
+                            uid={uid}
+                            hasEditRole={canEdit}
+                        />
+                    </Suspense>
+                </ErrorBoundary>
+            </Col>
+        </Grid>
+    )
 }

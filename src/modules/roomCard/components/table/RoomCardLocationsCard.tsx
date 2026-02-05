@@ -10,33 +10,33 @@ import { AddLocationButton } from './AddLocationButton'
 import { useRoomCardsColumns } from './RoomCard.columns'
 
 type Props = {
-  roomCardUid?: string
+    roomCardUid?: string
 }
 
 export const RoomCardLocationsCard: FC<Props> = ({ roomCardUid }) => {
-  const { locationColumns } = useRoomCardsColumns(roomCardUid)
-  const { locations, isFetching } = useRoomCardLocations(roomCardUid)
-  const editPermission = usePermission([ROLE.ROOM_CARD_EDIT])
+    const { locationColumns } = useRoomCardsColumns(roomCardUid)
+    const { locations, isFetching } = useRoomCardLocations(roomCardUid)
+    const editPermission = usePermission([ROLE.ROOM_CARD_EDIT])
 
-  return (
-    <div>
-      <Heading
-        customText="LOCATIONS"
-        className="mb-0"
-        textColor="text-orange-500"
-        showBorder={false}
-      >
-        {editPermission && <AddLocationButton roomCardUid={roomCardUid} />}
-      </Heading>
-      <Table<any>
-        {...{
-          columns: locationColumns,
-          rowClassName: 'relative group/row',
-          data: locations,
-          loading: isFetching,
-          skeletonRowCount: 3
-        }}
-      />
-    </div>
-  )
+    return (
+        <div>
+            <Heading
+                customText="LOCATIONS"
+                className="mb-0"
+                textColor="text-orange-500"
+                showBorder={false}
+            >
+                {editPermission && <AddLocationButton roomCardUid={roomCardUid} />}
+            </Heading>
+            <Table<any>
+                {...{
+                    columns: locationColumns,
+                    rowClassName: 'relative group/row',
+                    data: locations,
+                    loading: isFetching,
+                    skeletonRowCount: 3,
+                }}
+            />
+        </div>
+    )
 }

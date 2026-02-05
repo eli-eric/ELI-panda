@@ -1,30 +1,30 @@
 version: '3.9'
 
 networks:
-  panda-net-test:
-    driver: bridge
-    name: panda-net-test
+    panda-net-test:
+        driver: bridge
+        name: panda-net-test
 
 services:
-  panda-frontend-ui-main-app-test:
-    container_name: panda-frontend-ui-main-app-test
-    restart: unless-stopped
-    environment:
-      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
-      - MINIO_ACCESS_KEY_TEST=${MINIO_ACCESS_KEY_TEST}
-      - MINIO_SECRET_KEY_TEST=${MINIO_SECRET_KEY_TEST}
-      - NEO4J_PASSWORD=${NEO4J_PASSWORD}
-      - AZURE_AD_BEAMLINES_CLIENT_ID=${AZURE_AD_BEAMLINES_CLIENT_ID}
-      - AZURE_AD_BEAMLINES_CLIENT_SECRET=${AZURE_AD_BEAMLINES_CLIENT_SECRET}
-      - AZURE_AD_BEAMLINES_TENANT_ID=${AZURE_AD_BEAMLINES_TENANT_ID}
-    build:
-      context: ./
-      dockerfile: Dockerfile.testenv
-      labels:
-        - panda-frontend-ui-main-app-test
-      args:
-        - NEO4J_PASSWORD=${NEO4J_PASSWORD}
-    networks:
-      - panda-net-test
-    ports:
-      - '127.0.0.1:5100:5001'
+    panda-frontend-ui-main-app-test:
+        container_name: panda-frontend-ui-main-app-test
+        restart: unless-stopped
+        environment:
+            - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+            - MINIO_ACCESS_KEY_TEST=${MINIO_ACCESS_KEY_TEST}
+            - MINIO_SECRET_KEY_TEST=${MINIO_SECRET_KEY_TEST}
+            - NEO4J_PASSWORD=${NEO4J_PASSWORD}
+            - AZURE_AD_BEAMLINES_CLIENT_ID=${AZURE_AD_BEAMLINES_CLIENT_ID}
+            - AZURE_AD_BEAMLINES_CLIENT_SECRET=${AZURE_AD_BEAMLINES_CLIENT_SECRET}
+            - AZURE_AD_BEAMLINES_TENANT_ID=${AZURE_AD_BEAMLINES_TENANT_ID}
+        build:
+            context: ./
+            dockerfile: Dockerfile.testenv
+            labels:
+                - panda-frontend-ui-main-app-test
+            args:
+                - NEO4J_PASSWORD=${NEO4J_PASSWORD}
+        networks:
+            - panda-net-test
+        ports:
+            - '127.0.0.1:5100:5001'

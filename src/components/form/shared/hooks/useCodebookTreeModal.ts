@@ -5,34 +5,34 @@ import type { CodebookType } from '@/types/responses/codebook'
 import { CodebookTreeModalContent } from '../CodebookTreeModal'
 
 export const useCodebookTreeModal = () => {
-  const { openModal } = useDynamicModalStore()
+    const { openModal } = useDynamicModalStore()
 
-  const openCodebookTreeModal = ({
-    codebook,
-    name,
-    title,
-    onSubmit
-  }: {
-    codebook?: CODEBOOK
-    name: string
-    title?: string
-    onSubmit?: (item?: CodebookType | null) => void
-  }) => {
-    if (typeof window === 'undefined') return // Prevent SSR execution
-
-    const modalId = openModal('dialog', {
-      id: `codebook-tree-${codebook || name}`,
-      component: CodebookTreeModalContent,
-      props: {
-        title,
+    const openCodebookTreeModal = ({
         codebook,
         name,
-        onSelect: onSubmit
-      }
-    })
+        title,
+        onSubmit,
+    }: {
+        codebook?: CODEBOOK
+        name: string
+        title?: string
+        onSubmit?: (item?: CodebookType | null) => void
+    }) => {
+        if (typeof window === 'undefined') return // Prevent SSR execution
 
-    return modalId
-  }
+        const modalId = openModal('dialog', {
+            id: `codebook-tree-${codebook || name}`,
+            component: CodebookTreeModalContent,
+            props: {
+                title,
+                codebook,
+                name,
+                onSelect: onSubmit,
+            },
+        })
 
-  return { openCodebookTreeModal }
+        return modalId
+    }
+
+    return { openCodebookTreeModal }
 }

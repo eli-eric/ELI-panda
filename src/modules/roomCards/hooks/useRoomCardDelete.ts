@@ -20,29 +20,29 @@ const roomCardDeleteMutation = gql(`
 `)
 
 export const useRoomCardDelete = (uid: string, name: string) => {
-  const { refetch } = useRoomCards()
+    const { refetch } = useRoomCards()
 
-  const { mutate } = useGraphQLMutation(roomCardDeleteMutation, {
-    onSuccess: () => {
-      refetch()
-      toast.success(`Room card ${name} was deleted`)
-    },
-    onError: () => {
-      toast.error(`Something went wrong with delete ${name} room card!`)
-    }
-  })
-  const deleteRoomCard = () => {
-    mutate({
-      where: {
-        uid
-      },
-      deleteHallContactPeopleWhere: {
-        roomCard: {
-          uid
-        }
-      }
+    const { mutate } = useGraphQLMutation(roomCardDeleteMutation, {
+        onSuccess: () => {
+            refetch()
+            toast.success(`Room card ${name} was deleted`)
+        },
+        onError: () => {
+            toast.error(`Something went wrong with delete ${name} room card!`)
+        },
     })
-  }
+    const deleteRoomCard = () => {
+        mutate({
+            where: {
+                uid,
+            },
+            deleteHallContactPeopleWhere: {
+                roomCard: {
+                    uid,
+                },
+            },
+        })
+    }
 
-  return { deleteRoomCard }
+    return { deleteRoomCard }
 }

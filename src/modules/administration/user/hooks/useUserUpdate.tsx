@@ -14,17 +14,17 @@ const UPDATE_USER = gql(`
 `)
 
 export const useUserUpdate = (onSuccess: () => void) => {
-  const { mutate, isPending } = useGraphQLMutation(UPDATE_USER, {
-    onSuccess: () => {
-      toast.success('User updated successfully')
-      onSuccess()
-    },
-    onError: error => {
-      toast.error(`Failed to update user: ${error.message}`)
+    const { mutate, isPending } = useGraphQLMutation(UPDATE_USER, {
+        onSuccess: () => {
+            toast.success('User updated successfully')
+            onSuccess()
+        },
+        onError: error => {
+            toast.error(`Failed to update user: ${error.message}`)
+        },
+    })
+    return {
+        updateUser: mutate,
+        loading: isPending,
     }
-  })
-  return {
-    updateUser: mutate,
-    loading: isPending
-  }
 }

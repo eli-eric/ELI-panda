@@ -18,105 +18,97 @@ import { SystemHierarchySection } from './sections/SystemHierarchySection.comp'
 import { SystemInformationSection } from './sections/SystemInformationSection.comp'
 
 type Props = {
-  alias?: string
-  uid?: string
+    alias?: string
+    uid?: string
 }
 
 export const SystemDetailInfo: FC<Props> = ({ alias, uid }) => {
-  const { formatMessage: fm } = useIntl()
-  const { loading, error, systemDetail, physicalItem, catalogueItem } =
-    useSuspenseSystemDetail({
-      code: alias,
-      uid
+    const { formatMessage: fm } = useIntl()
+    const { loading, error, systemDetail, physicalItem, catalogueItem } = useSuspenseSystemDetail({
+        code: alias,
+        uid,
     })
 
-  const serviceItems = physicalItem?.serviceItemsConnection?.edges || []
+    const serviceItems = physicalItem?.serviceItemsConnection?.edges || []
 
-  // Use the custom hook for processing properties data
-  const { groupedProperties, hasOverriddenProperties, hasProperties } =
-    useItemPropertiesData({
-      catalogueItem: physicalItem?.catalogueItem,
-      serviceItems
+    // Use the custom hook for processing properties data
+    const { groupedProperties, hasOverriddenProperties, hasProperties } = useItemPropertiesData({
+        catalogueItem: physicalItem?.catalogueItem,
+        serviceItems,
     })
 
-  if (loading) {
-    return <ProgressBarComponent />
-  }
+    if (loading) {
+        return <ProgressBarComponent />
+    }
 
-  if (error) {
+    if (error) {
+        return (
+            <div className="p-4 text-center">
+                <p className="text-red-600 dark:text-red-400">
+                    {fm({ id: message.common.systemOverlay.failedToLoad })}
+                </p>
+            </div>
+        )
+    }
+
+    // Check if no system was found (not loading, no error, but no systemDetail)
+    if (!systemDetail) {
+        return <NotFound code={alias || 'Unknown System Code'} />
+    }
+
     return (
-      <div className="p-4 text-center">
-        <p className="text-red-600 dark:text-red-400">
-          {fm({ id: message.common.systemOverlay.failedToLoad })}
-        </p>
-      </div>
-    )
-  }
+        <div className="space-y-4">
+            {/* Image Gallery */}
+            {systemDetail?.uid && (
+                <div className="mb-4">
+                    <ImageGallery
+                        config={{
+                            itemCategory: FILE_TYPE.SYSTEM,
+                            itemId: systemDetail.uid,
+                            fileCategory: 'image',
+                            additionalParams: catalogueItem?.uid
+                                ? {
+                                      itemCategory: FILE_TYPE.CATALOGUE,
+                                      itemId: catalogueItem.uid,
+                                  }
+                                : undefined,
+                        }}
+                        hasEditRole={false}
+                        allowMultipleImages={true}
+                        disabled={true}
+                    />
+                </div>
+            )}
 
-  // Check if no system was found (not loading, no error, but no systemDetail)
-  if (!systemDetail) {
-    return <NotFound code={alias || 'Unknown System Code'} />
-  }
+            {/* System Hierarchy */}
+            {systemDetail && <SystemHierarchySection systemDetail={systemDetail} />}
+            {/* System Information */}
+            {systemDetail && <SystemInformationSection systemDetail={systemDetail} />}
 
-  return (
-    <div className="space-y-4">
-      {/* Image Gallery */}
-      {systemDetail?.uid && (
-        <div className="mb-4">
-          <ImageGallery
-            config={{
-              itemCategory: FILE_TYPE.SYSTEM,
-              itemId: systemDetail.uid,
-              fileCategory: 'image',
-              additionalParams: catalogueItem?.uid
-                ? {
-                    itemCategory: FILE_TYPE.CATALOGUE,
-                    itemId: catalogueItem.uid
-                  }
-                : undefined
-            }}
-            hasEditRole={false}
-            allowMultipleImages={true}
-            disabled={true}
-          />
+            {/* Physical Item Information */}
+            {physicalItem && (
+                <PhysicalItemSection physicalItem={physicalItem} catalogueItem={catalogueItem} />
+            )}
+            {catalogueItem && physicalItem && hasProperties && (
+                <ItemPropertiesSection
+                    groupedProperties={groupedProperties}
+                    hasOverriddenProperties={hasOverriddenProperties}
+                    hasProperties={hasProperties}
+                />
+            )}
+
+            {physicalItem && (
+                <OrderInformationSection physicalItem={physicalItem} serviceItems={serviceItems} />
+            )}
+
+            {systemDetail &&
+                (systemDetail?.sparePartsFor.length > 0 ||
+                    systemDetail.sparePartsConnection.edges.length > 0) && (
+                    <SparePartsCoverageSection systemDetail={systemDetail} />
+                )}
+
+            {/* Subsystems */}
+            {systemDetail && <SubsystemsSection systemDetail={systemDetail} />}
         </div>
-      )}
-
-      {/* System Hierarchy */}
-      {systemDetail && <SystemHierarchySection systemDetail={systemDetail} />}
-      {/* System Information */}
-      {systemDetail && <SystemInformationSection systemDetail={systemDetail} />}
-
-      {/* Physical Item Information */}
-      {physicalItem && (
-        <PhysicalItemSection
-          physicalItem={physicalItem}
-          catalogueItem={catalogueItem}
-        />
-      )}
-      {catalogueItem && physicalItem && hasProperties && (
-        <ItemPropertiesSection
-          groupedProperties={groupedProperties}
-          hasOverriddenProperties={hasOverriddenProperties}
-          hasProperties={hasProperties}
-        />
-      )}
-
-      {physicalItem && (
-        <OrderInformationSection
-          physicalItem={physicalItem}
-          serviceItems={serviceItems}
-        />
-      )}
-
-      {systemDetail &&
-        (systemDetail?.sparePartsFor.length > 0 ||
-          systemDetail.sparePartsConnection.edges.length > 0) && (
-          <SparePartsCoverageSection systemDetail={systemDetail} />
-        )}
-
-      {/* Subsystems */}
-      {systemDetail && <SubsystemsSection systemDetail={systemDetail} />}
-    </div>
-  )
+    )
 }

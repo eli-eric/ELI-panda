@@ -8,27 +8,25 @@ import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/response
 import { BASE_URL } from '@/types/constants/common'
 
 const getItemProperties = props => {
-  const { queryKey } = props
-  const { cataloguePhysicalItemProperties } = getEndpoints(queryKey[1])
+    const { queryKey } = props
+    const { cataloguePhysicalItemProperties } = getEndpoints(queryKey[1])
 
-  return axiosInstance
-    .get(BASE_URL + cataloguePhysicalItemProperties)
-    .then(res => res.data)
+    return axiosInstance.get(BASE_URL + cataloguePhysicalItemProperties).then(res => res.data)
 }
 
 export const useCategoryItemProperties = (uid?: string) => {
-  const response = useQuery<CatalogueItemDetail[]>({
-    queryKey: ['properties', uid],
-    queryFn: getItemProperties,
-    placeholderData: keepPreviousData,
-    enabled: !!uid
-  })
+    const response = useQuery<CatalogueItemDetail[]>({
+        queryKey: ['properties', uid],
+        queryFn: getItemProperties,
+        placeholderData: keepPreviousData,
+        enabled: !!uid,
+    })
 
-  useEffect(() => {
-    if (response.isError) {
-      toast.error('Failed fetch properties')
-    }
-  }, [response.isError])
+    useEffect(() => {
+        if (response.isError) {
+            toast.error('Failed fetch properties')
+        }
+    }, [response.isError])
 
-  return response
+    return response
 }

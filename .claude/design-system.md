@@ -27,6 +27,7 @@ The application has completed its migration to modern design patterns:
 The application uses shadcn/ui components located in `/src/components/ui/`:
 
 **Available Components:**
+
 - `Dialog` - Modal dialogs for confirmations, forms, alerts
 - `Sheet` - Side panel modals for filters, forms, detailed views
 - `Button` - All button variants (default, outline, ghost, destructive, etc.)
@@ -134,13 +135,13 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { z } from 'zod'
 
 const userSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  name: z.string().min(2, 'Name must be at least 2 characters'),
-  age: z.number().min(18, 'Must be at least 18 years old').optional(),
-  role: z.enum(['admin', 'user', 'guest']),
-  acceptTerms: z.boolean().refine(val => val === true, {
-    message: 'You must accept the terms and conditions'
-  })
+    email: z.string().email('Invalid email address'),
+    name: z.string().min(2, 'Name must be at least 2 characters'),
+    age: z.number().min(18, 'Must be at least 18 years old').optional(),
+    role: z.enum(['admin', 'user', 'guest']),
+    acceptTerms: z.boolean().refine(val => val === true, {
+        message: 'You must accept the terms and conditions',
+    }),
 })
 
 type UserFormData = z.infer<typeof userSchema>
@@ -220,7 +221,7 @@ z.string().nullish() // optional + nullable
 
 // Custom refinements
 z.string().refine(val => val.length > 5, {
-  message: 'Must be longer than 5 characters'
+    message: 'Must be longer than 5 characters',
 })
 
 // Transform
@@ -232,8 +233,8 @@ z.string().or(z.number())
 
 // Discriminated unions
 z.discriminatedUnion('type', [
-  z.object({ type: z.literal('email'), email: z.string().email() }),
-  z.object({ type: z.literal('phone'), phone: z.string() })
+    z.object({ type: z.literal('email'), email: z.string().email() }),
+    z.object({ type: z.literal('phone'), phone: z.string() }),
 ])
 ```
 
@@ -287,27 +288,27 @@ The application uses custom design tokens defined in Tailwind config:
 
 ```typescript
 // Colors (use semantic names)
-bg-background
-text-foreground
-border-border
-bg-card
-text-card-foreground
-bg-primary
-text-primary-foreground
-bg-secondary
-text-secondary-foreground
-bg-muted
-text-muted-foreground
-bg-accent
-text-accent-foreground
-bg-destructive
-text-destructive-foreground
+bg - background
+text - foreground
+border - border
+bg - card
+text - card - foreground
+bg - primary
+text - primary - foreground
+bg - secondary
+text - secondary - foreground
+bg - muted
+text - muted - foreground
+bg - accent
+text - accent - foreground
+bg - destructive
+text - destructive - foreground
 
 // Spacing
-p-4, m-4, gap-4, space-y-4
+;(p - 4, m - 4, gap - 4, space - y - 4)
 
 // Border radius
-rounded-sm, rounded-md, rounded-lg, rounded-xl
+;(rounded - sm, rounded - md, rounded - lg, rounded - xl)
 ```
 
 ## Migration Guide
@@ -347,16 +348,16 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import * as yup from 'yup'
 
 const schema = yup.object().shape({
-  email: yup.string().email().required(),
-  age: yup.number().min(18).required()
+    email: yup.string().email().required(),
+    age: yup.number().min(18).required(),
 })
 
 // ✅ New - Zod
 import { z } from 'zod'
 
 const schema = z.object({
-  email: z.string().email(),
-  age: z.number().min(18)
+    email: z.string().email(),
+    age: z.number().min(18),
 })
 ```
 

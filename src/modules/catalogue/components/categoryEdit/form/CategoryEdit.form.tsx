@@ -18,90 +18,90 @@ import Main from './components/Main'
 import { PhysicalItemProperties } from './components/PhysicalItemProperties'
 
 interface Props {
-  uid?: string
-  onSubmit: (data: CategoryFormType) => void
-  children?: React.ReactNode
-  systemType?: CodebookType
-  categoryDetail: CategoryFormType
-  imageRef?: React.MutableRefObject<ImageGalleryRef | null>
-  modalId?: string
+    uid?: string
+    onSubmit: (data: CategoryFormType) => void
+    children?: React.ReactNode
+    systemType?: CodebookType
+    categoryDetail: CategoryFormType
+    imageRef?: React.MutableRefObject<ImageGalleryRef | null>
+    modalId?: string
 }
 
 const CategoryEditForm = ({
-  uid,
-  onSubmit,
-  systemType,
-  categoryDetail,
-  imageRef,
-  modalId
+    uid,
+    onSubmit,
+    systemType,
+    categoryDetail,
+    imageRef,
+    modalId,
 }: Props) => {
-  const formMethods = useForm<CategoryFormType>({
-    defaultValues: !uid
-      ? {
-          systemType
-        }
-      : categoryDetail,
-    resolver: yupResolver(categoryValidationschema)
-  })
+    const formMethods = useForm<CategoryFormType>({
+        defaultValues: !uid
+            ? {
+                  systemType,
+              }
+            : categoryDetail,
+        resolver: yupResolver(categoryValidationschema),
+    })
 
-  const { handleSubmit } = formMethods
-  const { formatMessage: fm } = useIntl()
-  const { closeModal } = useDynamicModalStore()
+    const { handleSubmit } = formMethods
+    const { formatMessage: fm } = useIntl()
+    const { closeModal } = useDynamicModalStore()
 
-  return (
-    <Form formMethods={formMethods}>
-      <SheetFormButtons
-        editRole={ROLE.CATALOGUE_EDIT}
-        isFormDirty={formMethods.formState.isDirty}
-        onSubmit={handleSubmit(onSubmit)}
-        onExit={() => {
-          if (modalId) {
-            closeModal(modalId)
-          }
-        }}
-        saveLabel={fm({ id: message.catalogue.category.save })}
-        loadingText={fm({ id: message.catalogue.category.saving })}
-      />
-      <div className="space-y-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>
-              {fm({ id: message.catalogue.category.basicInformation })}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Main uid={uid} imageRef={imageRef} />
-          </CardContent>
-        </Card>
+    return (
+        <Form formMethods={formMethods}>
+            <SheetFormButtons
+                editRole={ROLE.CATALOGUE_EDIT}
+                isFormDirty={formMethods.formState.isDirty}
+                onSubmit={handleSubmit(onSubmit)}
+                onExit={() => {
+                    if (modalId) {
+                        closeModal(modalId)
+                    }
+                }}
+                saveLabel={fm({ id: message.catalogue.category.save })}
+                loadingText={fm({ id: message.catalogue.category.saving })}
+            />
+            <div className="space-y-6">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>
+                            {fm({ id: message.catalogue.category.basicInformation })}
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <Main uid={uid} imageRef={imageRef} />
+                    </CardContent>
+                </Card>
 
-        {/* Property Groups */}
-        <Card>
-          <CardHeader>
-            <CardTitle>
-              {fm({ id: message.catalogue.category.propertyGroups })}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <GroupList />
-          </CardContent>
-        </Card>
+                {/* Property Groups */}
+                <Card>
+                    <CardHeader>
+                        <CardTitle>
+                            {fm({ id: message.catalogue.category.propertyGroups })}
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <GroupList />
+                    </CardContent>
+                </Card>
 
-        {/* Physical Item Properties */}
-        <Card>
-          <CardHeader>
-            <CardTitle>
-              {fm({ id: message.catalogue.category.physicalProperties })}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <PhysicalItemProperties />
-          </CardContent>
-        </Card>
+                {/* Physical Item Properties */}
+                <Card>
+                    <CardHeader>
+                        <CardTitle>
+                            {fm({ id: message.catalogue.category.physicalProperties })}
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <PhysicalItemProperties />
+                    </CardContent>
+                </Card>
 
-        {/* Action Buttons */}
-      </div>
-    </Form>
-  )
+                {/* Action Buttons */}
+            </div>
+        </Form>
+    )
 }
 
 export default CategoryEditForm

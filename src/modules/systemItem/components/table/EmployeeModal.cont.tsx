@@ -17,108 +17,98 @@ const nestedForm = message.roomCardsPage.nestedForm
 const messages = message.common.buttons
 
 interface EmployeeModalProps {
-  onSubmit?: (data: EmployeeFormData) => void
-  onClose?: () => void
-  existingEmployeeUids?: string[]
+    onSubmit?: (data: EmployeeFormData) => void
+    onClose?: () => void
+    existingEmployeeUids?: string[]
 }
 
 export const EmployeeModalContainer = ({
-  onSubmit,
-  onClose,
-  existingEmployeeUids = []
+    onSubmit,
+    onClose,
+    existingEmployeeUids = [],
 }: EmployeeModalProps) => {
-  const [employeeUid, setEmployeeUid] = useState<string | null>(null)
-  const [loadedEmployee, setLoadedEmployee] = useState<any>(null)
-  const { employee, isLoading: employeeLoading } = useEmployee(employeeUid)
+    const [employeeUid, setEmployeeUid] = useState<string | null>(null)
+    const [loadedEmployee, setLoadedEmployee] = useState<any>(null)
+    const { employee, isLoading: employeeLoading } = useEmployee(employeeUid)
 
-  const formMethods = useForm<EmployeeFormData>({
-    resolver: zodResolver(
-      employeeSchema.refine(
-        data => {
-          if (
-            data.employee &&
-            existingEmployeeUids.includes(data.employee.uid)
-          ) {
-            return false
-          }
-          return true
+    const formMethods = useForm<EmployeeFormData>({
+        resolver: zodResolver(
+            employeeSchema.refine(
+                data => {
+                    if (data.employee && existingEmployeeUids.includes(data.employee.uid)) {
+                        return false
+                    }
+                    return true
+                },
+                {
+                    message: 'Cannot select the same employee twice',
+                    path: ['employee'],
+                },
+            ),
+        ),
+        defaultValues: {
+            employee: null,
         },
-        {
-          message: 'Cannot select the same employee twice',
-          path: ['employee']
+    })
+
+    const { handleSubmit, formState, watch } = formMethods
+
+    const fields = useMakeFormFields({
+        employee: {
+            name: 'employee',
+            disabled: false,
+            label: nestedForm.employee.label,
+            codebook: CODEBOOK.EMPLOYEE,
+        },
+    })
+
+    // Track loaded employee data separately (don't overwrite form value)
+    useEffect(() => {
+        if (employee && employeeUid) {
+            setLoadedEmployee({
+                uid: employee.uid,
+                fullName: employee.fullName,
+                phone1: employee.phone1 || '',
+                phone2: employee.phone2 || '',
+            })
         }
-      )
-    ),
-    defaultValues: {
-      employee: null
-    }
-  })
+    }, [employee, employeeUid])
 
-  const { handleSubmit, formState, watch } = formMethods
+    const handleFormSubmit = handleSubmit(() => {
+        if (onSubmit && loadedEmployee) {
+            // Pass loaded employee data with full details
+            onSubmit({
+                employee: loadedEmployee,
+            })
+        }
+    })
 
-  const fields = useMakeFormFields({
-    employee: {
-      name: 'employee',
-      disabled: false,
-      label: nestedForm.employee.label,
-      codebook: CODEBOOK.EMPLOYEE
-    }
-  })
+    const selectedEmployee = watch('employee')
+    const isSubmitDisabled =
+        !selectedEmployee || !loadedEmployee || employeeLoading || formState.isSubmitting
 
-  // Track loaded employee data separately (don't overwrite form value)
-  useEffect(() => {
-    if (employee && employeeUid) {
-      setLoadedEmployee({
-        uid: employee.uid,
-        fullName: employee.fullName,
-        phone1: employee.phone1 || '',
-        phone2: employee.phone2 || ''
-      })
-    }
-  }, [employee, employeeUid])
+    return (
+        <div className="space-y-6 min-w-0 max-w-none w-full">
+            <FormProvider {...formMethods}>
+                <div className="flex space-x-3">
+                    <Combobox
+                        {...fields.employee}
+                        onSelect={v => setEmployeeUid(v ? v.uid : null)}
+                    />
+                </div>
+            </FormProvider>
 
-  const handleFormSubmit = handleSubmit(() => {
-    if (onSubmit && loadedEmployee) {
-      // Pass loaded employee data with full details
-      onSubmit({
-        employee: loadedEmployee
-      })
-    }
-  })
-
-  const selectedEmployee = watch('employee')
-  const isSubmitDisabled =
-    !selectedEmployee ||
-    !loadedEmployee ||
-    employeeLoading ||
-    formState.isSubmitting
-
-  return (
-    <div className="space-y-6 min-w-0 max-w-none w-full">
-      <FormProvider {...formMethods}>
-        <div className="flex space-x-3">
-          <Combobox
-            {...fields.employee}
-            onSelect={v => setEmployeeUid(v ? v.uid : null)}
-          />
+            <div className="flex justify-end gap-2 pt-4 border-t">
+                <Button type="button" variant="outline" onClick={onClose}>
+                    <FormattedMessage id={messages.close} />
+                </Button>
+                <Button type="button" disabled={isSubmitDisabled} onClick={handleFormSubmit}>
+                    {formState.isSubmitting && (
+                        <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                    )}
+                    <FormattedMessage id={messages.save} />
+                </Button>
+            </div>
         </div>
-      </FormProvider>
-
-      <div className="flex justify-end gap-2 pt-4 border-t">
-        <Button type="button" variant="outline" onClick={onClose}>
-          <FormattedMessage id={messages.close} />
-        </Button>
-        <Button
-          type="button"
-          disabled={isSubmitDisabled}
-          onClick={handleFormSubmit}
-        >
-          {formState.isSubmitting && (
-            <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-          )}
-          <FormattedMessage id={messages.save} />
-        </Button>
-      </div>
-    </div>
-  )
+    )
 }

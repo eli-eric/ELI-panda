@@ -10,153 +10,140 @@ import { SystemTypeComboBox } from '@/modules/shared/form/systemType/SelectSyste
 import type { Employee } from '@/types/gql/graphql'
 import { SystemLevel } from '@/types/gql/graphql'
 
-import {
-  useAddSystemEmployee,
-  useRemoveSystemEmployee
-} from '../../../hooks/employees'
+import { useAddSystemEmployee, useRemoveSystemEmployee } from '../../../hooks/employees'
 import { useSystemDetail } from '../../../hooks/useSystemDetail'
 import { EmployeeTable } from '../../table/Employee.table'
 import useSystemFormFields from '../SystemForm.fields'
 import { SystemCodeButton } from './SystemCodeGenerate.button'
 
 interface SystemFormComponentProps {
-  systemUid?: string
-  children?: React.ReactNode
+    systemUid?: string
+    children?: React.ReactNode
 }
 
-export const SystemMainForm = ({
-  systemUid,
-  children
-}: SystemFormComponentProps) => {
-  const fields = useSystemFormFields()
-  const { control } = useFormContext()
+export const SystemMainForm = ({ systemUid, children }: SystemFormComponentProps) => {
+    const fields = useSystemFormFields()
+    const { control } = useFormContext()
 
-  const systemLevel = useWatch({ control, name: 'systemLevel' })
-  const systemLevels = Object.values(SystemLevel).map(level => level)
+    const systemLevel = useWatch({ control, name: 'systemLevel' })
+    const systemLevels = Object.values(SystemLevel).map(level => level)
 
-  // Get employees data from systemDetail (only available in edit mode)
-  const { systemDetail, refetch, loading: isLoading } = useSystemDetail()
-  const operators = (systemDetail?.operators ?? []) as Employee[]
-  const maintainedBy = (systemDetail?.maintainedBy ?? []) as Employee[]
+    // Get employees data from systemDetail (only available in edit mode)
+    const { systemDetail, refetch, loading: isLoading } = useSystemDetail()
+    const operators = (systemDetail?.operators ?? []) as Employee[]
+    const maintainedBy = (systemDetail?.maintainedBy ?? []) as Employee[]
 
-  // Mutation hooks for operators
-  const { addEmployee: addOperator } = useAddSystemEmployee(
-    systemUid,
-    'operators',
-    { onSuccess: refetch }
-  )
-  const { removeEmployee: removeOperator } = useRemoveSystemEmployee(
-    systemUid,
-    'operators',
-    { onSuccess: refetch }
-  )
+    // Mutation hooks for operators
+    const { addEmployee: addOperator } = useAddSystemEmployee(systemUid, 'operators', {
+        onSuccess: refetch,
+    })
+    const { removeEmployee: removeOperator } = useRemoveSystemEmployee(systemUid, 'operators', {
+        onSuccess: refetch,
+    })
 
-  // Mutation hooks for maintainedBy
-  const { addEmployee: addMaintainedBy } = useAddSystemEmployee(
-    systemUid,
-    'maintainedBy',
-    { onSuccess: refetch }
-  )
-  const { removeEmployee: removeMaintainedBy } = useRemoveSystemEmployee(
-    systemUid,
-    'maintainedBy',
-    { onSuccess: refetch }
-  )
+    // Mutation hooks for maintainedBy
+    const { addEmployee: addMaintainedBy } = useAddSystemEmployee(systemUid, 'maintainedBy', {
+        onSuccess: refetch,
+    })
+    const { removeEmployee: removeMaintainedBy } = useRemoveSystemEmployee(
+        systemUid,
+        'maintainedBy',
+        { onSuccess: refetch },
+    )
 
-  // Show employee tables only in edit mode (when systemUid exists)
-  // and when system level is not SubsystemsAndParts
-  const showEmployeeTables =
-    systemUid && systemLevel !== SystemLevel.SubsystemsAndParts
+    // Show employee tables only in edit mode (when systemUid exists)
+    // and when system level is not SubsystemsAndParts
+    const showEmployeeTables = systemUid && systemLevel !== SystemLevel.SubsystemsAndParts
 
-  return (
-    <div className="space-y-6">
-      {/* Basic System Information */}
-      <Grid>
-        <Col sm={3} md={6} lg={12}>
-          <Input {...fields.name} className={'font-bold'} />
-        </Col>
-        <Col sm={3} md={6} lg={4} className="md:pr-4">
-          {children}
-        </Col>
-        <Col
-          sm={3}
-          md={6}
-          lg={8}
-          className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-x-2 gap-y-4 mb-auto"
-        >
-          <Col sm={3} md={6} lg={4}>
-            <SystemTypeComboBox systemTypeField={fields.systemType} />
-          </Col>
-          <Col sm={3} md={6} lg={4}>
-            <Listbox
-              {...fields.systemLevel}
-              customOptions={systemLevels}
-              defaultValue={systemLevel || SystemLevel.SubsystemsAndParts}
-            />
-          </Col>
-          <Col sm={3} md={6} lg={8}>
-            <SelectLocationCombo
-              locationField={fields.location}
-              disabled={fields.location.disabled}
-            />
-          </Col>
-          <Col sm={3} md={6} lg={8}>
-            <Combobox {...fields.zone} />
-          </Col>
-          <Col sm={2} md={5} lg={6}>
-            <Input {...fields.systemCode} defaultValue={''} />
-          </Col>
-          <Col sm={1} md={1} lg={2}>
-            <SystemCodeButton />
-          </Col>
-          {systemLevel === SystemLevel.KeySystems && (
-            <Col sm={3} md={6} lg={8}>
-              <Listbox {...fields.attribute} />
-            </Col>
-          )}
-        </Col>
-      </Grid>
+    return (
+        <div className="space-y-6">
+            {/* Basic System Information */}
+            <Grid>
+                <Col sm={3} md={6} lg={12}>
+                    <Input {...fields.name} className={'font-bold'} />
+                </Col>
+                <Col sm={3} md={6} lg={4} className="md:pr-4">
+                    {children}
+                </Col>
+                <Col
+                    sm={3}
+                    md={6}
+                    lg={8}
+                    className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-x-2 gap-y-4 mb-auto"
+                >
+                    <Col sm={3} md={6} lg={4}>
+                        <SystemTypeComboBox systemTypeField={fields.systemType} />
+                    </Col>
+                    <Col sm={3} md={6} lg={4}>
+                        <Listbox
+                            {...fields.systemLevel}
+                            customOptions={systemLevels}
+                            defaultValue={systemLevel || SystemLevel.SubsystemsAndParts}
+                        />
+                    </Col>
+                    <Col sm={3} md={6} lg={8}>
+                        <SelectLocationCombo
+                            locationField={fields.location}
+                            disabled={fields.location.disabled}
+                        />
+                    </Col>
+                    <Col sm={3} md={6} lg={8}>
+                        <Combobox {...fields.zone} />
+                    </Col>
+                    <Col sm={2} md={5} lg={6}>
+                        <Input {...fields.systemCode} defaultValue={''} />
+                    </Col>
+                    <Col sm={1} md={1} lg={2}>
+                        <SystemCodeButton />
+                    </Col>
+                    {systemLevel === SystemLevel.KeySystems && (
+                        <Col sm={3} md={6} lg={8}>
+                            <Listbox {...fields.attribute} />
+                        </Col>
+                    )}
+                </Col>
+            </Grid>
 
-      {/* Team and Responsibility */}
-      <Grid>
-        <Col sm={3} md={6}>
-          <Combobox {...fields.team} limit={50} />
-        </Col>
-        <Col sm={3} md={6}>
-          <Combobox {...fields.responsible} />
-        </Col>
-        {showEmployeeTables && (
-          <Fragment>
-            <Col sm={3} md={6}>
-              <EmployeeTable
-                className="w-full"
-                data={operators}
-                header={'Authorized Operators'}
-                onAdd={async emp => addOperator(emp.uid)}
-                onRemove={removeOperator}
-                isLoading={isLoading}
-              />
-            </Col>
-            <Col sm={3} md={6}>
-              <EmployeeTable
-                className="w-full"
-                data={maintainedBy}
-                header={'Maintained By'}
-                onAdd={async emp => addMaintainedBy(emp.uid)}
-                onRemove={removeMaintainedBy}
-                isLoading={isLoading}
-              />
-            </Col>
-          </Fragment>
-        )}
-      </Grid>
+            {/* Team and Responsibility */}
+            <Grid>
+                <Col sm={3} md={6}>
+                    <Combobox {...fields.team} limit={50} />
+                </Col>
+                <Col sm={3} md={6}>
+                    <Combobox {...fields.responsible} />
+                </Col>
+                {showEmployeeTables && (
+                    <Fragment>
+                        <Col sm={3} md={6}>
+                            <EmployeeTable
+                                className="w-full"
+                                data={operators}
+                                header={'Authorized Operators'}
+                                onAdd={async emp => addOperator(emp.uid)}
+                                onRemove={removeOperator}
+                                isLoading={isLoading}
+                            />
+                        </Col>
+                        <Col sm={3} md={6}>
+                            <EmployeeTable
+                                className="w-full"
+                                data={maintainedBy}
+                                header={'Maintained By'}
+                                onAdd={async emp => addMaintainedBy(emp.uid)}
+                                onRemove={removeMaintainedBy}
+                                isLoading={isLoading}
+                            />
+                        </Col>
+                    </Fragment>
+                )}
+            </Grid>
 
-      {/* Description */}
-      <Grid>
-        <Col sm="full">
-          <TextArea {...fields.description} />
-        </Col>
-      </Grid>
-    </div>
-  )
+            {/* Description */}
+            <Grid>
+                <Col sm="full">
+                    <TextArea {...fields.description} />
+                </Col>
+            </Grid>
+        </div>
+    )
 }

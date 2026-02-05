@@ -24,104 +24,101 @@ import { useCategoryList } from './hooks/useCategoryList'
 import type { SystemFilterType } from './types/filter'
 
 const CatalogueContainer = () => {
-  const tableId = 'catalogueItems'
-  const { catalogueItems, error, loading } = useCatalogueItems(tableId)
-  const { catalogueCategories } = useCategoryList()
-  const [categoryQuery, setCategoryQuery] = useQueryState('category', {
-    history: 'push'
-  })
-  const tableRef = useRef<PandaTableV2Handle>(null)
+    const tableId = 'catalogueItems'
+    const { catalogueItems, error, loading } = useCatalogueItems(tableId)
+    const { catalogueCategories } = useCategoryList()
+    const [categoryQuery, setCategoryQuery] = useQueryState('category', {
+        history: 'push',
+    })
+    const tableRef = useRef<PandaTableV2Handle>(null)
 
-  const defValues = useMemo<CatalogueItemForm>(
-    () => ({
-      name: '',
-      category: null,
-      catalogueNumber: '',
-      manufacturerUrl: '',
-      supplier: null,
-      description: ''
-    }),
-    []
-  )
-  const [open, setOpen] = useState(true)
+    const defValues = useMemo<CatalogueItemForm>(
+        () => ({
+            name: '',
+            category: null,
+            catalogueNumber: '',
+            manufacturerUrl: '',
+            supplier: null,
+            description: '',
+        }),
+        [],
+    )
+    const [open, setOpen] = useState(true)
 
-  const filterFormMethods = useFormFilter<SystemFilterType>({
-    tableId,
-    defValues,
-    enableQueryURL: true
-  })
+    const filterFormMethods = useFormFilter<SystemFilterType>({
+        tableId,
+        defValues,
+        enableQueryURL: true,
+    })
 
-  const setCategoryFilter = useCallback(
-    (value: CodebookType | null) => {
-      setCategoryQuery(value ? JSON.stringify(value) : null)
-    },
-    [setCategoryQuery]
-  )
+    const setCategoryFilter = useCallback(
+        (value: CodebookType | null) => {
+            setCategoryQuery(value ? JSON.stringify(value) : null)
+        },
+        [setCategoryQuery],
+    )
 
-  // Scroll table to top when page changes
-  const handlePageChange = useCallback(() => {
-    tableRef.current?.scrollToTop()
-  }, [])
+    // Scroll table to top when page changes
+    const handlePageChange = useCallback(() => {
+        tableRef.current?.scrollToTop()
+    }, [])
 
-  const { formatMessage: fm } = useIntl()
+    const { formatMessage: fm } = useIntl()
 
-  return (
-    <div className="w-max-full flex flex-col">
-      <SearchBar
-        left={<SearchBarButtons filterFormMethods={filterFormMethods} />}
-        tableId={tableId}
-        right={
-          <FilterBadges
-            tableId={tableId}
-            additionalBadge={
-              categoryQuery ? (
-                <Badge>
-                  <span>
-                    {fm({
-                      id: message.catalogue.category.badge,
-                      defaultMessage: 'Category'
-                    })}
-                  </span>
-                  <X
-                    className="h-4 w-4 ml-1 cursor-pointer hover:text-red-600 clickable"
-                    onClick={() => {
-                      setCategoryQuery(null)
+    return (
+        <div className="w-max-full flex flex-col">
+            <SearchBar
+                left={<SearchBarButtons filterFormMethods={filterFormMethods} />}
+                tableId={tableId}
+                right={
+                    <FilterBadges
+                        tableId={tableId}
+                        additionalBadge={
+                            categoryQuery ? (
+                                <Badge>
+                                    <span>
+                                        {fm({
+                                            id: message.catalogue.category.badge,
+                                            defaultMessage: 'Category',
+                                        })}
+                                    </span>
+                                    <X
+                                        className="h-4 w-4 ml-1 cursor-pointer hover:text-red-600 clickable"
+                                        onClick={() => {
+                                            setCategoryQuery(null)
+                                        }}
+                                    />
+                                </Badge>
+                            ) : undefined
+                        }
+                    />
+                }
+            />
+            <CatalogueBreadcrumbs setCategoryFilter={setCategoryFilter} />
+            <CategoryListContainer setCategoryFilter={setCategoryFilter} onChange={setOpen} />
+            <TableLayoutContainer deps={[open, catalogueItems, catalogueCategories]}>
+                <CatalogueTable
+                    ref={tableRef}
+                    tableId={tableId}
+                    setCategoryFilter={setCategoryFilter}
+                    catalogueItems={catalogueItems}
+                    loading={loading}
+                    pageSize={50}
+                    categoryList={catalogueCategories}
+                />
+                <Pagination
+                    tableId={tableId}
+                    settings={{
+                        enableQueryURL: true,
+                        total: catalogueItems?.totalCount,
+                        pageSizeDefault: 50,
                     }}
-                  />
-                </Badge>
-              ) : undefined
-            }
-          />
-        }
-      />
-      <CatalogueBreadcrumbs setCategoryFilter={setCategoryFilter} />
-      <CategoryListContainer
-        setCategoryFilter={setCategoryFilter}
-        onChange={setOpen}
-      />
-      <TableLayoutContainer deps={[open, catalogueItems, catalogueCategories]}>
-        <CatalogueTable
-          ref={tableRef}
-          tableId={tableId}
-          setCategoryFilter={setCategoryFilter}
-          catalogueItems={catalogueItems}
-          loading={loading}
-          pageSize={50}
-          categoryList={catalogueCategories}
-        />
-        <Pagination
-          tableId={tableId}
-          settings={{
-            enableQueryURL: true,
-            total: catalogueItems?.totalCount,
-            pageSizeDefault: 50
-          }}
-          onPageChange={handlePageChange}
-        />
-        {error && <ErrorPage />}
-      </TableLayoutContainer>
-    </div>
-  )
+                    onPageChange={handlePageChange}
+                />
+                {error && <ErrorPage />}
+            </TableLayoutContainer>
+        </div>
+    )
 }
 
 export default CatalogueContainer

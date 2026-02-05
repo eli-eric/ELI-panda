@@ -20,34 +20,34 @@ const GET_CATEGORIES = gql(`
 `)
 
 export const useCategoryList = () => {
-  const uid = useCategoryUid()
-  const { data, isLoading, error, refetch } = useGraphQL(GET_CATEGORIES, {
-    variables: {
-      where: uid
-        ? {
-            parentCategory: {
-              uid
-            }
-          }
-        : {
-            parentCategoryAggregate: {
-              count: 0
-            }
-          }
-    }
-  })
+    const uid = useCategoryUid()
+    const { data, isLoading, error, refetch } = useGraphQL(GET_CATEGORIES, {
+        variables: {
+            where: uid
+                ? {
+                      parentCategory: {
+                          uid,
+                      },
+                  }
+                : {
+                      parentCategoryAggregate: {
+                          count: 0,
+                      },
+                  },
+        },
+    })
 
-  const { formatMessage: fm } = useIntl()
-  useEffect(() => {
-    if (error) {
-      toast.error(fm({ id: message.catalogue.category.failedToLoadList }))
-    }
-  }, [error, fm])
+    const { formatMessage: fm } = useIntl()
+    useEffect(() => {
+        if (error) {
+            toast.error(fm({ id: message.catalogue.category.failedToLoadList }))
+        }
+    }, [error, fm])
 
-  return {
-    catalogueCategories: data?.catalogueCategories,
-    loading: isLoading,
-    error: error,
-    refetch
-  }
+    return {
+        catalogueCategories: data?.catalogueCategories,
+        loading: isLoading,
+        error: error,
+        refetch,
+    }
 }

@@ -1,6 +1,6 @@
 /* RowCell.module.css */
 @media (min-width: 640px) {
-  .cell {
-    left: var(--left);
-  }
+    .cell {
+        left: var(--left);
+    }
 }

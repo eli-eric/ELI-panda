@@ -10,54 +10,47 @@ import { useGrant } from '../hooks/useGrant'
 import { GrantFormContainer } from './grant-form.cont'
 
 interface Props {
-  uid: string
+    uid: string
 }
 
 const GrantFormSkeleton = () => (
-  <div className="flex flex-col gap-4 py-4">
-    <Skeleton className="h-10 w-full" />
-    <Skeleton className="h-10 w-full" />
-    <Skeleton className="h-10 w-full" />
-  </div>
+    <div className="flex flex-col gap-4 py-4">
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+    </div>
 )
 
 export const GrantEditContainer: FC<Props> = ({ uid }) => {
-  const { closeModal } = useDynamicModalStore()
+    const { closeModal } = useDynamicModalStore()
 
-  const {
-    data: grant,
-    isLoading,
-    isFetching,
-    isError,
-    error,
-    refetch
-  } = useGrant(uid)
+    const { data: grant, isLoading, isFetching, isError, error, refetch } = useGrant(uid)
 
-  useEffect(() => {
-    if (isError) {
-      toast.error('Failed to load grant')
+    useEffect(() => {
+        if (isError) {
+            toast.error('Failed to load grant')
+        }
+    }, [isError])
+
+    const handleClose = () => {
+        closeModal(`grant-edit-${uid}`)
     }
-  }, [isError])
 
-  const handleClose = () => {
-    closeModal(`grant-edit-${uid}`)
-  }
+    if (error?.response?.status === 404) {
+        return <RecordNotFound onClick={handleClose} />
+    }
 
-  if (error?.response?.status === 404) {
-    return <RecordNotFound onClick={handleClose} />
-  }
+    if (isError) {
+        return <ErrorPage />
+    }
 
-  if (isError) {
-    return <ErrorPage />
-  }
+    if (isLoading || isFetching) {
+        return <GrantFormSkeleton />
+    }
 
-  if (isLoading || isFetching) {
-    return <GrantFormSkeleton />
-  }
+    if (!grant) {
+        return <GrantFormSkeleton />
+    }
 
-  if (!grant) {
-    return <GrantFormSkeleton />
-  }
-
-  return <GrantFormContainer grant={grant} onSuccess={refetch} />
+    return <GrantFormContainer grant={grant} onSuccess={refetch} />
 }

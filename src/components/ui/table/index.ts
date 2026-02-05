@@ -7,10 +7,10 @@ export { TableFooter } from './table-footer'
 export { TableHeader } from './table-header'
 export { TablePagination } from './table-pagination'
 export type {
-  TableBodyProps,
-  TableFooterProps,
-  TableHeaderProps,
-  TablePaginationProps,
-  TableProps
+    TableBodyProps,
+    TableFooterProps,
+    TableHeaderProps,
+    TablePaginationProps,
+    TableProps,
 } from './types'
 export * from './utils'

@@ -4,23 +4,23 @@ import type { CodebookType } from '@/types/responses/codebook'
 import type { PhysicalItem } from '@/types/responses/systems'
 
 export type SystemDetailFormType = {
-  uid?: string | null
-  name: string | null
-  description?: string | null
-  parentPath?: CodebookType[]
-  location?: CodebookType | null
-  attribute?: CodebookType | null
-  responsibleTeam?: CodebookType | null
-  minimalSpareParstCount?: number | null
-  sp_coverage?: number | null
-  zone?: CodebookType | null
-  systemType?: CodebookType | null
-  systemCode?: string | null
-  responsible?: CodebookType | null
-  importance?: CodebookType | null
-  systemLevel: SystemLevel | null
-  physicalItem?: PhysicalItem | null
-  hasImageGalleryChanges?: boolean | null
-  operators?: EmployeeType[] | null
-  maintainedBy?: EmployeeType[] | null
+    uid?: string | null
+    name: string | null
+    description?: string | null
+    parentPath?: CodebookType[]
+    location?: CodebookType | null
+    attribute?: CodebookType | null
+    responsibleTeam?: CodebookType | null
+    minimalSpareParstCount?: number | null
+    sp_coverage?: number | null
+    zone?: CodebookType | null
+    systemType?: CodebookType | null
+    systemCode?: string | null
+    responsible?: CodebookType | null
+    importance?: CodebookType | null
+    systemLevel: SystemLevel | null
+    physicalItem?: PhysicalItem | null
+    hasImageGalleryChanges?: boolean | null
+    operators?: EmployeeType[] | null
+    maintainedBy?: EmployeeType[] | null
 }

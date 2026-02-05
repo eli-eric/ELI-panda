@@ -1,138 +1,138 @@
 .app-loader {
-  max-height: 100%;
-  display: flex;
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 99999;
+    max-height: 100%;
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 99999;
 }
 .eli-logo {
-  width: 50px;
-  height: 50px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 6%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 6%;
 }
 
 .eli-logo-p {
-  width: 12.29%;
-  display: flex;
-  background-color: #ff6633;
+    width: 12.29%;
+    display: flex;
+    background-color: #ff6633;
 }
 
 .eli-logo-p1 {
-  height: 55%;
-  animation: elibusy1 1.6s infinite;
+    height: 55%;
+    animation: elibusy1 1.6s infinite;
 }
 .eli-logo-p2 {
-  height: 75%;
-  animation: elibusy2 1.6s infinite;
+    height: 75%;
+    animation: elibusy2 1.6s infinite;
 }
 .eli-logo-p3 {
-  height: 95%;
-  animation: elibusy3 1.6s infinite;
+    height: 95%;
+    animation: elibusy3 1.6s infinite;
 }
 .eli-logo-p4 {
-  height: 100%;
-  animation: elibusy4 1.6s infinite;
+    height: 100%;
+    animation: elibusy4 1.6s infinite;
 }
 
 .eli-logo-p5 {
-  height: 100%;
-  animation: elibusy5 1.6s infinite;
+    height: 100%;
+    animation: elibusy5 1.6s infinite;
 }
 
 .eli-logo-p6 {
-  height: 85%;
-  animation: elibusy6 1.6s infinite;
+    height: 85%;
+    animation: elibusy6 1.6s infinite;
 }
 
 .eli-logo-p7 {
-  height: 65%;
-  animation: elibusy7 1.6s infinite;
+    height: 65%;
+    animation: elibusy7 1.6s infinite;
 }
 
 @keyframes elibusy1 {
-  from {
-    opacity: 1;
-  }
-  12.29% {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+    from {
+        opacity: 1;
+    }
+    12.29% {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 @keyframes elibusy2 {
-  from {
-    opacity: 1;
-  }
-  24.58% {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+    from {
+        opacity: 1;
+    }
+    24.58% {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 @keyframes elibusy3 {
-  from {
-    opacity: 1;
-  }
-  36.87% {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+    from {
+        opacity: 1;
+    }
+    36.87% {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 @keyframes elibusy4 {
-  from {
-    opacity: 1;
-  }
-  49.16% {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+    from {
+        opacity: 1;
+    }
+    49.16% {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 @keyframes elibusy5 {
-  from {
-    opacity: 1;
-  }
-  61.45% {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+    from {
+        opacity: 1;
+    }
+    61.45% {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 @keyframes elibusy6 {
-  from {
-    opacity: 1;
-  }
-  73.74% {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+    from {
+        opacity: 1;
+    }
+    73.74% {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 @keyframes elibusy7 {
-  from {
-    opacity: 1;
-  }
-  86.03% {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+    from {
+        opacity: 1;
+    }
+    86.03% {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }

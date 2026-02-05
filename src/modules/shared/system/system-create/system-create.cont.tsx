@@ -22,121 +22,117 @@ import { type SystemCreateFormData, systemCreateSchema } from './schema'
 const MemoizedImageGallery = memo(ImageGallery)
 
 export const SystemCreateContainer: FC = () => {
-  const {
-    parentSystem,
-    parentPath,
-    loading: parentLoading
-  } = useSystemCreateParent()
+    const { parentSystem, parentPath, loading: parentLoading } = useSystemCreateParent()
 
-  const systemImageRef = useRef<ImageGalleryRef | undefined>(undefined)
+    const systemImageRef = useRef<ImageGalleryRef | undefined>(undefined)
 
-  const formMethods = useForm<SystemCreateFormData>({
-    resolver: zodResolver(systemCreateSchema),
-    mode: 'onSubmit',
-    defaultValues: {
-      name: '',
-      systemType: null,
-      systemLevel: SystemLevel.SubsystemsAndParts,
-      location: null,
-      zone: null,
-      systemCode: null,
-      attribute: null,
-      responsible: null,
-      description: ''
+    const formMethods = useForm<SystemCreateFormData>({
+        resolver: zodResolver(systemCreateSchema),
+        mode: 'onSubmit',
+        defaultValues: {
+            name: '',
+            systemType: null,
+            systemLevel: SystemLevel.SubsystemsAndParts,
+            location: null,
+            zone: null,
+            systemCode: null,
+            attribute: null,
+            responsible: null,
+            description: '',
+        },
+    })
+
+    const {
+        formState: { isDirty },
+    } = formMethods
+
+    // Set parent system defaults when available
+    useEffect(() => {
+        if (parentSystem) {
+            if (parentSystem.responsible) {
+                formMethods.setValue(
+                    'responsible',
+                    {
+                        uid: parentSystem.responsible.uid,
+                        name: parentSystem.responsible.fullName || 'N/A',
+                    },
+                    { shouldDirty: false },
+                )
+            }
+
+            if (parentSystem.zone) {
+                formMethods.setValue(
+                    'zone',
+                    {
+                        uid: parentSystem.zone.uid,
+                        name: parentSystem.zone.name,
+                    },
+                    { shouldDirty: false },
+                )
+            }
+
+            if (parentSystem.location) {
+                formMethods.setValue(
+                    'location',
+                    {
+                        uid: parentSystem.location.uid,
+                        name: parentSystem.location.name,
+                    },
+                    { shouldDirty: false },
+                )
+            }
+        }
+    }, [parentSystem, formMethods])
+
+    const { createSystem, loading } = useSystemCreate(systemImageRef)
+    const { closeModal } = useDynamicModalStore()
+
+    const onSubmit = (data: SystemCreateFormData) => {
+        createSystem(data)
     }
-  })
 
-  const {
-    formState: { isDirty }
-  } = formMethods
-
-  // Set parent system defaults when available
-  useEffect(() => {
-    if (parentSystem) {
-      if (parentSystem.responsible) {
-        formMethods.setValue(
-          'responsible',
-          {
-            uid: parentSystem.responsible.uid,
-            name: parentSystem.responsible.fullName || 'N/A'
-          },
-          { shouldDirty: false }
-        )
-      }
-
-      if (parentSystem.zone) {
-        formMethods.setValue(
-          'zone',
-          {
-            uid: parentSystem.zone.uid,
-            name: parentSystem.zone.name
-          },
-          { shouldDirty: false }
-        )
-      }
-
-      if (parentSystem.location) {
-        formMethods.setValue(
-          'location',
-          {
-            uid: parentSystem.location.uid,
-            name: parentSystem.location.name
-          },
-          { shouldDirty: false }
-        )
-      }
+    const onExit = () => {
+        // NOTE: Modal is opened with ID 'system-create' in useSystemCreateSheet.ts
+        closeModal('system-create')
     }
-  }, [parentSystem, formMethods])
 
-  const { createSystem, loading } = useSystemCreate(systemImageRef)
-  const { closeModal } = useDynamicModalStore()
+    const systemLevel = formMethods.watch('systemLevel') as SystemLevel
+    const systemName = formMethods.watch('name')
 
-  const onSubmit = (data: SystemCreateFormData) => {
-    createSystem(data)
-  }
+    return (
+        <Form formMethods={formMethods} onSubmit={onSubmit}>
+            <SheetFormButtons
+                editRole={ROLE.SYSTEM_EDIT}
+                loading={loading}
+                onSubmit={formMethods.handleSubmit(onSubmit)}
+                onExit={onExit}
+                isFormDirty={isDirty}
+                saveLabel="Create System"
+                loadingText="Creating system..."
+            />
 
-  const onExit = () => {
-    // NOTE: Modal is opened with ID 'system-create' in useSystemCreateSheet.ts
-    closeModal('system-create')
-  }
+            <div className="space-y-4">
+                <MemoizedImageGallery
+                    ref={systemImageRef}
+                    setValue={formMethods.setValue}
+                    config={{
+                        itemCategory: FILE_TYPE.SYSTEM,
+                        itemId: 'new',
+                    }}
+                    className="w-full"
+                    hasEditRole={true}
+                />
+                {parentLoading && <Skeleton className="h-6 w-full" />}
+                {parentPath.length > 0 && (
+                    <SystemHierarchy
+                        parentPath={parentPath}
+                        currentSystemName={systemName || 'New System'}
+                        currentSystemLevel={systemLevel}
+                    />
+                )}
 
-  const systemLevel = formMethods.watch('systemLevel') as SystemLevel
-  const systemName = formMethods.watch('name')
-
-  return (
-    <Form formMethods={formMethods} onSubmit={onSubmit}>
-      <SheetFormButtons
-        editRole={ROLE.SYSTEM_EDIT}
-        loading={loading}
-        onSubmit={formMethods.handleSubmit(onSubmit)}
-        onExit={onExit}
-        isFormDirty={isDirty}
-        saveLabel="Create System"
-        loadingText="Creating system..."
-      />
-
-      <div className="space-y-4">
-        <MemoizedImageGallery
-          ref={systemImageRef}
-          setValue={formMethods.setValue}
-          config={{
-            itemCategory: FILE_TYPE.SYSTEM,
-            itemId: 'new'
-          }}
-          className="w-full"
-          hasEditRole={true}
-        />
-        {parentLoading && <Skeleton className="h-6 w-full" />}
-        {parentPath.length > 0 && (
-          <SystemHierarchy
-            parentPath={parentPath}
-            currentSystemName={systemName || 'New System'}
-            currentSystemLevel={systemLevel}
-          />
-        )}
-
-        <SystemDetailSection />
-      </div>
-    </Form>
-  )
+                <SystemDetailSection />
+            </div>
+        </Form>
+    )
 }

@@ -13,145 +13,135 @@ import type { RoomCardFormType } from '../../types/form'
 import type { RoomCardProperties } from './RoomCard.columns'
 
 const CleaningSchedule = () => {
-  const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
-  const days = [
-    'MONDAY',
-    'TUESDAY',
-    'WEDNESDAY',
-    'THURSDAY',
-    'FRIDAY',
-    'SATURDAY',
-    'SUNDAY'
-  ] as CleaningScheduleDay[]
-  const { setValue, control } = useFormContext()
-  const cleaningScheduleDays = useWatch({
-    control,
-    name: 'cleaningScheduleDays'
-  })
+    const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
+    const days = [
+        'MONDAY',
+        'TUESDAY',
+        'WEDNESDAY',
+        'THURSDAY',
+        'FRIDAY',
+        'SATURDAY',
+        'SUNDAY',
+    ] as CleaningScheduleDay[]
+    const { setValue, control } = useFormContext()
+    const cleaningScheduleDays = useWatch({
+        control,
+        name: 'cleaningScheduleDays',
+    })
 
-  return (
-    <div className="flex">
-      {days.map(day => (
-        <Button
-          key={day}
-          disabled={!editPersmission}
-          onClick={() => {
-            if (cleaningScheduleDays?.includes(day)) {
-              setValue(
-                'cleaningScheduleDays',
-                cleaningScheduleDays.filter(selectedDay => selectedDay !== day)
-              )
-            } else {
-              setValue('cleaningScheduleDays', [
-                ...(cleaningScheduleDays ?? []),
-                day
-              ])
-            }
-          }}
-          type="button"
-          variant={
-            cleaningScheduleDays?.includes(day) ? 'default' : 'secondary'
-          }
-        >
-          {day.slice(0, 2)}
-        </Button>
-      ))}
-      <InputDate
-        disabled={!editPersmission}
-        rounded="rounded-md"
-        name="cleaningScheduleDate"
-      />
-    </div>
-  )
+    return (
+        <div className="flex">
+            {days.map(day => (
+                <Button
+                    key={day}
+                    disabled={!editPersmission}
+                    onClick={() => {
+                        if (cleaningScheduleDays?.includes(day)) {
+                            setValue(
+                                'cleaningScheduleDays',
+                                cleaningScheduleDays.filter(selectedDay => selectedDay !== day),
+                            )
+                        } else {
+                            setValue('cleaningScheduleDays', [...(cleaningScheduleDays ?? []), day])
+                        }
+                    }}
+                    type="button"
+                    variant={cleaningScheduleDays?.includes(day) ? 'default' : 'secondary'}
+                >
+                    {day.slice(0, 2)}
+                </Button>
+            ))}
+            <InputDate
+                disabled={!editPersmission}
+                rounded="rounded-md"
+                name="cleaningScheduleDate"
+            />
+        </div>
+    )
 }
 
 const PrescribedClothingSelect = () => {
-  const prescribedClothingEnums = Object.values(PrescribedClothing).map(
-    value => value
-  )
-  const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
-  const { control, setValue } = useFormContext<RoomCardFormType>()
-  const prescribedClothing =
-    useWatch({ control, name: 'prescribedClothing' }) || []
-  return (
-    <div className="grid grid-cols-4 mt-1">
-      {prescribedClothingEnums.map((item, index) => (
-        <CheckboxWithLabel
-          key={index}
-          id={item}
-          checked={prescribedClothing?.includes(item as any) ? true : false}
-          className="mr-1 mb-1 col-span-1"
-          label={item.replace(/_/g, ' ')}
-          disabled={!editPersmission}
-          onChange={e => {
-            e
-              ? setValue('prescribedClothing', [...prescribedClothing, item])
-              : setValue(
-                  'prescribedClothing',
-                  prescribedClothing.filter(
-                    selectedItem => selectedItem !== item
-                  )
-                )
-          }}
-        />
-      ))}
-    </div>
-  )
+    const prescribedClothingEnums = Object.values(PrescribedClothing).map(value => value)
+    const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
+    const { control, setValue } = useFormContext<RoomCardFormType>()
+    const prescribedClothing = useWatch({ control, name: 'prescribedClothing' }) || []
+    return (
+        <div className="grid grid-cols-4 mt-1">
+            {prescribedClothingEnums.map((item, index) => (
+                <CheckboxWithLabel
+                    key={index}
+                    id={item}
+                    checked={prescribedClothing?.includes(item as any) ? true : false}
+                    className="mr-1 mb-1 col-span-1"
+                    label={item.replace(/_/g, ' ')}
+                    disabled={!editPersmission}
+                    onChange={e => {
+                        e
+                            ? setValue('prescribedClothing', [...prescribedClothing, item])
+                            : setValue(
+                                  'prescribedClothing',
+                                  prescribedClothing.filter(selectedItem => selectedItem !== item),
+                              )
+                    }}
+                />
+            ))}
+        </div>
+    )
 }
 
 type Props = {
-  code: string
+    code: string
 }
 
 const PurityClassSelect = ({ code }: Props) => {
-  const { register, getValues } = useFormContext()
-  const purityClass = Object.values(PurityClass).map(value => value)
-  const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
-  return (
-    <select
-      className="select-reset select-custom w-full"
-      defaultValue={getValues(code) ?? ''}
-      {...register(code)}
-      disabled={!editPersmission}
-    >
-      {purityClass.map((purityClass, index) => (
-        <option key={index}>{purityClass}</option>
-      ))}
-    </select>
-  )
+    const { register, getValues } = useFormContext()
+    const purityClass = Object.values(PurityClass).map(value => value)
+    const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
+    return (
+        <select
+            className="select-reset select-custom w-full"
+            defaultValue={getValues(code) ?? ''}
+            {...register(code)}
+            disabled={!editPersmission}
+        >
+            {purityClass.map((purityClass, index) => (
+                <option key={index}>{purityClass}</option>
+            ))}
+        </select>
+    )
 }
 
 const DefaultInput = ({ code }: Props) => {
-  const { register, getValues } = useFormContext()
-  const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
-  return (
-    <input
-      className="w-full text-xs px-0 border-0 bg-inherit py-1"
-      defaultValue={getValues(code) ?? ''}
-      {...register(code)}
-      disabled={!editPersmission}
-    />
-  )
+    const { register, getValues } = useFormContext()
+    const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
+    return (
+        <input
+            className="w-full text-xs px-0 border-0 bg-inherit py-1"
+            defaultValue={getValues(code) ?? ''}
+            {...register(code)}
+            disabled={!editPersmission}
+        />
+    )
 }
 
 export const CellInput = ({
-  row: {
-    original: { code }
-  },
-  column: { id }
+    row: {
+        original: { code },
+    },
+    column: { id },
 }: CellContext<RoomCardProperties, any>) => {
-  switch (code) {
-    case 'cleaningSchedule':
-      return <CleaningSchedule />
-    case 'purityClass':
-      return <PurityClassSelect code={code} />
-    case 'prescribedClothing':
-      return <PrescribedClothingSelect />
-    default: {
-      if (id === 'clientRequirements') {
-        return <DefaultInput code={code + 'Client'} />
-      }
-      return <DefaultInput code={code} />
+    switch (code) {
+        case 'cleaningSchedule':
+            return <CleaningSchedule />
+        case 'purityClass':
+            return <PurityClassSelect code={code} />
+        case 'prescribedClothing':
+            return <PrescribedClothingSelect />
+        default: {
+            if (id === 'clientRequirements') {
+                return <DefaultInput code={code + 'Client'} />
+            }
+            return <DefaultInput code={code} />
+        }
     }
-  }
 }

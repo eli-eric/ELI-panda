@@ -12,88 +12,84 @@ import { PandaTableV2 } from '../../table/pandaTableV2/PandaTableV2'
 import { useCatalogueTableSelectColumns } from './CatalogueTableSelect.columns'
 
 interface CatalogueTableSelectProps {
-  hideButtons?: boolean
-  enableQueryURL?: boolean
-  tableId?: string
-  catalogueItems?: CatalogueItemsResponse
-  categoryList?: GetCategoriesQuery['catalogueCategories']
-  loading?: boolean
-  enableFiltering?: boolean
-  setCategoryFilter?: (value: CodebookType) => void
-  getRowProps?: (row: Row<any>) => GetRowPropsReturnType
-  selectedItemUid?: string
-  onSelectionChange?: (uid: string) => void
+    hideButtons?: boolean
+    enableQueryURL?: boolean
+    tableId?: string
+    catalogueItems?: CatalogueItemsResponse
+    categoryList?: GetCategoriesQuery['catalogueCategories']
+    loading?: boolean
+    enableFiltering?: boolean
+    setCategoryFilter?: (value: CodebookType) => void
+    getRowProps?: (row: Row<any>) => GetRowPropsReturnType
+    selectedItemUid?: string
+    onSelectionChange?: (uid: string) => void
 }
 
 export const CatalogueTableSelectContext = createContext<{
-  isHoveringId: number | undefined | string
+    isHoveringId: number | undefined | string
 }>({
-  isHoveringId: undefined
+    isHoveringId: undefined,
 })
 
 export const CatalogueTableSelectComponent = ({
-  hideButtons,
-  enableQueryURL = true,
-  tableId = 'catalogueItemsModal',
-  catalogueItems,
-  getRowProps,
-  categoryList,
-  loading,
-  setCategoryFilter,
-  selectedItemUid,
-  onSelectionChange
-}: CatalogueTableSelectProps) => {
-  const columns = useCatalogueTableSelectColumns({
-    tableId,
     hideButtons,
+    enableQueryURL = true,
+    tableId = 'catalogueItemsModal',
     catalogueItems,
+    getRowProps,
+    categoryList,
+    loading,
     setCategoryFilter,
-    selectedItemUid
-  })
-
-  const table = usePandaTable({
-    tableId,
-    columns,
-    data: catalogueItems?.data,
-    settings: {
-      enableSorting: true,
-      enableQueryURL: true,
-      enableColumnHiding: true,
-      enableColumnReordering: true,
-      manualSorting: true,
-      defaultColumnOrder: ['selection', 'name']
-    }
-  })
-
-  useEffect(() => {
-    table.setColumnVisibility({
-      categoryName: categoryList?.length !== 0
+    selectedItemUid,
+    onSelectionChange,
+}: CatalogueTableSelectProps) => {
+    const columns = useCatalogueTableSelectColumns({
+        tableId,
+        hideButtons,
+        catalogueItems,
+        setCategoryFilter,
+        selectedItemUid,
     })
-    table.setColumnOrder(table.getAllLeafColumns().map(column => column.id))
-  }, [categoryList, columns, table])
 
-  return (
-    <RadioGroup
-      value={selectedItemUid}
-      onValueChange={onSelectionChange}
-      className="w-full"
-    >
-      <PandaTableV2
-        table={table}
-        loading={loading}
-        tableId={tableId}
-        getRowProps={getRowProps}
-        data={catalogueItems?.data}
-        className={'relative overflow-y-scroll scrollbar-style text-sm'}
-        settings={{
-          enableQueryURL,
-          defaultColumnOrder: ['selection', 'name'],
-          enableColumnHiding: false,
-          enableColumnReordering: false,
-          enableSorting: false,
-          manualSorting: false
-        }}
-      />
-    </RadioGroup>
-  )
+    const table = usePandaTable({
+        tableId,
+        columns,
+        data: catalogueItems?.data,
+        settings: {
+            enableSorting: true,
+            enableQueryURL: true,
+            enableColumnHiding: true,
+            enableColumnReordering: true,
+            manualSorting: true,
+            defaultColumnOrder: ['selection', 'name'],
+        },
+    })
+
+    useEffect(() => {
+        table.setColumnVisibility({
+            categoryName: categoryList?.length !== 0,
+        })
+        table.setColumnOrder(table.getAllLeafColumns().map(column => column.id))
+    }, [categoryList, columns, table])
+
+    return (
+        <RadioGroup value={selectedItemUid} onValueChange={onSelectionChange} className="w-full">
+            <PandaTableV2
+                table={table}
+                loading={loading}
+                tableId={tableId}
+                getRowProps={getRowProps}
+                data={catalogueItems?.data}
+                className={'relative overflow-y-scroll scrollbar-style text-sm'}
+                settings={{
+                    enableQueryURL,
+                    defaultColumnOrder: ['selection', 'name'],
+                    enableColumnHiding: false,
+                    enableColumnReordering: false,
+                    enableSorting: false,
+                    manualSorting: false,
+                }}
+            />
+        </RadioGroup>
+    )
 }

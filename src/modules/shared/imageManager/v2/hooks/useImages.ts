@@ -23,17 +23,17 @@ import type { ImageHookParams, ImageItem } from '../types'
  * ```
  */
 export const useImages = ({ itemType, itemId }: ImageHookParams) => {
-  return useQuery<ImageItem[]>({
-    queryKey: ['images', itemType, itemId],
-    queryFn: async () => {
-      if (!itemId) return []
-      return uniFetcher<ImageItem[]>(`/api/${itemType}/${itemId}/image`)
-    },
-    enabled: !!itemId,
-    refetchOnMount: true,
-    // Keep images fresh, refetch when user focuses window
-    refetchOnWindowFocus: true,
-    // Cache images for 5 minutes
-    staleTime: 5 * 60 * 1000
-  })
+    return useQuery<ImageItem[]>({
+        queryKey: ['images', itemType, itemId],
+        queryFn: async () => {
+            if (!itemId) return []
+            return uniFetcher<ImageItem[]>(`/api/${itemType}/${itemId}/image`)
+        },
+        enabled: !!itemId,
+        refetchOnMount: true,
+        // Keep images fresh, refetch when user focuses window
+        refetchOnWindowFocus: true,
+        // Cache images for 5 minutes
+        staleTime: 5 * 60 * 1000,
+    })
 }

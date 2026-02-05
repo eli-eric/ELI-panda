@@ -20,9 +20,9 @@ import type { SpareAssignmentFormType, SpareAssignmentPayload } from '../types'
 import { SpareParentSystemSelectTable } from './spare-parent-system-select.table'
 
 interface SpareAssignmentWizardProps {
-  systemUid: string
-  spareItemUid: string
-  onSuccess?: () => void
+    systemUid: string
+    spareItemUid: string
+    onSuccess?: () => void
 }
 
 const tableId = 'spare-parent-system-select-table'
@@ -30,178 +30,162 @@ const messages = message.common.spareAssignment
 
 // Auto-assign checkbox component
 const AutoAssignCheckbox = () => {
-  const { formatMessage: fm } = useIntl()
-  const { setValue, watch } = useFormContext<SpareAssignmentFormType>()
-  const autoAssignParent = watch('autoAssignParent')
+    const { formatMessage: fm } = useIntl()
+    const { setValue, watch } = useFormContext<SpareAssignmentFormType>()
+    const autoAssignParent = watch('autoAssignParent')
 
-  return (
-    <div className="flex items-center space-x-2">
-      <Checkbox
-        id="autoAssignParent"
-        checked={autoAssignParent}
-        onCheckedChange={(checked: boolean) =>
-          setValue('autoAssignParent', checked, { shouldValidate: true })
-        }
-      />
-      <Label
-        htmlFor="autoAssignParent"
-        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
-      >
-        {fm({ id: messages.form.autoAssignParent.label })}
-      </Label>
-    </div>
-  )
+    return (
+        <div className="flex items-center space-x-2">
+            <Checkbox
+                id="autoAssignParent"
+                checked={autoAssignParent}
+                onCheckedChange={(checked: boolean) =>
+                    setValue('autoAssignParent', checked, { shouldValidate: true })
+                }
+            />
+            <Label
+                htmlFor="autoAssignParent"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+            >
+                {fm({ id: messages.form.autoAssignParent.label })}
+            </Label>
+        </div>
+    )
 }
 
 export const SpareAssignmentWizardContainer = ({
-  systemUid,
-  spareItemUid,
-  onSuccess
+    systemUid,
+    spareItemUid,
+    onSuccess,
 }: SpareAssignmentWizardProps) => {
-  const { formatMessage: fm } = useIntl()
-  const { mutateAsync, isPending } = useAssignSpare()
-  const { closeModal } = useDynamicModalStore()
-  const queryClient = useQueryClient()
+    const { formatMessage: fm } = useIntl()
+    const { mutateAsync, isPending } = useAssignSpare()
+    const { closeModal } = useDynamicModalStore()
+    const queryClient = useQueryClient()
 
-  const initialData: Partial<SpareAssignmentFormType> = useMemo(
-    () => ({
-      autoAssignParent: true
-    }),
-    []
-  )
-
-  const [recalculate] = useRecalculate({
-    onSuccess: () => {
-      toast.success(fm({ id: message.common.spareAssignment.success.assigned }))
-      if (onSuccess) {
-        onSuccess()
-      }
-      closeModal('spare-assignment-wizard')
-    }
-  })
-
-  const handleSubmit = async (
-    data: SpareAssignmentFormType,
-    reset: () => void
-  ) => {
-    try {
-      // Validate required fields
-      if (!data.oldItemCondition) {
-        toast.error(
-          fm({ id: message.common.spareAssignment.errors.conditionRequired })
-        )
-        return
-      }
-
-      if (!data.newItemLocation) {
-        toast.error(
-          fm({ id: message.common.spareAssignment.errors.locationRequired })
-        )
-        return
-      }
-
-      // Get selected system UID from table state if auto-assign is disabled
-      let newParentSystemUid: string | undefined
-
-      if (!data.autoAssignParent) {
-        const { instances } = useTableStateStore.getState()
-        const rowSelection = instances[tableId]?.rowSelection || {}
-
-        // Get selected row IDs (which are now system UIDs thanks to getRowId in table)
-        const selectedSystemUids = Object.keys(rowSelection).filter(
-          key => rowSelection[key]
-        )
-
-        if (selectedSystemUids.length === 0) {
-          toast.error(
-            fm({ id: message.common.spareAssignment.errors.noSystemSelected })
-          )
-          return
-        }
-
-        // Row ID is now directly the system UID (configured via getRowId in SpareParentSystemSelectTable)
-        newParentSystemUid = selectedSystemUids[0]
-      }
-
-      const payload: SpareAssignmentPayload = {
-        systemUid,
-        spareItemUid,
-        oldItemCondition: data.oldItemCondition,
-        newItemLocation: data.newItemLocation,
-        ...(newParentSystemUid && { newParentSystemUid })
-      }
-
-      await mutateAsync(payload)
-
-      // Recalculate system tree structure to preserve subsystems
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: [systemUid] }),
-        queryClient.invalidateQueries({ queryKey: ['system-detail'] })
-      ])
-      recalculate(null)
-      reset()
-    } catch (error) {
-      toast.error(
-        fm({ id: message.common.spareAssignment.errors.assignmentFailed })
-      )
-      //eslint-disable-next-line
-      console.error('Failed to assign spare part:', error)
-    }
-  }
-
-  if (isPending) {
-    return (
-      <div className="flex items-center justify-center p-8">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-sm text-muted-foreground">
-            {fm({ id: messages.processing })}
-          </p>
-        </div>
-      </div>
+    const initialData: Partial<SpareAssignmentFormType> = useMemo(
+        () => ({
+            autoAssignParent: true,
+        }),
+        [],
     )
-  }
 
-  return (
-    <FormWizard<SpareAssignmentFormType>
-      onSubmit={handleSubmit}
-      initialValues={initialData}
-    >
-      <WizardStep
-        id="itemSettings"
-        title={fm({ id: messages.wizard.steps.step1.title })}
-        validate={data =>
-          Boolean(data.oldItemCondition && data.newItemLocation)
+    const [recalculate] = useRecalculate({
+        onSuccess: () => {
+            toast.success(fm({ id: message.common.spareAssignment.success.assigned }))
+            if (onSuccess) {
+                onSuccess()
+            }
+            closeModal('spare-assignment-wizard')
+        },
+    })
+
+    const handleSubmit = async (data: SpareAssignmentFormType, reset: () => void) => {
+        try {
+            // Validate required fields
+            if (!data.oldItemCondition) {
+                toast.error(fm({ id: message.common.spareAssignment.errors.conditionRequired }))
+                return
+            }
+
+            if (!data.newItemLocation) {
+                toast.error(fm({ id: message.common.spareAssignment.errors.locationRequired }))
+                return
+            }
+
+            // Get selected system UID from table state if auto-assign is disabled
+            let newParentSystemUid: string | undefined
+
+            if (!data.autoAssignParent) {
+                const { instances } = useTableStateStore.getState()
+                const rowSelection = instances[tableId]?.rowSelection || {}
+
+                // Get selected row IDs (which are now system UIDs thanks to getRowId in table)
+                const selectedSystemUids = Object.keys(rowSelection).filter(
+                    key => rowSelection[key],
+                )
+
+                if (selectedSystemUids.length === 0) {
+                    toast.error(fm({ id: message.common.spareAssignment.errors.noSystemSelected }))
+                    return
+                }
+
+                // Row ID is now directly the system UID (configured via getRowId in SpareParentSystemSelectTable)
+                newParentSystemUid = selectedSystemUids[0]
+            }
+
+            const payload: SpareAssignmentPayload = {
+                systemUid,
+                spareItemUid,
+                oldItemCondition: data.oldItemCondition,
+                newItemLocation: data.newItemLocation,
+                ...(newParentSystemUid && { newParentSystemUid }),
+            }
+
+            await mutateAsync(payload)
+
+            // Recalculate system tree structure to preserve subsystems
+            await Promise.all([
+                queryClient.invalidateQueries({ queryKey: [systemUid] }),
+                queryClient.invalidateQueries({ queryKey: ['system-detail'] }),
+            ])
+            recalculate(null)
+            reset()
+        } catch (error) {
+            toast.error(fm({ id: message.common.spareAssignment.errors.assignmentFailed }))
+            //eslint-disable-next-line
+            console.error('Failed to assign spare part:', error)
         }
-      >
-        <div className="space-y-4">
-          <Listbox
-            name="oldItemCondition"
-            label={fm({ id: messages.form.oldItemCondition.label })}
-            codebook={CODEBOOK.ITEM_CONDITION_STATUS}
-            required
-            rounded="rounded-md"
-          />
-          <SelectLocationCombo
-            locationField={{
-              name: 'newItemLocation',
-              label: fm({ id: messages.form.newItemLocation.label }),
-              codebook: CODEBOOK.LOCATION,
-              required: true,
-              rounded: 'rounded-md'
-            }}
-          />
-          <AutoAssignCheckbox />
-        </div>
-      </WizardStep>
+    }
 
-      <WizardStep
-        id="parentSystemSelection"
-        title={fm({ id: messages.wizard.steps.step2.title })}
-        shouldShow={data => !data.autoAssignParent}
-      >
-        <SpareParentSystemSelectTable />
-      </WizardStep>
-    </FormWizard>
-  )
+    if (isPending) {
+        return (
+            <div className="flex items-center justify-center p-8">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+                    <p className="text-sm text-muted-foreground">
+                        {fm({ id: messages.processing })}
+                    </p>
+                </div>
+            </div>
+        )
+    }
+
+    return (
+        <FormWizard<SpareAssignmentFormType> onSubmit={handleSubmit} initialValues={initialData}>
+            <WizardStep
+                id="itemSettings"
+                title={fm({ id: messages.wizard.steps.step1.title })}
+                validate={data => Boolean(data.oldItemCondition && data.newItemLocation)}
+            >
+                <div className="space-y-4">
+                    <Listbox
+                        name="oldItemCondition"
+                        label={fm({ id: messages.form.oldItemCondition.label })}
+                        codebook={CODEBOOK.ITEM_CONDITION_STATUS}
+                        required
+                        rounded="rounded-md"
+                    />
+                    <SelectLocationCombo
+                        locationField={{
+                            name: 'newItemLocation',
+                            label: fm({ id: messages.form.newItemLocation.label }),
+                            codebook: CODEBOOK.LOCATION,
+                            required: true,
+                            rounded: 'rounded-md',
+                        }}
+                    />
+                    <AutoAssignCheckbox />
+                </div>
+            </WizardStep>
+
+            <WizardStep
+                id="parentSystemSelection"
+                title={fm({ id: messages.wizard.steps.step2.title })}
+                shouldShow={data => !data.autoAssignParent}
+            >
+                <SpareParentSystemSelectTable />
+            </WizardStep>
+        </FormWizard>
+    )
 }

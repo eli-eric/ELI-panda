@@ -8,27 +8,25 @@ import { CodebookTreeModalGraphqlContent } from '../components/location-modal-co
  * Automatically handles z-index when opened from nested modals
  */
 export const useLocationSelectionModal = () => {
-  const { openModal } = useDynamicModalStore()
+    const { openModal } = useDynamicModalStore()
 
-  const openLocationModal = (
-    onSelect?: (location: CodebookType | null) => void
-  ) => {
-    // Use custom ID for consistent modal management
-    const modalId = openModal('dialog', {
-      id: 'location-select',
-      component: CodebookTreeModalGraphqlContent,
-      props: {
-        title: 'Select Location',
-        size: 'l' as const,
-        enableFiltering: true,
-        manualFiltering: true,
-        selectParent: true,
-        onSelect: onSelect || (() => {})
-      }
-    })
+    const openLocationModal = (onSelect?: (location: CodebookType | null) => void) => {
+        // Use custom ID for consistent modal management
+        const modalId = openModal('dialog', {
+            id: 'location-select',
+            component: CodebookTreeModalGraphqlContent,
+            props: {
+                title: 'Select Location',
+                size: 'l' as const,
+                enableFiltering: true,
+                manualFiltering: true,
+                selectParent: true,
+                onSelect: onSelect || (() => {}),
+            },
+        })
 
-    return modalId
-  }
+        return modalId
+    }
 
-  return { openLocationModal }
+    return { openLocationModal }
 }

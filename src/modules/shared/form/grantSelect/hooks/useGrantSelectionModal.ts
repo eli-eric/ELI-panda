@@ -23,25 +23,25 @@ import type { SelectedGrant } from '../types/grant-select.types'
  * ```
  */
 export const useGrantSelectionModal = () => {
-  const { openModal } = useDynamicModalStore()
+    const { openModal } = useDynamicModalStore()
 
-  const openGrantModal = (
-    onSelect: (grants: SelectedGrant[]) => void,
-    initialSelected?: SelectedGrant[]
-  ) => {
-    const modalId = openModal('dialog', {
-      id: 'grant-select',
-      component: GrantModalContent,
-      props: {
-        title: 'Select Grants',
-        size: 'xl' as const,
-        onSelect,
-        initialSelected
-      }
-    })
+    const openGrantModal = (
+        onSelect: (grants: SelectedGrant[]) => void,
+        initialSelected?: SelectedGrant[],
+    ) => {
+        const modalId = openModal('dialog', {
+            id: 'grant-select',
+            component: GrantModalContent,
+            props: {
+                title: 'Select Grants',
+                size: 'xl' as const,
+                onSelect,
+                initialSelected,
+            },
+        })
 
-    return modalId
-  }
+        return modalId
+    }
 
-  return { openGrantModal }
+    return { openGrantModal }
 }

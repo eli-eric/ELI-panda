@@ -1,4 +1,4 @@
 export type Step = {
-  id: number
-  name: string
+    id: number
+    name: string
 }

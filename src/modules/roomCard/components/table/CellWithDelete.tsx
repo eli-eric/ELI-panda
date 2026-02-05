@@ -5,92 +5,91 @@ import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import usePermission from '@/hooks/usePermission'
 import useWarningModal from '@/hooks/useWarningModal'
 import { ROLE } from '@/types/constants/roles'
 
 interface ToastMessages {
-  loading?: string
-  success?: string
-  error?: string
+    loading?: string
+    success?: string
+    error?: string
 }
 
 interface Props extends CellContext<any, any> {
-  onDelete?: (item: any) => Promise<void>
-  warningMessage?: string
-  roomCardUid?: string
-  toastMessages?: ToastMessages
+    onDelete?: (item: any) => Promise<void>
+    warningMessage?: string
+    roomCardUid?: string
+    toastMessages?: ToastMessages
 }
 
 export const CellWithDelete = ({
-  row,
-  getValue,
-  onDelete,
-  warningMessage,
-  roomCardUid,
-  toastMessages
+    row,
+    getValue,
+    onDelete,
+    warningMessage,
+    roomCardUid,
+    toastMessages,
 }: Props) => {
-  const editPermission = usePermission([ROLE.ROOM_CARD_EDIT])
-  const withWarningModal = useWarningModal()
-  const [isDeleting, setIsDeleting] = useState(false)
+    const editPermission = usePermission([ROLE.ROOM_CARD_EDIT])
+    const withWarningModal = useWarningModal()
+    const [isDeleting, setIsDeleting] = useState(false)
 
-  const item = row.original
+    const item = row.original
 
-  const onDeleteClick = useCallback(async () => {
-    if (!onDelete || !roomCardUid) return
+    const onDeleteClick = useCallback(async () => {
+        if (!onDelete || !roomCardUid) return
 
-    setIsDeleting(true)
-    toast.promise(onDelete(item), {
-      loading: toastMessages?.loading ?? 'Removing...',
-      success: toastMessages?.success ?? 'Item removed',
-      error: toastMessages?.error ?? 'Failed to remove item',
-      finally: () => setIsDeleting(false)
-    })
-  }, [item, onDelete, roomCardUid, toastMessages])
+        setIsDeleting(true)
+        toast.promise(onDelete(item), {
+            loading: toastMessages?.loading ?? 'Removing...',
+            success: toastMessages?.success ?? 'Item removed',
+            error: toastMessages?.error ?? 'Failed to remove item',
+            finally: () => setIsDeleting(false),
+        })
+    }, [item, onDelete, roomCardUid, toastMessages])
 
-  const handleDeleteWithConfirmation = useCallback(() => {
-    const message =
-      warningMessage || 'Are you sure you want to remove this item?'
-    withWarningModal(onDeleteClick, message)()
-  }, [withWarningModal, onDeleteClick, warningMessage])
+    const handleDeleteWithConfirmation = useCallback(() => {
+        const message = warningMessage || 'Are you sure you want to remove this item?'
+        withWarningModal(onDeleteClick, message)()
+    }, [withWarningModal, onDeleteClick, warningMessage])
 
-  // In create mode (no roomCardUid), don't show actions
-  if (!roomCardUid) {
-    return <span>{getValue()}</span>
-  }
+    // In create mode (no roomCardUid), don't show actions
+    if (!roomCardUid) {
+        return <span>{getValue()}</span>
+    }
 
-  return (
-    <div className="flex items-center gap-1">
-      {editPermission && (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              size="sm"
-              aria-label="Row actions"
-              className="h-8 w-8 p-0"
-              disabled={isDeleting}
-            >
-              <MoreVertical className="h-4 w-4 text-muted-foreground" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" sideOffset={4}>
-            <DropdownMenuItem
-              onClick={handleDeleteWithConfirmation}
-              className="cursor-pointer text-destructive focus:text-destructive"
-            >
-              <Trash2 className="h-4 w-4 mr-2" />
-              Remove
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )}
-      <span>{getValue()}</span>
-    </div>
-  )
+    return (
+        <div className="flex items-center gap-1">
+            {editPermission && (
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            aria-label="Row actions"
+                            className="h-8 w-8 p-0"
+                            disabled={isDeleting}
+                        >
+                            <MoreVertical className="h-4 w-4 text-muted-foreground" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" sideOffset={4}>
+                        <DropdownMenuItem
+                            onClick={handleDeleteWithConfirmation}
+                            className="cursor-pointer text-destructive focus:text-destructive"
+                        >
+                            <Trash2 className="h-4 w-4 mr-2" />
+                            Remove
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            )}
+            <span>{getValue()}</span>
+        </div>
+    )
 }

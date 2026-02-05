@@ -17,7 +17,7 @@ const UPDATE_FILTER = gql(`
   }
 `)
 export const useFilterUpdate = () => {
-  const { mutate, isPending } = useGraphQLMutation(UPDATE_FILTER)
+    const { mutate, isPending } = useGraphQLMutation(UPDATE_FILTER)
 
-  return { updateSavedFilter: mutate, loading: isPending }
+    return { updateSavedFilter: mutate, loading: isPending }
 }

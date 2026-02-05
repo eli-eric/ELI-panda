@@ -18,12 +18,12 @@ Provide a searchable, filterable, paginated table of system codes with the same 
 ### UI / UX
 
 - Table grid with:
-  - sticky header
-  - pagination
+    - sticky header
+    - pagination
 - Page header includes **three filters**:
-  - `search`
-  - `zone`
-  - `systemType`
+    - `search`
+    - `zone`
+    - `systemType`
 - Filters **must be connected to the Query Manager** (API query params via `useQueryManager`).
 
 ### Columns
@@ -67,15 +67,15 @@ Actions:
 ### Behavior
 
 1. **Preview on blur**
-   - When the user blurs any form field (or when the form becomes valid), call the **preview endpoint**.
-   - The response represents _what would be created_ (not persisted).
-   - Render these rows in the table using a distinct “preview” style.
+    - When the user blurs any form field (or when the form becomes valid), call the **preview endpoint**.
+    - The response represents _what would be created_ (not persisted).
+    - Render these rows in the table using a distinct “preview” style.
 
 2. **Create on submit**
-   - On submit, call the **create endpoint**.
-   - The API returns the **created systems**.
-   - Update local state so preview rows are replaced/updated to the created versions.
-   - Created rows should display normal styling (not muted).
+    - On submit, call the **create endpoint**.
+    - The API returns the **created systems**.
+    - Update local state so preview rows are replaced/updated to the created versions.
+    - Created rows should display normal styling (not muted).
 
 **State note:** keep preview/created results in local UI state so the table updates immediately and predictably.
 
@@ -93,22 +93,22 @@ Actions:
 > Adjust exact optionality/fields to match backend behavior.
 
 - **SystemCodeResult**
-  - `uid: string` _(not returned by preview)_
-  - `name: string`
-  - `systemCode: string`
-  - `location?: CodebookType` _(not returned by preview)_
-  - `zone: CodebookType`
-  - `createdBy: string` _(not returned by preview)_
-  - `updatedBy: string` _(not returned by preview)_
+    - `uid: string` _(not returned by preview)_
+    - `name: string`
+    - `systemCode: string`
+    - `location?: CodebookType` _(not returned by preview)_
+    - `zone: CodebookType`
+    - `createdBy: string` _(not returned by preview)_
+    - `updatedBy: string` _(not returned by preview)_
 
 - **SystemCodeRequest**
-  - `zone: CodebookType`
-  - `systemType: CodebookType`
-  - `batch: number`
+    - `zone: CodebookType`
+    - `systemType: CodebookType`
+    - `batch: number`
 
 - **SystemCodesOverviewResponse**
-  - `data: SystemCodeResult[]`
-  - `totalCount: number`
+    - `data: SystemCodeResult[]`
+    - `totalCount: number`
 
 ---
 
@@ -117,20 +117,20 @@ Actions:
 Add three endpoints:
 
 1. **GET** `/systems/system-codes`
-   - Classic filter params (driven by Query Manager)
-   - Used by Overview page
+    - Classic filter params (driven by Query Manager)
+    - Used by Overview page
 
 2. **POST** `/systems/system-codes`
-   - Body: `SystemCodeRequest`
-   - Creates system codes
-   - Returns created `SystemCodeResult[]`
+    - Body: `SystemCodeRequest`
+    - Creates system codes
+    - Returns created `SystemCodeResult[]`
 
 3. **GET** `/systems/system-codes/preview`
-   - Query params:
-     - `zoneUid`
-     - `systemTypeUid`
-     - `batch`
-   - Returns preview `SystemCodeResult[]` (without `uid`, `createdBy`, `updatedBy`, and possibly `location`)
+    - Query params:
+        - `zoneUid`
+        - `systemTypeUid`
+        - `batch`
+    - Returns preview `SystemCodeResult[]` (without `uid`, `createdBy`, `updatedBy`, and possibly `location`)
 
 ---
 
@@ -139,9 +139,9 @@ Add three endpoints:
 ### Requirements
 
 - Provide a **custom hook per endpoint**, using TanStack Query patterns:
-  - `useSystemCodesOverviewQuery(...)` (GET)
-  - `useCreateSystemCodesMutation()` (POST)
-  - `useSystemCodesPreviewQuery(...)` (GET preview) or `usePreviewSystemCodesMutation()` if you prefer imperative calls on blur
+    - `useSystemCodesOverviewQuery(...)` (GET)
+    - `useCreateSystemCodesMutation()` (POST)
+    - `useSystemCodesPreviewQuery(...)` (GET preview) or `usePreviewSystemCodesMutation()` if you prefer imperative calls on blur
 
 ### Notes
 

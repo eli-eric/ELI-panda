@@ -120,6 +120,7 @@ const categoryFilters = useMemo(() => {
 ```
 
 **Why memoization matters:**
+
 - Prevents unnecessary re-renders of child components
 - Ensures stable references for useCallback dependencies
 - Improves performance in large forms with many steps
@@ -144,6 +145,7 @@ const stepTitles = useMemo(
 ```
 
 **Why:**
+
 - `formatMessage` (fm) is a stable function that doesn't change
 - React's reconciliation is fast enough for string comparisons
 - Over-memoization adds unnecessary complexity
@@ -176,6 +178,7 @@ const shouldShowStepWithExternal = useCallback((formData: FormType) => {
 ```
 
 **Key points:**
+
 - `validate` receives form data and returns boolean
 - `shouldShow` receives form data and returns boolean
 - Both should be memoized with `useCallback`
@@ -207,6 +210,7 @@ const handleStepComplete = useCallback(
 ```
 
 **When to use onStepComplete:**
+
 - Applying table filters based on step data
 - Fetching data for the next step
 - Clearing specific form fields
@@ -218,18 +222,18 @@ const handleStepComplete = useCallback(
 ```typescript
 // ✅ Good - explain why eslint-disable is needed
 const data = useMemo(() => {
-  return processData(input)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  // Reason: We only track specific properties to prevent unnecessary re-renders
+    return processData(input)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // Reason: We only track specific properties to prevent unnecessary re-renders
 }, [input.specificProp])
 
 // ✅ Good - explain closure over external data in shouldShow
 const shouldShow = useCallback(
-  (formData: FormType) => {
-    // NOTE: Using closure over external API data because it's not in formData
-    return apiData ? Boolean(apiData.property) : true
-  },
-  [apiData]
+    (formData: FormType) => {
+        // NOTE: Using closure over external API data because it's not in formData
+        return apiData ? Boolean(apiData.property) : true
+    },
+    [apiData],
 )
 ```
 
@@ -240,6 +244,7 @@ const shouldShow = useCallback(
 File: `src/modules/orderItem/components/serviceLines/form/service-line-v3.wizz.tsx`
 
 Key features demonstrated:
+
 - ✅ Uses `TABLE_IDS` and `ITEM_USAGE_FILTERS` constants
 - ✅ Memoizes complex objects (`categoryFilters`, `serviceTypeData`)
 - ✅ Uses `fm()` directly in title props
@@ -253,6 +258,7 @@ Key features demonstrated:
 File: `src/modules/shared/system/use-spare/components/spare-assignment-wizard.cont.tsx`
 
 Key features:
+
 - Shows proper usage of `shouldShow` with formData parameter
 - Demonstrates error handling in onSubmit
 - Multi-step workflow with nested modals
@@ -271,11 +277,12 @@ Key features:
 ```typescript
 // ❌ Bad - dependency hell, infinite loops, race conditions
 useEffect(() => {
-  setValue('field', computedValue)
+    setValue('field', computedValue)
 }, [computedValue, otherDep, anotherDep, setValue])
 ```
 
 **Problems:**
+
 - Creates dependency cycles
 - Can cause infinite loops
 - Race conditions between multiple useEffects
@@ -300,6 +307,7 @@ const handleChange = useCallback((value) => {
 ```
 
 **Benefits:**
+
 - Predictable execution order
 - No dependency issues
 - Easier to test
@@ -312,17 +320,18 @@ const handleChange = useCallback((value) => {
 const isInitializedRef = useRef(false)
 
 useEffect(() => {
-  if (isInitializedRef.current) return
-  isInitializedRef.current = true
+    if (isInitializedRef.current) return
+    isInitializedRef.current = true
 
-  // Initialization logic
-  if (shouldInitialize) {
-    initializeData()
-  }
+    // Initialization logic
+    if (shouldInitialize) {
+        initializeData()
+    }
 }, []) // Empty deps = mount only
 ```
 
 **When to use:**
+
 - Data fetching on mount
 - Setting up subscriptions
 - Initializing third-party libraries
@@ -338,12 +347,12 @@ useEffect(() => {
 
 ```typescript
 interface WizardStepProps<T> {
-  id: string                                    // Unique step identifier
-  title: string                                 // Step title (shown in stepper)
-  validate?: (data: T) => boolean              // Optional validation function
-  shouldShow?: (data: T) => boolean            // Optional conditional visibility
-  onStepComplete?: (data: T) => void | Promise<void>  // Optional completion handler
-  children: React.ReactNode                    // Step content
+    id: string // Unique step identifier
+    title: string // Step title (shown in stepper)
+    validate?: (data: T) => boolean // Optional validation function
+    shouldShow?: (data: T) => boolean // Optional conditional visibility
+    onStepComplete?: (data: T) => void | Promise<void> // Optional completion handler
+    children: React.ReactNode // Step content
 }
 ```
 
@@ -351,9 +360,9 @@ interface WizardStepProps<T> {
 
 ```typescript
 interface FormWizardProps<T> {
-  onSubmit: (data: T, reset: UseFormReset<T>) => void | Promise<void>
-  defaultValues?: Partial<T>
-  children: React.ReactNode  // WizardStep components
+    onSubmit: (data: T, reset: UseFormReset<T>) => void | Promise<void>
+    defaultValues?: Partial<T>
+    children: React.ReactNode // WizardStep components
 }
 ```
 
@@ -363,11 +372,7 @@ interface FormWizardProps<T> {
 
 ```typescript
 const shouldShowAdvancedStep = useCallback((data: FormType) => {
-  return (
-    data.userType === 'advanced' &&
-    data.experience > 5 &&
-    Boolean(data.certification)
-  )
+    return data.userType === 'advanced' && data.experience > 5 && Boolean(data.certification)
 }, [])
 ```
 
@@ -391,24 +396,24 @@ const shouldShowAdvancedStep = useCallback((data: FormType) => {
 
 ```typescript
 const handleStep1Complete = useCallback(
-  async (data: FormType) => {
-    try {
-      // Validate data with API
-      const isValid = await validateWithAPI(data.field1)
-      if (!isValid) {
-        toast.error('Validation failed')
-        // Note: onStepComplete can't prevent step transition
-        // Use validate prop for blocking validation
-      }
+    async (data: FormType) => {
+        try {
+            // Validate data with API
+            const isValid = await validateWithAPI(data.field1)
+            if (!isValid) {
+                toast.error('Validation failed')
+                // Note: onStepComplete can't prevent step transition
+                // Use validate prop for blocking validation
+            }
 
-      // Fetch data for next step
-      const nextStepData = await fetchData(data.field1)
-      setAdditionalData(nextStepData)
-    } catch (error) {
-      console.error('Step completion error:', error)
-    }
-  },
-  [setAdditionalData]
+            // Fetch data for next step
+            const nextStepData = await fetchData(data.field1)
+            setAdditionalData(nextStepData)
+        } catch (error) {
+            console.error('Step completion error:', error)
+        }
+    },
+    [setAdditionalData],
 )
 ```
 
@@ -416,23 +421,23 @@ const handleStep1Complete = useCallback(
 
 ```typescript
 const validateOrderStep = useCallback((data: OrderFormData) => {
-  // Must have items
-  if (!data.items || data.items.length === 0) {
-    return false
-  }
+    // Must have items
+    if (!data.items || data.items.length === 0) {
+        return false
+    }
 
-  // Must have delivery date if delivery type is scheduled
-  if (data.deliveryType === 'scheduled' && !data.deliveryDate) {
-    return false
-  }
+    // Must have delivery date if delivery type is scheduled
+    if (data.deliveryType === 'scheduled' && !data.deliveryDate) {
+        return false
+    }
 
-  // Total must be positive
-  const total = calculateTotal(data.items)
-  if (total <= 0) {
-    return false
-  }
+    // Total must be positive
+    const total = calculateTotal(data.items)
+    if (total <= 0) {
+        return false
+    }
 
-  return true
+    return true
 }, [])
 ```
 
@@ -473,17 +478,17 @@ const Step1Content = () => {
 ```typescript
 // validate receives current form data
 const validateStep = useCallback((data: FormType) => {
-  // Can access any form field
-  if (!data.firstName || !data.lastName) {
-    return false
-  }
+    // Can access any form field
+    if (!data.firstName || !data.lastName) {
+        return false
+    }
 
-  // Can use predicates
-  if (!isValidEmail(data.email)) {
-    return false
-  }
+    // Can use predicates
+    if (!isValidEmail(data.email)) {
+        return false
+    }
 
-  return true
+    return true
 }, [])
 ```
 
@@ -549,9 +554,9 @@ const validate = useCallback((data: FormType) => {
 ```typescript
 // ❌ Bad - causes issues
 useEffect(() => {
-  if (externalData) {
-    setValue('field', externalData.value)
-  }
+    if (externalData) {
+        setValue('field', externalData.value)
+    }
 }, [externalData, setValue])
 ```
 
@@ -559,9 +564,12 @@ useEffect(() => {
 
 ```typescript
 // ✅ Good - direct update
-const handleSelect = useCallback((value) => {
-  setValue('field', value)
-}, [setValue])
+const handleSelect = useCallback(
+    value => {
+        setValue('field', value)
+    },
+    [setValue],
+)
 ```
 
 ### ❌ Don't: Forget to memoize complex objects
@@ -589,28 +597,34 @@ const filters = useMemo(() => {
 ### Memoization Strategy
 
 1. **Always memoize:**
-   - Functions passed as props (`validate`, `shouldShow`, `onStepComplete`)
-   - Complex objects and arrays passed to child components
-   - Computed values used in multiple places
+    - Functions passed as props (`validate`, `shouldShow`, `onStepComplete`)
+    - Complex objects and arrays passed to child components
+    - Computed values used in multiple places
 
 2. **Don't memoize:**
-   - Primitive values (strings, numbers, booleans)
-   - JSX elements (React handles this)
-   - Values that change every render anyway
-   - Simple translations (fm calls)
+    - Primitive values (strings, numbers, booleans)
+    - JSX elements (React handles this)
+    - Values that change every render anyway
+    - Simple translations (fm calls)
 
 ```typescript
 // ✅ Memoize complex objects
-const tableConfig = useMemo(() => ({
-  tableId: TABLE_IDS.ITEMS_SELECT,
-  filters: categoryFilters,
-  sorting: defaultSorting
-}), [categoryFilters, defaultSorting])
+const tableConfig = useMemo(
+    () => ({
+        tableId: TABLE_IDS.ITEMS_SELECT,
+        filters: categoryFilters,
+        sorting: defaultSorting,
+    }),
+    [categoryFilters, defaultSorting],
+)
 
 // ✅ Memoize callbacks
-const handleStepComplete = useCallback(async (data) => {
-  await processData(data)
-}, [processData])
+const handleStepComplete = useCallback(
+    async data => {
+        await processData(data)
+    },
+    [processData],
+)
 
 // ❌ Don't memoize primitives
 const title = useMemo(() => 'Step 1', []) // Unnecessary!
@@ -626,33 +640,36 @@ const title = useMemo(() => fm({ id: message.title }), [fm]) // Unnecessary!
 ```typescript
 // Add console logs to track wizard state
 const validateStep = useCallback((data: FormType) => {
-  console.log('Validating step with data:', data)
-  const isValid = Boolean(data.field)
-  console.log('Validation result:', isValid)
-  return isValid
+    console.log('Validating step with data:', data)
+    const isValid = Boolean(data.field)
+    console.log('Validation result:', isValid)
+    return isValid
 }, [])
 
 const shouldShow = useCallback((data: FormType) => {
-  console.log('Checking shouldShow with data:', data)
-  const show = Boolean(data.condition)
-  console.log('Should show:', show)
-  return show
+    console.log('Checking shouldShow with data:', data)
+    const show = Boolean(data.condition)
+    console.log('Should show:', show)
+    return show
 }, [])
 ```
 
 ### Common Issues
 
 **Issue: Step won't proceed**
+
 - Check validation function returns `true`
 - Verify required fields are filled
 - Check console for validation errors
 
 **Issue: Step not appearing**
+
 - Verify `shouldShow` returns `true`
 - Check form data has required values
 - Ensure step is included in wizard
 
 **Issue: Infinite re-renders**
+
 - Memoize all functions and complex objects
 - Check useEffect dependencies
 - Avoid creating new objects in render
@@ -663,18 +680,18 @@ const shouldShow = useCallback((data: FormType) => {
 import type { UseFormReset } from 'react-hook-form'
 
 interface WizardStepProps<T> {
-  id: string
-  title: string
-  validate?: (data: T) => boolean
-  shouldShow?: (data: T) => boolean
-  onStepComplete?: (data: T) => void | Promise<void>
-  children: React.ReactNode
+    id: string
+    title: string
+    validate?: (data: T) => boolean
+    shouldShow?: (data: T) => boolean
+    onStepComplete?: (data: T) => void | Promise<void>
+    children: React.ReactNode
 }
 
 interface FormWizardProps<T> {
-  onSubmit: (data: T, reset: UseFormReset<T>) => void | Promise<void>
-  defaultValues?: Partial<T>
-  children: React.ReactNode
+    onSubmit: (data: T, reset: UseFormReset<T>) => void | Promise<void>
+    defaultValues?: Partial<T>
+    children: React.ReactNode
 }
 ```
 

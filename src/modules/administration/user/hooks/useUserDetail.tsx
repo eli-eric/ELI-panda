@@ -30,16 +30,16 @@ const USERS = gql(`
 `)
 
 export const useUserDetail = (userUid?: string) => {
-  const { data, refetch, isLoading } = useGraphQL(USERS, {
-    variables: {
-      where: {
-        uid: userUid
-      }
+    const { data, refetch, isLoading } = useGraphQL(USERS, {
+        variables: {
+            where: {
+                uid: userUid,
+            },
+        },
+    })
+    return {
+        userDetail: data?.users[0],
+        refetch,
+        loading: isLoading,
     }
-  })
-  return {
-    userDetail: data?.users[0],
-    refetch,
-    loading: isLoading
-  }
 }

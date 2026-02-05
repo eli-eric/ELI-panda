@@ -30,32 +30,32 @@ const SUBSYSTEMS_QUERY = gql(`
 `)
 
 export const useSystemSubsystems = () => {
-  const router = useRouter()
-  const uid = router.query.uid as string | undefined
+    const router = useRouter()
+    const uid = router.query.uid as string | undefined
 
-  const { data, error, isLoading, status } = useGraphQL(SUBSYSTEMS_QUERY, {
-    variables: {
-      where: {
-        deleted: false,
-        parentSystem: {
-          uid
+    const { data, error, isLoading, status } = useGraphQL(SUBSYSTEMS_QUERY, {
+        variables: {
+            where: {
+                deleted: false,
+                parentSystem: {
+                    uid,
+                },
+            },
+        },
+        refetchOnMount: 'always',
+        refetchOnReconnect: 'always',
+    })
+
+    useEffect(() => {
+        if (error) {
+            toast.error('Failed to fetch system detail')
         }
-      }
-    },
-    refetchOnMount: 'always',
-    refetchOnReconnect: 'always'
-  })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [error, status, data])
 
-  useEffect(() => {
-    if (error) {
-      toast.error('Failed to fetch system detail')
+    return {
+        subsystems: data?.systems,
+        loading: isLoading,
+        error,
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [error, status, data])
-
-  return {
-    subsystems: data?.systems,
-    loading: isLoading,
-    error
-  }
 }

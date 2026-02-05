@@ -9,27 +9,27 @@ import type { NavigationItem } from './types'
  * @returns Filtered navigation items that user has access to
  */
 export function filterNavigationByPermission(
-  items: NavigationItem[],
-  userRoles?: ROLE[]
+    items: NavigationItem[],
+    userRoles?: ROLE[],
 ): NavigationItem[] {
-  if (!userRoles || userRoles.length === 0) {
-    return []
-  }
+    if (!userRoles || userRoles.length === 0) {
+        return []
+    }
 
-  return items
-    .filter(item => userRoles.includes(item.role))
-    .map(item => {
-      if (item.items) {
-        const filteredSubItems = item.items.filter(subItem =>
-          userRoles.includes(subItem.role)
-        )
+    return items
+        .filter(item => userRoles.includes(item.role))
+        .map(item => {
+            if (item.items) {
+                const filteredSubItems = item.items.filter(subItem =>
+                    userRoles.includes(subItem.role),
+                )
 
-        return {
-          ...item,
-          items: filteredSubItems.length > 0 ? filteredSubItems : undefined
-        }
-      }
+                return {
+                    ...item,
+                    items: filteredSubItems.length > 0 ? filteredSubItems : undefined,
+                }
+            }
 
-      return item
-    })
+            return item
+        })
 }

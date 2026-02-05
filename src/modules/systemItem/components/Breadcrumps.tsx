@@ -7,31 +7,31 @@ import { PATH } from '@/types/constants/paths'
 import type { CodebookType } from '@/types/responses/codebook'
 
 interface BreadcrumbsProps {
-  parentPath?: CodebookType[]
-  isLink?: boolean
+    parentPath?: CodebookType[]
+    isLink?: boolean
 }
 
 const Breadcrumbs: FC<BreadcrumbsProps> = ({ parentPath, isLink = true }) => {
-  if (!parentPath || parentPath.length === 0) {
-    return null
-  }
-  return (
-    <BreadcrumpContainer homeLink={isLink ? PATH.SYSTEMS : undefined}>
-      <Fragment>
-        {parentPath?.map(system => {
-          const link = isLink ? PATH.SYSTEM + '/' + system.uid : undefined
+    if (!parentPath || parentPath.length === 0) {
+        return null
+    }
+    return (
+        <BreadcrumpContainer homeLink={isLink ? PATH.SYSTEMS : undefined}>
+            <Fragment>
+                {parentPath?.map(system => {
+                    const link = isLink ? PATH.SYSTEM + '/' + system.uid : undefined
 
-          return (
-            <BreadcrumpItem
-              key={system?.uid}
-              name={system?.name}
-              systemLevel={system.systemLevel}
-              link={link}
-            />
-          )
-        })}
-      </Fragment>
-    </BreadcrumpContainer>
-  )
+                    return (
+                        <BreadcrumpItem
+                            key={system?.uid}
+                            name={system?.name}
+                            systemLevel={system.systemLevel}
+                            link={link}
+                        />
+                    )
+                })}
+            </Fragment>
+        </BreadcrumpContainer>
+    )
 }
 export default Breadcrumbs

@@ -8,53 +8,45 @@ import { SystemTypeComboBox } from '@/modules/shared/form/systemType/SelectSyste
 import { useSystemsFilterFields } from '@/modules/systems/components/filters/form/SystemsFilter.fields'
 
 export const FilterForm = ({
-  tableId,
-  enableQueryUrl
+    tableId,
+    enableQueryUrl,
 }: {
-  tableId: string
-  enableQueryUrl: boolean
+    tableId: string
+    enableQueryUrl: boolean
 }) => {
-  const fields = useSystemsFilterFields()
+    const fields = useSystemsFilterFields()
 
-  const { setFilter } = useFormFilterState({ tableId, enableQueryUrl })
+    const { setFilter } = useFormFilterState({ tableId, enableQueryUrl })
 
-  return (
-    <div className={cn('md:grid md:grid-cols-2 md:gap-4 md:min-w-[500px]')}>
-      <div className="flex flex-col gap-2">
-        <SelectSystemComboBox
-          selectSystemField={fields.parentSystem}
-          onChange={setFilter(fields.parentSystem.name)}
-          isFilter={true}
-        />
-        <Input
-          {...fields.name}
-          onChange={setFilter(fields.name.name)}
-          isFilter={true}
-        />
-        <SystemTypeComboBox
-          systemTypeField={fields.systemType}
-          clickIcon={true}
-          onChange={setFilter(fields.systemType.name)}
-          isFilter={true}
-        />
-      </div>
-      <div className="flex flex-col gap-2">
-        <Input
-          {...fields.systemCode}
-          onChange={setFilter(fields.systemCode.name)}
-          isFilter={true}
-        />
-        <Combobox
-          {...fields.zone}
-          onSelect={setFilter(fields.zone.name)}
-          isFilter={true}
-        />
-        <SelectLocationCombo
-          locationField={fields.location}
-          onSelect={setFilter(fields.location.name)}
-          isFilter={true}
-        />
-      </div>
-    </div>
-  )
+    return (
+        <div className={cn('md:grid md:grid-cols-2 md:gap-4 md:min-w-[500px]')}>
+            <div className="flex flex-col gap-2">
+                <SelectSystemComboBox
+                    selectSystemField={fields.parentSystem}
+                    onChange={setFilter(fields.parentSystem.name)}
+                    isFilter={true}
+                />
+                <Input {...fields.name} onChange={setFilter(fields.name.name)} isFilter={true} />
+                <SystemTypeComboBox
+                    systemTypeField={fields.systemType}
+                    clickIcon={true}
+                    onChange={setFilter(fields.systemType.name)}
+                    isFilter={true}
+                />
+            </div>
+            <div className="flex flex-col gap-2">
+                <Input
+                    {...fields.systemCode}
+                    onChange={setFilter(fields.systemCode.name)}
+                    isFilter={true}
+                />
+                <Combobox {...fields.zone} onSelect={setFilter(fields.zone.name)} isFilter={true} />
+                <SelectLocationCombo
+                    locationField={fields.location}
+                    onSelect={setFilter(fields.location.name)}
+                    isFilter={true}
+                />
+            </div>
+        </div>
+    )
 }

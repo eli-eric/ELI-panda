@@ -5,35 +5,35 @@ import { FormLeaveWarning } from '@/components/form/FormLeaveWarning'
 import useFormNotification from '@/hooks/form/useFormNotification'
 
 interface Props<T extends FieldValues> {
-  onSubmit?: (data: T) => void
-  children: React.ReactNode
-  formMethods: UseFormReturn<T, any, any>
-  enableLeaveWarning?: boolean
-  className?: string
+    onSubmit?: (data: T) => void
+    children: React.ReactNode
+    formMethods: UseFormReturn<T, any, any>
+    enableLeaveWarning?: boolean
+    className?: string
 }
 export const Form = <T extends FieldValues>({
-  children,
-  onSubmit,
-  formMethods,
-  enableLeaveWarning,
-  className
+    children,
+    onSubmit,
+    formMethods,
+    enableLeaveWarning,
+    className,
 }: Props<T>) => {
-  const { handleSubmit, control, formState } = formMethods
-  useFormNotification<T>({ control })
+    const { handleSubmit, control, formState } = formMethods
+    useFormNotification<T>({ control })
 
-  return (
-    <form
-      onSubmit={
-        onSubmit
-          ? handleSubmit(onSubmit)
-          : e => {
-              e.preventDefault()
+    return (
+        <form
+            onSubmit={
+                onSubmit
+                    ? handleSubmit(onSubmit)
+                    : e => {
+                          e.preventDefault()
+                      }
             }
-      }
-      className={className}
-    >
-      <FormProvider {...formMethods}>{children}</FormProvider>
-      {enableLeaveWarning && <FormLeaveWarning formState={formState} />}
-    </form>
-  )
+            className={className}
+        >
+            <FormProvider {...formMethods}>{children}</FormProvider>
+            {enableLeaveWarning && <FormLeaveWarning formState={formState} />}
+        </form>
+    )
 }

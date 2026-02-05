@@ -9,17 +9,17 @@ import { PublicationsContainer } from '@/modules/publications/publications.cont'
 const messages = message.publications
 
 const OrderItemPage: NextPage = (): JSX.Element => {
-  const intl = useIntl()
+    const intl = useIntl()
 
-  return (
-    <Fragment>
-      <Head>
-        <title>{intl.formatMessage({ id: messages.head })}</title>
-        <meta name="description" content="...." />
-      </Head>
-      <PublicationsContainer />
-    </Fragment>
-  )
+    return (
+        <Fragment>
+            <Head>
+                <title>{intl.formatMessage({ id: messages.head })}</title>
+                <meta name="description" content="...." />
+            </Head>
+            <PublicationsContainer />
+        </Fragment>
+    )
 }
 
 export default OrderItemPage

@@ -10,164 +10,172 @@ import { useFormControlStore } from '@/store/useFormControlStore'
 import { PROPERTY_TYPE } from '@/types/catalogue/constants'
 
 interface Props {
-  tableId: string
-  catalogueCategoryProperties?: CatalogueItemDetail[]
-  enableQueryUrl?: boolean
-  isItemProperties?: boolean
+    tableId: string
+    catalogueCategoryProperties?: CatalogueItemDetail[]
+    enableQueryUrl?: boolean
+    isItemProperties?: boolean
 }
 
 export const CategoryPropFilters = ({
-  tableId,
-  catalogueCategoryProperties,
-  enableQueryUrl,
-  isItemProperties
+    tableId,
+    catalogueCategoryProperties,
+    enableQueryUrl,
+    isItemProperties,
 }: Props) => {
-  const { setFilter } = useFormFilterState({ tableId, enableQueryUrl })
-  const { addCustomFieldIdToSync } = useFormControlStore()
+    const { setFilter } = useFormFilterState({ tableId, enableQueryUrl })
+    const { addCustomFieldIdToSync } = useFormControlStore()
 
-  // sort properties by type.uid list first and by name to in same order every time
-  const categoryProperties = catalogueCategoryProperties?.sort((a, b) => {
-    if (
-      a.property.type.uid === PROPERTY_TYPE.LIST &&
-      b.property.type.uid !== PROPERTY_TYPE.LIST
+    // sort properties by type.uid list first and by name to in same order every time
+    const categoryProperties = catalogueCategoryProperties?.sort((a, b) => {
+        if (
+            a.property.type.uid === PROPERTY_TYPE.LIST &&
+            b.property.type.uid !== PROPERTY_TYPE.LIST
+        )
+            return -1
+        if (
+            a.property.type.uid !== PROPERTY_TYPE.LIST &&
+            b.property.type.uid === PROPERTY_TYPE.LIST
+        )
+            return 1
+        return a.property.name.localeCompare(b.property.name)
+    })
+
+    if (!categoryProperties) return null
+
+    return (
+        <Fragment>
+            {categoryProperties?.length > 0 && (
+                <div className="col-span-2 md:grid md:grid-cols-2 md:gap-4">
+                    <span className=" col-span-2 text-base font-semibold leading-6 text-gray-900 dark:text-gray-200">
+                        {isItemProperties ? 'Item Properties' : 'Category Properties'}
+                    </span>
+                    {categoryProperties.map(property => {
+                        const label =
+                            property.property.name +
+                            (property.property.unit ? ` [${property.property.unit?.name}]` : '')
+                        switch (property.property.type.uid) {
+                            case PROPERTY_TYPE.TEXT: {
+                                return (
+                                    <Input
+                                        disabled={false}
+                                        rounded="rounded-md"
+                                        key={property.property.uid}
+                                        unit={property.property.unit?.name}
+                                        name={property.property.uid}
+                                        label={label}
+                                        onChange={value => {
+                                            setFilter(property.property.uid)(
+                                                value,
+                                                property.property.type.code,
+                                                property.property.name,
+                                                isItemProperties
+                                                    ? 'PHYSICAL_ITEM'
+                                                    : 'CATALOGUE_ITEM',
+                                            )
+                                            addCustomFieldIdToSync(property.property.uid)
+                                        }}
+                                        isFilter={true}
+                                    />
+                                )
+                            }
+                            case PROPERTY_TYPE.NUMBER: {
+                                return (
+                                    <RangeInput
+                                        disabled={false}
+                                        key={property.property.uid}
+                                        name={property.property.uid}
+                                        required
+                                        label={label}
+                                        onChange={value => {
+                                            setFilter(property.property.uid)(
+                                                value,
+                                                property.property.type.code,
+                                                property.property.name,
+
+                                                isItemProperties
+                                                    ? 'PHYSICAL_ITEM'
+                                                    : 'CATALOGUE_ITEM',
+                                            )
+                                            addCustomFieldIdToSync(property.property.uid)
+                                        }}
+                                        isFilter={true}
+                                    />
+                                )
+                            }
+                            case PROPERTY_TYPE.RANGE: {
+                                return (
+                                    <RangeInput
+                                        disabled={false}
+                                        key={property.property.uid}
+                                        name={property.property.uid}
+                                        placeholder={{ min: 'Value', max: '+/-' }}
+                                        label={label}
+                                        onChange={value => {
+                                            setFilter(property.property.uid)(
+                                                value,
+                                                property.property.type.code,
+                                                property.property.name,
+                                                isItemProperties
+                                                    ? 'PHYSICAL_ITEM'
+                                                    : 'CATALOGUE_ITEM',
+                                            )
+                                            addCustomFieldIdToSync(property.property.uid)
+                                        }}
+                                        isFilter={true}
+                                    />
+                                )
+                            }
+                            case PROPERTY_TYPE.BOOLEAN: {
+                                return (
+                                    <Listbox
+                                        key={property.property.uid}
+                                        disabled={false}
+                                        name={property.property.uid}
+                                        customLabel={label}
+                                        onChange={value => {
+                                            setFilter(property.property.uid)(
+                                                value,
+                                                property.property.type.code,
+                                                property.property.name,
+                                                isItemProperties
+                                                    ? 'PHYSICAL_ITEM'
+                                                    : 'CATALOGUE_ITEM',
+                                            )
+                                            addCustomFieldIdToSync(property.property.uid)
+                                        }}
+                                        isFilter={true}
+                                        customOptions={['true', 'false']}
+                                    />
+                                )
+                            }
+                            case PROPERTY_TYPE.LIST: {
+                                return (
+                                    <FilterCheckboxes
+                                        key={property.property.uid}
+                                        name={property.property.uid}
+                                        label={label}
+                                        onChange={value => {
+                                            setFilter(property.property.uid)(
+                                                value,
+                                                property.property.type.code,
+                                                property.property.name,
+                                                isItemProperties
+                                                    ? 'PHYSICAL_ITEM'
+                                                    : 'CATALOGUE_ITEM',
+                                            )
+                                            addCustomFieldIdToSync(property.property.uid)
+                                        }}
+                                        isFilter={true}
+                                        options={property.property.listOfValues}
+                                    />
+                                )
+                            }
+                            default:
+                                return null
+                        }
+                    })}
+                </div>
+            )}
+        </Fragment>
     )
-      return -1
-    if (
-      a.property.type.uid !== PROPERTY_TYPE.LIST &&
-      b.property.type.uid === PROPERTY_TYPE.LIST
-    )
-      return 1
-    return a.property.name.localeCompare(b.property.name)
-  })
-
-  if (!categoryProperties) return null
-
-  return (
-    <Fragment>
-      {categoryProperties?.length > 0 && (
-        <div className="col-span-2 md:grid md:grid-cols-2 md:gap-4">
-          <span className=" col-span-2 text-base font-semibold leading-6 text-gray-900 dark:text-gray-200">
-            {isItemProperties ? 'Item Properties' : 'Category Properties'}
-          </span>
-          {categoryProperties.map(property => {
-            const label =
-              property.property.name +
-              (property.property.unit
-                ? ` [${property.property.unit?.name}]`
-                : '')
-            switch (property.property.type.uid) {
-              case PROPERTY_TYPE.TEXT: {
-                return (
-                  <Input
-                    disabled={false}
-                    rounded="rounded-md"
-                    key={property.property.uid}
-                    unit={property.property.unit?.name}
-                    name={property.property.uid}
-                    label={label}
-                    onChange={value => {
-                      setFilter(property.property.uid)(
-                        value,
-                        property.property.type.code,
-                        property.property.name,
-                        isItemProperties ? 'PHYSICAL_ITEM' : 'CATALOGUE_ITEM'
-                      )
-                      addCustomFieldIdToSync(property.property.uid)
-                    }}
-                    isFilter={true}
-                  />
-                )
-              }
-              case PROPERTY_TYPE.NUMBER: {
-                return (
-                  <RangeInput
-                    disabled={false}
-                    key={property.property.uid}
-                    name={property.property.uid}
-                    required
-                    label={label}
-                    onChange={value => {
-                      setFilter(property.property.uid)(
-                        value,
-                        property.property.type.code,
-                        property.property.name,
-
-                        isItemProperties ? 'PHYSICAL_ITEM' : 'CATALOGUE_ITEM'
-                      )
-                      addCustomFieldIdToSync(property.property.uid)
-                    }}
-                    isFilter={true}
-                  />
-                )
-              }
-              case PROPERTY_TYPE.RANGE: {
-                return (
-                  <RangeInput
-                    disabled={false}
-                    key={property.property.uid}
-                    name={property.property.uid}
-                    placeholder={{ min: 'Value', max: '+/-' }}
-                    label={label}
-                    onChange={value => {
-                      setFilter(property.property.uid)(
-                        value,
-                        property.property.type.code,
-                        property.property.name,
-                        isItemProperties ? 'PHYSICAL_ITEM' : 'CATALOGUE_ITEM'
-                      )
-                      addCustomFieldIdToSync(property.property.uid)
-                    }}
-                    isFilter={true}
-                  />
-                )
-              }
-              case PROPERTY_TYPE.BOOLEAN: {
-                return (
-                  <Listbox
-                    key={property.property.uid}
-                    disabled={false}
-                    name={property.property.uid}
-                    customLabel={label}
-                    onChange={value => {
-                      setFilter(property.property.uid)(
-                        value,
-                        property.property.type.code,
-                        property.property.name,
-                        isItemProperties ? 'PHYSICAL_ITEM' : 'CATALOGUE_ITEM'
-                      )
-                      addCustomFieldIdToSync(property.property.uid)
-                    }}
-                    isFilter={true}
-                    customOptions={['true', 'false']}
-                  />
-                )
-              }
-              case PROPERTY_TYPE.LIST: {
-                return (
-                  <FilterCheckboxes
-                    key={property.property.uid}
-                    name={property.property.uid}
-                    label={label}
-                    onChange={value => {
-                      setFilter(property.property.uid)(
-                        value,
-                        property.property.type.code,
-                        property.property.name,
-                        isItemProperties ? 'PHYSICAL_ITEM' : 'CATALOGUE_ITEM'
-                      )
-                      addCustomFieldIdToSync(property.property.uid)
-                    }}
-                    isFilter={true}
-                    options={property.property.listOfValues}
-                  />
-                )
-              }
-              default:
-                return null
-            }
-          })}
-        </div>
-      )}
-    </Fragment>
-  )
 }

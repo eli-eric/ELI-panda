@@ -1,29 +1,29 @@
 name: Compose up TEST frontend on push
 
 on:
-  push:
-    branches:
-      - 'main'
+    push:
+        branches:
+            - 'main'
 
 jobs:
-  use-secret:
-    runs-on: czechia-server
-    steps:
-      - name: Show secret stats
-        run: |
-          echo "${{ secrets.NEXTAUTH_SECRET }}" | "${{ secrets.MINIO_ACCESS_KEY_DEV }}" | "${{ secrets.MINIO_SECRET_KEY_DEV }}" | "${{ secrets.NEO4J_PASSWORD }}" | "${{ secrets.AZURE_AD_BEAMLINES_CLIENT_ID }}" | "${{ secrets.AZURE_AD_BEAMLINES_CLIENT_SECRET }}" | "${{ secrets.AZURE_AD_BEAMLINES_TENANT_ID }}" | wc
-  compose-up:
-    runs-on: czechia-server
-    needs: use-secret
-    steps:
-      - uses: actions/checkout@v3
-      - run: |
-          docker compose -f docker-compose-test.yml up -d --build
-        env:
-          NEXTAUTH_SECRET: '${{ secrets.NEXTAUTH_SECRET }}'
-          MINIO_ACCESS_KEY_PROD: '${{ secrets.MINIO_ACCESS_KEY_TEST }}'
-          MINIO_SECRET_KEY_PROD: '${{ secrets.MINIO_SECRET_KEY_TEST }}'
-          NEO4J_PASSWORD: '${{ secrets.NEO4J_PASSWORD }}'
-          AZURE_AD_BEAMLINES_CLIENT_ID: '${{ secrets.AZURE_AD_BEAMLINES_CLIENT_ID }}'
-          AZURE_AD_BEAMLINES_CLIENT_SECRET: '${{ secrets.AZURE_AD_BEAMLINES_CLIENT_SECRET }}'
-          AZURE_AD_BEAMLINES_TENANT_ID: '${{ secrets.AZURE_AD_BEAMLINES_TENANT_ID }}'
+    use-secret:
+        runs-on: czechia-server
+        steps:
+            - name: Show secret stats
+              run: |
+                  echo "${{ secrets.NEXTAUTH_SECRET }}" | "${{ secrets.MINIO_ACCESS_KEY_DEV }}" | "${{ secrets.MINIO_SECRET_KEY_DEV }}" | "${{ secrets.NEO4J_PASSWORD }}" | "${{ secrets.AZURE_AD_BEAMLINES_CLIENT_ID }}" | "${{ secrets.AZURE_AD_BEAMLINES_CLIENT_SECRET }}" | "${{ secrets.AZURE_AD_BEAMLINES_TENANT_ID }}" | wc
+    compose-up:
+        runs-on: czechia-server
+        needs: use-secret
+        steps:
+            - uses: actions/checkout@v3
+            - run: |
+                  docker compose -f docker-compose-test.yml up -d --build
+              env:
+                  NEXTAUTH_SECRET: '${{ secrets.NEXTAUTH_SECRET }}'
+                  MINIO_ACCESS_KEY_PROD: '${{ secrets.MINIO_ACCESS_KEY_TEST }}'
+                  MINIO_SECRET_KEY_PROD: '${{ secrets.MINIO_SECRET_KEY_TEST }}'
+                  NEO4J_PASSWORD: '${{ secrets.NEO4J_PASSWORD }}'
+                  AZURE_AD_BEAMLINES_CLIENT_ID: '${{ secrets.AZURE_AD_BEAMLINES_CLIENT_ID }}'
+                  AZURE_AD_BEAMLINES_CLIENT_SECRET: '${{ secrets.AZURE_AD_BEAMLINES_CLIENT_SECRET }}'
+                  AZURE_AD_BEAMLINES_TENANT_ID: '${{ secrets.AZURE_AD_BEAMLINES_TENANT_ID }}'

@@ -14,34 +14,32 @@ import { PATH } from '@/types/constants/paths'
 import { PhysicalItemForm } from './PhysicalItem.form'
 
 export const SystemItemCard = () => {
-  const { formatMessage: fm } = useIntl()
-  const { control } = useFormContext()
-  const item = useWatch({ control, name: 'physicalItem' })
+    const { formatMessage: fm } = useIntl()
+    const { control } = useFormContext()
+    const item = useWatch({ control, name: 'physicalItem' })
 
-  return (
-    <CardUI className="border-2 border-amber-600 rounded-md shadow-md mt-8 ">
-      <CardContent>
-        <Fragment>
-          <Heading
-            customText={'ITEM: ' + (item?.catalogueItem?.name || 'No item')}
-          >
-            <div className="flex space-x-4 items-center">
-              {item?.catalogueItem?.uid && (
-                <Link
-                  href={PATH.CATALOGUE_ITEM + '/' + item.catalogueItem.uid}
-                  target={'_blank'}
-                >
-                  <LinkDecorator>
-                    {fm({ id: message.common.systemItem.viewCatalogueItem })}
-                  </LinkDecorator>
-                </Link>
-              )}
-              {item ? <ItemMoveButton /> : <ItemAssignButton />}
-            </div>
-          </Heading>
-          {item && <PhysicalItemForm uid={item.uid} />}
-        </Fragment>
-      </CardContent>
-    </CardUI>
-  )
+    return (
+        <CardUI className="border-2 border-amber-600 rounded-md shadow-md mt-8 ">
+            <CardContent>
+                <Fragment>
+                    <Heading customText={'ITEM: ' + (item?.catalogueItem?.name || 'No item')}>
+                        <div className="flex space-x-4 items-center">
+                            {item?.catalogueItem?.uid && (
+                                <Link
+                                    href={PATH.CATALOGUE_ITEM + '/' + item.catalogueItem.uid}
+                                    target={'_blank'}
+                                >
+                                    <LinkDecorator>
+                                        {fm({ id: message.common.systemItem.viewCatalogueItem })}
+                                    </LinkDecorator>
+                                </Link>
+                            )}
+                            {item ? <ItemMoveButton /> : <ItemAssignButton />}
+                        </div>
+                    </Heading>
+                    {item && <PhysicalItemForm uid={item.uid} />}
+                </Fragment>
+            </CardContent>
+        </CardUI>
+    )
 }

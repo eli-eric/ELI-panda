@@ -19,62 +19,62 @@ const messages = message.common.buttons
 let currentHistoryModalId: string | undefined
 
 function openHistoryModal(uid: string) {
-  if (typeof window === 'undefined') return // Prevent SSR execution
+    if (typeof window === 'undefined') return // Prevent SSR execution
 
-  const { openModal } = useDynamicModalStore.getState()
+    const { openModal } = useDynamicModalStore.getState()
 
-  currentHistoryModalId = openModal('dialog', {
-    id: `item-history-${uid}`,
-    component: () => <HistoryModalContent uid={uid} />,
-    props: {
-      title: 'History',
-      size: 'l' as const
-    }
-  })
+    currentHistoryModalId = openModal('dialog', {
+        id: `item-history-${uid}`,
+        component: () => <HistoryModalContent uid={uid} />,
+        props: {
+            title: 'History',
+            size: 'l' as const,
+        },
+    })
 
-  return currentHistoryModalId
+    return currentHistoryModalId
 }
 
 const HistoryModalContent = ({ uid }: { uid: string }) => {
-  const { closeModal } = useDynamicModalStore()
+    const { closeModal } = useDynamicModalStore()
 
-  const { data, error, isError } = useQuery({
-    queryKey: ['history', { uid }],
-    queryFn: queryFetcher<HistoryResponse[]>('history'),
-    enabled: true
-  })
+    const { data, error, isError } = useQuery({
+        queryKey: ['history', { uid }],
+        queryFn: queryFetcher<HistoryResponse[]>('history'),
+        enabled: true,
+    })
 
-  useEffect(() => {
-    if (isError || error) {
-      toast.error(error.message)
-    }
-  }, [isError, error])
+    useEffect(() => {
+        if (isError || error) {
+            toast.error(error.message)
+        }
+    }, [isError, error])
 
-  return (
-    <div className="space-y-4">
-      <HistoryFeeds history={data} />
-      <div className="flex justify-end">
-        <UIButton
-          onClick={() => {
-            if (currentHistoryModalId) {
-              closeModal(currentHistoryModalId)
-            }
-          }}
-        >
-          {messages.close}
-        </UIButton>
-      </div>
-    </div>
-  )
+    return (
+        <div className="space-y-4">
+            <HistoryFeeds history={data} />
+            <div className="flex justify-end">
+                <UIButton
+                    onClick={() => {
+                        if (currentHistoryModalId) {
+                            closeModal(currentHistoryModalId)
+                        }
+                    }}
+                >
+                    {messages.close}
+                </UIButton>
+            </div>
+        </div>
+    )
 }
 
 export const ShowHistoryButton = () => {
-  const router = useRouter()
-  const { uid } = router.query as { uid: string }
+    const router = useRouter()
+    const { uid } = router.query as { uid: string }
 
-  return (
-    <Button type="button" onClick={() => openHistoryModal(uid)}>
-      <Clock className="w-4 h-4" />
-    </Button>
-  )
+    return (
+        <Button type="button" onClick={() => openHistoryModal(uid)}>
+            <Clock className="w-4 h-4" />
+        </Button>
+    )
 }

@@ -7,26 +7,23 @@ import { queryMutate } from '@/utils/fetcher'
 import { useSystemsReload } from './useSystemsReload'
 
 export const useRecalculate = ({
-  onSuccess,
-  tableId = 'systems'
+    onSuccess,
+    tableId = 'systems',
 }: {
-  onSuccess?: () => void
-  tableId?: string
+    onSuccess?: () => void
+    tableId?: string
 }) => {
-  const [reloadSystems] = useSystemsReload({ tableId, onSuccess })
+    const [reloadSystems] = useSystemsReload({ tableId, onSuccess })
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: queryMutate<SystemsResponse, any>(
-      'recalculateSpareParts',
-      'post'
-    ),
-    onError: error => {
-      toast.error('Something went wrong: ' + error.message)
-    },
-    onSuccess: () => {
-      reloadSystems()
-    }
-  })
+    const { mutate, isPending } = useMutation({
+        mutationFn: queryMutate<SystemsResponse, any>('recalculateSpareParts', 'post'),
+        onError: error => {
+            toast.error('Something went wrong: ' + error.message)
+        },
+        onSuccess: () => {
+            reloadSystems()
+        },
+    })
 
-  return [mutate, isPending] as const
+    return [mutate, isPending] as const
 }

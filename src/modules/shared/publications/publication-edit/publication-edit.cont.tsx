@@ -10,44 +10,42 @@ import { PublicationFormContainer } from '../publication-create/publication-form
 import { usePublicationEditSheet } from './usePublicationEditSheet'
 
 type Props = {
-  uid: string
+    uid: string
 }
 
 export const PublicationEditContainer = ({ uid }: Props) => {
-  const {
-    data: publication,
-    isLoading,
-    isFetching,
-    isError,
-    error,
-    refetch
-  } = usePublication(uid)
+    const {
+        data: publication,
+        isLoading,
+        isFetching,
+        isError,
+        error,
+        refetch,
+    } = usePublication(uid)
 
-  const [, closeModal] = usePublicationEditSheet(uid)
+    const [, closeModal] = usePublicationEditSheet(uid)
 
-  useEffect(() => {
-    if (isError) {
-      toast.error('Something went wrong')
+    useEffect(() => {
+        if (isError) {
+            toast.error('Something went wrong')
+        }
+    }, [isError])
+
+    if (error?.response?.status === 404) {
+        return <RecordNotFound onClick={closeModal} />
     }
-  }, [isError])
 
-  if (error?.response?.status === 404) {
-    return <RecordNotFound onClick={closeModal} />
-  }
+    if (isError) {
+        return <ErrorPage />
+    }
 
-  if (isError) {
-    return <ErrorPage />
-  }
+    if (isLoading || isFetching) {
+        return <PublicationSkeleton />
+    }
 
-  if (isLoading || isFetching) {
-    return <PublicationSkeleton />
-  }
+    if (!publication) {
+        return <PublicationSkeleton />
+    }
 
-  if (!publication) {
-    return <PublicationSkeleton />
-  }
-
-  return (
-    <PublicationFormContainer publication={publication} refetch={refetch} />
-  )
+    return <PublicationFormContainer publication={publication} refetch={refetch} />
 }

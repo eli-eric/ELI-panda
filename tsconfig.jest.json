@@ -1,17 +1,17 @@
 {
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "types": ["jest"]
-  },
-  "include": [
-    "**/*.test.ts",
-    "**/*.test.tsx",
-    "**/*.spec.ts",
-    "**/*.spec.tsx",
-    "./jest.setup.ts",
-    "src/types/**/*.d.ts",
-    "src/**/*.ts",
-    "src/**/*.tsx"
-  ],
-  "exclude": []
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "types": ["jest"]
+    },
+    "include": [
+        "**/*.test.ts",
+        "**/*.test.tsx",
+        "**/*.spec.ts",
+        "**/*.spec.tsx",
+        "./jest.setup.ts",
+        "src/types/**/*.d.ts",
+        "src/**/*.ts",
+        "src/**/*.tsx"
+    ],
+    "exclude": []
 }

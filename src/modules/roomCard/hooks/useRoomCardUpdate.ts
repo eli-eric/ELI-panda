@@ -100,97 +100,84 @@ const updateOperationalStateMutation = gql(`
 `)
 
 export const useRoomCardUpdate = (roomCardUid?: string) => {
-  const queryClient = useQueryClient()
-  const { mutateAsync: update } = useGraphQLMutation(updateRoomCardMutation)
-  const { mutateAsync: updateOpState } = useGraphQLMutation(
-    updateOperationalStateMutation
-  )
-  const { roomCard: roomCardOrigin } = useRoomCard(roomCardUid)
+    const queryClient = useQueryClient()
+    const { mutateAsync: update } = useGraphQLMutation(updateRoomCardMutation)
+    const { mutateAsync: updateOpState } = useGraphQLMutation(updateOperationalStateMutation)
+    const { roomCard: roomCardOrigin } = useRoomCard(roomCardUid)
 
-  const updateRoomCard = (
-    roomCardForm: RoomCardFormType,
-    saveAndExit: boolean
-  ) => {
-    // Contacts and Locations are now handled separately via direct mutations
-    const variables = updateRoomCardVariables({
-      uid: roomCardUid,
-      roomCard: roomCardForm,
-      originalOperationalState: roomCardOrigin?.operationalState
-    })
+    const updateRoomCard = (roomCardForm: RoomCardFormType, saveAndExit: boolean) => {
+        // Contacts and Locations are now handled separately via direct mutations
+        const variables = updateRoomCardVariables({
+            uid: roomCardUid,
+            roomCard: roomCardForm,
+            originalOperationalState: roomCardOrigin?.operationalState,
+        })
 
-    // Prepare data for UPDATE action (without previousState/newState)
-    const updateData = {
-      node: 'RoomCard',
-      nodeUid: roomCardUid || '',
-      action: 'UPDATE'
+        // Prepare data for UPDATE action (without previousState/newState)
+        const updateData = {
+            node: 'RoomCard',
+            nodeUid: roomCardUid || '',
+            action: 'UPDATE',
+        }
+
+        return update(
+            {
+                ...variables,
+                ...updateData,
+            },
+            {
+                onSuccess: async data => {
+                    const updatedRoomCard = data.updateRoomCards.roomCards[0]
+
+                    // Update RoomCardQuery cache with server response
+                    queryClient.setQueriesData({ queryKey: ['RoomCardQuery'] }, (old: any) => {
+                        if (!old?.roomCards?.[0]) return old
+                        return {
+                            ...old,
+                            roomCards: [{ ...old.roomCards[0], ...updatedRoomCard }],
+                        }
+                    })
+
+                    // Update RoomCardsQuery cache with server response
+                    queryClient.setQueriesData({ queryKey: ['RoomCardsQuery'] }, (old: any) => {
+                        if (!old?.roomCards) return old
+                        return {
+                            ...old,
+                            roomCards: old.roomCards.map((rc: any) =>
+                                rc.uid === roomCardUid ? { ...rc, ...updatedRoomCard } : rc,
+                            ),
+                        }
+                    })
+
+                    // Invalidate to trigger background refetch for fresh data
+                    queryClient.invalidateQueries({
+                        queryKey: ['RoomCardsQuery'],
+                        refetchType: 'none',
+                    })
+
+                    // If operational state changed, create a separate history entry
+                    if (
+                        hasOperationalStateChanged(
+                            roomCardOrigin?.operationalState,
+                            roomCardForm.operationalState,
+                        )
+                    ) {
+                        await updateOpState({
+                            node: 'RoomCard',
+                            nodeUid: roomCardUid || '',
+                            action: 'OPERATION_STATE',
+                            previousState: roomCardOrigin?.operationalState?.code || '',
+                            newState: roomCardForm.operationalState?.code || '',
+                        })
+                    }
+
+                    if (saveAndExit) {
+                        navigateBack()
+                    }
+                },
+            },
+        )
     }
 
-    return update(
-      {
-        ...variables,
-        ...updateData
-      },
-      {
-        onSuccess: async data => {
-          const updatedRoomCard = data.updateRoomCards.roomCards[0]
-
-          // Update RoomCardQuery cache with server response
-          queryClient.setQueriesData(
-            { queryKey: ['RoomCardQuery'] },
-            (old: any) => {
-              if (!old?.roomCards?.[0]) return old
-              return {
-                ...old,
-                roomCards: [{ ...old.roomCards[0], ...updatedRoomCard }]
-              }
-            }
-          )
-
-          // Update RoomCardsQuery cache with server response
-          queryClient.setQueriesData(
-            { queryKey: ['RoomCardsQuery'] },
-            (old: any) => {
-              if (!old?.roomCards) return old
-              return {
-                ...old,
-                roomCards: old.roomCards.map((rc: any) =>
-                  rc.uid === roomCardUid
-                    ? { ...rc, ...updatedRoomCard }
-                    : rc
-                )
-              }
-            }
-          )
-
-          // Invalidate to trigger background refetch for fresh data
-          queryClient.invalidateQueries({
-            queryKey: ['RoomCardsQuery'],
-            refetchType: 'none'
-          })
-
-          // If operational state changed, create a separate history entry
-          if (
-            hasOperationalStateChanged(
-              roomCardOrigin?.operationalState,
-              roomCardForm.operationalState
-            )
-          ) {
-            await updateOpState({
-              node: 'RoomCard',
-              nodeUid: roomCardUid || '',
-              action: 'OPERATION_STATE',
-              previousState: roomCardOrigin?.operationalState?.code || '',
-              newState: roomCardForm.operationalState?.code || ''
-            })
-          }
-
-          if (saveAndExit) {
-            navigateBack()
-          }
-        }
-      }
-    )
-  }
-
-  return { updateRoomCard }
+    return { updateRoomCard }
 }

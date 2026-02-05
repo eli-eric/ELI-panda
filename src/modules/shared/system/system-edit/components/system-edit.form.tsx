@@ -26,156 +26,136 @@ import { SystemDetailSection } from './sections/system-detail.section'
 
 const MemoizedImageGallery = memo(ImageGallery)
 
-export const SystemEditForm = ({
-  uid,
-  onClose
-}: {
-  uid: string
-  onClose?: () => void
-}) => {
-  const { systemDetail, physicalItem, catalogueItem, refetch } =
-    useSuspenseSystemDetail({ uid })
-  const parentPath = systemDetail?.parentPath || []
-  const systemImageRef = useRef<ImageGalleryRef | undefined>(undefined)
-  const serviceItems = physicalItem?.serviceItemsConnection?.edges || []
-  const { groupedProperties, hasOverriddenProperties, hasProperties } =
-    useItemPropertiesData({
-      catalogueItem: physicalItem?.catalogueItem,
-      serviceItems
+export const SystemEditForm = ({ uid, onClose }: { uid: string; onClose?: () => void }) => {
+    const { systemDetail, physicalItem, catalogueItem, refetch } = useSuspenseSystemDetail({ uid })
+    const parentPath = systemDetail?.parentPath || []
+    const systemImageRef = useRef<ImageGalleryRef | undefined>(undefined)
+    const serviceItems = physicalItem?.serviceItemsConnection?.edges || []
+    const { groupedProperties, hasOverriddenProperties, hasProperties } = useItemPropertiesData({
+        catalogueItem: physicalItem?.catalogueItem,
+        serviceItems,
     })
 
-  const defaultValues = {
-    ...systemDetail,
-    physicalItem: physicalItem
-      ? {
-          ...physicalItem,
-          conditionStatus: physicalItem.conditionStatus,
-          itemUsage: physicalItem.itemUsage,
-          notes: physicalItem.notes,
-          serialNumber: physicalItem.serialNumber
-        }
-      : undefined,
-    responsible:
-      systemDetail?.responsible && systemDetail?.responsible?.fullName
-        ? {
-            uid: systemDetail?.responsible?.uid,
-            name: systemDetail?.responsible?.fullName
-          }
-        : undefined,
-    zone: systemDetail?.zone
-      ? {
-          uid: systemDetail?.zone?.uid,
-          name: systemDetail?.zone?.name as string
-        }
-      : undefined,
-    location: systemDetail?.location
-      ? {
-          uid: systemDetail?.location?.uid,
-          name:
-            systemDetail?.location?.name +
-            ' (' +
-            systemDetail?.location?.code +
-            ')',
-          code: systemDetail?.location?.code
-        }
-      : undefined,
-    systemLevel: systemDetail?.systemLevel || SystemLevel.SubsystemsAndParts
-  }
-
-  const formMethods = useForm<any>({
-    resolver: zodResolver(systemUpdateSchema),
-    mode: 'onSubmit',
-    defaultValues
-  })
-
-  const { updateSystem, loading } = useSystemSheetUpdate({
-    uid,
-    imageRef: systemImageRef,
-    physicalItemUid: physicalItem?.uid
-  })
-
-  const { withDirtyProtection } = useFormDirtyProtection(formMethods)
-  const { setIsDirty, reset } = useModalFormStateStore()
-
-  // Sync form dirty state with global modal store
-  useEffect(() => {
-    setIsDirty(formMethods.formState.isDirty)
-    return reset
-  }, [reset, formMethods.formState.isDirty, setIsDirty])
-
-  return (
-    <Form formMethods={formMethods} className="space-y-4">
-      <SheetFormButtons
-        editRole={ROLE.SYSTEM_EDIT}
-        loading={loading}
-        onSubmit={formMethods.handleSubmit(updateSystem)}
-        onExit={onClose}
-        isFormDirty={formMethods.formState.isDirty}
-        saveLabel="Save System"
-        loadingText="Saving system..."
-      />
-      <MemoizedImageGallery
-        ref={systemImageRef}
-        setValue={formMethods.setValue}
-        config={{
-          itemCategory: FILE_TYPE.SYSTEM,
-          itemId: uid,
-          additionalParams: catalogueItem?.uid
+    const defaultValues = {
+        ...systemDetail,
+        physicalItem: physicalItem
             ? {
-                itemCategory: FILE_TYPE.CATALOGUE,
-                itemId: catalogueItem?.uid
+                  ...physicalItem,
+                  conditionStatus: physicalItem.conditionStatus,
+                  itemUsage: physicalItem.itemUsage,
+                  notes: physicalItem.notes,
+                  serialNumber: physicalItem.serialNumber,
               }
-            : undefined
-        }}
-        className="w-full"
-      />
-      {parentPath && parentPath.length > 0 && (
-        <SystemHierarchy
-          parentPath={parentPath.filter(
-            (p: any): p is Exclude<typeof p, null> => p !== null
-          )}
-          currentSystemName={systemDetail?.name || 'System'}
-          currentSystemLevel={
-            systemDetail?.systemLevel || ('OTHER' as SystemLevel)
-          }
-          withDirtyProtection={withDirtyProtection}
-        />
-      )}
-      <SystemDetailSection />
-      {physicalItem && (
-        <PhysicalItemSection
-          physicalItem={physicalItem}
-          catalogueItem={catalogueItem}
-        />
-      )}
-      {catalogueItem && physicalItem && hasProperties && (
-        <ItemPropertiesSection
-          groupedProperties={groupedProperties}
-          hasOverriddenProperties={hasOverriddenProperties}
-          hasProperties={hasProperties}
-        />
-      )}
-      {physicalItem && (
-        <OrderInformationSection
-          physicalItem={physicalItem}
-          serviceItems={serviceItems}
-        />
-      )}
-      {systemDetail &&
-        (systemDetail?.sparePartsFor?.length > 0 ||
-          systemDetail?.sparePartsConnection?.edges?.length > 0) && (
-          <SparePartsCoverageSection
-            systemDetail={systemDetail}
-            withDirtyProtection={withDirtyProtection}
-            onSpareAssigned={refetch}
-          />
-        )}
-      {systemDetail && (
-        <SubsystemsSection
-          systemDetail={systemDetail}
-          withDirtyProtection={withDirtyProtection}
-        />
-      )}
-    </Form>
-  )
+            : undefined,
+        responsible:
+            systemDetail?.responsible && systemDetail?.responsible?.fullName
+                ? {
+                      uid: systemDetail?.responsible?.uid,
+                      name: systemDetail?.responsible?.fullName,
+                  }
+                : undefined,
+        zone: systemDetail?.zone
+            ? {
+                  uid: systemDetail?.zone?.uid,
+                  name: systemDetail?.zone?.name as string,
+              }
+            : undefined,
+        location: systemDetail?.location
+            ? {
+                  uid: systemDetail?.location?.uid,
+                  name: systemDetail?.location?.name + ' (' + systemDetail?.location?.code + ')',
+                  code: systemDetail?.location?.code,
+              }
+            : undefined,
+        systemLevel: systemDetail?.systemLevel || SystemLevel.SubsystemsAndParts,
+    }
+
+    const formMethods = useForm<any>({
+        resolver: zodResolver(systemUpdateSchema),
+        mode: 'onSubmit',
+        defaultValues,
+    })
+
+    const { updateSystem, loading } = useSystemSheetUpdate({
+        uid,
+        imageRef: systemImageRef,
+        physicalItemUid: physicalItem?.uid,
+    })
+
+    const { withDirtyProtection } = useFormDirtyProtection(formMethods)
+    const { setIsDirty, reset } = useModalFormStateStore()
+
+    // Sync form dirty state with global modal store
+    useEffect(() => {
+        setIsDirty(formMethods.formState.isDirty)
+        return reset
+    }, [reset, formMethods.formState.isDirty, setIsDirty])
+
+    return (
+        <Form formMethods={formMethods} className="space-y-4">
+            <SheetFormButtons
+                editRole={ROLE.SYSTEM_EDIT}
+                loading={loading}
+                onSubmit={formMethods.handleSubmit(updateSystem)}
+                onExit={onClose}
+                isFormDirty={formMethods.formState.isDirty}
+                saveLabel="Save System"
+                loadingText="Saving system..."
+            />
+            <MemoizedImageGallery
+                ref={systemImageRef}
+                setValue={formMethods.setValue}
+                config={{
+                    itemCategory: FILE_TYPE.SYSTEM,
+                    itemId: uid,
+                    additionalParams: catalogueItem?.uid
+                        ? {
+                              itemCategory: FILE_TYPE.CATALOGUE,
+                              itemId: catalogueItem?.uid,
+                          }
+                        : undefined,
+                }}
+                className="w-full"
+            />
+            {parentPath && parentPath.length > 0 && (
+                <SystemHierarchy
+                    parentPath={parentPath.filter(
+                        (p: any): p is Exclude<typeof p, null> => p !== null,
+                    )}
+                    currentSystemName={systemDetail?.name || 'System'}
+                    currentSystemLevel={systemDetail?.systemLevel || ('OTHER' as SystemLevel)}
+                    withDirtyProtection={withDirtyProtection}
+                />
+            )}
+            <SystemDetailSection />
+            {physicalItem && (
+                <PhysicalItemSection physicalItem={physicalItem} catalogueItem={catalogueItem} />
+            )}
+            {catalogueItem && physicalItem && hasProperties && (
+                <ItemPropertiesSection
+                    groupedProperties={groupedProperties}
+                    hasOverriddenProperties={hasOverriddenProperties}
+                    hasProperties={hasProperties}
+                />
+            )}
+            {physicalItem && (
+                <OrderInformationSection physicalItem={physicalItem} serviceItems={serviceItems} />
+            )}
+            {systemDetail &&
+                (systemDetail?.sparePartsFor?.length > 0 ||
+                    systemDetail?.sparePartsConnection?.edges?.length > 0) && (
+                    <SparePartsCoverageSection
+                        systemDetail={systemDetail}
+                        withDirtyProtection={withDirtyProtection}
+                        onSpareAssigned={refetch}
+                    />
+                )}
+            {systemDetail && (
+                <SubsystemsSection
+                    systemDetail={systemDetail}
+                    withDirtyProtection={withDirtyProtection}
+                />
+            )}
+        </Form>
+    )
 }

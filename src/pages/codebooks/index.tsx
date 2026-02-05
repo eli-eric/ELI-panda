@@ -9,17 +9,17 @@ import { CodebooksContainer } from '@/modules/codebooks/Codebooks.cont'
 const messages = message.orderItem
 
 const CodeBookEditorPage: NextPage = (): JSX.Element => {
-  const intl = useIntl()
+    const intl = useIntl()
 
-  return (
-    <Fragment>
-      <Head>
-        <title>{intl.formatMessage({ id: messages.head })}</title>
-        <meta name="description" content="...." />
-      </Head>
-      <CodebooksContainer />
-    </Fragment>
-  )
+    return (
+        <Fragment>
+            <Head>
+                <title>{intl.formatMessage({ id: messages.head })}</title>
+                <meta name="description" content="...." />
+            </Head>
+            <CodebooksContainer />
+        </Fragment>
+    )
 }
 
 export default CodeBookEditorPage

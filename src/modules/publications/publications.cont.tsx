@@ -16,63 +16,63 @@ import { usePublications } from './hooks/usePublications'
 import { usePublicationColumns } from './publications.columns'
 
 export const PublicationsContainer: FC = () => {
-  const tableId = 'publications'
-  const router = useRouter()
+    const tableId = 'publications'
+    const router = useRouter()
 
-  const columns = usePublicationColumns()
-  const { data, refetch } = usePublications(tableId)
+    const columns = usePublicationColumns()
+    const { data, refetch } = usePublications(tableId)
 
-  const tableSettings: PandaTableSettings<Publication> = {
-    enableSorting: true,
-    manualSorting: false,
-    enableColumnReordering: true,
-    enableQueryURL: true,
-    enableColumnHiding: true
-  }
+    const tableSettings: PandaTableSettings<Publication> = {
+        enableSorting: true,
+        manualSorting: false,
+        enableColumnReordering: true,
+        enableQueryURL: true,
+        enableColumnHiding: true,
+    }
 
-  const table = usePandaTable<Publication>({
-    tableId,
-    columns,
-    data: data?.data || [],
-    settings: tableSettings
-  })
+    const table = usePandaTable<Publication>({
+        tableId,
+        columns,
+        data: data?.data || [],
+        settings: tableSettings,
+    })
 
-  const openCreateSheet = () => {
-    router.push(PATH.PUBLICATION)
-  }
+    const openCreateSheet = () => {
+        router.push(PATH.PUBLICATION)
+    }
 
-  const handleRefresh = () => {
-    refetch()
-  }
+    const handleRefresh = () => {
+        refetch()
+    }
 
-  return (
-    <TableLayoutContainer>
-      <SearchBar
-        tableId={tableId}
-        left={
-          <SearchBarButtonsComponent
-            editRole={ROLE.PUBLICATIONS_EDIT}
-            handleAdd={openCreateSheet}
-            handleRefresh={handleRefresh}
-          >
-            <ExportButton />
-          </SearchBarButtonsComponent>
-        }
-      />
-      <PandaTableV2
-        tableId={tableId}
-        table={table}
-        data={data?.data}
-        settings={tableSettings}
-      />
-      <Pagination
-        tableId={tableId}
-        settings={{
-          enableQueryURL: true,
-          pageSizeDefault: 100,
-          total: data?.totalCount
-        }}
-      />
-    </TableLayoutContainer>
-  )
+    return (
+        <TableLayoutContainer>
+            <SearchBar
+                tableId={tableId}
+                left={
+                    <SearchBarButtonsComponent
+                        editRole={ROLE.PUBLICATIONS_EDIT}
+                        handleAdd={openCreateSheet}
+                        handleRefresh={handleRefresh}
+                    >
+                        <ExportButton />
+                    </SearchBarButtonsComponent>
+                }
+            />
+            <PandaTableV2
+                tableId={tableId}
+                table={table}
+                data={data?.data}
+                settings={tableSettings}
+            />
+            <Pagination
+                tableId={tableId}
+                settings={{
+                    enableQueryURL: true,
+                    pageSizeDefault: 100,
+                    total: data?.totalCount,
+                }}
+            />
+        </TableLayoutContainer>
+    )
 }

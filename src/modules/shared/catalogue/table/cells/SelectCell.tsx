@@ -4,25 +4,21 @@ import type { Dispatch, SetStateAction } from 'react'
 import type { CatalogueItem } from '@/types/responses/catalogue'
 
 interface Props extends CellContext<CatalogueItem, any> {
-  setItem: Dispatch<SetStateAction<CatalogueItem | undefined>>
-  selectedItem?: CatalogueItem
+    setItem: Dispatch<SetStateAction<CatalogueItem | undefined>>
+    selectedItem?: CatalogueItem
 }
 
-export const SelectCell = ({
-  row: { original },
-  setItem,
-  selectedItem
-}: Props) => (
-  <div className="ml-3 flex h-5 items-center">
-    <input
-      id={`side-${original.uid}`}
-      name="itemUid"
-      type="radio"
-      checked={selectedItem?.uid === original.uid}
-      onChange={() => {
-        setItem(original)
-      }}
-      className="h-4 w-4 border-gray-300 text-orange-500 focus:ring-orange-500"
-    />
-  </div>
+export const SelectCell = ({ row: { original }, setItem, selectedItem }: Props) => (
+    <div className="ml-3 flex h-5 items-center">
+        <input
+            id={`side-${original.uid}`}
+            name="itemUid"
+            type="radio"
+            checked={selectedItem?.uid === original.uid}
+            onChange={() => {
+                setItem(original)
+            }}
+            className="h-4 w-4 border-gray-300 text-orange-500 focus:ring-orange-500"
+        />
+    </div>
 )

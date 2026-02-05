@@ -5,31 +5,31 @@ import type { SystemDetail } from '@/types/responses/systems'
 import { SystemMovingEditForm } from './system-moving-edit.form'
 
 interface SystemsMovingType extends SystemDetail {
-  tableId: string
+    tableId: string
 }
 
 interface SystemMovingEditContainerProps {
-  childSystem: SystemsMovingType
-  parentSystem: SystemsMovingType
-  onClose?: () => void
+    childSystem: SystemsMovingType
+    parentSystem: SystemsMovingType
+    onClose?: () => void
 }
 
 export const SystemMovingEditContainer = ({
-  childSystem,
-  parentSystem,
-  onClose
+    childSystem,
+    parentSystem,
+    onClose,
 }: SystemMovingEditContainerProps) => {
-  if (!childSystem || !parentSystem) {
-    return <div>Missing required data</div>
-  }
+    if (!childSystem || !parentSystem) {
+        return <div>Missing required data</div>
+    }
 
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <SystemMovingEditForm
-        childSystem={childSystem}
-        parentSystem={parentSystem}
-        onClose={onClose}
-      />
-    </Suspense>
-  )
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <SystemMovingEditForm
+                childSystem={childSystem}
+                parentSystem={parentSystem}
+                onClose={onClose}
+            />
+        </Suspense>
+    )
 }

@@ -34,15 +34,11 @@ import { FILE_TYPE } from '@/modules/shared/fileManager/types'
 import { ImageGalleryV2 } from '@/modules/shared/imageManager/v2'
 
 function MyComponent({ itemId }: { itemId?: string }) {
-  const hasEditRole = usePermission([ROLE.EDIT])
+    const hasEditRole = usePermission([ROLE.EDIT])
 
-  return (
-    <ImageGalleryV2
-      itemType={FILE_TYPE.CATALOGUE}
-      itemId={itemId}
-      hasEditRole={hasEditRole}
-    />
-  )
+    return (
+        <ImageGalleryV2 itemType={FILE_TYPE.CATALOGUE} itemId={itemId} hasEditRole={hasEditRole} />
+    )
 }
 ```
 
@@ -65,12 +61,12 @@ function MyComponent({ itemId }: { itemId?: string }) {
 
 ```tsx
 <ImageGalleryV2
-  itemType={FILE_TYPE.CATALOGUE}
-  itemId="123-456-789"
-  hasEditRole={true}
-  allowMultipleImages={true}
-  disabled={false}
-  className="mb-4"
+    itemType={FILE_TYPE.CATALOGUE}
+    itemId="123-456-789"
+    hasEditRole={true}
+    allowMultipleImages={true}
+    disabled={false}
+    className="mb-4"
 />
 ```
 
@@ -273,7 +269,7 @@ yarn test --watch imageManager/v2
 
 // ✅ Good
 {
-  itemId && <ImageGalleryV2 itemType={FILE_TYPE.CATALOGUE} itemId={itemId} />
+    itemId && <ImageGalleryV2 itemType={FILE_TYPE.CATALOGUE} itemId={itemId} />
 }
 ```
 
@@ -303,12 +299,12 @@ yarn test --watch imageManager/v2
 
 ```tsx
 const validateFileSize = (file: File) => {
-  const maxSize = 50 * 1024 * 1024 // 50MB
-  if (file.size > maxSize) {
-    toast.error('File size exceeds 50MB')
-    return false
-  }
-  return true
+    const maxSize = 50 * 1024 * 1024 // 50MB
+    if (file.size > maxSize) {
+        toast.error('File size exceeds 50MB')
+        return false
+    }
+    return true
 }
 ```
 
@@ -323,23 +319,23 @@ import { ImageGallery } from '@/modules/shared/imageManager/ImageGallery'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 
 const Component = () => {
-  const imageRef = useRef<ImageGalleryRef>()
-  const [hasChanges, setHasChanges] = useState(false)
+    const imageRef = useRef<ImageGalleryRef>()
+    const [hasChanges, setHasChanges] = useState(false)
 
-  const handleSubmit = () => {
-    imageRef.current?.submit(itemId, () => {
-      // Success callback
-    })
-  }
+    const handleSubmit = () => {
+        imageRef.current?.submit(itemId, () => {
+            // Success callback
+        })
+    }
 
-  return (
-    <ImageGallery
-      ref={imageRef}
-      config={{ itemCategory: FILE_TYPE.CATALOGUE, itemId }}
-      hasEditRole={hasEditRole}
-      setValue={setValue}
-    />
-  )
+    return (
+        <ImageGallery
+            ref={imageRef}
+            config={{ itemCategory: FILE_TYPE.CATALOGUE, itemId }}
+            hasEditRole={hasEditRole}
+            setValue={setValue}
+        />
+    )
 }
 ```
 
@@ -349,21 +345,17 @@ const Component = () => {
 import { ImageGalleryV2 } from '@/modules/shared/imageManager/v2'
 
 const Component = () => {
-  // No refs needed!
-  // No submit coordination needed!
+    // No refs needed!
+    // No submit coordination needed!
 
-  const handleSubmit = () => {
-    // Images already uploaded independently
-    // Just submit form data
-  }
+    const handleSubmit = () => {
+        // Images already uploaded independently
+        // Just submit form data
+    }
 
-  return (
-    <ImageGalleryV2
-      itemType={FILE_TYPE.CATALOGUE}
-      itemId={itemId}
-      hasEditRole={hasEditRole}
-    />
-  )
+    return (
+        <ImageGalleryV2 itemType={FILE_TYPE.CATALOGUE} itemId={itemId} hasEditRole={hasEditRole} />
+    )
 }
 ```
 
@@ -388,18 +380,14 @@ const Component = () => {
 import { ImageGalleryV2 } from '@/modules/shared/imageManager/v2'
 
 const CatalogueItemContainer = ({ uid }: { uid?: string }) => {
-  const hasEditRole = !usePermission([ROLE.CATALOGUE_EDIT])
+    const hasEditRole = !usePermission([ROLE.CATALOGUE_EDIT])
 
-  return (
-    <div className="lg:grid lg:grid-cols-3 lg:gap-x-8">
-      <ImageGalleryV2
-        itemType={FILE_TYPE.CATALOGUE}
-        itemId={uid}
-        hasEditRole={hasEditRole}
-      />
-      <div className="col-span-2">{/* Form fields */}</div>
-    </div>
-  )
+    return (
+        <div className="lg:grid lg:grid-cols-3 lg:gap-x-8">
+            <ImageGalleryV2 itemType={FILE_TYPE.CATALOGUE} itemId={uid} hasEditRole={hasEditRole} />
+            <div className="col-span-2">{/* Form fields */}</div>
+        </div>
+    )
 }
 ```
 
@@ -407,17 +395,11 @@ const CatalogueItemContainer = ({ uid }: { uid?: string }) => {
 
 ```tsx
 const Component = ({ itemId }: { itemId?: string }) => {
-  if (!itemId) {
-    return <p>Create item first to upload images</p>
-  }
+    if (!itemId) {
+        return <p>Create item first to upload images</p>
+    }
 
-  return (
-    <ImageGalleryV2
-      itemType={FILE_TYPE.CATALOGUE}
-      itemId={itemId}
-      hasEditRole={true}
-    />
-  )
+    return <ImageGalleryV2 itemType={FILE_TYPE.CATALOGUE} itemId={itemId} hasEditRole={true} />
 }
 ```
 
@@ -425,10 +407,10 @@ const Component = ({ itemId }: { itemId?: string }) => {
 
 ```tsx
 <ImageGalleryV2
-  itemType={FILE_TYPE.CATALOGUE}
-  itemId={itemId}
-  hasEditRole={true}
-  className="border-2 border-dashed rounded-lg shadow-sm"
+    itemType={FILE_TYPE.CATALOGUE}
+    itemId={itemId}
+    hasEditRole={true}
+    className="border-2 border-dashed rounded-lg shadow-sm"
 />
 ```
 
@@ -489,10 +471,10 @@ const Component = ({ itemId }: { itemId?: string }) => {
 
 1. Check if issue exists in GitHub Issues
 2. Create new issue with:
-   - Steps to reproduce
-   - Expected vs actual behavior
-   - Screenshots if applicable
-   - Browser/environment info
+    - Steps to reproduce
+    - Expected vs actual behavior
+    - Screenshots if applicable
+    - Browser/environment info
 
 ---
 

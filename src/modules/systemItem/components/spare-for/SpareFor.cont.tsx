@@ -14,51 +14,51 @@ import { getFontBySystemLevel } from '../../utils'
 import { useSpareForColumns } from './SpareFor.columns'
 
 export const SparePartsFor = () => {
-  const tableId = 'sparePartFor'
-  const columns = useSpareForColumns(tableId)
+    const tableId = 'sparePartFor'
+    const columns = useSpareForColumns(tableId)
 
-  const { systemDetail } = useSystemDetail()
-  const router = useRouter()
-  const { setFilter } = useFormFilterState({
-    tableId: 'spare-parts',
-    enableQueryUrl: false
-  })
+    const { systemDetail } = useSystemDetail()
+    const router = useRouter()
+    const { setFilter } = useFormFilterState({
+        tableId: 'spare-parts',
+        enableQueryUrl: false,
+    })
 
-  const AssignSparePartButton = () => {
+    const AssignSparePartButton = () => {
+        return (
+            <Tooltip content="Redirect to assign Spare Part page">
+                <div>
+                    <PlusButton
+                        onClick={() => {
+                            setFilter('name')(systemDetail?.name)
+                            router.push(PATH.SPARE_PARTS)
+                        }}
+                    />
+                </div>
+            </Tooltip>
+        )
+    }
+
     return (
-      <Tooltip content="Redirect to assign Spare Part page">
-        <div>
-          <PlusButton
-            onClick={() => {
-              setFilter('name')(systemDetail?.name)
-              router.push(PATH.SPARE_PARTS)
-            }}
-          />
-        </div>
-      </Tooltip>
+        <Fragment>
+            <Heading customText="Designated spare part for">
+                <AssignSparePartButton />
+            </Heading>
+            {systemDetail?.sparePartsFor && systemDetail.sparePartsFor.length > 0 && (
+                <PandaTable
+                    columns={columns}
+                    getRowProps={({ original }) => ({
+                        className: cn(
+                            original?.physicalItem && 'font-bold',
+                            getFontBySystemLevel(original?.systemLevel),
+                        ),
+                    })}
+                    tableId={tableId}
+                    settings={{ enableColumnReordering: false }}
+                    className={'relative overflow-x-auto mb-0 pb-0'}
+                    data={systemDetail?.sparePartsFor || []}
+                />
+            )}
+        </Fragment>
     )
-  }
-
-  return (
-    <Fragment>
-      <Heading customText="Designated spare part for">
-        <AssignSparePartButton />
-      </Heading>
-      {systemDetail?.sparePartsFor && systemDetail.sparePartsFor.length > 0 && (
-        <PandaTable
-          columns={columns}
-          getRowProps={({ original }) => ({
-            className: cn(
-              original?.physicalItem && 'font-bold',
-              getFontBySystemLevel(original?.systemLevel)
-            )
-          })}
-          tableId={tableId}
-          settings={{ enableColumnReordering: false }}
-          className={'relative overflow-x-auto mb-0 pb-0'}
-          data={systemDetail?.sparePartsFor || []}
-        />
-      )}
-    </Fragment>
-  )
 }

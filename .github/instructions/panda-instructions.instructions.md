@@ -109,20 +109,17 @@ Each feature is organized as a module containing:
 ```typescript
 // Standard pattern using queryFetcher utility
 export const useOrders = () => {
-  const { query } = useQueryManager('orders')
+    const { query } = useQueryManager('orders')
 
-  const queryKey: QueryFetcherKey = useMemo(
-    () => ['orders', { query }],
-    [query]
-  )
+    const queryKey: QueryFetcherKey = useMemo(() => ['orders', { query }], [query])
 
-  const { data, isFetching, error, refetch } = useQuery({
-    queryKey,
-    queryFn: queryFetcher<OrderListResponse>('orders'),
-    placeholderData: keepPreviousData
-  })
+    const { data, isFetching, error, refetch } = useQuery({
+        queryKey,
+        queryFn: queryFetcher<OrderListResponse>('orders'),
+        placeholderData: keepPreviousData,
+    })
 
-  return { orderList: data, loading: isFetching, error, mutate: refetch }
+    return { orderList: data, loading: isFetching, error, mutate: refetch }
 }
 ```
 
@@ -146,13 +143,13 @@ const SYSTEM_DETAIL_QUERY = gql(`
 `)
 
 export const useSystemDetail = (uid?: string) => {
-  const { data, loading, error } = useGraphQL(SYSTEM_DETAIL_QUERY, {
-    variables: { where: { uid } },
-    enabled: !!uid
-  })
+    const { data, loading, error } = useGraphQL(SYSTEM_DETAIL_QUERY, {
+        variables: { where: { uid } },
+        enabled: !!uid,
+    })
 
-  const systemDetail = useFragment(SystemDetailFragment, data?.systems[0])
-  return { systemDetail, loading, error }
+    const systemDetail = useFragment(SystemDetailFragment, data?.systems[0])
+    return { systemDetail, loading, error }
 }
 ```
 
@@ -160,17 +157,17 @@ export const useSystemDetail = (uid?: string) => {
 
 ```typescript
 export const useSystemDelete = ({ system, queryKey }) => {
-  const queryClient = useQueryClient()
+    const queryClient = useQueryClient()
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: queryMutate('system', 'delete', system.uid),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey })
-      toast.success('System deleted successfully')
-    }
-  })
+    const { mutate, isPending } = useMutation({
+        mutationFn: queryMutate('system', 'delete', system.uid),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey })
+            toast.success('System deleted successfully')
+        },
+    })
 
-  return { deleteSystem: mutate, isPending }
+    return { deleteSystem: mutate, isPending }
 }
 ```
 
@@ -230,24 +227,24 @@ export const SystemDetailComponent = ({ system, onUpdate }) => {
 
 ```typescript
 export const useSystemDelete = ({ system, queryKey }) => {
-  const queryClient = useQueryClient()
-  const withWarningModal = useWarningModal()
+    const queryClient = useQueryClient()
+    const withWarningModal = useWarningModal()
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: queryMutate('system', 'delete', system.uid),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey })
-      toast.success('System deleted successfully')
-    },
-    onError: error => {
-      toast.error(`Failed to delete system: ${error.message}`)
+    const { mutate, isPending } = useMutation({
+        mutationFn: queryMutate('system', 'delete', system.uid),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey })
+            toast.success('System deleted successfully')
+        },
+        onError: error => {
+            toast.error(`Failed to delete system: ${error.message}`)
+        },
+    })
+
+    return {
+        deleteSystem: withWarningModal(mutate),
+        isPending,
     }
-  })
-
-  return {
-    deleteSystem: withWarningModal(mutate),
-    isPending
-  }
 }
 ```
 
@@ -256,10 +253,10 @@ export const useSystemDelete = ({ system, queryKey }) => {
 ```typescript
 // Consistent return object naming
 return {
-  orderList: data, // Main data with descriptive name
-  loading: isFetching, // Always "loading" for consistency
-  error, // Raw error object
-  mutate: refetch // Use "mutate" for refetch functions
+    orderList: data, // Main data with descriptive name
+    loading: isFetching, // Always "loading" for consistency
+    error, // Raw error object
+    mutate: refetch, // Use "mutate" for refetch functions
 }
 ```
 
@@ -278,8 +275,8 @@ return {
 ```typescript
 // Simple query key
 ;['systems'][
-  // Query key with parameters
-  ('systems', { query: { page: 1, limit: 10 } })
+    // Query key with parameters
+    ('systems', { query: { page: 1, limit: 10 } })
 ]
 
 // Typed query key
@@ -291,16 +288,16 @@ const queryKey: QueryFetcherKey = ['orders', { query }]
 ```typescript
 // In custom hooks - handle errors with toast notifications
 useEffect(() => {
-  if (error) {
-    toast.error('Failed to fetch data')
-  }
+    if (error) {
+        toast.error('Failed to fetch data')
+    }
 }, [error])
 
 // In mutations - handle both success and error
 const { mutate } = useMutation({
-  mutationFn: queryMutate('system', 'delete', uid),
-  onSuccess: () => toast.success('System deleted'),
-  onError: error => toast.error(`Failed: ${error.message}`)
+    mutationFn: queryMutate('system', 'delete', uid),
+    onSuccess: () => toast.success('System deleted'),
+    onError: error => toast.error(`Failed: ${error.message}`),
 })
 ```
 
@@ -457,19 +454,13 @@ The codebase uses a centralized endpoint management system:
 
 ```typescript
 // getEndpoints.ts - Single source of truth for all endpoints
-export const getEndpoints = ({
-  uid,
-  path,
-  itemUid,
-  query,
-  codebook
-}: EndpointProps) => ({
-  systems: `/systems${query}`,
-  system: `/system${uid ? '/' + uid : ''}`,
-  systemImage: `/system/${uid}/image`,
-  orders: `/orders${query}`,
-  catalogueItems: `/catalogue/items${query}`
-  // ... all other endpoints
+export const getEndpoints = ({ uid, path, itemUid, query, codebook }: EndpointProps) => ({
+    systems: `/systems${query}`,
+    system: `/system${uid ? '/' + uid : ''}`,
+    systemImage: `/system/${uid}/image`,
+    orders: `/orders${query}`,
+    catalogueItems: `/catalogue/items${query}`,
+    // ... all other endpoints
 })
 
 // Usage in queryFetcher
@@ -491,10 +482,7 @@ return axiosInstance.get(BASE_URL + endpoint).then(res => res.data)
 // Most data fetching hooks use useQueryManager for URL synchronization
 const { query } = useQueryManager('tableId') // Gets filters, pagination, sorting from URL
 
-const queryKey: QueryFetcherKey = useMemo(
-  () => ['endpoint', { query }],
-  [query]
-)
+const queryKey: QueryFetcherKey = useMemo(() => ['endpoint', { query }], [query])
 ```
 
 ### GraphQL Schema Integration
@@ -611,7 +599,7 @@ const SYSTEM_QUERY = gql(`
 
 // Hook with full type safety
 const { data, loading, error } = useGraphQL(SYSTEM_QUERY, {
-  variables: { where: { uid: systemId } as SystemWhere }
+    variables: { where: { uid: systemId } as SystemWhere },
 })
 ```
 
@@ -643,8 +631,8 @@ export const SystemDetailFragment = gql(`
 
 ```typescript
 const usePermission = (roles: ROLE[]) => {
-  const { data: session } = useSession()
-  return roles.some(role => session?.user?.roles?.includes(role))
+    const { data: session } = useSession()
+    return roles.some(role => session?.user?.roles?.includes(role))
 }
 
 // Usage in components
@@ -658,42 +646,40 @@ Route protection is handled at the Next.js middleware level using `src/middlewar
 ```typescript
 // middleware.ts - Centralized route protection
 export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl
-  const matchesProtectedPath = PROTECTED_PATHS.some(path =>
-    pathname.startsWith(path)
-  )
-  const user = await getToken({ req: request })
+    const { pathname } = request.nextUrl
+    const matchesProtectedPath = PROTECTED_PATHS.some(path => pathname.startsWith(path))
+    const user = await getToken({ req: request })
 
-  if (matchesProtectedPath) {
-    // Redirect to login if not authenticated
-    if (!user) {
-      const url = new URL('/', request.url)
-      url.searchParams.set('callbackUrl', encodeURI(APP_BASE_URL + pathname))
-      return NextResponse.redirect(url)
+    if (matchesProtectedPath) {
+        // Redirect to login if not authenticated
+        if (!user) {
+            const url = new URL('/', request.url)
+            url.searchParams.set('callbackUrl', encodeURI(APP_BASE_URL + pathname))
+            return NextResponse.redirect(url)
+        }
+
+        // Check role-based access
+        const currentPath = Object.keys(PATH_ROLES_CONFIG).find(key =>
+            pathname.startsWith(key),
+        ) as PATH
+        const matchRolesToPath = PATH_ROLES_CONFIG[currentPath].some(role =>
+            user.roles.includes(role),
+        )
+
+        // Redirect to 404 if user doesn't have required role
+        if (!matchRolesToPath) {
+            const url = new URL(`/404`, request.url)
+            return NextResponse.redirect(url)
+        }
     }
 
-    // Check role-based access
-    const currentPath = Object.keys(PATH_ROLES_CONFIG).find(key =>
-      pathname.startsWith(key)
-    ) as PATH
-    const matchRolesToPath = PATH_ROLES_CONFIG[currentPath].some(role =>
-      user.roles.includes(role)
-    )
-
-    // Redirect to 404 if user doesn't have required role
-    if (!matchRolesToPath) {
-      const url = new URL(`/404`, request.url)
-      return NextResponse.redirect(url)
+    // Redirect authenticated users from root to dashboard
+    if (user && pathname === PATH.ROOT) {
+        const url = new URL(PATH.DASHBOARD, request.url)
+        return NextResponse.redirect(url)
     }
-  }
 
-  // Redirect authenticated users from root to dashboard
-  if (user && pathname === PATH.ROOT) {
-    const url = new URL(PATH.DASHBOARD, request.url)
-    return NextResponse.redirect(url)
-  }
-
-  return NextResponse.next()
+    return NextResponse.next()
 }
 ```
 

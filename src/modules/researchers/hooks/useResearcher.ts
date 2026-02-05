@@ -7,10 +7,10 @@ import { queryFetcher } from '@/utils/fetcher'
 import type { Researcher } from '../types/researcher.types'
 
 export const useResearcher = (uid?: string) => {
-  return useQuery<Researcher, AxiosError, Researcher, QueryFetcherKey>({
-    queryKey: ['researcher', { uid }],
-    queryFn: queryFetcher<Researcher>('researcher'),
-    enabled: !!uid,
-    staleTime: 0
-  })
+    return useQuery<Researcher, AxiosError, Researcher, QueryFetcherKey>({
+        queryKey: ['researcher', { uid }],
+        queryFn: queryFetcher<Researcher>('researcher'),
+        enabled: !!uid,
+        staleTime: 0,
+    })
 }

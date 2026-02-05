@@ -14,69 +14,69 @@ import { SetMinimalSparesButton } from './SetMinimalSparesButton'
 import { useSparePartsColumns } from './SpareParts.columns'
 
 export const SparePartsContainer = () => {
-  const { formatMessage: fm } = useIntl()
-  const columns = useSparePartsColumns()
-  const { systemDetail } = useSystemDetail()
-  const { control } = useFormContext()
+    const { formatMessage: fm } = useIntl()
+    const columns = useSparePartsColumns()
+    const { systemDetail } = useSystemDetail()
+    const { control } = useFormContext()
 
-  const sparePartsCoverageSum =
-    systemDetail?.sparePartsCoverageSum ||
-    systemDetail?.sparePartsConnection.edges.reduce(
-      (acc, { coverage }) => coverage || 0 + acc,
-      0
-    )
+    const sparePartsCoverageSum =
+        systemDetail?.sparePartsCoverageSum ||
+        systemDetail?.sparePartsConnection.edges.reduce(
+            (acc, { coverage }) => coverage || 0 + acc,
+            0,
+        )
 
-  const minSparePartsCount = useWatch({
-    control,
-    name: 'minimalSpareParstCount'
-  })
+    const minSparePartsCount = useWatch({
+        control,
+        name: 'minimalSpareParstCount',
+    })
 
-  return (
-    <Fragment>
-      <Heading
-        className="mt-4"
-        customText="Spare Parts"
-        showBorder={false}
-        titleNode={
-          <div className="flex w-[300px] ml-4 items-center">
-            <h3
-              className={cn(
-                'font-medium whitespace-nowrap mr-4',
-                minSparePartsCount
-                  ? sparePartsCoverageSum || 0 < minSparePartsCount
-                    ? 'text-red-500 dark:text-red-500'
-                    : 'text-green-500 dark:text-green-500'
-                  : 'text-gray-500 dark:text-gray-300'
-              )}
-            >
-              {fm(
-                { id: message.common.systemItem.sparePartsAvailable },
-                {
-                  available:
-                    systemDetail?.sparePartsCoverageSum?.toFixed(2) || '0',
-                  required: minSparePartsCount || '0'
+    return (
+        <Fragment>
+            <Heading
+                className="mt-4"
+                customText="Spare Parts"
+                showBorder={false}
+                titleNode={
+                    <div className="flex w-[300px] ml-4 items-center">
+                        <h3
+                            className={cn(
+                                'font-medium whitespace-nowrap mr-4',
+                                minSparePartsCount
+                                    ? sparePartsCoverageSum || 0 < minSparePartsCount
+                                        ? 'text-red-500 dark:text-red-500'
+                                        : 'text-green-500 dark:text-green-500'
+                                    : 'text-gray-500 dark:text-gray-300',
+                            )}
+                        >
+                            {fm(
+                                { id: message.common.systemItem.sparePartsAvailable },
+                                {
+                                    available:
+                                        systemDetail?.sparePartsCoverageSum?.toFixed(2) || '0',
+                                    required: minSparePartsCount || '0',
+                                },
+                            )}
+                        </h3>
+                        <SetMinimalSparesButton />
+                    </div>
                 }
-              )}
-            </h3>
-            <SetMinimalSparesButton />
-          </div>
-        }
-      >
-        <AssignSparePartButton />
-      </Heading>
-      {systemDetail?.sparePartsConnection.edges &&
-        systemDetail.sparePartsConnection.edges.length > 0 && (
-          <Table<any>
-            columns={columns}
-            getRowProps={({ original }) => ({
-              className: cn(
-                original?.physicalItem && 'font-bold',
-                getFontBySystemLevel(original?.systemLevel)
-              )
-            })}
-            data={systemDetail?.sparePartsConnection.edges}
-          />
-        )}
-    </Fragment>
-  )
+            >
+                <AssignSparePartButton />
+            </Heading>
+            {systemDetail?.sparePartsConnection.edges &&
+                systemDetail.sparePartsConnection.edges.length > 0 && (
+                    <Table<any>
+                        columns={columns}
+                        getRowProps={({ original }) => ({
+                            className: cn(
+                                original?.physicalItem && 'font-bold',
+                                getFontBySystemLevel(original?.systemLevel),
+                            ),
+                        })}
+                        data={systemDetail?.sparePartsConnection.edges}
+                    />
+                )}
+        </Fragment>
+    )
 }

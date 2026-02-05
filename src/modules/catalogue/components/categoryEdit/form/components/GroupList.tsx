@@ -12,118 +12,111 @@ import MoveButtons from './MoveButtons'
 import PropertyList from './PropertyList'
 
 interface groupProps {
-  name: `groups.${number}`
-  remove: (index: number) => void
-  index: number
-  lenght: number
+    name: `groups.${number}`
+    remove: (index: number) => void
+    index: number
+    lenght: number
 
-  moveUp: (index: number) => void
-  moveDown: (index: number) => void
+    moveUp: (index: number) => void
+    moveDown: (index: number) => void
 }
 
-const Group = ({
-  name,
-  remove,
-  index,
-  moveDown,
-  moveUp,
-  lenght
-}: groupProps) => {
-  const handleRemoveGroup = () => {
-    remove(index)
-  }
+const Group = ({ name, remove, index, moveDown, moveUp, lenght }: groupProps) => {
+    const handleRemoveGroup = () => {
+        remove(index)
+    }
 
-  const { formatMessage: fm } = useIntl()
-  return (
-    <Card className="border-l-4 border-l-primary">
-      <CardHeader className="pb-3">
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-base w-full mr-2">
-            <Input
-              name={`${name}.name`}
-              placeholder={fm({ id: message.catalogue.category.groupName })}
-              className="w-full"
-              label={fm({ id: message.catalogue.category.groupName })}
-            />
-          </CardTitle>
-          <div className="flex items-center gap-2">
-            <MoveButtons
-              moveDown={moveDown}
-              moveUp={moveUp}
-              lenght={lenght}
-              index={index}
-            />
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleRemoveGroup}
-              className="text-red-600 hover:text-red-700 hover:bg-red-50"
-            >
-              <Trash2 className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
-        <div className="mt-2"></div>
-      </CardHeader>
-      <CardContent>
-        <PropertyList name={name} />
-      </CardContent>
-    </Card>
-  )
+    const { formatMessage: fm } = useIntl()
+    return (
+        <Card className="border-l-4 border-l-primary">
+            <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                    <CardTitle className="text-base w-full mr-2">
+                        <Input
+                            name={`${name}.name`}
+                            placeholder={fm({ id: message.catalogue.category.groupName })}
+                            className="w-full"
+                            label={fm({ id: message.catalogue.category.groupName })}
+                        />
+                    </CardTitle>
+                    <div className="flex items-center gap-2">
+                        <MoveButtons
+                            moveDown={moveDown}
+                            moveUp={moveUp}
+                            lenght={lenght}
+                            index={index}
+                        />
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={handleRemoveGroup}
+                            className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                        >
+                            <Trash2 className="h-4 w-4" />
+                        </Button>
+                    </div>
+                </div>
+                <div className="mt-2"></div>
+            </CardHeader>
+            <CardContent>
+                <PropertyList name={name} />
+            </CardContent>
+        </Card>
+    )
 }
 
 const GroupList = () => {
-  const { formatMessage: fm } = useIntl()
-  const { control } = useFormContext<CategoryFormType>()
-  const { fields, append, remove, move } = useFieldArray({
-    control,
-    name: 'groups'
-  })
-
-  const handleAddGroup = () => {
-    append({
-      name: '',
-      properties: [{ name: '', type: null, unit: null, defaultValue: '' }]
+    const { formatMessage: fm } = useIntl()
+    const { control } = useFormContext<CategoryFormType>()
+    const { fields, append, remove, move } = useFieldArray({
+        control,
+        name: 'groups',
     })
-  }
 
-  const handleMoveDown = index => {
-    if (index < fields.length - 1) move(index, index + 1)
-  }
-  const handleMoveUp = index => {
-    if (index > 0) move(index, index - 1)
-  }
+    const handleAddGroup = () => {
+        append({
+            name: '',
+            properties: [{ name: '', type: null, unit: null, defaultValue: '' }],
+        })
+    }
 
-  return (
-    <div className="space-y-4">
-      <div className="flex justify-center">
-        <Button
-          type="button"
-          onClick={handleAddGroup}
-          variant="outline"
-          className="border-dashed border-2 hover:border-solid"
-        >
-          <Plus className="h-4 w-4 mr-2" />
-          {fm({ id: message.catalogue.category.groupAdd })}
-        </Button>
-      </div>
-      {fields.length > 0 && (
+    const handleMoveDown = index => {
+        if (index < fields.length - 1) move(index, index + 1)
+    }
+    const handleMoveUp = index => {
+        if (index > 0) move(index, index - 1)
+    }
+
+    return (
         <div className="space-y-4">
-          {fields.map((field, index) => (
-            <Group
-              key={field.id}
-              remove={remove}
-              index={index}
-              name={`groups.${index}`}
-              moveUp={handleMoveUp}
-              moveDown={handleMoveDown}
-              lenght={fields.length}
-            />
-          ))}
+            <div className="flex justify-center">
+                <Button
+                    type="button"
+                    onClick={handleAddGroup}
+                    variant="outline"
+                    className="border-dashed border-2 hover:border-solid"
+                >
+                    <Plus className="h-4 w-4 mr-2" />
+                    {fm({ id: message.catalogue.category.groupAdd })}
+                </Button>
+            </div>
+            {fields.length > 0 && (
+                <div className="space-y-4">
+                    {fields.map((field, index) => (
+                        <Group
+                            key={field.id}
+                            remove={remove}
+                            index={index}
+                            name={`groups.${index}`}
+                            moveUp={handleMoveUp}
+                            moveDown={handleMoveDown}
+                            lenght={fields.length}
+                        />
+                    ))}
+                </div>
+            )}
         </div>
-      )}
-    </div>
-  )
+    )
 }
 
 export default GroupList

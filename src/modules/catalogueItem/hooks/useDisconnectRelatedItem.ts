@@ -17,9 +17,9 @@ const DISCONNECT_RELATED_ITEM = gql(`
 `)
 
 export const useDisconnectRelatedItem = () => {
-  const { mutate, isPending } = useGraphQLMutation(DISCONNECT_RELATED_ITEM)
-  return {
-    disconnectRelatedItem: mutate,
-    loading: isPending
-  }
+    const { mutate, isPending } = useGraphQLMutation(DISCONNECT_RELATED_ITEM)
+    return {
+        disconnectRelatedItem: mutate,
+        loading: isPending,
+    }
 }

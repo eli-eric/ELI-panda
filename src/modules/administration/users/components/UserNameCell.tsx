@@ -12,34 +12,31 @@ import type { User } from '@/types/gql/graphql'
 import { useUserDelete } from '../hooks/useUserDelete'
 
 interface LocationCellProps extends CellContext<User, any> {
-  isHoveringId?: number | string
+    isHoveringId?: number | string
 }
 
-export const UserNameCell = ({
-  getValue,
-  row: { original }
-}: LocationCellProps) => {
-  const editPersmission = usePermission([ROLE.ADMIN])
+export const UserNameCell = ({ getValue, row: { original } }: LocationCellProps) => {
+    const editPersmission = usePermission([ROLE.ADMIN])
 
-  const [deleteUser] = useUserDelete(original.username)
-  const withWarningModal = useWarningModal(
-    `Are you sure you want to delete user: "${original.firstName} ${original.lastName}"?`
-  )
-  const handleDelete = () => {
-    deleteUser({ where: { uid: original.uid } })
-  }
-  const onDeleteClick = () => withWarningModal(handleDelete)()
+    const [deleteUser] = useUserDelete(original.username)
+    const withWarningModal = useWarningModal(
+        `Are you sure you want to delete user: "${original.firstName} ${original.lastName}"?`,
+    )
+    const handleDelete = () => {
+        deleteUser({ where: { uid: original.uid } })
+    }
+    const onDeleteClick = () => withWarningModal(handleDelete)()
 
-  return (
-    <div className="flex items-center">
-      <Link href={PATH.ADMIN_USER + '/' + original.uid}>
-        <LinkDecorator>
-          <span>{getValue()}</span>
-        </LinkDecorator>
-      </Link>
-      {editPersmission && (
-        <TableActionsButtons onDeleteClick={onDeleteClick} canEdit={true} />
-      )}
-    </div>
-  )
+    return (
+        <div className="flex items-center">
+            <Link href={PATH.ADMIN_USER + '/' + original.uid}>
+                <LinkDecorator>
+                    <span>{getValue()}</span>
+                </LinkDecorator>
+            </Link>
+            {editPersmission && (
+                <TableActionsButtons onDeleteClick={onDeleteClick} canEdit={true} />
+            )}
+        </div>
+    )
 }

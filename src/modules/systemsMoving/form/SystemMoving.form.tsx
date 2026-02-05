@@ -12,46 +12,46 @@ import type { CodebookType } from '@/types/responses/codebook'
 import { useSystemMovingFormFields } from './SystemMoving.fields'
 
 interface SystemMovingFormProps {
-  parentPath?: CodebookType[]
+    parentPath?: CodebookType[]
 }
 
 export const SystemMovingForm = ({ parentPath }: SystemMovingFormProps) => {
-  const { formatMessage: fm } = useIntl()
-  const fields = useSystemMovingFormFields()
+    const { formatMessage: fm } = useIntl()
+    const fields = useSystemMovingFormFields()
 
-  return (
-    <Grid>
-      <Col lg={12}>
-        <BreadcrumpContainer>
-          <span className="text-sm font-medium text-gray-500">
-            {fm({ id: message.common.systemsMoving.targetSystem })}{' '}
-          </span>
-          {parentPath?.map((item, index) => (
-            <BreadcrumpItem key={index} name={item.name} />
-          ))}
-        </BreadcrumpContainer>
-      </Col>
-      <Col sm={3} md={4} lg={8}>
-        <Input {...fields.name} />
-      </Col>
-      <Col sm={3} md={4}>
-        <Combobox {...fields.responsible} />
-      </Col>
-      <Col sm={3} md={6}>
-        <Listbox {...fields.zone} />
-      </Col>
-      <Col sm={3} md={6}>
-        <Combobox {...fields.location} />
-      </Col>
-      <Col sm={3} md={6}>
-        <Listbox {...fields.systemType} disabled />
-      </Col>
-      <Col sm={3}>
-        <Input {...fields.systemCode} disabled />
-      </Col>
-      <Col sm="full">
-        <TextArea {...fields.description} />
-      </Col>
-    </Grid>
-  )
+    return (
+        <Grid>
+            <Col lg={12}>
+                <BreadcrumpContainer>
+                    <span className="text-sm font-medium text-gray-500">
+                        {fm({ id: message.common.systemsMoving.targetSystem })}{' '}
+                    </span>
+                    {parentPath?.map((item, index) => (
+                        <BreadcrumpItem key={index} name={item.name} />
+                    ))}
+                </BreadcrumpContainer>
+            </Col>
+            <Col sm={3} md={4} lg={8}>
+                <Input {...fields.name} />
+            </Col>
+            <Col sm={3} md={4}>
+                <Combobox {...fields.responsible} />
+            </Col>
+            <Col sm={3} md={6}>
+                <Listbox {...fields.zone} />
+            </Col>
+            <Col sm={3} md={6}>
+                <Combobox {...fields.location} />
+            </Col>
+            <Col sm={3} md={6}>
+                <Listbox {...fields.systemType} disabled />
+            </Col>
+            <Col sm={3}>
+                <Input {...fields.systemCode} disabled />
+            </Col>
+            <Col sm="full">
+                <TextArea {...fields.description} />
+            </Col>
+        </Grid>
+    )
 }

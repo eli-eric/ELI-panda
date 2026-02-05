@@ -4,26 +4,26 @@ import { useSystemEditSheet } from '@/modules/shared/system/system-edit/useSyste
 import type { SystemDetail } from '@/types/responses/systems'
 
 export const useSystemCellActions = (
-  row: Row<SystemDetail>,
-  setUid?: (uid: string | null) => void
+    row: Row<SystemDetail>,
+    setUid?: (uid: string | null) => void,
 ) => {
-  const { original } = row
-  const openEdit = useSystemEditSheet()
+    const { original } = row
+    const openEdit = useSystemEditSheet()
 
-  const handleExpand = () => {
-    if (!row.getIsExpanded()) {
-      setUid?.(original.uid)
+    const handleExpand = () => {
+        if (!row.getIsExpanded()) {
+            setUid?.(original.uid)
+        }
+        row.toggleExpanded()
     }
-    row.toggleExpanded()
-  }
 
-  const handleOpenEdit = () => {
-    openEdit(original.uid)
-  }
+    const handleOpenEdit = () => {
+        openEdit(original.uid)
+    }
 
-  return {
-    handleExpand,
-    handleOpenEdit,
-    hasSubsystems: original.hasSubsystems
-  }
+    return {
+        handleExpand,
+        handleOpenEdit,
+        hasSubsystems: original.hasSubsystems,
+    }
 }

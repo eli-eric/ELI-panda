@@ -1,9 +1,9 @@
 // Types
 export type {
-  SystemTypeGroupTreeItem,
-  SystemTypeModalContentProps,
-  SystemTypeTreeItem,
-  SystemTypeTreeRow
+    SystemTypeGroupTreeItem,
+    SystemTypeModalContentProps,
+    SystemTypeTreeItem,
+    SystemTypeTreeRow,
 } from './types/system-type-select.types'
 
 // Hooks

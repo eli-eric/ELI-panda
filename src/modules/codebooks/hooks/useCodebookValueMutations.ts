@@ -9,93 +9,86 @@ import type { CodebookType } from '@/types/responses/codebook'
 import { queryMutate } from '@/utils/fetcher'
 
 interface Props {
-  codebookType: CODEBOOK | null
-  queryKey: QueryKey
+    codebookType: CODEBOOK | null
+    queryKey: QueryKey
 }
 
 export const useCodebookValueMutations = ({ codebookType, queryKey }: Props) => {
-  const queryClient = useQueryClient()
-  const { formatMessage: fm } = useIntl()
+    const queryClient = useQueryClient()
+    const { formatMessage: fm } = useIntl()
 
-  const invalidate = () => queryClient.invalidateQueries({ queryKey })
+    const invalidate = () => queryClient.invalidateQueries({ queryKey })
 
-  const createMutation = useMutation({
-    mutationFn: queryMutate<CodebookType, { name: string }>(
-      'codebook',
-      'post',
-      undefined,
-      false,
-      { path: codebookType ?? '' }
-    ),
-    onSuccess: invalidate
-  })
-
-  const updateMutation = useMutation({
-    mutationFn: ({ uid, name }: { uid: string; name: string }) => {
-      const mutateFn = queryMutate<CodebookType, { name: string; uid: string }>(
-        'codebook',
-        'put',
-        undefined,
-        false,
-        { path: `${codebookType}/${uid}` }
-      )
-      return mutateFn({ name, uid })
-    },
-    onSuccess: invalidate
-  })
-
-  const deleteMutation = useMutation({
-    mutationFn: (uid: string) => {
-      const mutateFn = queryMutate<void, void>(
-        'codebook',
-        'delete',
-        undefined,
-        false,
-        { path: `${codebookType}/${uid}` }
-      )
-      return mutateFn(undefined as void)
-    },
-    onSuccess: invalidate
-  })
-
-  const create = async (data: { name: string }) => {
-    const promise = createMutation.mutateAsync(data)
-    toast.promise(promise, {
-      loading: fm({ id: message.codebooksPage.toast.addingValue }),
-      success: fm({ id: message.codebooksPage.toast.valueAdded }),
-      error: fm({ id: message.codebooksPage.toast.failedToAdd })
+    const createMutation = useMutation({
+        mutationFn: queryMutate<CodebookType, { name: string }>(
+            'codebook',
+            'post',
+            undefined,
+            false,
+            { path: codebookType ?? '' },
+        ),
+        onSuccess: invalidate,
     })
-    return promise
-  }
 
-  const update = async (data: { uid: string; name: string }) => {
-    const promise = updateMutation.mutateAsync(data)
-    toast.promise(promise, {
-      loading: fm({ id: message.codebooksPage.toast.savingChanges }),
-      success: fm({ id: message.codebooksPage.toast.changesSaved }),
-      error: fm({ id: message.codebooksPage.toast.failedToSave })
+    const updateMutation = useMutation({
+        mutationFn: ({ uid, name }: { uid: string; name: string }) => {
+            const mutateFn = queryMutate<CodebookType, { name: string; uid: string }>(
+                'codebook',
+                'put',
+                undefined,
+                false,
+                { path: `${codebookType}/${uid}` },
+            )
+            return mutateFn({ name, uid })
+        },
+        onSuccess: invalidate,
     })
-    return promise
-  }
 
-  const deleteValue = async (uid: string) => {
-    const promise = deleteMutation.mutateAsync(uid)
-    toast.promise(promise, {
-      loading: fm({ id: message.codebooksPage.toast.deletingValue }),
-      success: fm({ id: message.codebooksPage.toast.valueDeleted }),
-      error: fm({ id: message.codebooksPage.toast.failedToDelete })
+    const deleteMutation = useMutation({
+        mutationFn: (uid: string) => {
+            const mutateFn = queryMutate<void, void>('codebook', 'delete', undefined, false, {
+                path: `${codebookType}/${uid}`,
+            })
+            return mutateFn(undefined as void)
+        },
+        onSuccess: invalidate,
     })
-    return promise
-  }
 
-  return {
-    create,
-    update,
-    delete: deleteValue,
-    isPending:
-      createMutation.isPending ||
-      updateMutation.isPending ||
-      deleteMutation.isPending,
-    isUpdating: updateMutation.isPending
-  }
+    const create = async (data: { name: string }) => {
+        const promise = createMutation.mutateAsync(data)
+        toast.promise(promise, {
+            loading: fm({ id: message.codebooksPage.toast.addingValue }),
+            success: fm({ id: message.codebooksPage.toast.valueAdded }),
+            error: fm({ id: message.codebooksPage.toast.failedToAdd }),
+        })
+        return promise
+    }
+
+    const update = async (data: { uid: string; name: string }) => {
+        const promise = updateMutation.mutateAsync(data)
+        toast.promise(promise, {
+            loading: fm({ id: message.codebooksPage.toast.savingChanges }),
+            success: fm({ id: message.codebooksPage.toast.changesSaved }),
+            error: fm({ id: message.codebooksPage.toast.failedToSave }),
+        })
+        return promise
+    }
+
+    const deleteValue = async (uid: string) => {
+        const promise = deleteMutation.mutateAsync(uid)
+        toast.promise(promise, {
+            loading: fm({ id: message.codebooksPage.toast.deletingValue }),
+            success: fm({ id: message.codebooksPage.toast.valueDeleted }),
+            error: fm({ id: message.codebooksPage.toast.failedToDelete }),
+        })
+        return promise
+    }
+
+    return {
+        create,
+        update,
+        delete: deleteValue,
+        isPending: createMutation.isPending || updateMutation.isPending || deleteMutation.isPending,
+        isUpdating: updateMutation.isPending,
+    }
 }
