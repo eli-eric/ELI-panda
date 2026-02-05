@@ -240,7 +240,7 @@ export const usePublicationFields = () => {
         otherGrants: {
             label: form.otherGrants.label,
             rounded: 'rounded-md',
-            name: 'foreignGrant',
+            name: 'otherGrants',
             disabled,
         },
         wosNumber: {

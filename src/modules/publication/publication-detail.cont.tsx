@@ -70,6 +70,10 @@ export const PublicationDetailContainer: FC<Props> = ({ publication, refetch }) 
         refetch?.()
     }
 
+    const onInvalid = (errors: any) => {
+        console.error('Publication form validation errors:', errors)
+    }
+
     const onSubmit = formMethods.handleSubmit(data => {
         const formattedData = formatFormData(data)
         mutate(formattedData, {
@@ -78,7 +82,7 @@ export const PublicationDetailContainer: FC<Props> = ({ publication, refetch }) 
                 router.push(PATH.PUBLICATION + '/' + data.uid)
             },
         })
-    })
+    }, onInvalid)
 
     const onSubmitAndExit = formMethods.handleSubmit(data => {
         mutate(formatFormData(data), {
@@ -87,7 +91,7 @@ export const PublicationDetailContainer: FC<Props> = ({ publication, refetch }) 
                 router.push(PATH.PUBLICATIONS)
             },
         })
-    })
+    }, onInvalid)
 
     return (
         <Form

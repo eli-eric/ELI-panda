@@ -35,7 +35,7 @@ const selectedGrantSchema = z.object({
 const isResearcherPickerEnabled = isFeatureEnabled('enableEliAuthorsResearcherPicker')
 
 const eliAuthorsSchema = isResearcherPickerEnabled
-    ? z.string().optional()
+    ? z.string().nullable().optional()
     : z.string().min(1, 'ELI Authors is required')
 
 const eliResearchersSchema = isResearcherPickerEnabled
@@ -93,17 +93,17 @@ export const publicationPeerReviewedSchema = z.object({
     }),
 
     // Optional fields
-    mediaType: z.string().optional(),
+    mediaType: z.string().nullable().optional(),
     mediaTypeCb: codebookSchema.refine(val => val, {
         message: 'Media Type is required',
     }),
-    shortJournalTitle: z.string().optional(),
-    experimentalSystem: z.string().optional(),
+    shortJournalTitle: z.string().nullable().optional(),
+    experimentalSystem: z.string().nullable().optional(),
     experimentalSystemCb: codebookSchema.nullable().optional(),
     userCall: codebookSchema.nullable().optional(),
-    userExperiment: z.string().optional(),
+    userExperiment: z.string().nullable().optional(),
     userExperimentCb: codebookSchema.nullable().optional(),
-    webLink: z.string().optional(),
+    webLink: z.string().nullable().optional(),
     issue: z
         .union([z.string(), z.number()])
         .optional()
@@ -123,17 +123,17 @@ export const publicationPeerReviewedSchema = z.object({
             return isNaN(num) ? null : num
         })
         .nullable(),
-    quartilBasis: z.string().optional(),
+    quartilBasis: z.string().nullable().optional(),
     quartil: z.string().nullable().optional(),
-    grant: z.string().optional(),
+    grant: z.string().nullable().optional(),
     grants: z.array(selectedGrantSchema).optional(),
-    otherGrants: z.string().optional(),
-    wosNumber: z.string().optional(),
-    issn: z.string().optional(),
-    eissn: z.string().optional(),
-    eidScopus: z.string().optional(),
-    language: z.string().optional(),
-    note: z.string().optional(),
+    otherGrants: z.string().nullable().optional(),
+    wosNumber: z.string().nullable().optional(),
+    issn: z.string().nullable().optional(),
+    eissn: z.string().nullable().optional(),
+    eidScopus: z.string().nullable().optional(),
+    language: z.string().nullable().optional(),
+    note: z.string().nullable().optional(),
 })
 
 export const publicationOtherSchema = z.object({
@@ -171,20 +171,20 @@ export const publicationOtherSchema = z.object({
     }),
 
     // Optional fields (different from peer-reviewed)
-    mediaType: z.string().optional(),
+    mediaType: z.string().nullable().optional(),
     mediaTypeCb: codebookSchema.optional().refine(val => val !== undefined, {
         message: 'Media Type is required',
     }),
-    doi: z.string().optional(), // Optional for Other articles
-    volume: z.union([z.string(), z.number()]).optional(), // Optional for Other articles
-    oecdFord: z.string().optional(), // Optional for Other articles
-    experimentalSystem: z.string().optional(),
+    doi: z.string().nullable().optional(), // Optional for Other articles
+    volume: z.union([z.string(), z.number()]).nullable().optional(), // Optional for Other articles
+    oecdFord: z.string().nullable().optional(), // Optional for Other articles
+    experimentalSystem: z.string().nullable().optional(),
     experimentalSystemCb: codebookSchema.nullable().optional(),
     userCall: codebookSchema.nullable().optional(),
-    userExperiment: z.string().optional(),
+    userExperiment: z.string().nullable().optional(),
     userExperimentCb: codebookSchema.nullable().optional(),
-    webLink: z.string().optional(),
-    issue: z.union([z.string(), z.number()]).optional(),
+    webLink: z.string().nullable().optional(),
+    issue: z.union([z.string(), z.number()]).nullable().optional(),
     impactFactor: z
         .union([z.string(), z.number()])
         .optional()
@@ -194,18 +194,18 @@ export const publicationOtherSchema = z.object({
             return isNaN(num) ? null : num
         })
         .nullable(),
-    shortJournalTitle: z.string().optional(),
-    quartilBasis: z.string().optional(),
+    shortJournalTitle: z.string().nullable().optional(),
+    quartilBasis: z.string().nullable().optional(),
     quartil: z.string().nullable().optional(),
-    grant: z.string().optional(),
+    grant: z.string().nullable().optional(),
     grants: z.array(selectedGrantSchema).optional(),
-    otherGrants: z.string().optional(),
-    wosNumber: z.string().optional(),
-    issn: z.string().optional(),
-    eissn: z.string().optional(),
-    eidScopus: z.string().optional(),
-    language: z.string().optional(),
-    note: z.string().optional(),
+    otherGrants: z.string().nullable().optional(),
+    wosNumber: z.string().nullable().optional(),
+    issn: z.string().nullable().optional(),
+    eissn: z.string().nullable().optional(),
+    eidScopus: z.string().nullable().optional(),
+    language: z.string().nullable().optional(),
+    note: z.string().nullable().optional(),
 })
 
 export type PublicationPeerReviewedFormData = z.infer<typeof publicationPeerReviewedSchema>
