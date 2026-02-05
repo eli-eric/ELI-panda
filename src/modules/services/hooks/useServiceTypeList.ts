@@ -5,8 +5,8 @@ import { queryFetcher } from '@/utils/fetcher'
 import type { ServiceTypeResponse } from '../types/responses'
 
 export const useServiceTypeList = () => {
-  return useQuery({
-    queryKey: ['useServiceTypeList', {}],
-    queryFn: queryFetcher<ServiceTypeResponse[]>('serviceTypeList')
-  })
+    return useQuery({
+        queryKey: ['useServiceTypeList', {}],
+        queryFn: queryFetcher<ServiceTypeResponse[]>('serviceTypeList'),
+    })
 }

@@ -35,20 +35,20 @@ export const roomCardsQuery = gql(`
 `)
 
 export const useRoomCards = () => {
-  const [search] = useQueryState('search')
-  const { data, isFetching, error, refetch } = useGraphQL(roomCardsQuery, {
-    variables: {
-      where: {
-        name_CONTAINS: search || ''
-      }
-    }
-  })
+    const [search] = useQueryState('search')
+    const { data, isFetching, error, refetch } = useGraphQL(roomCardsQuery, {
+        variables: {
+            where: {
+                name_CONTAINS: search || '',
+            },
+        },
+    })
 
-  useEffect(() => {
-    if (error) {
-      toast.error('Failed to fetch room cards')
-    }
-  }, [error])
+    useEffect(() => {
+        if (error) {
+            toast.error('Failed to fetch room cards')
+        }
+    }, [error])
 
-  return { roomCards: data?.roomCards, loading: isFetching, error, refetch }
+    return { roomCards: data?.roomCards, loading: isFetching, error, refetch }
 }

@@ -23,25 +23,25 @@ import type { SelectedResearcher } from '../types/researcher-select.types'
  * ```
  */
 export const useResearcherSelectionModal = () => {
-  const { openModal } = useDynamicModalStore()
+    const { openModal } = useDynamicModalStore()
 
-  const openResearcherModal = (
-    onSelect: (researchers: SelectedResearcher[]) => void,
-    initialSelected?: SelectedResearcher[]
-  ) => {
-    const modalId = openModal('dialog', {
-      id: 'researcher-select',
-      component: ResearcherModalContent,
-      props: {
-        title: 'Select ELI Authors',
-        size: 'xl' as const,
-        onSelect,
-        initialSelected
-      }
-    })
+    const openResearcherModal = (
+        onSelect: (researchers: SelectedResearcher[]) => void,
+        initialSelected?: SelectedResearcher[],
+    ) => {
+        const modalId = openModal('dialog', {
+            id: 'researcher-select',
+            component: ResearcherModalContent,
+            props: {
+                title: 'Select ELI Authors',
+                size: 'xl' as const,
+                onSelect,
+                initialSelected,
+            },
+        })
 
-    return modalId
-  }
+        return modalId
+    }
 
-  return { openResearcherModal }
+    return { openResearcherModal }
 }

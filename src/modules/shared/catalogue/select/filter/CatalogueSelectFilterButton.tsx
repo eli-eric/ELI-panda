@@ -9,45 +9,43 @@ import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/response
 import { useCatalogueSelectFilterSheet } from './hooks/useCatalogueSelectFilterSheet'
 
 interface Props {
-  tableId: string
-  catalogueCategoryProperties?: CatalogueItemDetail[]
-  side?: 'top' | 'right' | 'bottom' | 'left'
+    tableId: string
+    catalogueCategoryProperties?: CatalogueItemDetail[]
+    side?: 'top' | 'right' | 'bottom' | 'left'
 }
 
 export const CatalogueSelectFilterButton = ({
-  tableId,
-  catalogueCategoryProperties,
-  side = 'right'
-}: Props) => {
-  const openFilterSheet = useCatalogueSelectFilterSheet()
-
-  const { storeFilters } = useFormFilterState({
     tableId,
-    enableQueryUrl: false
-  })
+    catalogueCategoryProperties,
+    side = 'right',
+}: Props) => {
+    const openFilterSheet = useCatalogueSelectFilterSheet()
 
-  const handleOpenFilters = () => {
-    openFilterSheet({
-      tableId,
-      catalogueCategoryProperties,
-      side
+    const { storeFilters } = useFormFilterState({
+        tableId,
+        enableQueryUrl: false,
     })
-  }
 
-  return (
-    <Fragment>
-      <Tooltip
-        content={storeFilters.length > 0 ? 'Filters Applied' : 'Open Filters'}
-      >
-        <div>
-          <Button size="sm" variant="outline" onClick={handleOpenFilters}>
-            <Filter
-              className={`h-4 w-4 ${storeFilters.length > 0 ? 'fill-current' : ''}`}
-              aria-hidden="true"
-            />
-          </Button>
-        </div>
-      </Tooltip>
-    </Fragment>
-  )
+    const handleOpenFilters = () => {
+        openFilterSheet({
+            tableId,
+            catalogueCategoryProperties,
+            side,
+        })
+    }
+
+    return (
+        <Fragment>
+            <Tooltip content={storeFilters.length > 0 ? 'Filters Applied' : 'Open Filters'}>
+                <div>
+                    <Button size="sm" variant="outline" onClick={handleOpenFilters}>
+                        <Filter
+                            className={`h-4 w-4 ${storeFilters.length > 0 ? 'fill-current' : ''}`}
+                            aria-hidden="true"
+                        />
+                    </Button>
+                </div>
+            </Tooltip>
+        </Fragment>
+    )
 }

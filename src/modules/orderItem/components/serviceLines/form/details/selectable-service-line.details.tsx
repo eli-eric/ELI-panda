@@ -8,44 +8,39 @@ import type { CodebookType } from '@/types/responses/codebook'
 import { SelectableServiceLineGroups } from './selectable-service-line.groups'
 
 interface Props {
-  serviceType?: CodebookType
+    serviceType?: CodebookType
 }
 
 export const SelectableServiceLineDetails = ({ serviceType }: Props) => {
-  const { watch } = useFormContext()
+    const { watch } = useFormContext()
 
-  const serviceTypeForm = watch('serviceType')
+    const serviceTypeForm = watch('serviceType')
 
-  const { data, error } = useServiceType(
-    serviceType ? serviceType.uid : serviceTypeForm?.uid
-  )
-  const { formatMessage: fm } = useIntl()
+    const { data, error } = useServiceType(serviceType ? serviceType.uid : serviceTypeForm?.uid)
+    const { formatMessage: fm } = useIntl()
 
-  // Stabilize allowedDetails to prevent infinite re-renders
-  const allowedDetails = useMemo(() => {
-    return data?.properties || []
-  }, [data?.properties])
+    // Stabilize allowedDetails to prevent infinite re-renders
+    const allowedDetails = useMemo(() => {
+        return data?.properties || []
+    }, [data?.properties])
 
-  // Stabilize category reference
-  const category = useMemo(() => {
-    return data?.category
-  }, [data?.category])
+    // Stabilize category reference
+    const category = useMemo(() => {
+        return data?.category
+    }, [data?.category])
 
-  if (error)
+    if (error)
+        return (
+            <div className="text-red-300">
+                {fm({ id: 'ordersPage.serviceLines.selectable.error' })}
+            </div>
+        )
+
     return (
-      <div className="text-red-300">
-        {fm({ id: 'ordersPage.serviceLines.selectable.error' })}
-      </div>
+        <div className="flex flex-col">
+            <div className="min-h-[320px]">
+                <SelectableServiceLineGroups category={category} allowedDetails={allowedDetails} />
+            </div>
+        </div>
     )
-
-  return (
-    <div className="flex flex-col">
-      <div className="min-h-[320px]">
-        <SelectableServiceLineGroups
-          category={category}
-          allowedDetails={allowedDetails}
-        />
-      </div>
-    </div>
-  )
 }

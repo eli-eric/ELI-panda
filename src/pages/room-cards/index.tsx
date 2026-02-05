@@ -9,17 +9,17 @@ import { RoomCardsContainer } from '@/modules/roomCards/RoomCards.cont'
 const messages = message.roomCardsPage
 
 const RoomCardsPage: NextPage = (): JSX.Element => {
-  const intl = useIntl()
+    const intl = useIntl()
 
-  return (
-    <Fragment>
-      <Head>
-        <title>{intl.formatMessage({ id: messages.head })}</title>
-        <meta name="description" content="...." />
-      </Head>
-      <RoomCardsContainer />
-    </Fragment>
-  )
+    return (
+        <Fragment>
+            <Head>
+                <title>{intl.formatMessage({ id: messages.head })}</title>
+                <meta name="description" content="...." />
+            </Head>
+            <RoomCardsContainer />
+        </Fragment>
+    )
 }
 
 export default RoomCardsPage

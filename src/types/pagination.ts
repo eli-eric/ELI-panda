@@ -9,8 +9,8 @@
  * Typed pagination state
  */
 export interface PaginationState {
-  page: number
-  pageSize: number
+    page: number
+    pageSize: number
 }
 
 /**
@@ -23,46 +23,46 @@ export type PageSizeOption = (typeof PAGE_SIZE_OPTIONS)[number]
  * Default pagination configuration
  */
 export const DEFAULT_PAGINATION: PaginationState = {
-  page: 1,
-  pageSize: 50
+    page: 1,
+    pageSize: 50,
 }
 
 /**
  * Pagination settings passed to components
  */
 export interface PaginationSettings {
-  enableQueryURL?: boolean
-  total?: number
-  pageSizeDefault?: number
-  pageSizeOptions?: readonly number[]
+    enableQueryURL?: boolean
+    total?: number
+    pageSizeDefault?: number
+    pageSizeOptions?: readonly number[]
 }
 
 /**
  * Return type for the usePagination hook
  */
 export interface UsePaginationReturn {
-  /** Current pagination state */
-  pagination: PaginationState
-  /** Go to previous page */
-  goToPreviousPage: () => void
-  /** Go to next page */
-  goToNextPage: () => void
-  /** Go to specific page */
-  goToPage: (page: number) => void
-  /** Change page size (resets to page 1) */
-  setPageSize: (size: number) => void
-  /** Reset pagination to defaults */
-  resetPagination: () => void
-  /** Computed: total number of pages */
-  totalPages: number
-  /** Computed: is on first page */
-  isFirstPage: boolean
-  /** Computed: is on last page */
-  isLastPage: boolean
-  /** Computed: "from" item number for display */
-  fromItem: number
-  /** Computed: "to" item number for display */
-  toItem: number
+    /** Current pagination state */
+    pagination: PaginationState
+    /** Go to previous page */
+    goToPreviousPage: () => void
+    /** Go to next page */
+    goToNextPage: () => void
+    /** Go to specific page */
+    goToPage: (page: number) => void
+    /** Change page size (resets to page 1) */
+    setPageSize: (size: number) => void
+    /** Reset pagination to defaults */
+    resetPagination: () => void
+    /** Computed: total number of pages */
+    totalPages: number
+    /** Computed: is on first page */
+    isFirstPage: boolean
+    /** Computed: is on last page */
+    isLastPage: boolean
+    /** Computed: "from" item number for display */
+    fromItem: number
+    /** Computed: "to" item number for display */
+    toItem: number
 }
 
 /**
@@ -74,22 +74,22 @@ export interface UsePaginationReturn {
  * @returns Typed PaginationState
  */
 export function parseLegacyPagination(
-  jsonString: string | undefined,
-  defaults: PaginationState = DEFAULT_PAGINATION
+    jsonString: string | undefined,
+    defaults: PaginationState = DEFAULT_PAGINATION,
 ): PaginationState {
-  if (!jsonString) return defaults
-  try {
-    const parsed = JSON.parse(jsonString)
-    return {
-      page: typeof parsed.page === 'number' && parsed.page > 0 ? parsed.page : defaults.page,
-      pageSize:
-        typeof parsed.pageSize === 'number' && parsed.pageSize > 0
-          ? parsed.pageSize
-          : defaults.pageSize
+    if (!jsonString) return defaults
+    try {
+        const parsed = JSON.parse(jsonString)
+        return {
+            page: typeof parsed.page === 'number' && parsed.page > 0 ? parsed.page : defaults.page,
+            pageSize:
+                typeof parsed.pageSize === 'number' && parsed.pageSize > 0
+                    ? parsed.pageSize
+                    : defaults.pageSize,
+        }
+    } catch {
+        return defaults
     }
-  } catch {
-    return defaults
-  }
 }
 
 /**
@@ -100,7 +100,7 @@ export function parseLegacyPagination(
  * @returns JSON string in legacy format
  */
 export function toLegacyPagination(state: PaginationState): string {
-  return JSON.stringify({ page: state.page, pageSize: state.pageSize })
+    return JSON.stringify({ page: state.page, pageSize: state.pageSize })
 }
 
 /**
@@ -111,7 +111,7 @@ export function toLegacyPagination(state: PaginationState): string {
  * @returns Valid page number within bounds
  */
 export function clampPage(page: number, totalPages: number): number {
-  return Math.max(1, Math.min(page, Math.max(1, totalPages)))
+    return Math.max(1, Math.min(page, Math.max(1, totalPages)))
 }
 
 /**
@@ -122,7 +122,7 @@ export function clampPage(page: number, totalPages: number): number {
  * @returns Total number of pages (minimum 1)
  */
 export function calculateTotalPages(total: number, pageSize: number): number {
-  return Math.max(1, Math.ceil(total / pageSize))
+    return Math.max(1, Math.ceil(total / pageSize))
 }
 
 /**
@@ -134,16 +134,16 @@ export function calculateTotalPages(total: number, pageSize: number): number {
  * @returns Object with from and to values
  */
 export function calculateDisplayRange(
-  page: number,
-  pageSize: number,
-  total: number
+    page: number,
+    pageSize: number,
+    total: number,
 ): { from: number; to: number } {
-  if (total === 0) {
-    return { from: 0, to: 0 }
-  }
-  const from = (page - 1) * pageSize + 1
-  const to = Math.min(page * pageSize, total)
-  return { from, to }
+    if (total === 0) {
+        return { from: 0, to: 0 }
+    }
+    const from = (page - 1) * pageSize + 1
+    const to = Math.min(page * pageSize, total)
+    return { from, to }
 }
 
 /**
@@ -170,43 +170,43 @@ export type PageItem = number | 'ellipsis'
  * @returns Array of page numbers and ellipsis indicators
  */
 export function generatePageNumbers(
-  currentPage: number,
-  totalPages: number,
-  siblingsCount: number = 3
+    currentPage: number,
+    totalPages: number,
+    siblingsCount: number = 3,
 ): PageItem[] {
-  // Handle edge case: no pages or single page
-  if (totalPages <= 1) {
-    return totalPages === 1 ? [1] : []
-  }
+    // Handle edge case: no pages or single page
+    if (totalPages <= 1) {
+        return totalPages === 1 ? [1] : []
+    }
 
-  const pages: PageItem[] = []
+    const pages: PageItem[] = []
 
-  // Calculate the range around current page
-  const leftBound = Math.max(2, currentPage - siblingsCount)
-  const rightBound = Math.min(totalPages - 1, currentPage + siblingsCount)
+    // Calculate the range around current page
+    const leftBound = Math.max(2, currentPage - siblingsCount)
+    const rightBound = Math.min(totalPages - 1, currentPage + siblingsCount)
 
-  // Always add first page
-  pages.push(1)
+    // Always add first page
+    pages.push(1)
 
-  // Add left ellipsis if there's a gap
-  if (leftBound > 2) {
-    pages.push('ellipsis')
-  }
+    // Add left ellipsis if there's a gap
+    if (leftBound > 2) {
+        pages.push('ellipsis')
+    }
 
-  // Add middle range (excluding first and last page which are added separately)
-  for (let i = leftBound; i <= rightBound; i++) {
-    pages.push(i)
-  }
+    // Add middle range (excluding first and last page which are added separately)
+    for (let i = leftBound; i <= rightBound; i++) {
+        pages.push(i)
+    }
 
-  // Add right ellipsis if there's a gap
-  if (rightBound < totalPages - 1) {
-    pages.push('ellipsis')
-  }
+    // Add right ellipsis if there's a gap
+    if (rightBound < totalPages - 1) {
+        pages.push('ellipsis')
+    }
 
-  // Always add last page (if different from first)
-  if (totalPages > 1) {
-    pages.push(totalPages)
-  }
+    // Always add last page (if different from first)
+    if (totalPages > 1) {
+        pages.push(totalPages)
+    }
 
-  return pages
+    return pages
 }

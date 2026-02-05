@@ -9,26 +9,26 @@ import { SystemModalContent } from '../components/system-modal-content'
  * Automatically handles z-index when opened from nested modals
  */
 export const useSystemSelectionModal = () => {
-  const { openModal } = useDynamicModalStore()
+    const { openModal } = useDynamicModalStore()
 
-  const openSystemModal = (
-    onSelect?: (system: CodebookType | null) => void,
-    onSystemDetailSelect?: (system: SystemDetail) => void
-  ) => {
-    // Use custom ID for consistent modal management
-    const modalId = openModal('dialog', {
-      id: 'system-select',
-      component: SystemModalContent,
-      props: {
-        title: 'Select System',
-        size: 'xl' as const,
-        onSelect: onSelect || (() => {}),
-        onSystemDetailSelect
-      }
-    })
+    const openSystemModal = (
+        onSelect?: (system: CodebookType | null) => void,
+        onSystemDetailSelect?: (system: SystemDetail) => void,
+    ) => {
+        // Use custom ID for consistent modal management
+        const modalId = openModal('dialog', {
+            id: 'system-select',
+            component: SystemModalContent,
+            props: {
+                title: 'Select System',
+                size: 'xl' as const,
+                onSelect: onSelect || (() => {}),
+                onSystemDetailSelect,
+            },
+        })
 
-    return modalId
-  }
+        return modalId
+    }
 
-  return { openSystemModal }
+    return { openSystemModal }
 }

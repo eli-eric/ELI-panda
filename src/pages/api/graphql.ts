@@ -13,34 +13,30 @@ import { createGraphqlLogger } from '@/server/logger'
 import { authOptions } from './auth/[...nextauth]'
 
 const server = async (): Promise<ApolloServer> => {
-  const schema = await neoSchema.getSchema()
-  await neoSchema.assertIndexesAndConstraints({ options: { create: true } })
+    const schema = await neoSchema.getSchema()
+    await neoSchema.assertIndexesAndConstraints({ options: { create: true } })
 
-  return new ApolloServer({
-    schema
-  })
+    return new ApolloServer({
+        schema,
+    })
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const session = await getServerSession(
-    req,
-    res,
-    authOptions as NextAuthOptions
-  )
-  if (isFeatureEnabled('enableGraphqlLogging')) {
-    createGraphqlLogger(session, req, res)
-  }
-
-  if (!session?.user && !isLocalEnvironment()) {
-    res.status(403).json('Authentication required.')
-    return
-  }
-  const appoloServer = await server()
-
-  return startServerAndCreateNextHandler(appoloServer, {
-    context: async (req, res) => {
-      const token = await getToken({ req })
-      return { req, res, token: token?.apiAccessToken }
+    const session = await getServerSession(req, res, authOptions as NextAuthOptions)
+    if (isFeatureEnabled('enableGraphqlLogging')) {
+        createGraphqlLogger(session, req, res)
     }
-  })(req, res)
+
+    if (!session?.user && !isLocalEnvironment()) {
+        res.status(403).json('Authentication required.')
+        return
+    }
+    const appoloServer = await server()
+
+    return startServerAndCreateNextHandler(appoloServer, {
+        context: async (req, res) => {
+            const token = await getToken({ req })
+            return { req, res, token: token?.apiAccessToken }
+        },
+    })(req, res)
 }

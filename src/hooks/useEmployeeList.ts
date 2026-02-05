@@ -18,13 +18,13 @@ query Query($where: EmployeeWhere) {
 `)
 
 export const useEmployeeList = (locationCode?: string) => {
-  const employeeQuery = useGraphQL(eployeeQuery, {
-    variables: {
-      where: {
-        workplaceName_CONTAINS: locationCode
-      }
-    }
-  })
+    const employeeQuery = useGraphQL(eployeeQuery, {
+        variables: {
+            where: {
+                workplaceName_CONTAINS: locationCode,
+            },
+        },
+    })
 
-  return employeeQuery
+    return employeeQuery
 }

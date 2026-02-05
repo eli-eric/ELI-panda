@@ -3,17 +3,14 @@ import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 
 import { Col, Grid } from '@/components/grid/Grid'
 import {
-  Table,
-  TableBody,
-  TableContainer,
-  TableHead,
-  TableHeader,
-  TableRow
+    Table,
+    TableBody,
+    TableContainer,
+    TableHead,
+    TableHeader,
+    TableRow,
 } from '@/components/ui/simple-table'
-import type {
-  OrderLineSystemConfig,
-  OrderLineWizardFormType
-} from '@/modules/orderItem/types/form'
+import type { OrderLineSystemConfig, OrderLineWizardFormType } from '@/modules/orderItem/types/form'
 import { parseSerialNumbers } from '@/modules/orderItem/utils/parseSerialNumbers'
 import { SelectSystemComboBox } from '@/modules/shared/form/systemSelect/SelectSystem.combo'
 import type { CodebookType } from '@/types/responses/codebook'
@@ -37,177 +34,173 @@ import useOrderLineFormFields from '../OrderLineForm.fields'
  * - Callbacks for user interactions (parent system change, type change)
  */
 export const OrderLineStep3SystemConfig = () => {
-  const { setValue, control } = useFormContext<OrderLineWizardFormType>()
+    const { setValue, control } = useFormContext<OrderLineWizardFormType>()
 
-  const formFields = useOrderLineFormFields(true)
+    const formFields = useOrderLineFormFields(true)
 
-  // useFieldArray for proper React Hook Form integration
-  const { fields, replace } = useFieldArray({
-    control,
-    name: 'systemConfigs'
-  })
+    // useFieldArray for proper React Hook Form integration
+    const { fields, replace } = useFieldArray({
+        control,
+        name: 'systemConfigs',
+    })
 
-  // Watch form values
-  const globalParentSystem = useWatch({
-    control,
-    name: 'globalParentSystem'
-  })
-  const globalParentSystemPath = useWatch({
-    control,
-    name: 'globalParentSystemPath'
-  })
-  const name = useWatch({ control, name: 'name' })
-  const quantity = useWatch({ control, name: 'quantity' }) || 1
-  const serialNumbers = useWatch({ control, name: 'serialNumbers' })
+    // Watch form values
+    const globalParentSystem = useWatch({
+        control,
+        name: 'globalParentSystem',
+    })
+    const globalParentSystemPath = useWatch({
+        control,
+        name: 'globalParentSystemPath',
+    })
+    const name = useWatch({ control, name: 'name' })
+    const quantity = useWatch({ control, name: 'quantity' }) || 1
+    const serialNumbers = useWatch({ control, name: 'serialNumbers' })
 
-  // Parse serial numbers if provided
-  const parsedSerialNumbers = parseSerialNumbers(serialNumbers)
-  const hasSerialNumbers = parsedSerialNumbers.length > 0
+    // Parse serial numbers if provided
+    const parsedSerialNumbers = parseSerialNumbers(serialNumbers)
+    const hasSerialNumbers = parsedSerialNumbers.length > 0
 
-  // Ref to ensure initialization happens only once on mount
-  const isInitializedRef = useRef(false)
+    // Ref to ensure initialization happens only once on mount
+    const isInitializedRef = useRef(false)
 
-  // Initialize systemConfigs on component mount (Step 2 → Step 3 transition)
-  // Runs ONCE - empty dependencies array
-  useEffect(() => {
-    // Guard: prevent multiple initializations
-    if (isInitializedRef.current) return
-    isInitializedRef.current = true
+    // Initialize systemConfigs on component mount (Step 2 → Step 3 transition)
+    // Runs ONCE - empty dependencies array
+    useEffect(() => {
+        // Guard: prevent multiple initializations
+        if (isInitializedRef.current) return
+        isInitializedRef.current = true
 
-    // Lazy initialization: only initialize if configs are empty
-    if (fields.length === 0) {
-      // Effective count: use serial numbers count if available, otherwise quantity
-      const effectiveCount = hasSerialNumbers ? parsedSerialNumbers.length : quantity
+        // Lazy initialization: only initialize if configs are empty
+        if (fields.length === 0) {
+            // Effective count: use serial numbers count if available, otherwise quantity
+            const effectiveCount = hasSerialNumbers ? parsedSerialNumbers.length : quantity
 
-      if (effectiveCount > 0) {
-        const newConfigs: OrderLineSystemConfig[] = []
-        for (let i = 0; i < effectiveCount; i++) {
-          newConfigs.push({
-            index: i,
-            itemName: name || '',
-            parentSystem: globalParentSystem || null,
-            systemType: 'new',
-            systemName: name || '',
-            selectedSystem: null,
-            // Assign individual serial number if available
-            serialNumber: hasSerialNumbers ? parsedSerialNumbers[i] : undefined
-          })
+            if (effectiveCount > 0) {
+                const newConfigs: OrderLineSystemConfig[] = []
+                for (let i = 0; i < effectiveCount; i++) {
+                    newConfigs.push({
+                        index: i,
+                        itemName: name || '',
+                        parentSystem: globalParentSystem || null,
+                        systemType: 'new',
+                        systemName: name || '',
+                        selectedSystem: null,
+                        // Assign individual serial number if available
+                        serialNumber: hasSerialNumbers ? parsedSerialNumbers[i] : undefined,
+                    })
+                }
+                replace(newConfigs)
+            }
         }
-        replace(newConfigs)
-      }
-    }
-    // Empty deps = runs only once on mount
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+        // Empty deps = runs only once on mount
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
-  // Callback: Handle global parent system change
-  // Updates parentSystem for all "new" system configs immediately
-  const handleParentSystemChange = useCallback(
-    (parent: CodebookType | null) => {
-      setValue('globalParentSystem', parent)
+    // Callback: Handle global parent system change
+    // Updates parentSystem for all "new" system configs immediately
+    const handleParentSystemChange = useCallback(
+        (parent: CodebookType | null) => {
+            setValue('globalParentSystem', parent)
 
-      // Batch update: prepare all changes at once
-      const updatedConfigs = fields.map(field =>
-        field.systemType === 'new'
-          ? { ...field, parentSystem: parent }
-          : field // "existing" configs keep their selectedSystemParent
-      )
-      replace(updatedConfigs)
-    },
-    [fields, setValue, replace]
-  )
+            // Batch update: prepare all changes at once
+            const updatedConfigs = fields.map(
+                field => (field.systemType === 'new' ? { ...field, parentSystem: parent } : field), // "existing" configs keep their selectedSystemParent
+            )
+            replace(updatedConfigs)
+        },
+        [fields, setValue, replace],
+    )
 
-  // Callback: Handle system detail change to capture parentPath
-  const handleSystemDetailChange = useCallback(
-    (system: SystemDetail) => {
-      // Store parentPath for breadcrumb display
-      setValue('globalParentSystemPath', system.parentPath || null)
-    },
-    [setValue]
-  )
+    // Callback: Handle system detail change to capture parentPath
+    const handleSystemDetailChange = useCallback(
+        (system: SystemDetail) => {
+            // Store parentPath for breadcrumb display
+            setValue('globalParentSystemPath', system.parentPath || null)
+        },
+        [setValue],
+    )
 
-  // Callback: Handle system type change (new vs existing)
-  const handleSystemTypeChange = useCallback(
-    (
-      index: number,
-      type: 'new' | 'existing',
-      selectedSystem?: CodebookType,
-      selectedSystemParent?: CodebookType
-    ) => {
-      const updatedConfigs = [...fields]
-      updatedConfigs[index] = {
-        ...updatedConfigs[index],
-        systemType: type,
-        selectedSystem: type === 'existing' ? selectedSystem || null : null,
-        // parentSystem is used for BOTH cases:
-        // - For "new": use globalParentSystem
-        // - For "existing": use parent of selected system (selectedSystemParent)
-        parentSystem:
-          type === 'existing'
-            ? selectedSystemParent || null
-            : globalParentSystem || null,
-        systemName: type === 'new' ? name || '' : selectedSystem?.name || ''
-      }
-      replace(updatedConfigs)
-    },
-    [fields, replace, globalParentSystem, name]
-  )
+    // Callback: Handle system type change (new vs existing)
+    const handleSystemTypeChange = useCallback(
+        (
+            index: number,
+            type: 'new' | 'existing',
+            selectedSystem?: CodebookType,
+            selectedSystemParent?: CodebookType,
+        ) => {
+            const updatedConfigs = [...fields]
+            updatedConfigs[index] = {
+                ...updatedConfigs[index],
+                systemType: type,
+                selectedSystem: type === 'existing' ? selectedSystem || null : null,
+                // parentSystem is used for BOTH cases:
+                // - For "new": use globalParentSystem
+                // - For "existing": use parent of selected system (selectedSystemParent)
+                parentSystem:
+                    type === 'existing' ? selectedSystemParent || null : globalParentSystem || null,
+                systemName: type === 'new' ? name || '' : selectedSystem?.name || '',
+            }
+            replace(updatedConfigs)
+        },
+        [fields, replace, globalParentSystem, name],
+    )
 
-  return (
-    <Grid className="pt-2">
-      <Col sm="full">
-        <div className="mb-6">
-          {/* System hierarchy breadcrumbs */}
-          <SystemHierarchyBreadcrumb
-            parentPath={globalParentSystemPath || null}
-            currentSystem={globalParentSystem || null}
-            className="mb-3"
-          />
+    return (
+        <Grid className="pt-2">
+            <Col sm="full">
+                <div className="mb-6">
+                    {/* System hierarchy breadcrumbs */}
+                    <SystemHierarchyBreadcrumb
+                        parentPath={globalParentSystemPath || null}
+                        currentSystem={globalParentSystem || null}
+                        className="mb-3"
+                    />
 
-          {/* System selector */}
-          <SelectSystemComboBox
-            selectSystemField={{
-              ...formFields.parentSystem,
-              name: 'globalParentSystem'
-            }}
-            onChange={handleParentSystemChange}
-            onSystemDetailChange={handleSystemDetailChange}
-          />
-          <p className="text-sm text-muted-foreground mt-1">
-            This parent system will be applied to all order lines
-          </p>
-        </div>
-      </Col>
+                    {/* System selector */}
+                    <SelectSystemComboBox
+                        selectSystemField={{
+                            ...formFields.parentSystem,
+                            name: 'globalParentSystem',
+                        }}
+                        onChange={handleParentSystemChange}
+                        onSystemDetailChange={handleSystemDetailChange}
+                    />
+                    <p className="text-sm text-muted-foreground mt-1">
+                        This parent system will be applied to all order lines
+                    </p>
+                </div>
+            </Col>
 
-      <Col sm="full">
-        <TableContainer>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[40px]">#</TableHead>
-                <TableHead className="min-w-[200px]">Item Name</TableHead>
-                {hasSerialNumbers && (
-                  <TableHead className="min-w-[150px]">Serial Number</TableHead>
-                )}
-                <TableHead className="min-w-[200px]">Parent System</TableHead>
-                <TableHead className="min-w-[180px]">System Type</TableHead>
-                <TableHead className="min-w-[200px]">System Name</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {fields.map((field, index) => (
-                <OrderLineConfigRow
-                  key={field.id}
-                  index={index}
-                  config={field}
-                  onTypeChange={handleSystemTypeChange}
-                  showSerialNumber={hasSerialNumbers}
-                />
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Col>
-    </Grid>
-  )
+            <Col sm="full">
+                <TableContainer>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-[40px]">#</TableHead>
+                                <TableHead className="min-w-[200px]">Item Name</TableHead>
+                                {hasSerialNumbers && (
+                                    <TableHead className="min-w-[150px]">Serial Number</TableHead>
+                                )}
+                                <TableHead className="min-w-[200px]">Parent System</TableHead>
+                                <TableHead className="min-w-[180px]">System Type</TableHead>
+                                <TableHead className="min-w-[200px]">System Name</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {fields.map((field, index) => (
+                                <OrderLineConfigRow
+                                    key={field.id}
+                                    index={index}
+                                    config={field}
+                                    onTypeChange={handleSystemTypeChange}
+                                    showSerialNumber={hasSerialNumbers}
+                                />
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Col>
+        </Grid>
+    )
 }

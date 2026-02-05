@@ -14,11 +14,11 @@ import { queryFetcher } from '@/utils/fetcher'
  * @param tableId - Table ID for state management (search, pagination)
  */
 export const useResearchersForSelect = (tableId: string) => {
-  const query = useQueryManager(tableId)
+    const query = useQueryManager(tableId)
 
-  return useQuery({
-    queryKey: ['researchers-select', { query: query.query }],
-    queryFn: queryFetcher<ResearchersResponse>('researchers'),
-    placeholderData: keepPreviousData
-  })
+    return useQuery({
+        queryKey: ['researchers-select', { query: query.query }],
+        queryFn: queryFetcher<ResearchersResponse>('researchers'),
+        placeholderData: keepPreviousData,
+    })
 }

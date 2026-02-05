@@ -7,10 +7,10 @@ import { useIntl } from 'react-intl'
 import { Tooltip } from '@/components/Tooltip'
 import { Button } from '@/components/ui/button'
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { useAccessControl } from '@/hooks/useAccessControl'
 import useWarningModal from '@/hooks/useWarningModal'
@@ -25,55 +25,50 @@ import { usePublicationDelete } from '../hooks/usePublicationDelete'
 interface TitleCellProps extends CellContext<Publication, any> {}
 
 export const TitleCell: FC<TitleCellProps> = ({
-  getValue,
-  row: {
-    original: { uid }
-  }
+    getValue,
+    row: {
+        original: { uid },
+    },
 }) => {
-  const { formatMessage: fm } = useIntl()
-  const title = getValue()
-  const deletePublication = usePublicationDelete(uid as string)
-  const withWarning = useWarningModal()
-  const canEdit = useAccessControl(ROLE.PUBLICATIONS_EDIT)()
+    const { formatMessage: fm } = useIntl()
+    const title = getValue()
+    const deletePublication = usePublicationDelete(uid as string)
+    const withWarning = useWarningModal()
+    const canEdit = useAccessControl(ROLE.PUBLICATIONS_EDIT)()
 
-  const onDeleteClick = () => {
-    withWarning(deletePublication)({})
-  }
+    const onDeleteClick = () => {
+        withWarning(deletePublication)({})
+    }
 
-  return (
-    <div className="flex items-center justify-between w-full flex-row-reverse">
-      {canEdit && (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              aria-label="Publication actions"
-              variant="ghost"
-              tabIndex={0}
-              className="has-[>svg]:px-1 cursor-pointer"
-            >
-              <MoreVertical className="size-4 text-muted-foreground" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start" sideOffset={4}>
-            <DropdownMenuItem
-              onClick={onDeleteClick}
-              className="text-destructive"
-            >
-              <Trash2 className="size-4" />
-              {fm({ id: message.publicationsPage.actions.deletePublication })}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )}
-      <div className="flex-1 min-w-0 flex items-center justify-start">
-        <Tooltip content={title}>
-          <Button variant="link" className="cursor-pointer" asChild>
-            <Link href={`${PATH.PUBLICATION}/${uid}`}>
-              {truncateString(title, 40)}
-            </Link>
-          </Button>
-        </Tooltip>
-      </div>
-    </div>
-  )
+    return (
+        <div className="flex items-center justify-between w-full flex-row-reverse">
+            {canEdit && (
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button
+                            aria-label="Publication actions"
+                            variant="ghost"
+                            tabIndex={0}
+                            className="has-[>svg]:px-1 cursor-pointer"
+                        >
+                            <MoreVertical className="size-4 text-muted-foreground" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="start" sideOffset={4}>
+                        <DropdownMenuItem onClick={onDeleteClick} className="text-destructive">
+                            <Trash2 className="size-4" />
+                            {fm({ id: message.publicationsPage.actions.deletePublication })}
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            )}
+            <div className="flex-1 min-w-0 flex items-center justify-start">
+                <Tooltip content={title}>
+                    <Button variant="link" className="cursor-pointer" asChild>
+                        <Link href={`${PATH.PUBLICATION}/${uid}`}>{truncateString(title, 40)}</Link>
+                    </Button>
+                </Tooltip>
+            </div>
+        </div>
+    )
 }

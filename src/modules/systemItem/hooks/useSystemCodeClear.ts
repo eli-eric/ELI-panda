@@ -18,20 +18,20 @@ const clearSystemCodeMutation = gql(`
 `)
 
 export const useSystemCodeClear = () => {
-  const { setValue } = useFormContext()
+    const { setValue } = useFormContext()
 
-  const { mutate: clearSystemCode, isPending: loading } = useGraphQLMutation(
-    clearSystemCodeMutation,
-    {
-      onSuccess: () => {
-        setValue('systemCode', '')
-        toast.success('System code has been released')
-      },
-      onError: () => {
-        toast.error('Failed to release system code')
-      }
-    }
-  )
+    const { mutate: clearSystemCode, isPending: loading } = useGraphQLMutation(
+        clearSystemCodeMutation,
+        {
+            onSuccess: () => {
+                setValue('systemCode', '')
+                toast.success('System code has been released')
+            },
+            onError: () => {
+                toast.error('Failed to release system code')
+            },
+        },
+    )
 
-  return { clearSystemCode, loading }
+    return { clearSystemCode, loading }
 }

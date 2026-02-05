@@ -3,7 +3,7 @@ import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { GrantFormContainer } from '../form/grant-form.cont'
 
 interface UseOpenGrantFormOptions {
-  onSuccess?: () => void
+    onSuccess?: () => void
 }
 
 /**
@@ -17,18 +17,18 @@ interface UseOpenGrantFormOptions {
  * ```
  */
 export const useOpenGrantForm = (options?: UseOpenGrantFormOptions) => {
-  const { openModal } = useDynamicModalStore()
+    const { openModal } = useDynamicModalStore()
 
-  const openGrantForm = () => {
-    openModal('sheet', {
-      id: 'grant-create',
-      component: GrantFormContainer,
-      props: {
-        title: 'Create Grant',
-        onSuccess: options?.onSuccess
-      }
-    })
-  }
+    const openGrantForm = () => {
+        openModal('sheet', {
+            id: 'grant-create',
+            component: GrantFormContainer,
+            props: {
+                title: 'Create Grant',
+                onSuccess: options?.onSuccess,
+            },
+        })
+    }
 
-  return { openGrantForm }
+    return { openGrantForm }
 }

@@ -4,23 +4,23 @@ import { toast } from 'sonner'
 import { fetchRequest } from '@/core/http/fetchClient'
 
 import type {
-  ImageHookParams,
-  ImageItem,
-  ImageUploadPayload,
-  ImageUploadResponse,
-  UploadImageParams
+    ImageHookParams,
+    ImageItem,
+    ImageUploadPayload,
+    ImageUploadResponse,
+    UploadImageParams,
 } from '../types'
 
 /**
  * Convert File to base64 string
  */
 const fileToBase64 = (file: File): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onload = () => resolve(String(reader.result))
-    reader.onerror = reject
-    reader.readAsDataURL(file)
-  })
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onload = () => resolve(String(reader.result))
+        reader.onerror = reject
+        reader.readAsDataURL(file)
+    })
 }
 
 /**
@@ -50,108 +50,95 @@ const fileToBase64 = (file: File): Promise<string> => {
  * ```
  */
 export const useImageUpload = ({ itemType, itemId }: ImageHookParams) => {
-  const queryClient = useQueryClient()
-  const endpoint = itemId ? `/api/${itemType}/${itemId}/image` : null
+    const queryClient = useQueryClient()
+    const endpoint = itemId ? `/api/${itemType}/${itemId}/image` : null
 
-  return useMutation<
-    ImageUploadResponse,
-    Error,
-    UploadImageParams,
-    { previous?: ImageItem[] }
-  >({
-    mutationFn: async ({ file }: UploadImageParams) => {
-      if (!endpoint) {
-        throw new Error('Cannot upload image: itemId is required')
-      }
+    return useMutation<ImageUploadResponse, Error, UploadImageParams, { previous?: ImageItem[] }>({
+        mutationFn: async ({ file }: UploadImageParams) => {
+            if (!endpoint) {
+                throw new Error('Cannot upload image: itemId is required')
+            }
 
-      const payload = await fileToBase64(file)
-      const uploadPayload: ImageUploadPayload = {
-        name: file.name,
-        payload
-      }
+            const payload = await fileToBase64(file)
+            const uploadPayload: ImageUploadPayload = {
+                name: file.name,
+                payload,
+            }
 
-      const response = await fetchRequest<ImageUploadResponse>(endpoint, {
-        method: 'POST',
-        body: uploadPayload
-      })
-      return response
-    },
+            const response = await fetchRequest<ImageUploadResponse>(endpoint, {
+                method: 'POST',
+                body: uploadPayload,
+            })
+            return response
+        },
 
-    onMutate: async ({ file }: UploadImageParams) => {
-      // Cancel any outgoing refetches to avoid overwriting optimistic update
-      await queryClient.cancelQueries({
-        queryKey: ['images', itemType, itemId]
-      })
+        onMutate: async ({ file }: UploadImageParams) => {
+            // Cancel any outgoing refetches to avoid overwriting optimistic update
+            await queryClient.cancelQueries({
+                queryKey: ['images', itemType, itemId],
+            })
 
-      // Snapshot the previous value
-      const previous = queryClient.getQueryData<ImageItem[]>([
-        'images',
-        itemType,
-        itemId
-      ])
+            // Snapshot the previous value
+            const previous = queryClient.getQueryData<ImageItem[]>(['images', itemType, itemId])
 
-      // Optimistically update with temporary image
-      const tempImage: ImageItem = {
-        id: `temp-${Date.now()}-${Math.random()}`,
-        name: file.name,
-        url: URL.createObjectURL(file),
-        type: file.type,
-        ts: Date.now(),
-        size: file.size,
-        tags: []
-      }
+            // Optimistically update with temporary image
+            const tempImage: ImageItem = {
+                id: `temp-${Date.now()}-${Math.random()}`,
+                name: file.name,
+                url: URL.createObjectURL(file),
+                type: file.type,
+                ts: Date.now(),
+                size: file.size,
+                tags: [],
+            }
 
-      queryClient.setQueryData<ImageItem[]>(
-        ['images', itemType, itemId],
-        old => (old ? [tempImage, ...old] : [tempImage])
-      )
+            queryClient.setQueryData<ImageItem[]>(['images', itemType, itemId], old =>
+                old ? [tempImage, ...old] : [tempImage],
+            )
 
-      // Return context with previous value for rollback
-      return { previous }
-    },
+            // Return context with previous value for rollback
+            return { previous }
+        },
 
-    onSuccess: (uploadedImage: ImageUploadResponse) => {
-      // Replace temp image with real image from server
-      queryClient.setQueryData<ImageItem[]>(
-        ['images', itemType, itemId],
-        old => {
-          if (!old) return []
+        onSuccess: (uploadedImage: ImageUploadResponse) => {
+            // Replace temp image with real image from server
+            queryClient.setQueryData<ImageItem[]>(['images', itemType, itemId], old => {
+                if (!old) return []
 
-          // Remove temp images and add the real one
-          const withoutTemp = old.filter(img => !img.id.startsWith('temp-'))
+                // Remove temp images and add the real one
+                const withoutTemp = old.filter(img => !img.id.startsWith('temp-'))
 
-          // Convert upload response to ImageItem
-          const newImage: ImageItem = {
-            ...uploadedImage,
-            ts: Date.now(),
-            size: 0 // Server doesn't return size in upload response
-          }
+                // Convert upload response to ImageItem
+                const newImage: ImageItem = {
+                    ...uploadedImage,
+                    ts: Date.now(),
+                    size: 0, // Server doesn't return size in upload response
+                }
 
-          return [newImage, ...withoutTemp]
-        }
-      )
+                return [newImage, ...withoutTemp]
+            })
 
-      toast.success(`Uploaded ${uploadedImage.name}`)
-    },
+            toast.success(`Uploaded ${uploadedImage.name}`)
+        },
 
-    onError: (error: Error, { file }, context) => {
-      // Rollback optimistic update
-      if (context?.previous) {
-        queryClient.setQueryData<ImageItem[]>(
-          ['images', itemType, itemId],
-          context.previous
-        )
-      }
+        onError: (error: Error, { file }, context) => {
+            // Rollback optimistic update
+            if (context?.previous) {
+                queryClient.setQueryData<ImageItem[]>(
+                    ['images', itemType, itemId],
+                    context.previous,
+                )
+            }
 
-      toast.error(`Failed to upload ${file.name}: ${error.message}`)
-    },
+            toast.error(`Failed to upload ${file.name}: ${error.message}`)
+        },
 
-    // Refetch after mutation settles (success or error)
-    // This ensures we have the latest server state
-    onSettled: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['images', itemType, itemId]
-      })
-    }
-  })
+        // Refetch after mutation settles (success or error)
+        // This ensures we have the latest server state
+        onSettled: () => {
+            queryClient.invalidateQueries({
+                queryKey: ['images', itemType, itemId],
+            })
+        },
+    })
 }

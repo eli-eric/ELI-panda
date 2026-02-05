@@ -18,75 +18,69 @@ import { useDarkModeStore } from '@/store/useDarkModeStore'
 import { getQueryClient } from '@/utils/queryClient'
 
 const ReactQueryDevtoolsProduction = lazy(() =>
-  import('@tanstack/react-query-devtools/build/modern/production.js').then(
-    d => ({
-      default: d.ReactQueryDevtools
-    })
-  )
+    import('@tanstack/react-query-devtools/build/modern/production.js').then(d => ({
+        default: d.ReactQueryDevtools,
+    })),
 )
 
 const ModalProvider = lazy(() =>
-  import('@/components/overlays/ModalProvider').then(d => ({
-    default: d.ModalProvider
-  }))
+    import('@/components/overlays/ModalProvider').then(d => ({
+        default: d.ModalProvider,
+    })),
 )
 
 const DynamicModalProvider = lazy(() =>
-  import('@/components/overlays/DynamicModalProvider').then(d => ({
-    default: d.DynamicModalProvider
-  }))
+    import('@/components/overlays/DynamicModalProvider').then(d => ({
+        default: d.DynamicModalProvider,
+    })),
 )
 
 const GlobalSearchCommandContainer = lazy(() =>
-  import(
-    '@/modules/shared/globalSearch/components/GlobalSearchCommand.cont'
-  ).then(d => ({
-    default: d.GlobalSearchCommandContainer
-  }))
+    import('@/modules/shared/globalSearch/components/GlobalSearchCommand.cont').then(d => ({
+        default: d.GlobalSearchCommandContainer,
+    })),
 )
 
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
-  const [queryClient] = useState(() => getQueryClient())
+    const [queryClient] = useState(() => getQueryClient())
 
-  const setStoredTheme = useDarkModeStore(state => state.setStoredTheme)
+    const setStoredTheme = useDarkModeStore(state => state.setStoredTheme)
 
-  useEffect(() => {
-    setStoredTheme()
-  }, [setStoredTheme])
+    useEffect(() => {
+        setStoredTheme()
+    }, [setStoredTheme])
 
-  // Extract key from pageProps if it exists to avoid React warning
-  const { key, ...componentProps } = pageProps as any
+    // Extract key from pageProps if it exists to avoid React warning
+    const { key, ...componentProps } = pageProps as any
 
-  return (
-    <QueryClientProvider client={queryClient}>
-      <HydrationBoundary state={componentProps.dehydratedState}>
-        <SessionProvider session={session} refetchOnWindowFocus={false}>
-          <IntlProvider locale={'en'} messages={messages.en}>
-            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-              <EnvironmentWarning />
-              <SonnerToaster />
-              <DndProvider backend={HTML5Backend}>
-                <NewLayout>
-                  {<Component {...componentProps} key={key} />}
-                </NewLayout>
+    return (
+        <QueryClientProvider client={queryClient}>
+            <HydrationBoundary state={componentProps.dehydratedState}>
+                <SessionProvider session={session} refetchOnWindowFocus={false}>
+                    <IntlProvider locale={'en'} messages={messages.en}>
+                        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+                            <EnvironmentWarning />
+                            <SonnerToaster />
+                            <DndProvider backend={HTML5Backend}>
+                                <NewLayout>{<Component {...componentProps} key={key} />}</NewLayout>
+                                <Suspense fallback={null}>
+                                    <ModalProvider />
+                                    <DynamicModalProvider />
+                                    <GlobalSearchCommandContainer />
+                                </Suspense>
+                                <WarningModal />
+                            </DndProvider>
+                        </ThemeProvider>
+                    </IntlProvider>
+                </SessionProvider>
+            </HydrationBoundary>
+            {process.env.NODE_ENV === 'development' && (
                 <Suspense fallback={null}>
-                  <ModalProvider />
-                  <DynamicModalProvider />
-                  <GlobalSearchCommandContainer />
+                    <ReactQueryDevtoolsProduction />
                 </Suspense>
-                <WarningModal />
-              </DndProvider>
-            </ThemeProvider>
-          </IntlProvider>
-        </SessionProvider>
-      </HydrationBoundary>
-      {process.env.NODE_ENV === 'development' && (
-        <Suspense fallback={null}>
-          <ReactQueryDevtoolsProduction />
-        </Suspense>
-      )}
-    </QueryClientProvider>
-  )
+            )}
+        </QueryClientProvider>
+    )
 }
 
 export default App

@@ -5,49 +5,49 @@ import { useServiceTypeList } from '@/modules/services/hooks/useServiceTypeList'
 const messages = message.ordersPage.serviceLines.wizard.steps
 
 export const useServiceLineFields = () => {
-  const { step1, step2, step3 } = messages
-  const formMessage = { ...step1.form, ...step2.form, ...step3.form }
-  const { data } = useServiceTypeList()
-  return useMakeFormFields({
-    name: {
-      name: 'name',
-      label: formMessage.name.label,
-      rounded: 'rounded-md',
-      required: true
-    },
-    notes: {
-      name: 'notes',
-      label: formMessage.notes.label,
-      rounded: 'rounded-md'
-    },
-    serviceType: {
-      name: 'serviceType',
-      label: formMessage.serviceType.label,
-      rounded: 'rounded-md',
-      required: true,
-      codebookResponse: data?.map(({ uid, name }) => ({
-        name,
-        uid
-      }))
-    },
-    items: {
-      name: 'items',
-      label: formMessage.item.label,
-      rounded: 'rounded-md'
-    },
-    price: {
-      name: 'price',
-      label: formMessage.price.label,
-      rounded: 'rounded-md',
-      type: 'number',
-      inputMode: 'numeric',
-      required: true
-    },
-    currency: {
-      name: 'currency',
-      label: formMessage.currency.label,
-      rounded: 'rounded-md',
-      required: true
-    }
-  })
+    const { step1, step2, step3 } = messages
+    const formMessage = { ...step1.form, ...step2.form, ...step3.form }
+    const { data } = useServiceTypeList()
+    return useMakeFormFields({
+        name: {
+            name: 'name',
+            label: formMessage.name.label,
+            rounded: 'rounded-md',
+            required: true,
+        },
+        notes: {
+            name: 'notes',
+            label: formMessage.notes.label,
+            rounded: 'rounded-md',
+        },
+        serviceType: {
+            name: 'serviceType',
+            label: formMessage.serviceType.label,
+            rounded: 'rounded-md',
+            required: true,
+            codebookResponse: data?.map(({ uid, name }) => ({
+                name,
+                uid,
+            })),
+        },
+        items: {
+            name: 'items',
+            label: formMessage.item.label,
+            rounded: 'rounded-md',
+        },
+        price: {
+            name: 'price',
+            label: formMessage.price.label,
+            rounded: 'rounded-md',
+            type: 'number',
+            inputMode: 'numeric',
+            required: true,
+        },
+        currency: {
+            name: 'currency',
+            label: formMessage.currency.label,
+            rounded: 'rounded-md',
+            required: true,
+        },
+    })
 }

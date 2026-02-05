@@ -26,28 +26,25 @@ const GET_CATEGORIES = gql(`
 `)
 
 export const useCategory = (catalogueCategoryUid?: string) => {
-  const uid = useCategoryUid()
-  const { data, isLoading, error } = useGraphQL(GET_CATEGORIES, {
-    variables: {
-      uid: uid || catalogueCategoryUid
-    }
-  })
+    const uid = useCategoryUid()
+    const { data, isLoading, error } = useGraphQL(GET_CATEGORIES, {
+        variables: {
+            uid: uid || catalogueCategoryUid,
+        },
+    })
 
-  const { formatMessage: fm } = useIntl()
-  useEffect(() => {
-    if (error) {
-      toast.error(
-        fm(
-          { id: message.catalogue.category.errorFetching },
-          { reason: error.message }
-        )
-      )
-    }
-  }, [error, fm])
+    const { formatMessage: fm } = useIntl()
+    useEffect(() => {
+        if (error) {
+            toast.error(
+                fm({ id: message.catalogue.category.errorFetching }, { reason: error.message }),
+            )
+        }
+    }, [error, fm])
 
-  return {
-    catalogueCategory: data?.catalogueCategories[0],
-    loading: isLoading,
-    error: error
-  }
+    return {
+        catalogueCategory: data?.catalogueCategories[0],
+        loading: isLoading,
+        error: error,
+    }
 }

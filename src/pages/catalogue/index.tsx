@@ -8,25 +8,22 @@ import { message } from '@/i18n/src/messages'
 
 const { head } = message.cataloguePage
 
-const NoSSRCatalogueCont = dynamic(
-  () => import('@/modules/catalogue/Catalogue.cont'),
-  {
-    ssr: false
-  }
-)
+const NoSSRCatalogueCont = dynamic(() => import('@/modules/catalogue/Catalogue.cont'), {
+    ssr: false,
+})
 
 const CatalogueCategoryHomePage: NextPage = (): JSX.Element => {
-  const intl = useIntl()
+    const intl = useIntl()
 
-  return (
-    <Fragment>
-      <Head>
-        <title>{intl.formatMessage({ id: head })}</title>
-        <meta name="description" content="...." />
-      </Head>
-      <NoSSRCatalogueCont />
-    </Fragment>
-  )
+    return (
+        <Fragment>
+            <Head>
+                <title>{intl.formatMessage({ id: head })}</title>
+                <meta name="description" content="...." />
+            </Head>
+            <NoSSRCatalogueCont />
+        </Fragment>
+    )
 }
 
 export default CatalogueCategoryHomePage

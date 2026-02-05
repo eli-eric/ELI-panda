@@ -9,72 +9,71 @@ import type { SystemDetail } from '@/types/responses/systems'
 import { useSystemSelectColumns } from './SystemSelect.columns'
 
 interface SystemSelectTableProps {
-  tableId: string
-  systems: SystemDetail[] | undefined
-  selectedSystemUid?: string
-  onSystemToggle: (system: SystemDetail) => void
-  loading?: boolean
-  getRowProps?: (row: Row<SystemDetail>) => GetRowPropsReturnType
-  pageSizeDefault?: number
-  enableQueryURL?: boolean
-  className?: string
+    tableId: string
+    systems: SystemDetail[] | undefined
+    selectedSystemUid?: string
+    onSystemToggle: (system: SystemDetail) => void
+    loading?: boolean
+    getRowProps?: (row: Row<SystemDetail>) => GetRowPropsReturnType
+    pageSizeDefault?: number
+    enableQueryURL?: boolean
+    className?: string
 }
 
 export const SystemSelectTable = ({
-  tableId,
-  systems,
-  selectedSystemUid,
-  onSystemToggle,
-  loading,
-  getRowProps,
-  pageSizeDefault = 10,
-  enableQueryURL = false,
-  className
-}: SystemSelectTableProps) => {
-  const columns = useSystemSelectColumns({
     tableId,
+    systems,
     selectedSystemUid,
-    onSystemToggle
-  })
+    onSystemToggle,
+    loading,
+    getRowProps,
+    pageSizeDefault = 10,
+    enableQueryURL = false,
+    className,
+}: SystemSelectTableProps) => {
+    const columns = useSystemSelectColumns({
+        tableId,
+        selectedSystemUid,
+        onSystemToggle,
+    })
 
-  const table = usePandaTable({
-    tableId,
-    columns,
-    data: systems || [],
-    getSubRows: (original: SystemDetail) => original.subSystems ?? [],
-    settings: {
-      enableSorting: false,
-      enableQueryURL: false,
-      enableColumnHiding: false,
-      enableColumnReordering: false,
-      manualSorting: false,
-      defaultColumnOrder: ['selection', 'name', 'systemCode', 'systemType']
-    }
-  })
+    const table = usePandaTable({
+        tableId,
+        columns,
+        data: systems || [],
+        getSubRows: (original: SystemDetail) => original.subSystems ?? [],
+        settings: {
+            enableSorting: false,
+            enableQueryURL: false,
+            enableColumnHiding: false,
+            enableColumnReordering: false,
+            manualSorting: false,
+            defaultColumnOrder: ['selection', 'name', 'systemCode', 'systemType'],
+        },
+    })
 
-  useEffect(() => {
-    // Ensure column order is set on mount
-    table.setColumnOrder(table.getAllLeafColumns().map(column => column.id))
-  }, [table])
+    useEffect(() => {
+        // Ensure column order is set on mount
+        table.setColumnOrder(table.getAllLeafColumns().map(column => column.id))
+    }, [table])
 
-  return (
-    <PandaTableV2
-      table={table}
-      loading={loading}
-      tableId={tableId}
-      getRowProps={getRowProps}
-      data={systems}
-      skeletonRowCount={pageSizeDefault}
-      className={'relative overflow-y-scroll scrollbar-style text-sm'}
-      settings={{
-        enableQueryURL,
-        defaultColumnOrder: ['selection', 'name', 'systemCode', 'systemType'],
-        enableColumnHiding: false,
-        enableColumnReordering: false,
-        enableSorting: false,
-        manualSorting: false
-      }}
-    />
-  )
+    return (
+        <PandaTableV2
+            table={table}
+            loading={loading}
+            tableId={tableId}
+            getRowProps={getRowProps}
+            data={systems}
+            skeletonRowCount={pageSizeDefault}
+            className={'relative overflow-y-scroll scrollbar-style text-sm'}
+            settings={{
+                enableQueryURL,
+                defaultColumnOrder: ['selection', 'name', 'systemCode', 'systemType'],
+                enableColumnHiding: false,
+                enableColumnReordering: false,
+                enableSorting: false,
+                manualSorting: false,
+            }}
+        />
+    )
 }
-

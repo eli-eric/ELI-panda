@@ -13,12 +13,12 @@ const createFilterMutation = gql(`
   }
 `)
 export const useFilterCreate = ({ tableId }: { tableId: string }) => {
-  const { refetch } = useFilterDetails(tableId)
-  const { mutate, isPending } = useGraphQLMutation(createFilterMutation, {
-    onSuccess: () => {
-      refetch()
-    }
-  })
+    const { refetch } = useFilterDetails(tableId)
+    const { mutate, isPending } = useGraphQLMutation(createFilterMutation, {
+        onSuccess: () => {
+            refetch()
+        },
+    })
 
-  return { createUserSettings: mutate, loading: isPending }
+    return { createUserSettings: mutate, loading: isPending }
 }

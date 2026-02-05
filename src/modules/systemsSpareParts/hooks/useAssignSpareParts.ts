@@ -10,22 +10,22 @@ const ASSIGN_SPARE_PARTS = gql(`
 `)
 
 export const useAssignSpareParts = () => {
-  const { mutate, isPending } = useGraphQLMutation(ASSIGN_SPARE_PARTS, {
-    onSuccess: data => {
-      if (data.createSparePartRelation?.includes('Error')) {
-        toast.error(data.createSparePartRelation as string, { duration: 10000 })
-      } else {
-        toast.success(data.createSparePartRelation as string)
-      }
-    },
-    onError: erorr => {
-      toast.error(erorr.message)
+    const { mutate, isPending } = useGraphQLMutation(ASSIGN_SPARE_PARTS, {
+        onSuccess: data => {
+            if (data.createSparePartRelation?.includes('Error')) {
+                toast.error(data.createSparePartRelation as string, { duration: 10000 })
+            } else {
+                toast.success(data.createSparePartRelation as string)
+            }
+        },
+        onError: erorr => {
+            toast.error(erorr.message)
+        },
+    })
+
+    const wrappedMutate = (variables: any, options?: any) => {
+        return mutate(variables, options)
     }
-  })
 
-  const wrappedMutate = (variables: any, options?: any) => {
-    return mutate(variables, options)
-  }
-
-  return { assignSpareParts: wrappedMutate, loading: isPending }
+    return { assignSpareParts: wrappedMutate, loading: isPending }
 }

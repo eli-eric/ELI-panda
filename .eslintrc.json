@@ -1,97 +1,94 @@
 {
-  "parser": "@typescript-eslint/parser",
-  "extends": [
-    "next/core-web-vitals",
-    "next",
-    "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended",
-    "plugin:@tanstack/query/recommended",
-    "prettier"
-  ],
-  "plugins": [
-    "unused-imports",
-    "simple-import-sort",
-    "@typescript-eslint",
-    "sort-keys-fix",
-    "typescript-sort-keys",
-    "import",
-    "@tanstack/query"
-  ],
-  "rules": {
-    "simple-import-sort/imports": 1,
-    "simple-import-sort/exports": "warn",
-    "@tanstack/query/exhaustive-deps": "error",
-    "@tanstack/query/no-rest-destructuring": "warn",
-    "@tanstack/query/stable-query-client": "error",
-    "unused-imports/no-unused-imports": "warn",
-    "@typescript-eslint/consistent-type-imports": "warn",
-    "@typescript-eslint/explicit-function-return-type": "off",
-    "@typescript-eslint/no-empty-function": [
-      "error",
-      { "allow": ["arrowFunctions"] }
+    "parser": "@typescript-eslint/parser",
+    "extends": [
+        "next/core-web-vitals",
+        "next",
+        "eslint:recommended",
+        "plugin:react/recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:prettier/recommended",
+        "plugin:@tanstack/query/recommended",
+        "prettier"
     ],
-    "@typescript-eslint/no-explicit-any": "off",
-    "@typescript-eslint/no-use-before-define": "off",
-    "@typescript-eslint/no-non-null-assertion": "off",
-    "@typescript-eslint/ban-ts-ignore": "off",
-    "@typescript-eslint/camelcase": 0,
-    "@typescript-eslint/no-var-requires": 0,
-    "@typescript-eslint/ban-types": 0,
-    "@typescript-eslint/explicit-module-boundary-types": 0,
-    "@typescript-eslint/no-unused-vars": ["warn", { "args": "after-used" }],
-    "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn",
-    "arrow-body-style": "off",
-    "no-console": "warn",
-    "linebreak-style": ["off", "unix"],
-    "sort-imports": "off",
-    "import/order": "off",
-    "react/prefer-stateless-function": [2, { "ignorePureComponents": false }],
-    "prettier/prettier": "off",
-    "react/react-in-jsx-scope": "off",
-    "react/prop-types": "warn",
-    "no-case-declarations": "off",
-    "react/jsx-no-literals": [
-      "warn",
-      {
-        "noStrings": true,
-        "allowedStrings": [
-          " ",
-          ":",
-          ",",
-          ".",
-          "-",
-          "+",
-          "(",
-          ")",
-          "/",
-          "\\",
-          "?",
-          "!",
-          "&"
-        ],
-        "ignoreProps": true
-      }
-    ]
-  },
-  "overrides": [
-    {
-      "files": ["**/constants/**"],
-      "rules": {
-        "@typescript-eslint/naming-convention": [
-          "warn",
-          { "selector": "variableLike", "format": ["UPPER_CASE"] },
-          { "selector": "enum", "format": ["UPPER_CASE"] }
+    "plugins": [
+        "unused-imports",
+        "simple-import-sort",
+        "@typescript-eslint",
+        "sort-keys-fix",
+        "typescript-sort-keys",
+        "import",
+        "@tanstack/query"
+    ],
+    "rules": {
+        "simple-import-sort/imports": 1,
+        "simple-import-sort/exports": "warn",
+        "@tanstack/query/exhaustive-deps": "error",
+        "@tanstack/query/no-rest-destructuring": "warn",
+        "@tanstack/query/stable-query-client": "error",
+        "unused-imports/no-unused-imports": "warn",
+        "@typescript-eslint/consistent-type-imports": "warn",
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "@typescript-eslint/no-empty-function": ["error", { "allow": ["arrowFunctions"] }],
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-use-before-define": "off",
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "@typescript-eslint/ban-ts-ignore": "off",
+        "@typescript-eslint/camelcase": 0,
+        "@typescript-eslint/no-var-requires": 0,
+        "@typescript-eslint/ban-types": 0,
+        "@typescript-eslint/explicit-module-boundary-types": 0,
+        "@typescript-eslint/no-unused-vars": ["warn", { "args": "after-used" }],
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn",
+        "arrow-body-style": "off",
+        "no-console": "warn",
+        "linebreak-style": ["off", "unix"],
+        "sort-imports": "off",
+        "import/order": "off",
+        "react/prefer-stateless-function": [2, { "ignorePureComponents": false }],
+        "prettier/prettier": "off",
+        "react/react-in-jsx-scope": "off",
+        "react/prop-types": "warn",
+        "no-case-declarations": "off",
+        "react/jsx-no-literals": [
+            "warn",
+            {
+                "noStrings": true,
+                "allowedStrings": [
+                    " ",
+                    ":",
+                    ",",
+                    ".",
+                    "-",
+                    "+",
+                    "(",
+                    ")",
+                    "/",
+                    "\\",
+                    "?",
+                    "!",
+                    "&"
+                ],
+                "ignoreProps": true
+            }
         ]
-      }
     },
-    {
-      "files": ["tests/**/*"],
-      "env": {
-        "jest": true
-      }
-    }
-  ]
+    "overrides": [
+        {
+            "files": ["**/constants/**"],
+            "rules": {
+                "@typescript-eslint/naming-convention": [
+                    "warn",
+                    { "selector": "variableLike", "format": ["UPPER_CASE"] },
+                    { "selector": "enum", "format": ["UPPER_CASE"] }
+                ]
+            }
+        },
+        {
+            "files": ["tests/**/*"],
+            "env": {
+                "jest": true
+            }
+        }
+    ]
 }

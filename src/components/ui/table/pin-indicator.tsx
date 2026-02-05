@@ -6,38 +6,38 @@ import { cn } from '@/lib/utils'
 import type { PinnedPosition } from './types'
 
 interface PinIndicatorProps {
-  column: any
-  position: PinnedPosition
+    column: any
+    position: PinnedPosition
 }
 
 export function PinIndicator({ column, position }: PinIndicatorProps) {
-  // Only show for left pinning
-  if (position === 'right') return null
+    // Only show for left pinning
+    if (position === 'right') return null
 
-  const isPinned = column.getIsPinned() === position
-  const canPin = column.getCanPin()
+    const isPinned = column.getIsPinned() === position
+    const canPin = column.getCanPin()
 
-  if (!canPin) return null
+    if (!canPin) return null
 
-  return (
-    <button
-      onClick={(e: React.MouseEvent) => {
-        e.stopPropagation() // Prevent sorting when clicking pin
-        column.pin(isPinned ? false : position)
-      }}
-      className={cn(
-        'p-1 rounded hover:bg-accent transition-colors',
-        isPinned ? 'text-primary' : 'text-muted-foreground'
-      )}
-      title={`${isPinned ? 'Unpin' : 'Pin'} column`}
-    >
-      <PinIcon
-        className={cn(
-          'w-4 h-4',
-          isPinned && '-rotate-45',
-          isPinned ? 'text-primary' : 'text-muted-foreground'
-        )}
-      />
-    </button>
-  )
+    return (
+        <button
+            onClick={(e: React.MouseEvent) => {
+                e.stopPropagation() // Prevent sorting when clicking pin
+                column.pin(isPinned ? false : position)
+            }}
+            className={cn(
+                'p-1 rounded hover:bg-accent transition-colors',
+                isPinned ? 'text-primary' : 'text-muted-foreground',
+            )}
+            title={`${isPinned ? 'Unpin' : 'Pin'} column`}
+        >
+            <PinIcon
+                className={cn(
+                    'w-4 h-4',
+                    isPinned && '-rotate-45',
+                    isPinned ? 'text-primary' : 'text-muted-foreground',
+                )}
+            />
+        </button>
+    )
 }

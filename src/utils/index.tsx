@@ -1,88 +1,81 @@
 export function generatePassword() {
-  const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-  const digits = '0123456789'
-  const specialChars = '._-@!'
-  const lowercase = 'abcdefghijklmnopqrstuvwxyz'
+    const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    const digits = '0123456789'
+    const specialChars = '._-@!'
+    const lowercase = 'abcdefghijklmnopqrstuvwxyz'
 
-  let password = ''
+    let password = ''
 
-  // Adding one uppercase letter
-  password += uppercase[Math.floor(Math.random() * uppercase.length)]
+    // Adding one uppercase letter
+    password += uppercase[Math.floor(Math.random() * uppercase.length)]
 
-  // Adding one special character
-  password += specialChars[Math.floor(Math.random() * specialChars.length)]
+    // Adding one special character
+    password += specialChars[Math.floor(Math.random() * specialChars.length)]
 
-  // Adding two digits
-  for (let i = 0; i < 2; i++) {
-    password += digits[Math.floor(Math.random() * digits.length)]
-  }
+    // Adding two digits
+    for (let i = 0; i < 2; i++) {
+        password += digits[Math.floor(Math.random() * digits.length)]
+    }
 
-  // Filling the rest of the password
-  const combinedChars = uppercase + lowercase + digits + specialChars
-  while (password.length < 10) {
-    password += combinedChars[Math.floor(Math.random() * combinedChars.length)]
-  }
+    // Filling the rest of the password
+    const combinedChars = uppercase + lowercase + digits + specialChars
+    while (password.length < 10) {
+        password += combinedChars[Math.floor(Math.random() * combinedChars.length)]
+    }
 
-  // Shuffle the password to randomize the order of characters
-  password = password
-    .split('')
-    .sort(() => 0.5 - Math.random())
-    .join('')
+    // Shuffle the password to randomize the order of characters
+    password = password
+        .split('')
+        .sort(() => 0.5 - Math.random())
+        .join('')
 
-  return password
+    return password
 }
 
-export const highlightText = (
-  text: string,
-  highlight?: string
-): JSX.Element => {
-  if (!highlight) {
-    return <span>{text}</span>
-  }
+export const highlightText = (text: string, highlight?: string): JSX.Element => {
+    if (!highlight) {
+        return <span>{text}</span>
+    }
 
-  // Escape special regex characters to prevent SyntaxError
-  const escapedHighlight = highlight.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    // Escape special regex characters to prevent SyntaxError
+    const escapedHighlight = highlight.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 
-  const regex = new RegExp(`(${escapedHighlight})`, 'gi')
-  const parts = text.split(regex)
-  return (
-    <span>
-      {parts
-        .filter(part => part)
-        .map((part, i) =>
-          regex.test(part) ? (
-            <mark key={i}>{part}</mark>
-          ) : (
-            <span key={i}>{part}</span>
-          )
-        )}
-    </span>
-  )
+    const regex = new RegExp(`(${escapedHighlight})`, 'gi')
+    const parts = text.split(regex)
+    return (
+        <span>
+            {parts
+                .filter(part => part)
+                .map((part, i) =>
+                    regex.test(part) ? <mark key={i}>{part}</mark> : <span key={i}>{part}</span>,
+                )}
+        </span>
+    )
 }
 
 export const navigateBack = (navigateExit?: () => void) => {
-  if (window.history.length > 1) {
-    if (navigateExit) {
-      navigateExit()
+    if (window.history.length > 1) {
+        if (navigateExit) {
+            navigateExit()
+        } else {
+            window.history.back()
+        }
     } else {
-      window.history.back()
+        window.close()
     }
-  } else {
-    window.close()
-  }
 }
 
 export function truncateString(str?: string, length = 30) {
-  if (!str) {
-    return ''
-  }
-  if (str.length > length) {
-    return str.slice(0, length) + '...'
-  } else {
-    return str
-  }
+    if (!str) {
+        return ''
+    }
+    if (str.length > length) {
+        return str.slice(0, length) + '...'
+    } else {
+        return str
+    }
 }
 
 export function encodeURIWithStringify(data: any): string {
-  return encodeURIComponent(JSON.stringify(data))
+    return encodeURIComponent(JSON.stringify(data))
 }

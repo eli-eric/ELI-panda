@@ -12,31 +12,31 @@ const { validation } = message.cataloguePage.itemDetail
  * @returns Zod schema with localized error messages
  */
 export const createItemSchema = (fm: (descriptor: { id: string }) => string) =>
-  z.object({
-    name: z
-      .string()
-      .min(1, fm({ id: validation.nameRequired }))
-      .max(255, fm({ id: validation.nameTooLong })),
-    catalogueNumber: z
-      .string()
-      .min(1, fm({ id: validation.catalogueNumberRequired }))
-      .max(100, fm({ id: validation.catalogueNumberTooLong })),
-    category: z
-      .custom<CodebookType>(
-        val =>
-          val &&
-          typeof val === 'object' &&
-          'uid' in val &&
-          'name' in val &&
-          typeof val.uid === 'string',
-        {
-          message: fm({ id: validation.categoryRequired })
-        }
-      )
-      .refine(val => val !== null && val !== undefined, {
-        message: fm({ id: validation.categoryRequired })
-      }),
-  })
+    z.object({
+        name: z
+            .string()
+            .min(1, fm({ id: validation.nameRequired }))
+            .max(255, fm({ id: validation.nameTooLong })),
+        catalogueNumber: z
+            .string()
+            .min(1, fm({ id: validation.catalogueNumberRequired }))
+            .max(100, fm({ id: validation.catalogueNumberTooLong })),
+        category: z
+            .custom<CodebookType>(
+                val =>
+                    val &&
+                    typeof val === 'object' &&
+                    'uid' in val &&
+                    'name' in val &&
+                    typeof val.uid === 'string',
+                {
+                    message: fm({ id: validation.categoryRequired }),
+                },
+            )
+            .refine(val => val !== null && val !== undefined, {
+                message: fm({ id: validation.categoryRequired }),
+            }),
+    })
 
 /**
  * TypeScript type inferred from the Zod schema

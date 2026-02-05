@@ -14,11 +14,11 @@ import { queryFetcher } from '@/utils/fetcher'
  * @param tableId - Table ID for state management (search, pagination)
  */
 export const useGrantsForSelect = (tableId: string) => {
-  const query = useQueryManager(tableId)
+    const query = useQueryManager(tableId)
 
-  return useQuery({
-    queryKey: ['grants-select', { query: query.query }],
-    queryFn: queryFetcher<GrantsResponse>('grants'),
-    placeholderData: keepPreviousData
-  })
+    return useQuery({
+        queryKey: ['grants-select', { query: query.query }],
+        queryFn: queryFetcher<GrantsResponse>('grants'),
+        placeholderData: keepPreviousData,
+    })
 }

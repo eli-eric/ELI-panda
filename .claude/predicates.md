@@ -21,15 +21,15 @@ Use these predicates for common data checks:
 ```typescript
 // Null/undefined/empty checks
 export const isEmpty = (value: unknown): boolean =>
-  value === null || value === undefined || value === ''
+    value === null || value === undefined || value === ''
 
 export const isNotEmpty = (value: unknown): boolean => !isEmpty(value)
 
 export const hasValue = <T>(value: T | null | undefined): value is T =>
-  value !== null && value !== undefined
+    value !== null && value !== undefined
 
 export const isNullOrUndefined = (value: unknown): value is null | undefined =>
-  value === null || value === undefined
+    value === null || value === undefined
 
 // Array checks
 export const isEmptyArray = (arr: unknown[]): boolean => arr.length === 0
@@ -38,10 +38,9 @@ export const hasItems = <T>(arr: T[]): boolean => arr.length > 0
 
 // Object checks
 export const isEmptyObject = (obj: Record<string, unknown>): boolean =>
-  Object.keys(obj).length === 0
+    Object.keys(obj).length === 0
 
-export const hasProperties = (obj: Record<string, unknown>): boolean =>
-  Object.keys(obj).length > 0
+export const hasProperties = (obj: Record<string, unknown>): boolean => Object.keys(obj).length > 0
 ```
 
 **Usage:**
@@ -51,12 +50,12 @@ import { hasValue, hasItems } from '@/lib/predicates/data'
 
 // ✅ Good - readable and self-documenting
 if (hasValue(user.email) && hasItems(user.roles)) {
-  // Process user
+    // Process user
 }
 
 // ❌ Bad - inline logic
 if (user.email !== null && user.email !== undefined && user.roles.length > 0) {
-  // Process user
+    // Process user
 }
 ```
 
@@ -66,33 +65,31 @@ Use these predicates for input validation:
 
 ```typescript
 // Email validation
-export const isValidEmail = (email: string): boolean =>
-  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+export const isValidEmail = (email: string): boolean => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 
 // URL validation
 export const isValidUrl = (url: string): boolean => {
-  try {
-    new URL(url)
-    return true
-  } catch {
-    return false
-  }
+    try {
+        new URL(url)
+        return true
+    } catch {
+        return false
+    }
 }
 
 // UUID validation
 export const isValidUUID = (uuid: string): boolean =>
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(uuid)
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(uuid)
 
 // Phone number validation
-export const isValidPhoneNumber = (phone: string): boolean =>
-  /^\+?[\d\s-()]+$/.test(phone)
+export const isValidPhoneNumber = (phone: string): boolean => /^\+?[\d\s-()]+$/.test(phone)
 
 // Password strength
 export const isStrongPassword = (password: string): boolean =>
-  password.length >= 8 &&
-  /[a-z]/.test(password) &&
-  /[A-Z]/.test(password) &&
-  /[0-9]/.test(password)
+    password.length >= 8 &&
+    /[a-z]/.test(password) &&
+    /[A-Z]/.test(password) &&
+    /[0-9]/.test(password)
 ```
 
 **Usage:**
@@ -102,13 +99,13 @@ import { isValidEmail, isValidUUID } from '@/lib/predicates/validation'
 
 // Form validation
 const validateForm = (data: FormData) => {
-  if (!isValidEmail(data.email)) {
-    return { email: 'Invalid email address' }
-  }
-  if (!isValidUUID(data.userId)) {
-    return { userId: 'Invalid user ID format' }
-  }
-  return null
+    if (!isValidEmail(data.email)) {
+        return { email: 'Invalid email address' }
+    }
+    if (!isValidUUID(data.userId)) {
+        return { userId: 'Invalid user ID format' }
+    }
+    return null
 }
 ```
 
@@ -119,29 +116,26 @@ Use these predicates for TypeScript type narrowing:
 ```typescript
 // Basic type guards
 export const isDefined = <T>(value: T | null | undefined): value is T =>
-  value !== null && value !== undefined
+    value !== null && value !== undefined
 
-export const isString = (value: unknown): value is string =>
-  typeof value === 'string'
+export const isString = (value: unknown): value is string => typeof value === 'string'
 
 export const isNumber = (value: unknown): value is number =>
-  typeof value === 'number' && !isNaN(value)
+    typeof value === 'number' && !isNaN(value)
 
-export const isBoolean = (value: unknown): value is boolean =>
-  typeof value === 'boolean'
+export const isBoolean = (value: unknown): value is boolean => typeof value === 'boolean'
 
-export const isArray = <T>(value: unknown): value is T[] =>
-  Array.isArray(value)
+export const isArray = <T>(value: unknown): value is T[] => Array.isArray(value)
 
 export const isObject = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null && !Array.isArray(value)
+    typeof value === 'object' && value !== null && !Array.isArray(value)
 
 // Advanced type guards
 export const isNonEmptyString = (value: unknown): value is string =>
-  isString(value) && value.length > 0
+    isString(value) && value.length > 0
 
 export const isNonEmptyArray = <T>(value: unknown): value is T[] =>
-  isArray(value) && value.length > 0
+    isArray(value) && value.length > 0
 ```
 
 **Usage:**
@@ -151,11 +145,11 @@ import { isDefined, isNonEmptyString } from '@/lib/predicates/type-guards'
 
 // TypeScript type narrowing
 function processData(data: string | null | undefined) {
-  if (isDefined(data)) {
-    // TypeScript knows data is string here
-    return data.toUpperCase()
-  }
-  return null
+    if (isDefined(data)) {
+        // TypeScript knows data is string here
+        return data.toUpperCase()
+    }
+    return null
 }
 
 // Filter with type guards
@@ -171,24 +165,22 @@ Use these predicates for application-specific logic:
 import type { User, System, Resource } from '@/types'
 
 // System predicates
-export const isSystemActive = (system: { status: string }): boolean =>
-  system.status === 'active'
+export const isSystemActive = (system: { status: string }): boolean => system.status === 'active'
 
 export const isSystemInMaintenance = (system: { status: string }): boolean =>
-  system.status === 'maintenance'
+    system.status === 'maintenance'
 
 // Permission predicates
 export const hasEditPermission = (user: User, resource: Resource): boolean =>
-  user.role === 'admin' || resource.ownerId === user.id
+    user.role === 'admin' || resource.ownerId === user.id
 
 export const canEdit = (permissions: string[]): boolean =>
-  permissions.includes('edit') || permissions.includes('admin')
+    permissions.includes('edit') || permissions.includes('admin')
 
 export const canDelete = (permissions: string[]): boolean =>
-  permissions.includes('delete') || permissions.includes('admin')
+    permissions.includes('delete') || permissions.includes('admin')
 
-export const isAdmin = (user: User): boolean =>
-  user.role === 'admin'
+export const isAdmin = (user: User): boolean => user.role === 'admin'
 
 // Status predicates
 export const isPending = (status: string): boolean => status === 'pending'
@@ -221,25 +213,25 @@ if (hasEditPermission(currentUser, resource)) {
 ```typescript
 // ✅ Good - extract to predicate
 const canSubmitForm = (form: FormData): boolean =>
-  hasValue(form.email) &&
-  isValidEmail(form.email) &&
-  hasValue(form.password) &&
-  isStrongPassword(form.password)
+    hasValue(form.email) &&
+    isValidEmail(form.email) &&
+    hasValue(form.password) &&
+    isStrongPassword(form.password)
 
 if (canSubmitForm(formData)) {
-  // Submit
+    // Submit
 }
 
 // ❌ Bad - inline complexity
 if (
-  formData.email !== null &&
-  formData.email !== undefined &&
-  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) &&
-  formData.password !== null &&
-  formData.password !== undefined &&
-  formData.password.length >= 8
+    formData.email !== null &&
+    formData.email !== undefined &&
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) &&
+    formData.password !== null &&
+    formData.password !== undefined &&
+    formData.password.length >= 8
 ) {
-  // Submit
+    // Submit
 }
 ```
 
@@ -250,11 +242,11 @@ if (
 import { isDefined, isNonEmptyArray } from '@/lib/predicates/type-guards'
 
 function processItems(items: Item[] | null | undefined) {
-  if (isDefined(items) && isNonEmptyArray(items)) {
-    // TypeScript knows items is Item[] here
-    return items.map(item => item.name)
-  }
-  return []
+    if (isDefined(items) && isNonEmptyArray(items)) {
+        // TypeScript knows items is Item[] here
+        return items.map(item => item.name)
+    }
+    return []
 }
 ```
 
@@ -295,14 +287,13 @@ const shouldValidate = (field: string): boolean => field.length > 0
 
 ```typescript
 // ✅ Good - pure function, no side effects
-export const isValidUser = (user: User): boolean =>
-  hasValue(user.email) && isValidEmail(user.email)
+export const isValidUser = (user: User): boolean => hasValue(user.email) && isValidEmail(user.email)
 
 // ❌ Bad - has side effects
 export const isValidUser = (user: User): boolean => {
-  console.log('Validating user') // Side effect!
-  logToAnalytics('validation') // Side effect!
-  return hasValue(user.email) && isValidEmail(user.email)
+    console.log('Validating user') // Side effect!
+    logToAnalytics('validation') // Side effect!
+    return hasValue(user.email) && isValidEmail(user.email)
 }
 ```
 
@@ -317,10 +308,14 @@ Place predicates in the appropriate file:
 ```typescript
 // ✅ Good organization
 // /src/lib/predicates/data.ts
-export const isEmpty = (value: unknown): boolean => { /* ... */ }
+export const isEmpty = (value: unknown): boolean => {
+    /* ... */
+}
 
 // /src/lib/predicates/domain.ts
-export const isSystemActive = (system: System): boolean => { /* ... */ }
+export const isSystemActive = (system: System): boolean => {
+    /* ... */
+}
 
 // ❌ Bad - everything in one file
 // /src/lib/predicates/index.ts (too large, not organized)
@@ -334,21 +329,22 @@ export const isSystemActive = (system: System): boolean => { /* ... */ }
 import { hasValue, isValidEmail, isStrongPassword } from '@/lib/predicates'
 
 const validateRegistrationForm = (data: RegistrationFormData) => {
-  const errors: Record<string, string> = {}
+    const errors: Record<string, string> = {}
 
-  if (!hasValue(data.email)) {
-    errors.email = 'Email is required'
-  } else if (!isValidEmail(data.email)) {
-    errors.email = 'Invalid email format'
-  }
+    if (!hasValue(data.email)) {
+        errors.email = 'Email is required'
+    } else if (!isValidEmail(data.email)) {
+        errors.email = 'Invalid email format'
+    }
 
-  if (!hasValue(data.password)) {
-    errors.password = 'Password is required'
-  } else if (!isStrongPassword(data.password)) {
-    errors.password = 'Password must be at least 8 characters with uppercase, lowercase, and numbers'
-  }
+    if (!hasValue(data.password)) {
+        errors.password = 'Password is required'
+    } else if (!isStrongPassword(data.password)) {
+        errors.password =
+            'Password must be at least 8 characters with uppercase, lowercase, and numbers'
+    }
 
-  return Object.keys(errors).length > 0 ? errors : null
+    return Object.keys(errors).length > 0 ? errors : null
 }
 ```
 
@@ -389,11 +385,11 @@ import { isDefined, isNonEmptyArray } from '@/lib/predicates/type-guards'
 import { isSystemActive } from '@/lib/predicates/domain'
 
 const getActiveSystems = (systems: System[] | null | undefined) => {
-  if (!isDefined(systems) || !isNonEmptyArray(systems)) {
-    return []
-  }
+    if (!isDefined(systems) || !isNonEmptyArray(systems)) {
+        return []
+    }
 
-  return systems.filter(isSystemActive)
+    return systems.filter(isSystemActive)
 }
 ```
 
@@ -418,12 +414,14 @@ const date = formatDate(new Date()) // "2025-11-24"
 ### When to Use Predicates vs Helpers
 
 **Use Predicates when:**
+
 - Function returns a boolean
 - Checking state, conditions, or validation
 - Type narrowing with TypeScript
 - Self-documenting conditional logic
 
 **Use Helpers when:**
+
 - Transforming data (formatting, mapping, reducing)
 - Performing calculations
 - Utility functions that return non-boolean values
@@ -441,7 +439,7 @@ const hasDiscount = (user: User): boolean => user.membershipLevel === 'premium'
 
 // ✅ Helper - calculates value
 const calculateDiscount = (price: number, user: User): number =>
-  hasDiscount(user) ? price * 0.9 : price
+    hasDiscount(user) ? price * 0.9 : price
 ```
 
 ## Creating New Predicates
@@ -451,6 +449,7 @@ When creating new predicates, follow these steps:
 ### Step 1: Identify the domain
 
 Determine which file the predicate belongs in:
+
 - Common data checks → `data.ts`
 - Input validation → `validation.ts`
 - Type guards → `type-guards.ts`
@@ -459,6 +458,7 @@ Determine which file the predicate belongs in:
 ### Step 2: Use appropriate naming
 
 Choose a prefix that indicates the predicate's purpose:
+
 - `is*` for state/type checks
 - `has*` for possession checks
 - `can*` for capability checks
@@ -467,6 +467,7 @@ Choose a prefix that indicates the predicate's purpose:
 ### Step 3: Keep it pure
 
 Ensure the predicate:
+
 - Has no side effects
 - Returns a boolean
 - Is deterministic (same input = same output)
@@ -479,11 +480,10 @@ Use type guards when appropriate to provide type narrowing:
 ```typescript
 // Type guard predicate
 export const isUser = (value: unknown): value is User =>
-  isObject(value) && 'id' in value && 'email' in value
+    isObject(value) && 'id' in value && 'email' in value
 
 // Regular predicate
-export const isActiveUser = (user: User): boolean =>
-  user.status === 'active'
+export const isActiveUser = (user: User): boolean => user.status === 'active'
 ```
 
 ### Step 5: Document complex logic
@@ -498,9 +498,7 @@ Add comments for non-obvious predicates:
  * - System has no pending orders
  */
 export const isEligibleForMaintenance = (system: System): boolean =>
-  !isSystemInMaintenance(system) &&
-  daysSinceActivation(system) >= 30 &&
-  !hasPendingOrders(system)
+    !isSystemInMaintenance(system) && daysSinceActivation(system) >= 30 && !hasPendingOrders(system)
 ```
 
 ## Testing Predicates
@@ -511,25 +509,25 @@ Predicates are easy to test because they're pure functions:
 import { isValidEmail, hasValue } from '@/lib/predicates'
 
 describe('isValidEmail', () => {
-  it('returns true for valid emails', () => {
-    expect(isValidEmail('test@example.com')).toBe(true)
-  })
+    it('returns true for valid emails', () => {
+        expect(isValidEmail('test@example.com')).toBe(true)
+    })
 
-  it('returns false for invalid emails', () => {
-    expect(isValidEmail('invalid')).toBe(false)
-    expect(isValidEmail('test@')).toBe(false)
-  })
+    it('returns false for invalid emails', () => {
+        expect(isValidEmail('invalid')).toBe(false)
+        expect(isValidEmail('test@')).toBe(false)
+    })
 })
 
 describe('hasValue', () => {
-  it('returns true for defined values', () => {
-    expect(hasValue('test')).toBe(true)
-    expect(hasValue(0)).toBe(true)
-  })
+    it('returns true for defined values', () => {
+        expect(hasValue('test')).toBe(true)
+        expect(hasValue(0)).toBe(true)
+    })
 
-  it('returns false for null/undefined', () => {
-    expect(hasValue(null)).toBe(false)
-    expect(hasValue(undefined)).toBe(false)
-  })
+    it('returns false for null/undefined', () => {
+        expect(hasValue(null)).toBe(false)
+        expect(hasValue(undefined)).toBe(false)
+    })
 })
 ```

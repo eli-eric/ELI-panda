@@ -1,555 +1,515 @@
 type Mutation {
-  createSparePartRelation(fromSystemIds: [ID!]!, toSystemIds: [ID!]!): String
-  updatedByResolver(
-    node: String
-    nodeUid: String
-    action: String
-    previousState: String
-    newState: String
-  ): String
-  itemOriginatedResolver(itemUid: String, systemOriginatedUid: String): String
-  systemMovedFromResolver(systemFromUid: String, systemUid: String): String
-  moveSystem(systemUid: ID!, newParentUid: ID!, oldParentUid: ID): String
+    createSparePartRelation(fromSystemIds: [ID!]!, toSystemIds: [ID!]!): String
+    updatedByResolver(
+        node: String
+        nodeUid: String
+        action: String
+        previousState: String
+        newState: String
+    ): String
+    itemOriginatedResolver(itemUid: String, systemOriginatedUid: String): String
+    systemMovedFromResolver(systemFromUid: String, systemUid: String): String
+    moveSystem(systemUid: ID!, newParentUid: ID!, oldParentUid: ID): String
 }
 
 type JWT @jwt {
-  roles: [String!]!
+    roles: [String!]!
 }
 type Location @authentication {
-  uid: ID! @id
-  facility: Facility! @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
-  code: String
-  subLocations: [Location!]!
-    @relationship(type: "HAS_SUBLOCATION", direction: OUT)
-  parentLocation: Location @relationship(type: "HAS_SUBLOCATION", direction: IN)
-  name: String!
-  roomCards: [RoomCard!]! @relationship(type: "HAS_ROOM_CARD", direction: OUT)
+    uid: ID! @id
+    facility: Facility! @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
+    code: String
+    subLocations: [Location!]! @relationship(type: "HAS_SUBLOCATION", direction: OUT)
+    parentLocation: Location @relationship(type: "HAS_SUBLOCATION", direction: IN)
+    name: String!
+    roomCards: [RoomCard!]! @relationship(type: "HAS_ROOM_CARD", direction: OUT)
 }
 
 enum RoomCardStatus {
-  DIRTY_MODE
-  CLEAN_MODE
-  IN_PREPARATION_MODE
+    DIRTY_MODE
+    CLEAN_MODE
+    IN_PREPARATION_MODE
 }
 
 type ContactPersonRole @authentication {
-  uid: ID! @id
-  name: String!
-  facility: Facility! @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
+    uid: ID! @id
+    name: String!
+    facility: Facility! @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
 }
 
 type HallContactPerson @authentication {
-  uid: ID! @id
-  employee: Employee! @relationship(type: "HAS_CONTACT_PERSON", direction: OUT)
-  role: ContactPersonRole
-    @relationship(type: "HAS_ROOM_CARD_ROLE", direction: OUT)
-  roomCard: RoomCard!
-    @relationship(type: "HAS_CONTACT_PERSON_HALL", direction: IN)
+    uid: ID! @id
+    employee: Employee! @relationship(type: "HAS_CONTACT_PERSON", direction: OUT)
+    role: ContactPersonRole @relationship(type: "HAS_ROOM_CARD_ROLE", direction: OUT)
+    roomCard: RoomCard! @relationship(type: "HAS_CONTACT_PERSON_HALL", direction: IN)
 }
 
 enum CleaningScheduleDay {
-  MONDAY
-  TUESDAY
-  WEDNESDAY
-  THURSDAY
-  FRIDAY
-  SATURDAY
-  SUNDAY
+    MONDAY
+    TUESDAY
+    WEDNESDAY
+    THURSDAY
+    FRIDAY
+    SATURDAY
+    SUNDAY
 }
 
 enum PrescribedClothing {
-  CAP
-  GLOVES
-  BEARD_COVER
-  SHOE_COVERS
-  OVERAL_ISO_7
-  OVERAL_ISO_5
-  BOOTS_ISO_5
-  SOCKS_ISO_5
-  CR_SHOES
-  HOOD
-  FACE_MASK
-  COAT
-  T_SHIRT_AND_TROUSERS
+    CAP
+    GLOVES
+    BEARD_COVER
+    SHOE_COVERS
+    OVERAL_ISO_7
+    OVERAL_ISO_5
+    BOOTS_ISO_5
+    SOCKS_ISO_5
+    CR_SHOES
+    HOOD
+    FACE_MASK
+    COAT
+    T_SHIRT_AND_TROUSERS
 }
 
 enum PurityClass {
-  ISO_5
-  ISO_6
-  ISO_7
-  ISO_8
+    ISO_5
+    ISO_6
+    ISO_7
+    ISO_8
 }
 
 type OperationalState @authentication {
-  uid: ID! @id
-  name: String!
-  code: String!
+    uid: ID! @id
+    name: String!
+    code: String!
 }
 
 type RoomCard @authentication {
-  uid: ID! @id
-  name: String!
-  status: RoomCardStatus!
-  operationalState: OperationalState
-    @relationship(type: "HAS_OPERATIONAL_STATE", direction: OUT)
-  operationalStateLastUpdated: DateTime
-  contactPersonsHall: [HallContactPerson!]!
-    @relationship(type: "HAS_CONTACT_PERSON_HALL", direction: OUT)
-  contactPersonsDept: [Employee!]!
-    @relationship(type: "HAS_CONTACT_PERSON_DEPT", direction: OUT)
-  locations: [Location!]! @relationship(type: "HAS_ROOM_CARD", direction: IN)
-  teams: [Team!]! @relationship(type: "HAS_TEAM", direction: OUT)
-  purityClass: PurityClass
-  prescribedClothing: [PrescribedClothing!]
-  entryToHvacTent: String
-  cleaningScheduleDate: Date
-  cleaningScheduleDays: [CleaningScheduleDay!]
-  additionalRequirements: String
-  coolingWater: String
-  indoorEnvironmentQuality: String
-  compressedAirDistribution: String
-  nitrogenCentralDistribution: String
-  maxPressureInColdDistribution: String
-  coolingWaterClient: String
-  indoorEnvironmentQualityClient: String
-  compressedAirDistributionClient: String
-  nitrogenCentralDistributionClient: String
-  maxPressureInColdDistributionClient: String
-  updatedBy: [User!]!
-    @relationship(
-      type: "WAS_UPDATED_BY"
-      direction: OUT
-      properties: "wasUpdatedBy"
-    )
+    uid: ID! @id
+    name: String!
+    status: RoomCardStatus!
+    operationalState: OperationalState @relationship(type: "HAS_OPERATIONAL_STATE", direction: OUT)
+    operationalStateLastUpdated: DateTime
+    contactPersonsHall: [HallContactPerson!]!
+        @relationship(type: "HAS_CONTACT_PERSON_HALL", direction: OUT)
+    contactPersonsDept: [Employee!]! @relationship(type: "HAS_CONTACT_PERSON_DEPT", direction: OUT)
+    locations: [Location!]! @relationship(type: "HAS_ROOM_CARD", direction: IN)
+    teams: [Team!]! @relationship(type: "HAS_TEAM", direction: OUT)
+    purityClass: PurityClass
+    prescribedClothing: [PrescribedClothing!]
+    entryToHvacTent: String
+    cleaningScheduleDate: Date
+    cleaningScheduleDays: [CleaningScheduleDay!]
+    additionalRequirements: String
+    coolingWater: String
+    indoorEnvironmentQuality: String
+    compressedAirDistribution: String
+    nitrogenCentralDistribution: String
+    maxPressureInColdDistribution: String
+    coolingWaterClient: String
+    indoorEnvironmentQualityClient: String
+    compressedAirDistributionClient: String
+    nitrogenCentralDistributionClient: String
+    maxPressureInColdDistributionClient: String
+    updatedBy: [User!]!
+        @relationship(type: "WAS_UPDATED_BY", direction: OUT, properties: "wasUpdatedBy")
 }
 
 type Team @authentication {
-  uid: ID! @id
-  name: String!
-  facility: Facility! @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
+    uid: ID! @id
+    name: String!
+    facility: Facility! @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
 }
 
 type Employee @authentication {
-  uid: ID! @id
-  firstName: String!
-  user: User @relationship(type: "HAS_USER", direction: OUT)
-  facility: Facility!
-    @relationship(type: "AFFILIATED_WITH_FACILITY", direction: OUT)
-  fullName: String
-  lastName: String!
-  phone1: String
-  phone2: String
-  superiorName: String
-  superiorNUmber: String
-  jobPosition: String
-  jobPositionCode: String
-  workplaceName: String
-  email: String
+    uid: ID! @id
+    firstName: String!
+    user: User @relationship(type: "HAS_USER", direction: OUT)
+    facility: Facility! @relationship(type: "AFFILIATED_WITH_FACILITY", direction: OUT)
+    fullName: String
+    lastName: String!
+    phone1: String
+    phone2: String
+    superiorName: String
+    superiorNUmber: String
+    jobPosition: String
+    jobPositionCode: String
+    workplaceName: String
+    email: String
 }
 
 type ParentPathItem @authentication {
-  uid: ID
-  name: String
-  systemLevel: SystemLevel
+    uid: ID
+    name: String
+    systemLevel: SystemLevel
 }
 
 type CatalogueCategory @authentication {
-  uid: ID! @id
-  code: String!
-  name: String!
-  miniImageUrl: String
-  catalogueCategoriesHasSubcategory: [CatalogueCategory!]!
-    @relationship(type: "HAS_SUBCATEGORY", direction: IN)
-  catalogueItemsBelongsToCategory: [CatalogueItem!]!
-    @relationship(type: "BELONGS_TO_CATEGORY", direction: IN)
-  parentCategory: CatalogueCategory
-    @relationship(type: "HAS_SUBCATEGORY", direction: IN)
-  systemType: SystemType @relationship(type: "HAS_SYSTEM_TYPE", direction: OUT)
-  hasGroupCatalogueCategoryPropertyGroups: [CatalogueCategoryPropertyGroup!]!
-    @relationship(type: "HAS_GROUP", direction: OUT)
-  hasSubcategoryCatalogueCategories: [CatalogueCategory!]!
-    @relationship(type: "HAS_SUBCATEGORY", direction: OUT)
-  parentPath: [ParentPathItem]!
-    @cypher(
-      statement: """
-      OPTIONAL MATCH (parent)-[:HAS_SUBCATEGORY*1..50]->(this)
-      WITH this, reverse(collect({uid: parent.uid, name: parent.name})) AS parentPaths
-      WITH this, CASE WHEN size(parentPaths) = 0 THEN [this] ELSE parentPaths END AS finalPaths
-      UNWIND finalPaths AS finalPath
-      RETURN {uid: finalPath.uid, name: finalPath.name} as parentPath
-      """
-      columnName: "parentPath"
-    )
+    uid: ID! @id
+    code: String!
+    name: String!
+    miniImageUrl: String
+    catalogueCategoriesHasSubcategory: [CatalogueCategory!]!
+        @relationship(type: "HAS_SUBCATEGORY", direction: IN)
+    catalogueItemsBelongsToCategory: [CatalogueItem!]!
+        @relationship(type: "BELONGS_TO_CATEGORY", direction: IN)
+    parentCategory: CatalogueCategory @relationship(type: "HAS_SUBCATEGORY", direction: IN)
+    systemType: SystemType @relationship(type: "HAS_SYSTEM_TYPE", direction: OUT)
+    hasGroupCatalogueCategoryPropertyGroups: [CatalogueCategoryPropertyGroup!]!
+        @relationship(type: "HAS_GROUP", direction: OUT)
+    hasSubcategoryCatalogueCategories: [CatalogueCategory!]!
+        @relationship(type: "HAS_SUBCATEGORY", direction: OUT)
+    parentPath: [ParentPathItem]!
+        @cypher(
+            statement: """
+            OPTIONAL MATCH (parent)-[:HAS_SUBCATEGORY*1..50]->(this)
+            WITH this, reverse(collect({uid: parent.uid, name: parent.name})) AS parentPaths
+            WITH this, CASE WHEN size(parentPaths) = 0 THEN [this] ELSE parentPaths END AS finalPaths
+            UNWIND finalPaths AS finalPath
+            RETURN {uid: finalPath.uid, name: finalPath.name} as parentPath
+            """
+            columnName: "parentPath"
+        )
 }
 
 type CatalogueCategoryProperty @authentication {
-  uid: String!
-  value: String
-  name: String!
-  defaultValue: String!
-  unit: Unit @relationship(type: "HAS_UNIT", direction: OUT)
-  groups: [CatalogueCategoryPropertyGroup!]!
-    @relationship(type: "CONTAINS_PROPERTY", direction: IN)
-  type: CatalogueCategoryPropertyType
-    @relationship(type: "IS_PROPERTY_TYPE", direction: OUT)
-  listOfValues: String!
+    uid: String!
+    value: String
+    name: String!
+    defaultValue: String!
+    unit: Unit @relationship(type: "HAS_UNIT", direction: OUT)
+    groups: [CatalogueCategoryPropertyGroup!]!
+        @relationship(type: "CONTAINS_PROPERTY", direction: IN)
+    type: CatalogueCategoryPropertyType @relationship(type: "IS_PROPERTY_TYPE", direction: OUT)
+    listOfValues: String!
 }
 
 type CatalogueCategoryPropertyGroup @authentication {
-  uid: String!
-  name: String!
-  catalogueCategoriesHasGroup: [CatalogueCategory!]!
-    @relationship(type: "HAS_GROUP", direction: IN)
-  containsPropertyCatalogueCategoryProperties: [CatalogueCategoryProperty!]!
-    @relationship(type: "CONTAINS_PROPERTY", direction: OUT)
+    uid: String!
+    name: String!
+    catalogueCategoriesHasGroup: [CatalogueCategory!]!
+        @relationship(type: "HAS_GROUP", direction: IN)
+    containsPropertyCatalogueCategoryProperties: [CatalogueCategoryProperty!]!
+        @relationship(type: "CONTAINS_PROPERTY", direction: OUT)
 }
 
 type CatalogueCategoryPropertyType @authentication {
-  uid: String!
-  name: String!
-  code: String!
+    uid: String!
+    name: String!
+    code: String!
 }
 
 type CatalogueItem @authentication {
-  catalogueCategory: CatalogueCategory!
-    @relationship(type: "BELONGS_TO_CATEGORY", direction: OUT)
-  catalogueNumber: String!
-  description: String
-  relatedCatalogueItems: [CatalogueItem!]!
-    @relationship(type: "IS_RELATED_TO", direction: OUT)
-  relatedCatalogueItemsFor: [CatalogueItem!]!
-    @relationship(type: "IS_RELATED_TO", direction: IN)
-  properties: [CatalogueCategoryProperty!]!
-    @relationship(
-      type: "HAS_CATALOGUE_PROPERTY"
-      direction: OUT
-      properties: "hasCatalogueProperty"
-    )
-  supplier: Supplier @relationship(type: "HAS_SUPPLIER", direction: OUT)
-  manufacturerUrl: String
-  name: String!
-  uid: String!
-  item: [Item!]! @relationship(type: "IS_BASED_ON", direction: IN)
-  links: [Link!]! @relationship(type: "HAS_LINK", direction: OUT)
+    catalogueCategory: CatalogueCategory! @relationship(type: "BELONGS_TO_CATEGORY", direction: OUT)
+    catalogueNumber: String!
+    description: String
+    relatedCatalogueItems: [CatalogueItem!]! @relationship(type: "IS_RELATED_TO", direction: OUT)
+    relatedCatalogueItemsFor: [CatalogueItem!]! @relationship(type: "IS_RELATED_TO", direction: IN)
+    properties: [CatalogueCategoryProperty!]!
+        @relationship(
+            type: "HAS_CATALOGUE_PROPERTY"
+            direction: OUT
+            properties: "hasCatalogueProperty"
+        )
+    supplier: Supplier @relationship(type: "HAS_SUPPLIER", direction: OUT)
+    manufacturerUrl: String
+    name: String!
+    uid: String!
+    item: [Item!]! @relationship(type: "IS_BASED_ON", direction: IN)
+    links: [Link!]! @relationship(type: "HAS_LINK", direction: OUT)
 }
 
 interface hasCatalogueProperty @relationshipProperties {
-  value: String
+    value: String
 }
 
 type Facility @authentication {
-  code: String!
-  name: String!
-  uid: String!
+    code: String!
+    name: String!
+    uid: String!
 }
 
 type Supplier @authentication {
-  uid: ID! @id
-  name: String!
+    uid: ID! @id
+    name: String!
 }
 
 type SystemAttribute @authentication {
-  uid: ID! @id
-  name: String!
+    uid: ID! @id
+    name: String!
 }
 
 type SchemaMigration @authentication {
-  dirty: Boolean!
-  ts: Date!
-  version: BigInt!
+    dirty: Boolean!
+    ts: Date!
+    version: BigInt!
 }
 
 interface wasUpdatedBy @relationshipProperties {
-  at: DateTime! @timestamp
-  action: Actions!
-  previousState: String
-  newState: String
+    at: DateTime! @timestamp
+    action: Actions!
+    previousState: String
+    newState: String
 }
 
 enum Actions {
-  INSERT
-  UPDATE
-  DELETE
-  OPERATION_STATE
+    INSERT
+    UPDATE
+    DELETE
+    OPERATION_STATE
 }
 
 interface IsSpareFor @relationshipProperties {
-  coverage: Float
+    coverage: Float
 }
 
 interface SystemInterface {
-  uid: ID! @id
-  description: String
-  deleted: Boolean!
-  isTechnologicalUnit: Boolean
-  name: String!
-  systemCode: String
-  minimalSpareParstCount: Float
-  sp_coverage: Float
-  sparePartsCoverageSum: Float
-  responsibleTeam: Team
-  spareParts: [System!]!
-  sparePartsFor: [System!]!
-  parentSystem: System
-  location: Location
-  facility: Facility!
-  physicalItem: Item
-  zone: Zone
-  systemType: SystemType
-  responsible: Employee
-  operators: [Employee!]!
-  attribute: SystemAttribute
-  maintainedBy: [Employee!]!
-  systemLevel: SystemLevel
-  links: [Link!]!
-  updatedBy: [User!]!
-  keySystem: System
-  parentPath: [ParentPathItem]
+    uid: ID! @id
+    description: String
+    deleted: Boolean!
+    isTechnologicalUnit: Boolean
+    name: String!
+    systemCode: String
+    minimalSpareParstCount: Float
+    sp_coverage: Float
+    sparePartsCoverageSum: Float
+    responsibleTeam: Team
+    spareParts: [System!]!
+    sparePartsFor: [System!]!
+    parentSystem: System
+    location: Location
+    facility: Facility!
+    physicalItem: Item
+    zone: Zone
+    systemType: SystemType
+    responsible: Employee
+    operators: [Employee!]!
+    attribute: SystemAttribute
+    maintainedBy: [Employee!]!
+    systemLevel: SystemLevel
+    links: [Link!]!
+    updatedBy: [User!]!
+    keySystem: System
+    parentPath: [ParentPathItem]
 }
 
 type System implements SystemInterface
-  @authorization(
-    validate: [
-      { operations: [READ], where: { jwt: { roles_INCLUDES: "systems-view" } } }
-      {
-        operations: [UPDATE, CREATE, DELETE, READ]
-        where: { jwt: { roles_INCLUDES: "systems-edit" } }
-      }
-    ]
-  ) {
-  uid: ID! @id
-  description: String
-  deleted: Boolean!
-  isTechnologicalUnit: Boolean
-  name: String!
-  systemCode: String
-  minimalSpareParstCount: Float
-  sp_coverage: Float
-  sparePartsCoverageSum: Float
-  responsibleTeam: Team
-    @relationship(type: "HAS_RESPONSIBLE_TEAM", direction: OUT)
-  subSystems: [System!]! @relationship(type: "HAS_SUBSYSTEM", direction: OUT)
-  spareParts: [System!]!
-    @relationship(type: "IS_SPARE_FOR", direction: IN, properties: "IsSpareFor")
-  sparePartsFor: [System!]! @relationship(type: "IS_SPARE_FOR", direction: OUT)
-  parentSystem: System @relationship(type: "HAS_SUBSYSTEM", direction: IN)
-  location: Location @relationship(type: "HAS_LOCATION", direction: OUT)
-  facility: Facility! @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
-  physicalItem: Item @relationship(type: "CONTAINS_ITEM", direction: OUT)
-  zone: Zone @relationship(type: "HAS_ZONE", direction: OUT)
-  systemType: SystemType @relationship(type: "HAS_SYSTEM_TYPE", direction: OUT)
-  responsible: Employee @relationship(type: "HAS_RESPONSIBLE", direction: OUT)
-  operators: [Employee!]! @relationship(type: "HAS_OPERATOR", direction: OUT)
-  attribute: SystemAttribute
-    @relationship(type: "HAS_SYSTEM_ATTRIBUTE", direction: OUT)
-  maintainedBy: [Employee!]!
-    @relationship(type: "IS_MAINTAINED_BY", direction: OUT)
-  systemLevel: SystemLevel
-  links: [Link!]! @relationship(type: "HAS_LINK", direction: OUT)
-  updatedBy: [User!]!
-    @relationship(
-      type: "WAS_UPDATED_BY"
-      direction: OUT
-      properties: "wasUpdatedBy"
-    )
-  keySystem: System
-    @cypher(
-      statement: """
-      OPTIONAL MATCH path=(this)<-[:HAS_SUBSYSTEM*]-(parent:System)
-      WHERE parent.systemLevel IN ['TECHNOLOGY_UNIT', 'KEY_SYSTEMS']
-      RETURN parent as keySystem
-      ORDER BY LENGTH(path) ASC
-      LIMIT 1
-      """
-      columnName: "keySystem"
-    )
-  parentPath: [ParentPathItem]
-    @cypher(
-      statement: """
-      OPTIONAL MATCH (parent)-[:HAS_SUBSYSTEM*1..50]->(this)
-      WITH this, reverse(collect({uid: parent.uid, name: parent.name, systemLevel: parent.systemLevel})) AS parentPaths
-      WITH this, CASE WHEN size(parentPaths) = 0 THEN [this] ELSE parentPaths END AS finalPaths
-      UNWIND finalPaths AS finalPath
-      RETURN {uid: finalPath.uid, name: finalPath.name, systemLevel: finalPath.systemLevel} as parentPath
-      """
-      columnName: "parentPath"
-    )
+    @authorization(
+        validate: [
+            { operations: [READ], where: { jwt: { roles_INCLUDES: "systems-view" } } }
+            {
+                operations: [UPDATE, CREATE, DELETE, READ]
+                where: { jwt: { roles_INCLUDES: "systems-edit" } }
+            }
+        ]
+    ) {
+    uid: ID! @id
+    description: String
+    deleted: Boolean!
+    isTechnologicalUnit: Boolean
+    name: String!
+    systemCode: String
+    minimalSpareParstCount: Float
+    sp_coverage: Float
+    sparePartsCoverageSum: Float
+    responsibleTeam: Team @relationship(type: "HAS_RESPONSIBLE_TEAM", direction: OUT)
+    subSystems: [System!]! @relationship(type: "HAS_SUBSYSTEM", direction: OUT)
+    spareParts: [System!]!
+        @relationship(type: "IS_SPARE_FOR", direction: IN, properties: "IsSpareFor")
+    sparePartsFor: [System!]! @relationship(type: "IS_SPARE_FOR", direction: OUT)
+    parentSystem: System @relationship(type: "HAS_SUBSYSTEM", direction: IN)
+    location: Location @relationship(type: "HAS_LOCATION", direction: OUT)
+    facility: Facility! @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
+    physicalItem: Item @relationship(type: "CONTAINS_ITEM", direction: OUT)
+    zone: Zone @relationship(type: "HAS_ZONE", direction: OUT)
+    systemType: SystemType @relationship(type: "HAS_SYSTEM_TYPE", direction: OUT)
+    responsible: Employee @relationship(type: "HAS_RESPONSIBLE", direction: OUT)
+    operators: [Employee!]! @relationship(type: "HAS_OPERATOR", direction: OUT)
+    attribute: SystemAttribute @relationship(type: "HAS_SYSTEM_ATTRIBUTE", direction: OUT)
+    maintainedBy: [Employee!]! @relationship(type: "IS_MAINTAINED_BY", direction: OUT)
+    systemLevel: SystemLevel
+    links: [Link!]! @relationship(type: "HAS_LINK", direction: OUT)
+    updatedBy: [User!]!
+        @relationship(type: "WAS_UPDATED_BY", direction: OUT, properties: "wasUpdatedBy")
+    keySystem: System
+        @cypher(
+            statement: """
+            OPTIONAL MATCH path=(this)<-[:HAS_SUBSYSTEM*]-(parent:System)
+            WHERE parent.systemLevel IN ['TECHNOLOGY_UNIT', 'KEY_SYSTEMS']
+            RETURN parent as keySystem
+            ORDER BY LENGTH(path) ASC
+            LIMIT 1
+            """
+            columnName: "keySystem"
+        )
+    parentPath: [ParentPathItem]
+        @cypher(
+            statement: """
+            OPTIONAL MATCH (parent)-[:HAS_SUBSYSTEM*1..50]->(this)
+            WITH this, reverse(collect({uid: parent.uid, name: parent.name, systemLevel: parent.systemLevel})) AS parentPaths
+            WITH this, CASE WHEN size(parentPaths) = 0 THEN [this] ELSE parentPaths END AS finalPaths
+            UNWIND finalPaths AS finalPath
+            RETURN {uid: finalPath.uid, name: finalPath.name, systemLevel: finalPath.systemLevel} as parentPath
+            """
+            columnName: "parentPath"
+        )
 }
 
 type Link @authentication {
-  uid: ID! @id
-  parentUid: String!
-  parentType: String!
-  url: String!
-  name: String!
-  tags: [String!]!
+    uid: ID! @id
+    parentUid: String!
+    parentType: String!
+    url: String!
+    name: String!
+    tags: [String!]!
 }
 
 enum SystemLevel {
-  TECHNOLOGY_UNIT
-  KEY_SYSTEMS
-  SUBSYSTEMS_AND_PARTS
-  TRASH
+    TECHNOLOGY_UNIT
+    KEY_SYSTEMS
+    SUBSYSTEMS_AND_PARTS
+    TRASH
 }
 
 interface hasOrderLine @relationshipProperties {
-  price: Int
-  currency: String
-  isDelivered: Boolean
+    price: Int
+    currency: String
+    isDelivered: Boolean
 }
 
 type Item @authentication {
-  uid: ID! @id
-  eun: String
-  name: String!
-  serialNumber: String
-  system: System @relationship(type: "CONTAINS_ITEM", direction: IN)
-  catalogueItem: CatalogueItem!
-    @relationship(type: "IS_BASED_ON", direction: OUT)
-  order: Order
-    @relationship(
-      type: "HAS_ORDER_LINE"
-      direction: IN
-      properties: "hasOrderLine"
-    )
-  serviceItems: [ServiceItem!]!
-    @relationship(
-      type: "IS_SERVICED_BY"
-      direction: OUT
-      properties: "isServicedBy"
-    )
-  itemUsage: ItemUsage @relationship(type: "HAS_ITEM_USAGE", direction: OUT)
-  conditionStatus: ItemCondition
-    @relationship(type: "HAS_CONDITION_STATUS", direction: OUT)
-  notes: String
+    uid: ID! @id
+    eun: String
+    name: String!
+    serialNumber: String
+    system: System @relationship(type: "CONTAINS_ITEM", direction: IN)
+    catalogueItem: CatalogueItem! @relationship(type: "IS_BASED_ON", direction: OUT)
+    order: Order @relationship(type: "HAS_ORDER_LINE", direction: IN, properties: "hasOrderLine")
+    serviceItems: [ServiceItem!]!
+        @relationship(type: "IS_SERVICED_BY", direction: OUT, properties: "isServicedBy")
+    itemUsage: ItemUsage @relationship(type: "HAS_ITEM_USAGE", direction: OUT)
+    conditionStatus: ItemCondition @relationship(type: "HAS_CONDITION_STATUS", direction: OUT)
+    notes: String
 }
 
 interface isServicedBy @relationshipProperties {
-  created: DateTime
+    created: DateTime
 }
 
 type ServiceItem @authentication {
-  uid: ID! @id
-  name: String!
-  order: Order @relationship(type: "HAS_SERVICE_LINE", direction: IN)
-  isDelivered: Boolean!
-  servicedItem: Item
-    @relationship(
-      type: "IS_SERVICED_BY"
-      direction: IN
-      properties: "isServicedBy"
-    )
-  details: [CatalogueCategoryProperty!]!
-    @relationship(
-      type: "HAS_CATALOGUE_PROPERTY"
-      direction: OUT
-      properties: "hasCatalogueProperty"
-    )
+    uid: ID! @id
+    name: String!
+    order: Order @relationship(type: "HAS_SERVICE_LINE", direction: IN)
+    isDelivered: Boolean!
+    servicedItem: Item
+        @relationship(type: "IS_SERVICED_BY", direction: IN, properties: "isServicedBy")
+    details: [CatalogueCategoryProperty!]!
+        @relationship(
+            type: "HAS_CATALOGUE_PROPERTY"
+            direction: OUT
+            properties: "hasCatalogueProperty"
+        )
 }
 
 type SystemCriticality @authentication {
-  code: String!
-  name: String!
-  uid: ID! @id
+    code: String!
+    name: String!
+    uid: ID! @id
 }
 
 type ItemCondition @authentication {
-  code: String!
-  name: String!
-  uid: ID! @id
+    code: String!
+    name: String!
+    uid: ID! @id
 }
 
 type ItemUsage @authentication {
-  code: String!
-  name: String!
-  uid: ID! @id
+    code: String!
+    name: String!
+    uid: ID! @id
 }
 
 type SystemImportance @authentication {
-  code: String!
-  name: String!
-  uid: ID! @id
+    code: String!
+    name: String!
+    uid: ID! @id
 }
 
 type SystemType @authentication {
-  code: String!
-  mask: String!
-  name: String!
-  systemTypeGroup: SystemTypeGroup!
-    @relationship(type: "CONTAINS_SYSTEM_TYPE", direction: IN)
-  uid: ID! @id
+    code: String!
+    mask: String!
+    name: String!
+    systemTypeGroup: SystemTypeGroup! @relationship(type: "CONTAINS_SYSTEM_TYPE", direction: IN)
+    uid: ID! @id
 }
 
 type Order @authentication {
-  uid: ID! @id
-  name: String!
-  orderDate: DateTime
-  orderNumber: String
-  requestNumber: String
-  notes: String
-  lastUpdateTime: DateTime
-  created: DateTime
-  orderLines: [Item!]! @relationship(type: "HAS_ORDER_LINE", direction: OUT)
+    uid: ID! @id
+    name: String!
+    orderDate: DateTime
+    orderNumber: String
+    requestNumber: String
+    notes: String
+    lastUpdateTime: DateTime
+    created: DateTime
+    orderLines: [Item!]! @relationship(type: "HAS_ORDER_LINE", direction: OUT)
 }
 
 type Zone @authentication {
-  code: String!
-  facilitiesHasZone: [Facility!]! @relationship(type: "HAS_ZONE", direction: IN)
-  hasSubzoneZones: [Zone!]! @relationship(type: "HAS_SUBZONE", direction: OUT)
-  name: String!
-  uid: ID! @id
-  zonesHasSubzone: [Zone!]! @relationship(type: "HAS_SUBZONE", direction: IN)
+    code: String!
+    facilitiesHasZone: [Facility!]! @relationship(type: "HAS_ZONE", direction: IN)
+    hasSubzoneZones: [Zone!]! @relationship(type: "HAS_SUBZONE", direction: OUT)
+    name: String!
+    uid: ID! @id
+    zonesHasSubzone: [Zone!]! @relationship(type: "HAS_SUBZONE", direction: IN)
 }
 
 type SystemTypeGroup @authentication {
-  facility: Facility! @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
-  systemTypes: [SystemType!]!
-    @relationship(type: "CONTAINS_SYSTEM_TYPE", direction: OUT)
-  name: String!
-  uid: String!
+    facility: Facility! @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
+    systemTypes: [SystemType!]! @relationship(type: "CONTAINS_SYSTEM_TYPE", direction: OUT)
+    name: String!
+    uid: String!
 }
 
 type Unit @authentication {
-  code: String!
-  name: String!
-  uid: ID! @id
+    code: String!
+    name: String!
+    uid: ID! @id
 }
 
 type User
-  @authorization(
-    validate: [
-      { operations: [UPDATE, READ], where: { node: { uid: "$jwt.sub" } } }
-      {
-        operations: [UPDATE, CREATE, READ, DELETE]
-        where: { jwt: { roles_INCLUDES: "admin" } }
-      }
-    ]
-  ) {
-  email: String!
-  firstName: String!
-  roles: [Role!]! @relationship(type: "HAS_ROLE", direction: OUT)
-  facility: Facility @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
-  isEnabled: Boolean!
-  lastName: String!
-  passwordHash: String!
-  passwordToChange: Boolean
-  employee: Employee @relationship(type: "HAS_USER", direction: IN)
-  uid: ID! @id
-  username: String!
-  userSettings: [UserSettings!]!
-    @relationship(type: "HAS_SETTINGS", direction: OUT)
+    @authorization(
+        validate: [
+            { operations: [UPDATE, READ], where: { node: { uid: "$jwt.sub" } } }
+            {
+                operations: [UPDATE, CREATE, READ, DELETE]
+                where: { jwt: { roles_INCLUDES: "admin" } }
+            }
+        ]
+    ) {
+    email: String!
+    firstName: String!
+    roles: [Role!]! @relationship(type: "HAS_ROLE", direction: OUT)
+    facility: Facility @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
+    isEnabled: Boolean!
+    lastName: String!
+    passwordHash: String!
+    passwordToChange: Boolean
+    employee: Employee @relationship(type: "HAS_USER", direction: IN)
+    uid: ID! @id
+    username: String!
+    userSettings: [UserSettings!]! @relationship(type: "HAS_SETTINGS", direction: OUT)
 }
 type UserSettings @authentication {
-  uid: ID! @id
-  user: User! @relationship(type: "HAS_SETTINGS", direction: IN)
-  name: String!
-  key: String!
-  value: String!
+    uid: ID! @id
+    user: User! @relationship(type: "HAS_SETTINGS", direction: IN)
+    name: String!
+    key: String!
+    value: String!
 }
 
 type Role @authentication {
-  code: String!
-  name: String!
-  uid: ID! @id
-  usersHasRole: [User!]! @relationship(type: "HAS_ROLE", direction: IN)
+    code: String!
+    name: String!
+    uid: ID! @id
+    usersHasRole: [User!]! @relationship(type: "HAS_ROLE", direction: IN)
 }

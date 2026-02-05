@@ -13,63 +13,63 @@ import { useRoomCardsColumns } from './components/RoomCards.columns'
 import { useRoomCards } from './hooks/useRoomCards'
 
 export const RoomCardsContainer = () => {
-  const tableId = 'roomCards'
-  const router = useRouter()
-  const { roomCards, loading, error, refetch } = useRoomCards()
+    const tableId = 'roomCards'
+    const router = useRouter()
+    const { roomCards, loading, error, refetch } = useRoomCards()
 
-  const columns = useRoomCardsColumns()
+    const columns = useRoomCardsColumns()
 
-  const table = usePandaTable({
-    tableId,
-    columns,
-    data: (roomCards || []) as RoomCard[],
-    settings: {
-      enableSorting: true,
-      manualSorting: false,
-      enableColumnReordering: false,
-      enableColumnHiding: true
-    }
-  })
-
-  useEffect(() => {
-    roomCards?.forEach(roomCard => {
-      router.prefetch(`${PATH.ROOM_CARD}/${roomCard.uid}`)
+    const table = usePandaTable({
+        tableId,
+        columns,
+        data: (roomCards || []) as RoomCard[],
+        settings: {
+            enableSorting: true,
+            manualSorting: false,
+            enableColumnReordering: false,
+            enableColumnHiding: true,
+        },
     })
-  }, [roomCards, router])
 
-  return (
-    <TableLayoutContainer deps={[roomCards]}>
-      <SearchBar
-        {...{
-          left: (
-            <SearchBarButtonsComponent
-              handleAdd={() => {
-                router.push(PATH.ROOM_CARD)
-              }}
-              handleRefresh={() => {
-                refetch()
-              }}
-              editRole={ROLE.ROOM_CARD_EDIT}
+    useEffect(() => {
+        roomCards?.forEach(roomCard => {
+            router.prefetch(`${PATH.ROOM_CARD}/${roomCard.uid}`)
+        })
+    }, [roomCards, router])
+
+    return (
+        <TableLayoutContainer deps={[roomCards]}>
+            <SearchBar
+                {...{
+                    left: (
+                        <SearchBarButtonsComponent
+                            handleAdd={() => {
+                                router.push(PATH.ROOM_CARD)
+                            }}
+                            handleRefresh={() => {
+                                refetch()
+                            }}
+                            editRole={ROLE.ROOM_CARD_EDIT}
+                        />
+                    ),
+                    tableId,
+                }}
             />
-          ),
-          tableId
-        }}
-      />
-      <PandaTableV2
-        table={table}
-        tableId={tableId}
-        loading={loading}
-        data={roomCards as RoomCard[]}
-        skeletonRowCount={50}
-        settings={{
-          enableSorting: true,
-          manualSorting: false,
-          enableColumnReordering: false,
-          enableColumnHiding: true,
-          enablePagination: true
-        }}
-        className="relative overflow-x-auto scrollbar-style"
-      />
-    </TableLayoutContainer>
-  )
+            <PandaTableV2
+                table={table}
+                tableId={tableId}
+                loading={loading}
+                data={roomCards as RoomCard[]}
+                skeletonRowCount={50}
+                settings={{
+                    enableSorting: true,
+                    manualSorting: false,
+                    enableColumnReordering: false,
+                    enableColumnHiding: true,
+                    enablePagination: true,
+                }}
+                className="relative overflow-x-auto scrollbar-style"
+            />
+        </TableLayoutContainer>
+    )
 }

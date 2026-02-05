@@ -20,22 +20,19 @@ import { ROLE } from '@/types/constants/roles'
 
 import { useResearchersForSelect } from '../hooks/useResearchersForSelect'
 import type {
-  ResearcherModalContentProps,
-  SelectedResearcher
+    ResearcherModalContentProps,
+    SelectedResearcher,
 } from '../types/researcher-select.types'
-import {
-  isResearcherSelected,
-  toSelectedResearcher
-} from '../types/researcher-select.types'
+import { isResearcherSelected, toSelectedResearcher } from '../types/researcher-select.types'
 import { useResearcherSelectColumns } from './researcher-select.columns'
 
 const TABLE_ID = 'researcher-select-modal'
 
 const tableSettings: PandaTableSettings<Researcher> = {
-  enableSorting: true,
-  enableQueryURL: false,
-  enableColumnReordering: false,
-  enableColumnHiding: false
+    enableSorting: true,
+    enableQueryURL: false,
+    enableColumnReordering: false,
+    enableColumnHiding: false,
 }
 
 /**
@@ -49,153 +46,152 @@ const tableSettings: PandaTableSettings<Researcher> = {
  * - Multi-select with checkboxes and row highlighting
  */
 export const ResearcherModalContent: React.FC<ResearcherModalContentProps> = ({
-  onSelect,
-  onClose,
-  initialSelected = []
+    onSelect,
+    onClose,
+    initialSelected = [],
 }) => {
-  // Local state for multi-selection
-  const [selectedResearchers, setSelectedResearchers] =
-    useState<SelectedResearcher[]>(initialSelected)
+    // Local state for multi-selection
+    const [selectedResearchers, setSelectedResearchers] =
+        useState<SelectedResearcher[]>(initialSelected)
 
-  // Fetch researchers using table state (search, pagination)
-  const { data, isFetching: isLoading, refetch } =
-    useResearchersForSelect(TABLE_ID)
-  const researchers = data?.data
+    // Fetch researchers using table state (search, pagination)
+    const { data, isFetching: isLoading, refetch } = useResearchersForSelect(TABLE_ID)
+    const researchers = data?.data
 
-  // Permission check for creating researchers
-  const canCreate = usePermission([ROLE.PUBLICATIONS_EDIT])
+    // Permission check for creating researchers
+    const canCreate = usePermission([ROLE.PUBLICATIONS_EDIT])
 
-  // Open researcher creation form
-  const { openResearcherForm } = useOpenResearcherForm({ onSuccess: refetch })
+    // Open researcher creation form
+    const { openResearcherForm } = useOpenResearcherForm({ onSuccess: refetch })
 
-  // Toggle researcher selection (works for both Researcher and SelectedResearcher)
-  const handleToggle = (researcher: Researcher | SelectedResearcher) => {
-    setSelectedResearchers(prev => {
-      const isSelected = isResearcherSelected(researcher.uid, prev)
+    // Toggle researcher selection (works for both Researcher and SelectedResearcher)
+    const handleToggle = (researcher: Researcher | SelectedResearcher) => {
+        setSelectedResearchers(prev => {
+            const isSelected = isResearcherSelected(researcher.uid, prev)
 
-      if (isSelected) {
-        return prev.filter(r => r.uid !== researcher.uid)
-      }
+            if (isSelected) {
+                return prev.filter(r => r.uid !== researcher.uid)
+            }
 
-      // For Researcher objects, convert to SelectedResearcher
-      return [...prev, toSelectedResearcher(researcher as Researcher)]
+            // For Researcher objects, convert to SelectedResearcher
+            return [...prev, toSelectedResearcher(researcher as Researcher)]
+        })
+    }
+
+    // Remove from badges
+    const handleRemoveFromBadges = (uid: string) => {
+        setSelectedResearchers(prev => prev.filter(r => r.uid !== uid))
+    }
+
+    // Get columns with selection state
+    const columns = useResearcherSelectColumns({
+        selectedResearchers,
+        onToggle: handleToggle,
     })
-  }
 
-  // Remove from badges
-  const handleRemoveFromBadges = (uid: string) => {
-    setSelectedResearchers(prev => prev.filter(r => r.uid !== uid))
-  }
+    // Create table instance
+    const table = usePandaTable<Researcher>({
+        tableId: TABLE_ID,
+        columns,
+        data: researchers,
+        settings: tableSettings,
+    })
 
-  // Get columns with selection state
-  const columns = useResearcherSelectColumns({
-    selectedResearchers,
-    onToggle: handleToggle
-  })
+    // Handle confirm - pass selected researchers to parent
+    const handleConfirm = () => {
+        onSelect(selectedResearchers)
+        onClose?.()
+    }
 
-  // Create table instance
-  const table = usePandaTable<Researcher>({
-    tableId: TABLE_ID,
-    columns,
-    data: researchers,
-    settings: tableSettings
-  })
+    return (
+        <div className="flex flex-col gap-3">
+            {/* Selected researchers badges */}
+            {selectedResearchers.length > 0 && (
+                <div className="flex flex-wrap gap-1 p-2 bg-muted/50 rounded-md">
+                    <span className="text-sm text-muted-foreground mr-2 self-center">
+                        Selected ({selectedResearchers.length}):
+                    </span>
+                    {selectedResearchers.map(r => (
+                        <Badge
+                            key={r.uid}
+                            variant="secondary"
+                            className="flex items-center gap-1 pr-1"
+                        >
+                            <span className="text-xs">
+                                {r.lastName}, {r.firstName}
+                            </span>
+                            <button
+                                type="button"
+                                onClick={() => handleRemoveFromBadges(r.uid)}
+                                className="ml-1 rounded-full hover:bg-muted p-0.5"
+                                aria-label={`Remove ${r.firstName} ${r.lastName}`}
+                            >
+                                <X className="h-3 w-3" />
+                            </button>
+                        </Badge>
+                    ))}
+                </div>
+            )}
 
-  // Handle confirm - pass selected researchers to parent
-  const handleConfirm = () => {
-    onSelect(selectedResearchers)
-    onClose?.()
-  }
+            {/* Search bar */}
+            <SearchBar
+                tableId={TABLE_ID}
+                useQuery={false}
+                right={
+                    canCreate ? (
+                        <Tooltip content="Create New Researcher">
+                            <div>
+                                <PlusButton onClick={openResearcherForm} />
+                            </div>
+                        </Tooltip>
+                    ) : undefined
+                }
+            />
 
-  return (
-    <div className="flex flex-col gap-3">
-      {/* Selected researchers badges */}
-      {selectedResearchers.length > 0 && (
-        <div className="flex flex-wrap gap-1 p-2 bg-muted/50 rounded-md">
-          <span className="text-sm text-muted-foreground mr-2 self-center">
-            Selected ({selectedResearchers.length}):
-          </span>
-          {selectedResearchers.map(r => (
-            <Badge
-              key={r.uid}
-              variant="secondary"
-              className="flex items-center gap-1 pr-1"
-            >
-              <span className="text-xs">
-                {r.lastName}, {r.firstName}
-              </span>
-              <button
-                type="button"
-                onClick={() => handleRemoveFromBadges(r.uid)}
-                className="ml-1 rounded-full hover:bg-muted p-0.5"
-                aria-label={`Remove ${r.firstName} ${r.lastName}`}
-              >
-                <X className="h-3 w-3" />
-              </button>
-            </Badge>
-          ))}
+            {/* Researchers table */}
+            <div className="h-[350px] overflow-hidden border rounded-md">
+                <PandaTableV2
+                    tableId={TABLE_ID}
+                    table={table}
+                    data={researchers}
+                    settings={tableSettings}
+                    loading={isLoading}
+                    skeletonRowCount={50}
+                    getRowProps={row => ({
+                        onClick: () => handleToggle(row.original),
+                        className: cn(
+                            isResearcherSelected(row.original.uid, selectedResearchers) &&
+                                'bg-orange-200 dark:bg-orange-800 hover:bg-orange-200 dark:hover:bg-orange-900',
+                            'cursor-pointer',
+                        ),
+                    })}
+                />
+            </div>
+
+            {/* Pagination */}
+            <Pagination
+                tableId={TABLE_ID}
+                settings={{
+                    enableQueryURL: false,
+                    pageSizeDefault: 50,
+                    total: data?.totalCount,
+                }}
+            />
+
+            {/* Footer buttons */}
+            <div className="flex justify-end gap-2 pt-2 border-t">
+                <Button type="button" variant="outline" onClick={onClose}>
+                    <FormattedMessage id={message.common.buttons.close} />
+                </Button>
+                <Button
+                    type="button"
+                    disabled={selectedResearchers.length === 0}
+                    onClick={handleConfirm}
+                >
+                    <FormattedMessage id={message.common.buttons.continue} />
+                    {selectedResearchers.length > 0 && ` (${selectedResearchers.length})`}
+                </Button>
+            </div>
         </div>
-      )}
-
-      {/* Search bar */}
-      <SearchBar
-        tableId={TABLE_ID}
-        useQuery={false}
-        right={
-          canCreate ? (
-            <Tooltip content="Create New Researcher">
-              <div>
-                <PlusButton onClick={openResearcherForm} />
-              </div>
-            </Tooltip>
-          ) : undefined
-        }
-      />
-
-      {/* Researchers table */}
-      <div className="h-[350px] overflow-hidden border rounded-md">
-        <PandaTableV2
-          tableId={TABLE_ID}
-          table={table}
-          data={researchers}
-          settings={tableSettings}
-          loading={isLoading}
-          skeletonRowCount={50}
-          getRowProps={row => ({
-            onClick: () => handleToggle(row.original),
-            className: cn(
-              isResearcherSelected(row.original.uid, selectedResearchers) &&
-                'bg-orange-200 dark:bg-orange-800 hover:bg-orange-200 dark:hover:bg-orange-900',
-              'cursor-pointer'
-            )
-          })}
-        />
-      </div>
-
-      {/* Pagination */}
-      <Pagination
-        tableId={TABLE_ID}
-        settings={{
-          enableQueryURL: false,
-          pageSizeDefault: 50,
-          total: data?.totalCount
-        }}
-      />
-
-      {/* Footer buttons */}
-      <div className="flex justify-end gap-2 pt-2 border-t">
-        <Button type="button" variant="outline" onClick={onClose}>
-          <FormattedMessage id={message.common.buttons.close} />
-        </Button>
-        <Button
-          type="button"
-          disabled={selectedResearchers.length === 0}
-          onClick={handleConfirm}
-        >
-          <FormattedMessage id={message.common.buttons.continue} />
-          {selectedResearchers.length > 0 && ` (${selectedResearchers.length})`}
-        </Button>
-      </div>
-    </div>
-  )
+    )
 }

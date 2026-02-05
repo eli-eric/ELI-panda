@@ -8,19 +8,16 @@ import resolvers from './resolvers'
 
 const driver = getDriver()
 
-const schemaPath = path.resolve(
-  process.cwd(),
-  'src/server/apollo/schema.graphql'
-)
+const schemaPath = path.resolve(process.cwd(), 'src/server/apollo/schema.graphql')
 const typeDefs = readFileSync(schemaPath, 'utf8')
 
 export const neoSchema = new Neo4jGraphQL({
-  typeDefs,
-  driver,
-  resolvers,
-  features: {
-    authorization: {
-      key: process.env.NEXTAUTH_SECRET ?? ''
-    }
-  }
+    typeDefs,
+    driver,
+    resolvers,
+    features: {
+        authorization: {
+            key: process.env.NEXTAUTH_SECRET ?? '',
+        },
+    },
 })

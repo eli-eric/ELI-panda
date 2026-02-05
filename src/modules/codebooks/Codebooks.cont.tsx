@@ -19,89 +19,88 @@ import { useCodebookValues } from './hooks/useCodebookValues'
 const SIDEBAR_WIDTH = 280
 
 export const CodebooksContainer = () => {
-  const { formatMessage: fm } = useIntl()
-  const [selectedCodebook, setSelectedCodebook] =
-    useQueryState('selectedCodebook')
-  const { openModal, closeModal } = useModalGlobalStore()
+    const { formatMessage: fm } = useIntl()
+    const [selectedCodebook, setSelectedCodebook] = useQueryState('selectedCodebook')
+    const { openModal, closeModal } = useModalGlobalStore()
 
-  const { data: codebookList, isLoading: isLoadingList } = useCodebookList()
-  const {
-    data: values,
-    isLoading: isLoadingValues,
-    queryKey
-  } = useCodebookValues(selectedCodebook as CODEBOOK)
+    const { data: codebookList, isLoading: isLoadingList } = useCodebookList()
+    const {
+        data: values,
+        isLoading: isLoadingValues,
+        queryKey,
+    } = useCodebookValues(selectedCodebook as CODEBOOK)
 
-  const mutations = useCodebookValueMutations({
-    codebookType: selectedCodebook as CODEBOOK,
-    queryKey
-  })
-
-  const withWarningModal = useWarningModal()
-
-  const handleSelect = useCallback(
-    (code: string) => {
-      setSelectedCodebook(code)
-    },
-    [setSelectedCodebook]
-  )
-
-  const handleAdd = useCallback(() => {
-    if (!selectedCodebook) return
-
-    openModal('dialog1', {
-      component: CodebookAddFormContainer,
-      props: {
-        title: fm({ id: message.codebooksPage.addForm.title }),
+    const mutations = useCodebookValueMutations({
         codebookType: selectedCodebook as CODEBOOK,
         queryKey,
-        onSuccess: () => closeModal('dialog1'),
-        onCancel: () => closeModal('dialog1')
-      }
     })
-  }, [selectedCodebook, queryKey, openModal, closeModal, fm])
 
-  const handleUpdate = useCallback(
-    async (uid: string, name: string) => {
-      await mutations.update({ uid, name })
-    },
-    [mutations]
-  )
+    const withWarningModal = useWarningModal()
 
-  const handleDelete = useCallback(
-    (value: CodebookType) => {
-      withWarningModal(
-        () => mutations.delete(value.uid),
-        fm({ id: message.codebooksPage.deleteConfirm }, { name: value.name })
-      )()
-    },
-    [withWarningModal, mutations, fm]
-  )
+    const handleSelect = useCallback(
+        (code: string) => {
+            setSelectedCodebook(code)
+        },
+        [setSelectedCodebook],
+    )
 
-  return (
-    <div className="flex h-[calc(100vh-4rem)]">
-      <div style={{ width: SIDEBAR_WIDTH }} className="flex-shrink-0">
-        <CodebookSidebar
-          codebooks={codebookList ?? []}
-          selectedCodebook={selectedCodebook}
-          onSelect={handleSelect}
-          isLoading={isLoadingList}
-        />
-      </div>
+    const handleAdd = useCallback(() => {
+        if (!selectedCodebook) return
 
-      <div className="flex-1 overflow-auto">
-        {selectedCodebook ? (
-          <CodebookDetail
-            codebookCode={selectedCodebook}
-            data={values?.data ?? []}
-            isLoading={isLoadingValues}
-            onAdd={handleAdd}
-            onUpdate={handleUpdate}
-            onDelete={handleDelete}
-          />
-        ) : (
-          <CodebookEmptyState />
-        )}
-      </div>
-    </div>
-  )
+        openModal('dialog1', {
+            component: CodebookAddFormContainer,
+            props: {
+                title: fm({ id: message.codebooksPage.addForm.title }),
+                codebookType: selectedCodebook as CODEBOOK,
+                queryKey,
+                onSuccess: () => closeModal('dialog1'),
+                onCancel: () => closeModal('dialog1'),
+            },
+        })
+    }, [selectedCodebook, queryKey, openModal, closeModal, fm])
+
+    const handleUpdate = useCallback(
+        async (uid: string, name: string) => {
+            await mutations.update({ uid, name })
+        },
+        [mutations],
+    )
+
+    const handleDelete = useCallback(
+        (value: CodebookType) => {
+            withWarningModal(
+                () => mutations.delete(value.uid),
+                fm({ id: message.codebooksPage.deleteConfirm }, { name: value.name }),
+            )()
+        },
+        [withWarningModal, mutations, fm],
+    )
+
+    return (
+        <div className="flex h-[calc(100vh-4rem)]">
+            <div style={{ width: SIDEBAR_WIDTH }} className="flex-shrink-0">
+                <CodebookSidebar
+                    codebooks={codebookList ?? []}
+                    selectedCodebook={selectedCodebook}
+                    onSelect={handleSelect}
+                    isLoading={isLoadingList}
+                />
+            </div>
+
+            <div className="flex-1 overflow-auto">
+                {selectedCodebook ? (
+                    <CodebookDetail
+                        codebookCode={selectedCodebook}
+                        data={values?.data ?? []}
+                        isLoading={isLoadingValues}
+                        onAdd={handleAdd}
+                        onUpdate={handleUpdate}
+                        onDelete={handleDelete}
+                    />
+                ) : (
+                    <CodebookEmptyState />
+                )}
+            </div>
+        </div>
+    )
 }

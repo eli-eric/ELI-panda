@@ -17,90 +17,80 @@ const nestedForm = message.roomCardsPage.nestedForm
 const messages = message.common.buttons
 
 interface ContactDeptModalProps {
-  onSubmit?: (data: ContactDeptFormData) => void
-  onClose?: () => void
+    onSubmit?: (data: ContactDeptFormData) => void
+    onClose?: () => void
 }
 
-export const ContactDeptModalContainer = ({
-  onSubmit,
-  onClose
-}: ContactDeptModalProps) => {
-  const [employeeUid, setEmployeeUid] = useState<string | null>(null)
-  const [loadedEmployee, setLoadedEmployee] = useState<any>(null)
-  const { employee, isLoading: employeeLoading } = useEmployee(employeeUid)
+export const ContactDeptModalContainer = ({ onSubmit, onClose }: ContactDeptModalProps) => {
+    const [employeeUid, setEmployeeUid] = useState<string | null>(null)
+    const [loadedEmployee, setLoadedEmployee] = useState<any>(null)
+    const { employee, isLoading: employeeLoading } = useEmployee(employeeUid)
 
-  const formMethods = useForm<ContactDeptFormData>({
-    resolver: zodResolver(contactDeptSchema),
-    defaultValues: {
-      employee: null
-    }
-  })
+    const formMethods = useForm<ContactDeptFormData>({
+        resolver: zodResolver(contactDeptSchema),
+        defaultValues: {
+            employee: null,
+        },
+    })
 
-  const { handleSubmit, formState, watch } = formMethods
+    const { handleSubmit, formState, watch } = formMethods
 
-  const fields = useMakeFormFields({
-    employee: {
-      name: 'employee',
-      disabled: false,
-      label: nestedForm.employee.label,
-      codebook: CODEBOOK.EMPLOYEE
-    }
-  })
+    const fields = useMakeFormFields({
+        employee: {
+            name: 'employee',
+            disabled: false,
+            label: nestedForm.employee.label,
+            codebook: CODEBOOK.EMPLOYEE,
+        },
+    })
 
-  // Track loaded employee data separately (don't overwrite form value)
-  useEffect(() => {
-    if (employee && employeeUid) {
-      setLoadedEmployee({
-        uid: employee.uid,
-        fullName: employee.fullName,
-        phone1: employee.phone1 || '',
-        phone2: employee.phone2 || ''
-      })
-    }
-  }, [employee, employeeUid])
+    // Track loaded employee data separately (don't overwrite form value)
+    useEffect(() => {
+        if (employee && employeeUid) {
+            setLoadedEmployee({
+                uid: employee.uid,
+                fullName: employee.fullName,
+                phone1: employee.phone1 || '',
+                phone2: employee.phone2 || '',
+            })
+        }
+    }, [employee, employeeUid])
 
-  const handleFormSubmit = handleSubmit(() => {
-    if (onSubmit && loadedEmployee) {
-      // Pass loaded employee data with full details
-      onSubmit({
-        employee: loadedEmployee
-      })
-    }
-  })
+    const handleFormSubmit = handleSubmit(() => {
+        if (onSubmit && loadedEmployee) {
+            // Pass loaded employee data with full details
+            onSubmit({
+                employee: loadedEmployee,
+            })
+        }
+    })
 
-  const selectedEmployee = watch('employee')
-  const isSubmitDisabled =
-    !selectedEmployee ||
-    !loadedEmployee ||
-    employeeLoading ||
-    formState.isSubmitting
+    const selectedEmployee = watch('employee')
+    const isSubmitDisabled =
+        !selectedEmployee || !loadedEmployee || employeeLoading || formState.isSubmitting
 
-  return (
-    <div className="space-y-6 min-w-0 max-w-none w-full">
-      <FormProvider {...formMethods}>
-        <div className="flex space-x-3">
-          <Combobox
-            {...fields.employee}
-            onSelect={v => setEmployeeUid(v ? v.uid : null)}
-          />
+    return (
+        <div className="space-y-6 min-w-0 max-w-none w-full">
+            <FormProvider {...formMethods}>
+                <div className="flex space-x-3">
+                    <Combobox
+                        {...fields.employee}
+                        onSelect={v => setEmployeeUid(v ? v.uid : null)}
+                    />
+                </div>
+            </FormProvider>
+
+            <div className="flex justify-end gap-2 pt-4 border-t">
+                <Button type="button" variant="outline" onClick={onClose}>
+                    <FormattedMessage id={messages.close} />
+                </Button>
+                <Button type="button" disabled={isSubmitDisabled} onClick={handleFormSubmit}>
+                    {formState.isSubmitting && (
+                        <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                    )}
+                    <FormattedMessage id={messages.save} />
+                </Button>
+            </div>
         </div>
-      </FormProvider>
-
-      <div className="flex justify-end gap-2 pt-4 border-t">
-        <Button type="button" variant="outline" onClick={onClose}>
-          <FormattedMessage id={messages.close} />
-        </Button>
-        <Button
-          type="button"
-          disabled={isSubmitDisabled}
-          onClick={handleFormSubmit}
-        >
-          {formState.isSubmitting && (
-            <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-          )}
-          <FormattedMessage id={messages.save} />
-        </Button>
-      </div>
-    </div>
-  )
+    )
 }

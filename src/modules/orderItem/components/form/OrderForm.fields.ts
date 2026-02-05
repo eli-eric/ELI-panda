@@ -8,102 +8,102 @@ import useOrderDetail from '../../hooks/useOrderDetail'
 const { form } = message.ordersPage.orderDetail
 
 const useOrderFormFields = () => {
-  const { disabledEdit } = useOrderDetail()
+    const { disabledEdit } = useOrderDetail()
 
-  return useMakeFormFields({
-    name: {
-      name: 'name',
-      label: form.name.label,
-      placeholder: form.name.placeholder,
-      disabled: disabledEdit,
-      rounded: 'rounded-md'
-    },
-    eun: {
-      name: 'eun',
-      label: form.eun.label,
-      placeholder: form.eun.placeholder,
-      disabled: disabledEdit,
-      rounded: 'rounded-md'
-    },
-    partNumber: {
-      name: 'partNumber',
-      label: form.partNumber.label,
-      placeholder: form.partNumber.placeholder,
-      disabled: disabledEdit,
-      rounded: 'rounded-md'
-    },
-    orderNumber: {
-      name: 'orderNumber',
-      label: form.orderNumber.label,
-      placeholder: form.orderNumber.placeholder,
-      disabled: disabledEdit,
-      rounded: 'rounded-md'
-    },
-    requestNumber: {
-      name: 'requestNumber',
-      label: form.requestNumber.label,
-      placeholder: form.requestNumber.placeholder,
-      disabled: disabledEdit,
-      rounded: 'rounded-md'
-    },
-    contractNumber: {
-      name: 'contractNumber',
-      label: form.contractNumber.label,
-      placeholder: form.contractNumber.placeholder,
-      disabled: disabledEdit,
-      rounded: 'rounded-md'
-    },
-    supplier: {
-      name: 'supplier',
-      label: form.supplier.label,
-      placeholder: form.supplier.placeholder,
-      disabled: disabledEdit,
-      rounded: 'rounded-md',
-      codebook: CODEBOOK.SUPPLIER
-    },
+    return useMakeFormFields({
+        name: {
+            name: 'name',
+            label: form.name.label,
+            placeholder: form.name.placeholder,
+            disabled: disabledEdit,
+            rounded: 'rounded-md',
+        },
+        eun: {
+            name: 'eun',
+            label: form.eun.label,
+            placeholder: form.eun.placeholder,
+            disabled: disabledEdit,
+            rounded: 'rounded-md',
+        },
+        partNumber: {
+            name: 'partNumber',
+            label: form.partNumber.label,
+            placeholder: form.partNumber.placeholder,
+            disabled: disabledEdit,
+            rounded: 'rounded-md',
+        },
+        orderNumber: {
+            name: 'orderNumber',
+            label: form.orderNumber.label,
+            placeholder: form.orderNumber.placeholder,
+            disabled: disabledEdit,
+            rounded: 'rounded-md',
+        },
+        requestNumber: {
+            name: 'requestNumber',
+            label: form.requestNumber.label,
+            placeholder: form.requestNumber.placeholder,
+            disabled: disabledEdit,
+            rounded: 'rounded-md',
+        },
+        contractNumber: {
+            name: 'contractNumber',
+            label: form.contractNumber.label,
+            placeholder: form.contractNumber.placeholder,
+            disabled: disabledEdit,
+            rounded: 'rounded-md',
+        },
+        supplier: {
+            name: 'supplier',
+            label: form.supplier.label,
+            placeholder: form.supplier.placeholder,
+            disabled: disabledEdit,
+            rounded: 'rounded-md',
+            codebook: CODEBOOK.SUPPLIER,
+        },
 
-    procurementResponsible: {
-      name: 'procurementResponsible',
-      label: form.procurementResponsible.label,
-      disabled: disabledEdit,
-      rounded: 'rounded-md',
-      emptyOption: true,
-      codebook: CODEBOOK.PROCUREMENTER
-    },
-    requestor: {
-      name: 'requestor',
-      label: form.requestor.label,
-      placeholder: form.requestor.placeholder,
-      disabled: disabledEdit,
-      rounded: 'rounded-md',
-      codebook: CODEBOOK.EMPLOYEE
-    },
-    orderStatus: {
-      name: 'orderStatus',
-      label: form.orderStatus.label,
-      disabled: disabledEdit,
-      rounded: 'rounded-md',
-      codebook: CODEBOOK.ORDER_STATUS
-    },
-    deliveryStatus: {
-      name: 'deliveryStatus',
-      label: form.deliveryStatus.label,
-      disabled: disabledEdit,
-      rounded: 'rounded-md'
-    },
-    notes: {
-      name: 'notes',
-      label: form.notes.label,
-      disabled: disabledEdit,
-      rounded: 'rounded-md'
-    },
-    orderDate: {
-      name: 'orderDate',
-      label: form.orderDate.label,
-      type: 'date',
-      disabled: disabledEdit,
-      rounded: 'rounded-md'
-    }
-  })
+        procurementResponsible: {
+            name: 'procurementResponsible',
+            label: form.procurementResponsible.label,
+            disabled: disabledEdit,
+            rounded: 'rounded-md',
+            emptyOption: true,
+            codebook: CODEBOOK.PROCUREMENTER,
+        },
+        requestor: {
+            name: 'requestor',
+            label: form.requestor.label,
+            placeholder: form.requestor.placeholder,
+            disabled: disabledEdit,
+            rounded: 'rounded-md',
+            codebook: CODEBOOK.EMPLOYEE,
+        },
+        orderStatus: {
+            name: 'orderStatus',
+            label: form.orderStatus.label,
+            disabled: disabledEdit,
+            rounded: 'rounded-md',
+            codebook: CODEBOOK.ORDER_STATUS,
+        },
+        deliveryStatus: {
+            name: 'deliveryStatus',
+            label: form.deliveryStatus.label,
+            disabled: disabledEdit,
+            rounded: 'rounded-md',
+        },
+        notes: {
+            name: 'notes',
+            label: form.notes.label,
+            disabled: disabledEdit,
+            rounded: 'rounded-md',
+        },
+        orderDate: {
+            name: 'orderDate',
+            label: form.orderDate.label,
+            type: 'date',
+            disabled: disabledEdit,
+            rounded: 'rounded-md',
+        },
+    })
 }
 export default useOrderFormFields

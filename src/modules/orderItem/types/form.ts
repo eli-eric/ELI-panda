@@ -4,21 +4,21 @@ import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/response
 import type { CodebookType } from '@/types/responses/codebook'
 
 export interface OrderDetailFormType extends FieldValues {
-  uid: string
-  lastUpdateTime?: string
-  name: string
-  orderNumber: number
-  requestNumber: number
-  contractNumber: number
-  notes: string
-  supplier: CodebookType
-  orderStatus: CodebookType
+    uid: string
+    lastUpdateTime?: string
+    name: string
+    orderNumber: number
+    requestNumber: number
+    contractNumber: number
+    notes: string
+    supplier: CodebookType
+    orderStatus: CodebookType
 
-  procurementResponsible: CodebookType
-  requestor: CodebookType
-  serviceLines: ServiceLine[]
-  orderDate: string
-  orderLines: OrderLineFormType[]
+    procurementResponsible: CodebookType
+    requestor: CodebookType
+    serviceLines: ServiceLine[]
+    orderDate: string
+    orderLines: OrderLineFormType[]
 }
 
 /**
@@ -29,40 +29,40 @@ export interface OrderDetailFormType extends FieldValues {
  * - For "existing" systems: `parentSystem` = parent of the selected system (from parentPath)
  */
 export interface OrderLineSystemConfig {
-  index: number
-  itemName: string
-  /** Parent system - used for BOTH new and existing systems */
-  parentSystem: CodebookType | null
-  /** Type of system: "new" creates a new system, "existing" links to existing system */
-  systemType: 'new' | 'existing'
-  /** System name - auto-filled from item name (new) or selected system (existing) */
-  systemName: string
-  /** Selected existing system - only populated when systemType is "existing" */
-  selectedSystem?: CodebookType | null
-  /** Individual serial number for this order line (parsed from comma-separated serialNumbers) */
-  serialNumber?: string
+    index: number
+    itemName: string
+    /** Parent system - used for BOTH new and existing systems */
+    parentSystem: CodebookType | null
+    /** Type of system: "new" creates a new system, "existing" links to existing system */
+    systemType: 'new' | 'existing'
+    /** System name - auto-filled from item name (new) or selected system (existing) */
+    systemName: string
+    /** Selected existing system - only populated when systemType is "existing" */
+    selectedSystem?: CodebookType | null
+    /** Individual serial number for this order line (parsed from comma-separated serialNumbers) */
+    serialNumber?: string
 }
 
 export interface OrderLineFormType extends FieldValues {
-  uid?: string // Optional - only saved items have uid from DB
-  name: string
-  catalogueUid?: string
-  catalogueNumber: string
-  system?: CodebookType
-  parentSystem?: CodebookType
-  location?: CodebookType
-  itemUsage?: CodebookType
-  price?: number
-  currency?: string
-  quantity?: number
-  eun?: string
-  notes?: string
-  isDelivered?: boolean
-  serialNumber?: string
-  lastUpdateTime?: string
-  serialNumbers?: string
-  serviceOrderUid?: string
-  serviceItemName?: string
+    uid?: string // Optional - only saved items have uid from DB
+    name: string
+    catalogueUid?: string
+    catalogueNumber: string
+    system?: CodebookType
+    parentSystem?: CodebookType
+    location?: CodebookType
+    itemUsage?: CodebookType
+    price?: number
+    currency?: string
+    quantity?: number
+    eun?: string
+    notes?: string
+    isDelivered?: boolean
+    serialNumber?: string
+    lastUpdateTime?: string
+    serialNumbers?: string
+    serviceOrderUid?: string
+    serviceItemName?: string
 }
 
 /**
@@ -70,45 +70,45 @@ export interface OrderLineFormType extends FieldValues {
  * Includes wizard-specific UI state fields that are not part of final order line
  */
 export interface OrderLineWizardFormType extends OrderLineFormType {
-  // Wizard-specific fields (UI state only, not submitted to backend)
-  _selectedCatalogueItem?: any
-  globalParentSystem?: CodebookType | null
-  globalParentSystemPath?: CodebookType[] | null
-  systemConfigs?: OrderLineSystemConfig[]
+    // Wizard-specific fields (UI state only, not submitted to backend)
+    _selectedCatalogueItem?: any
+    globalParentSystem?: CodebookType | null
+    globalParentSystemPath?: CodebookType[] | null
+    systemConfigs?: OrderLineSystemConfig[]
 }
 
 export interface ServiceLine extends FieldValues {
-  uuid?: string
-  uid?: string
-  name: string
-  serviceType: CodebookType
-  item: CodebookType
-  price: number
-  currency: string
-  notes?: string
-  eun?: string
-  serialNumber?: string
-  isDelivered?: boolean
-  lastUpdateTime?: string
-  details?: CatalogueItemDetail[]
+    uuid?: string
+    uid?: string
+    name: string
+    serviceType: CodebookType
+    item: CodebookType
+    price: number
+    currency: string
+    notes?: string
+    eun?: string
+    serialNumber?: string
+    isDelivered?: boolean
+    lastUpdateTime?: string
+    details?: CatalogueItemDetail[]
 }
 
 export interface ServiceLineFormType extends FieldValues {
-  uuid?: string
-  uid: string
-  name: string
-  serviceType: CodebookType
-  items: ServiceLinePhysicalItem[]
-  price: number
-  currency: string
-  notes?: string
-  isDelivered?: boolean
-  lastUpdateTime?: string
-  details?: CatalogueItemDetail[]
-  selectedProperties?: string[]
+    uuid?: string
+    uid: string
+    name: string
+    serviceType: CodebookType
+    items: ServiceLinePhysicalItem[]
+    price: number
+    currency: string
+    notes?: string
+    isDelivered?: boolean
+    lastUpdateTime?: string
+    details?: CatalogueItemDetail[]
+    selectedProperties?: string[]
 }
 
 export interface ServiceLinePhysicalItem extends CodebookType {
-  serialNumber: string
-  eun: string
+    serialNumber: string
+    eun: string
 }

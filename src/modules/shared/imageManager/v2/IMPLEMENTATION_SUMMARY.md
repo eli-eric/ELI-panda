@@ -262,22 +262,22 @@ const { submit } = useItemSubmit({
 
 ```typescript
 export const useItemSubmit = ({
-  setvalue,
-  imageRef,
-  saveAndExit,
-  reset
+    setvalue,
+    imageRef,
+    saveAndExit,
+    reset,
 }: {
-  setvalue: UseFormSetValue<any>
-  imageRef?: MutableRefObject<ImageGalleryRef | undefined>
-  saveAndExit?: boolean
-  reset?: (data?: any) => void
+    setvalue: UseFormSetValue<any>
+    imageRef?: MutableRefObject<ImageGalleryRef | undefined>
+    saveAndExit?: boolean
+    reset?: (data?: any) => void
 }) => {
-  // ...
-  onSuccess: catalogueItem => {
-    imageRef?.current?.submit(catalogueItem.data?.uid, () => {
-      if (saveAndExit) navigateBack()
-    })
-  }
+    // ...
+    onSuccess: catalogueItem => {
+        imageRef?.current?.submit(catalogueItem.data?.uid, () => {
+            if (saveAndExit) navigateBack()
+        })
+    }
 }
 ```
 
@@ -285,21 +285,21 @@ export const useItemSubmit = ({
 
 ```typescript
 export const useItemSubmit = ({
-  setvalue,
-  saveAndExit,
-  reset
+    setvalue,
+    saveAndExit,
+    reset,
 }: {
-  setvalue: UseFormSetValue<any>
-  saveAndExit?: boolean
-  reset?: (data?: any) => void
+    setvalue: UseFormSetValue<any>
+    saveAndExit?: boolean
+    reset?: (data?: any) => void
 }) => {
-  // ...
-  onSuccess: catalogueItem => {
-    // Images already uploaded independently!
-    if (saveAndExit) navigateBack()
-    else if (!uid) replace(PATH.CATALOGUE_ITEM + '/' + catalogueItem.data?.uid)
-    toast.success('Item saved')
-  }
+    // ...
+    onSuccess: catalogueItem => {
+        // Images already uploaded independently!
+        if (saveAndExit) navigateBack()
+        else if (!uid) replace(PATH.CATALOGUE_ITEM + '/' + catalogueItem.data?.uid)
+        toast.success('Item saved')
+    }
 }
 ```
 
@@ -309,9 +309,9 @@ export const useItemSubmit = ({
 
 ```typescript
 export const catalogueItemSchema = z.object({
-  // ...
-  hasImageGalleryChanges: z.boolean().optional()
-  // ...
+    // ...
+    hasImageGalleryChanges: z.boolean().optional(),
+    // ...
 })
 ```
 
@@ -319,9 +319,9 @@ export const catalogueItemSchema = z.object({
 
 ```typescript
 export const catalogueItemSchema = z.object({
-  // ...
-  // No hasImageGalleryChanges field!
-  // ...
+    // ...
+    // No hasImageGalleryChanges field!
+    // ...
 })
 ```
 

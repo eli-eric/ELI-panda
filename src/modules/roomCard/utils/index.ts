@@ -8,12 +8,12 @@ import type { RoomCardFormType } from '../types/form'
  * Example: "01/12/24, 14:30:45"
  */
 export const formatDateTime = (dateString?: string | null): string => {
-  if (!dateString) return ''
-  const date = new Date(dateString)
-  return new Intl.DateTimeFormat('en-GB', {
-    dateStyle: 'short',
-    timeStyle: 'medium'
-  }).format(date)
+    if (!dateString) return ''
+    const date = new Date(dateString)
+    return new Intl.DateTimeFormat('en-GB', {
+        dateStyle: 'short',
+        timeStyle: 'medium',
+    }).format(date)
 }
 
 /**
@@ -22,20 +22,20 @@ export const formatDateTime = (dateString?: string | null): string => {
  * Treats null and undefined as equivalent (both represent "no value")
  */
 export const hasOperationalStateChanged = (
-  original: CodebookType | null | undefined,
-  current: CodebookType | null | undefined
+    original: CodebookType | null | undefined,
+    current: CodebookType | null | undefined,
 ): boolean => {
-  // Normalize null and undefined to null for consistent comparison
-  const originalUid = original?.uid || null
-  const currentUid = current?.uid || null
+    // Normalize null and undefined to null for consistent comparison
+    const originalUid = original?.uid || null
+    const currentUid = current?.uid || null
 
-  return originalUid !== currentUid
+    return originalUid !== currentUid
 }
 
 type RoomCardUpdateType = {
-  roomCard: RoomCardFormType
-  uid?: string
-  originalOperationalState?: CodebookType | null
+    roomCard: RoomCardFormType
+    uid?: string
+    originalOperationalState?: CodebookType | null
 }
 
 /**
@@ -43,61 +43,59 @@ type RoomCardUpdateType = {
  * Note: Contacts (Hall, Dept, Teams) and Locations are now handled via separate direct mutations.
  */
 export const updateRoomCardVariables = ({
-  uid,
-  roomCard,
-  originalOperationalState
-}: RoomCardUpdateType): {
-  where: RoomCardWhere
-  update: RoomCardUpdateInput
-  operationalStateChanged: boolean
-  originalOperationalState?: CodebookType | null
-} => {
-  const operationalStateChanged = hasOperationalStateChanged(
+    uid,
+    roomCard,
     originalOperationalState,
-    roomCard.operationalState
-  )
+}: RoomCardUpdateType): {
+    where: RoomCardWhere
+    update: RoomCardUpdateInput
+    operationalStateChanged: boolean
+    originalOperationalState?: CodebookType | null
+} => {
+    const operationalStateChanged = hasOperationalStateChanged(
+        originalOperationalState,
+        roomCard.operationalState,
+    )
 
-  return {
-    where: {
-      uid: uid
-    },
-    update: {
-      name: roomCard.name,
-      additionalRequirements: roomCard.additionalRequirements,
-      cleaningScheduleDate: roomCard.cleaningScheduleDate,
-      cleaningScheduleDays: roomCard.cleaningScheduleDays,
-      compressedAirDistribution: roomCard.compressedAirDistribution,
-      coolingWater: roomCard.coolingWater,
-      entryToHvacTent: roomCard.entryToHvacTent,
-      indoorEnvironmentQuality: roomCard.indoorEnvironmentQuality,
-      maxPressureInColdDistribution: roomCard.maxPressureInColdDistribution,
-      nitrogenCentralDistribution: roomCard.nitrogenCentralDistribution,
-      prescribedClothing: roomCard.prescribedClothing,
-      purityClass: roomCard.purityClass,
-      compressedAirDistributionClient: roomCard.compressedAirDistributionClient,
-      coolingWaterClient: roomCard.coolingWaterClient,
-      indoorEnvironmentQualityClient: roomCard.indoorEnvironmentQualityClient,
-      maxPressureInColdDistributionClient:
-        roomCard.maxPressureInColdDistributionClient,
-      nitrogenCentralDistributionClient:
-        roomCard.nitrogenCentralDistributionClient,
-      status: roomCard.status,
-      operationalState: {
-        connect: roomCard.operationalState?.uid
-          ? { where: { node: { uid: roomCard.operationalState.uid } } }
-          : undefined,
-        disconnect:
-          originalOperationalState?.uid &&
-          originalOperationalState?.uid !== roomCard.operationalState?.uid
-            ? { where: { node: { uid: originalOperationalState.uid } } }
-            : undefined
-      },
-      ...(operationalStateChanged && {
-        operationalStateLastUpdated: new Date().toISOString()
-      })
-      // Contacts and Locations are now handled via separate mutations - NOT included here
-    },
-    operationalStateChanged,
-    originalOperationalState
-  }
+    return {
+        where: {
+            uid: uid,
+        },
+        update: {
+            name: roomCard.name,
+            additionalRequirements: roomCard.additionalRequirements,
+            cleaningScheduleDate: roomCard.cleaningScheduleDate,
+            cleaningScheduleDays: roomCard.cleaningScheduleDays,
+            compressedAirDistribution: roomCard.compressedAirDistribution,
+            coolingWater: roomCard.coolingWater,
+            entryToHvacTent: roomCard.entryToHvacTent,
+            indoorEnvironmentQuality: roomCard.indoorEnvironmentQuality,
+            maxPressureInColdDistribution: roomCard.maxPressureInColdDistribution,
+            nitrogenCentralDistribution: roomCard.nitrogenCentralDistribution,
+            prescribedClothing: roomCard.prescribedClothing,
+            purityClass: roomCard.purityClass,
+            compressedAirDistributionClient: roomCard.compressedAirDistributionClient,
+            coolingWaterClient: roomCard.coolingWaterClient,
+            indoorEnvironmentQualityClient: roomCard.indoorEnvironmentQualityClient,
+            maxPressureInColdDistributionClient: roomCard.maxPressureInColdDistributionClient,
+            nitrogenCentralDistributionClient: roomCard.nitrogenCentralDistributionClient,
+            status: roomCard.status,
+            operationalState: {
+                connect: roomCard.operationalState?.uid
+                    ? { where: { node: { uid: roomCard.operationalState.uid } } }
+                    : undefined,
+                disconnect:
+                    originalOperationalState?.uid &&
+                    originalOperationalState?.uid !== roomCard.operationalState?.uid
+                        ? { where: { node: { uid: originalOperationalState.uid } } }
+                        : undefined,
+            },
+            ...(operationalStateChanged && {
+                operationalStateLastUpdated: new Date().toISOString(),
+            }),
+            // Contacts and Locations are now handled via separate mutations - NOT included here
+        },
+        operationalStateChanged,
+        originalOperationalState,
+    }
 }

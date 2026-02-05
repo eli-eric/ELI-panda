@@ -14,31 +14,29 @@ import type { CatalogueItem } from '@/types/responses/catalogue'
  * @returns Array with selected item pinned to first position, or undefined if no data loaded yet
  */
 export const usePinnedCatalogueData = (
-  catalogueItems: CatalogueItem[] | undefined,
-  selectedItem: CatalogueItem | undefined
+    catalogueItems: CatalogueItem[] | undefined,
+    selectedItem: CatalogueItem | undefined,
 ): CatalogueItem[] | undefined => {
-  return useMemo(() => {
-    // Initial load - data hasn't been fetched yet
-    if (isUndefined(catalogueItems)) {
-      return selectedItem ? [selectedItem] : undefined
-    }
+    return useMemo(() => {
+        // Initial load - data hasn't been fetched yet
+        if (isUndefined(catalogueItems)) {
+            return selectedItem ? [selectedItem] : undefined
+        }
 
-    // Empty results - data is loaded but empty (e.g., after filtering)
-    if (isEmptyArray(catalogueItems)) {
-      return selectedItem ? [selectedItem] : []
-    }
+        // Empty results - data is loaded but empty (e.g., after filtering)
+        if (isEmptyArray(catalogueItems)) {
+            return selectedItem ? [selectedItem] : []
+        }
 
-    // No selected item, return items as-is
-    if (!selectedItem) {
-      return catalogueItems
-    }
+        // No selected item, return items as-is
+        if (!selectedItem) {
+            return catalogueItems
+        }
 
-    // Filter out selected item from the list to avoid duplicates
-    const filteredItems = catalogueItems.filter(
-      item => item.uid !== selectedItem.uid
-    )
+        // Filter out selected item from the list to avoid duplicates
+        const filteredItems = catalogueItems.filter(item => item.uid !== selectedItem.uid)
 
-    // Prepend selected item to the beginning
-    return [selectedItem, ...filteredItems]
-  }, [catalogueItems, selectedItem?.uid])
+        // Prepend selected item to the beginning
+        return [selectedItem, ...filteredItems]
+    }, [catalogueItems, selectedItem?.uid])
 }

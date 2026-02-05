@@ -6,17 +6,17 @@ import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/response
 import { queryFetcher } from '@/utils/fetcher'
 
 export const useCategoryProperties = (uid?: string) => {
-  const { data, error } = useQuery({
-    queryKey: ['catalogueCategoryProperties', { uid }],
-    queryFn: queryFetcher<CatalogueItemDetail[]>('catalogueCategoryProperties'),
-    enabled: !!uid
-  })
+    const { data, error } = useQuery({
+        queryKey: ['catalogueCategoryProperties', { uid }],
+        queryFn: queryFetcher<CatalogueItemDetail[]>('catalogueCategoryProperties'),
+        enabled: !!uid,
+    })
 
-  useEffect(() => {
-    if (error) {
-      toast.error('Failed to fetch category properties')
-    }
-  }, [error])
+    useEffect(() => {
+        if (error) {
+            toast.error('Failed to fetch category properties')
+        }
+    }, [error])
 
-  return { catalogueCategoryProperties: data }
+    return { catalogueCategoryProperties: data }
 }

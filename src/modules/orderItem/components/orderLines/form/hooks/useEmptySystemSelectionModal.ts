@@ -9,26 +9,23 @@ import { EmptySystemModalContent } from '../components/empty-system-modal-conten
  * Automatically handles z-index when opened from nested modals
  */
 export const useEmptySystemSelectionModal = () => {
-  const { openModal } = useDynamicModalStore()
+    const { openModal } = useDynamicModalStore()
 
-  const openEmptySystemModal = (
-    onSelect?: (
-      system: CodebookType | null,
-      parent?: CodebookType | null
-    ) => void
-  ) => {
-    const modalId = openModal('dialog', {
-      id: 'order-line-empty-system-select',
-      component: EmptySystemModalContent,
-      props: {
-        title: 'Select System (Empty Only)',
-        size: 'xl' as const,
-        onSelect: onSelect || (() => {})
-      }
-    })
+    const openEmptySystemModal = (
+        onSelect?: (system: CodebookType | null, parent?: CodebookType | null) => void,
+    ) => {
+        const modalId = openModal('dialog', {
+            id: 'order-line-empty-system-select',
+            component: EmptySystemModalContent,
+            props: {
+                title: 'Select System (Empty Only)',
+                size: 'xl' as const,
+                onSelect: onSelect || (() => {}),
+            },
+        })
 
-    return modalId
-  }
+        return modalId
+    }
 
-  return { openEmptySystemModal }
+    return { openEmptySystemModal }
 }

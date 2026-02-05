@@ -15,16 +15,16 @@ import { ITEM_USAGE_OPTION } from '@/modules/systems/types/constants'
  * - Order line edit forms
  */
 export const ORDER_LINE_DEFAULTS = {
-  /**
-   * Default currency for order line items
-   * Standard currency used across the ELI facility
-   */
-  currency: 'EUR',
+    /**
+     * Default currency for order line items
+     * Standard currency used across the ELI facility
+     */
+    currency: 'EUR',
 
-  /**
-   * Default item usage
-   */
-  itemUsage: ITEM_USAGE_OPTION.STOCK_ITEM
+    /**
+     * Default item usage
+     */
+    itemUsage: ITEM_USAGE_OPTION.STOCK_ITEM,
 } as const
 
 /**
@@ -35,10 +35,10 @@ export const ORDER_LINE_DEFAULTS = {
  * - Service line edit forms
  */
 export const SERVICE_LINE_DEFAULTS = {
-  /**
-   * Default currency for service line items
-   */
-  currency: 'EUR'
+    /**
+     * Default currency for service line items
+     */
+    currency: 'EUR',
 } as const
 
 export type OrderLineDefaultKey = keyof typeof ORDER_LINE_DEFAULTS

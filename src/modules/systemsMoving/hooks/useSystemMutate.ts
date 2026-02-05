@@ -31,23 +31,21 @@ const MOVE_SYSTEM = gql(`
 `)
 
 export const useSystemMutation = () => {
-  const { mutate: updateMutate, isPending: updatePending } =
-    useGraphQLMutation(UPDATE_SYSTEM, {
-      onError: error => {
-        toast.error('Failed to update system: ' + error.message)
-      }
+    const { mutate: updateMutate, isPending: updatePending } = useGraphQLMutation(UPDATE_SYSTEM, {
+        onError: error => {
+            toast.error('Failed to update system: ' + error.message)
+        },
     })
 
-  const { mutate: moveMutate, isPending: movePending } =
-    useGraphQLMutation(MOVE_SYSTEM, {
-      onError: error => {
-        toast.error('Failed to move system: ' + error.message)
-      }
+    const { mutate: moveMutate, isPending: movePending } = useGraphQLMutation(MOVE_SYSTEM, {
+        onError: error => {
+            toast.error('Failed to move system: ' + error.message)
+        },
     })
 
-  return {
-    update: updateMutate,
-    moveSystem: moveMutate,
-    loading: updatePending || movePending
-  }
+    return {
+        update: updateMutate,
+        moveSystem: moveMutate,
+        loading: updatePending || movePending,
+    }
 }

@@ -6,24 +6,21 @@ import { FormattedMessage } from 'react-intl'
 
 import { messages } from '@/i18n/src/locale/en'
 
-const SystemsMovingContainer = dynamic(
-  () => import('@/modules/systemsMoving/SystemsMoving.cont'),
-  {
-    ssr: false
-  }
-)
+const SystemsMovingContainer = dynamic(() => import('@/modules/systemsMoving/SystemsMoving.cont'), {
+    ssr: false,
+})
 
 const SystemsMovingPage: NextPage = () => {
-  return (
-    <Fragment>
-      <Head>
-        <title>
-          <FormattedMessage id={messages.common.pages.systemsMoving} />
-        </title>
-      </Head>
-      <SystemsMovingContainer />
-    </Fragment>
-  )
+    return (
+        <Fragment>
+            <Head>
+                <title>
+                    <FormattedMessage id={messages.common.pages.systemsMoving} />
+                </title>
+            </Head>
+            <SystemsMovingContainer />
+        </Fragment>
+    )
 }
 
 export default SystemsMovingPage

@@ -12,63 +12,63 @@ import { SystemFilterButtonV2 } from './SystemFilterButtonV2'
 import { useSpareParentSystemColumns } from './useSpareParentSystemColumns'
 
 export const SpareParentSystemSelectTable = () => {
-  const tableId = 'spare-parent-system-select-table'
+    const tableId = 'spare-parent-system-select-table'
 
-  const settings = useMemo<PandaTableSettings<SystemDetail>>(
-    () => ({
-      enableMultiRowSelection: false,
-      enableColumnHiding: true,
-      enableColumnReordering: false,
-      enableQueryURL: false,
-      enableRowSelection: row => !row.original.physicalItem?.uid
-    }),
-    []
-  )
+    const settings = useMemo<PandaTableSettings<SystemDetail>>(
+        () => ({
+            enableMultiRowSelection: false,
+            enableColumnHiding: true,
+            enableColumnReordering: false,
+            enableQueryURL: false,
+            enableRowSelection: row => !row.original.physicalItem?.uid,
+        }),
+        [],
+    )
 
-  const columns = useSpareParentSystemColumns({ tableId })
+    const columns = useSpareParentSystemColumns({ tableId })
 
-  const { systems } = useSystems(tableId)
+    const { systems } = useSystems(tableId)
 
-  const table = usePandaTable({
-    tableId,
-    settings,
-    data: systems?.data,
-    columns: columns.columns,
-    getSubRows: original => original.subSystems ?? [],
-    getRowId: original => original.uid
-  })
+    const table = usePandaTable({
+        tableId,
+        settings,
+        data: systems?.data,
+        columns: columns.columns,
+        getSubRows: original => original.subSystems ?? [],
+        getRowId: original => original.uid,
+    })
 
-  const paginationSettings = useMemo(
-    () => ({
-      enableQueryURL: settings?.enableQueryURL,
-      pageSizeDefault: 50,
-      total: systems?.totalCount
-    }),
-    [settings?.enableQueryURL, systems?.totalCount]
-  )
+    const paginationSettings = useMemo(
+        () => ({
+            enableQueryURL: settings?.enableQueryURL,
+            pageSizeDefault: 50,
+            total: systems?.totalCount,
+        }),
+        [settings?.enableQueryURL, systems?.totalCount],
+    )
 
-  return (
-    <div>
-      <SearchBar
-        tableId={tableId}
-        useQuery={settings?.enableQueryURL}
-        left={
-          <SystemFilterButtonV2
-            tableId={tableId}
-            enableQueryURL={settings?.enableQueryURL}
-          />
-        }
-      />
-      <PandaTableV2
-        data={systems?.data}
-        className="overflow-y-auto relative h-[423px]"
-        table={table}
-        tableId={tableId}
-        settings={settings}
-      />
-      <Pagination tableId={tableId} settings={paginationSettings} />
-    </div>
-  )
+    return (
+        <div>
+            <SearchBar
+                tableId={tableId}
+                useQuery={settings?.enableQueryURL}
+                left={
+                    <SystemFilterButtonV2
+                        tableId={tableId}
+                        enableQueryURL={settings?.enableQueryURL}
+                    />
+                }
+            />
+            <PandaTableV2
+                data={systems?.data}
+                className="overflow-y-auto relative h-[423px]"
+                table={table}
+                tableId={tableId}
+                settings={settings}
+            />
+            <Pagination tableId={tableId} settings={paginationSettings} />
+        </div>
+    )
 }
 
 const MemoizedSpareParentSystemSelectTable = memo(SpareParentSystemSelectTable)

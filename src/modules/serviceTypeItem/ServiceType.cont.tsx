@@ -16,72 +16,72 @@ import { ServiceProperties } from './form/serivce-properties.cont'
 import { ServiceTypeForm } from './form/service-type.form'
 
 interface Props {
-  data?: ServiceTypeResponse
-  uid?: string
+    data?: ServiceTypeResponse
+    uid?: string
 }
 
 export const ServiceTypeContainer: FC<Props> = ({ data, uid }) => {
-  const router = useRouter()
+    const router = useRouter()
 
-  const formMethods = useForm({
-    defaultValues: {
-      ...data,
-      properties: data?.properties?.reduce((acc, item) => {
-        acc[item] = true
-        return acc
-      }, {})
-    }
-  })
-
-  const { mutate, isPending } = useServiceMutation({ uid })
-  const { refetch: refetchService } = useServiceType(uid)
-  const { refetch } = useServiceTypeList()
-
-  const submit = (data, exit?: boolean) => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { properties, ...rest } = data
-    const newPropperties = properties
-      ? Object.keys(data.properties)
-          .map(key => (data.properties[key] ? key : null))
-          .filter(Boolean)
-      : []
-    const newData = { ...rest, properties: newPropperties }
-    mutate(newData, {
-      onSuccess: ({ data }) => {
-        if (exit) {
-          router.push(PATH.SERVICES)
-        }
-        if (uid) {
-          refetch()
-          refetchService()
-        } else {
-          router.push(PATH.SERVICE + '/' + data.uid)
-        }
-      },
-      onError: () => {}
+    const formMethods = useForm({
+        defaultValues: {
+            ...data,
+            properties: data?.properties?.reduce((acc, item) => {
+                acc[item] = true
+                return acc
+            }, {}),
+        },
     })
-  }
 
-  const onSubmit = data => {
-    submit(data)
-  }
-  const onSubmitAndExit = data => {
-    submit(data, true)
-  }
+    const { mutate, isPending } = useServiceMutation({ uid })
+    const { refetch: refetchService } = useServiceType(uid)
+    const { refetch } = useServiceTypeList()
 
-  return (
-    <Form className="h-screen overflow-auto" formMethods={formMethods}>
-      <HeaderWithButtons
-        loading={isPending}
-        customElement={<h1>{data ? 'Edit Service' : 'New Service'}</h1>}
-        editRole={ROLE.SERVICE_EDIT}
-        onSubmit={formMethods.handleSubmit(onSubmit)}
-        onSubmitAndExit={formMethods.handleSubmit(onSubmitAndExit)}
-      />
-      <Card>
-        <ServiceTypeForm />
-        <ServiceProperties />
-      </Card>
-    </Form>
-  )
+    const submit = (data, exit?: boolean) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { properties, ...rest } = data
+        const newPropperties = properties
+            ? Object.keys(data.properties)
+                  .map(key => (data.properties[key] ? key : null))
+                  .filter(Boolean)
+            : []
+        const newData = { ...rest, properties: newPropperties }
+        mutate(newData, {
+            onSuccess: ({ data }) => {
+                if (exit) {
+                    router.push(PATH.SERVICES)
+                }
+                if (uid) {
+                    refetch()
+                    refetchService()
+                } else {
+                    router.push(PATH.SERVICE + '/' + data.uid)
+                }
+            },
+            onError: () => {},
+        })
+    }
+
+    const onSubmit = data => {
+        submit(data)
+    }
+    const onSubmitAndExit = data => {
+        submit(data, true)
+    }
+
+    return (
+        <Form className="h-screen overflow-auto" formMethods={formMethods}>
+            <HeaderWithButtons
+                loading={isPending}
+                customElement={<h1>{data ? 'Edit Service' : 'New Service'}</h1>}
+                editRole={ROLE.SERVICE_EDIT}
+                onSubmit={formMethods.handleSubmit(onSubmit)}
+                onSubmitAndExit={formMethods.handleSubmit(onSubmitAndExit)}
+            />
+            <Card>
+                <ServiceTypeForm />
+                <ServiceProperties />
+            </Card>
+        </Form>
+    )
 }

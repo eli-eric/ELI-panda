@@ -8,42 +8,38 @@ import { message } from '@/i18n/src/messages'
 import { ItemProperty } from './ItemProperty'
 
 interface ItemPropertiesProps {
-  properties: any[] | null | undefined
+    properties: any[] | null | undefined
 }
 
 export const ItemProperties = ({ properties }: ItemPropertiesProps) => {
-  const { formatMessage: fm } = useIntl()
+    const { formatMessage: fm } = useIntl()
 
-  if (!properties || properties.length === 0) {
-    return null
-  }
+    if (!properties || properties.length === 0) {
+        return null
+    }
 
-  const title = (
-    <div className="flex items-center gap-2">
-      <ListCollapse className="h-4 w-4 text-muted-foreground" />
-      <span>{fm({ id: message.common.systemItem.catalogueProperties })}</span>
-    </div>
-  )
+    const title = (
+        <div className="flex items-center gap-2">
+            <ListCollapse className="h-4 w-4 text-muted-foreground" />
+            <span>{fm({ id: message.common.systemItem.catalogueProperties })}</span>
+        </div>
+    )
 
-  return (
-    <Disclosure
-      title={title}
-      defaultOpen={false}
-      className="w-full border rounded-lg"
-      buttonClassName="p-3 text-base font-semibold"
-      panelClassName="p-4 space-y-4 shadow-md rounded-lg"
-    >
-      <Grid className="w-full">
-        {properties.map((property, index) => (
-          <Col key={property.property.uid} sm={3} md={3}>
-            <ItemProperty
-              key={property.property.uid}
-              detail={property}
-              index={index}
-            />
-          </Col>
-        ))}
-      </Grid>
-    </Disclosure>
-  )
+    return (
+        <Disclosure
+            title={title}
+            defaultOpen={false}
+            className="w-full border rounded-lg"
+            buttonClassName="p-3 text-base font-semibold"
+            panelClassName="p-4 space-y-4 shadow-md rounded-lg"
+        >
+            <Grid className="w-full">
+                {properties.map((property, index) => (
+                    <Col key={property.property.uid} sm={3} md={3}>
+                        <ItemProperty key={property.property.uid} detail={property} index={index} />
+                    </Col>
+                ))}
+            </Grid>
+        </Disclosure>
+    )
 }

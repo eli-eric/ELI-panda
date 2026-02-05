@@ -5,36 +5,36 @@ import { cn } from '@/lib/utils'
 import type { CodebookType } from '@/types/responses/codebook'
 
 interface Props {
-  value?: any
-  placeholder?: string
-  onChange?: (e: any) => void
-  disabled?: boolean
-  error?: FieldError | undefined
-  rounded?: string
-  isFilter?: boolean
+    value?: any
+    placeholder?: string
+    onChange?: (e: any) => void
+    disabled?: boolean
+    error?: FieldError | undefined
+    rounded?: string
+    isFilter?: boolean
 }
 
 export const ComboboxInput = ({
-  value,
-  placeholder,
-  disabled,
-  error,
-  onChange,
-  rounded,
-  isFilter
+    value,
+    placeholder,
+    disabled,
+    error,
+    onChange,
+    rounded,
+    isFilter,
 }: Props) => (
-  <Combobox.Input
-    onChange={onChange}
-    displayValue={(item: CodebookType) => item?.name}
-    placeholder={placeholder}
-    autoComplete="off"
-    className={cn(
-      'form-field ',
-      value && !disabled ? 'pr-14' : 'pr-9',
-      rounded,
-      error ? 'border-red-500' : 'border-gray-300',
-      disabled ? 'bg-gray-100' : '',
-      isFilter ? value && 'border-2 border-lime-500' : ''
-    )}
-  />
+    <Combobox.Input
+        onChange={onChange}
+        displayValue={(item: CodebookType) => item?.name}
+        placeholder={placeholder}
+        autoComplete="off"
+        className={cn(
+            'form-field ',
+            value && !disabled ? 'pr-14' : 'pr-9',
+            rounded,
+            error ? 'border-red-500' : 'border-gray-300',
+            disabled ? 'bg-gray-100' : '',
+            isFilter ? value && 'border-2 border-lime-500' : '',
+        )}
+    />
 )

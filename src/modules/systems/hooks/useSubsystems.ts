@@ -9,40 +9,40 @@ import { addSubsystems } from '../utils'
 import { useSystems } from './useSystems'
 
 export const useSubsystems = (tableId: string) => {
-  const [uid, setUid] = useState<string | null>(null)
-  const { queryKey } = useSystems(tableId)
+    const [uid, setUid] = useState<string | null>(null)
+    const { queryKey } = useSystems(tableId)
 
-  const queryClient = useQueryClient()
+    const queryClient = useQueryClient()
 
-  const queryKeySubsystems: QueryFetcherKey = ['subsystems', { uid }]
+    const queryKeySubsystems: QueryFetcherKey = ['subsystems', { uid }]
 
-  const { isLoading: pending, data: response } = useQuery({
-    queryKey: queryKeySubsystems,
-    queryFn: queryFetcher<SystemDetail[]>('systemSubsystems'),
-    enabled: !!uid,
-    staleTime: 0
-  })
+    const { isLoading: pending, data: response } = useQuery({
+        queryKey: queryKeySubsystems,
+        queryFn: queryFetcher<SystemDetail[]>('systemSubsystems'),
+        enabled: !!uid,
+        staleTime: 0,
+    })
 
-  useEffect(() => {
-    if (response) {
-      queryClient.setQueryData<SystemsResponse>(
-        queryKey,
-        prev => {
-          if (prev) {
-            return {
-              ...prev,
-              data: addSubsystems(prev.data, response, uid)
-            }
-          } else {
-            return prev
-          }
-        },
-        { updatedAt: Date.now() }
-      )
-    }
-    return () => {}
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [response])
+    useEffect(() => {
+        if (response) {
+            queryClient.setQueryData<SystemsResponse>(
+                queryKey,
+                prev => {
+                    if (prev) {
+                        return {
+                            ...prev,
+                            data: addSubsystems(prev.data, response, uid),
+                        }
+                    } else {
+                        return prev
+                    }
+                },
+                { updatedAt: Date.now() },
+            )
+        }
+        return () => {}
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [response])
 
-  return { setUid, pending, queryKey: queryKeySubsystems }
+    return { setUid, pending, queryKey: queryKeySubsystems }
 }

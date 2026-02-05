@@ -34,21 +34,21 @@ const USERS = gql(`
 `)
 
 export const useUsers = () => {
-  const [search] = useQueryState('search')
+    const [search] = useQueryState('search')
 
-  const { data, isLoading, error, refetch } = useGraphQL(USERS, {
-    variables: {
-      where: {
-        username_CONTAINS: search || ''
-      }
-    }
-  })
+    const { data, isLoading, error, refetch } = useGraphQL(USERS, {
+        variables: {
+            where: {
+                username_CONTAINS: search || '',
+            },
+        },
+    })
 
-  useEffect(() => {
-    if (error) {
-      toast.error('Failed to fetch users')
-    }
-  }, [error])
+    useEffect(() => {
+        if (error) {
+            toast.error('Failed to fetch users')
+        }
+    }, [error])
 
-  return { users: data?.users, loading: isLoading, error, refetch }
+    return { users: data?.users, loading: isLoading, error, refetch }
 }

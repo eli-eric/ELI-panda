@@ -10,6 +10,6 @@ const deleteFilterMutation = gql(`
   }
 `)
 export const useFilterDelete = () => {
-  const { mutate, isPending } = useGraphQLMutation(deleteFilterMutation)
-  return { deleteSavedFilter: mutate, loading: isPending }
+    const { mutate, isPending } = useGraphQLMutation(deleteFilterMutation)
+    return { deleteSavedFilter: mutate, loading: isPending }
 }

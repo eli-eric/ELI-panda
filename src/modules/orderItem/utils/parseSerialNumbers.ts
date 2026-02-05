@@ -8,20 +8,18 @@
  * @param serialNumbers - Comma-separated string of serial numbers
  * @returns Array of unique, trimmed serial number strings
  */
-export const parseSerialNumbers = (
-  serialNumbers: string | null | undefined
-): string[] => {
-  if (!serialNumbers || typeof serialNumbers !== 'string') {
-    return []
-  }
+export const parseSerialNumbers = (serialNumbers: string | null | undefined): string[] => {
+    if (!serialNumbers || typeof serialNumbers !== 'string') {
+        return []
+    }
 
-  const parsed = serialNumbers
-    .split(',')
-    .map(sn => sn.trim())
-    .filter(sn => sn.length > 0)
+    const parsed = serialNumbers
+        .split(',')
+        .map(sn => sn.trim())
+        .filter(sn => sn.length > 0)
 
-  // Return unique values only
-  return [...new Set(parsed)]
+    // Return unique values only
+    return [...new Set(parsed)]
 }
 
 /**
@@ -29,10 +27,8 @@ export const parseSerialNumbers = (
  * @param serialNumbers - Comma-separated string
  * @returns Count of unique, non-empty serial numbers
  */
-export const getSerialNumberCount = (
-  serialNumbers: string | null | undefined
-): number => {
-  return parseSerialNumbers(serialNumbers).length
+export const getSerialNumberCount = (serialNumbers: string | null | undefined): number => {
+    return parseSerialNumbers(serialNumbers).length
 }
 
 /**
@@ -40,15 +36,13 @@ export const getSerialNumberCount = (
  * @param serialNumbers - Comma-separated string
  * @returns true if duplicates exist
  */
-export const hasDuplicateSerialNumbers = (
-  serialNumbers: string | null | undefined
-): boolean => {
-  if (!serialNumbers) return false
+export const hasDuplicateSerialNumbers = (serialNumbers: string | null | undefined): boolean => {
+    if (!serialNumbers) return false
 
-  const parsed = serialNumbers
-    .split(',')
-    .map(sn => sn.trim())
-    .filter(sn => sn.length > 0)
+    const parsed = serialNumbers
+        .split(',')
+        .map(sn => sn.trim())
+        .filter(sn => sn.length > 0)
 
-  return parsed.length !== new Set(parsed).size
+    return parsed.length !== new Set(parsed).size
 }

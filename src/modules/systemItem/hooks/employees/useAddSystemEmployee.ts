@@ -17,35 +17,35 @@ const addEmployeeMutation = gql(`
 `)
 
 interface UseAddSystemEmployeeOptions {
-  onSuccess?: () => void
+    onSuccess?: () => void
 }
 
 export const useAddSystemEmployee = (
-  systemUid: string | undefined,
-  employeeType: EmployeeType,
-  options?: UseAddSystemEmployeeOptions
+    systemUid: string | undefined,
+    employeeType: EmployeeType,
+    options?: UseAddSystemEmployeeOptions,
 ) => {
-  const { mutateAsync, isPending } = useGraphQLMutation(addEmployeeMutation)
+    const { mutateAsync, isPending } = useGraphQLMutation(addEmployeeMutation)
 
-  const addEmployee = async (employeeUid: string) => {
-    if (!systemUid) {
-      toast.error('System UID is required')
-      return
+    const addEmployee = async (employeeUid: string) => {
+        if (!systemUid) {
+            toast.error('System UID is required')
+            return
+        }
+
+        const update = {
+            [employeeType]: [{ connect: [whereN(employeeUid)] }],
+        }
+
+        toast.promise(mutateAsync({ where: { uid: systemUid }, update }), {
+            loading: 'Adding employee...',
+            success: () => {
+                options?.onSuccess?.()
+                return 'Employee added'
+            },
+            error: 'Failed to add employee',
+        })
     }
 
-    const update = {
-      [employeeType]: [{ connect: [whereN(employeeUid)] }]
-    }
-
-    toast.promise(mutateAsync({ where: { uid: systemUid }, update }), {
-      loading: 'Adding employee...',
-      success: () => {
-        options?.onSuccess?.()
-        return 'Employee added'
-      },
-      error: 'Failed to add employee'
-    })
-  }
-
-  return { addEmployee, isAdding: isPending }
+    return { addEmployee, isAdding: isPending }
 }

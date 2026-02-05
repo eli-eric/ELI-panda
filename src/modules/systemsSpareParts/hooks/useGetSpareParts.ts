@@ -31,21 +31,21 @@ const GET_SPARE_PARTS = gql(`
 `)
 
 export const useGetSpareParts = uid => {
-  const { data, isLoading, error } = useGraphQL(GET_SPARE_PARTS, {
-    variables: {
-      where: {
-        uid: uid
-      }
-    }
-  })
+    const { data, isLoading, error } = useGraphQL(GET_SPARE_PARTS, {
+        variables: {
+            where: {
+                uid: uid,
+            },
+        },
+    })
 
-  useEffect(() => {
-    if (error) {
-      toast.error('Failed to fetch spare parts')
-    }
-  }, [error])
+    useEffect(() => {
+        if (error) {
+            toast.error('Failed to fetch spare parts')
+        }
+    }, [error])
 
-  return { spareParts: data?.systems[0].spareParts, loading: isLoading }
+    return { spareParts: data?.systems[0].spareParts, loading: isLoading }
 }
 
 const GET_SPARE_PARTS_FOR = gql(`
@@ -74,19 +74,19 @@ const GET_SPARE_PARTS_FOR = gql(`
   }
 `)
 export const useGetSparePartsFor = uid => {
-  const { data, isLoading, error } = useGraphQL(GET_SPARE_PARTS_FOR, {
-    variables: {
-      where: {
-        uid: uid
-      }
-    }
-  })
+    const { data, isLoading, error } = useGraphQL(GET_SPARE_PARTS_FOR, {
+        variables: {
+            where: {
+                uid: uid,
+            },
+        },
+    })
 
-  useEffect(() => {
-    if (error) {
-      toast.error('Failed to fetch spare parts')
-    }
-  }, [error])
+    useEffect(() => {
+        if (error) {
+            toast.error('Failed to fetch spare parts')
+        }
+    }, [error])
 
-  return { spareParts: data?.systems[0].sparePartsFor, loading: isLoading }
+    return { spareParts: data?.systems[0].sparePartsFor, loading: isLoading }
 }

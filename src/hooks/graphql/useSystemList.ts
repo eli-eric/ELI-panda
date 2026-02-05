@@ -15,11 +15,11 @@ query Systems($where: SystemWhere) {
 }`)
 
 export const useSystemList = (systemCode?: string) => {
-  return useGraphQL(systemsQuery, {
-    variables: {
-      where: {
-        systemCode_CONTAINS: systemCode
-      }
-    }
-  })
+    return useGraphQL(systemsQuery, {
+        variables: {
+            where: {
+                systemCode_CONTAINS: systemCode,
+            },
+        },
+    })
 }

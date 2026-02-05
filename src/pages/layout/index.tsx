@@ -9,17 +9,17 @@ import LayoutContainer from '@/modules/layout/Layout.cont'
 const messages = message.layoutPage
 
 const EliLayoutPage: NextPage = (): JSX.Element => {
-  const intl = useIntl()
+    const intl = useIntl()
 
-  return (
-    <Fragment>
-      <Head>
-        <title>{intl.formatMessage({ id: messages.head })}</title>
-        <meta name="description" content="...." />
-      </Head>
-      <LayoutContainer />
-    </Fragment>
-  )
+    return (
+        <Fragment>
+            <Head>
+                <title>{intl.formatMessage({ id: messages.head })}</title>
+                <meta name="description" content="...." />
+            </Head>
+            <LayoutContainer />
+        </Fragment>
+    )
 }
 
 export default EliLayoutPage

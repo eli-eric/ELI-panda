@@ -10,43 +10,41 @@ import type { TeamFormData } from '../schemas/team.schema'
 import { TeamModalContainer } from '../TeamModal.cont'
 
 export const useTeamModal = (roomCardUid?: string) => {
-  const { openModal, closeModal } = useDynamicModalStore()
-  const { connectTeam } = useConnectTeam(roomCardUid || '')
-  const { teams } = useRoomCardTeams(roomCardUid)
+    const { openModal, closeModal } = useDynamicModalStore()
+    const { connectTeam } = useConnectTeam(roomCardUid || '')
+    const { teams } = useRoomCardTeams(roomCardUid)
 
-  return useCallback(() => {
-    const modalId = openModal('dialog', {
-      id: 'team-modal',
-      component: TeamModalContainer,
-      props: {
-        title: 'Add Team',
-        size: 'm' as ModalSize
-      },
-      onSubmit: async (data: TeamFormData) => {
-        if (data.team && roomCardUid) {
-          // Check for duplicate using fresh data
-          const isDuplicate = teams?.some(
-            (team: any) => team?.uid === data.team?.uid
-          )
-
-          if (isDuplicate) {
-            toast.error('This team is already added')
-            return
-          }
-
-          toast.promise(connectTeam(data.team.uid), {
-            loading: 'Adding team...',
-            success: () => {
-              closeModal(modalId)
-              return 'Team added'
+    return useCallback(() => {
+        const modalId = openModal('dialog', {
+            id: 'team-modal',
+            component: TeamModalContainer,
+            props: {
+                title: 'Add Team',
+                size: 'm' as ModalSize,
             },
-            error: 'Failed to add team'
-          })
-        }
-      },
-      onClose: () => {
-        // Cleanup if needed
-      }
-    })
-  }, [openModal, closeModal, roomCardUid, teams, connectTeam])
+            onSubmit: async (data: TeamFormData) => {
+                if (data.team && roomCardUid) {
+                    // Check for duplicate using fresh data
+                    const isDuplicate = teams?.some((team: any) => team?.uid === data.team?.uid)
+
+                    if (isDuplicate) {
+                        toast.error('This team is already added')
+                        return
+                    }
+
+                    toast.promise(connectTeam(data.team.uid), {
+                        loading: 'Adding team...',
+                        success: () => {
+                            closeModal(modalId)
+                            return 'Team added'
+                        },
+                        error: 'Failed to add team',
+                    })
+                }
+            },
+            onClose: () => {
+                // Cleanup if needed
+            },
+        })
+    }, [openModal, closeModal, roomCardUid, teams, connectTeam])
 }

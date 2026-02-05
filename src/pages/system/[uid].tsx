@@ -12,38 +12,38 @@ import { SystemItemContainer } from '@/modules/systemItem/SystemItem.cont'
 const messages = message.systemItem
 
 interface Props {
-  key?: string
-  uid?: string
+    key?: string
+    uid?: string
 }
 
 const SystemDetailPage: NextPage = ({ uid }: Props) => {
-  const intl = useIntl()
-  const { systemDetail, loading, error } = useSystemDetail()
+    const intl = useIntl()
+    const { systemDetail, loading, error } = useSystemDetail()
 
-  if (loading) {
-    return <LoaderComponent />
-  }
+    if (loading) {
+        return <LoaderComponent />
+    }
 
-  if (error) {
-    return <ErrorPage />
-  }
+    if (error) {
+        return <ErrorPage />
+    }
 
-  return (
-    <Fragment>
-      <Head>
-        <title>{intl.formatMessage({ id: messages.head })}</title>
-        <meta name="description" content="...." />
-      </Head>
-      <div className="min-h-screen bg-background">
-        {systemDetail && <SystemItemContainer uid={uid} />}
-      </div>
-    </Fragment>
-  )
+    return (
+        <Fragment>
+            <Head>
+                <title>{intl.formatMessage({ id: messages.head })}</title>
+                <meta name="description" content="...." />
+            </Head>
+            <div className="min-h-screen bg-background">
+                {systemDetail && <SystemItemContainer uid={uid} />}
+            </div>
+        </Fragment>
+    )
 }
 
 SystemDetailPage.getInitialProps = ({ query }) => ({
-  key: query.uid,
-  uid: query.uid
+    key: query.uid,
+    uid: query.uid,
 })
 
 export default SystemDetailPage

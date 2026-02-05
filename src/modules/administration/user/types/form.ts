@@ -1,9 +1,6 @@
 import type { z } from 'zod'
 
-import type {
-  userFormSchema,
-  userUpdateFormSchema
-} from '../components/form/User.schema'
+import type { userFormSchema, userUpdateFormSchema } from '../components/form/User.schema'
 
 export type UserCreateFormType = z.infer<typeof userFormSchema>
 

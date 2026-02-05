@@ -126,11 +126,11 @@ Response: {}
 ```typescript
 // Fetch images with React Query
 const useImages = ({ itemType, itemId }: UseImagesParams) => {
-  return useQuery({
-    queryKey: ['images', itemType, itemId],
-    queryFn: () => fetcher(`/api/${itemType}/${itemId}/image`),
-    enabled: !!itemId
-  })
+    return useQuery({
+        queryKey: ['images', itemType, itemId],
+        queryFn: () => fetcher(`/api/${itemType}/${itemId}/image`),
+        enabled: !!itemId,
+    })
 }
 ```
 
@@ -148,37 +148,34 @@ const useImages = ({ itemType, itemId }: UseImagesParams) => {
 ```typescript
 // Upload with optimistic updates
 const useImageUpload = ({ itemType, itemId }: UseImageUploadParams) => {
-  const queryClient = useQueryClient()
+    const queryClient = useQueryClient()
 
-  return useMutation({
-    mutationFn: (file: File) => {
-      // Convert to base64, POST to server
-    },
-    onMutate: async file => {
-      // Optimistic update: show preview immediately
-      const tempImage = {
-        id: `temp-${Date.now()}`,
-        url: URL.createObjectURL(file),
-        name: file.name
-      }
-      queryClient.setQueryData(['images', itemType, itemId], old => [
-        tempImage,
-        ...old
-      ])
-    },
-    onSuccess: newImage => {
-      // Replace temp with real image from server
-      queryClient.setQueryData(['images', itemType, itemId], old =>
-        old.map(img => (img.id.startsWith('temp') ? newImage : img))
-      )
-      toast.success(`Uploaded ${newImage.name}`)
-    },
-    onError: (error, file, context) => {
-      // Rollback optimistic update
-      queryClient.setQueryData(['images', itemType, itemId], context.previous)
-      toast.error(`Failed to upload ${file.name}`)
-    }
-  })
+    return useMutation({
+        mutationFn: (file: File) => {
+            // Convert to base64, POST to server
+        },
+        onMutate: async file => {
+            // Optimistic update: show preview immediately
+            const tempImage = {
+                id: `temp-${Date.now()}`,
+                url: URL.createObjectURL(file),
+                name: file.name,
+            }
+            queryClient.setQueryData(['images', itemType, itemId], old => [tempImage, ...old])
+        },
+        onSuccess: newImage => {
+            // Replace temp with real image from server
+            queryClient.setQueryData(['images', itemType, itemId], old =>
+                old.map(img => (img.id.startsWith('temp') ? newImage : img)),
+            )
+            toast.success(`Uploaded ${newImage.name}`)
+        },
+        onError: (error, file, context) => {
+            // Rollback optimistic update
+            queryClient.setQueryData(['images', itemType, itemId], context.previous)
+            toast.error(`Failed to upload ${file.name}`)
+        },
+    })
 }
 ```
 
@@ -197,27 +194,27 @@ const useImageUpload = ({ itemType, itemId }: UseImageUploadParams) => {
 ```typescript
 // Delete with optimistic updates
 const useImageDelete = ({ itemType, itemId }: UseImageDeleteParams) => {
-  const queryClient = useQueryClient()
+    const queryClient = useQueryClient()
 
-  return useMutation({
-    mutationFn: (imageId: string) => {
-      return axios.delete(`/api/${itemType}/${itemId}/image/${imageId}`)
-    },
-    onMutate: async imageId => {
-      // Optimistic: remove from UI immediately
-      queryClient.setQueryData(['images', itemType, itemId], old =>
-        old.filter(img => img.id !== imageId)
-      )
-    },
-    onSuccess: () => {
-      toast.success('Image deleted')
-    },
-    onError: (error, imageId, context) => {
-      // Rollback
-      queryClient.setQueryData(['images', itemType, itemId], context.previous)
-      toast.error('Failed to delete image')
-    }
-  })
+    return useMutation({
+        mutationFn: (imageId: string) => {
+            return axios.delete(`/api/${itemType}/${itemId}/image/${imageId}`)
+        },
+        onMutate: async imageId => {
+            // Optimistic: remove from UI immediately
+            queryClient.setQueryData(['images', itemType, itemId], old =>
+                old.filter(img => img.id !== imageId),
+            )
+        },
+        onSuccess: () => {
+            toast.success('Image deleted')
+        },
+        onError: (error, imageId, context) => {
+            // Rollback
+            queryClient.setQueryData(['images', itemType, itemId], context.previous)
+            toast.error('Failed to delete image')
+        },
+    })
 }
 ```
 
@@ -353,11 +350,11 @@ const { submit } = useItemSubmit({
 
 ```typescript
 onSuccess: catalogueItem => {
-  // ...
-  imageRef?.current?.submit(catalogueItem.data?.uid, () => {
-    // ❌ Imperative call
-    if (saveAndExit) navigateBack()
-  })
+    // ...
+    imageRef?.current?.submit(catalogueItem.data?.uid, () => {
+        // ❌ Imperative call
+        if (saveAndExit) navigateBack()
+    })
 }
 ```
 
@@ -397,11 +394,11 @@ const { submit } = useItemSubmit({
 
 ```typescript
 onSuccess: catalogueItem => {
-  // ✅ No image coordination needed!
-  // Images already uploaded independently
-  if (saveAndExit) navigateBack()
-  else if (!uid) replace(PATH.CATALOGUE_ITEM + '/' + catalogueItem.data?.uid)
-  toast.success('Item saved')
+    // ✅ No image coordination needed!
+    // Images already uploaded independently
+    if (saveAndExit) navigateBack()
+    else if (!uid) replace(PATH.CATALOGUE_ITEM + '/' + catalogueItem.data?.uid)
+    toast.success('Item saved')
 }
 ```
 

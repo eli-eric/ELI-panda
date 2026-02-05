@@ -13,33 +13,29 @@ import { OrderItemContainer } from '@/modules/orderItem/OrderItem.cont'
 const messages = message.orderItem
 
 const OrderContainer = (): JSX.Element => {
-  const { orderDetail, error } = useOrderDetail()
+    const { orderDetail, error } = useOrderDetail()
 
-  if (error) return <ErrorPage />
-  return (
-    <Fragment>
-      {orderDetail ? <OrderItemContainer /> : <LoaderComponent />}
-    </Fragment>
-  )
+    if (error) return <ErrorPage />
+    return <Fragment>{orderDetail ? <OrderItemContainer /> : <LoaderComponent />}</Fragment>
 }
 
 const OrderItemPage: NextPage = (): JSX.Element => {
-  const intl = useIntl()
-  return (
-    <Fragment>
-      <Head>
-        <title>{intl.formatMessage({ id: messages.head })}</title>
-        <meta name="description" content="...." />
-      </Head>
-      <ErrorBoundary fallback={<ErrorPage />}>
-        <OrderContainer />
-      </ErrorBoundary>
-    </Fragment>
-  )
+    const intl = useIntl()
+    return (
+        <Fragment>
+            <Head>
+                <title>{intl.formatMessage({ id: messages.head })}</title>
+                <meta name="description" content="...." />
+            </Head>
+            <ErrorBoundary fallback={<ErrorPage />}>
+                <OrderContainer />
+            </ErrorBoundary>
+        </Fragment>
+    )
 }
 
 OrderItemPage.getInitialProps = ({ query }) => ({
-  key: query.uid
+    key: query.uid,
 })
 
 export default OrderItemPage

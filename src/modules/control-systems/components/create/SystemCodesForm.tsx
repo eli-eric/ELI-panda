@@ -15,163 +15,149 @@ import { SystemTypeComboBox } from '@/modules/shared/form/systemType/SelectSyste
 import { CODEBOOK } from '@/types/constants/codebook'
 
 import { BATCH_LIMIT, ONLY_ROOT_ZONES } from '../../types/constants'
-import type {
-  SystemCodesFormInput,
-  SystemCodesFormValues
-} from './SystemCodesForm.schema'
+import type { SystemCodesFormInput, SystemCodesFormValues } from './SystemCodesForm.schema'
 import { systemCodesFormSchema } from './SystemCodesForm.schema'
 
 interface Props {
-  onPreview: (values: SystemCodesFormValues) => void
-  onSubmit: (values: SystemCodesFormValues) => Promise<boolean>
-  isPending?: boolean
+    onPreview: (values: SystemCodesFormValues) => void
+    onSubmit: (values: SystemCodesFormValues) => Promise<boolean>
+    isPending?: boolean
 }
 
 export const SystemCodesForm = ({ onPreview, onSubmit }: Props) => {
-  const { formatMessage: fm } = useIntl()
+    const { formatMessage: fm } = useIntl()
 
-  const defaultValues: SystemCodesFormInput = useMemo(
-    () => ({
-      zone: null,
-      systemType: null,
-      batch: 1
-    }),
-    []
-  )
+    const defaultValues: SystemCodesFormInput = useMemo(
+        () => ({
+            zone: null,
+            systemType: null,
+            batch: 1,
+        }),
+        [],
+    )
 
-  const formMethods = useForm<SystemCodesFormInput>({
-    resolver: zodResolver(systemCodesFormSchema),
-    defaultValues,
-    mode: 'onChange'
-  })
+    const formMethods = useForm<SystemCodesFormInput>({
+        resolver: zodResolver(systemCodesFormSchema),
+        defaultValues,
+        mode: 'onChange',
+    })
 
-  const { watch, register, setValue } = formMethods
+    const { watch, register, setValue } = formMethods
 
-  // Watch form values for preview
-  const zone = watch('zone')
-  const systemType = watch('systemType')
-  const batch = watch('batch')
+    // Watch form values for preview
+    const zone = watch('zone')
+    const systemType = watch('systemType')
+    const batch = watch('batch')
 
-  // Debounce the values for preview
-  const debouncedZoneUid = useDebounce(zone?.uid, 500)
-  const debouncedSystemTypeUid = useDebounce(systemType?.uid, 500)
-  const debouncedBatch = useDebounce(batch, 500)
+    // Debounce the values for preview
+    const debouncedZoneUid = useDebounce(zone?.uid, 500)
+    const debouncedSystemTypeUid = useDebounce(systemType?.uid, 500)
+    const debouncedBatch = useDebounce(batch, 500)
 
-  // Trigger preview when debounced values change
-  useEffect(() => {
-    // Guard ensures zone and systemType are non-null before calling onPreview
-    if (
-      zone &&
-      systemType &&
-      debouncedBatch >= 1 &&
-      debouncedZoneUid &&
-      debouncedSystemTypeUid
-    ) {
-      onPreview({
-        zone,
-        systemType,
-        batch: debouncedBatch
-      } as SystemCodesFormValues)
-    }
-  }, [
-    debouncedZoneUid,
-    debouncedSystemTypeUid,
-    debouncedBatch,
-    zone,
-    systemType,
-    onPreview
-  ])
+    // Trigger preview when debounced values change
+    useEffect(() => {
+        // Guard ensures zone and systemType are non-null before calling onPreview
+        if (
+            zone &&
+            systemType &&
+            debouncedBatch >= 1 &&
+            debouncedZoneUid &&
+            debouncedSystemTypeUid
+        ) {
+            onPreview({
+                zone,
+                systemType,
+                batch: debouncedBatch,
+            } as SystemCodesFormValues)
+        }
+    }, [debouncedZoneUid, debouncedSystemTypeUid, debouncedBatch, zone, systemType, onPreview])
 
-  const handleFormSubmit = useCallback(
-    async (values: SystemCodesFormInput) => {
-      // Zod validation ensures values are non-null at this point
-      await onSubmit(values as SystemCodesFormValues)
-    },
-    [onSubmit]
-  )
+    const handleFormSubmit = useCallback(
+        async (values: SystemCodesFormInput) => {
+            // Zod validation ensures values are non-null at this point
+            await onSubmit(values as SystemCodesFormValues)
+        },
+        [onSubmit],
+    )
 
-  return (
-    <Form
-      formMethods={formMethods}
-      onSubmit={handleFormSubmit}
-      className=" flex flex-col gap-4"
-    >
-      {/* Zone field */}
-      <div className="space-y-2">
-        <Combobox
-          name="zone"
-          codebook={CODEBOOK.ZONE}
-          filter={ONLY_ROOT_ZONES}
-          label={fm({ id: message.controlSystems.form.zone })}
-          placeholder={fm({ id: message.controlSystems.form.zone })}
-        />
-      </div>
+    return (
+        <Form
+            formMethods={formMethods}
+            onSubmit={handleFormSubmit}
+            className=" flex flex-col gap-4"
+        >
+            {/* Zone field */}
+            <div className="space-y-2">
+                <Combobox
+                    name="zone"
+                    codebook={CODEBOOK.ZONE}
+                    filter={ONLY_ROOT_ZONES}
+                    label={fm({ id: message.controlSystems.form.zone })}
+                    placeholder={fm({ id: message.controlSystems.form.zone })}
+                />
+            </div>
 
-      {/* System Type field */}
-      <div className="space-y-2">
-        <Label>{fm({ id: message.controlSystems.form.systemType })}</Label>
-        <SystemTypeComboBox
-          systemTypeField={{
-            name: 'systemType',
-            label: '',
-            disabled: false
-          }}
-        />
-      </div>
+            {/* System Type field */}
+            <div className="space-y-2">
+                <Label>{fm({ id: message.controlSystems.form.systemType })}</Label>
+                <SystemTypeComboBox
+                    systemTypeField={{
+                        name: 'systemType',
+                        label: '',
+                        disabled: false,
+                    }}
+                />
+            </div>
 
-      {/* Batch field */}
-      <div className="space-y-2">
-        <Label htmlFor="batch">
-          {fm({ id: message.controlSystems.form.batch })}
-        </Label>
-        <div className="flex items-center gap-2">
-          <Button
-            type="button"
-            variant="outline"
-            size="icon"
-            onClick={() =>
-              setValue('batch', Math.max(1, (Number(batch) || 1) - 1))
-            }
-            disabled={Number(batch) <= 1}
-          >
-            <Minus className="h-4 w-4" />
-          </Button>
-          <Input
-            id="batch"
-            type="number"
-            min={1}
-            max={BATCH_LIMIT}
-            {...register('batch', { valueAsNumber: true })}
-            onChange={e => {
-              const value = Math.max(
-                1,
-                Math.min(BATCH_LIMIT, Number(e.target.value) || 1)
-              )
-              setValue('batch', value)
-            }}
-            className="text-center"
-            placeholder={fm({
-              id: message.controlSystems.form.batchPlaceholder
-            })}
-          />
-          <Button
-            type="button"
-            variant="outline"
-            size="icon"
-            onClick={() =>
-              setValue('batch', Math.min(BATCH_LIMIT, (Number(batch) || 1) + 1))
-            }
-            disabled={Number(batch) >= BATCH_LIMIT}
-          >
-            <Plus className="h-4 w-4" />
-          </Button>
-        </div>
-      </div>
+            {/* Batch field */}
+            <div className="space-y-2">
+                <Label htmlFor="batch">{fm({ id: message.controlSystems.form.batch })}</Label>
+                <div className="flex items-center gap-2">
+                    <Button
+                        type="button"
+                        variant="outline"
+                        size="icon"
+                        onClick={() => setValue('batch', Math.max(1, (Number(batch) || 1) - 1))}
+                        disabled={Number(batch) <= 1}
+                    >
+                        <Minus className="h-4 w-4" />
+                    </Button>
+                    <Input
+                        id="batch"
+                        type="number"
+                        min={1}
+                        max={BATCH_LIMIT}
+                        {...register('batch', { valueAsNumber: true })}
+                        onChange={e => {
+                            const value = Math.max(
+                                1,
+                                Math.min(BATCH_LIMIT, Number(e.target.value) || 1),
+                            )
+                            setValue('batch', value)
+                        }}
+                        className="text-center"
+                        placeholder={fm({
+                            id: message.controlSystems.form.batchPlaceholder,
+                        })}
+                    />
+                    <Button
+                        type="button"
+                        variant="outline"
+                        size="icon"
+                        onClick={() =>
+                            setValue('batch', Math.min(BATCH_LIMIT, (Number(batch) || 1) + 1))
+                        }
+                        disabled={Number(batch) >= BATCH_LIMIT}
+                    >
+                        <Plus className="h-4 w-4" />
+                    </Button>
+                </div>
+            </div>
 
-      {/* Submit button */}
-      <Button type="submit" className="w-full">
-        {fm({ id: message.controlSystems.buttons.create })}
-      </Button>
-    </Form>
-  )
+            {/* Submit button */}
+            <Button type="submit" className="w-full">
+                {fm({ id: message.controlSystems.buttons.create })}
+            </Button>
+        </Form>
+    )
 }

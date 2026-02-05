@@ -10,24 +10,19 @@ import { operationalStateColorMapping } from '../utils/constants'
 const messages = message.roomCardsPage.form.operationalState
 
 type Props = {
-  state?: CodebookType | null
+    state?: CodebookType | null
 }
 
 export const OperationalStateIcon = ({ state }: Props) => {
-  const { formatMessage: fm } = useIntl()
+    const { formatMessage: fm } = useIntl()
 
-  if (!state) return null
+    if (!state) return null
 
-  return (
-    <Tooltip content={`${fm({ id: messages.label })}: ${state.name || ''}`}>
-      <div className="flex items-center">
-        <div
-          className={cn(
-            'h-4 w-4 rounded-full',
-            operationalStateColorMapping(state)
-          )}
-        />
-      </div>
-    </Tooltip>
-  )
+    return (
+        <Tooltip content={`${fm({ id: messages.label })}: ${state.name || ''}`}>
+            <div className="flex items-center">
+                <div className={cn('h-4 w-4 rounded-full', operationalStateColorMapping(state))} />
+            </div>
+        </Tooltip>
+    )
 }

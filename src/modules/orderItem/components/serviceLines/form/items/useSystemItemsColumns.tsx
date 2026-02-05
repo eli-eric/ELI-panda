@@ -18,260 +18,249 @@ import type { SystemDetail } from '@/types/responses/systems'
 // eslint-disable-next-line
 
 interface SystemsColumnsProps {
-  tableId: string
+    tableId: string
 }
 
 interface IndeterminateCheckboxProps extends HTMLProps<HTMLInputElement> {
-  row: Row<SystemDetail>
+    row: Row<SystemDetail>
 }
 
-function IndeterminateCheckbox({
-  className,
-  checked,
-  row,
-  ...rest
-}: IndeterminateCheckboxProps) {
-  const { control } = useFormContext()
+function IndeterminateCheckbox({ className, checked, row, ...rest }: IndeterminateCheckboxProps) {
+    const { control } = useFormContext()
 
-  const { append, remove, fields } = useFieldArray({
-    control,
-    name: 'items'
-  })
+    const { append, remove, fields } = useFieldArray({
+        control,
+        name: 'items',
+    })
 
-  const onChange = () => {
-    row.toggleSelected(undefined, { selectChildren: false })
-    if (checked) {
-      const formIndex = fields.findIndex(
-        (field: any) => field.uid === row.original.physicalItem?.uid
-      )
-      if (formIndex !== -1) {
-        remove(formIndex)
-      }
-    } else {
-      append({
-        uid: row.original.physicalItem?.uid,
-        name: row.original.physicalItem?.catalogueItem?.name,
-        eun: row.original.physicalItem?.eun,
-        serialNumber: row.original.physicalItem?.serialNumber
-      })
+    const onChange = () => {
+        row.toggleSelected(undefined, { selectChildren: false })
+        if (checked) {
+            const formIndex = fields.findIndex(
+                (field: any) => field.uid === row.original.physicalItem?.uid,
+            )
+            if (formIndex !== -1) {
+                remove(formIndex)
+            }
+        } else {
+            append({
+                uid: row.original.physicalItem?.uid,
+                name: row.original.physicalItem?.catalogueItem?.name,
+                eun: row.original.physicalItem?.eun,
+                serialNumber: row.original.physicalItem?.serialNumber,
+            })
+        }
     }
-  }
 
-  return (
-    <Checkbox
-      className={cn(className, !rest.disabled && 'cursor-pointer')}
-      onCheckedChange={onChange}
-      checked={checked}
-      disabled={rest.disabled}
-    />
-  )
+    return (
+        <Checkbox
+            className={cn(className, !rest.disabled && 'cursor-pointer')}
+            onCheckedChange={onChange}
+            checked={checked}
+            disabled={rest.disabled}
+        />
+    )
 }
 
 export const useSystemsItemsColumns = ({ tableId }: SystemsColumnsProps) => {
-  const { setUid, pending } = useSubsystems(tableId)
-  const columns = useMemo(
-    (): ColumnDef<SystemDetail, any>[] => [
-      {
-        id: 'icons',
-        size: 41,
-        meta: { sticky: true },
-        cell: ({ row: { original } }) => (
-          <div>
-            <IconCell
-              itemUsageUid={original.physicalItem?.itemUsage?.uid as ITEM_USAGE}
-            />
-          </div>
-        )
-      },
-      {
-        id: 'select',
-        header: 'sel',
-        size: 41,
-        meta: { sticky: true },
-        enableHiding: false,
-        cell: ({ row }) => (
-          <IndeterminateCheckbox
-            row={row}
-            checked={row.getIsSelected()}
-            disabled={!row.getCanSelect()}
-          />
-        )
-      },
-      {
-        header: 'Name',
-        accessorFn: row => row.name,
-        id: 'name',
-        size: 440,
-        enableHiding: false,
-        cell: props => (
-          <SystemNameCell
-            {...props}
-            hideButtons={true}
-            setUid={setUid}
-            tableId={tableId}
-          />
-        )
-      },
-      {
-        header: 'System Code',
-        accessorFn: row => row.systemCode,
-        id: 'systemCode',
-        size: 150
-      },
-      {
-        header: 'System Type',
-        accessorFn: row => row.systemType?.name,
-        id: 'systemType',
-        size: 150
-      },
-      {
-        header: 'Control System Zone',
-        accessorFn: row => row.zone?.name,
-        id: 'zone',
-        size: 150
-      },
-      {
-        header: 'Location',
-        accessorFn: row => row.location?.name,
-        id: 'location',
-        size: 150
-      },
-      {
-        header: 'Responsible',
-        accessorFn: row => row.responsible?.name,
-        id: 'responsible',
-        size: 150
-      },
-      {
-        header: 'Description',
-        accessorFn: row => row.description,
-        id: 'description',
-        size: 150,
-        cell: ({ getValue }) => (
-          <Fragment>
-            {getValue() && (
-              <Tooltip content={getValue()}>
-                <Info className="h-5 w-5 pr- shrink-0" />
-              </Tooltip>
-            )}
-          </Fragment>
-        )
-      },
-      {
-        header: 'Importance',
-        accessorFn: row => row.importance?.name,
-        id: 'importance',
-        size: 150
-      },
-      {
-        header: 'Sub Systems Count',
-        accessorFn: row => row.statistics?.subsystemsCount,
-        id: 'subsystemsCount',
-        size: 200
-      },
-      {
-        header: 'Spare Parts Count',
-        accessorFn: row => row.statistics?.sparePartsCount,
-        id: 'sparePartsCount',
-        size: 200
-      },
-      {
-        header: 'Minimal Spare Parts Count',
-        accessorFn: row => row.statistics?.minimalSpareParstCount,
-        id: 'minimalSpareParstCount',
-        size: 200
-      },
-      {
-        header: 'Spare Parts Coverage',
-        accessorFn: row => row.statistics?.sp_coverage,
-        id: 'sp_coverage',
-        size: 200
-      },
-      {
-        header: 'Item Usage',
-        accessorFn: row => row.physicalItem?.itemUsage?.name,
-        id: 'itemUsage',
-        size: 150
-      },
-      {
-        header: 'Price',
-        accessorFn: row => row.physicalItem?.price,
-        id: 'price',
-        size: 150,
-        meta: { className: 'text-right' },
-        cell: ({ getValue, row: { original } }) => (
-          <span className="whitespace-nowrap">
-            {getValue()}{' '}
-            <span className="font-medium">
-              {original.physicalItem?.currency}
-            </span>
-          </span>
-        )
-      },
-      {
-        header: 'Eun',
-        accessorFn: row => row.physicalItem?.eun,
-        id: 'eun',
-        size: 150
-      },
-      {
-        header: 'Serial Number',
-        accessorFn: row => row.physicalItem?.serialNumber,
-        id: 'serialNumber',
-        size: 150
-      },
-      {
-        header: 'Catalogue Name',
-        accessorFn: row => row.physicalItem?.catalogueItem?.name,
-        id: 'catalogueName',
-        size: 300,
-        cell: ({ getValue, row: { original } }) => (
-          <NewTabLink
-            href={
-              PATH.CATALOGUE_ITEM +
-              '/' +
-              original.physicalItem?.catalogueItem?.uid
-            }
-            value={getValue()}
-          />
-        )
-      },
-      {
-        header: 'Part Number',
-        accessorFn: row => row.physicalItem?.catalogueItem?.catalogueNumber,
-        id: 'partNumber',
-        size: 150
-      },
-      {
-        header: 'Catalogue Description',
-        accessorFn: row => row.physicalItem?.catalogueItem?.description,
-        id: 'catalogueDescription',
-        size: 200,
-        cell: ({ getValue }) => (
-          <Fragment>
-            {getValue() && (
-              <Tooltip content={getValue()}>
-                <Info className="h-6 w-6 shrink-0" />
-              </Tooltip>
-            )}
-          </Fragment>
-        )
-      },
-      {
-        header: 'Catalogue Category',
-        accessorFn: row => row.physicalItem?.catalogueItem?.category?.name,
-        id: 'catalogueCategory',
-        size: 170
-      },
-      {
-        header: 'Supplier',
-        accessorFn: row => row.physicalItem?.catalogueItem?.supplier?.name,
-        id: 'supplier',
-        size: 150
-      }
-    ],
-    [setUid, tableId]
-  )
+    const { setUid, pending } = useSubsystems(tableId)
+    const columns = useMemo(
+        (): ColumnDef<SystemDetail, any>[] => [
+            {
+                id: 'icons',
+                size: 41,
+                meta: { sticky: true },
+                cell: ({ row: { original } }) => (
+                    <div>
+                        <IconCell
+                            itemUsageUid={original.physicalItem?.itemUsage?.uid as ITEM_USAGE}
+                        />
+                    </div>
+                ),
+            },
+            {
+                id: 'select',
+                header: 'sel',
+                size: 41,
+                meta: { sticky: true },
+                enableHiding: false,
+                cell: ({ row }) => (
+                    <IndeterminateCheckbox
+                        row={row}
+                        checked={row.getIsSelected()}
+                        disabled={!row.getCanSelect()}
+                    />
+                ),
+            },
+            {
+                header: 'Name',
+                accessorFn: row => row.name,
+                id: 'name',
+                size: 440,
+                enableHiding: false,
+                cell: props => (
+                    <SystemNameCell
+                        {...props}
+                        hideButtons={true}
+                        setUid={setUid}
+                        tableId={tableId}
+                    />
+                ),
+            },
+            {
+                header: 'System Code',
+                accessorFn: row => row.systemCode,
+                id: 'systemCode',
+                size: 150,
+            },
+            {
+                header: 'System Type',
+                accessorFn: row => row.systemType?.name,
+                id: 'systemType',
+                size: 150,
+            },
+            {
+                header: 'Control System Zone',
+                accessorFn: row => row.zone?.name,
+                id: 'zone',
+                size: 150,
+            },
+            {
+                header: 'Location',
+                accessorFn: row => row.location?.name,
+                id: 'location',
+                size: 150,
+            },
+            {
+                header: 'Responsible',
+                accessorFn: row => row.responsible?.name,
+                id: 'responsible',
+                size: 150,
+            },
+            {
+                header: 'Description',
+                accessorFn: row => row.description,
+                id: 'description',
+                size: 150,
+                cell: ({ getValue }) => (
+                    <Fragment>
+                        {getValue() && (
+                            <Tooltip content={getValue()}>
+                                <Info className="h-5 w-5 pr- shrink-0" />
+                            </Tooltip>
+                        )}
+                    </Fragment>
+                ),
+            },
+            {
+                header: 'Importance',
+                accessorFn: row => row.importance?.name,
+                id: 'importance',
+                size: 150,
+            },
+            {
+                header: 'Sub Systems Count',
+                accessorFn: row => row.statistics?.subsystemsCount,
+                id: 'subsystemsCount',
+                size: 200,
+            },
+            {
+                header: 'Spare Parts Count',
+                accessorFn: row => row.statistics?.sparePartsCount,
+                id: 'sparePartsCount',
+                size: 200,
+            },
+            {
+                header: 'Minimal Spare Parts Count',
+                accessorFn: row => row.statistics?.minimalSpareParstCount,
+                id: 'minimalSpareParstCount',
+                size: 200,
+            },
+            {
+                header: 'Spare Parts Coverage',
+                accessorFn: row => row.statistics?.sp_coverage,
+                id: 'sp_coverage',
+                size: 200,
+            },
+            {
+                header: 'Item Usage',
+                accessorFn: row => row.physicalItem?.itemUsage?.name,
+                id: 'itemUsage',
+                size: 150,
+            },
+            {
+                header: 'Price',
+                accessorFn: row => row.physicalItem?.price,
+                id: 'price',
+                size: 150,
+                meta: { className: 'text-right' },
+                cell: ({ getValue, row: { original } }) => (
+                    <span className="whitespace-nowrap">
+                        {getValue()}{' '}
+                        <span className="font-medium">{original.physicalItem?.currency}</span>
+                    </span>
+                ),
+            },
+            {
+                header: 'Eun',
+                accessorFn: row => row.physicalItem?.eun,
+                id: 'eun',
+                size: 150,
+            },
+            {
+                header: 'Serial Number',
+                accessorFn: row => row.physicalItem?.serialNumber,
+                id: 'serialNumber',
+                size: 150,
+            },
+            {
+                header: 'Catalogue Name',
+                accessorFn: row => row.physicalItem?.catalogueItem?.name,
+                id: 'catalogueName',
+                size: 300,
+                cell: ({ getValue, row: { original } }) => (
+                    <NewTabLink
+                        href={PATH.CATALOGUE_ITEM + '/' + original.physicalItem?.catalogueItem?.uid}
+                        value={getValue()}
+                    />
+                ),
+            },
+            {
+                header: 'Part Number',
+                accessorFn: row => row.physicalItem?.catalogueItem?.catalogueNumber,
+                id: 'partNumber',
+                size: 150,
+            },
+            {
+                header: 'Catalogue Description',
+                accessorFn: row => row.physicalItem?.catalogueItem?.description,
+                id: 'catalogueDescription',
+                size: 200,
+                cell: ({ getValue }) => (
+                    <Fragment>
+                        {getValue() && (
+                            <Tooltip content={getValue()}>
+                                <Info className="h-6 w-6 shrink-0" />
+                            </Tooltip>
+                        )}
+                    </Fragment>
+                ),
+            },
+            {
+                header: 'Catalogue Category',
+                accessorFn: row => row.physicalItem?.catalogueItem?.category?.name,
+                id: 'catalogueCategory',
+                size: 170,
+            },
+            {
+                header: 'Supplier',
+                accessorFn: row => row.physicalItem?.catalogueItem?.supplier?.name,
+                id: 'supplier',
+                size: 150,
+            },
+        ],
+        [setUid, tableId],
+    )
 
-  return { columns, pending }
+    return { columns, pending }
 }

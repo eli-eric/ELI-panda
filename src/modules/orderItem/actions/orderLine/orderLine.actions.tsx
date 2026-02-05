@@ -10,10 +10,10 @@ import { Toggle } from '@/components/form/Switch'
 import { Tooltip } from '@/components/Tooltip'
 import { Button } from '@/components/ui/button'
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
@@ -32,227 +32,217 @@ import { useOrderLineEditSheet } from '../../components/orderLines/hooks/useOrde
 
 // Custom buttons wrapper designed to better fit the table design
 type OrderLineButtonsWrapperProps = {
-  position?: 'left-0' | 'right-0' | 'left-1' | 'right-1'
-  className?: string
+    position?: 'left-0' | 'right-0' | 'left-1' | 'right-1'
+    className?: string
 }
 
-export const ButtonsWrapperNew: FC<
-  PropsWithChildren<OrderLineButtonsWrapperProps>
-> = ({ children, position = 'right-0', className }) => (
-  <div
-    className={cn(
-      'absolute flex items-center gap-1',
-      'opacity-0 group-hover/row:opacity-100 transition-opacity duration-150',
-      'z-20',
-      'top-1/2 -translate-y-1/2 -right-1',
-      position !== 'right-0' && position,
-      className
-    )}
-  >
-    {children}
-  </div>
+export const ButtonsWrapperNew: FC<PropsWithChildren<OrderLineButtonsWrapperProps>> = ({
+    children,
+    position = 'right-0',
+    className,
+}) => (
+    <div
+        className={cn(
+            'absolute flex items-center gap-1',
+            'opacity-0 group-hover/row:opacity-100 transition-opacity duration-150',
+            'z-20',
+            'top-1/2 -translate-y-1/2 -right-1',
+            position !== 'right-0' && position,
+            className,
+        )}
+    >
+        {children}
+    </div>
 )
 
 export const OrderLineActionButtons = ({
-  orderLine
+    orderLine,
 }: {
-  orderLine: OrderLineFormType & { id?: string }
+    orderLine: OrderLineFormType & { id?: string }
 }) => {
-  const { formatMessage: fm } = useIntl()
-  const { deleteOrderLine, setOrderLine } = useOrderLineContext()
-  const { openEditSheet } = useOrderLineEditSheet()
-  const withWarning = useWarningModal(
-    fm(
-      { id: message.ordersPage.orderLines.deleteModal.message },
-      createMessageValues({ name: orderLine.name })
+    const { formatMessage: fm } = useIntl()
+    const { deleteOrderLine, setOrderLine } = useOrderLineContext()
+    const { openEditSheet } = useOrderLineEditSheet()
+    const withWarning = useWarningModal(
+        fm(
+            { id: message.ordersPage.orderLines.deleteModal.message },
+            createMessageValues({ name: orderLine.name }),
+        ),
     )
-  )
 
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          size="sm"
-          aria-label={fm({
-            id: message.ordersPage.orderLines.actionsMenuAriaLabel
-          })}
-          className="h-8 w-8 p-0"
-        >
-          <MoreVertical className="h-4 w-4 text-muted-foreground" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" sideOffset={4}>
-        <DropdownMenuItem
-          onClick={() => {
-            openEditSheet(orderLine, data => {
-              setOrderLine(data)
-            })
-          }}
-          className="cursor-pointer"
-        >
-          <Edit className="h-4 w-4 mr-2" />
-          {fm({ id: message.common.buttons.edit })}
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() =>
-            orderLine.id &&
-            withWarning(deleteOrderLine)(
-              orderLine as OrderLineFormType & { id: string }
-            )
-          }
-          className="cursor-pointer text-destructive focus:text-destructive"
-        >
-          <Trash2 className="h-4 w-4 mr-2" />
-          {fm({ id: message.common.buttons.delete })}
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  )
+    return (
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button
+                    variant="ghost"
+                    size="sm"
+                    aria-label={fm({
+                        id: message.ordersPage.orderLines.actionsMenuAriaLabel,
+                    })}
+                    className="h-8 w-8 p-0"
+                >
+                    <MoreVertical className="h-4 w-4 text-muted-foreground" />
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" sideOffset={4}>
+                <DropdownMenuItem
+                    onClick={() => {
+                        openEditSheet(orderLine, data => {
+                            setOrderLine(data)
+                        })
+                    }}
+                    className="cursor-pointer"
+                >
+                    <Edit className="h-4 w-4 mr-2" />
+                    {fm({ id: message.common.buttons.edit })}
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                    onClick={() =>
+                        orderLine.id &&
+                        withWarning(deleteOrderLine)(
+                            orderLine as OrderLineFormType & { id: string },
+                        )
+                    }
+                    className="cursor-pointer text-destructive focus:text-destructive"
+                >
+                    <Trash2 className="h-4 w-4 mr-2" />
+                    {fm({ id: message.common.buttons.delete })}
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu>
+    )
 }
 
 export const OrderisDeliveredAction = ({
-  orderLine,
-  checked
+    orderLine,
+    checked,
 }: {
-  orderLine: OrderLineFormType
-  checked?: boolean
+    orderLine: OrderLineFormType
+    checked?: boolean
 }) => {
-  const uid = useRouter().query.uid as string
-  const { setOrderLine } = useOrderLineContext()
-  const { orderLineDelivery } = useEndpoint({
-    uid: uid,
-    itemUid: orderLine.uid!
-  })
-  const hasRole = usePermission([ROLE.ORDERS_DELIVERY_EDIT, ROLE.ORDERS_EDIT])
-  const { openModal } = useDynamicModalStore()
+    const uid = useRouter().query.uid as string
+    const { setOrderLine } = useOrderLineContext()
+    const { orderLineDelivery } = useEndpoint({
+        uid: uid,
+        itemUid: orderLine.uid!,
+    })
+    const hasRole = usePermission([ROLE.ORDERS_DELIVERY_EDIT, ROLE.ORDERS_EDIT])
+    const { openModal } = useDynamicModalStore()
 
-  const { submit } = useSubmit<OrderLineFormType>({
-    endpoint: orderLineDelivery,
-    method: 'put',
-    onSuccess: data => {
-      setOrderLine({
-        ...orderLine,
-        id: orderLine.id,
-        isDelivered: data?.isDelivered,
-        serialNumber: data?.serialNumber,
-        eun: data?.eun
-      })
-    },
-    onError: err => {
-      toast.error(err.message)
-    }
-  })
-
-  const handleCheck = () => {
-    if (!orderLine.isDelivered) {
-      openModal('dialog', {
-        id: `order-delivery-${orderLine.uid}`,
-        component: OrderIsDeliveryModal,
-        props: {
-          title: 'Fill missing Serial Number',
-          size: 'm',
-          orderLine
+    const { submit } = useSubmit<OrderLineFormType>({
+        endpoint: orderLineDelivery,
+        method: 'put',
+        onSuccess: data => {
+            setOrderLine({
+                ...orderLine,
+                id: orderLine.id,
+                isDelivered: data?.isDelivered,
+                serialNumber: data?.serialNumber,
+                eun: data?.eun,
+            })
         },
-        onSubmit: (data: any) => {
-          submit({
-            serialNumber: data?.serialNumber,
-            isDelivered: !checked,
-            eun: data?.eun || undefined
-          })
-        }
-      })
-    } else {
-      submit({ isDelivered: !checked })
-    }
-  }
+        onError: err => {
+            toast.error(err.message)
+        },
+    })
 
-  return (
-    <div className="flex items-center justify-center gap-1 w-full">
-      {orderLine.uid && (
-        <Fragment>
-          {hasRole ? (
-            <Toggle onChange={handleCheck} enabled={checked || false} />
-          ) : (
-            <Toggle enabled={checked || false} onChange={() => {}} />
-          )}
-        </Fragment>
-      )}
-    </div>
-  )
+    const handleCheck = () => {
+        if (!orderLine.isDelivered) {
+            openModal('dialog', {
+                id: `order-delivery-${orderLine.uid}`,
+                component: OrderIsDeliveryModal,
+                props: {
+                    title: 'Fill missing Serial Number',
+                    size: 'm',
+                    orderLine,
+                },
+                onSubmit: (data: any) => {
+                    submit({
+                        serialNumber: data?.serialNumber,
+                        isDelivered: !checked,
+                        eun: data?.eun || undefined,
+                    })
+                },
+            })
+        } else {
+            submit({ isDelivered: !checked })
+        }
+    }
+
+    return (
+        <div className="flex items-center justify-center gap-1 w-full">
+            {orderLine.uid && (
+                <Fragment>
+                    {hasRole ? (
+                        <Toggle onChange={handleCheck} enabled={checked || false} />
+                    ) : (
+                        <Toggle enabled={checked || false} onChange={() => {}} />
+                    )}
+                </Fragment>
+            )}
+        </div>
+    )
 }
 
-export const PrintEunButton = ({
-  orderLine
-}: {
-  orderLine: OrderLineFormType
-}) => {
-  const { formatMessage: fm } = useIntl()
-  const { eunforPrint } = useEndpoint({
-    uid: orderLine.eun,
-    query: { printEUN: true }
-  })
-  const { submit } = useSubmit({
-    endpoint: eunforPrint,
-    method: 'put',
-    onSuccess: () => {
-      toast.success(
-        fm(
-          { id: message.ordersPage.orderLines.eunPrintedSuccessfully },
-          { eun: orderLine.eun }
-        )
-      )
-    },
-    onError: err => {
-      toast.error(err.message)
+export const PrintEunButton = ({ orderLine }: { orderLine: OrderLineFormType }) => {
+    const { formatMessage: fm } = useIntl()
+    const { eunforPrint } = useEndpoint({
+        uid: orderLine.eun,
+        query: { printEUN: true },
+    })
+    const { submit } = useSubmit({
+        endpoint: eunforPrint,
+        method: 'put',
+        onSuccess: () => {
+            toast.success(
+                fm(
+                    { id: message.ordersPage.orderLines.eunPrintedSuccessfully },
+                    { eun: orderLine.eun },
+                ),
+            )
+        },
+        onError: err => {
+            toast.error(err.message)
+        },
+    })
+
+    if (!orderLine.eun) {
+        return null
     }
-  })
 
-  if (!orderLine.eun) {
-    return null
-  }
-
-  return (
-    <div className="flex items-center gap-2">
-      <span>{orderLine.eun}</span>
-      <Tooltip
-        content={fm({ id: message.ordersPage.orderLines.printEunTooltip })}
-      >
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          className="h-6 w-6 p-0 hover:text-primary"
-          onClick={() => {
-            submit()
-          }}
-        >
-          <Printer className="h-4 w-4" />
-        </Button>
-      </Tooltip>
-    </div>
-  )
+    return (
+        <div className="flex items-center gap-2">
+            <span>{orderLine.eun}</span>
+            <Tooltip content={fm({ id: message.ordersPage.orderLines.printEunTooltip })}>
+                <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="h-6 w-6 p-0 hover:text-primary"
+                    onClick={() => {
+                        submit()
+                    }}
+                >
+                    <Printer className="h-4 w-4" />
+                </Button>
+            </Tooltip>
+        </div>
+    )
 }
 
 export const PriceFooter = ({ rows }: { rows: Row<any>[] }) => {
-  const total = rows.reduce(
-    (sum, { original: { price } }) => sum + (price || 0),
-    0
-  )
-  const totalCurrencyRows = rows.filter(
-    ({ original: { currency } }) => currency != undefined
-  )
-  const totalCurrency =
-    totalCurrencyRows.length > 0 ? totalCurrencyRows[0].original.currency : ''
-  return (
-    <Fragment>
-      {rows.length > 0 && (
-        <div className="flex flex-col whitespace-nowrap py-1">
-          <span className="font-medium">
-            {parseFloat(total.toFixed(2)).toFixed(2)} {totalCurrency}
-          </span>
-        </div>
-      )}
-    </Fragment>
-  )
+    const total = rows.reduce((sum, { original: { price } }) => sum + (price || 0), 0)
+    const totalCurrencyRows = rows.filter(({ original: { currency } }) => currency != undefined)
+    const totalCurrency = totalCurrencyRows.length > 0 ? totalCurrencyRows[0].original.currency : ''
+    return (
+        <Fragment>
+            {rows.length > 0 && (
+                <div className="flex flex-col whitespace-nowrap py-1">
+                    <span className="font-medium">
+                        {parseFloat(total.toFixed(2)).toFixed(2)} {totalCurrency}
+                    </span>
+                </div>
+            )}
+        </Fragment>
+    )
 }
