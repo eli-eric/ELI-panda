@@ -1180,6 +1180,11 @@ export const messages = {
             systemType: 'System Type',
             batch: 'Batch Count',
             batchPlaceholder: 'Number of system codes to create',
+            searchHelpTooltip:
+                'Search patterns:\nC01 → starts with\n*C01* → contains\n*C01 → ends with',
+            searchPatternStartsWith: 'Starts with',
+            searchPatternContains: 'Contains',
+            searchPatternEndsWith: 'Ends with',
         },
         toast: {
             creating: 'Creating system codes...',
