@@ -1,3 +1,9 @@
+---
+name: design-system
+description: UI component patterns with shadcn/ui, Zod validation, and Tailwind CSS. Use when creating or modifying UI components, implementing forms with validation, using Dialog/Sheet/Button/Card components, migrating from HeadlessUI, or styling with Tailwind.
+user-invocable: false
+---
+
 # Design System Guide
 
 ## Current State
@@ -193,20 +199,16 @@ z.string().url()
 z.string().uuid()
 z.string().regex(/^[A-Z0-9]+$/)
 z.string().trim()
-z.string().toLowerCase()
-z.string().toUpperCase()
 
 // Number validations
 z.number().min(0)
 z.number().max(100)
 z.number().int()
 z.number().positive()
-z.number().negative()
 
 // Array validations
 z.array(z.string())
 z.array(z.string()).min(1)
-z.array(z.string()).max(10)
 z.array(z.string()).nonempty()
 
 // Object validations
@@ -229,7 +231,6 @@ z.string().transform(val => val.trim())
 
 // Union types
 z.union([z.string(), z.number()])
-z.string().or(z.number())
 
 // Discriminated unions
 z.discriminatedUnion('type', [
@@ -243,12 +244,12 @@ z.discriminatedUnion('type', [
 ### Utility-First Approach
 
 ```typescript
-// ✅ Good - utility classes
+// Good - utility classes
 <div className="flex items-center gap-4 p-4 bg-white rounded-lg shadow-sm">
   <Button className="px-4 py-2 text-sm font-medium">Click me</Button>
 </div>
 
-// ❌ Bad - inline styles
+// Bad - inline styles
 <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
   <button style={{ padding: '8px 16px' }}>Click me</button>
 </div>
@@ -282,43 +283,14 @@ The application has dark mode support. Use Tailwind's dark mode classes:
 </div>
 ```
 
-### Custom Design Tokens
-
-The application uses custom design tokens defined in Tailwind config:
-
-```typescript
-// Colors (use semantic names)
-bg - background
-text - foreground
-border - border
-bg - card
-text - card - foreground
-bg - primary
-text - primary - foreground
-bg - secondary
-text - secondary - foreground
-bg - muted
-text - muted - foreground
-bg - accent
-text - accent - foreground
-bg - destructive
-text - destructive - foreground
-
-// Spacing
-;(p - 4, m - 4, gap - 4, space - y - 4)
-
-// Border radius
-;(rounded - sm, rounded - md, rounded - lg, rounded - xl)
-```
-
 ## Migration Guide
 
 ### Migrating from HeadlessUI to shadcn/ui
 
-**HeadlessUI Dialog → shadcn/ui Dialog:**
+**HeadlessUI Dialog -> shadcn/ui Dialog:**
 
 ```typescript
-// ❌ Old - HeadlessUI
+// Old - HeadlessUI
 import { Dialog } from '@headlessui/react'
 
 <Dialog open={open} onClose={() => setOpen(false)}>
@@ -328,7 +300,7 @@ import { Dialog } from '@headlessui/react'
   </Dialog.Panel>
 </Dialog>
 
-// ✅ New - shadcn/ui
+// New - shadcn/ui
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 
 <Dialog open={open} onOpenChange={setOpen}>
@@ -344,7 +316,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 ### Migrating from Yup to Zod
 
 ```typescript
-// ❌ Old - Yup
+// Old - Yup
 import * as yup from 'yup'
 
 const schema = yup.object().shape({
@@ -352,7 +324,7 @@ const schema = yup.object().shape({
     age: yup.number().min(18).required(),
 })
 
-// ✅ New - Zod
+// New - Zod
 import { z } from 'zod'
 
 const schema = z.object({

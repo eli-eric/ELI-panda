@@ -1,3 +1,9 @@
+---
+name: predicates
+description: Predicate functions and type guards for clean, self-documenting code. Use when writing boolean conditions, type narrowing, validation logic, or creating reusable predicate functions. Covers isEmpty, hasValue, isValid, can/has/should naming patterns.
+user-invocable: false
+---
+
 # Predicates & Helper Functions Guide
 
 The application uses centralized predicates and helper functions to promote code reusability and self-documenting logic.
@@ -48,12 +54,12 @@ export const hasProperties = (obj: Record<string, unknown>): boolean => Object.k
 ```typescript
 import { hasValue, hasItems } from '@/lib/predicates/data'
 
-// ✅ Good - readable and self-documenting
+// Good - readable and self-documenting
 if (hasValue(user.email) && hasItems(user.roles)) {
     // Process user
 }
 
-// ❌ Bad - inline logic
+// Bad - inline logic
 if (user.email !== null && user.email !== undefined && user.roles.length > 0) {
     // Process user
 }
@@ -184,9 +190,7 @@ export const isAdmin = (user: User): boolean => user.role === 'admin'
 
 // Status predicates
 export const isPending = (status: string): boolean => status === 'pending'
-
 export const isCompleted = (status: string): boolean => status === 'completed'
-
 export const isCancelled = (status: string): boolean => status === 'cancelled'
 ```
 
@@ -211,7 +215,7 @@ if (hasEditPermission(currentUser, resource)) {
 ### 1. Extract Complex Conditions
 
 ```typescript
-// ✅ Good - extract to predicate
+// Good - extract to predicate
 const canSubmitForm = (form: FormData): boolean =>
     hasValue(form.email) &&
     isValidEmail(form.email) &&
@@ -222,7 +226,7 @@ if (canSubmitForm(formData)) {
     // Submit
 }
 
-// ❌ Bad - inline complexity
+// Bad - inline complexity
 if (
     formData.email !== null &&
     formData.email !== undefined &&
@@ -238,7 +242,7 @@ if (
 ### 2. Use Type Guards for Type Safety
 
 ```typescript
-// ✅ Good - provides type narrowing
+// Good - provides type narrowing
 import { isDefined, isNonEmptyArray } from '@/lib/predicates/type-guards'
 
 function processItems(items: Item[] | null | undefined) {
@@ -286,10 +290,10 @@ const shouldValidate = (field: string): boolean => field.length > 0
 ### 4. Keep Predicates Pure
 
 ```typescript
-// ✅ Good - pure function, no side effects
+// Good - pure function, no side effects
 export const isValidUser = (user: User): boolean => hasValue(user.email) && isValidEmail(user.email)
 
-// ❌ Bad - has side effects
+// Bad - has side effects
 export const isValidUser = (user: User): boolean => {
     console.log('Validating user') // Side effect!
     logToAnalytics('validation') // Side effect!
@@ -301,25 +305,9 @@ export const isValidUser = (user: User): boolean => {
 
 Place predicates in the appropriate file:
 
-- **General purpose** → `data.ts` or `type-guards.ts`
-- **Input validation** → `validation.ts`
-- **Business logic** → `domain.ts`
-
-```typescript
-// ✅ Good organization
-// /src/lib/predicates/data.ts
-export const isEmpty = (value: unknown): boolean => {
-    /* ... */
-}
-
-// /src/lib/predicates/domain.ts
-export const isSystemActive = (system: System): boolean => {
-    /* ... */
-}
-
-// ❌ Bad - everything in one file
-// /src/lib/predicates/index.ts (too large, not organized)
-```
+- **General purpose** -> `data.ts` or `type-guards.ts`
+- **Input validation** -> `validation.ts`
+- **Business logic** -> `domain.ts`
 
 ## Real-World Examples
 
@@ -393,25 +381,7 @@ const getActiveSystems = (systems: System[] | null | undefined) => {
 }
 ```
 
-## Helper Functions in `/src/utils/`
-
-For non-predicate helpers, use `/src/utils/`:
-
-- **`formatters.tsx`** - Formatting utilities (dates, numbers, currency)
-- **`fetcher.ts`** - Data fetching utilities
-- **`modalHelpers.ts`** - Modal-related helpers
-
-### Formatters Example
-
-```typescript
-// Example: formatters
-import { formatCurrency, formatDate } from '@/utils/formatters'
-
-const total = formatCurrency(1234.56) // "$1,234.56"
-const date = formatDate(new Date()) // "2025-11-24"
-```
-
-### When to Use Predicates vs Helpers
+## When to Use Predicates vs Helpers
 
 **Use Predicates when:**
 
@@ -428,77 +398,18 @@ const date = formatDate(new Date()) // "2025-11-24"
 - Side effects (fetching data, logging, etc.)
 
 ```typescript
-// ✅ Predicate - returns boolean
+// Predicate - returns boolean
 const isValidEmail = (email: string): boolean => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 
-// ✅ Helper - transforms data
+// Helper - transforms data
 const formatEmail = (email: string): string => email.toLowerCase().trim()
 
-// ✅ Predicate - checks condition
+// Predicate - checks condition
 const hasDiscount = (user: User): boolean => user.membershipLevel === 'premium'
 
-// ✅ Helper - calculates value
+// Helper - calculates value
 const calculateDiscount = (price: number, user: User): number =>
     hasDiscount(user) ? price * 0.9 : price
-```
-
-## Creating New Predicates
-
-When creating new predicates, follow these steps:
-
-### Step 1: Identify the domain
-
-Determine which file the predicate belongs in:
-
-- Common data checks → `data.ts`
-- Input validation → `validation.ts`
-- Type guards → `type-guards.ts`
-- Business logic → `domain.ts`
-
-### Step 2: Use appropriate naming
-
-Choose a prefix that indicates the predicate's purpose:
-
-- `is*` for state/type checks
-- `has*` for possession checks
-- `can*` for capability checks
-- `should*` for conditional logic
-
-### Step 3: Keep it pure
-
-Ensure the predicate:
-
-- Has no side effects
-- Returns a boolean
-- Is deterministic (same input = same output)
-- Has clear, focused logic
-
-### Step 4: Add TypeScript types
-
-Use type guards when appropriate to provide type narrowing:
-
-```typescript
-// Type guard predicate
-export const isUser = (value: unknown): value is User =>
-    isObject(value) && 'id' in value && 'email' in value
-
-// Regular predicate
-export const isActiveUser = (user: User): boolean => user.status === 'active'
-```
-
-### Step 5: Document complex logic
-
-Add comments for non-obvious predicates:
-
-```typescript
-/**
- * Checks if a system is eligible for maintenance based on:
- * - System is not currently in maintenance
- * - System has been active for at least 30 days
- * - System has no pending orders
- */
-export const isEligibleForMaintenance = (system: System): boolean =>
-    !isSystemInMaintenance(system) && daysSinceActivation(system) >= 30 && !hasPendingOrders(system)
 ```
 
 ## Testing Predicates
