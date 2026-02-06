@@ -15,7 +15,7 @@ export const Tooltip: FC<Props> = ({ children, content, className, maxWidth = 'm
         <TP disableHoverableContent>
             <TooltipTrigger asChild>{children}</TooltipTrigger>
             <TooltipContent className={`${maxWidth} ${className || ''}`}>
-                <p className="whitespace-normal break-words">{content}</p>
+                <p className="whitespace-pre-line break-words">{content}</p>
             </TooltipContent>
         </TP>
     ) : (
