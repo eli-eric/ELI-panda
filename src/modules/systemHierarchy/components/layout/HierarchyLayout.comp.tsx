@@ -12,7 +12,7 @@ export const HierarchyLayoutComponent: FC<HierarchyLayoutProps> = ({ tree, middl
     return (
         <div
             className={cn(
-                'grid h-[calc(100vh-4rem)] gap-0 overflow-hidden',
+                'grid h-[calc(100vh)] gap-0 overflow-hidden',
                 sidebar
                     ? 'grid-cols-1 md:grid-cols-[280px_1fr] lg:grid-cols-[280px_1fr_320px]'
                     : 'grid-cols-1 md:grid-cols-[280px_1fr]',

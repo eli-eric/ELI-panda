@@ -1,7 +1,7 @@
 import type { FC } from 'react'
-import { useIntl } from 'react-intl'
 
-import { message } from '@/i18n/src/messages'
+import FileManager from '@/modules/shared/fileManager/FileManager'
+import { FILE_TYPE } from '@/modules/shared/fileManager/types'
 
 import type { SystemLeaf } from '../../types'
 
@@ -10,16 +10,13 @@ interface AttachmentsTabProps {
 }
 
 export const AttachmentsTabContainer: FC<AttachmentsTabProps> = ({ system }) => {
-    const { formatMessage: fm } = useIntl()
-
     return (
         <div className="p-4" data-testid={`attachments-${system.uid}`}>
-            <h3 className="text-sm font-medium mb-2">
-                {fm({ id: message.systemHierarchy.tabs.attachments })}
-            </h3>
-            <p className="text-sm text-muted-foreground">
-                {fm({ id: message.common.files.title })}
-            </p>
+            <FileManager
+                itemType={FILE_TYPE.SYSTEM}
+                uid={system.uid}
+                hasEditRole
+            />
         </div>
     )
 }
