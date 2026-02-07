@@ -73,6 +73,7 @@ export const systemLeafSchema = z.object({
     zone: codebookRefSchema.optional().nullable(),
     location: codebookRefSchema.optional().nullable(),
     responsible: codebookRefSchema.optional().nullable(),
+    responsibleTeam: codebookRefSchema.optional().nullable(),
     importance: codebookRefSchema.optional().nullable(),
     owner: codebookRefSchema.optional().nullable(),
     parentPath: z.array(parentPathItemSchema).optional().nullable(),

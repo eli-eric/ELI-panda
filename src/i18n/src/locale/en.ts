@@ -519,6 +519,7 @@ export const messages = {
                 parentUID: { label: 'ParentUID' }, // codebook of criticalities - SYSTEM_CRITICALITY_CLASS
                 physicalItem: {
                     itemUsage: { label: 'Item Usage' }, // codebook of item usage - ITEM_USAGE
+                    partNumber: { label: 'Part Number' },
                     serialNumber: {
                         label: 'Serial Number',
                         placeholder: 'Serial Number',
@@ -1264,6 +1265,10 @@ export const messages = {
             importance: 'Importance',
             responsible: 'Responsible',
             owner: 'Owner',
+            team: 'Team',
+            attribute: 'Attribute',
+            noneEntered: 'None entered',
+            clickToEdit: 'Click to edit',
         },
         toast: {
             saving: 'Saving...',
