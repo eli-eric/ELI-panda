@@ -10,6 +10,7 @@ interface SystemTreeComponentProps {
     selectedParentUid: string | null
     onToggle: (uid: string) => void
     onSelect: (uid: string) => void
+    search?: string
 }
 
 export const SystemTreeComponent: FC<SystemTreeComponentProps> = ({
@@ -18,6 +19,7 @@ export const SystemTreeComponent: FC<SystemTreeComponentProps> = ({
     selectedParentUid,
     onToggle,
     onSelect,
+    search,
 }) => {
     const renderNode = useCallback(
         (node: HierarchyNode, depth: number) => {
@@ -33,12 +35,13 @@ export const SystemTreeComponent: FC<SystemTreeComponentProps> = ({
                     isSelected={isSelected}
                     onToggle={onToggle}
                     onSelect={onSelect}
+                    search={search}
                 >
                     {isExpanded && node.children.map(child => renderNode(child, depth + 1))}
                 </TreeNode>
             )
         },
-        [expandedNodes, selectedParentUid, onToggle, onSelect],
+        [expandedNodes, selectedParentUid, onToggle, onSelect, search],
     )
 
     return <div className="py-1">{nodes.map(node => renderNode(node, 0))}</div>

@@ -5,6 +5,8 @@ interface HierarchyStore {
     expandedNodes: string[]
     toggleNode: (uid: string) => void
     expandNode: (uid: string) => void
+    expandNodes: (uids: string[]) => void
+    setExpandedNodes: (uids: string[]) => void
     collapseAll: () => void
 }
 
@@ -26,6 +28,16 @@ export const useHierarchyStore = create<HierarchyStore>()(
                 if (!current.includes(uid)) {
                     set({ expandedNodes: [...current, uid] })
                 }
+            },
+            expandNodes: (uids: string[]) => {
+                const current = get().expandedNodes
+                const newNodes = uids.filter(uid => !current.includes(uid))
+                if (newNodes.length > 0) {
+                    set({ expandedNodes: [...current, ...newNodes] })
+                }
+            },
+            setExpandedNodes: (uids: string[]) => {
+                set({ expandedNodes: uids })
             },
             collapseAll: () => set({ expandedNodes: [] }),
         }),

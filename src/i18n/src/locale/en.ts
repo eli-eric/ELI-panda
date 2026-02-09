@@ -1212,6 +1212,7 @@ export const messages = {
             title: 'System Tree',
             collapseAll: 'Collapse All',
             noSystems: 'No systems found',
+            noResults: 'No matching systems',
             searchPlaceholder: 'Search systems...',
         },
         leaves: {
