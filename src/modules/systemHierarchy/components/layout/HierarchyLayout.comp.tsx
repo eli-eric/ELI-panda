@@ -31,22 +31,20 @@ export const HierarchyLayoutComponent: FC<HierarchyLayoutProps> = ({ tree, middl
 
                 <ResizableHandle withHandle />
 
-                {/* Middle panel - Content */}
+                {/* Middle panel - Content + Sidebar */}
                 <ResizablePanel
                     defaultSize="75%"
                     minSize="50%"
-                    className="flex flex-col overflow-hidden"
+                    className="flex overflow-hidden"
                 >
-                    {middle}
+                    <div className="flex-1 flex flex-col overflow-hidden">{middle}</div>
+                    {sidebar && (
+                        <aside className="hidden lg:flex flex-col w-80 border-l border-border bg-background overflow-hidden shrink-0">
+                            {sidebar}
+                        </aside>
+                    )}
                 </ResizablePanel>
             </ResizablePanelGroup>
-
-            {/* Right sidebar - fixed width, not resizable */}
-            {sidebar && (
-                <aside className="hidden lg:flex flex-col w-80 border-l border-border bg-background overflow-hidden shrink-0">
-                    {sidebar}
-                </aside>
-            )}
         </div>
     )
 }
