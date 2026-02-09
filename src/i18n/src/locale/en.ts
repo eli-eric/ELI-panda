@@ -1218,6 +1218,7 @@ export const messages = {
             title: 'Subsystems',
             noLeaves: 'No subsystems found',
             selectParent: 'Select a system from the tree to view its subsystems',
+            viewParent: 'View Detail',
         },
         columns: {
             name: 'Name',
