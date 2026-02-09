@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import { Fragment, useCallback, useRef } from 'react'
+import { useCallback, useRef } from 'react'
 
 import { PaginationV2 as Pagination } from '@/modules/shared/table/PaginationV2'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
@@ -46,34 +46,38 @@ export const LeavesTableComponent: FC<LeavesTableProps> = ({
     }, [])
 
     return (
-        <Fragment>
-            <PandaTableV2
-                ref={tableRef}
-                data={data}
-                table={table}
-                loading={isLoading}
-                tableId={LEAVES_TABLE_ID}
-                skeletonRowCount={20}
-                getRowProps={({ original: { uid } }) => ({
-                    onClick: () => onRowClick(uid),
-                    className: 'cursor-pointer hover:text-primary hover:bg-primary/10',
-                })}
-                settings={{
-                    enableSorting: true,
-                    enableColumnHiding: true,
-                    enableColumnReordering: false,
-                }}
-                className="relative overflow-scroll scrollbar-style"
-            />
-            <Pagination
-                tableId={LEAVES_TABLE_ID}
-                settings={{
-                    enableQueryURL: false,
-                    pageSizeDefault: 20,
-                    total: totalCount,
-                }}
-                onPageChange={handlePageChange}
-            />
-        </Fragment>
+        <div className="flex flex-col h-full">
+            <div className="flex-1 min-h-0 flex flex-col">
+                <PandaTableV2
+                    ref={tableRef}
+                    data={data}
+                    table={table}
+                    loading={isLoading}
+                    tableId={LEAVES_TABLE_ID}
+                    skeletonRowCount={20}
+                    getRowProps={({ original: { uid } }) => ({
+                        onClick: () => onRowClick(uid),
+                        className: 'cursor-pointer hover:text-primary hover:bg-primary/10',
+                    })}
+                    settings={{
+                        enableSorting: true,
+                        enableColumnHiding: true,
+                        enableColumnReordering: false,
+                    }}
+                    className="flex-1 min-h-0"
+                />
+            </div>
+            <div className="shrink-0">
+                <Pagination
+                    tableId={LEAVES_TABLE_ID}
+                    settings={{
+                        enableQueryURL: false,
+                        pageSizeDefault: 20,
+                        total: totalCount,
+                    }}
+                    onPageChange={handlePageChange}
+                />
+            </div>
+        </div>
     )
 }

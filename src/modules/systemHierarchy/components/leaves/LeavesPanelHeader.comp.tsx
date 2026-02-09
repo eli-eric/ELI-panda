@@ -42,7 +42,7 @@ export const LeavesPanelHeader: FC<LeavesPanelHeaderProps> = ({
     }
 
     return (
-        <div className="border-b border-border px-4 py-2">
+        <div id="page-head" className="border-b border-border px-4 py-2">
             <div className="flex items-center gap-2">
                 <Folder className="size-4 text-muted-foreground shrink-0" />
                 <h2 className="text-sm font-semibold truncate">{parentName}</h2>
