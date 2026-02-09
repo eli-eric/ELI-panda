@@ -8,6 +8,7 @@ ELI-PANDA.code-workspace
 
 # dependencies
 node_modules
+/tmp
 /.pnp
 .pnp.js
 package-lock.json

@@ -1,3 +1,9 @@
+---
+name: i18n
+description: Internationalization patterns using react-intl. Use when working with translations, adding new messages to locale files, using useIntl or FormattedMessage, or when user asks about translation patterns in this codebase.
+user-invocable: false
+---
+
 # Internationalization (i18n) Guide
 
 The application uses `react-intl` for internationalization with a custom message system.
@@ -20,10 +26,10 @@ import { message } from '@/i18n/src/messages'
 const MyComponent = () => {
   const { formatMessage: fm } = useIntl()
 
-  // ✅ Correct - use message object for type-safe paths
+  // Correct - use message object for type-safe paths
   return <h1>{fm({ id: message.common.ui.appName })}</h1>
 
-  // ❌ Incorrect - hardcoded strings are not type-safe
+  // Incorrect - hardcoded strings are not type-safe
   return <h1>{fm({ id: 'common.ui.appName' })}</h1>
 }
 ```
@@ -42,7 +48,7 @@ import { FormattedMessage } from 'react-intl'
 import { message } from '@/i18n/src/messages'
 
 const MyComponent = () => {
-  // ✅ Correct - declarative and type-safe
+  // Correct - declarative and type-safe
   return (
     <h1>
       <FormattedMessage id={message.common.ui.appName} />
@@ -145,7 +151,7 @@ import { message } from '@/i18n/src/messages'
 
 ## Best Practices
 
-### ✅ Do
+### Do
 
 - Always use the `message` object for type-safe paths
 - Use `useIntl` for dynamic content
@@ -153,7 +159,7 @@ import { message } from '@/i18n/src/messages'
 - Organize messages by feature/domain in the locale file
 - Use descriptive keys that indicate the content purpose
 
-### ❌ Don't
+### Don't
 
 - Hardcode message IDs as strings: `fm({ id: 'common.ui.appName' })`
 - Create duplicate messages across different sections
@@ -208,50 +214,28 @@ Organize messages by feature in the locale file:
 export const messages = {
     // Common/shared messages
     common: {
-        ui: {
-            /* ... */
-        },
-        actions: {
-            /* ... */
-        },
-        validation: {
-            /* ... */
-        },
+        ui: { /* ... */ },
+        actions: { /* ... */ },
+        validation: { /* ... */ },
     },
 
     // Feature-specific messages
     orders: {
-        list: {
-            /* ... */
-        },
-        create: {
-            /* ... */
-        },
-        edit: {
-            /* ... */
-        },
+        list: { /* ... */ },
+        create: { /* ... */ },
+        edit: { /* ... */ },
     },
 
     systems: {
-        list: {
-            /* ... */
-        },
-        details: {
-            /* ... */
-        },
-        filters: {
-            /* ... */
-        },
+        list: { /* ... */ },
+        details: { /* ... */ },
+        filters: { /* ... */ },
     },
 
     // Forms
     forms: {
-        user: {
-            /* ... */
-        },
-        order: {
-            /* ... */
-        },
+        user: { /* ... */ },
+        order: { /* ... */ },
     },
 }
 ```
@@ -262,8 +246,8 @@ The `message` object provides full TypeScript autocomplete and type checking:
 
 ```typescript
 // TypeScript knows all available message paths
-fm({ id: message.common.ui.appName }) // ✅ Valid
-fm({ id: message.invalid.path }) // ❌ TypeScript error
+fm({ id: message.common.ui.appName }) // Valid
+fm({ id: message.invalid.path }) // TypeScript error
 ```
 
 This ensures you can't reference non-existent message keys at compile time.

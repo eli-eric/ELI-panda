@@ -519,6 +519,7 @@ export const messages = {
                 parentUID: { label: 'ParentUID' }, // codebook of criticalities - SYSTEM_CRITICALITY_CLASS
                 physicalItem: {
                     itemUsage: { label: 'Item Usage' }, // codebook of item usage - ITEM_USAGE
+                    partNumber: { label: 'Part Number' },
                     serialNumber: {
                         label: 'Serial Number',
                         placeholder: 'Serial Number',
@@ -1206,6 +1207,104 @@ export const messages = {
         emptyState: {
             title: 'No system codes found',
             description: 'No system codes match your current filters.',
+        },
+    },
+    systemHierarchy: {
+        pages: {
+            hierarchy: 'System Hierarchy',
+        },
+        tree: {
+            title: 'System Tree',
+            collapseAll: 'Collapse All',
+            noSystems: 'No systems found',
+            searchPlaceholder: 'Search systems...',
+        },
+        leaves: {
+            title: 'Subsystems',
+            noLeaves: 'No subsystems found',
+            selectParent: 'Select a system from the tree to view its subsystems',
+            viewParent: 'View Detail',
+        },
+        columns: {
+            name: 'Name',
+            systemCode: 'System Code',
+            systemType: 'System Type',
+            location: 'Location',
+            zone: 'Zone',
+            importance: 'Importance',
+            responsible: 'Responsible',
+            sparesIn: 'Spares In',
+            sparesOut: 'Spares Out',
+        },
+        detail: {
+            backToLeaves: 'Back to list',
+            actions: 'Actions',
+            moveItem: 'Move Item',
+            assignSpares: 'Assign Spares',
+            assignItem: 'Assign Item',
+        },
+        tabs: {
+            detail: 'Detail',
+            persons: 'Persons',
+            physicalItem: 'Physical Item',
+            spareParts: 'Spare Parts',
+            spareFor: 'Spare For',
+            attachments: 'Attachments',
+            history: 'History',
+        },
+        sidebar: {
+            title: 'Quick Info',
+            statistics: 'Statistics',
+            subsystemsCount: 'Subsystems',
+            sparePartsCount: 'Spare Parts',
+            spareCoverage: 'Spare Coverage',
+            metadata: 'Metadata',
+        },
+        fields: {
+            name: 'Name',
+            description: 'Description',
+            systemCode: 'System Code',
+            systemLevel: 'System Level',
+            systemType: 'System Type',
+            location: 'Location',
+            zone: 'Zone',
+            importance: 'Importance',
+            responsible: 'Responsible',
+            owner: 'Owner',
+            team: 'Team',
+            attribute: 'Attribute',
+            noneEntered: 'None entered',
+            clickToEdit: 'Click to edit',
+        },
+        toast: {
+            saving: 'Saving...',
+            saved: 'Saved successfully',
+            failedToSave: 'Failed to save',
+        },
+        persons: {
+            responsible: 'Responsible Person',
+            owner: 'Owner',
+            noPersons: 'No persons assigned',
+        },
+        physicalItem: {
+            title: 'Physical Item',
+            noItem: 'No physical item assigned',
+        },
+        spareParts: {
+            title: 'Spare Parts',
+            noSpareParts: 'No spare parts assigned',
+        },
+        spareFor: {
+            title: 'Spare For',
+            noSpareFor: 'Not a spare for any system',
+        },
+        history: {
+            title: 'History',
+            noHistory: 'No history available',
+            changedAt: 'Changed At',
+            changedBy: 'Changed By',
+            action: 'Action',
+            detail: 'Detail',
         },
     },
     catalogue: {
