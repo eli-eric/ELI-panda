@@ -75,7 +75,7 @@ export const InlineFieldCombobox: FC<InlineFieldComboboxProps> = ({
                 setIsOpen(false)
                 return
             }
-            const selected = options.find((opt) => opt.uid === uid)
+            const selected = options.find(opt => opt.uid === uid)
             if (!selected) return
 
             // Optimistic update - immediately show new value
@@ -151,7 +151,7 @@ export const InlineFieldCombobox: FC<InlineFieldComboboxProps> = ({
                                         {fm({ id: 'common.errors.noResults' })}
                                     </CommandEmpty>
                                     <CommandGroup>
-                                        {options.map((option) => (
+                                        {options.map(option => (
                                             <CommandItem
                                                 key={option.uid}
                                                 value={option.uid}

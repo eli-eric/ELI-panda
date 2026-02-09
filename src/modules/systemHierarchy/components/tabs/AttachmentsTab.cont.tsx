@@ -12,11 +12,7 @@ interface AttachmentsTabProps {
 export const AttachmentsTabContainer: FC<AttachmentsTabProps> = ({ system }) => {
     return (
         <div className="p-4" data-testid={`attachments-${system.uid}`}>
-            <FileManager
-                itemType={FILE_TYPE.SYSTEM}
-                uid={system.uid}
-                hasEditRole
-            />
+            <FileManager itemType={FILE_TYPE.SYSTEM} uid={system.uid} hasEditRole />
         </div>
     )
 }

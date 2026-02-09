@@ -20,10 +20,7 @@ export const MetadataSection: FC<MetadataSectionProps> = ({ title, items }) => {
             )}
             <div className="space-y-1">
                 {items.map((item, index) => (
-                    <div
-                        key={index}
-                        className="flex justify-between items-center text-sm py-0.5"
-                    >
+                    <div key={index} className="flex justify-between items-center text-sm py-0.5">
                         <span className="text-muted-foreground text-xs">{item.label}</span>
                         <span className="text-xs font-medium truncate ml-2 max-w-[60%] text-right">
                             {item.value ?? 'N/A'}

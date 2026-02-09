@@ -82,7 +82,7 @@ export const InlineFieldTextArea: FC<InlineFieldTextAreaProps> = ({
                 <div className="space-y-0">
                     <Textarea
                         value={editValue}
-                        onChange={(e) => setEditValue(e.target.value)}
+                        onChange={e => setEditValue(e.target.value)}
                         onKeyDown={handleKeyDown}
                         autoFocus
                         disabled={effectivePending}

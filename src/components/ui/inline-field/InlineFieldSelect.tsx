@@ -43,7 +43,7 @@ export const InlineFieldSelect: FC<InlineFieldSelectProps> = ({
         setOptimisticValue(value)
     }, [value])
 
-    const selectedOption = options.find((opt) => opt.value === optimisticValue)
+    const selectedOption = options.find(opt => opt.value === optimisticValue)
     const displayValue = selectedOption?.label ?? null
 
     const handleSelect = useCallback(
@@ -73,11 +73,7 @@ export const InlineFieldSelect: FC<InlineFieldSelectProps> = ({
     if (disabled) {
         return (
             <InlineFieldRow label={label} disabled className={className}>
-                <InlineFieldValue
-                    value={displayValue}
-                    placeholder={placeholder}
-                    disabled
-                />
+                <InlineFieldValue value={displayValue} placeholder={placeholder} disabled />
             </InlineFieldRow>
         )
     }
@@ -95,7 +91,7 @@ export const InlineFieldSelect: FC<InlineFieldSelectProps> = ({
                     <SelectValue placeholder={placeholder ?? 'Select...'} />
                 </SelectTrigger>
                 <SelectContent>
-                    {options.map((option) => (
+                    {options.map(option => (
                         <SelectItem key={option.value} value={option.value}>
                             {option.label}
                         </SelectItem>

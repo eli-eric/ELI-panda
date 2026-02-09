@@ -34,8 +34,7 @@ export const SystemTreeComponent: FC<SystemTreeComponentProps> = ({
                     onToggle={onToggle}
                     onSelect={onSelect}
                 >
-                    {isExpanded &&
-                        node.children.map(child => renderNode(child, depth + 1))}
+                    {isExpanded && node.children.map(child => renderNode(child, depth + 1))}
                 </TreeNode>
             )
         },

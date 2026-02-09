@@ -41,12 +41,7 @@ export const InlineFieldValue: FC<InlineFieldValueProps> = ({
                 className,
             )}
         >
-            <span
-                className={cn(
-                    'truncate',
-                    isEmpty && 'text-muted-foreground italic',
-                )}
-            >
+            <span className={cn('truncate', isEmpty && 'text-muted-foreground italic')}>
                 {isEmpty ? displayPlaceholder : value}
             </span>
             <div className="flex items-center gap-1 shrink-0">

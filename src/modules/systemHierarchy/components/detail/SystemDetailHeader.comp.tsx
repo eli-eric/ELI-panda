@@ -18,12 +18,7 @@ export const SystemDetailHeader: FC<SystemDetailHeaderProps> = ({ system, onBack
 
     return (
         <div className="flex items-center gap-3 border-b border-border px-4 py-2">
-            <Button
-                variant="ghost"
-                size="sm"
-                onClick={onBack}
-                className="h-8 gap-1.5 px-2 text-xs"
-            >
+            <Button variant="ghost" size="sm" onClick={onBack} className="h-8 gap-1.5 px-2 text-xs">
                 <ArrowLeft className="size-3.5" />
                 {fm({ id: message.systemHierarchy.detail.backToLeaves })}
             </Button>

@@ -91,7 +91,7 @@ export const InlineFieldInput: FC<InlineFieldInputProps> = ({
                     <div className="flex items-center gap-2">
                         <Input
                             value={editValue}
-                            onChange={(e) => setEditValue(e.target.value)}
+                            onChange={e => setEditValue(e.target.value)}
                             onKeyDown={handleKeyDown}
                             type={type}
                             autoFocus

@@ -73,7 +73,7 @@ export const PhysicalItemTabContainer: FC<PhysicalItemTabProps> = ({ system }) =
                     id: message.systemsPage.systemDetail.form.physicalItem.serialNumber.label,
                 })}
                 value={physicalItem.serialNumber ?? null}
-                onSave={(value) => handleSaveField('serialNumber', value)}
+                onSave={value => handleSaveField('serialNumber', value)}
                 isPending={isPending}
             />
 
@@ -84,7 +84,7 @@ export const PhysicalItemTabContainer: FC<PhysicalItemTabProps> = ({ system }) =
                 value={physicalItem.itemUsage?.uid ?? null}
                 displayValue={physicalItem.itemUsage?.name ?? null}
                 codebook={CODEBOOK.ITEM_USAGE}
-                onSave={(uid) => handleSaveField('itemUsageUid', uid)}
+                onSave={uid => handleSaveField('itemUsageUid', uid)}
                 isPending={isPending}
             />
 
@@ -95,14 +95,14 @@ export const PhysicalItemTabContainer: FC<PhysicalItemTabProps> = ({ system }) =
                 value={physicalItem.conditionStatus?.uid ?? null}
                 displayValue={physicalItem.conditionStatus?.name ?? null}
                 codebook={CODEBOOK.ITEM_CONDITION_STATUS}
-                onSave={(uid) => handleSaveField('conditionStatusUid', uid)}
+                onSave={uid => handleSaveField('conditionStatusUid', uid)}
                 isPending={isPending}
             />
 
             <InlineFieldTextArea
                 label={fm({ id: message.systemsPage.systemDetail.form.physicalItem.notes.label })}
                 value={physicalItem.notes ?? null}
-                onSave={(value) => handleSaveField('notes', value)}
+                onSave={value => handleSaveField('notes', value)}
                 isPending={isPending}
             />
 

@@ -38,7 +38,7 @@ export const PersonsTabContainer: FC<PersonsTabProps> = ({ system }) => {
                 value={system.responsible?.uid ?? null}
                 displayValue={system.responsible?.name ?? null}
                 codebook={CODEBOOK.EMPLOYEE}
-                onSave={(uid) => handleSaveField('responsibleUid', uid)}
+                onSave={uid => handleSaveField('responsibleUid', uid)}
                 isPending={isPending}
             />
 
@@ -47,7 +47,7 @@ export const PersonsTabContainer: FC<PersonsTabProps> = ({ system }) => {
                 value={system.owner?.uid ?? null}
                 displayValue={system.owner?.name ?? null}
                 codebook={CODEBOOK.EMPLOYEE}
-                onSave={(uid) => handleSaveField('ownerUid', uid)}
+                onSave={uid => handleSaveField('ownerUid', uid)}
                 isPending={isPending}
                 disabled
             />
@@ -57,7 +57,7 @@ export const PersonsTabContainer: FC<PersonsTabProps> = ({ system }) => {
                 value={system.responsibleTeam?.uid ?? null}
                 displayValue={system.responsibleTeam?.name ?? null}
                 codebook={CODEBOOK.TEAM}
-                onSave={(uid) => handleSaveField('responsibleTeamUid', uid)}
+                onSave={uid => handleSaveField('responsibleTeamUid', uid)}
                 isPending={isPending}
             />
         </div>

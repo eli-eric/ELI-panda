@@ -68,7 +68,7 @@ export const useSystemDetail = (leafUid: string | null) => {
               parentPath:
                   systemDetail.parentPath
                       ?.filter((p): p is NonNullable<typeof p> => p !== null)
-                      .map((p) => ({
+                      .map(p => ({
                           uid: p.uid ?? '',
                           name: p.name ?? '',
                       })) ?? null,

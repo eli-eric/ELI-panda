@@ -16,13 +16,7 @@ export const InlineFieldRow: FC<InlineFieldRowProps> = ({
     className,
 }) => {
     return (
-        <div
-            className={cn(
-                'flex items-start gap-4 py-2',
-                disabled && 'opacity-60',
-                className,
-            )}
-        >
+        <div className={cn('flex items-start gap-4 py-2', disabled && 'opacity-60', className)}>
             <div className="w-40 shrink-0 pt-1.5">
                 <span className="text-sm font-medium text-muted-foreground">{label}</span>
             </div>

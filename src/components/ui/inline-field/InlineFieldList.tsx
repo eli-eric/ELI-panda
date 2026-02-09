@@ -55,13 +55,15 @@ export const InlineFieldList: FC<InlineFieldListProps> = ({
                     </div>
                 ) : (
                     <div className="flex flex-wrap gap-1.5">
-                        {items.map((item) => (
+                        {items.map(item => (
                             <Badge
                                 key={item.uid}
                                 variant="secondary"
                                 className="gap-1.5 pr-1 group"
                             >
-                                <span>{renderItem ? renderItem(item) : defaultRenderItem(item)}</span>
+                                <span>
+                                    {renderItem ? renderItem(item) : defaultRenderItem(item)}
+                                </span>
                                 {!disabled && (
                                     <Button
                                         type="button"

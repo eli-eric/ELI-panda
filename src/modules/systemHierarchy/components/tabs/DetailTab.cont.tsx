@@ -60,14 +60,14 @@ export const DetailTabContainer: FC<DetailTabProps> = ({ system }) => {
             <InlineFieldInput
                 label={fm({ id: message.systemHierarchy.fields.name })}
                 value={system.name}
-                onSave={(value) => handleSaveField('name', value)}
+                onSave={value => handleSaveField('name', value)}
                 isPending={isPending}
             />
 
             <InlineFieldInput
                 label={fm({ id: message.systemHierarchy.fields.systemCode })}
                 value={system.systemCode ?? null}
-                onSave={(value) => handleSaveField('systemCode', value)}
+                onSave={value => handleSaveField('systemCode', value)}
                 isPending={isPending}
                 rightAction={
                     <Button
@@ -87,7 +87,7 @@ export const DetailTabContainer: FC<DetailTabProps> = ({ system }) => {
                 label={fm({ id: message.systemHierarchy.fields.systemLevel })}
                 value={system.systemLevel ?? null}
                 options={SYSTEM_LEVEL_OPTIONS}
-                onSave={(value) => handleSaveField('systemLevel', value)}
+                onSave={value => handleSaveField('systemLevel', value)}
                 isPending={isPending}
             />
 
@@ -95,8 +95,8 @@ export const DetailTabContainer: FC<DetailTabProps> = ({ system }) => {
                 label={fm({ id: message.systemHierarchy.fields.systemType })}
                 value={system.systemType?.uid ?? null}
                 displayValue={system.systemType?.name ?? null}
-                onOpenModal={(onSelect) => openSystemTypeModal(onSelect)}
-                onSave={(uid) => handleSaveField('systemTypeUid', uid)}
+                onOpenModal={onSelect => openSystemTypeModal(onSelect)}
+                onSave={uid => handleSaveField('systemTypeUid', uid)}
                 isPending={isPending}
             />
 
@@ -104,8 +104,8 @@ export const DetailTabContainer: FC<DetailTabProps> = ({ system }) => {
                 label={fm({ id: message.systemHierarchy.fields.location })}
                 value={system.location?.uid ?? null}
                 displayValue={system.location?.name ?? null}
-                onOpenModal={(onSelect) => openLocationModal(onSelect)}
-                onSave={(uid) => handleSaveField('locationUid', uid)}
+                onOpenModal={onSelect => openLocationModal(onSelect)}
+                onSave={uid => handleSaveField('locationUid', uid)}
                 isPending={isPending}
             />
 
@@ -114,14 +114,14 @@ export const DetailTabContainer: FC<DetailTabProps> = ({ system }) => {
                 value={system.zone?.uid ?? null}
                 displayValue={system.zone?.name ?? null}
                 codebook={CODEBOOK.ZONE}
-                onSave={(uid) => handleSaveField('zoneUid', uid)}
+                onSave={uid => handleSaveField('zoneUid', uid)}
                 isPending={isPending}
             />
 
             <InlineFieldTextArea
                 label={fm({ id: message.systemHierarchy.fields.description })}
                 value={system.description ?? null}
-                onSave={(value) => handleSaveField('description', value)}
+                onSave={value => handleSaveField('description', value)}
                 isPending={isPending}
             />
         </div>

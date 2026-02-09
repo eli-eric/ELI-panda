@@ -116,7 +116,8 @@ export const useSystemFieldUpdate = (currentSystem?: SystemFieldCache) => {
                 // Get the GraphQL field name
                 const gqlFieldName = FIELD_NAME_MAP[fieldName] ?? fieldName.replace('Uid', '')
                 // Get current value for disconnect from our tracked ref
-                const currentUid = currentValuesRef.current[gqlFieldName as keyof SystemFieldCache]?.uid
+                const currentUid =
+                    currentValuesRef.current[gqlFieldName as keyof SystemFieldCache]?.uid
 
                 // Build relationship update - only include disconnect if there's something to disconnect
                 const relationshipUpdate: Record<string, unknown> = {}
