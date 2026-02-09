@@ -3,6 +3,7 @@ import type { FC } from 'react'
 import { useCallback } from 'react'
 
 import { cn } from '@/lib/utils'
+import { highlightText } from '@/utils'
 
 import type { HierarchyNode } from '../../types'
 
@@ -14,6 +15,7 @@ interface TreeNodeProps {
     onToggle: (uid: string) => void
     onSelect: (uid: string) => void
     children?: React.ReactNode
+    search?: string
 }
 
 export const TreeNode: FC<TreeNodeProps> = ({
@@ -24,6 +26,7 @@ export const TreeNode: FC<TreeNodeProps> = ({
     onToggle,
     onSelect,
     children,
+    search,
 }) => {
     const hasChildren = node.children.length > 0
     const ChevronIcon = isExpanded ? ChevronDown : ChevronRight
@@ -64,10 +67,12 @@ export const TreeNode: FC<TreeNodeProps> = ({
                     <span className="w-[18px] shrink-0" />
                 )}
                 <FolderIcon className="size-4 shrink-0 text-muted-foreground" />
-                <span className="truncate flex-1">{node.name}</span>
+                <span className="truncate flex-1">
+                    {search ? highlightText(node.name, search) : node.name}
+                </span>
                 {node.systemCode && (
                     <code className="text-[10px] text-muted-foreground shrink-0 rounded bg-muted px-1 py-0.5">
-                        {node.systemCode}
+                        {search ? highlightText(node.systemCode, search) : node.systemCode}
                     </code>
                 )}
             </div>
