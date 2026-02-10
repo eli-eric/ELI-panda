@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 import * as React from 'react'
 import { useIntl } from 'react-intl'
 
@@ -11,11 +12,11 @@ import {
     SidebarHeader,
     SidebarMenuButton,
     SidebarRail,
-    useSidebar,
 } from '@/components/ui/sidebar'
 import { useFilteredNavigation } from '@/hooks/useFilteredNavigation'
 import { message } from '@/i18n/src/messages'
 import { NAV_ITEMS, OTHERS_NAV_ITEMS } from '@/lib/navigation/config'
+import { PATH } from '@/types/constants/paths'
 
 import { NavMain } from './nav-main'
 import { NavProjects } from './nav-projects'
@@ -25,7 +26,7 @@ import { SidebarSearch } from './sidebar-search'
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {}
 
 export function AppSidebar({ ...props }: AppSidebarProps) {
-    const { toggleSidebar } = useSidebar()
+    const { push } = useRouter()
     const { formatMessage: fm } = useIntl()
 
     const filteredNavMain = useFilteredNavigation(NAV_ITEMS)
@@ -37,7 +38,7 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
                 <SidebarMenuButton
                     size="lg"
                     className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground cursor-pointer"
-                    onClick={() => toggleSidebar()}
+                    onClick={() => push(PATH.DASHBOARD)}
                 >
                     <div className="relative flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-orange-foreground">
                         <Image
