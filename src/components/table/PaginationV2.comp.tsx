@@ -64,6 +64,7 @@ export function PaginationV2({
 
     return (
         <nav
+            id="paging"
             data-testid="pagination"
             className="flex items-center justify-between border-t border-border bg-background px-3 py-2 sm:px-6 sticky bottom-0 z-10"
             aria-label="Pagination"
