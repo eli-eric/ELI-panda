@@ -38,6 +38,7 @@ export function Table<T extends object>({
     enableFooter = false,
     enablePinning = false,
     defaultPageSize = 10,
+    paginationResetKey,
     loading = false,
     skeletonRowCount = 5,
     skipEmptyMessage = false,
@@ -102,7 +103,7 @@ export function Table<T extends object>({
         if (enablePagination) {
             setPagination(prev => ({ ...prev, pageIndex: 0 }))
         }
-    }, [columnFilters, enablePagination])
+    }, [columnFilters, enablePagination, paginationResetKey])
 
     // Apply column-specific filter functions
     const columnsWithFiltering = React.useMemo(() => {

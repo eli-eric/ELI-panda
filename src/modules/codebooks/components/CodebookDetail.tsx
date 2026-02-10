@@ -13,7 +13,7 @@ interface Props {
     data: CodebookType[]
     isLoading: boolean
     onAdd: () => void
-    onUpdate: (uid: string, name: string) => Promise<void>
+    onUpdate: (data: { uid: string; name: string; code?: string }) => Promise<void>
     onDelete: (value: CodebookType) => void
 }
 
@@ -29,10 +29,10 @@ export const CodebookDetail = ({
     const [updatingUid, setUpdatingUid] = useState<string>()
 
     const handleUpdate = useCallback(
-        async (uid: string, name: string) => {
-            setUpdatingUid(uid)
+        async (data: { uid: string; name: string; code?: string }) => {
+            setUpdatingUid(data.uid)
             try {
-                await onUpdate(uid, name)
+                await onUpdate(data)
             } finally {
                 setUpdatingUid(undefined)
             }
