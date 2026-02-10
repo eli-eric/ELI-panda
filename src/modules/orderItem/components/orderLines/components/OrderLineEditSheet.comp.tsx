@@ -21,7 +21,7 @@ const orderLineFormSchema = yup.object({
     catalogueNumber: yup.string().required('Catalogue number is required'),
     price: yup.number().nullable().optional(),
     quantity: yup.number().max(100).nullable().optional(),
-    system: yup.object().nullable().required('Parent system is required'),
+    system: yup.object().nullable().optional(),
     serialNumber: yup.string().nullable().optional(),
 })
 
