@@ -60,8 +60,8 @@ export const CodebooksContainer = () => {
     }, [selectedCodebook, queryKey, openModal, closeModal, fm])
 
     const handleUpdate = useCallback(
-        async (uid: string, name: string) => {
-            await mutations.update({ uid, name })
+        async (data: { uid: string; name: string; code?: string }) => {
+            await mutations.update(data)
         },
         [mutations],
     )
