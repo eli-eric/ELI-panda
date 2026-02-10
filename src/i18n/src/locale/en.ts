@@ -909,7 +909,7 @@ export const messages = {
             manageValues: 'Manage codebook values',
             addValue: 'Add value',
             infoTooltip:
-                'Click on a value name to edit it inline. Confirm with the checkmark button or press Enter. Cancel with the X button or press Escape.',
+                'Click on a value name or code to edit it inline. Confirm with the checkmark button or press Enter. Cancel with the X button or press Escape.',
         },
         emptyState: {
             title: 'Select a codebook',
@@ -931,6 +931,7 @@ export const messages = {
             savingChanges: 'Saving changes...',
             changesSaved: 'Changes saved',
             failedToSave: 'Failed to save changes',
+            codeAlreadyExists: 'This code already exists',
             deletingValue: 'Deleting value...',
             valueDeleted: 'Value deleted',
             failedToDelete: 'Failed to delete value',
