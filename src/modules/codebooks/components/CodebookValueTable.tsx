@@ -17,7 +17,7 @@ interface Props {
     data: CodebookType[]
     isLoading: boolean
     onAdd: () => void
-    onUpdate: (uid: string, name: string) => Promise<void>
+    onUpdate: (data: { uid: string; name: string; code?: string }) => Promise<void>
     onDelete: (value: CodebookType) => void
     updatingUid?: string
 }
@@ -37,7 +37,10 @@ export const CodebookValueTable = ({
         if (!search) return data
         const lower = search.toLowerCase()
         return data.filter(
-            v => v.name.toLowerCase().includes(lower) || v.uid.toLowerCase().includes(lower),
+            v =>
+                v.name.toLowerCase().includes(lower) ||
+                v.uid.toLowerCase().includes(lower) ||
+                (v.code ?? '').toLowerCase().includes(lower),
         )
     }, [data, search])
 
@@ -49,7 +52,13 @@ export const CodebookValueTable = ({
                 cell: ({ row }) => (
                     <CodebookInlineEdit
                         value={row.original.name}
-                        onSave={newName => onUpdate(row.original.uid, newName)}
+                        onSave={newName =>
+                            onUpdate({
+                                uid: row.original.uid,
+                                name: newName,
+                                code: row.original.code,
+                            })
+                        }
                         isPending={updatingUid === row.original.uid}
                     />
                 ),
@@ -58,10 +67,18 @@ export const CodebookValueTable = ({
             {
                 accessorKey: 'code',
                 header: fm({ id: message.codebooksPage.table.code }),
-                cell: ({ getValue }) => (
-                    <code className="rounded bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">
-                        {getValue<string | undefined>()}
-                    </code>
+                cell: ({ row }) => (
+                    <CodebookInlineEdit
+                        value={row.original.code ?? ''}
+                        onSave={newCode =>
+                            onUpdate({
+                                uid: row.original.uid,
+                                name: row.original.name,
+                                code: newCode,
+                            })
+                        }
+                        isPending={updatingUid === row.original.uid}
+                    />
                 ),
                 size: 200,
             },
@@ -125,6 +142,7 @@ export const CodebookValueTable = ({
                     data={filteredData}
                     enablePagination
                     defaultPageSize={10}
+                    paginationResetKey={search}
                     emptyMessage={
                         search
                             ? fm({ id: message.codebooksPage.table.noMatchingValues })

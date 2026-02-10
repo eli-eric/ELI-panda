@@ -88,6 +88,12 @@ export interface TableProps<T extends object> {
     defaultPageSize?: number
 
     /**
+     * External signal that resets pagination to the first page when it changes.
+     * Useful for client-side search inputs outside of table column filters.
+     */
+    paginationResetKey?: unknown
+
+    /**
      * Whether the table is in a loading state.
      * Displays skeleton rows when true.
      * @default false
