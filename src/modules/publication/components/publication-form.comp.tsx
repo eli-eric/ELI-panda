@@ -30,10 +30,13 @@ export const PublicationFormComponent = () => {
                 <Col lg={12}>
                     <Input {...fields.mediaType} />
                 </Col>
-                <Col lg={6}>
+                <Col lg={4}>
                     <Listbox {...fields.mediaTypeCb} />
                 </Col>
-                <Col lg={6}>
+                <Col lg={4}>
+                    <Listbox {...fields.eliPublication} customOptions={['YES', 'NO']} />
+                </Col>
+                <Col lg={4}>
                     <Input {...fields.code} />
                 </Col>
                 <Col lg={4}></Col>
