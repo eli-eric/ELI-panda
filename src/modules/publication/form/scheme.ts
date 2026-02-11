@@ -2,6 +2,8 @@ import { z } from 'zod'
 
 import { isFeatureEnabled } from '@/config/featureFlags'
 
+import { ELI_PUBLICATION } from '../types/constants'
+
 const codebookSchema = z.object({
     uid: z.string().min(1, 'UID is required'),
     name: z.string().min(1, 'Name is required'),
@@ -54,6 +56,7 @@ const authorsDepartmentSchema = z.object({
 
 export const publicationPeerReviewedSchema = z.object({
     // Required fields
+    eliPublication: z.nativeEnum(ELI_PUBLICATION).default(ELI_PUBLICATION.YES),
     code: z.string().min(1, 'Code is required'),
     doi: z.string().min(1, 'DOI is required'),
     openAccessType: codebookSchema.refine(val => val, {
@@ -138,6 +141,7 @@ export const publicationPeerReviewedSchema = z.object({
 
 export const publicationOtherSchema = z.object({
     // Required fields
+    eliPublication: z.nativeEnum(ELI_PUBLICATION).default(ELI_PUBLICATION.YES),
     code: z.string().min(1, 'Code is required'),
     openAccessType: codebookSchema.refine(val => val, {
         message: 'Open Access Type is required',

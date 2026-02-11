@@ -1,6 +1,7 @@
 import { isFeatureEnabled } from '@/config/featureFlags'
 import type { SelectedResearcher } from '@/modules/shared/form/researcherSelect'
 
+import { ELI_PUBLICATION } from '../types/constants'
 import type { Publication } from '../types/responses'
 
 /**
@@ -9,6 +10,7 @@ import type { Publication } from '../types/responses'
  */
 export const formatFormData = (data: any): Publication => ({
     ...data,
+    eliPublication: data.eliPublication ?? ELI_PUBLICATION.YES,
     allAuthorsCount: Number(data.allAuthorsCount),
     eliAuthorsCount: Number(data.eliAuthorsCount),
     volume: data.volume ? Number(data.volume) : null,
@@ -39,6 +41,7 @@ export const formatPublication = (publication?: Publication): any | undefined =>
 
     return {
         ...publication,
+        eliPublication: publication.eliPublication ?? ELI_PUBLICATION.YES,
         language: publication.language || 'English',
         // Ensure eliResearchers is always an array for the form
         eliResearchers: publication.eliResearchers ?? [],

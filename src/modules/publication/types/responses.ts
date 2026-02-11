@@ -2,11 +2,14 @@ import type { SelectedGrant } from '@/modules/shared/form/grantSelect'
 import type { SelectedResearcher } from '@/modules/shared/form/researcherSelect'
 import type { CodebookType } from '@/types/responses/codebook'
 
+import type { ELI_PUBLICATION } from './constants'
+
 export interface Publication {
     uid?: string
     /** @deprecated use mediaTypeCb */
     mediaType: string
     mediaTypeCb?: CodebookType
+    eliPublication: ELI_PUBLICATION
     code: string
     /** @deprecated use experimentalSystemCb */
     experimentalSystem?: string

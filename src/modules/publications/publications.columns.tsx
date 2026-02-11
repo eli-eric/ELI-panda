@@ -37,6 +37,12 @@ export const usePublicationColumns = () => {
                 size: 200,
             },
             {
+                id: 'eliPublication',
+                header: fm({ id: message.publicationsPage.columns.eliPublication }),
+                accessorFn: row => row.eliPublication,
+                size: 160,
+            },
+            {
                 id: 'experimentalSystem',
                 header: 'Experimental System',
                 accessorFn: row => row.experimentalSystemCb?.name || row.experimentalSystem,
