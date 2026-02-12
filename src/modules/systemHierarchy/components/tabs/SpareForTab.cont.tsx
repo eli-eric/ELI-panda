@@ -4,6 +4,7 @@ import { useIntl } from 'react-intl'
 import { message } from '@/i18n/src/messages'
 
 import type { SystemLeaf } from '../../types'
+import { hasSpareFor } from '../../utils/predicates'
 
 interface SpareForTabProps {
     system: SystemLeaf
@@ -12,9 +13,7 @@ interface SpareForTabProps {
 export const SpareForTabContainer: FC<SpareForTabProps> = ({ system }) => {
     const { formatMessage: fm } = useIntl()
 
-    const hasSpareFor = (system.sparesOut ?? 0) > 0
-
-    if (!hasSpareFor) {
+    if (!hasSpareFor(system)) {
         return (
             <div className="p-4 text-sm text-muted-foreground">
                 {fm({ id: message.systemHierarchy.spareFor.noSpareFor })}

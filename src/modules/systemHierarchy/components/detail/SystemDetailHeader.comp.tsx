@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { message } from '@/i18n/src/messages'
 
 import type { SystemLeaf } from '../../types'
+import { hasPhysicalItem } from '../../utils/predicates'
 import { ActionsDropdown } from './ActionsDropdown.comp'
 
 interface SystemDetailHeaderProps {
@@ -32,7 +33,7 @@ export const SystemDetailHeader: FC<SystemDetailHeaderProps> = ({ system, onBack
                     )}
                 </div>
             </div>
-            <ActionsDropdown uid={system.uid} />
+            <ActionsDropdown uid={system.uid} hasPhysicalItem={hasPhysicalItem(system)} />
         </div>
     )
 }

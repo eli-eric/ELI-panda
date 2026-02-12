@@ -87,6 +87,8 @@ export const useSystemDetail = (leafUid: string | null) => {
               operators: systemDetail.operators ?? [],
               maintainedBy: systemDetail.maintainedBy ?? [],
               attribute: systemDetail.attribute ?? null,
+              sparesIn: systemDetail.sparePartsConnection?.edges?.length ?? 0,
+              sparesOut: systemDetail.sparePartsFor?.length ?? 0,
           }
         : null
 

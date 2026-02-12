@@ -8,6 +8,7 @@ import { useHierarchyNavigation } from '../../hooks/useHierarchyNavigation'
 import type { SystemLeaf } from '../../types'
 import type { HierarchyTab } from '../../types/constants'
 import { HIERARCHY_TABS } from '../../types/constants'
+import { hasPhysicalItem, hasSpareFor, hasSpareParts } from '../../utils/predicates'
 import { AttachmentsTabContainer } from '../tabs/AttachmentsTab.cont'
 import { DetailTabContainer } from '../tabs/DetailTab.cont'
 import { HistoryTabContainer } from '../tabs/HistoryTab.cont'
@@ -24,9 +25,15 @@ export const SystemDetailTabsContainer: FC<SystemDetailTabsProps> = ({ system })
     const { formatMessage: fm } = useIntl()
     const { activeTab, setActiveTab } = useHierarchyNavigation()
 
+    const isTabHidden =
+        (activeTab === HIERARCHY_TABS.PHYSICAL_ITEM && !hasPhysicalItem(system)) ||
+        (activeTab === HIERARCHY_TABS.SPARE_PARTS && !hasSpareParts(system)) ||
+        (activeTab === HIERARCHY_TABS.SPARE_FOR && !hasSpareFor(system))
+    const effectiveTab = isTabHidden ? HIERARCHY_TABS.DETAIL : activeTab
+
     return (
         <Tabs
-            value={activeTab}
+            value={effectiveTab}
             onValueChange={value => setActiveTab(value as HierarchyTab)}
             className="flex flex-col h-full"
         >
@@ -37,15 +44,21 @@ export const SystemDetailTabsContainer: FC<SystemDetailTabsProps> = ({ system })
                 <TabsTrigger value={HIERARCHY_TABS.PERSONS}>
                     {fm({ id: message.systemHierarchy.tabs.persons })}
                 </TabsTrigger>
-                <TabsTrigger value={HIERARCHY_TABS.PHYSICAL_ITEM}>
-                    {fm({ id: message.systemHierarchy.tabs.physicalItem })}
-                </TabsTrigger>
-                <TabsTrigger value={HIERARCHY_TABS.SPARE_PARTS}>
-                    {fm({ id: message.systemHierarchy.tabs.spareParts })}
-                </TabsTrigger>
-                <TabsTrigger value={HIERARCHY_TABS.SPARE_FOR}>
-                    {fm({ id: message.systemHierarchy.tabs.spareFor })}
-                </TabsTrigger>
+                {hasPhysicalItem(system) && (
+                    <TabsTrigger value={HIERARCHY_TABS.PHYSICAL_ITEM}>
+                        {fm({ id: message.systemHierarchy.tabs.physicalItem })}
+                    </TabsTrigger>
+                )}
+                {hasSpareParts(system) && (
+                    <TabsTrigger value={HIERARCHY_TABS.SPARE_PARTS}>
+                        {fm({ id: message.systemHierarchy.tabs.spareParts })}
+                    </TabsTrigger>
+                )}
+                {hasSpareFor(system) && (
+                    <TabsTrigger value={HIERARCHY_TABS.SPARE_FOR}>
+                        {fm({ id: message.systemHierarchy.tabs.spareFor })}
+                    </TabsTrigger>
+                )}
                 <TabsTrigger value={HIERARCHY_TABS.ATTACHMENTS}>
                     {fm({ id: message.systemHierarchy.tabs.attachments })}
                 </TabsTrigger>
@@ -60,15 +73,21 @@ export const SystemDetailTabsContainer: FC<SystemDetailTabsProps> = ({ system })
                 <TabsContent value={HIERARCHY_TABS.PERSONS}>
                     <PersonsTabContainer system={system} />
                 </TabsContent>
-                <TabsContent value={HIERARCHY_TABS.PHYSICAL_ITEM}>
-                    <PhysicalItemTabContainer system={system} />
-                </TabsContent>
-                <TabsContent value={HIERARCHY_TABS.SPARE_PARTS}>
-                    <SparePartsTabContainer system={system} />
-                </TabsContent>
-                <TabsContent value={HIERARCHY_TABS.SPARE_FOR}>
-                    <SpareForTabContainer system={system} />
-                </TabsContent>
+                {hasPhysicalItem(system) && (
+                    <TabsContent value={HIERARCHY_TABS.PHYSICAL_ITEM}>
+                        <PhysicalItemTabContainer system={system} />
+                    </TabsContent>
+                )}
+                {hasSpareParts(system) && (
+                    <TabsContent value={HIERARCHY_TABS.SPARE_PARTS}>
+                        <SparePartsTabContainer system={system} />
+                    </TabsContent>
+                )}
+                {hasSpareFor(system) && (
+                    <TabsContent value={HIERARCHY_TABS.SPARE_FOR}>
+                        <SpareForTabContainer system={system} />
+                    </TabsContent>
+                )}
                 <TabsContent value={HIERARCHY_TABS.ATTACHMENTS}>
                     <AttachmentsTabContainer system={system} />
                 </TabsContent>

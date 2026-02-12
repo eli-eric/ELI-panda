@@ -5,6 +5,7 @@ import { Separator } from '@/components/ui/separator'
 import { message } from '@/i18n/src/messages'
 
 import type { SystemLeaf } from '../../types'
+import { hasPhysicalItem } from '../../utils/predicates'
 import { MetadataSection } from './MetadataSection.comp'
 
 interface QuickInfoSidebarProps {
@@ -109,11 +110,15 @@ export const QuickInfoSidebar: FC<QuickInfoSidebarProps> = ({ system }) => {
                     title={fm({ id: message.systemHierarchy.sidebar.statistics })}
                     items={statsItems}
                 />
-                <Separator />
-                <MetadataSection
-                    title={fm({ id: message.systemHierarchy.physicalItem.title })}
-                    items={physicalItemItems}
-                />
+                {hasPhysicalItem(system) && (
+                    <>
+                        <Separator />
+                        <MetadataSection
+                            title={fm({ id: message.systemHierarchy.physicalItem.title })}
+                            items={physicalItemItems}
+                        />
+                    </>
+                )}
             </div>
         </div>
     )

@@ -13,9 +13,10 @@ import { message } from '@/i18n/src/messages'
 
 interface ActionsDropdownProps {
     uid: string
+    hasPhysicalItem: boolean
 }
 
-export const ActionsDropdown: FC<ActionsDropdownProps> = ({ uid }) => {
+export const ActionsDropdown: FC<ActionsDropdownProps> = ({ uid, hasPhysicalItem }) => {
     const { formatMessage: fm } = useIntl()
 
     return (
@@ -26,18 +27,22 @@ export const ActionsDropdown: FC<ActionsDropdownProps> = ({ uid }) => {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" data-testid={`actions-${uid}`}>
-                <DropdownMenuItem className="cursor-pointer">
-                    <Move className="h-4 w-4 mr-2" />
-                    {fm({ id: message.systemHierarchy.detail.moveItem })}
-                </DropdownMenuItem>
+                {hasPhysicalItem && (
+                    <DropdownMenuItem className="cursor-pointer">
+                        <Move className="h-4 w-4 mr-2" />
+                        {fm({ id: message.systemHierarchy.detail.moveItem })}
+                    </DropdownMenuItem>
+                )}
                 <DropdownMenuItem className="cursor-pointer">
                     <Wrench className="h-4 w-4 mr-2" />
                     {fm({ id: message.systemHierarchy.detail.assignSpares })}
                 </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer">
-                    <Package className="h-4 w-4 mr-2" />
-                    {fm({ id: message.systemHierarchy.detail.assignItem })}
-                </DropdownMenuItem>
+                {!hasPhysicalItem && (
+                    <DropdownMenuItem className="cursor-pointer">
+                        <Package className="h-4 w-4 mr-2" />
+                        {fm({ id: message.systemHierarchy.detail.assignItem })}
+                    </DropdownMenuItem>
+                )}
             </DropdownMenuContent>
         </DropdownMenu>
     )
