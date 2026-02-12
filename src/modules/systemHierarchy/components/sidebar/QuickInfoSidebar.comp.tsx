@@ -5,6 +5,7 @@ import { Separator } from '@/components/ui/separator'
 import { message } from '@/i18n/src/messages'
 
 import type { SystemLeaf } from '../../types'
+import { hasPhysicalItem } from '../../utils/predicates'
 import { MetadataSection } from './MetadataSection.comp'
 
 interface QuickInfoSidebarProps {
@@ -65,6 +66,33 @@ export const QuickInfoSidebar: FC<QuickInfoSidebarProps> = ({ system }) => {
         },
     ]
 
+    const physicalItemItems = [
+        {
+            label: fm({ id: message.systemsPage.systemDetail.form.physicalItem.eun.label }),
+            value: system.physicalItem?.eun ?? null,
+        },
+        {
+            label: fm({ id: message.systemsPage.systemDetail.form.physicalItem.partNumber.label }),
+            value: system.physicalItem?.catalogueNumber ?? null,
+        },
+        {
+            label: fm({
+                id: message.systemsPage.systemDetail.form.physicalItem.serialNumber.label,
+            }),
+            value: system.physicalItem?.serialNumber ?? null,
+        },
+        {
+            label: fm({ id: message.systemsPage.systemDetail.form.physicalItem.itemUsage.label }),
+            value: system.physicalItem?.itemUsage?.name ?? null,
+        },
+        {
+            label: fm({
+                id: message.systemsPage.systemDetail.form.physicalItem.conditionStatus.label,
+            }),
+            value: system.physicalItem?.conditionStatus?.name ?? null,
+        },
+    ]
+
     return (
         <div className="flex flex-col h-full overflow-y-auto scrollbar-style">
             <div className="border-b border-border px-3 py-2">
@@ -82,6 +110,15 @@ export const QuickInfoSidebar: FC<QuickInfoSidebarProps> = ({ system }) => {
                     title={fm({ id: message.systemHierarchy.sidebar.statistics })}
                     items={statsItems}
                 />
+                {hasPhysicalItem(system) && (
+                    <>
+                        <Separator />
+                        <MetadataSection
+                            title={fm({ id: message.systemHierarchy.physicalItem.title })}
+                            items={physicalItemItems}
+                        />
+                    </>
+                )}
             </div>
         </div>
     )

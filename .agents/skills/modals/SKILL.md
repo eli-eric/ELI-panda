@@ -299,7 +299,9 @@ openModal('dialog', {
 // Good - handles all user actions
 const modalId = openModal('dialog', {
     component: EditForm,
-    props: { /* ... */ },
+    props: {
+        /* ... */
+    },
     onSubmit: data => {
         saveData(data)
         closeModal(modalId)
@@ -333,7 +335,9 @@ openModal('dialog', {
 openModal('sheet', {
     id: 'global-search',
     component: GlobalSearch,
-    props: { /* ... */ },
+    props: {
+        /* ... */
+    },
 })
 
 // Later, from anywhere:
@@ -346,7 +350,9 @@ closeModal('global-search')
 // Good - cleans up resources
 openModal('dialog', {
     component: VideoPlayer,
-    props: { /* ... */ },
+    props: {
+        /* ... */
+    },
     onClose: () => {
         stopVideo()
         clearCache()

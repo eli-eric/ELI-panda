@@ -4,6 +4,7 @@ import { useIntl } from 'react-intl'
 import { message } from '@/i18n/src/messages'
 
 import type { SystemLeaf } from '../../types'
+import { hasSpareParts } from '../../utils/predicates'
 
 interface SparePartsTabProps {
     system: SystemLeaf
@@ -12,9 +13,7 @@ interface SparePartsTabProps {
 export const SparePartsTabContainer: FC<SparePartsTabProps> = ({ system }) => {
     const { formatMessage: fm } = useIntl()
 
-    const hasSpareParts = (system.sparesIn ?? 0) > 0
-
-    if (!hasSpareParts) {
+    if (!hasSpareParts(system)) {
         return (
             <div className="p-4 text-sm text-muted-foreground">
                 {fm({ id: message.systemHierarchy.spareParts.noSpareParts })}
