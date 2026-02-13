@@ -4,6 +4,8 @@ import { useIntl } from 'react-intl'
 
 import { Tooltip } from '@/components/Tooltip'
 import { message } from '@/i18n/src/messages'
+import { IconCell } from '@/modules/systems/components/table/cells/IconCell'
+import type { ITEM_USAGE } from '@/modules/systems/types/constants'
 
 import type { SystemLeaf } from '../../types'
 
@@ -12,6 +14,19 @@ export const useLeavesColumns = () => {
 
     const columns = useMemo(
         (): ColumnDef<SystemLeaf>[] => [
+            {
+                id: 'icon',
+                header: '',
+                size: 41,
+                meta: { sticky: true },
+                cell: ({ row: { original } }) => (
+                    <div>
+                        <IconCell
+                            itemUsageUid={original.physicalItem?.itemUsage?.uid as ITEM_USAGE}
+                        />
+                    </div>
+                ),
+            },
             {
                 header: fm({ id: message.systemHierarchy.columns.systemCode }),
                 accessorKey: 'systemCode',
