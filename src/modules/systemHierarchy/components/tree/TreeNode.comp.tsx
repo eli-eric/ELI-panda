@@ -4,6 +4,7 @@ import { useCallback } from 'react'
 
 import { cn } from '@/lib/utils'
 import { highlightText } from '@/utils'
+import { getFontBySystemLevel } from '@/utils/systemLevel'
 
 import type { HierarchyNode } from '../../types'
 
@@ -66,7 +67,9 @@ export const TreeNode: FC<TreeNodeProps> = ({
                 ) : (
                     <span className="w-[18px] shrink-0" />
                 )}
-                <FolderIcon className="size-4 shrink-0 text-muted-foreground" />
+                <FolderIcon
+                    className={cn('size-4 shrink-0', getFontBySystemLevel(node.systemLevel))}
+                />
                 <span className="truncate flex-1">
                     {search ? highlightText(node.name, search) : node.name}
                 </span>
