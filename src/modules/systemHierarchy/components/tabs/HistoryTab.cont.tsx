@@ -15,11 +15,11 @@ import {
     SelectValue,
 } from '@/components/ui/select'
 import { message } from '@/i18n/src/messages'
-import { HistoryFeeds } from '@/modules/systemItem/components/history/HistoryFeeds'
 import { HISTORY_TYPE } from '@/modules/systemItem/types/constants'
 
 import { useSystemHistory } from '../../hooks/queries/useSystemHistory'
 import type { SystemLeaf } from '../../types'
+import { SystemHistoryFeed } from '../history/SystemHistoryFeed.comp'
 
 interface HistoryTabProps {
     system: SystemLeaf
@@ -153,7 +153,7 @@ export const HistoryTabContainer: FC<HistoryTabProps> = ({ system }) => {
 
             {/* Timeline - flex-1 to fill remaining space */}
             <div className="flex-1 min-h-0 overflow-y-auto scrollbar-style px-4 pb-8">
-                <HistoryFeeds history={filteredHistory} className="space-y-6 pb-6" />
+                <SystemHistoryFeed history={filteredHistory} className="pb-6" />
             </div>
         </div>
     )
