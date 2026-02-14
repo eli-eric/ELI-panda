@@ -148,11 +148,39 @@ export const useSystemFieldUpdate = (currentSystem?: SystemFieldCache) => {
                 update,
             })
 
-            toast.promise(promise, {
-                loading: fm({ id: message.systemHierarchy.toast.saving }),
-                success: fm({ id: message.systemHierarchy.toast.saved }),
-                error: fm({ id: message.common.errors.somethingWentWrong }),
-            })
+            // Custom toast messages for systemCode
+            if (fieldName === 'systemCode') {
+                toast.promise(promise, {
+                    loading: value
+                        ? fm({ id: message.systemHierarchy.toast.generatingCode })
+                        : fm({ id: message.systemHierarchy.toast.releasingCode }),
+                    success: value
+                        ? fm({ id: message.systemHierarchy.toast.codeGenerated })
+                        : fm({ id: message.systemHierarchy.toast.codeReleased }),
+                    error: err => {
+                        // Check for duplicate error
+                        const errorMsg = err?.message?.toLowerCase() || ''
+                        if (
+                            errorMsg.includes('duplicate') ||
+                            errorMsg.includes('already exists') ||
+                            errorMsg.includes('constraint')
+                        ) {
+                            return fm(
+                                { id: message.systemHierarchy.toast.duplicateCode },
+                                { code: String(value || '') },
+                            )
+                        }
+                        return fm({ id: message.common.errors.somethingWentWrong })
+                    },
+                })
+            } else {
+                // Default toast for other fields
+                toast.promise(promise, {
+                    loading: fm({ id: message.systemHierarchy.toast.saving }),
+                    success: fm({ id: message.systemHierarchy.toast.saved }),
+                    error: fm({ id: message.common.errors.somethingWentWrong }),
+                })
+            }
 
             return promise
         },

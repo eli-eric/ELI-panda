@@ -1,11 +1,9 @@
 'use client'
 
-import { Wand2 } from 'lucide-react'
 import type { FC } from 'react'
 import { useCallback } from 'react'
 import { useIntl } from 'react-intl'
 
-import { Button } from '@/components/ui/button'
 import {
     InlineFieldCombobox,
     InlineFieldInput,
@@ -21,6 +19,7 @@ import { SystemLevel } from '@/types/gql/graphql'
 
 import { useSystemFieldUpdate } from '../../hooks/mutations/useSystemFieldUpdate'
 import type { SystemLeaf } from '../../types'
+import { SystemCodeActions } from './SystemCodeActions.comp'
 
 interface DetailTabProps {
     system: SystemLeaf
@@ -51,10 +50,6 @@ export const DetailTabContainer: FC<DetailTabProps> = ({ system }) => {
         [system.uid, updateField],
     )
 
-    const handleGenerateCode = useCallback(() => {
-        // TODO: Implement code generation logic
-    }, [])
-
     return (
         <div className="p-4 space-y-1">
             <InlineFieldInput
@@ -69,18 +64,7 @@ export const DetailTabContainer: FC<DetailTabProps> = ({ system }) => {
                 value={system.systemCode ?? null}
                 onSave={value => handleSaveField('systemCode', value)}
                 isPending={isPending}
-                rightAction={
-                    <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={handleGenerateCode}
-                        className="shrink-0"
-                    >
-                        <Wand2 className="size-4 mr-1" />
-                        {fm({ id: message.common.buttons.generate })}
-                    </Button>
-                }
+                rightAction={<SystemCodeActions system={system} disabled={isPending} />}
             />
 
             <InlineFieldSelect
