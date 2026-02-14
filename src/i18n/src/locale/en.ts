@@ -1301,6 +1301,16 @@ export const messages = {
             changedBy: 'Changed By',
             action: 'Action',
             detail: 'Detail',
+            filters: {
+                historyType: 'Filter by action type',
+                changedByUser: 'Filter by user',
+                all: 'All',
+                general: 'General',
+                itemChanges: 'Item Changes',
+                moves: 'System Moves',
+                itemMoves: 'Item Moves',
+                allUsers: 'All users',
+            },
         },
     },
     catalogue: {
