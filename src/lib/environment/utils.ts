@@ -41,3 +41,14 @@ export const getEnvironmentColor = () => {
 export const getEnvironmentDisplayName = () => {
     return getEnvironmentColor().name
 }
+
+export const getSwaggerApiDocsUrl = () => {
+    switch (PROCESS_ENV) {
+        case ENV.DEV:
+            return 'https://api-dev.panda.eli-beams.eu/swagger/index.html'
+        case ENV.TEST:
+            return 'https://api-test.panda.eli-beams.eu/swagger/index.html'
+        default:
+            return 'https://api.panda.eli-beams.eu/swagger/index.html'
+    }
+}
