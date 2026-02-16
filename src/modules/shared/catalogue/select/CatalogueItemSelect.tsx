@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils'
 import { useCatalogueItems } from '@/modules/catalogue/hooks/useCatalogueItems'
 import { useCategoryList } from '@/modules/catalogue/hooks/useCategoryList'
 import useTableStateStore from '@/store/useTableStateStore'
+import type { PageSizeOption } from '@/types/pagination'
 import type { CatalogueItem } from '@/types/responses/catalogue'
 
 import { FilterBadges } from '../../form/FilterBadges'
@@ -42,7 +43,7 @@ interface CatalogueItemSelectProps {
      * Default page size for pagination
      * @default 10
      */
-    pageSizeDefault?: number
+    pageSizeDefault?: PageSizeOption
 
     /**
      * Additional CSS classes for the container

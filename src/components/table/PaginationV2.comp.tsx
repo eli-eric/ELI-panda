@@ -17,7 +17,7 @@ import {
     SelectValue,
 } from '@/components/ui/select'
 import { message } from '@/i18n/src/messages'
-import type { PageItem, UsePaginationReturn } from '@/types/pagination'
+import type { PageItem, PageSizeOption, UsePaginationReturn } from '@/types/pagination'
 import { generatePageNumbers, PAGE_SIZE_OPTIONS } from '@/types/pagination'
 
 const paginationMessages = message.cataloguePage.pagination
@@ -27,7 +27,7 @@ const MAX_PAGE_SLOTS = 9 // 1 + ellipsis + 3 + current + 3 + ellipsis + last
 
 interface PaginationV2Props extends UsePaginationReturn {
     total: number
-    pageSizeOptions?: readonly number[]
+    pageSizeOptions?: readonly PageSizeOption[]
     showPageSizeSelector?: boolean
 }
 

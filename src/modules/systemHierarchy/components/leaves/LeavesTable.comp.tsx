@@ -54,7 +54,7 @@ export const LeavesTableComponent: FC<LeavesTableProps> = ({
                     table={table}
                     loading={isLoading}
                     tableId={LEAVES_TABLE_ID}
-                    skeletonRowCount={20}
+                    skeletonRowCount={25}
                     getRowProps={({ original: { uid } }) => ({
                         onClick: () => onRowClick(uid),
                         className: 'cursor-pointer hover:text-primary hover:bg-primary/10',
@@ -72,7 +72,7 @@ export const LeavesTableComponent: FC<LeavesTableProps> = ({
                     tableId={LEAVES_TABLE_ID}
                     settings={{
                         enableQueryURL: false,
-                        pageSizeDefault: 20,
+                        pageSizeDefault: 25,
                         total: totalCount,
                     }}
                     onPageChange={handlePageChange}

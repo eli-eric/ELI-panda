@@ -7,6 +7,7 @@ import {
     calculateDisplayRange,
     calculateTotalPages,
     clampPage,
+    DEFAULT_PAGE_SIZE,
     PAGE_SIZE_OPTIONS,
     parseLegacyPagination,
 } from '@/types/pagination'
@@ -30,7 +31,7 @@ export function usePagination({
     tableId,
     enableQueryURL = false,
     total = 0,
-    pageSizeDefault = 50,
+    pageSizeDefault = DEFAULT_PAGE_SIZE,
     pageSizeOptions = PAGE_SIZE_OPTIONS,
     onPageChange,
 }: UsePaginationOptions): UsePaginationReturn {
@@ -136,7 +137,9 @@ export function usePagination({
     const setPageSize = useCallback(
         (size: number) => {
             // Validate size is in options, otherwise use default
-            const validSize = pageSizeOptions.includes(size) ? size : pageSizeDefault
+            const validSize = (pageSizeOptions as readonly number[]).includes(size)
+                ? size
+                : pageSizeDefault
             // Reset to page 1 when changing page size
             updatePagination({ page: 1, pageSize: validSize })
         },

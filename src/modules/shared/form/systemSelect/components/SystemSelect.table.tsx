@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import type { GetRowPropsReturnType } from '@/modules/shared/table/pandaTable/PandaTable'
 import { PandaTableV2 } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
+import type { PageSizeOption } from '@/types/pagination'
 import type { SystemDetail } from '@/types/responses/systems'
 
 import { useSystemSelectColumns } from './SystemSelect.columns'
@@ -15,7 +16,7 @@ interface SystemSelectTableProps {
     onSystemToggle: (system: SystemDetail) => void
     loading?: boolean
     getRowProps?: (row: Row<SystemDetail>) => GetRowPropsReturnType
-    pageSizeDefault?: number
+    pageSizeDefault?: PageSizeOption
     enableQueryURL?: boolean
     className?: string
 }
