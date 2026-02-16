@@ -4,6 +4,7 @@ import { toast } from 'sonner'
 import { message } from 'src/i18n/src/messages'
 
 import { Badge } from '@/components/ui/badge'
+import { getSwaggerApiDocsUrl } from '@/lib/environment/utils'
 
 const messages = message.layout.profile
 const securityMessages = message.profilePage.security
@@ -11,6 +12,7 @@ const securityMessages = message.profilePage.security
 export const UserProfileCard = () => {
     const { formatMessage: fm } = useIntl()
     const user = useSession().data?.user
+    const swaggerApiDocsUrl = getSwaggerApiDocsUrl()
 
     const copyTokenToClipboard = () => {
         navigator.clipboard.writeText(user?.apiAccessToken || '')
@@ -65,11 +67,10 @@ export const UserProfileCard = () => {
                             <a
                                 target="_blank"
                                 className="text-orange-600 hover:underline"
-                                href={process.env.PANDA_API_GW_URL?.replaceAll('v1', '')}
+                                href={swaggerApiDocsUrl}
                                 rel="noreferrer"
                             >
-                                {' '}
-                                {process.env.PANDA_API_GW_URL?.replaceAll('v1', '')}
+                                {swaggerApiDocsUrl}
                             </a>{' '}
                         </span>
                     </dd>
