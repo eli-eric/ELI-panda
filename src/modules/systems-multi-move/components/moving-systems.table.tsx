@@ -101,7 +101,6 @@ export const MovingSystemsTable: FC<MovingSystemsTableProps> = ({
                 tableId={tableId}
                 settings={{
                     enableQueryURL: false,
-                    pageSizeDefault: 50,
                     total: systems?.totalCount,
                 }}
             />

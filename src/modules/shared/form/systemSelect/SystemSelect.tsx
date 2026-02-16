@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils'
 import { SystemFilterButtonContainer } from '@/modules/systems/components/filters/SystemsFilterButton.cont'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
 import useTableStateStore from '@/store/useTableStateStore'
+import type { PageSizeOption } from '@/types/pagination'
 import type { SystemDetail } from '@/types/responses/systems'
 
 import { PaginationV2 as Pagination } from '../../table/PaginationV2'
@@ -40,7 +41,7 @@ interface SystemSelectProps {
      * Default page size for pagination
      * @default 10
      */
-    pageSizeDefault?: number
+    pageSizeDefault?: PageSizeOption
 
     /**
      * Additional CSS classes for the container

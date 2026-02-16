@@ -8,6 +8,8 @@ import {
     PandaTableV2,
     type PandaTableV2Handle,
 } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
+import type { PageSizeOption } from '@/types/pagination'
+import { DEFAULT_PAGE_SIZE } from '@/types/pagination'
 
 import { useSystemCodes } from '../../hooks/useSystemCodes'
 import type { SystemCodeResult } from '../../types'
@@ -16,7 +18,7 @@ import { useSystemCodesColumns } from './useSystemCodesColumns'
 
 interface Props {
     tableId: string
-    pageSizeDefault?: number
+    pageSizeDefault?: PageSizeOption
     className?: string
     enableQueryURL?: boolean
     settings?: PandaTableSettings<SystemCodeResult>
@@ -24,7 +26,7 @@ interface Props {
 
 export const SystemCodesTable = ({
     tableId,
-    pageSizeDefault = 50,
+    pageSizeDefault = DEFAULT_PAGE_SIZE,
     className,
     enableQueryURL = true,
     settings,

@@ -243,7 +243,6 @@ export const SystemsSparePartsContainer = () => {
                     tableId={tableId1}
                     settings={{
                         enableQueryURL: false,
-                        pageSizeDefault: 50,
                         total: sysetms1.systems?.totalCount,
                     }}
                 />
@@ -300,7 +299,6 @@ export const SystemsSparePartsContainer = () => {
                     tableId={tableId2}
                     settings={{
                         enableQueryURL: false,
-                        pageSizeDefault: 50,
                         total: sysetms2.systems?.totalCount,
                     }}
                 />

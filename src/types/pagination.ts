@@ -20,11 +20,16 @@ export const PAGE_SIZE_OPTIONS = [10, 25, 50, 100] as const
 export type PageSizeOption = (typeof PAGE_SIZE_OPTIONS)[number]
 
 /**
+ * Default page size used across the application
+ */
+export const DEFAULT_PAGE_SIZE: PageSizeOption = 50
+
+/**
  * Default pagination configuration
  */
 export const DEFAULT_PAGINATION: PaginationState = {
     page: 1,
-    pageSize: 50,
+    pageSize: DEFAULT_PAGE_SIZE,
 }
 
 /**
@@ -33,8 +38,8 @@ export const DEFAULT_PAGINATION: PaginationState = {
 export interface PaginationSettings {
     enableQueryURL?: boolean
     total?: number
-    pageSizeDefault?: number
-    pageSizeOptions?: readonly number[]
+    pageSizeDefault?: PageSizeOption
+    pageSizeOptions?: readonly PageSizeOption[]
 }
 
 /**

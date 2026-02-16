@@ -29,7 +29,9 @@ export const SystemDetailViewContainer: FC = () => {
     return (
         <div className="flex flex-col h-full overflow-hidden">
             <SystemDetailHeader system={system} onBack={goBackToLeaves} />
-            <SystemDetailTabsContainer system={system} />
+            <div className="flex-1 min-h-0">
+                <SystemDetailTabsContainer system={system} />
+            </div>
         </div>
     )
 }

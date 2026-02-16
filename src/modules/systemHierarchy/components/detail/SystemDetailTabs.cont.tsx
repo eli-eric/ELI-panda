@@ -35,7 +35,7 @@ export const SystemDetailTabsContainer: FC<SystemDetailTabsProps> = ({ system })
         <Tabs
             value={effectiveTab}
             onValueChange={value => setActiveTab(value as HierarchyTab)}
-            className="flex flex-col h-full"
+            className="flex flex-col h-full min-h-0"
         >
             <TabsList className="mx-4 mt-2 w-fit">
                 <TabsTrigger value={HIERARCHY_TABS.DETAIL}>
@@ -66,32 +66,53 @@ export const SystemDetailTabsContainer: FC<SystemDetailTabsProps> = ({ system })
                     {fm({ id: message.systemHierarchy.tabs.history })}
                 </TabsTrigger>
             </TabsList>
-            <div className="flex-1 overflow-y-auto scrollbar-style">
-                <TabsContent value={HIERARCHY_TABS.DETAIL}>
+            <div className="flex-1 min-h-0">
+                <TabsContent
+                    value={HIERARCHY_TABS.DETAIL}
+                    className="h-full min-h-0 overflow-y-auto scrollbar-style"
+                >
                     <DetailTabContainer system={system} />
                 </TabsContent>
-                <TabsContent value={HIERARCHY_TABS.PERSONS}>
+                <TabsContent
+                    value={HIERARCHY_TABS.PERSONS}
+                    className="h-full min-h-0 overflow-y-auto scrollbar-style"
+                >
                     <PersonsTabContainer system={system} />
                 </TabsContent>
                 {hasPhysicalItem(system) && (
-                    <TabsContent value={HIERARCHY_TABS.PHYSICAL_ITEM}>
+                    <TabsContent
+                        value={HIERARCHY_TABS.PHYSICAL_ITEM}
+                        className="h-full min-h-0 overflow-y-auto scrollbar-style"
+                    >
                         <PhysicalItemTabContainer system={system} />
                     </TabsContent>
                 )}
                 {hasSpareParts(system) && (
-                    <TabsContent value={HIERARCHY_TABS.SPARE_PARTS}>
+                    <TabsContent
+                        value={HIERARCHY_TABS.SPARE_PARTS}
+                        className="h-full min-h-0 overflow-y-auto scrollbar-style"
+                    >
                         <SparePartsTabContainer system={system} />
                     </TabsContent>
                 )}
                 {hasSpareFor(system) && (
-                    <TabsContent value={HIERARCHY_TABS.SPARE_FOR}>
+                    <TabsContent
+                        value={HIERARCHY_TABS.SPARE_FOR}
+                        className="h-full min-h-0 overflow-y-auto scrollbar-style"
+                    >
                         <SpareForTabContainer system={system} />
                     </TabsContent>
                 )}
-                <TabsContent value={HIERARCHY_TABS.ATTACHMENTS}>
+                <TabsContent
+                    value={HIERARCHY_TABS.ATTACHMENTS}
+                    className="h-full min-h-0 overflow-y-auto scrollbar-style"
+                >
                     <AttachmentsTabContainer system={system} />
                 </TabsContent>
-                <TabsContent value={HIERARCHY_TABS.HISTORY}>
+                <TabsContent
+                    value={HIERARCHY_TABS.HISTORY}
+                    className="h-full min-h-0 overflow-hidden"
+                >
                     <HistoryTabContainer system={system} />
                 </TabsContent>
             </div>

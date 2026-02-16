@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+import { SystemLevel } from '@/types/gql/graphql'
+
 // --- Reusable atoms ---
 export const codebookRefSchema = z.object({
     uid: z.string(),
@@ -39,7 +41,7 @@ export interface HierarchyNode {
     uid: string
     name: string
     systemCode?: string | null
-    systemLevel: string
+    systemLevel: SystemLevel
     hasLeafChildren: boolean
     children: HierarchyNode[]
 }
@@ -49,7 +51,7 @@ export const hierarchyNodeSchema: z.ZodType<HierarchyNode> = z.lazy(() =>
         uid: z.string(),
         name: z.string(),
         systemCode: z.string().optional().nullable(),
-        systemLevel: z.string(),
+        systemLevel: z.nativeEnum(SystemLevel),
         hasLeafChildren: z.boolean(),
         children: z.array(hierarchyNodeSchema),
     }),

@@ -74,7 +74,6 @@ const OrdersContainer = () => {
                     {...{
                         settings: {
                             enableQueryURL: true,
-                            pageSizeDefault: 50,
                             total: orderList?.totalCount,
                         },
                         tableId,

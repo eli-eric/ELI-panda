@@ -1282,6 +1282,20 @@ export const messages = {
             saving: 'Saving...',
             saved: 'Saved successfully',
             failedToSave: 'Failed to save',
+            generatingCode: 'Generating system code...',
+            codeGenerated: 'System code generated and saved',
+            failedToGenerate: 'Failed to generate system code',
+            releasingCode: 'Releasing system code...',
+            codeReleased: 'System code released',
+            failedToRelease: 'Failed to release system code',
+            duplicateCode: 'System code "{code}" already exists',
+        },
+        systemCode: {
+            confirmReplaceTitle: 'Replace existing system code?',
+            confirmReplaceDescription:
+                'Current code "{currentCode}" will be replaced with a new generated code. This action cannot be undone.',
+            outdatedWarning: 'May be outdated',
+            generateDisabledTooltip: 'System Type is required to generate a code',
         },
         persons: {
             responsible: 'Responsible Person',
@@ -1307,6 +1321,16 @@ export const messages = {
             changedBy: 'Changed By',
             action: 'Action',
             detail: 'Detail',
+            filters: {
+                historyType: 'Filter by action type',
+                changedByUser: 'Filter by user',
+                all: 'All',
+                general: 'General',
+                itemChanges: 'Item Changes',
+                moves: 'System Moves',
+                itemMoves: 'Item Moves',
+                allUsers: 'All users',
+            },
         },
     },
     catalogue: {

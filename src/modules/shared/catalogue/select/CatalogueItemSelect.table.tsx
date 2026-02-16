@@ -2,6 +2,7 @@ import type { Row } from '@tanstack/react-table'
 import { useEffect } from 'react'
 
 import type { GetCategoriesQuery } from '@/types/gql/graphql'
+import type { PageSizeOption } from '@/types/pagination'
 import type { CatalogueItem, CatalogueItemsResponse } from '@/types/responses/catalogue'
 import type { CodebookType } from '@/types/responses/codebook'
 
@@ -22,7 +23,7 @@ interface CatalogueItemSelectTableProps {
     selectedItemUid?: string
     onItemToggle: (item: CatalogueItem) => void
     pinnedData: CatalogueItem[] | undefined
-    pageSizeDefault?: number
+    pageSizeDefault?: PageSizeOption
 }
 
 export const CatalogueItemSelectTable = ({
