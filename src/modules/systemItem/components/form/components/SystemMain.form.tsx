@@ -7,12 +7,14 @@ import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
 import { SelectLocationCombo } from '@/modules/shared/form/location/SelectLocation.combo'
 import { SystemTypeComboBox } from '@/modules/shared/form/systemType/SelectSystemType.combo'
-import type { Employee } from '@/types/gql/graphql'
+import {
+    EmployeeAssignmentTable,
+    useAddSystemEmployeeAssignment,
+    useRemoveSystemEmployeeAssignment,
+} from '@/modules/shared/system/employee-assignment'
 import { SystemLevel } from '@/types/gql/graphql'
 
-import { useAddSystemEmployee, useRemoveSystemEmployee } from '../../../hooks/employees'
 import { useSystemDetail } from '../../../hooks/useSystemDetail'
-import { EmployeeTable } from '../../table/Employee.table'
 import useSystemFormFields from '../SystemForm.fields'
 import { SystemCodeButton } from './SystemCodeGenerate.button'
 
@@ -30,22 +32,28 @@ export const SystemMainForm = ({ systemUid, children }: SystemFormComponentProps
 
     // Get employees data from systemDetail (only available in edit mode)
     const { systemDetail, refetch, loading: isLoading } = useSystemDetail()
-    const operators = (systemDetail?.operators ?? []) as Employee[]
-    const maintainedBy = (systemDetail?.maintainedBy ?? []) as Employee[]
+    const operators = systemDetail?.operators ?? []
+    const maintainedBy = systemDetail?.maintainedBy ?? []
 
     // Mutation hooks for operators
-    const { addEmployee: addOperator } = useAddSystemEmployee(systemUid, 'operators', {
+    const { addEmployee: addOperator } = useAddSystemEmployeeAssignment(systemUid, 'operators', {
         onSuccess: refetch,
     })
-    const { removeEmployee: removeOperator } = useRemoveSystemEmployee(systemUid, 'operators', {
-        onSuccess: refetch,
-    })
+    const { removeEmployee: removeOperator } = useRemoveSystemEmployeeAssignment(
+        systemUid,
+        'operators',
+        { onSuccess: refetch },
+    )
 
     // Mutation hooks for maintainedBy
-    const { addEmployee: addMaintainedBy } = useAddSystemEmployee(systemUid, 'maintainedBy', {
-        onSuccess: refetch,
-    })
-    const { removeEmployee: removeMaintainedBy } = useRemoveSystemEmployee(
+    const { addEmployee: addMaintainedBy } = useAddSystemEmployeeAssignment(
+        systemUid,
+        'maintainedBy',
+        {
+            onSuccess: refetch,
+        },
+    )
+    const { removeEmployee: removeMaintainedBy } = useRemoveSystemEmployeeAssignment(
         systemUid,
         'maintainedBy',
         { onSuccess: refetch },
@@ -115,7 +123,7 @@ export const SystemMainForm = ({ systemUid, children }: SystemFormComponentProps
                 {showEmployeeTables && (
                     <Fragment>
                         <Col sm={3} md={6}>
-                            <EmployeeTable
+                            <EmployeeAssignmentTable
                                 className="w-full"
                                 data={operators}
                                 header={'Authorized Operators'}
@@ -125,7 +133,7 @@ export const SystemMainForm = ({ systemUid, children }: SystemFormComponentProps
                             />
                         </Col>
                         <Col sm={3} md={6}>
-                            <EmployeeTable
+                            <EmployeeAssignmentTable
                                 className="w-full"
                                 data={maintainedBy}
                                 header={'Maintained By'}

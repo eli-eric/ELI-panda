@@ -1,7 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
+import { z } from 'zod'
 
 import Combobox from '@/components/form/Combobox'
 import { Button } from '@/components/ui/button'
@@ -10,41 +11,50 @@ import { useEmployee } from '@/hooks/graphql/useEmployee'
 import { message } from '@/i18n/src/messages'
 import { CODEBOOK } from '@/types/constants/codebook'
 
-import type { EmployeeFormData } from './schemas/employee.schema'
-import { employeeSchema } from './schemas/employee.schema'
+import type { EmployeeAssignmentFormData } from '../schemas/employeeAssignment.schema'
+import { employeeAssignmentSchema } from '../schemas/employeeAssignment.schema'
+import type { EmployeeAssignment } from '../types'
 
 const nestedForm = message.roomCardsPage.nestedForm
 const messages = message.common.buttons
 
-interface EmployeeModalProps {
-    onSubmit?: (data: EmployeeFormData) => void
+interface EmployeeAssignmentModalProps {
+    onSubmit?: (data: EmployeeAssignmentFormData) => void
     onClose?: () => void
     existingEmployeeUids?: string[]
 }
 
-export const EmployeeModalContainer = ({
+export const EmployeeAssignmentModalContainer = ({
     onSubmit,
     onClose,
     existingEmployeeUids = [],
-}: EmployeeModalProps) => {
+}: EmployeeAssignmentModalProps) => {
+    const { formatMessage: fm } = useIntl()
     const [employeeUid, setEmployeeUid] = useState<string | null>(null)
-    const [loadedEmployee, setLoadedEmployee] = useState<any>(null)
+    const [loadedEmployee, setLoadedEmployee] = useState<EmployeeAssignment | null>(null)
     const { employee, isLoading: employeeLoading } = useEmployee(employeeUid)
 
-    const formMethods = useForm<EmployeeFormData>({
+    const formMethods = useForm<EmployeeAssignmentFormData>({
         resolver: zodResolver(
-            employeeSchema.refine(
-                data => {
-                    if (data.employee && existingEmployeeUids.includes(data.employee.uid)) {
-                        return false
-                    }
-                    return true
-                },
-                {
-                    message: 'Cannot select the same employee twice',
-                    path: ['employee'],
-                },
-            ),
+            employeeAssignmentSchema.superRefine((data, ctx) => {
+                if (!data.employee) {
+                    ctx.addIssue({
+                        code: z.ZodIssueCode.custom,
+                        message: fm({ id: message.common.employeeAssignment.requiredSelection }),
+                        path: ['employee'],
+                    })
+                    return
+                }
+
+                if (existingEmployeeUids.includes(data.employee.uid)) {
+                    ctx.addIssue({
+                        code: z.ZodIssueCode.custom,
+                        message: fm({ id: message.common.employeeAssignment.duplicateSelection }),
+                        path: ['employee'],
+                    })
+                    return
+                }
+            }),
         ),
         defaultValues: {
             employee: null,
@@ -62,7 +72,6 @@ export const EmployeeModalContainer = ({
         },
     })
 
-    // Track loaded employee data separately (don't overwrite form value)
     useEffect(() => {
         if (employee && employeeUid) {
             setLoadedEmployee({
@@ -76,7 +85,6 @@ export const EmployeeModalContainer = ({
 
     const handleFormSubmit = handleSubmit(() => {
         if (onSubmit && loadedEmployee) {
-            // Pass loaded employee data with full details
             onSubmit({
                 employee: loadedEmployee,
             })

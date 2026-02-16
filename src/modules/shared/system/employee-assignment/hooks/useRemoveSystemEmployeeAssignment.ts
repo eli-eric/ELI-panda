@@ -1,10 +1,12 @@
+import { useIntl } from 'react-intl'
 import { toast } from 'sonner'
 
 import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
+import { message } from '@/i18n/src/messages'
 import { gql } from '@/types/gql'
 import { whereN } from '@/utils/graphql/mutations'
 
-type EmployeeType = 'operators' | 'maintainedBy'
+import type { EmployeeAssignmentType } from '../types'
 
 const removeEmployeeMutation = gql(`
   mutation RemoveSystemEmployee($where: SystemWhere, $update: SystemUpdateInput!) {
@@ -16,20 +18,21 @@ const removeEmployeeMutation = gql(`
   }
 `)
 
-interface UseRemoveSystemEmployeeOptions {
+interface UseRemoveSystemEmployeeAssignmentOptions {
     onSuccess?: () => void
 }
 
-export const useRemoveSystemEmployee = (
+export const useRemoveSystemEmployeeAssignment = (
     systemUid: string | undefined,
-    employeeType: EmployeeType,
-    options?: UseRemoveSystemEmployeeOptions,
+    employeeType: EmployeeAssignmentType,
+    options?: UseRemoveSystemEmployeeAssignmentOptions,
 ) => {
+    const { formatMessage: fm } = useIntl()
     const { mutateAsync, isPending } = useGraphQLMutation(removeEmployeeMutation)
 
     const removeEmployee = async (employeeUid: string) => {
         if (!systemUid) {
-            toast.error('System UID is required')
+            toast.error(fm({ id: message.common.employeeAssignment.systemUidRequired }))
             return
         }
 
@@ -38,12 +41,12 @@ export const useRemoveSystemEmployee = (
         }
 
         toast.promise(mutateAsync({ where: { uid: systemUid }, update }), {
-            loading: 'Removing employee...',
+            loading: fm({ id: message.common.employeeAssignment.toast.removing }),
             success: () => {
                 options?.onSuccess?.()
-                return 'Employee removed'
+                return fm({ id: message.common.employeeAssignment.toast.removed })
             },
-            error: 'Failed to remove employee',
+            error: fm({ id: message.common.employeeAssignment.toast.removeFailed }),
         })
     }
 
