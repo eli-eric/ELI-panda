@@ -5,12 +5,13 @@ import { toast } from 'sonner'
 
 import useQueryManager from '@/hooks/useQueryManager'
 import { message } from '@/i18n/src/messages'
+import type { PageSizeOption } from '@/types/pagination'
 import type { CatalogueItemsResponse } from '@/types/responses/catalogue'
 import type { QueryFetcherKey } from '@/utils/fetcher'
 import { queryFetcher } from '@/utils/fetcher'
 
-export const useCatalogueItems = (tableId = 'catalogueItems') => {
-    const { query } = useQueryManager(tableId)
+export const useCatalogueItems = (tableId = 'catalogueItems', pageSizeDefault?: PageSizeOption) => {
+    const { query } = useQueryManager(tableId, pageSizeDefault)
     const pagination = JSON.parse(query.pagination || '{}')
     const queryKey: QueryFetcherKey = ['catalogueItems', { query: { ...pagination, ...query } }]
     const {
