@@ -38,31 +38,52 @@ export const SystemDetailTabsContainer: FC<SystemDetailTabsProps> = ({ system })
             className="flex flex-col h-full min-h-0"
         >
             <TabsList className="mx-4 mt-2 w-fit">
-                <TabsTrigger value={HIERARCHY_TABS.DETAIL}>
+                <TabsTrigger
+                    value={HIERARCHY_TABS.DETAIL}
+                    data-testid="system-hierarchy-tab-detail"
+                >
                     {fm({ id: message.systemHierarchy.tabs.detail })}
                 </TabsTrigger>
-                <TabsTrigger value={HIERARCHY_TABS.PERSONS}>
+                <TabsTrigger
+                    value={HIERARCHY_TABS.PERSONS}
+                    data-testid="system-hierarchy-tab-persons"
+                >
                     {fm({ id: message.systemHierarchy.tabs.persons })}
                 </TabsTrigger>
                 {hasPhysicalItem(system) && (
-                    <TabsTrigger value={HIERARCHY_TABS.PHYSICAL_ITEM}>
+                    <TabsTrigger
+                        value={HIERARCHY_TABS.PHYSICAL_ITEM}
+                        data-testid="system-hierarchy-tab-physical-item"
+                    >
                         {fm({ id: message.systemHierarchy.tabs.physicalItem })}
                     </TabsTrigger>
                 )}
                 {hasSpareParts(system) && (
-                    <TabsTrigger value={HIERARCHY_TABS.SPARE_PARTS}>
+                    <TabsTrigger
+                        value={HIERARCHY_TABS.SPARE_PARTS}
+                        data-testid="system-hierarchy-tab-spare-parts"
+                    >
                         {fm({ id: message.systemHierarchy.tabs.spareParts })}
                     </TabsTrigger>
                 )}
                 {hasSpareFor(system) && (
-                    <TabsTrigger value={HIERARCHY_TABS.SPARE_FOR}>
+                    <TabsTrigger
+                        value={HIERARCHY_TABS.SPARE_FOR}
+                        data-testid="system-hierarchy-tab-spare-for"
+                    >
                         {fm({ id: message.systemHierarchy.tabs.spareFor })}
                     </TabsTrigger>
                 )}
-                <TabsTrigger value={HIERARCHY_TABS.ATTACHMENTS}>
+                <TabsTrigger
+                    value={HIERARCHY_TABS.ATTACHMENTS}
+                    data-testid="system-hierarchy-tab-attachments"
+                >
                     {fm({ id: message.systemHierarchy.tabs.attachments })}
                 </TabsTrigger>
-                <TabsTrigger value={HIERARCHY_TABS.HISTORY}>
+                <TabsTrigger
+                    value={HIERARCHY_TABS.HISTORY}
+                    data-testid="system-hierarchy-tab-history"
+                >
                     {fm({ id: message.systemHierarchy.tabs.history })}
                 </TabsTrigger>
             </TabsList>

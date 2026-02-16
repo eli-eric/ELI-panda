@@ -13,7 +13,12 @@
         "format": "prettier --write .",
         "generate": "graphql-codegen --config codegen.ts",
         "generate:watch": "graphql-codegen --config --watch",
-        "test": "tsc --project tsconfig.jest.json && jest"
+        "test": "tsc --project tsconfig.jest.json && jest",
+        "e2e": "playwright test",
+        "e2e:headed": "playwright test --headed",
+        "e2e:ui": "playwright test --ui",
+        "e2e:report": "playwright show-report",
+        "e2e:install": "playwright install chromium"
     },
     "dependencies": {
         "@apollo/server": "^4.9.5",
@@ -103,6 +108,7 @@
         "@jest/globals": "^29.7.0",
         "@next/eslint-plugin-next": "^14.0.3",
         "@parcel/watcher": "^2.4.1",
+        "@playwright/test": "^1.58.2",
         "@tailwindcss/aspect-ratio": "^0.4.2",
         "@tailwindcss/forms": "^0.5.7",
         "@tailwindcss/line-clamp": "^0.4.2",

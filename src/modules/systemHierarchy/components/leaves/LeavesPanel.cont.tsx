@@ -29,7 +29,10 @@ export const LeavesPanelContainer: FC = () => {
 
     if (!selectedParentUid) {
         return (
-            <div className="flex items-center justify-center h-full text-muted-foreground text-sm">
+            <div
+                className="flex items-center justify-center h-full text-muted-foreground text-sm"
+                data-testid="system-hierarchy-empty-state"
+            >
                 {fm({ id: message.systemHierarchy.leaves.selectParent })}
             </div>
         )
@@ -37,7 +40,10 @@ export const LeavesPanelContainer: FC = () => {
 
     if (!isLoading && leaves.length === 0) {
         return (
-            <div className="flex flex-col h-full overflow-hidden">
+            <div
+                className="flex flex-col h-full overflow-hidden"
+                data-testid="system-hierarchy-leaves-panel"
+            >
                 <LeavesPanelHeader
                     parentName={parentSystem?.name ?? null}
                     parentSystemCode={parentSystem?.systemCode ?? null}
@@ -54,7 +60,10 @@ export const LeavesPanelContainer: FC = () => {
     }
 
     return (
-        <div className="flex flex-col h-full overflow-hidden">
+        <div
+            className="flex flex-col h-full overflow-hidden"
+            data-testid="system-hierarchy-leaves-panel"
+        >
             <LeavesPanelHeader
                 parentName={parentSystem?.name ?? null}
                 parentSystemCode={parentSystem?.systemCode ?? null}

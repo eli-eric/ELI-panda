@@ -11,6 +11,9 @@ import { APP_BASE_URL } from './types/constants/common'
 // This ensures more specific paths are matched before generic ones
 // e.g., /system/item is matched before /system
 const PROTECTED_PATH_ENTRIES = Object.keys(PATH_ROLES_CONFIG).sort((a, b) => b.length - a.length)
+function shouldBypassAuthForE2E(): boolean {
+    return process.env.PLAYWRIGHT_E2E === '1'
+}
 
 // Helper: Check if a pathname matches any protected path
 function isProtectedPath(pathname: string): boolean {
@@ -50,6 +53,7 @@ function createCallbackUrl(pathname: string, search: string): string {
 export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl
     const matchesProtectedPath = isProtectedPath(pathname)
+    const isE2EAuthBypass = shouldBypassAuthForE2E()
 
     // Get user token from the request
     const user = await getToken({ req: request })
@@ -57,43 +61,45 @@ export async function middleware(request: NextRequest) {
     // Handle protected paths
     if (matchesProtectedPath) {
         // Redirect unauthenticated users to login
-        if (!user) {
+        if (!user && !isE2EAuthBypass) {
             const callbackUrl = createCallbackUrl(pathname, request.nextUrl.search)
             const url = new URL('/', request.url)
             url.searchParams.set('callbackUrl', encodeURI(APP_BASE_URL + callbackUrl))
             return NextResponse.redirect(url)
         }
 
-        // Find the matching path configuration
-        const currentPath = findMatchingProtectedPath(pathname)
+        if (user) {
+            // Find the matching path configuration
+            const currentPath = findMatchingProtectedPath(pathname)
 
-        if (!currentPath) {
-            // Path is in PROTECTED_PATHS but not in PATH_ROLES_CONFIG
-            // eslint-disable-next-line no-console
-            console.warn('[Security] Protected path not found in roles config:', {
-                path: pathname,
-                timestamp: new Date().toISOString(),
-            })
-            const url = new URL(PATH.NOT_FOUND, request.url)
-            return NextResponse.redirect(url)
-        }
+            if (!currentPath) {
+                // Path is in PROTECTED_PATHS but not in PATH_ROLES_CONFIG
+                // eslint-disable-next-line no-console
+                console.warn('[Security] Protected path not found in roles config:', {
+                    path: pathname,
+                    timestamp: new Date().toISOString(),
+                })
+                const url = new URL(PATH.NOT_FOUND, request.url)
+                return NextResponse.redirect(url)
+            }
 
-        // Check if user has required roles
-        const matchRolesToPath = hasRequiredRole(user.roles, currentPath)
+            // Check if user has required roles
+            const matchRolesToPath = hasRequiredRole(user.roles, currentPath)
 
-        if (!matchRolesToPath) {
-            // Log unauthorized access attempts for security audit
-            // eslint-disable-next-line no-console
-            console.warn('[Security] Unauthorized access attempt:', {
-                user: user.email || user.name || 'unknown',
-                roles: user.roles,
-                path: pathname,
-                requiredRoles: PATH_ROLES_CONFIG[currentPath],
-                timestamp: new Date().toISOString(),
-            })
+            if (!matchRolesToPath) {
+                // Log unauthorized access attempts for security audit
+                // eslint-disable-next-line no-console
+                console.warn('[Security] Unauthorized access attempt:', {
+                    user: user.email || user.name || 'unknown',
+                    roles: user.roles,
+                    path: pathname,
+                    requiredRoles: PATH_ROLES_CONFIG[currentPath],
+                    timestamp: new Date().toISOString(),
+                })
 
-            const url = new URL(PATH.NOT_FOUND, request.url)
-            return NextResponse.redirect(url)
+                const url = new URL(PATH.NOT_FOUND, request.url)
+                return NextResponse.redirect(url)
+            }
         }
     }
 

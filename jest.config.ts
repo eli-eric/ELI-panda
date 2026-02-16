@@ -15,6 +15,7 @@ const customJestConfig = {
         '^.+\\.tsx?$': 'ts-jest',
     },
     transformIgnorePatterns: ['/node_modules/(?!react-dnd|dnd-core|@react-dnd).+\\.js$'],
+    testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/e2e/'],
 }
 
 module.exports = createJestConfig(customJestConfig)
