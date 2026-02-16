@@ -1,15 +1,23 @@
 'use client'
 
+import { useQueryClient } from '@tanstack/react-query'
 import type { FC } from 'react'
 import { useCallback } from 'react'
 import { useIntl } from 'react-intl'
 
 import { InlineFieldCombobox } from '@/components/ui/inline-field'
 import { message } from '@/i18n/src/messages'
+import {
+    EmployeeAssignmentTable,
+    useAddSystemEmployeeAssignment,
+    useRemoveSystemEmployeeAssignment,
+} from '@/modules/shared/system/employee-assignment'
 import { CODEBOOK } from '@/types/constants/codebook'
+import { SystemLevel } from '@/types/gql/graphql'
 
 import { useSystemFieldUpdate } from '../../hooks/mutations/useSystemFieldUpdate'
 import type { SystemLeaf } from '../../types'
+import { SYSTEM_DETAIL_QUERY_KEY } from '../../types/constants'
 
 interface PersonsTabProps {
     system: SystemLeaf
@@ -17,6 +25,12 @@ interface PersonsTabProps {
 
 export const PersonsTabContainer: FC<PersonsTabProps> = ({ system }) => {
     const { formatMessage: fm } = useIntl()
+    const queryClient = useQueryClient()
+
+    const refreshSystemDetail = useCallback(() => {
+        void queryClient.invalidateQueries({ queryKey: [SYSTEM_DETAIL_QUERY_KEY] })
+    }, [queryClient])
+
     // Pass current system for relationship disconnect
     const { updateField, isPending } = useSystemFieldUpdate({
         responsible: system.responsible,
@@ -24,12 +38,39 @@ export const PersonsTabContainer: FC<PersonsTabProps> = ({ system }) => {
         responsibleTeam: system.responsibleTeam,
     })
 
+    const { addEmployee: addOperator, isAdding: isAddingOperator } = useAddSystemEmployeeAssignment(
+        system.uid,
+        'operators',
+        {
+            onSuccess: refreshSystemDetail,
+        },
+    )
+    const { removeEmployee: removeOperator, isRemoving: isRemovingOperator } =
+        useRemoveSystemEmployeeAssignment(system.uid, 'operators', {
+            onSuccess: refreshSystemDetail,
+        })
+
+    const { addEmployee: addMaintainedBy, isAdding: isAddingMaintainedBy } =
+        useAddSystemEmployeeAssignment(system.uid, 'maintainedBy', {
+            onSuccess: refreshSystemDetail,
+        })
+    const { removeEmployee: removeMaintainedBy, isRemoving: isRemovingMaintainedBy } =
+        useRemoveSystemEmployeeAssignment(system.uid, 'maintainedBy', {
+            onSuccess: refreshSystemDetail,
+        })
+
     const handleSaveField = useCallback(
         async (fieldName: string, value: unknown) => {
             await updateField(system.uid, fieldName, value)
         },
         [system.uid, updateField],
     )
+
+    const operators = system.operators ?? []
+    const maintainedBy = system.maintainedBy ?? []
+    const showEmployeeTables = system.systemLevel !== SystemLevel.SubsystemsAndParts
+    const isEmployeeMutationPending =
+        isAddingOperator || isRemovingOperator || isAddingMaintainedBy || isRemovingMaintainedBy
 
     return (
         <div className="p-4 space-y-1">
@@ -60,6 +101,28 @@ export const PersonsTabContainer: FC<PersonsTabProps> = ({ system }) => {
                 onSave={uid => handleSaveField('responsibleTeamUid', uid)}
                 isPending={isPending}
             />
+
+            {showEmployeeTables && (
+                <div className="space-y-4 pt-3">
+                    <EmployeeAssignmentTable
+                        className="w-full"
+                        data={operators}
+                        header={fm({ id: message.systemHierarchy.persons.authorizedOperators })}
+                        onAdd={async employee => addOperator(employee.uid)}
+                        onRemove={removeOperator}
+                        isLoading={isEmployeeMutationPending}
+                    />
+
+                    <EmployeeAssignmentTable
+                        className="w-full"
+                        data={maintainedBy}
+                        header={fm({ id: message.systemHierarchy.persons.maintainedBy })}
+                        onAdd={async employee => addMaintainedBy(employee.uid)}
+                        onRemove={removeMaintainedBy}
+                        isLoading={isEmployeeMutationPending}
+                    />
+                </div>
+            )}
         </div>
     )
 }

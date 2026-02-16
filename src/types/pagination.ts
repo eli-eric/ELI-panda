@@ -33,6 +33,34 @@ export const DEFAULT_PAGINATION: PaginationState = {
 }
 
 /**
+ * Table-specific page size defaults used for first render/query.
+ * Keep this in sync with Pagination usage for table IDs that differ from global default (50).
+ */
+export const TABLE_PAGE_SIZE_DEFAULTS: Record<string, PageSizeOption> = {
+    systemLeaves: 25,
+    publications: 100,
+    catalogueItemsModal: 10,
+    'catalogue-item-select': 10,
+    'system-select': 10,
+    emptySystemSelect: 10,
+}
+
+export function getTablePageSizeDefault(tableId: string): PageSizeOption {
+    return TABLE_PAGE_SIZE_DEFAULTS[tableId] ?? DEFAULT_PAGE_SIZE
+}
+
+export function resolvePageSizeDefault(tableId: string, pageSizeDefault?: number): PageSizeOption {
+    if (
+        typeof pageSizeDefault === 'number' &&
+        (PAGE_SIZE_OPTIONS as readonly number[]).includes(pageSizeDefault)
+    ) {
+        return pageSizeDefault as PageSizeOption
+    }
+
+    return getTablePageSizeDefault(tableId)
+}
+
+/**
  * Pagination settings passed to components
  */
 export interface PaginationSettings {

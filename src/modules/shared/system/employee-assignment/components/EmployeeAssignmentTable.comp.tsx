@@ -1,27 +1,29 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { memo, useCallback, useMemo } from 'react'
+import { useIntl } from 'react-intl'
 
 import { PlusButton, TableDeleteButton } from '@/components/Buttons'
 import { Table } from '@/components/ui/table'
 import usePermission from '@/hooks/usePermission'
 import useWarningModal from '@/hooks/useWarningModal'
+import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import { ROLE } from '@/types/constants/roles'
-import type { Employee } from '@/types/gql/graphql'
 
-import { useEmployeeModal } from './hooks/useEmployeeModal'
+import { useEmployeeAssignmentModal } from '../hooks/useEmployeeAssignmentModal'
+import type { EmployeeAssignment } from '../types'
 
-interface EmployeeTableProps {
+interface EmployeeAssignmentTableProps {
     header: string
-    data: Employee[]
-    onAdd: (employee: Employee) => void | Promise<void>
+    data: EmployeeAssignment[]
+    onAdd: (employee: EmployeeAssignment) => void | Promise<void>
     onRemove: (employeeUid: string) => void | Promise<void>
     existingEmployeeUids?: string[]
     isLoading?: boolean
     className?: string
 }
 
-export const EmployeeTable = memo(
+export const EmployeeAssignmentTable = memo(
     ({
         header,
         data,
@@ -30,7 +32,8 @@ export const EmployeeTable = memo(
         existingEmployeeUids,
         isLoading = false,
         className,
-    }: EmployeeTableProps) => {
+    }: EmployeeAssignmentTableProps) => {
+        const { formatMessage: fm } = useIntl()
         const canEdit = usePermission([ROLE.SYSTEM_EDIT])
         const withWarningModal = useWarningModal()
 
@@ -39,21 +42,25 @@ export const EmployeeTable = memo(
             return [...new Set([...dataUids, ...(existingEmployeeUids ?? [])])]
         }, [data, existingEmployeeUids])
 
-        const openEmployeeModal = useEmployeeModal({
+        const openEmployeeModal = useEmployeeAssignmentModal({
             existingEmployeeUids: allExistingUids,
             onEmployeeSelected: onAdd,
         })
 
         const handleDelete = useCallback(
-            (employee: Employee) => {
-                const message = `Are you sure you want to remove ${employee.fullName}?`
-                withWarningModal(() => onRemove(employee.uid), message)()
+            (employee: EmployeeAssignment) => {
+                const employeeName = employee.fullName || employee.name || employee.uid
+                const warningMessage = fm(
+                    { id: message.common.employeeAssignment.removeConfirm },
+                    { employeeName },
+                )
+                withWarningModal(() => onRemove(employee.uid), warningMessage)()
             },
-            [withWarningModal, onRemove],
+            [fm, withWarningModal, onRemove],
         )
 
         const columns = useMemo(
-            (): ColumnDef<Employee>[] => [
+            (): ColumnDef<EmployeeAssignment>[] => [
                 {
                     header: () => (
                         <div className="flex justify-between w-full items-center">
@@ -69,17 +76,22 @@ export const EmployeeTable = memo(
                     ),
                     accessorKey: 'fullName',
                     enableSorting: false,
-                    cell: ({ row, getValue }) => (
-                        <div className="flex items-center w-full justify-between pr-3">
-                            <span>{getValue<string>()}</span>
-                            {canEdit && (
-                                <TableDeleteButton
-                                    className="text-orange-400 dark:text-orange-500"
-                                    onClick={() => handleDelete(row.original)}
-                                />
-                            )}
-                        </div>
-                    ),
+                    cell: ({ row, getValue }) => {
+                        const value = getValue<string | null | undefined>()
+                        const displayName = value || row.original.name || row.original.uid
+
+                        return (
+                            <div className="flex items-center w-full justify-between pr-3">
+                                <span>{displayName}</span>
+                                {canEdit && (
+                                    <TableDeleteButton
+                                        className="text-orange-400 dark:text-orange-500"
+                                        onClick={() => handleDelete(row.original)}
+                                    />
+                                )}
+                            </div>
+                        )
+                    },
                     size: 563,
                 },
             ],
@@ -87,7 +99,7 @@ export const EmployeeTable = memo(
         )
 
         return (
-            <Table<Employee>
+            <Table<EmployeeAssignment>
                 columns={columns}
                 skipEmptyMessage
                 data={data}
@@ -99,4 +111,4 @@ export const EmployeeTable = memo(
     },
 )
 
-EmployeeTable.displayName = 'EmployeeTable'
+EmployeeAssignmentTable.displayName = 'EmployeeAssignmentTable'

@@ -255,6 +255,21 @@ export const messages = {
         services: {
             in: 'in',
         },
+        employeeAssignment: {
+            modalTitle: 'Add Employee',
+            requiredSelection: 'Employee is required',
+            duplicateSelection: 'Cannot select the same employee twice',
+            removeConfirm: 'Are you sure you want to remove {employeeName}?',
+            systemUidRequired: 'System UID is required',
+            toast: {
+                adding: 'Adding employee...',
+                added: 'Employee added',
+                addFailed: 'Failed to add employee',
+                removing: 'Removing employee...',
+                removed: 'Employee removed',
+                removeFailed: 'Failed to remove employee',
+            },
+        },
         catalogue: {
             ellipsis: '...',
             showStatistics: 'Show Statistics',
@@ -1300,6 +1315,8 @@ export const messages = {
         persons: {
             responsible: 'Responsible Person',
             owner: 'Owner',
+            authorizedOperators: 'Authorized Operators',
+            maintainedBy: 'Maintained By',
             noPersons: 'No persons assigned',
         },
         physicalItem: {

@@ -10,6 +10,12 @@ export const codebookRefSchema = z.object({
     additionalData: z.string().optional().nullable(),
 })
 
+export const employeeRefSchema = z.object({
+    uid: z.string(),
+    fullName: z.string().optional().nullable(),
+    name: z.string().optional().nullable(),
+})
+
 const parentPathItemSchema = z.object({
     uid: z.string(),
     name: z.string(),
@@ -78,6 +84,8 @@ export const systemLeafSchema = z.object({
     responsibleTeam: codebookRefSchema.optional().nullable(),
     importance: codebookRefSchema.optional().nullable(),
     owner: codebookRefSchema.optional().nullable(),
+    operators: z.array(employeeRefSchema).optional().nullable(),
+    maintainedBy: z.array(employeeRefSchema).optional().nullable(),
     parentPath: z.array(parentPathItemSchema).optional().nullable(),
     history: z.array(historyEntrySchema).optional().nullable(),
     statistics: statisticsSchema.optional().nullable(),

@@ -1,8 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 
-import type { Employee } from '@/types/gql/graphql'
-
-import { EmployeeTable } from '../Employee.table'
+import type { EmployeeAssignment } from '../../types'
+import { EmployeeAssignmentTable } from '../EmployeeAssignmentTable.comp'
 
 // Mock react-intl to avoid IntlProvider requirement
 jest.mock('react-intl', () => ({
@@ -30,15 +29,15 @@ jest.mock('@/store/useDynamicModalStore', () => ({
     }),
 }))
 
-const mockEmployees: Partial<Employee>[] = [
+const mockEmployees: EmployeeAssignment[] = [
     { uid: 'emp-1', fullName: 'John Doe' },
     { uid: 'emp-2', fullName: 'Jane Smith' },
 ]
 
-describe('EmployeeTable', () => {
+describe('EmployeeAssignmentTable', () => {
     const defaultProps = {
         header: 'Test Header',
-        data: mockEmployees as Employee[],
+        data: mockEmployees,
         onAdd: jest.fn(),
         onRemove: jest.fn(),
     }
@@ -48,26 +47,25 @@ describe('EmployeeTable', () => {
     })
 
     it('renders header correctly', () => {
-        render(<EmployeeTable {...defaultProps} />)
+        render(<EmployeeAssignmentTable {...defaultProps} />)
         expect(screen.getByText('Test Header')).toBeInTheDocument()
     })
 
     it('renders all employees', () => {
-        render(<EmployeeTable {...defaultProps} />)
+        render(<EmployeeAssignmentTable {...defaultProps} />)
         expect(screen.getByText('John Doe')).toBeInTheDocument()
         expect(screen.getByText('Jane Smith')).toBeInTheDocument()
     })
 
     it('renders add button when user has edit permission', () => {
-        render(<EmployeeTable {...defaultProps} />)
+        render(<EmployeeAssignmentTable {...defaultProps} />)
         const addButtons = screen.getAllByRole('button')
         expect(addButtons.length).toBeGreaterThan(0)
     })
 
     it('calls onRemove when delete button is clicked', () => {
-        render(<EmployeeTable {...defaultProps} />)
+        render(<EmployeeAssignmentTable {...defaultProps} />)
 
-        // Find delete buttons (there should be one per employee)
         const deleteButtons = screen
             .getAllByRole('button')
             .filter(btn => btn.className.includes('text-orange'))
@@ -80,9 +78,8 @@ describe('EmployeeTable', () => {
     })
 
     it('disables add button when isLoading is true', () => {
-        render(<EmployeeTable {...defaultProps} isLoading />)
+        render(<EmployeeAssignmentTable {...defaultProps} isLoading />)
 
-        // Find the plus button in header
         const buttons = screen.getAllByRole('button')
         const addButton = buttons.find(btn =>
             btn.closest('div')?.textContent?.includes('Test Header'),
@@ -92,7 +89,7 @@ describe('EmployeeTable', () => {
     })
 
     it('renders empty table without errors when data is empty', () => {
-        render(<EmployeeTable {...defaultProps} data={[] as Employee[]} />)
+        render(<EmployeeAssignmentTable {...defaultProps} data={[]} />)
         expect(screen.getByText('Test Header')).toBeInTheDocument()
     })
 
@@ -100,7 +97,7 @@ describe('EmployeeTable', () => {
         const usePermission = require('@/hooks/usePermission').default
         usePermission.mockReturnValue(false)
 
-        render(<EmployeeTable {...defaultProps} />)
+        render(<EmployeeAssignmentTable {...defaultProps} />)
 
         const deleteButtons = screen
             .queryAllByRole('button')

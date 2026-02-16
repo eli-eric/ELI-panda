@@ -4,7 +4,7 @@ import { PaginationV2 as PaginationComponent } from '@/components/table/Paginati
 import { usePagination } from '@/hooks/table/usePagination'
 import useTableStateStore from '@/store/useTableStateStore'
 import type { PaginationSettings } from '@/types/pagination'
-import { DEFAULT_PAGE_SIZE, PAGE_SIZE_OPTIONS } from '@/types/pagination'
+import { PAGE_SIZE_OPTIONS, resolvePageSizeDefault } from '@/types/pagination'
 
 interface PaginationV2Props {
     tableId: string
@@ -27,10 +27,11 @@ export function PaginationV2({ tableId, settings, onPageChange }: PaginationV2Pr
     const {
         enableQueryURL,
         total = 0,
-        pageSizeDefault = DEFAULT_PAGE_SIZE,
         pageSizeOptions = PAGE_SIZE_OPTIONS,
         showPageSizeSelector = true,
     } = settings || {}
+
+    const pageSizeDefault = resolvePageSizeDefault(tableId, settings?.pageSizeDefault)
 
     const paginationHook = usePagination({
         tableId,
