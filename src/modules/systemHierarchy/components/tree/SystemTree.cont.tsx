@@ -48,7 +48,7 @@ export const SystemTreeContainer: FC = () => {
     }, [search, filteredNodes, expandNodes, setExpandedNodes])
 
     return (
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-full" data-testid="system-hierarchy-tree-panel">
             <div className="flex flex-col gap-2 border-b border-border px-3 py-2">
                 <div className="flex items-center justify-between">
                     <h2 className="text-sm font-semibold">
@@ -72,6 +72,7 @@ export const SystemTreeContainer: FC = () => {
                         placeholder={fm({ id: message.systemHierarchy.tree.searchPlaceholder })}
                         className="h-8 pl-8 text-sm"
                         type="search"
+                        data-testid="system-hierarchy-tree-search"
                     />
                 </div>
             </div>

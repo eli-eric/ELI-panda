@@ -46,7 +46,7 @@ export const LeavesTableComponent: FC<LeavesTableProps> = ({
     }, [])
 
     return (
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-full" data-testid="system-hierarchy-leaves-table">
             <div className="flex-1 min-h-0 flex flex-col">
                 <PandaTableV2
                     ref={tableRef}
