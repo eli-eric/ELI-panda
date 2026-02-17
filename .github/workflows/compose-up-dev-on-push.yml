@@ -35,36 +35,33 @@ jobs:
               run: yarn install
             - name: Run unit tests
               run: yarn test
-    # TODO: Enable after installing Playwright system deps on runner (sudo npx playwright install-deps chromium)
-    # e2e-tests:
-    #     runs-on: czechia-server
-    #     needs: unit-tests
-    #     steps:
-    #         - name: Checkout code
-    #           uses: actions/checkout@v3
-    #         - uses: actions/setup-node@v3
-    #           with:
-    #               node-version: 18
-    #         - name: Install Yarn
-    #           run: npm install -g yarn
-    #         - name: Install dependencies
-    #           run: yarn install
-    #         - name: Clean old Playwright browsers
-    #           run: rm -rf ~/.cache/ms-playwright
-    #         - name: Install Playwright browsers
-    #           run: npx playwright install chromium
-    #         - name: Run E2E tests
-    #           run: yarn e2e
-    #         - name: Upload E2E report
-    #           uses: actions/upload-artifact@v4
-    #           if: ${{ !cancelled() }}
-    #           with:
-    #               name: playwright-report
-    #               path: playwright-report/
-    #               retention-days: 14
-    compose-up:
+    e2e-tests:
         runs-on: czechia-server
         needs: unit-tests
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+            - name: Build E2E Docker image
+              run: docker build -f Dockerfile.e2e -t panda-e2e:${{ github.sha }} .
+            - name: Run E2E tests
+              run: |
+                  docker run --rm --shm-size=1g \
+                    -v ${{ github.workspace }}/playwright-report:/app/playwright-report \
+                    -v ${{ github.workspace }}/test-results:/app/test-results \
+                    panda-e2e:${{ github.sha }}
+            - name: Upload E2E report
+              uses: actions/upload-artifact@v4
+              if: ${{ !cancelled() }}
+              with:
+                  name: playwright-report
+                  path: playwright-report/
+                  retention-days: 14
+            - name: Cleanup Docker image
+              if: always()
+              run: docker rmi panda-e2e:${{ github.sha }} || true
+    compose-up:
+        runs-on: czechia-server
+        needs: [unit-tests, e2e-tests]
         steps:
             - uses: actions/checkout@v3
             - run: |
