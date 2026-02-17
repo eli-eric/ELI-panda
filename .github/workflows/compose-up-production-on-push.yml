@@ -53,7 +53,7 @@ jobs:
               uses: actions/upload-artifact@v4
               if: ${{ always() && !cancelled() }}
               with:
-                  name: playwright-report
+                  name: playwright-report-production-${{ github.run_id }}
                   path: playwright-report/
                   retention-days: 14
             - name: Cleanup Docker image
