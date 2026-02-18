@@ -42,6 +42,7 @@ export const NAV_ITEMS: NavigationItem[] = [
                 url: PATH.SYSTEMS_MULTI_MOVE,
                 role: ROLE.SYSTEM_EDIT,
             },
+            { title: 'Hierarchy', url: PATH.SYSTEMS_HIERARCHY, role: ROLE.SYSTEMS_VIEW },
         ],
     },
     {
@@ -151,6 +152,7 @@ export const PROTECTED_PATHS = [
     PATH.RESEARCHERS,
     PATH.CONTROL_SYSTEMS,
     PATH.CONTROL_SYSTEMS_CREATE,
+    PATH.SYSTEMS_HIERARCHY,
 ]
 
 export const PATH_ROLES_CONFIG: Record<PATH, ROLE[]> = {
@@ -187,5 +189,6 @@ export const PATH_ROLES_CONFIG: Record<PATH, ROLE[]> = {
     [PATH.CONTROL_SYSTEMS]: [ROLE.CONTROL_SYSTEMS_VIEW, ROLE.CONTROL_SYSTEMS_EDIT],
     [PATH.GRANTS]: [ROLE.PUBLICATIONS_EDIT],
     [PATH.CONTROL_SYSTEMS_CREATE]: [ROLE.CONTROL_SYSTEMS_EDIT],
+    [PATH.SYSTEMS_HIERARCHY]: [ROLE.SYSTEM_EDIT, ROLE.SYSTEMS_VIEW],
     [PATH.NOT_FOUND]: [],
 }

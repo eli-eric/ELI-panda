@@ -1,6 +1,8 @@
 import type { ColumnDef, Table } from '@tanstack/react-table'
 import type { ReactNode } from 'react'
 
+import type { PageSizeOption } from '@/types/pagination'
+
 // Define a type for row event handlers
 export type RowClickHandler<T extends object> = (
     row: T,
@@ -179,5 +181,5 @@ export interface FilterDropdownProps {
 export interface PageSizeDropdownProps {
     value: number
     onChange: (value: number) => void
-    pageSizeOptions: number[]
+    pageSizeOptions: readonly PageSizeOption[]
 }

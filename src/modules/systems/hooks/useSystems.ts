@@ -2,14 +2,19 @@ import { keepPreviousData, useQuery, useQueryClient } from '@tanstack/react-quer
 import { useEffect } from 'react'
 import { toast } from 'sonner'
 
+import type { PageSizeOption } from '@/types/pagination'
 import type { SystemsResponse } from '@/types/responses/systems'
 import type { QueryFetcherKey } from '@/utils/fetcher'
 import { queryFetcher } from '@/utils/fetcher'
 
 import useQueryManager from '../../../hooks/useQueryManager'
 
-export const useSystems = (tableId: string = 'systems', refetchOnMount: boolean = false) => {
-    const { query } = useQueryManager(tableId)
+export const useSystems = (
+    tableId: string = 'systems',
+    refetchOnMount: boolean = false,
+    pageSizeDefault?: PageSizeOption,
+) => {
+    const { query } = useQueryManager(tableId, pageSizeDefault)
 
     const queryKey: QueryFetcherKey = [tableId, { query }]
 

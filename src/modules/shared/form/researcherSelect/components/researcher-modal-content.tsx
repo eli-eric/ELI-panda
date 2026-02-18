@@ -173,7 +173,6 @@ export const ResearcherModalContent: React.FC<ResearcherModalContentProps> = ({
                 tableId={TABLE_ID}
                 settings={{
                     enableQueryURL: false,
-                    pageSizeDefault: 50,
                     total: data?.totalCount,
                 }}
             />

@@ -4,6 +4,7 @@ import { useIntl } from 'react-intl'
 
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
+import { PAGE_SIZE_OPTIONS } from '@/types/pagination'
 
 import { PageSizeDropdown } from './page-size-dropdown'
 import type { TablePaginationProps } from './types'
@@ -14,8 +15,7 @@ import type { TablePaginationProps } from './types'
  */
 export function TablePagination<T extends object>({ table }: TablePaginationProps<T>) {
     const { formatMessage: fm } = useIntl()
-    // Default page size options
-    const pageSizeOptions = [10, 25, 50, 100]
+    const pageSizeOptions = PAGE_SIZE_OPTIONS
 
     return (
         <div className="flex items-center justify-between px-4 py-3 border-t border-border bg-background">

@@ -105,7 +105,6 @@ export const SelectItemStep: FC = () => {
                 settings={{
                     total: systems?.totalCount,
                     enableQueryURL: false,
-                    pageSizeDefault: 50,
                 }}
             />
             <ModalButtonsComponent buttons={buttons} className="mt-0 sm:mt-0" />

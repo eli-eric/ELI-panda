@@ -12,9 +12,10 @@ import type { HistoryResponse } from '../../types/responses'
 
 interface Props {
     history?: HistoryResponse[]
+    className?: string
 }
 
-export const HistoryFeeds: FC<Props> = ({ history }) => {
+export const HistoryFeeds: FC<Props> = ({ history, className }) => {
     const { formatMessage: fm } = useIntl()
 
     if (!history || history.length === 0) {
@@ -26,7 +27,7 @@ export const HistoryFeeds: FC<Props> = ({ history }) => {
     }
 
     return (
-        <ul role="list" className="space-y-6 max-h-96 overflow-y-auto">
+        <ul role="list" className={cn('space-y-6', className || 'max-h-96 overflow-y-auto')}>
             {history.map((historyItem, index) => (
                 <HistoryFeedItem
                     key={historyItem.uid}

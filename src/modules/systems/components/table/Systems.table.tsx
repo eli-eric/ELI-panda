@@ -13,6 +13,7 @@ import {
 } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
 import { SearchBar } from '@/modules/shared/table/SearchBar'
 import { useRecalculate } from '@/modules/systemItem/hooks/useRecalculate'
+import type { PageSizeOption } from '@/types/pagination'
 import type { SystemDetail } from '@/types/responses/systems'
 
 import { useSystems } from '../../hooks/useSystems'
@@ -23,7 +24,7 @@ const MemoizedSearchBar = memo(SearchBar)
 
 interface Props {
     tableId: string
-    pageSizeDefault?: number
+    pageSizeDefault?: PageSizeOption
     className?: string
     collapseOnUnMount?: boolean
     hideButtons?: boolean

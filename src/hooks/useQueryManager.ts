@@ -2,7 +2,7 @@ import { useQueryState } from 'next-usequerystate'
 import { useMemo } from 'react'
 
 import useTableStateStore from '@/store/useTableStateStore'
-import { DEFAULT_PAGINATION, toLegacyPagination } from '@/types/pagination'
+import { DEFAULT_PAGINATION, resolvePageSizeDefault, toLegacyPagination } from '@/types/pagination'
 import type { CodebookType } from '@/types/responses/codebook'
 
 interface Query {
@@ -13,7 +13,10 @@ interface Query {
     [key: string]: any
 }
 
-export default function useQueryManager(tableId: string): { query: Query } {
+export default function useQueryManager(
+    tableId: string,
+    pageSizeDefault?: number,
+): { query: Query } {
     const { instances } = useTableStateStore()
     const [categoryQuery] = useQueryState('category', { history: 'push' })
     const category: CodebookType | null = categoryQuery ? JSON.parse(categoryQuery) : null
@@ -26,6 +29,11 @@ export default function useQueryManager(tableId: string): { query: Query } {
     const [searchQuery] = useQueryState('search')
     const [pageQuery] = useQueryState('page')
     const [pageSizeQuery] = useQueryState('pageSize')
+
+    const resolvedPageSizeDefault = useMemo(
+        () => resolvePageSizeDefault(tableId, pageSizeDefault),
+        [tableId, pageSizeDefault],
+    )
 
     const sorting = instances[tableId]?.sortByQueryString || ''
 
@@ -46,9 +54,9 @@ export default function useQueryManager(tableId: string): { query: Query } {
 
         // Priority 3: URL params with defaults
         const page = pageQuery ? parseInt(pageQuery, 10) : DEFAULT_PAGINATION.page
-        const pageSize = pageSizeQuery ? parseInt(pageSizeQuery, 10) : DEFAULT_PAGINATION.pageSize
+        const pageSize = pageSizeQuery ? parseInt(pageSizeQuery, 10) : resolvedPageSizeDefault
         return `{"page":${page},"pageSize":${pageSize}}`
-    }, [instances, tableId, pageQuery, pageSizeQuery])
+    }, [instances, tableId, pageQuery, pageSizeQuery, resolvedPageSizeDefault])
 
     const search = instances[tableId]?.search || searchQuery || ''
 
