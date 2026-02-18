@@ -49,7 +49,7 @@ export const createGraphqlLogger = (
     res: NextApiResponse,
 ) => {
     const requestId = crypto.randomUUID().slice(0, 8)
-    const user = session?.user?.name ?? 'anonymous'
+    const user = session?.user?.fullName ?? 'anonymous'
     const body = req.body as GraphQLRequestBody
     const operation = body?.operationName ?? 'unknown'
 

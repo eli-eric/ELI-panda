@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import { useIntl } from 'react-intl'
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -32,6 +32,15 @@ export function NavUser() {
     const { isMobile } = useSidebar()
     const { formatMessage: fm } = useIntl()
     const user = session?.user
+    const displayName = user?.fullName || user?.email || ''
+    const userInitials =
+        displayName
+            .split(' ')
+            .filter(Boolean)
+            .slice(0, 2)
+            .map(name => name[0])
+            .join('')
+            .toUpperCase() || 'CN'
 
     return (
         <SidebarMenu>
@@ -43,13 +52,12 @@ export function NavUser() {
                             className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                         >
                             <Avatar className="h-8 w-8 rounded-lg">
-                                <AvatarImage src={user?.image || undefined} alt={user?.fullName} />
                                 <AvatarFallback className="rounded-lg">
-                                    {user?.name?.substring(0, 2).toUpperCase() || 'CN'}
+                                    {userInitials}
                                 </AvatarFallback>
                             </Avatar>
                             <div className="grid flex-1 text-left text-sm leading-tight">
-                                <span className="truncate font-semibold">{user?.name}</span>
+                                <span className="truncate font-semibold">{displayName}</span>
                                 <span className="truncate text-xs">{user?.email}</span>
                             </div>
                             <ChevronsUpDown className="ml-auto size-4" />
@@ -64,16 +72,12 @@ export function NavUser() {
                         <DropdownMenuLabel className="p-0 font-normal">
                             <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                                 <Avatar className="h-8 w-8 rounded-lg">
-                                    <AvatarImage
-                                        src={user?.image || undefined}
-                                        alt={user?.fullName}
-                                    />
                                     <AvatarFallback className="rounded-lg">
-                                        {user?.name?.substring(0, 2).toUpperCase() || 'CN'}
+                                        {userInitials}
                                     </AvatarFallback>
                                 </Avatar>
                                 <div className="grid flex-1 text-left text-sm leading-tight">
-                                    <span className="truncate font-semibold">{user?.name}</span>
+                                    <span className="truncate font-semibold">{displayName}</span>
                                     <span className="truncate text-xs">{user?.email}</span>
                                 </div>
                             </div>
