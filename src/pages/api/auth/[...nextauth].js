@@ -26,10 +26,7 @@ const toCompactToken = token => ({
     facilityCode: token?.facilityCode,
     uid: token?.uid || token?.sub,
     fullName: token?.fullName || token?.name || '',
-    name: token?.name || token?.fullName || '',
     email: token?.email || '',
-    username: token?.username || token?.email || '',
-    image: token?.image ?? null,
 })
 
 export const authOptions = {
@@ -104,6 +101,8 @@ export const authOptions = {
                     process.env.NEXTAUTH_SECRET,
                 )
 
+                const fullName = [user.firstName, user.lastName].filter(Boolean).join(' ').trim()
+
                 return toCompactToken({
                     ...params.token,
                     sub: user.uid,
@@ -112,11 +111,8 @@ export const authOptions = {
                     facility: user.facilityName,
                     facilityCode: user.facilityCode,
                     uid: user.uid,
-                    fullName: user.firstName + ' ' + user.lastName,
-                    name: params.user?.name || user.firstName + ' ' + user.lastName,
+                    fullName: fullName || params.user?.name || '',
                     email: params.user?.email || user.email,
-                    username: params.user?.email || user.email,
-                    image: params.user?.image,
                 })
             }
 
@@ -132,10 +128,7 @@ export const authOptions = {
                     facilityCode: params.user.facilityCode,
                     uid: params.user.uid,
                     fullName,
-                    name: params.user.name || fullName,
                     email: params.user.email || params.token.email,
-                    username: params.user.username || params.user.email || params.token.username,
-                    image: params.user.image ?? params.token.image,
                 })
             }
 
@@ -148,10 +141,7 @@ export const authOptions = {
             params.session.user.facility = params.token.facility
             params.session.user.uid = params.token.uid
             params.session.user.fullName = params.token.fullName || params.token.name || ''
-            params.session.user.name = params.token.name || params.token.fullName
             params.session.user.email = params.token.email
-            params.session.user.image = params.token.image
-            params.session.user.username = params.token.username || params.token.email
 
             return params.session
         },

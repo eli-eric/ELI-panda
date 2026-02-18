@@ -85,7 +85,7 @@ export async function middleware(request: NextRequest) {
             // Log unauthorized access attempts for security audit
             // eslint-disable-next-line no-console
             console.warn('[Security] Unauthorized access attempt:', {
-                user: user.email || user.name || 'unknown',
+                user: user.email || user.fullName || 'unknown',
                 roles: user.roles,
                 path: pathname,
                 requiredRoles: PATH_ROLES_CONFIG[currentPath],
