@@ -51,8 +51,6 @@ export const authOptions = {
     },
     callbacks: {
         async jwt(params) {
-            // update token
-
             const providerId = params?.account?.provider
 
             if (providerId === 'azure-ad-beamlines') {
@@ -68,7 +66,7 @@ export const authOptions = {
                 }
 
                 const user = await neo4GetOrCreateUser(params.user.email, firstName, lastName)
-                const token = jwt.sign(
+                const apiAccessToken = jwt.sign(
                     {
                         sub: user.uid,
                         jti: user.email,
@@ -79,24 +77,38 @@ export const authOptions = {
                     },
                     process.env.NEXTAUTH_SECRET,
                 )
-                params.token.roles = user.roles
-                params.token.apiAccessToken = token
-                params.token.facility = user.facilityName
-                params.token.facilityCode = user.facilityCode
-                params.token.uid = user.uid
-                params.token.fullName = user.firstName + ' ' + user.lastName
-                return params.token
+                // Return only necessary fields to keep session token small
+                // (avoids storing Azure AD profile/claims bloat that causes 431 errors)
+                return {
+                    sub: user.uid,
+                    iat: params.token.iat,
+                    exp: params.token.exp,
+                    jti: params.token.jti,
+                    roles: user.roles,
+                    apiAccessToken,
+                    facility: user.facilityName,
+                    facilityCode: user.facilityCode,
+                    uid: user.uid,
+                    fullName: user.firstName + ' ' + user.lastName,
+                }
             }
 
             if (params.user?.roles) {
-                params.token.roles = params.user.roles
-                params.token.apiAccessToken = params.user.accessToken
-                params.token.facility = params.user.facility
-                params.token.facilityCode = params.user.facilityCode
-                params.token.uid = params.user.uid
-                params.token.fullName = params.user.firstName + ' ' + params.user.lastName
+                // Credentials flow - return only necessary fields
+                return {
+                    sub: params.token.sub,
+                    iat: params.token.iat,
+                    exp: params.token.exp,
+                    jti: params.token.jti,
+                    roles: params.user.roles,
+                    apiAccessToken: params.user.accessToken,
+                    facility: params.user.facility,
+                    facilityCode: params.user.facilityCode,
+                    uid: params.user.uid,
+                    fullName: params.user.firstName + ' ' + params.user.lastName,
+                }
             }
-            // return final_token
+
             return params.token
         },
         async session(params) {
