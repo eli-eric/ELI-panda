@@ -6,6 +6,32 @@ import getDriver from '@/utils/neo4j'
 
 var jwt = require('jsonwebtoken')
 
+const getFullName = user => {
+    if (user?.fullName) return user.fullName
+
+    const combinedName = [user?.firstName, user?.lastName].filter(Boolean).join(' ').trim()
+    if (combinedName) return combinedName
+
+    return user?.name || ''
+}
+
+const toCompactToken = token => ({
+    sub: token?.sub,
+    iat: token?.iat,
+    exp: token?.exp,
+    jti: token?.jti,
+    roles: token?.roles ?? [],
+    apiAccessToken: token?.apiAccessToken,
+    facility: token?.facility,
+    facilityCode: token?.facilityCode,
+    uid: token?.uid || token?.sub,
+    fullName: token?.fullName || token?.name || '',
+    name: token?.name || token?.fullName || '',
+    email: token?.email || '',
+    username: token?.username || token?.email || '',
+    image: token?.image ?? null,
+})
+
 export const authOptions = {
     session: {
         jwt: true,
@@ -54,7 +80,7 @@ export const authOptions = {
             const providerId = params?.account?.provider
 
             if (providerId === 'azure-ad-beamlines') {
-                let names = params.user.name.split(' ')
+                let names = (params.user?.name || '').split(' ').filter(Boolean)
                 let firstName = ''
                 let lastName = ''
 
@@ -77,39 +103,43 @@ export const authOptions = {
                     },
                     process.env.NEXTAUTH_SECRET,
                 )
-                // Return only necessary fields to keep session token small
-                // (avoids storing Azure AD profile/claims bloat that causes 431 errors)
-                return {
+
+                return toCompactToken({
+                    ...params.token,
                     sub: user.uid,
-                    iat: params.token.iat,
-                    exp: params.token.exp,
-                    jti: params.token.jti,
                     roles: user.roles,
                     apiAccessToken,
                     facility: user.facilityName,
                     facilityCode: user.facilityCode,
                     uid: user.uid,
                     fullName: user.firstName + ' ' + user.lastName,
-                }
+                    name: params.user?.name || user.firstName + ' ' + user.lastName,
+                    email: params.user?.email || user.email,
+                    username: params.user?.email || user.email,
+                    image: params.user?.image,
+                })
             }
 
             if (params.user?.roles) {
-                // Credentials flow - return only necessary fields
-                return {
-                    sub: params.token.sub,
-                    iat: params.token.iat,
-                    exp: params.token.exp,
-                    jti: params.token.jti,
+                const fullName = getFullName(params.user)
+
+                return toCompactToken({
+                    ...params.token,
+                    sub: params.user.uid || params.token.sub,
                     roles: params.user.roles,
                     apiAccessToken: params.user.accessToken,
                     facility: params.user.facility,
                     facilityCode: params.user.facilityCode,
                     uid: params.user.uid,
-                    fullName: params.user.firstName + ' ' + params.user.lastName,
-                }
+                    fullName,
+                    name: params.user.name || fullName,
+                    email: params.user.email || params.token.email,
+                    username: params.user.username || params.user.email || params.token.username,
+                    image: params.user.image ?? params.token.image,
+                })
             }
 
-            return params.token
+            return toCompactToken(params.token)
         },
         async session(params) {
             params.session.user.roles = params.token.roles
@@ -117,7 +147,11 @@ export const authOptions = {
             params.session.user.facilityCode = params.token.facilityCode
             params.session.user.facility = params.token.facility
             params.session.user.uid = params.token.uid
-            params.session.user.fullName = params.token.fullName
+            params.session.user.fullName = params.token.fullName || params.token.name || ''
+            params.session.user.name = params.token.name || params.token.fullName
+            params.session.user.email = params.token.email
+            params.session.user.image = params.token.image
+            params.session.user.username = params.token.username || params.token.email
 
             return params.session
         },
