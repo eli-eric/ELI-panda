@@ -1,9 +1,9 @@
-import { Fragment, useMemo } from 'react'
+import { Fragment } from 'react'
 
 import { cn } from '@/lib/utils'
 import { useCatalogueItems } from '@/modules/catalogue/hooks/useCatalogueItems'
 import { useCategoryList } from '@/modules/catalogue/hooks/useCategoryList'
-import useTableStateStore from '@/store/useTableStateStore'
+import type { PageSizeOption } from '@/types/pagination'
 import type { CatalogueItem } from '@/types/responses/catalogue'
 
 import { FilterBadges } from '../../form/FilterBadges'
@@ -42,7 +42,7 @@ interface CatalogueItemSelectProps {
      * Default page size for pagination
      * @default 10
      */
-    pageSizeDefault?: number
+    pageSizeDefault?: PageSizeOption
 
     /**
      * Additional CSS classes for the container
@@ -84,19 +84,7 @@ export const CatalogueItemSelect = ({
     className,
     right,
 }: CatalogueItemSelectProps) => {
-    const { setPagination, instances } = useTableStateStore()
-
-    // Initialize pagination SYNCHRONOUSLY before useCatalogueItems runs
-    // This fixes timing issue where useQueryManager defaults to pageSize:50
-    // useMemo runs during render (synchronous), useEffect runs after (async)
-    useMemo(() => {
-        if (!instances[tableId]?.pagination) {
-            setPagination(tableId, `{"page":1,"pageSize":${pageSizeDefault}}`)
-        }
-        return null
-    }, [tableId, pageSizeDefault, setPagination, instances])
-
-    const { catalogueItems, loading } = useCatalogueItems(tableId)
+    const { catalogueItems, loading } = useCatalogueItems(tableId, pageSizeDefault)
     const { catalogueCategories } = useCategoryList()
 
     // Pin selected item to first row

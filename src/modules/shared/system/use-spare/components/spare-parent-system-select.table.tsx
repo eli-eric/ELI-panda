@@ -41,7 +41,6 @@ export const SpareParentSystemSelectTable = () => {
     const paginationSettings = useMemo(
         () => ({
             enableQueryURL: settings?.enableQueryURL,
-            pageSizeDefault: 50,
             total: systems?.totalCount,
         }),
         [settings?.enableQueryURL, systems?.totalCount],

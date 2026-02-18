@@ -66,7 +66,6 @@ export const GrantsContainer: FC = () => {
                 tableId={tableId}
                 settings={{
                     enableQueryURL: true,
-                    pageSizeDefault: 50,
                     total: data?.totalCount,
                 }}
                 onPageChange={handlePageChange}

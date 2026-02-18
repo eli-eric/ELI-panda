@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form'
 import { useFilters } from '@/modules/shared/table/pandaTable/hooks/useFilters'
 import { useFormControlStore } from '@/store/useFormControlStore'
 import useTableStateStore from '@/store/useTableStateStore'
+import { getTablePageSizeDefault } from '@/types/pagination'
 
 interface IFilter<T> {
     tableId: string
@@ -131,7 +132,7 @@ export const useFormFilterState = ({
     const clearPageAndSearch = useCallback(() => {
         // Read from paginationState (new format) - this is what useQueryManager reads
         const currentState = instances[tableId]?.paginationState
-        const pageSize = currentState?.pageSize || 50
+        const pageSize = currentState?.pageSize || getTablePageSizeDefault(tableId)
 
         // Use setPaginationState - updates BOTH paginationState AND legacy pagination
         setPaginationState(tableId, { page: 1, pageSize })

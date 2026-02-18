@@ -111,7 +111,6 @@ const CatalogueContainer = () => {
                     settings={{
                         enableQueryURL: true,
                         total: catalogueItems?.totalCount,
-                        pageSizeDefault: 50,
                     }}
                     onPageChange={handlePageChange}
                 />

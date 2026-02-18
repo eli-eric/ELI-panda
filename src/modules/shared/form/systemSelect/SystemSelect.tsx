@@ -1,9 +1,10 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect } from 'react'
 
 import { cn } from '@/lib/utils'
 import { SystemFilterButtonContainer } from '@/modules/systems/components/filters/SystemsFilterButton.cont'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
 import useTableStateStore from '@/store/useTableStateStore'
+import type { PageSizeOption } from '@/types/pagination'
 import type { SystemDetail } from '@/types/responses/systems'
 
 import { PaginationV2 as Pagination } from '../../table/PaginationV2'
@@ -40,7 +41,7 @@ interface SystemSelectProps {
      * Default page size for pagination
      * @default 10
      */
-    pageSizeDefault?: number
+    pageSizeDefault?: PageSizeOption
 
     /**
      * Additional CSS classes for the container
@@ -89,19 +90,8 @@ export const SystemSelect = ({
     right,
     getRowProps,
 }: SystemSelectProps) => {
-    const { setPagination, instances } = useTableStateStore()
-
-    // Initialize pagination SYNCHRONOUSLY before useSystems runs
-    // This fixes timing issue where useQueryManager defaults to pageSize:50
-    // useMemo runs during render (synchronous), useEffect runs after (async)
-    useMemo(() => {
-        if (!instances[tableId]?.pagination) {
-            setPagination(tableId, `{"page":1,"pageSize":${pageSizeDefault}}`)
-        }
-        return null
-    }, [tableId, pageSizeDefault, setPagination, instances])
-
-    const { systems, loading } = useSystems(tableId)
+    const { instances } = useTableStateStore()
+    const { systems, loading } = useSystems(tableId, false, pageSizeDefault)
 
     // NOTE: We do NOT pin selected systems to the top of the table
     // Pinning breaks the hierarchical structure and collapses all expanded subsystems

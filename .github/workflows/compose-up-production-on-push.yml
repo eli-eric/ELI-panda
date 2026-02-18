@@ -9,9 +9,15 @@ jobs:
     use-secret:
         runs-on: czechia-server
         steps:
-            - name: Show secret stats
+            - name: Validate required secrets are set
               run: |
-                  echo "${{ secrets.NEXTAUTH_SECRET }}" | "${{ secrets.MINIO_ACCESS_KEY_PROD }}" | "${{ secrets.MINIO_SECRET_KEY_PROD }}" | "${{ secrets.NEO4J_PASSWORD }}" | "${{ secrets.AZURE_AD_BEAMLINES_CLIENT_ID }}" | "${{ secrets.AZURE_AD_BEAMLINES_CLIENT_SECRET }}" | "${{ secrets.AZURE_AD_BEAMLINES_TENANT_ID }}" | wc | wc
+                  test -n "${{ secrets.NEXTAUTH_SECRET }}" || { echo "Error: NEXTAUTH_SECRET is not set."; exit 1; }
+                  test -n "${{ secrets.MINIO_ACCESS_KEY_PROD }}" || { echo "Error: MINIO_ACCESS_KEY_PROD is not set."; exit 1; }
+                  test -n "${{ secrets.MINIO_SECRET_KEY_PROD }}" || { echo "Error: MINIO_SECRET_KEY_PROD is not set."; exit 1; }
+                  test -n "${{ secrets.NEO4J_PASSWORD }}" || { echo "Error: NEO4J_PASSWORD is not set."; exit 1; }
+                  test -n "${{ secrets.AZURE_AD_BEAMLINES_CLIENT_ID }}" || { echo "Error: AZURE_AD_BEAMLINES_CLIENT_ID is not set."; exit 1; }
+                  test -n "${{ secrets.AZURE_AD_BEAMLINES_CLIENT_SECRET }}" || { echo "Error: AZURE_AD_BEAMLINES_CLIENT_SECRET is not set."; exit 1; }
+                  test -n "${{ secrets.AZURE_AD_BEAMLINES_TENANT_ID }}" || { echo "Error: AZURE_AD_BEAMLINES_TENANT_ID is not set."; exit 1; }
     unit-tests:
         runs-on: czechia-server
         needs: use-secret
@@ -27,9 +33,35 @@ jobs:
               run: yarn install
             - name: Run unit tests
               run: yarn test
-    compose-up:
+    e2e-tests:
         runs-on: czechia-server
         needs: unit-tests
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+            - name: Build E2E Docker image
+              run: docker build -f Dockerfile.e2e -t panda-e2e:${{ github.sha }} .
+            - name: Prepare E2E artifact directories
+              run: mkdir -p playwright-report test-results
+            - name: Run E2E tests
+              run: |
+                  docker run --rm --shm-size=1g \
+                    -v ${{ github.workspace }}/playwright-report:/app/playwright-report \
+                    -v ${{ github.workspace }}/test-results:/app/test-results \
+                    panda-e2e:${{ github.sha }}
+            - name: Upload E2E report
+              uses: actions/upload-artifact@v4
+              if: ${{ always() && !cancelled() }}
+              with:
+                  name: playwright-report-production-${{ github.run_id }}
+                  path: playwright-report/
+                  retention-days: 14
+            - name: Cleanup Docker image
+              if: always()
+              run: docker rmi panda-e2e:${{ github.sha }} || true
+    compose-up:
+        runs-on: czechia-server
+        needs: [unit-tests, e2e-tests]
         steps:
             - uses: actions/checkout@v3
             - run: |

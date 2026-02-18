@@ -1,4 +1,5 @@
 import type { Row } from '@tanstack/react-table'
+import type { FC } from 'react'
 import { useEffect } from 'react'
 import { FormattedMessage } from 'react-intl'
 
@@ -29,10 +30,7 @@ const TABLE_ID = 'system-type-select-modal'
  * - Only children (system types) are selectable, not groups
  * - Auto-confirm on child selection
  */
-export const SystemTypeModalContent: React.FC<SystemTypeModalContentProps> = ({
-    onSelect,
-    onClose,
-}) => {
+export const SystemTypeModalContent: FC<SystemTypeModalContentProps> = ({ onSelect, onClose }) => {
     // Fetch system type groups with children
     const { data: treeData, isLoading, search } = useSystemTypesForSelect(TABLE_ID)
 

@@ -59,7 +59,6 @@ export const ResearchersContainer: FC = () => {
                 tableId={tableId}
                 settings={{
                     enableQueryURL: true,
-                    pageSizeDefault: 50,
                     total: data?.totalCount,
                 }}
             />

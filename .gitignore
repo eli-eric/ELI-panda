@@ -8,12 +8,16 @@ ELI-PANDA.code-workspace
 
 # dependencies
 node_modules
+/tmp
 /.pnp
 .pnp.js
 package-lock.json
 
 # testing
 /coverage
+playwright-report/
+test-results/
+playwright/.auth/
 
 # next.js
 /.next/
