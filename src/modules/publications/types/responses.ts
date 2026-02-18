@@ -1,9 +1,11 @@
+import type { ELI_PUBLICATION } from '@/modules/publication/types/constants'
 import type { Publication as PublicationItem } from '@/modules/publication/types/responses'
 import type { Employee } from '@/types/gql/graphql'
 import type { CodebookType } from '@/types/responses/codebook'
 
 export type Publication = {
     pdfFile: string // pdf file + blob/code - TBD, nazev soubory link na file bude v tabulce a moznost filtrace
+    eliPublication: ELI_PUBLICATION
     experimentalSystem?: string // codebook? - nevime, konkretni beam line
     userCall?: CodebookType // codebook dostaneme, navazany na user Experiment
     useExperiment?: CodebookType // codebook? odkud budem brat?

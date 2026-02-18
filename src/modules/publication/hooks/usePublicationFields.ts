@@ -37,6 +37,13 @@ export const usePublicationFields = () => {
             disabled,
             codebook: CODEBOOK.MEDIA_TYPE,
         },
+        eliPublication: {
+            label: form.eliPublication.label,
+            name: 'eliPublication',
+            rounded: 'rounded-md',
+            disabled,
+            placeholder: form.eliPublication.placeholder,
+        },
         // Disabled @deprecated field
         experimentalSystem: {
             label: form.experimentalSystem.label,

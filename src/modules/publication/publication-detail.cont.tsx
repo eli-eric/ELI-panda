@@ -18,7 +18,7 @@ import { FILE_TYPE } from '../shared/fileManager/types'
 import { PublicationFormComponent } from './components/publication-form.comp'
 import { publicationOtherSchema, publicationPeerReviewedSchema } from './form/scheme'
 import { usePublicationMutation } from './hooks/usePublicationMutation'
-import { MEDIA_TYPE_UID } from './types/constants'
+import { ELI_PUBLICATION, MEDIA_TYPE_UID } from './types/constants'
 import type { PublicationForm } from './types/form'
 import type { Publication } from './types/responses'
 import { formatFormData, formatPublication } from './utils/formatters'
@@ -52,6 +52,7 @@ export const PublicationDetailContainer: FC<Props> = ({ publication, refetch }) 
     const defaultValues = publication
         ? formatPublication(publication)
         : ({
+              eliPublication: ELI_PUBLICATION.YES,
               authorsDepartments: [{ department: null, authorsCount: 0 }],
           } as unknown as PublicationForm)
 

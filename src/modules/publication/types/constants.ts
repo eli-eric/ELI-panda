@@ -34,3 +34,8 @@ export const MEDIA_TYPE_MAP: Record<MEDIA_TYPE_CODE, MEDIA_TYPE_LABEL> = {
     [MEDIA_TYPE_CODE.PeerReviewedArticle]: MEDIA_TYPE_LABEL.PEER_REVIEWED,
     [MEDIA_TYPE_CODE.OtherArticle]: MEDIA_TYPE_LABEL.OTHER,
 }
+
+export enum ELI_PUBLICATION {
+    YES = 'YES',
+    NO = 'NO',
+}
