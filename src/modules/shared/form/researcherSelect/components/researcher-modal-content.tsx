@@ -1,6 +1,6 @@
 import { X } from 'lucide-react'
 import { useState } from 'react'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import { PlusButton } from '@/components/Buttons'
 import { Tooltip } from '@/components/Tooltip'
@@ -50,6 +50,8 @@ export const ResearcherModalContent: React.FC<ResearcherModalContentProps> = ({
     onClose,
     initialSelected = [],
 }) => {
+    const { formatMessage: fm } = useIntl()
+    const labels = message.researchersPage.form
     // Local state for multi-selection
     const [selectedResearchers, setSelectedResearchers] =
         useState<SelectedResearcher[]>(initialSelected)
@@ -109,7 +111,7 @@ export const ResearcherModalContent: React.FC<ResearcherModalContentProps> = ({
             {selectedResearchers.length > 0 && (
                 <div className="flex flex-wrap gap-1 p-2 bg-muted/50 rounded-md">
                     <span className="text-sm text-muted-foreground mr-2 self-center">
-                        Selected ({selectedResearchers.length}):
+                        {fm({ id: labels.selectedCount }, { count: selectedResearchers.length })}
                     </span>
                     {selectedResearchers.map(r => (
                         <Badge
@@ -139,7 +141,7 @@ export const ResearcherModalContent: React.FC<ResearcherModalContentProps> = ({
                 useQuery={false}
                 right={
                     canCreate ? (
-                        <Tooltip content="Create New Researcher">
+                        <Tooltip content={fm({ id: labels.createNew })}>
                             <div>
                                 <PlusButton onClick={openResearcherForm} />
                             </div>
@@ -188,7 +190,8 @@ export const ResearcherModalContent: React.FC<ResearcherModalContentProps> = ({
                     onClick={handleConfirm}
                 >
                     <FormattedMessage id={message.common.buttons.continue} />
-                    {selectedResearchers.length > 0 && ` (${selectedResearchers.length})`}
+                    {selectedResearchers.length > 0 &&
+                        fm({ id: labels.countSuffix }, { count: selectedResearchers.length })}
                 </Button>
             </div>
         </div>

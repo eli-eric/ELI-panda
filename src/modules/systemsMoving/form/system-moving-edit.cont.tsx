@@ -1,5 +1,7 @@
 import { Suspense } from 'react'
+import { useIntl } from 'react-intl'
 
+import { message } from '@/i18n/src/messages'
 import type { SystemDetail } from '@/types/responses/systems'
 
 import { SystemMovingEditForm } from './system-moving-edit.form'
@@ -19,12 +21,14 @@ export const SystemMovingEditContainer = ({
     parentSystem,
     onClose,
 }: SystemMovingEditContainerProps) => {
+    const { formatMessage: fm } = useIntl()
+
     if (!childSystem || !parentSystem) {
-        return <div>Missing required data</div>
+        return <div>{fm({ id: message.common.ui.missingRequiredData })}</div>
     }
 
     return (
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<div>{fm({ id: message.common.ui.loading })}</div>}>
             <SystemMovingEditForm
                 childSystem={childSystem}
                 parentSystem={parentSystem}

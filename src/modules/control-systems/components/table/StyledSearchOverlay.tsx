@@ -11,6 +11,8 @@ interface StyledSearchOverlayProps {
  * Asterisks (*) are displayed in bold, larger font, and lime color.
  */
 export const StyledSearchOverlay = ({ value, className }: StyledSearchOverlayProps) => {
+    const ASTERISK = '*'
+
     if (!value) return null
 
     // Only show overlay if value contains asterisks
@@ -46,9 +48,9 @@ export const StyledSearchOverlay = ({ value, className }: StyledSearchOverlayPro
         >
             <span className="text-foreground/90">
                 {parts.map((part, i) =>
-                    part === '*' ? (
+                    part === ASTERISK ? (
                         <span key={i} className="font-bold text-lime-600 dark:text-lime-400">
-                            {/* eslint-disable-next-line react/jsx-no-literals */}*
+                            {ASTERISK}
                         </span>
                     ) : (
                         <span key={i}>{part}</span>
