@@ -1,9 +1,9 @@
-import { sortBy } from 'lodash'
 import { useMemo } from 'react'
 
 import useGroupDetails from '@/modules/catalogueItem/hooks/useGroupDetails'
 import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
 import type { CodebookType } from '@/types/responses/codebook'
+import { sortBy } from '@/utils/sortBy'
 
 import { DetailPropertiesList } from './detail-properties.list'
 
