@@ -143,6 +143,7 @@
         "eslint-plugin-typescript-sort-keys": "^3.1.0",
         "eslint-plugin-unused-imports": "^3.0.0",
         "husky": "^9.1.7",
+        "lint-staged": "^15.4.3",
         "jest": "^29.7.0",
         "jest-environment-jsdom": "^29.7.0",
         "postcss": "^8.5.6",
@@ -153,6 +154,11 @@
         "ts-jest": "^29.2.4",
         "ts-node": "^10.9.2",
         "typescript": "^5.8.3"
+    },
+    "lint-staged": {
+        "*.{ts,tsx,js,jsx}": [
+            "eslint --fix"
+        ]
     },
     "resolutions": {
         "fast-xml-parser": "5.3.6",

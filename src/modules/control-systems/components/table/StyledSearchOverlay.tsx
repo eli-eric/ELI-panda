@@ -5,14 +5,14 @@ interface StyledSearchOverlayProps {
     className?: string
 }
 
+const ASTERISK = '*'
+
 /**
  * Overlay component that displays search text with styled asterisks.
  * Renders over the native input to provide visual highlighting of search pattern characters.
  * Asterisks (*) are displayed in bold, larger font, and lime color.
  */
 export const StyledSearchOverlay = ({ value, className }: StyledSearchOverlayProps) => {
-    const ASTERISK = '*'
-
     if (!value) return null
 
     // Only show overlay if value contains asterisks
