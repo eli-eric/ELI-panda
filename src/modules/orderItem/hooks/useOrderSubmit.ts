@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import type { AxiosError, AxiosResponse } from 'axios'
+import type { AxiosError, AxiosResponse } from '@/types/http'
 import { useRouter } from 'next/router'
 import { toast } from 'sonner'
 
@@ -73,7 +73,7 @@ export const useOrderSubmit = (formReset: (t: any) => void) => {
     })
 
     const handleOnSuccess =
-        (saveAndExit: boolean) => async (data: AxiosResponse<OrderDetailFormType, any>) => {
+        (saveAndExit: boolean) => async (data: AxiosResponse<OrderDetailFormType>) => {
             const orderDetail = data.data
 
             // Prepare data for form reset (add uuid)

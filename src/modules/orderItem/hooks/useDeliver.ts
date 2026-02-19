@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
-import type { AxiosError, AxiosResponse } from 'axios'
+import type { AxiosError, AxiosResponse } from '@/types/http'
 import { useRouter } from 'next/router'
 import { toast } from 'sonner'
 

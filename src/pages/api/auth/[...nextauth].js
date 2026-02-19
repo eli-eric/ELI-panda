@@ -1,4 +1,3 @@
-import axios from 'axios'
 import NextAuth from 'next-auth/next'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import AzureADProvider from 'next-auth/providers/azure-ad'
@@ -42,29 +41,40 @@ export const authOptions = {
         }),
         CredentialsProvider({
             async authorize(credentials) {
-                const result = await axios({
+                const response = await fetch(process.env.PANDA_API_GW_URL + '/authenticate', {
+                    method: 'POST',
                     headers: {
                         Accept: 'application/json',
                         'Content-Type': 'application/json',
                     },
-                    method: 'post',
-                    url: process.env.PANDA_API_GW_URL + '/authenticate',
-                    data: {
+                    body: JSON.stringify({
                         username: credentials?.username,
                         password: credentials?.password,
-                    },
-                }).catch(error => {
-                    //catching erros
-                    console.log(error)
-                    if (error.response) {
-                        if (error.request.res.statusCode === 401) {
-                            throw new Error('Wrong password or user name')
-                        } else {
-                            throw new Error(error.response.data)
+                    }),
+                })
+
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        throw new Error('Wrong password or user name')
+                    }
+
+                    let errorMessage = 'Authentication failed'
+                    try {
+                        const errorData = await response.json()
+                        errorMessage =
+                            errorData?.message || errorData?.error || JSON.stringify(errorData)
+                    } catch {
+                        try {
+                            errorMessage = await response.text()
+                        } catch {
+                            errorMessage = 'Authentication failed'
                         }
                     }
-                })
-                return result.data
+
+                    throw new Error(errorMessage)
+                }
+
+                return await response.json()
             },
         }),
     ],

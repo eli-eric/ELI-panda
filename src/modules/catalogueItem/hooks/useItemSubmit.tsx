@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import type { AxiosError } from 'axios'
+import type { AxiosError } from '@/types/http'
 import { useRouter } from 'next/router'
 import type { UseFormSetValue } from 'react-hook-form'
 import { toast } from 'sonner'
