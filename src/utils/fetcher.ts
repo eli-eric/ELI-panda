@@ -5,7 +5,7 @@ import { z } from 'zod'
 
 // axiosInstance is gradually being replaced by fetchRequest – kept temporarily for compatibility
 // import axiosInstance from '@/core/axios/axiosInstance'
-import { fetchRequest } from '@/core/http/fetchClient'
+import { fetchRequest, fetchRequestDetailed } from '@/core/http/fetchClient'
 import { BASE_URL } from '@/types/constants/common'
 
 import type { EndpointProps } from './getEndpoints'
@@ -144,17 +144,17 @@ export const queryMutate = <TResponse, TVariables>(
         try {
             const method = mutationType.toUpperCase()
             // For delete do not send body
-            const data = await fetchRequest<TResponse>(url, {
+            const response = await fetchRequestDetailed<TResponse>(url, {
                 method,
                 body: mutationType === 'delete' ? undefined : (variables as any),
                 responseType,
             })
             // Adapt to AxiosResponse shape expected by existing code
             const axiosLike = {
-                data,
-                status: 200,
-                statusText: 'OK',
-                headers: {},
+                data: response.data,
+                status: response.status,
+                statusText: response.statusText,
+                headers: response.headers,
                 config: {},
                 request: undefined,
             } as AxiosResponse<TResponse>

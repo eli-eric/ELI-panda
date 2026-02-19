@@ -10,11 +10,14 @@ const compareValues = (a: unknown, b: unknown): number => {
     if (a == null) return 1
     if (b == null) return -1
 
-    if (typeof a === 'number' && typeof b === 'number') {
-        return a - b
-    }
+    if (typeof a === 'number' && typeof b === 'number') return a - b
 
-    return String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: 'base' })
+    const left = String(a)
+    const right = String(b)
+
+    if (left < right) return -1
+    if (left > right) return 1
+    return 0
 }
 
 export const sortBy = <T>(list: T[] | null | undefined, paths: string[] | string): T[] => {

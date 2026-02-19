@@ -36,12 +36,13 @@ export const toAxiosError = <T = any>(error: unknown): AxiosError<T> => {
         const candidate = error as Record<string, unknown>
         const status = typeof candidate.status === 'number' ? candidate.status : undefined
         const details = candidate.details
+        const data = (candidate.data ?? details ?? candidate) as T
         const code = typeof candidate.code === 'string' ? candidate.code : undefined
 
         if (status) {
             defaultError.response = {
                 status,
-                data: details as T,
+                data,
             }
         }
 
@@ -49,9 +50,7 @@ export const toAxiosError = <T = any>(error: unknown): AxiosError<T> => {
             defaultError.code = code
         }
 
-        if (details !== undefined) {
-            defaultError.details = details
-        }
+        defaultError.details = details ?? candidate
     }
 
     return defaultError
