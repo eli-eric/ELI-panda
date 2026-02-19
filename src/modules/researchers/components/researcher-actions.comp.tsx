@@ -1,6 +1,7 @@
 import type { CellContext } from '@tanstack/react-table'
 import { MoreVertical, Pencil, Trash2 } from 'lucide-react'
 import type { FC } from 'react'
+import { useIntl } from 'react-intl'
 import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
@@ -12,6 +13,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { useAccessControl } from '@/hooks/useAccessControl'
 import useWarningModal from '@/hooks/useWarningModal'
+import { message } from '@/i18n/src/messages'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { ROLE } from '@/types/constants/roles'
 
@@ -27,10 +29,12 @@ export const ResearcherActionsCell: FC<ResearcherActionsCellProps> = ({
         original: { uid },
     },
 }) => {
+    const { formatMessage: fm } = useIntl()
     const { openModal } = useDynamicModalStore()
+    const labels = message.researchersPage.actions
     const lastName = getValue()
     const deleteResearcher = useResearcherDelete(uid)
-    const withWarning = useWarningModal('Are you sure you want to delete this researcher?')
+    const withWarning = useWarningModal(fm({ id: labels.deleteWarning }))
     const canEdit = useAccessControl(ROLE.PUBLICATIONS_EDIT)()
 
     const handleEdit = () => {
@@ -39,7 +43,7 @@ export const ResearcherActionsCell: FC<ResearcherActionsCellProps> = ({
             component: ResearcherEditContainer,
             props: {
                 uid,
-                title: 'Edit Researcher',
+                title: fm({ id: labels.editTitle }),
             },
         })
     }
@@ -54,9 +58,9 @@ export const ResearcherActionsCell: FC<ResearcherActionsCellProps> = ({
                     })
                 }),
                 {
-                    loading: 'Deleting researcher...',
-                    success: 'Researcher deleted',
-                    error: 'Failed to delete researcher',
+                    loading: fm({ id: labels.deleting }),
+                    success: fm({ id: labels.deleted }),
+                    error: fm({ id: labels.deleteFailed }),
                 },
             )
         })()
@@ -68,7 +72,7 @@ export const ResearcherActionsCell: FC<ResearcherActionsCellProps> = ({
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button
-                            aria-label="Researcher actions"
+                            aria-label={fm({ id: labels.ariaLabel })}
                             variant="ghost"
                             tabIndex={0}
                             className="has-[>svg]:px-1 cursor-pointer"
@@ -79,11 +83,11 @@ export const ResearcherActionsCell: FC<ResearcherActionsCellProps> = ({
                     <DropdownMenuContent align="start" sideOffset={4}>
                         <DropdownMenuItem onClick={handleEdit}>
                             <Pencil className="size-4" />
-                            Edit
+                            {fm({ id: message.common.buttons.edit })}
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={handleDelete} className="text-destructive">
                             <Trash2 className="size-4" />
-                            Delete
+                            {fm({ id: message.common.buttons.delete })}
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>

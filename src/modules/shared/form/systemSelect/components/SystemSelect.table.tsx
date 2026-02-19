@@ -1,6 +1,7 @@
 import type { Row } from '@tanstack/react-table'
 import { useEffect } from 'react'
 
+import { cn } from '@/lib/utils'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import type { GetRowPropsReturnType } from '@/modules/shared/table/pandaTable/PandaTable'
 import { PandaTableV2 } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
@@ -66,7 +67,7 @@ export const SystemSelectTable = ({
             getRowProps={getRowProps}
             data={systems}
             skeletonRowCount={pageSizeDefault}
-            className={'relative overflow-y-scroll scrollbar-style text-sm'}
+            className={cn('relative overflow-y-scroll scrollbar-style text-sm', className)}
             settings={{
                 enableQueryURL,
                 defaultColumnOrder: ['selection', 'name', 'systemCode', 'systemType'],

@@ -38,5 +38,6 @@ export const usePinnedCatalogueData = (
 
         // Prepend selected item to the beginning
         return [selectedItem, ...filteredItems]
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- depend on uid only to avoid unstable object refs
     }, [catalogueItems, selectedItem?.uid])
 }

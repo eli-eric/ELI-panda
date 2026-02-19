@@ -1,4 +1,5 @@
 import { useCallback } from 'react'
+import { useIntl } from 'react-intl'
 
 import {
     Select,
@@ -7,6 +8,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
+import { message } from '@/i18n/src/messages'
 import type { CodebookType } from '@/types/responses/codebook'
 
 import { useEmptySystemSelectionModal } from '../hooks/useEmptySystemSelectionModal'
@@ -26,6 +28,8 @@ export const OrderLineSystemTypeCombo = ({
     onChange,
     disabled,
 }: OrderLineSystemTypeComboProps) => {
+    const { formatMessage: fm } = useIntl()
+    const labels = message.ordersPage.orderLines.systemTypeCombo
     const { openEmptySystemModal } = useEmptySystemSelectionModal()
 
     const handleValueChange = useCallback(
@@ -49,11 +53,11 @@ export const OrderLineSystemTypeCombo = ({
     return (
         <Select value={value} onValueChange={handleValueChange} disabled={disabled}>
             <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select system type" />
+                <SelectValue placeholder={fm({ id: labels.placeholder })} />
             </SelectTrigger>
             <SelectContent>
-                <SelectItem value="new">New System</SelectItem>
-                <SelectItem value="existing">Existing System</SelectItem>
+                <SelectItem value="new">{fm({ id: labels.newSystem })}</SelectItem>
+                <SelectItem value="existing">{fm({ id: labels.existingSystem })}</SelectItem>
             </SelectContent>
         </Select>
     )

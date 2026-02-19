@@ -35,7 +35,7 @@ interface SystemSelectProps {
      * Whether to show action buttons in table cells
      * @default true
      */
-    hideButtons?: boolean
+    _hideButtons?: boolean
 
     /**
      * Default page size for pagination
@@ -84,7 +84,8 @@ export const SystemSelect = ({
     selectedSystem,
     onSelect,
     tableId,
-    hideButtons = true,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- reserved for API compatibility
+    _hideButtons = true,
     pageSizeDefault = 10,
     className,
     right,

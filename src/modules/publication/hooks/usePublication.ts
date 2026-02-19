@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
-import type { AxiosError } from '@/types/http'
 import { useRouter } from 'next/router'
 
+import type { AxiosError } from '@/types/http'
 import type { QueryFetcherKey } from '@/utils/fetcher'
 import { queryFetcher } from '@/utils/fetcher'
 

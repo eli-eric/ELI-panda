@@ -1,5 +1,4 @@
 import { useMutation } from '@tanstack/react-query'
-import type { AxiosError } from '@/types/http'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { toast } from 'sonner'
@@ -8,6 +7,7 @@ import { useSystemDetail } from '@/modules/systemItem/hooks/useSystemDetail'
 import { useSystemsReload } from '@/modules/systemItem/hooks/useSystemsReload'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { PATH } from '@/types/constants/paths'
+import type { AxiosError } from '@/types/http'
 import type { CodebookType } from '@/types/responses/codebook'
 import { queryMutate } from '@/utils/fetcher'
 

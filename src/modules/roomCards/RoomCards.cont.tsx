@@ -15,7 +15,7 @@ import { useRoomCards } from './hooks/useRoomCards'
 export const RoomCardsContainer = () => {
     const tableId = 'roomCards'
     const router = useRouter()
-    const { roomCards, loading, error, refetch } = useRoomCards()
+    const { roomCards, loading, refetch } = useRoomCards()
 
     const columns = useRoomCardsColumns()
 

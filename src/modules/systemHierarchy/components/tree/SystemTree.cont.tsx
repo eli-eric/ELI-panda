@@ -45,6 +45,7 @@ export const SystemTreeContainer: FC = () => {
             setExpandedNodes(expandedBeforeSearch.current)
             expandedBeforeSearch.current = null
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- preserve pre-search expansion snapshot during search session
     }, [search, filteredNodes, expandNodes, setExpandedNodes])
 
     return (

@@ -1,10 +1,12 @@
 import { Plus, X } from 'lucide-react'
 import { useFieldArray } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { useAccessControl } from '@/hooks/useAccessControl'
+import { message } from '@/i18n/src/messages'
 import { type SelectedGrant, useGrantSelectionModal } from '@/modules/shared/form/grantSelect'
 import { ROLE } from '@/types/constants/roles'
 
@@ -17,6 +19,8 @@ import { ROLE } from '@/types/constants/roles'
  * - Respects user permissions (PUBLICATIONS_EDIT role)
  */
 export const GrantsSelectComponent = () => {
+    const { formatMessage: fm } = useIntl()
+    const labels = message.publication.form.grants
     const { fields, replace, remove } = useFieldArray<{
         grants: SelectedGrant[]
     }>({
@@ -38,12 +42,14 @@ export const GrantsSelectComponent = () => {
 
     return (
         <div className="space-y-2">
-            <Label>Grants</Label>
+            <Label>{fm({ id: labels.label })}</Label>
 
             {/* Selected grants as badges */}
             <div className="flex flex-wrap gap-2 min-h-[32px]">
                 {fields.length === 0 ? (
-                    <span className="text-sm text-muted-foreground">No grants selected</span>
+                    <span className="text-sm text-muted-foreground">
+                        {fm({ id: labels.noSelection })}
+                    </span>
                 ) : (
                     fields.map((field, index) => (
                         <Badge
@@ -57,7 +63,7 @@ export const GrantsSelectComponent = () => {
                                     type="button"
                                     onClick={() => handleRemove(index)}
                                     className="ml-1 rounded-full hover:bg-muted p-0.5"
-                                    aria-label={`Remove ${field.name}`}
+                                    aria-label={`${fm({ id: labels.remove })} ${field.name}`}
                                 >
                                     <X className="h-3 w-3" />
                                 </button>
@@ -77,7 +83,7 @@ export const GrantsSelectComponent = () => {
                     className="mt-2"
                 >
                     <Plus className="h-4 w-4 mr-1" />
-                    Add Grant
+                    {fm({ id: labels.addButton })}
                 </Button>
             )}
         </div>
