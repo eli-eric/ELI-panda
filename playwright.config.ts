@@ -28,7 +28,12 @@ export default defineConfig({
         },
     ],
     webServer: {
-        command: `yarn build && PORT=${E2E_PORT} next start --hostname 127.0.0.1`,
+        command:
+            `yarn build && ` +
+            `mkdir -p .next/standalone/.next && ` +
+            `cp -R .next/static .next/standalone/.next/static && ` +
+            `cp -R public .next/standalone/public && ` +
+            `PORT=${E2E_PORT} HOSTNAME=127.0.0.1 node .next/standalone/server.js`,
         url: E2E_BASE_URL,
         reuseExistingServer: false,
         timeout: 3 * 60 * 1000,
