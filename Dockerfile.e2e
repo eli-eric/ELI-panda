@@ -4,6 +4,7 @@ WORKDIR /app
 
 # Install dependencies (cached layer)
 COPY package.json yarn.lock ./
+COPY scripts/enforce-package-manager.cjs ./scripts/enforce-package-manager.cjs
 RUN HUSKY=0 yarn --frozen-lockfile
 
 # Install Playwright Chromium + system deps (matches installed @playwright/test version)
