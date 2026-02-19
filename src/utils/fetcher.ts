@@ -1,6 +1,6 @@
 import type { MutateFunction, QueryFunction, QueryKey } from '@tanstack/react-query'
-import type { AxiosError, AxiosResponse } from 'axios'
-import axios from 'axios'
+import type { AxiosError, AxiosResponse } from '@/types/http'
+import { isAxiosError, toAxiosError } from '@/types/http'
 import { z } from 'zod'
 
 // axiosInstance is gradually being replaced by fetchRequest – kept temporarily for compatibility
@@ -39,7 +39,7 @@ interface NormalizedError {
 }
 
 const normalizeError = (error: unknown): NormalizedError => {
-    if (axios.isAxiosError(error)) {
+    if (isAxiosError(error)) {
         return {
             status: error.response?.status,
             code: (error.response?.data as any)?.code,
@@ -161,7 +161,7 @@ export const queryMutate = <TResponse, TVariables>(
             return axiosLike
         } catch (e) {
             if ((e as any)?.name === 'AbortError') throw e
-            throw e
+            throw toAxiosError(e)
         }
     }
     return mutateFn

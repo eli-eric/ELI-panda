@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import type { AxiosError, AxiosResponse } from 'axios'
+import type { AxiosError, AxiosResponse } from '@/types/http'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { toast } from 'sonner'
 

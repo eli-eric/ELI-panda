@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import type { AxiosError } from 'axios'
+import type { AxiosError } from '@/types/http'
 
 import type { QueryFetcherKey } from '@/utils/fetcher'
 import { queryFetcher } from '@/utils/fetcher'

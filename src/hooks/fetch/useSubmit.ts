@@ -1,4 +1,4 @@
-import type { AxiosError } from 'axios'
+import type { AxiosError } from '@/types/http'
 import { useRef, useState } from 'react'
 
 import axiosInstance from '@/core/axios/axiosInstance'
