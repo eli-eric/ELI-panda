@@ -1,12 +1,12 @@
 import type { MutateFunction, QueryFunction, QueryKey } from '@tanstack/react-query'
-import type { AxiosError, AxiosResponse } from '@/types/http'
-import { isAxiosError, toAxiosError } from '@/types/http'
 import { z } from 'zod'
 
 // axiosInstance is gradually being replaced by fetchRequest – kept temporarily for compatibility
 // import axiosInstance from '@/core/axios/axiosInstance'
 import { fetchRequest, fetchRequestDetailed } from '@/core/http/fetchClient'
 import { BASE_URL } from '@/types/constants/common'
+import type { AxiosError, AxiosResponse } from '@/types/http'
+import { isAxiosError, toAxiosError } from '@/types/http'
 
 import type { EndpointProps } from './getEndpoints'
 import { getEndpoints } from './getEndpoints'

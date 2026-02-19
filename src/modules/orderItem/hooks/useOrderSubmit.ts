@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import type { AxiosError, AxiosResponse } from '@/types/http'
 import { useRouter } from 'next/router'
 import { toast } from 'sonner'
 
 import { PATH } from '@/types/constants/paths'
+import type { AxiosError, AxiosResponse } from '@/types/http'
 import type { QueryFetcherKey } from '@/utils/fetcher'
 import { queryMutate } from '@/utils/fetcher'
 

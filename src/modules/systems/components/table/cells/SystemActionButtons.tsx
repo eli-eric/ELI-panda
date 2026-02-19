@@ -14,7 +14,6 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { message } from '@/i18n/src/messages'
 import { openGraphModal } from '@/modules/shared/system/GraphModal'
-import { useSystemCreateSheet } from '@/modules/shared/system/system-create/useSystemCreateSheet'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 import { useSystemDelete } from '@/modules/systems/hooks/useSystemDelete'
 import { useSparePartsColumns } from '@/modules/systemsSpareParts/components/SpareParts.columns'
@@ -94,7 +93,6 @@ export const SystemActionButtons = ({
     })
 
     const { openModal } = useDynamicModalStore()
-    const openSystemCreateSheet = useSystemCreateSheet()
 
     const handleDelete = () => {
         deleteSystem()

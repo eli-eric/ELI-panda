@@ -72,6 +72,7 @@ export const PublicationDetailContainer: FC<Props> = ({ publication, refetch }) 
     }
 
     const onInvalid = (errors: any) => {
+        // eslint-disable-next-line no-console -- keep form validation diagnostics during submission failures
         console.error('Publication form validation errors:', errors)
     }
 

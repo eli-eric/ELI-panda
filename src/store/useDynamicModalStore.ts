@@ -149,7 +149,8 @@ export const useDynamicModalStore = create<ModalState>((set, get) => ({
         }
 
         // Remove from modals and order
-        const { [id]: removed, ...remainingModals } = state.modals
+        const remainingModals = { ...state.modals }
+        delete remainingModals[id]
         const newOrder = state.modalOrder.filter(modalId => modalId !== id)
 
         // Recalculate z-indices for remaining modals

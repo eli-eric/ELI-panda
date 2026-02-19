@@ -38,5 +38,5 @@ export const usePinnedCatalogueData = (
 
         // Prepend selected item to the beginning
         return [selectedItem, ...filteredItems]
-    }, [catalogueItems, selectedItem?.uid])
+    }, [catalogueItems, selectedItem])
 }

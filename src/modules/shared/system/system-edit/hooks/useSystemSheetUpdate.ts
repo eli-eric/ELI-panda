@@ -111,6 +111,7 @@ export const useSystemSheetUpdate = ({
 
     const { mutate: update, isPending } = useGraphQLMutation(systemDetailMutation, {
         onError: error => {
+            // eslint-disable-next-line no-console -- keep mutation error diagnostics for sheet update failures
             console.error('Update system error:', error)
             showErrorToast(intl, message.systemsPage.systemDetail.updateModal.onError, {
                 error: error.message,

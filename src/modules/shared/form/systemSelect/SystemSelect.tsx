@@ -84,6 +84,7 @@ export const SystemSelect = ({
     selectedSystem,
     onSelect,
     tableId,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- reserved for API compatibility
     hideButtons = true,
     pageSizeDefault = 10,
     className,
