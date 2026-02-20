@@ -19,6 +19,7 @@ export const employeeRefSchema = z.object({
 const parentPathItemSchema = z.object({
     uid: z.string(),
     name: z.string(),
+    systemLevel: z.string().optional().nullable(),
 })
 
 const historyEntrySchema = z.object({
