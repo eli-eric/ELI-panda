@@ -16,18 +16,20 @@ const ITEM_USAGE_VALUES = [
 
 interface AssignSparesParams {
     uid: string
-    parentPath: Array<{ uid: string; name: string; systemLevel?: string | null }> | null
+    parentPath: Array<{ uid: string; name: string; systemLevel?: SystemLevel | null }> | null
     catalogueNumber: string | null
 }
 
-export const useAssignSparesNavigation = (params: AssignSparesParams) => {
+export const useAssignSparesNavigation = ({
+    uid,
+    parentPath,
+    catalogueNumber,
+}: AssignSparesParams) => {
     const router = useRouter()
     const { setSelectedUidForSystem } = useSparesStore()
     const { setSearch, setColumnFilter } = useTableStateStore()
 
     return useCallback(() => {
-        const { uid, parentPath, catalogueNumber } = params
-
         const parentTechUnit = [...(parentPath ?? [])]
             .reverse()
             .find(p => p.systemLevel === SystemLevel.TechnologyUnit)
@@ -56,5 +58,5 @@ export const useAssignSparesNavigation = (params: AssignSparesParams) => {
         setSearch('for-system', uid)
         setSelectedUidForSystem(uid)
         router.push(PATH.SPARE_PARTS)
-    }, [params, router, setSelectedUidForSystem, setSearch, setColumnFilter])
+    }, [uid, parentPath, catalogueNumber, router, setSelectedUidForSystem, setSearch, setColumnFilter])
 }

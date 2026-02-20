@@ -13,6 +13,7 @@ import { message } from '@/i18n/src/messages'
 import { openItemAssignModal } from '@/modules/shared/form/itemAssign/item-assign.modal'
 import { openItemMoveModal } from '@/modules/shared/form/itemMoving/item-move.modal'
 import { useAssignSparesNavigation } from '@/modules/shared/hooks/useAssignSparesNavigation'
+import type { SystemLevel } from '@/types/gql/graphql'
 
 import type { SystemLeaf } from '../../types'
 
@@ -26,7 +27,7 @@ export const ActionsDropdown: FC<ActionsDropdownProps> = ({ system }) => {
 
     const handleAssignSpares = useAssignSparesNavigation({
         uid: system.uid,
-        parentPath: system.parentPath ?? null,
+        parentPath: (system.parentPath as Array<{ uid: string; name: string; systemLevel?: SystemLevel | null }>) ?? null,
         catalogueNumber: system.physicalItem?.catalogueNumber ?? null,
     })
 
