@@ -116,4 +116,19 @@ describe('useAssignSparesNavigation', () => {
             expect.arrayContaining([expect.objectContaining({ id: 'parentSystem' })]),
         )
     })
+
+    it('skips catalogueNumber filter when null', () => {
+        const params = {
+            uid: 'system-4',
+            parentPath: null,
+            catalogueNumber: null,
+        }
+        const { result } = renderHook(() => useAssignSparesNavigation(params))
+        act(() => result.current())
+
+        const filters = useTableStateStore.getState().instances['spare-parts']?.columnFilter
+        expect(filters).not.toEqual(
+            expect.arrayContaining([expect.objectContaining({ id: 'catalogueNumber' })]),
+        )
+    })
 })

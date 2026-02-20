@@ -84,6 +84,16 @@ export const PersonsTabContainer: FC<PersonsTabProps> = ({ system }) => {
             />
 
             <InlineFieldCombobox
+                label={fm({ id: message.systemHierarchy.persons.owner })}
+                value={system.owner?.uid ?? null}
+                displayValue={system.owner?.name ?? null}
+                codebook={CODEBOOK.EMPLOYEE}
+                onSave={uid => handleSaveField('ownerUid', uid)}
+                isPending={isPending}
+                disabled
+            />
+
+            <InlineFieldCombobox
                 label={fm({ id: message.systemHierarchy.fields.team })}
                 value={system.responsibleTeam?.uid ?? null}
                 displayValue={system.responsibleTeam?.name ?? null}
@@ -91,6 +101,7 @@ export const PersonsTabContainer: FC<PersonsTabProps> = ({ system }) => {
                 onSave={uid => handleSaveField('responsibleTeamUid', uid)}
                 isPending={isPending}
             />
+
             {showEmployeeTables && (
                 <div className="space-y-4 pt-3">
                     <EmployeeAssignmentTable

@@ -33,13 +33,16 @@ export const useAssignSparesNavigation = (params: AssignSparesParams) => {
             .find(p => p.systemLevel === SystemLevel.TechnologyUnit)
 
         const filters: Array<{ id: string; name: string; value: unknown }> = [
-            { id: 'catalogueNumber', name: 'catalogueNumber', value: catalogueNumber },
             {
                 id: 'itemUsage',
                 name: 'itemUsage',
                 value: ITEM_USAGE_VALUES,
             },
         ]
+
+        if (catalogueNumber) {
+            filters.push({ id: 'catalogueNumber', name: 'catalogueNumber', value: catalogueNumber })
+        }
 
         if (parentTechUnit) {
             filters.push({
