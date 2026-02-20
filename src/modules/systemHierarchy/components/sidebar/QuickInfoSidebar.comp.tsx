@@ -44,10 +44,6 @@ export const QuickInfoSidebar: FC<QuickInfoSidebarProps> = ({ system }) => {
             label: fm({ id: message.systemHierarchy.fields.responsible }),
             value: system.responsible?.name ?? null,
         },
-        {
-            label: fm({ id: message.systemHierarchy.fields.owner }),
-            value: system.owner?.name ?? null,
-        },
     ]
 
     const statsItems = [

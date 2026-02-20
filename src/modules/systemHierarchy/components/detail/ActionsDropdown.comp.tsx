@@ -10,14 +10,25 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { message } from '@/i18n/src/messages'
+import { openItemAssignModal } from '@/modules/shared/form/itemAssign/item-assign.modal'
+import { openItemMoveModal } from '@/modules/shared/form/itemMoving/item-move.modal'
+import { useAssignSparesNavigation } from '@/modules/shared/hooks/useAssignSparesNavigation'
+
+import type { SystemLeaf } from '../../types'
 
 interface ActionsDropdownProps {
-    uid: string
-    hasPhysicalItem: boolean
+    system: SystemLeaf
 }
 
-export const ActionsDropdown: FC<ActionsDropdownProps> = ({ uid, hasPhysicalItem }) => {
+export const ActionsDropdown: FC<ActionsDropdownProps> = ({ system }) => {
     const { formatMessage: fm } = useIntl()
+    const hasPhysicalItem = !!system.physicalItem
+
+    const handleAssignSpares = useAssignSparesNavigation({
+        uid: system.uid,
+        parentPath: system.parentPath ?? null,
+        catalogueNumber: system.physicalItem?.catalogueNumber ?? null,
+    })
 
     return (
         <DropdownMenu>
@@ -26,19 +37,19 @@ export const ActionsDropdown: FC<ActionsDropdownProps> = ({ uid, hasPhysicalItem
                     <MoreVertical className="h-4 w-4 text-muted-foreground" />
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" data-testid={`actions-${uid}`}>
+            <DropdownMenuContent align="end" data-testid={`actions-${system.uid}`}>
                 {hasPhysicalItem && (
-                    <DropdownMenuItem className="cursor-pointer">
+                    <DropdownMenuItem className="cursor-pointer" onClick={openItemMoveModal}>
                         <Move className="h-4 w-4 mr-2" />
                         {fm({ id: message.systemHierarchy.detail.moveItem })}
                     </DropdownMenuItem>
                 )}
-                <DropdownMenuItem className="cursor-pointer">
+                <DropdownMenuItem className="cursor-pointer" onClick={handleAssignSpares}>
                     <Wrench className="h-4 w-4 mr-2" />
                     {fm({ id: message.systemHierarchy.detail.assignSpares })}
                 </DropdownMenuItem>
                 {!hasPhysicalItem && (
-                    <DropdownMenuItem className="cursor-pointer">
+                    <DropdownMenuItem className="cursor-pointer" onClick={openItemAssignModal}>
                         <Package className="h-4 w-4 mr-2" />
                         {fm({ id: message.systemHierarchy.detail.assignItem })}
                     </DropdownMenuItem>
