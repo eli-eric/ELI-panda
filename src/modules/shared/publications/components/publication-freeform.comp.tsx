@@ -4,6 +4,7 @@ import Listbox from '@/components/form/Listbox'
 import { RadioSelect } from '@/components/form/radio-select.comp'
 import { useAccessControl } from '@/hooks/useAccessControl'
 import { DepartmentsComponent } from '@/modules/publication/components/departments.comp'
+import { EliAuthorsSelectComponent } from '@/modules/publication/components/eli-authors-select.comp'
 import { WebLinkField } from '@/modules/publication/components/web-link.field'
 import { useMediaTypeStore } from '@/modules/publication/hooks/useMediaTypeStore'
 import { usePublicationFields } from '@/modules/publication/hooks/usePublicationFields'
@@ -41,15 +42,15 @@ export const PublicationFreeFormComponent = () => {
             />
             <Input {...fields.code} />
             <Listbox {...fields.userCall} />
-            <Input {...fields.userExperiment} />
-            <Input {...fields.experimentalSystem} />
+            <Combobox {...fields.userExperimentCb} />
+            <Combobox {...fields.experimentalSystemCb} />
             <Input {...fields.doi} />
             <WebLinkField />
             <Listbox {...fields.openAccessType} />
             <Input {...fields.title} />
             <TextArea {...fields.allAuthors} />
             <Input {...fields.allAuthorsCount} />
-            <TextArea {...fields.eliAuthors} />
+            <EliAuthorsSelectComponent />
             <DepartmentsComponent />
             <Input {...fields.longJournalTitle} />
             <Input {...fields.shortJournalTitle} />
@@ -69,7 +70,6 @@ export const PublicationFreeFormComponent = () => {
             <TextArea {...fields.abstract} />
             <TextArea {...fields.keywords} />
             <Input {...fields.oecdFord} />
-            <Input {...fields.grant} />
             <Input {...fields.wosNumber} />
             <Input {...fields.issn} />
             <Input {...fields.eissn} />

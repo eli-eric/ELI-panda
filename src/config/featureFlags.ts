@@ -27,12 +27,6 @@ interface FeatureFlags {
     enableSparePartsAssignment: boolean
 
     /**
-     * Enable ELI Authors selection via researcher picker modal
-     * When disabled, uses legacy TextArea input for eliAuthors
-     */
-    enableEliAuthorsResearcherPicker: boolean
-
-    /**
      * Enable detailed GraphQL request/response logging
      * Logs user context, request body, and response data
      */
@@ -43,7 +37,6 @@ export const featureFlags: FeatureFlags = {
     enableHttpLogging: false,
     enableMutationLogging: false,
     enableSparePartsAssignment: !isProductionEnvironment(),
-    enableEliAuthorsResearcherPicker: !isProductionEnvironment(),
     enableGraphqlLogging: !isLocalEnvironment(),
 }
 

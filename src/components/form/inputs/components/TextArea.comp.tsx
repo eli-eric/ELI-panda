@@ -42,6 +42,7 @@ export const TextArea = ({
                         )}
                         aria-invalid={error ? 'true' : 'false'}
                     />
+                    {error && <p className="text-sm text-destructive">{error.message}</p>}
                 </div>
             )}
         />
