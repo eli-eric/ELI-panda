@@ -74,4 +74,36 @@ describe('useFormNotification', () => {
             )
         })
     })
+
+    it('does not spam toast when errors change after failed submit', async () => {
+        const { result } = renderHook(() => {
+            const form = useForm({
+                defaultValues: { name: '', email: '' },
+            })
+            useFormNotification({ control: form.control })
+            return form
+        })
+
+        // First failed submit
+        await act(async () => {
+            result.current.setError('name', { message: 'Name is required' })
+            result.current.setError('email', { message: 'Email is required' })
+            await result.current.handleSubmit(
+                () => {},
+                () => {},
+            )()
+        })
+
+        await waitFor(() => {
+            expect(toast.error).toHaveBeenCalledTimes(1)
+        })
+
+        // Clear one error (simulates user fixing a field) — should NOT fire another toast
+        await act(async () => {
+            result.current.clearErrors('name')
+        })
+
+        // Still only 1 toast call total
+        expect(toast.error).toHaveBeenCalledTimes(1)
+    })
 })

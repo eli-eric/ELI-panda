@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { type Control, type FieldErrors, type FieldValues, useFormState } from 'react-hook-form'
 import { toast } from 'sonner'
 
@@ -35,10 +35,13 @@ const scrollToFirstError = () => {
 }
 
 const useFormNotification = <T extends FieldValues>({ control }: Props<T>) => {
-    const { isSubmitted, errors } = useFormState<T>({ control })
+    const { submitCount, errors } = useFormState<T>({ control })
+    const lastSubmitCount = useRef(0)
 
     useEffect(() => {
-        if (!isSubmitted) return
+        if (submitCount === 0 || submitCount === lastSubmitCount.current) return
+        lastSubmitCount.current = submitCount
+
         const errorCount = countErrors(errors as FieldErrors)
         if (errorCount > 0) {
             toast.error(
@@ -47,7 +50,7 @@ const useFormNotification = <T extends FieldValues>({ control }: Props<T>) => {
             )
             scrollToFirstError()
         }
-    }, [isSubmitted, errors])
+    }, [submitCount, errors])
 }
 
 export default useFormNotification
