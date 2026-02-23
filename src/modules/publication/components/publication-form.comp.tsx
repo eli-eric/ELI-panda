@@ -9,7 +9,7 @@ import { useFormContext, useWatch } from 'react-hook-form'
 
 import { useMediaTypeStore } from '../hooks/useMediaTypeStore'
 import { usePublicationFields } from '../hooks/usePublicationFields'
-import { MEDIA_TYPE_CODE, MEDIA_TYPE_UID } from '../types/constants'
+import { MEDIA_TYPE_CODE, MEDIA_TYPE_CODEBOOK_CODE } from '../types/constants'
 import { DepartmentsComponent } from './departments.comp'
 import { EliAuthorsSelectComponent } from './eli-authors-select.comp'
 import { GrantsSelectComponent } from './grants-select.comp'
@@ -26,17 +26,24 @@ export type Publication = {
 }
 
 export const PublicationFormComponent = () => {
-    const { control } = useFormContext()
+    const {
+        control,
+        trigger,
+        formState: { submitCount },
+    } = useFormContext()
     const mediaTypeCb = useWatch({ control, name: 'mediaTypeCb' })
     const { setMediaType } = useMediaTypeStore()
 
     useEffect(() => {
         const code =
-            mediaTypeCb?.uid === MEDIA_TYPE_UID.PEER_REVIEWED_ARTICLE
+            mediaTypeCb?.code === MEDIA_TYPE_CODEBOOK_CODE
                 ? MEDIA_TYPE_CODE.PeerReviewedArticle
                 : MEDIA_TYPE_CODE.OtherArticle
         setMediaType(code)
-    }, [mediaTypeCb, setMediaType])
+        if (submitCount > 0) {
+            trigger(['doi', 'volume', 'oecdFord'])
+        }
+    }, [mediaTypeCb, setMediaType, trigger, submitCount])
 
     const fields = usePublicationFields()
 

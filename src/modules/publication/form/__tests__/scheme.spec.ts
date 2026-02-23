@@ -3,7 +3,7 @@ import {
     publicationPeerReviewedSchema,
 } from '../scheme'
 
-const validCodebook = { uid: 'test-uid', name: 'Test Name' }
+const validCodebook = { uid: 'test-uid', name: 'Test Name', code: 'T' }
 
 const validResearcher = { uid: 'r-1', firstName: 'John', lastName: 'Doe' }
 

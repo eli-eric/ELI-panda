@@ -160,7 +160,7 @@ export const publicationOtherSchema = z.object({
     }),
 
     // Optional fields (different from peer-reviewed)
-    mediaTypeCb: codebookSchema.nullable().optional().refine(val => val != null, {
+    mediaTypeCb: codebookSchema.nullable().refine(val => val !== null, {
         message: 'Media Type is required',
     }),
     doi: z.string().nullable().optional(), // Optional for Other articles
