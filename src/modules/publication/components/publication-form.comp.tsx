@@ -4,8 +4,12 @@ import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
 import Card from '@/components/layout/Card'
 import { Separator } from '@/components/ui/separator'
+import { useEffect } from 'react'
+import { useFormContext, useWatch } from 'react-hook-form'
 
+import { useMediaTypeStore } from '../hooks/useMediaTypeStore'
 import { usePublicationFields } from '../hooks/usePublicationFields'
+import { MEDIA_TYPE_CODE, MEDIA_TYPE_UID } from '../types/constants'
 import { DepartmentsComponent } from './departments.comp'
 import { EliAuthorsSelectComponent } from './eli-authors-select.comp'
 import { GrantsSelectComponent } from './grants-select.comp'
@@ -22,6 +26,18 @@ export type Publication = {
 }
 
 export const PublicationFormComponent = () => {
+    const { control } = useFormContext()
+    const mediaTypeCb = useWatch({ control, name: 'mediaTypeCb' })
+    const { setMediaType } = useMediaTypeStore()
+
+    useEffect(() => {
+        const code =
+            mediaTypeCb?.uid === MEDIA_TYPE_UID.PEER_REVIEWED_ARTICLE
+                ? MEDIA_TYPE_CODE.PeerReviewedArticle
+                : MEDIA_TYPE_CODE.OtherArticle
+        setMediaType(code)
+    }, [mediaTypeCb, setMediaType])
+
     const fields = usePublicationFields()
 
     return (
