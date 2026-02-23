@@ -1,8 +1,14 @@
 import type { RadioSelectOption } from '@/components/form/radio-select.comp'
 
-export const MEDIA_TYPE_UID = {
-    PEER_REVIEWED_ARTICLE: '927fd988-07a9-43c4-ab3e-1290f5b85d54',
-} as const
+export const MEDIA_TYPE_CODEBOOK_CODE = 'J' as const
+
+/**
+ * Checks if mediaTypeCb is peer-reviewed article.
+ * Uses `code` field (from codebook dropdown) with `name` prefix fallback (from API response).
+ */
+export const isPeerReviewedMediaType = (mediaTypeCb: { code?: string; name?: string } | null) =>
+    mediaTypeCb?.code === MEDIA_TYPE_CODEBOOK_CODE ||
+    mediaTypeCb?.name?.startsWith(MEDIA_TYPE_CODEBOOK_CODE + ' ')
 
 export enum MEDIA_TYPE_LABEL {
     PEER_REVIEWED = 'Peer-Reviewed Article',
