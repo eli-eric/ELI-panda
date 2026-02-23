@@ -1,10 +1,8 @@
 import type { RadioSelectOption } from '@/components/form/radio-select.comp'
 
-/**
- * Codebook code for peer-reviewed article media type.
- * Uses stable `code` field instead of UID which varies between environments.
- */
-export const MEDIA_TYPE_CODEBOOK_CODE = 'J' as const
+export const MEDIA_TYPE_UID = {
+    PEER_REVIEWED_ARTICLE: '927fd988-07a9-43c4-ab3e-1290f5b85d54',
+} as const
 
 export enum MEDIA_TYPE_LABEL {
     PEER_REVIEWED = 'Peer-Reviewed Article',

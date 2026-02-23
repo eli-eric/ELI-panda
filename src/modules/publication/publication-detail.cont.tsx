@@ -18,17 +18,17 @@ import { FILE_TYPE } from '../shared/fileManager/types'
 import { PublicationFormComponent } from './components/publication-form.comp'
 import { publicationOtherSchema, publicationPeerReviewedSchema } from './form/scheme'
 import { usePublicationMutation } from './hooks/usePublicationMutation'
-import { ELI_PUBLICATION, MEDIA_TYPE_CODEBOOK_CODE } from './types/constants'
+import { ELI_PUBLICATION, MEDIA_TYPE_UID } from './types/constants'
 import type { PublicationForm } from './types/form'
 import type { Publication } from './types/responses'
 import { formatFormData, formatPublication } from './utils/formatters'
 
 /**
- * Dynamic resolver that selects validation schema based on mediaTypeCb.code.
+ * Dynamic resolver that selects validation schema based on mediaTypeCb.uid.
  * Defined outside component to maintain stable reference.
  */
 const dynamicResolver = async (values: any, context: any, options: any) => {
-    const isPeerReviewed = values.mediaTypeCb?.code === MEDIA_TYPE_CODEBOOK_CODE
+    const isPeerReviewed = values.mediaTypeCb?.uid === MEDIA_TYPE_UID.PEER_REVIEWED_ARTICLE
     const schema = isPeerReviewed ? publicationPeerReviewedSchema : publicationOtherSchema
     return zodResolver(schema)(values, context, options)
 }
