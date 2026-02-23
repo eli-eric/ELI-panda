@@ -1,12 +1,24 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import { FormProvider, useForm } from 'react-hook-form'
-import type { FC, PropsWithChildren } from 'react'
+import { type FC, type PropsWithChildren, useEffect } from 'react'
 
 import { TextArea } from '../components/TextArea.comp'
 
 const FormWrapper: FC<PropsWithChildren> = ({ children }) => {
     const methods = useForm()
     return <FormProvider {...methods}>{children}</FormProvider>
+}
+
+const WithError: FC<{ field: string; message: string }> = ({ field, message }) => {
+    const methods = useForm({ defaultValues: { [field]: '' } })
+    useEffect(() => {
+        methods.setError(field, { message })
+    }, [methods, field, message])
+    return (
+        <FormProvider {...methods}>
+            <TextArea name={field} label="Test" />
+        </FormProvider>
+    )
 }
 
 describe('TextArea component', () => {
@@ -19,40 +31,21 @@ describe('TextArea component', () => {
         expect(screen.getByLabelText('Description')).toBeInTheDocument()
     })
 
-    it('renders error message when validation fails', () => {
-        const WithError: FC = () => {
-            const methods = useForm({
-                defaultValues: { test: '' },
-            })
-            // Manually set an error
-            methods.setError('test', { message: 'Field is required' })
-            return (
-                <FormProvider {...methods}>
-                    <TextArea name="test" label="Test" />
-                </FormProvider>
-            )
-        }
-        render(<WithError />)
-        expect(screen.getByText('Field is required')).toBeInTheDocument()
+    it('renders error message when validation fails', async () => {
+        render(<WithError field="test" message="Field is required" />)
+        await waitFor(() => {
+            expect(screen.getByText('Field is required')).toBeInTheDocument()
+        })
     })
 
-    it('sets aria-invalid when error exists', () => {
-        const WithError: FC = () => {
-            const methods = useForm({
-                defaultValues: { test: '' },
-            })
-            methods.setError('test', { message: 'Required' })
-            return (
-                <FormProvider {...methods}>
-                    <TextArea name="test" label="Test" />
-                </FormProvider>
+    it('sets aria-invalid when error exists', async () => {
+        render(<WithError field="test" message="Required" />)
+        await waitFor(() => {
+            expect(screen.getByLabelText('Test')).toHaveAttribute(
+                'aria-invalid',
+                'true',
             )
-        }
-        render(<WithError />)
-        expect(screen.getByLabelText('Test')).toHaveAttribute(
-            'aria-invalid',
-            'true',
-        )
+        })
     })
 
     it('does not show error when field is valid', () => {
