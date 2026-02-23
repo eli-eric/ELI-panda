@@ -1,7 +1,5 @@
 import { z } from 'zod'
 
-import { isFeatureEnabled } from '@/config/featureFlags'
-
 import { ELI_PUBLICATION } from '../types/constants'
 
 const codebookSchema = z.object({
@@ -29,20 +27,11 @@ const selectedGrantSchema = z.object({
     name: z.string().min(1),
 })
 
-/**
- * Conditional validation for ELI Authors fields based on feature flag.
- * - When researcher picker is enabled: eliResearchers is required, eliAuthors is optional
- * - When disabled (production): eliAuthors is required, eliResearchers is optional
- */
-const isResearcherPickerEnabled = isFeatureEnabled('enableEliAuthorsResearcherPicker')
+const eliAuthorsSchema = z.string().nullable().optional()
 
-const eliAuthorsSchema = isResearcherPickerEnabled
-    ? z.string().nullable().optional()
-    : z.string().min(1, 'ELI Authors is required')
-
-const eliResearchersSchema = isResearcherPickerEnabled
-    ? z.array(selectedResearcherSchema).min(1, 'At least one ELI Author is required')
-    : z.array(selectedResearcherSchema).optional()
+const eliResearchersSchema = z
+    .array(selectedResearcherSchema)
+    .min(1, 'At least one ELI Author is required')
 
 const authorsDepartmentSchema = z.object({
     department: codebookSchema.nullable().refine(val => val !== null, {
@@ -59,7 +48,7 @@ export const publicationPeerReviewedSchema = z.object({
     eliPublication: z.nativeEnum(ELI_PUBLICATION).default(ELI_PUBLICATION.YES),
     code: z.string().min(1, 'Code is required'),
     doi: z.string().min(1, 'DOI is required'),
-    openAccessType: codebookSchema.refine(val => val, {
+    openAccessType: codebookSchema.nullable().refine(val => val !== null, {
         message: 'Open Access Type is required',
     }),
     title: z.string().min(1, 'Title is required'),
@@ -91,20 +80,17 @@ export const publicationPeerReviewedSchema = z.object({
     abstract: z.string().min(1, 'Abstract is required'),
     keywords: z.string().min(1, 'Keywords is required'),
     oecdFord: z.string().min(1, 'OECD Ford is required'),
-    publishingCountry: codebookSchema.refine(val => val, {
+    publishingCountry: codebookSchema.nullable().refine(val => val !== null, {
         message: 'Publishing Country is required',
     }),
 
     // Optional fields
-    mediaType: z.string().nullable().optional(),
-    mediaTypeCb: codebookSchema.refine(val => val, {
+    mediaTypeCb: codebookSchema.nullable().refine(val => val !== null, {
         message: 'Media Type is required',
     }),
     shortJournalTitle: z.string().nullable().optional(),
-    experimentalSystem: z.string().nullable().optional(),
     experimentalSystemCb: codebookSchema.nullable().optional(),
     userCall: codebookSchema.nullable().optional(),
-    userExperiment: z.string().nullable().optional(),
     userExperimentCb: codebookSchema.nullable().optional(),
     webLink: z.string().nullable().optional(),
     issue: z
@@ -128,7 +114,6 @@ export const publicationPeerReviewedSchema = z.object({
         .nullable(),
     quartilBasis: z.string().nullable().optional(),
     quartil: z.string().nullable().optional(),
-    grant: z.string().nullable().optional(),
     grants: z.array(selectedGrantSchema).optional(),
     otherGrants: z.string().nullable().optional(),
     wosNumber: z.string().nullable().optional(),
@@ -143,7 +128,7 @@ export const publicationOtherSchema = z.object({
     // Required fields
     eliPublication: z.nativeEnum(ELI_PUBLICATION).default(ELI_PUBLICATION.YES),
     code: z.string().min(1, 'Code is required'),
-    openAccessType: codebookSchema.refine(val => val, {
+    openAccessType: codebookSchema.nullable().refine(val => val !== null, {
         message: 'Open Access Type is required',
     }),
     title: z.string().min(1, 'Title is required'),
@@ -170,22 +155,19 @@ export const publicationOtherSchema = z.object({
     dateOfPublication: z.string().min(1, 'Date of Publication is required'),
     abstract: z.string().min(1, 'Abstract is required'),
     keywords: z.string().min(1, 'Keywords is required'),
-    publishingCountry: codebookSchema.refine(val => val, {
+    publishingCountry: codebookSchema.nullable().refine(val => val !== null, {
         message: 'Publishing Country is required',
     }),
 
     // Optional fields (different from peer-reviewed)
-    mediaType: z.string().nullable().optional(),
-    mediaTypeCb: codebookSchema.optional().refine(val => val !== undefined, {
+    mediaTypeCb: codebookSchema.nullable().optional().refine(val => val != null, {
         message: 'Media Type is required',
     }),
     doi: z.string().nullable().optional(), // Optional for Other articles
     volume: z.union([z.string(), z.number()]).nullable().optional(), // Optional for Other articles
     oecdFord: z.string().nullable().optional(), // Optional for Other articles
-    experimentalSystem: z.string().nullable().optional(),
     experimentalSystemCb: codebookSchema.nullable().optional(),
     userCall: codebookSchema.nullable().optional(),
-    userExperiment: z.string().nullable().optional(),
     userExperimentCb: codebookSchema.nullable().optional(),
     webLink: z.string().nullable().optional(),
     issue: z.union([z.string(), z.number()]).nullable().optional(),
@@ -201,7 +183,6 @@ export const publicationOtherSchema = z.object({
     shortJournalTitle: z.string().nullable().optional(),
     quartilBasis: z.string().nullable().optional(),
     quartil: z.string().nullable().optional(),
-    grant: z.string().nullable().optional(),
     grants: z.array(selectedGrantSchema).optional(),
     otherGrants: z.string().nullable().optional(),
     wosNumber: z.string().nullable().optional(),

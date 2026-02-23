@@ -23,13 +23,6 @@ export const usePublicationFields = () => {
             rounded: 'rounded-md',
             disabled,
         },
-        // Disabled @deprecated field
-        mediaType: {
-            label: form.mediaType.label,
-            name: 'mediaType',
-            rounded: 'rounded-md',
-            disabled: true,
-        },
         mediaTypeCb: {
             label: form.mediaTypeCb.label,
             name: 'mediaTypeCb',
@@ -43,13 +36,6 @@ export const usePublicationFields = () => {
             rounded: 'rounded-md',
             disabled,
             placeholder: form.eliPublication.placeholder,
-        },
-        // Disabled @deprecated field
-        experimentalSystem: {
-            label: form.experimentalSystem.label,
-            name: 'experimentalSystem',
-            rounded: 'rounded-md',
-            disabled: true,
         },
         experimentalSystemCb: {
             label: form.experimentalSystemCb.label,
@@ -65,13 +51,6 @@ export const usePublicationFields = () => {
             rounded: 'rounded-md',
             disabled,
             codebook: CODEBOOK.USER_CALL,
-        },
-        // Disabled @deprecated field
-        userExperiment: {
-            label: form.userExperiment.label,
-            rounded: 'rounded-md',
-            name: 'userExperiment',
-            disabled: true,
         },
         userExperimentCb: {
             label: form.userExperimentCb.label,
@@ -116,14 +95,6 @@ export const usePublicationFields = () => {
             name: 'allAuthorsCount',
             rounded: 'rounded-md',
             type: 'number',
-            disabled,
-        },
-        eliAuthors: {
-            label: form.eliAuthors.label,
-            rounded: 'rounded-md',
-            name: 'eliAuthors',
-            // When researcher picker is enabled, this field is auto-generated and disabled
-            // When disabled (production), user can edit manually
             disabled,
         },
         eliAuthorsCount: {
@@ -229,13 +200,6 @@ export const usePublicationFields = () => {
             rounded: 'rounded-md',
             name: 'oecdFord',
             disabled,
-        },
-        // Disabled @deprecated field
-        grant: {
-            rounded: 'rounded-md',
-            label: form.grant.label,
-            name: 'grant',
-            disabled: true,
         },
         grantCb: {
             label: form.grantCb.label,
