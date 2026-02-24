@@ -1,0 +1,43 @@
+import { render, screen } from '@testing-library/react'
+import React from 'react'
+import { IntlProvider } from 'react-intl'
+
+import { RelationshipGraphComponent } from '../RelationshipGraph.comp'
+
+const msgs: Record<string, string> = {
+    'systemHierarchy.graph.title': 'Relationship Graph',
+    'systemHierarchy.graph.noNodes': 'No systems to display',
+}
+
+const renderWithIntl = (ui: React.ReactElement) =>
+    render(
+        <IntlProvider locale="en" messages={msgs}>
+            {ui}
+        </IntlProvider>,
+    )
+
+describe('RelationshipGraphComponent', () => {
+    it('shows loading state', () => {
+        renderWithIntl(
+            <RelationshipGraphComponent nodes={[]} edges={[]} isLoading={true} />,
+        )
+        expect(screen.getByText('Relationship Graph...')).toBeInTheDocument()
+    })
+
+    it('shows empty state when no nodes', () => {
+        renderWithIntl(
+            <RelationshipGraphComponent nodes={[]} edges={[]} isLoading={false} />,
+        )
+        expect(screen.getByText('No systems to display')).toBeInTheDocument()
+    })
+
+    it('renders ReactFlow when nodes exist', () => {
+        const nodes = [
+            { id: 'n1', position: { x: 0, y: 0 }, data: { label: 'Test' } },
+        ]
+        renderWithIntl(
+            <RelationshipGraphComponent nodes={nodes} edges={[]} isLoading={false} />,
+        )
+        expect(screen.getByTestId('relationship-graph')).toBeInTheDocument()
+    })
+})
