@@ -1,12 +1,14 @@
 import type { RadioSelectOption } from '@/components/form/radio-select.comp'
 
+export const MEDIA_TYPE_CODEBOOK_CODE = 'J' as const
+
 /**
- * Media type codebook UIDs from the database.
- * Used for determining which validation schema to apply.
+ * Checks if mediaTypeCb is peer-reviewed article.
+ * Uses `code` field (from codebook dropdown) with `name` prefix fallback (from API response).
  */
-export const MEDIA_TYPE_UID = {
-    PEER_REVIEWED_ARTICLE: '2a17af4e-806a-4189-9709-7565847e0619',
-} as const
+export const isPeerReviewedMediaType = (mediaTypeCb: { code?: string; name?: string } | null) =>
+    mediaTypeCb?.code === MEDIA_TYPE_CODEBOOK_CODE ||
+    mediaTypeCb?.name?.startsWith(MEDIA_TYPE_CODEBOOK_CODE + ' ')
 
 export enum MEDIA_TYPE_LABEL {
     PEER_REVIEWED = 'Peer-Reviewed Article',

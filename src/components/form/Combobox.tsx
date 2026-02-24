@@ -127,6 +127,7 @@ const Combobox = ({
                                             variant="outline"
                                             role="combobox"
                                             aria-expanded={open}
+                                            aria-invalid={error ? 'true' : 'false'}
                                             onClick={() => {
                                                 setOpen(!open)
                                             }}
@@ -224,6 +225,11 @@ const Combobox = ({
                                 </Button>
                             )}
                         </div>
+                        {error && (
+                            <p className="text-sm text-destructive">
+                                {error.message}
+                            </p>
+                        )}
                     </div>
                 )}
             />
