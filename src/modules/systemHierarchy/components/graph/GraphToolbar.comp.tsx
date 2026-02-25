@@ -1,4 +1,4 @@
-import { ChevronDown, Link2, RotateCcw, Search } from 'lucide-react'
+import { ChevronDown, RotateCcw, Search } from 'lucide-react'
 import type { FC, ReactNode } from 'react'
 import { useIntl } from 'react-intl'
 
@@ -33,8 +33,6 @@ interface GraphToolbarProps {
     onResetFilters: () => void
     systemTypes: string[]
     systemLevels: string[]
-    selectionMode: boolean
-    onToggleSelectionMode: () => void
     children?: ReactNode
 }
 
@@ -51,8 +49,6 @@ export const GraphToolbar: FC<GraphToolbarProps> = ({
     onResetFilters,
     systemTypes,
     systemLevels,
-    selectionMode,
-    onToggleSelectionMode,
     children,
 }) => {
     const { formatMessage: fm } = useIntl()
@@ -161,17 +157,6 @@ export const GraphToolbar: FC<GraphToolbarProps> = ({
                     ))}
                 </DropdownMenuContent>
             </DropdownMenu>
-
-            {/* Create relationship mode */}
-            <Button
-                variant={selectionMode ? 'default' : 'outline'}
-                size="sm"
-                onClick={onToggleSelectionMode}
-                className="text-xs h-8"
-            >
-                <Link2 className="h-3.5 w-3.5 mr-1" />
-                {fm({ id: message.systemHierarchy.graph.createRelationship.title })}
-            </Button>
 
             {/* Reset */}
             <Button variant="ghost" size="sm" onClick={onResetFilters} className="text-xs h-8">

@@ -1,5 +1,3 @@
-export { useCreateRelationship } from './mutations/useCreateRelationship'
-export { useDeleteRelationship } from './mutations/useDeleteRelationship'
 export { useSystemCodeClear } from './mutations/useSystemCodeClear'
 export { useSystemCodeGenerate } from './mutations/useSystemCodeGenerate'
 export { useSystemFieldUpdate } from './mutations/useSystemFieldUpdate'

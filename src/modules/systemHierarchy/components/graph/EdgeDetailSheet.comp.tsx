@@ -1,9 +1,6 @@
-import { Trash2 } from 'lucide-react'
 import type { FC } from 'react'
 import { useIntl } from 'react-intl'
 
-import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
 import { message } from '@/i18n/src/messages'
 
 import type { RelationshipGraphEdge } from '../../types/graph'
@@ -15,14 +12,12 @@ interface EdgeDetailSheetProps {
     edge: RelationshipGraphEdge
     sourceName: string
     targetName: string
-    onDelete?: (edgeUid: string) => void
 }
 
 export const EdgeDetailSheet: FC<EdgeDetailSheetProps> = ({
     edge,
     sourceName,
     targetName,
-    onDelete,
 }) => {
     const { formatMessage: fm } = useIntl()
 
@@ -47,18 +42,6 @@ export const EdgeDetailSheet: FC<EdgeDetailSheetProps> = ({
                 {fm({ id: message.systemHierarchy.graph.edgeDetail.title })}
             </h3>
             <MetadataSection items={items} />
-            <Separator />
-            {onDelete && (
-                <Button
-                    variant="destructive"
-                    size="sm"
-                    onClick={() => onDelete(edge.uid)}
-                    className="w-full"
-                >
-                    <Trash2 className="h-4 w-4 mr-1" />
-                    {fm({ id: message.systemHierarchy.graph.edgeDetail.deleteRelationship })}
-                </Button>
-            )}
         </div>
     )
 }

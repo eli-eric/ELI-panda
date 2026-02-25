@@ -8,7 +8,6 @@ import { useSystemEditSheet } from '@/modules/shared/system/system-edit/useSyste
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { queryFetcher } from '@/utils/fetcher'
 
-import { useDeleteRelationship } from '../../hooks/mutations/useDeleteRelationship'
 import { useRelationshipGraph } from '../../hooks/queries/useRelationshipGraph'
 import { useGraphFilters } from '../../hooks/useGraphFilters'
 import { useHierarchyNavigation } from '../../hooks/useHierarchyNavigation'
@@ -23,7 +22,6 @@ import {
     toReactFlowEdges,
     toReactFlowNodes,
 } from '../../utils/graphTransformers'
-import { CreateRelationshipModalContainer } from './CreateRelationshipModal.cont'
 import { EdgeDetailSheet } from './EdgeDetailSheet.comp'
 import { GraphLegend } from './GraphLegend.comp'
 import { GraphToolbar } from './GraphToolbar.comp'
@@ -47,13 +45,10 @@ export const RelationshipGraphContainer: FC = () => {
         resetGraphExpanded,
     } = useHierarchyStore()
     const [layoutMode, setLayoutMode] = useState<GraphLayoutMode>(graphLayoutMode)
-    const [selectionMode, setSelectionMode] = useState(false)
-    const [selectedNodes, setSelectedNodes] = useState<string[]>([])
     const rfInstance = useRef<ReactFlowInstance | null>(null)
     const contextMenuCloseRef = useRef(0)
 
-    const { openModal, closeModal } = useDynamicModalStore()
-    const { deleteRelationship } = useDeleteRelationship()
+    const { openModal } = useDynamicModalStore()
     const queryClient = useQueryClient()
     const openSystemEdit = useSystemEditSheet()
 
@@ -139,19 +134,6 @@ export const RelationshipGraphContainer: FC = () => {
         return applyVerticalLayout(rawNodes, rfEdges)
     }, [rawNodes, rfEdges, layoutMode])
 
-    // Apply selection highlighting
-    const nodesWithSelection = useMemo(() => {
-        if (!selectionMode || selectedNodes.length === 0) return rfNodes
-        return rfNodes.map(n => ({
-            ...n,
-            data: {
-                ...n.data,
-                selected: selectedNodes.includes(n.id),
-                selectionIndex: selectedNodes.indexOf(n.id),
-            },
-        }))
-    }, [rfNodes, selectionMode, selectedNodes])
-
     // Extract unique values for filter dropdowns
     const systemTypes = useMemo(
         () => [...new Set(mergedNodes.map(n => n.systemType?.name).filter(Boolean))] as string[],
@@ -178,40 +160,9 @@ export const RelationshipGraphContainer: FC = () => {
     const handleNodeClick = useCallback(
         (_event: React.MouseEvent, node: Node) => {
             if (Date.now() - contextMenuCloseRef.current < 300) return
-
-            if (selectionMode) {
-                setSelectedNodes(prev => {
-                    if (prev.includes(node.id)) return prev.filter(id => id !== node.id)
-                    if (prev.length >= 2) return [prev[1], node.id]
-                    const next = [...prev, node.id]
-                    if (next.length === 2) {
-                        setTimeout(() => {
-                            const sourceNode = mergedNodes.find(n => n.uid === next[0])
-                            const targetNode = mergedNodes.find(n => n.uid === next[1])
-                            if (!sourceNode || !targetNode) return
-                            const modalId = openModal('dialog', {
-                                id: 'create-relationship',
-                                component: CreateRelationshipModalContainer,
-                                props: {
-                                    sourceNode,
-                                    targetNode,
-                                    title: 'Create Relationship',
-                                    onClose: () => {
-                                        closeModal(modalId)
-                                        setSelectedNodes([])
-                                    },
-                                },
-                            })
-                        }, 0)
-                    }
-                    return next
-                })
-                return
-            }
-
             openSystemEdit(node.id)
         },
-        [selectionMode, mergedNodes, openModal, closeModal, openSystemEdit],
+        [openSystemEdit],
     )
 
     const handleEdgeClick = useCallback(
@@ -229,18 +180,12 @@ export const RelationshipGraphContainer: FC = () => {
                     edge: apiEdge,
                     sourceName: sourceNode?.name ?? apiEdge.source,
                     targetName: targetNode?.name ?? apiEdge.target,
-                    onDelete: deleteRelationship,
                     side: 'right',
                 },
             })
         },
-        [mergedEdges, mergedNodes, openModal, deleteRelationship],
+        [mergedEdges, mergedNodes, openModal],
     )
-
-    const toggleSelectionMode = useCallback(() => {
-        setSelectionMode(prev => !prev)
-        setSelectedNodes([])
-    }, [])
 
     return (
         <div className="h-full w-full flex flex-col">
@@ -253,15 +198,13 @@ export const RelationshipGraphContainer: FC = () => {
                 onResetFilters={resetFilters}
                 systemTypes={systemTypes}
                 systemLevels={systemLevels}
-                selectionMode={selectionMode}
-                onToggleSelectionMode={toggleSelectionMode}
             >
                 <LayoutSwitcher activeLayout={layoutMode} onLayoutChange={handleLayoutChange} />
             </GraphToolbar>
             <div className="flex-1 relative">
                 <ReactFlowProvider>
                     <RelationshipGraphComponent
-                        nodes={nodesWithSelection}
+                        nodes={rfNodes}
                         edges={rfEdges}
                         isLoading={isLoading}
                         onInit={handleInit}

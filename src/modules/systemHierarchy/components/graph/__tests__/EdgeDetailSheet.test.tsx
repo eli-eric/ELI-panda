@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import React from 'react'
 import { IntlProvider } from 'react-intl'
 
@@ -11,7 +11,6 @@ const msgs: Record<string, string> = {
     'systemHierarchy.graph.edgeDetail.target': 'Target',
     'systemHierarchy.graph.edgeDetail.type': 'Type',
     'systemHierarchy.graph.edgeDetail.description': 'Description',
-    'systemHierarchy.graph.edgeDetail.deleteRelationship': 'Delete Relationship',
 }
 
 const mockEdge: RelationshipGraphEdge = {
@@ -49,17 +48,5 @@ describe('EdgeDetailSheet', () => {
     it('renders description', () => {
         renderSheet()
         expect(screen.getByText('UPS powers server')).toBeInTheDocument()
-    })
-
-    it('renders delete button when onDelete provided', () => {
-        const onDelete = jest.fn()
-        renderSheet({ onDelete })
-        fireEvent.click(screen.getByText('Delete Relationship'))
-        expect(onDelete).toHaveBeenCalledWith('e1')
-    })
-
-    it('does not render delete button when no onDelete', () => {
-        renderSheet()
-        expect(screen.queryByText('Delete Relationship')).not.toBeInTheDocument()
     })
 })
