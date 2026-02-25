@@ -91,6 +91,7 @@ export const getEndpoints = ({
         systemCodesPreview: `/systems/system-codes/preview${query}`,
         systemsHierarchy: `/systems/hierarchy`,
         systemLeaves: uid ? `/system/${uid}/leaves${query}` : null,
+        systemLeavesCount: uid ? `/system/${uid}/leaves/count${query}` : null,
     }
     return endpoints
 }

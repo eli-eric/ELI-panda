@@ -99,3 +99,7 @@ export const leavesResponseSchema = z.object({
     data: z.array(systemLeafSchema),
     totalCount: z.number(),
 })
+
+export const leavesCountResponseSchema = z.object({
+    count: z.number(),
+})
