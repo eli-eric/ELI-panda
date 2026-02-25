@@ -15,9 +15,16 @@ const GRID_COLS = 4
 const GRID_GAP_X = 280
 const GRID_GAP_Y = 150
 
+interface ToReactFlowNodesOptions {
+    layoutMode?: GraphLayoutMode
+    onExpand?: (uid: string) => void
+    onViewDetail?: (uid: string) => void
+    onContextMenuChange?: (open: boolean) => void
+}
+
 export const toReactFlowNodes = (
     apiNodes: RelationshipGraphNode[],
-    layoutMode?: GraphLayoutMode,
+    options?: ToReactFlowNodesOptions,
 ): Node[] =>
     apiNodes.map((node, index) => ({
         id: node.uid,
@@ -32,7 +39,10 @@ export const toReactFlowNodes = (
             systemLevel: node.systemLevel,
             systemType: node.systemType?.name,
             nodeClasses: getNodeClasses(node.systemLevel),
-            layoutMode,
+            layoutMode: options?.layoutMode,
+            onExpand: options?.onExpand,
+            onViewDetail: options?.onViewDetail,
+            onContextMenuChange: options?.onContextMenuChange,
         },
     }))
 

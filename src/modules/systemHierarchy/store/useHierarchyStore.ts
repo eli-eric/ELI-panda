@@ -1,18 +1,22 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import type { GraphLayoutMode } from '../types/graph'
+import type { GraphLayoutMode, RelationshipGraphEdge, RelationshipGraphNode } from '../types/graph'
 import { GRAPH_LAYOUT_MODES } from '../types/graph'
 
 interface HierarchyStore {
     expandedNodes: string[]
     graphLayoutMode: GraphLayoutMode
+    graphExpandedNodes: RelationshipGraphNode[]
+    graphExpandedEdges: RelationshipGraphEdge[]
     toggleNode: (uid: string) => void
     expandNode: (uid: string) => void
     expandNodes: (uids: string[]) => void
     setExpandedNodes: (uids: string[]) => void
     collapseAll: () => void
     setGraphLayoutMode: (mode: GraphLayoutMode) => void
+    addGraphExpanded: (nodes: RelationshipGraphNode[], edges: RelationshipGraphEdge[]) => void
+    resetGraphExpanded: () => void
 }
 
 export const useHierarchyStore = create<HierarchyStore>()(
@@ -20,6 +24,8 @@ export const useHierarchyStore = create<HierarchyStore>()(
         (set, get) => ({
             expandedNodes: [],
             graphLayoutMode: GRAPH_LAYOUT_MODES.VERTICAL as GraphLayoutMode,
+            graphExpandedNodes: [],
+            graphExpandedEdges: [],
             toggleNode: (uid: string) => {
                 const current = get().expandedNodes
                 const isExpanded = current.includes(uid)
@@ -47,9 +53,23 @@ export const useHierarchyStore = create<HierarchyStore>()(
             },
             collapseAll: () => set({ expandedNodes: [] }),
             setGraphLayoutMode: (mode: GraphLayoutMode) => set({ graphLayoutMode: mode }),
+            addGraphExpanded: (nodes, edges) => {
+                const { graphExpandedNodes, graphExpandedEdges } = get()
+                const seenNodes = new Set(graphExpandedNodes.map(n => n.uid))
+                const seenEdges = new Set(graphExpandedEdges.map(e => e.uid))
+                set({
+                    graphExpandedNodes: [...graphExpandedNodes, ...nodes.filter(n => !seenNodes.has(n.uid))],
+                    graphExpandedEdges: [...graphExpandedEdges, ...edges.filter(e => !seenEdges.has(e.uid))],
+                })
+            },
+            resetGraphExpanded: () => set({ graphExpandedNodes: [], graphExpandedEdges: [] }),
         }),
         {
             name: 'hierarchy-expanded-nodes',
+            partialize: (state) => ({
+                expandedNodes: state.expandedNodes,
+                graphLayoutMode: state.graphLayoutMode,
+            }),
         },
     ),
 )
