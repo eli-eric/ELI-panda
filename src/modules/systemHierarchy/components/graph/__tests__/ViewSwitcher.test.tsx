@@ -10,7 +10,7 @@ const msgs: Record<string, string> = {
     'systemHierarchy.graph.viewGraph': 'Graph View',
 }
 
-const renderWithIntl = (ui: React.ReactElement) =>
+const renderWithIntl = (ui: React.JSX.Element) =>
     render(
         <IntlProvider locale="en" messages={msgs}>
             {ui}

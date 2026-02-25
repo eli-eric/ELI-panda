@@ -9,7 +9,7 @@ const msgs: Record<string, string> = {
     'systemHierarchy.graph.noNodes': 'No systems to display',
 }
 
-const renderWithIntl = (ui: React.ReactElement) =>
+const renderWithIntl = (ui: React.JSX.Element) =>
     render(
         <IntlProvider locale="en" messages={msgs}>
             {ui}
