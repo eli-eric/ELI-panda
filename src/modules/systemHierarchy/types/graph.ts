@@ -59,6 +59,17 @@ export type RelationshipGraphEdge = z.infer<typeof relationshipGraphEdgeSchema>
 export type RelationshipGraphResponse = z.infer<typeof relationshipGraphResponseSchema>
 export type CreateRelationshipPayload = z.infer<typeof createRelationshipPayloadSchema>
 
+// --- Relationship type rank (lower = higher visual priority) ---
+export const RELATIONSHIP_TYPE_RANK: Record<string, number> = {
+    HAS_SUBSYSTEM: 0,
+    IS_SPARE_FOR: 1,
+    IS_COOLED_BY: 2,
+    IS_POWERED_BY: 3,
+    IS_CONTROLED_BY: 4,
+}
+
+export const DEFAULT_RELATIONSHIP_RANK = 99
+
 // --- Graph view modes ---
 export const GRAPH_LAYOUT_MODES = {
     VERTICAL: 'vertical',
