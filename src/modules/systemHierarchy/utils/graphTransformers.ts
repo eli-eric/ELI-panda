@@ -1,9 +1,9 @@
 import type { Edge, Node } from '@xyflow/react'
-import { MarkerType } from '@xyflow/react'
 
 import type { SystemGraphResponse } from '@/modules/shared/d3/graph/types'
 
 import type {
+    GraphLayoutMode,
     RelationshipGraphEdge,
     RelationshipGraphNode,
     RelationshipGraphResponse,
@@ -15,7 +15,10 @@ const GRID_COLS = 4
 const GRID_GAP_X = 280
 const GRID_GAP_Y = 150
 
-export const toReactFlowNodes = (apiNodes: RelationshipGraphNode[]): Node[] =>
+export const toReactFlowNodes = (
+    apiNodes: RelationshipGraphNode[],
+    layoutMode?: GraphLayoutMode,
+): Node[] =>
     apiNodes.map((node, index) => ({
         id: node.uid,
         type: 'systemNode',
@@ -29,6 +32,7 @@ export const toReactFlowNodes = (apiNodes: RelationshipGraphNode[]): Node[] =>
             systemLevel: node.systemLevel,
             systemType: node.systemType?.name,
             nodeClasses: getNodeClasses(node.systemLevel),
+            layoutMode,
         },
     }))
 
@@ -47,7 +51,6 @@ export const toReactFlowEdges = (apiEdges: RelationshipGraphEdge[]): Edge[] =>
                 edge.relationship,
         },
         style: { stroke: getEdgeColor(edge.relationship), strokeWidth: 2 },
-        markerEnd: { type: MarkerType.ArrowClosed, color: getEdgeColor(edge.relationship) },
     }))
 
 /**

@@ -19,7 +19,7 @@ export const useHierarchyStore = create<HierarchyStore>()(
     persist(
         (set, get) => ({
             expandedNodes: [],
-            graphLayoutMode: GRAPH_LAYOUT_MODES.HIERARCHY as GraphLayoutMode,
+            graphLayoutMode: GRAPH_LAYOUT_MODES.VERTICAL as GraphLayoutMode,
             toggleNode: (uid: string) => {
                 const current = get().expandedNodes
                 const isExpanded = current.includes(uid)

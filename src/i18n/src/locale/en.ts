@@ -1448,8 +1448,8 @@ export const messages = {
             allSystems: 'All Systems',
             scopedToParent: 'Scoped to Parent',
             layout: {
-                hierarchy: 'Hierarchy',
-                force: 'Force',
+                vertical: 'Vertical',
+                horizontal: 'Horizontal',
             },
             filters: {
                 systemType: 'System Type',

@@ -61,8 +61,8 @@ export type CreateRelationshipPayload = z.infer<typeof createRelationshipPayload
 
 // --- Graph view modes ---
 export const GRAPH_LAYOUT_MODES = {
-    HIERARCHY: 'hierarchy',
-    FORCE: 'force',
+    VERTICAL: 'vertical',
+    HORIZONTAL: 'horizontal',
 } as const
 
 export type GraphLayoutMode = (typeof GRAPH_LAYOUT_MODES)[keyof typeof GRAPH_LAYOUT_MODES]

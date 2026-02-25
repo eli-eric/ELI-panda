@@ -12,7 +12,7 @@ import { useHierarchyStore } from '../../store/useHierarchyStore'
 import type { GraphLayoutMode } from '../../types/graph'
 import { GRAPH_LAYOUT_MODES } from '../../types/graph'
 import { filterEdges, filterNodes } from '../../utils/graphFilters'
-import { applyForceLayout, applyHierarchicalLayout } from '../../utils/graphLayout'
+import { applyHorizontalLayout, applyVerticalLayout } from '../../utils/graphLayout'
 import { toReactFlowEdges, toReactFlowNodes } from '../../utils/graphTransformers'
 import { CreateRelationshipModalContainer } from './CreateRelationshipModal.cont'
 import { EdgeDetailSheet } from './EdgeDetailSheet.comp'
@@ -63,15 +63,15 @@ export const RelationshipGraphContainer: FC = () => {
     )
 
     // Transform to ReactFlow format
-    const rawNodes = useMemo(() => toReactFlowNodes(filteredNodes), [filteredNodes])
+    const rawNodes = useMemo(() => toReactFlowNodes(filteredNodes, layoutMode), [filteredNodes, layoutMode])
     const rfEdges = useMemo(() => toReactFlowEdges(filteredEdges), [filteredEdges])
 
     // Apply layout
     const rfNodes = useMemo(() => {
-        if (layoutMode === GRAPH_LAYOUT_MODES.HIERARCHY) {
-            return applyHierarchicalLayout(rawNodes, rfEdges)
+        if (layoutMode === GRAPH_LAYOUT_MODES.HORIZONTAL) {
+            return applyHorizontalLayout(rawNodes, rfEdges)
         }
-        return applyForceLayout(rawNodes, rfEdges)
+        return applyVerticalLayout(rawNodes, rfEdges)
     }, [rawNodes, rfEdges, layoutMode])
 
     // Apply selection highlighting

@@ -1,26 +1,6 @@
 import type { Edge, Node } from '@xyflow/react'
 
-// Mock d3-force since it's ESM and Jest can't transform it
-jest.mock('d3-force', () => ({
-    forceSimulation: jest.fn(() => ({
-        force: jest.fn().mockReturnThis(),
-        stop: jest.fn().mockReturnThis(),
-        tick: jest.fn(),
-    })),
-    forceLink: jest.fn(() => ({
-        id: jest.fn().mockReturnThis(),
-        distance: jest.fn().mockReturnThis(),
-    })),
-    forceManyBody: jest.fn(() => ({
-        strength: jest.fn().mockReturnThis(),
-    })),
-    forceCenter: jest.fn(),
-    forceCollide: jest.fn(() => ({
-        radius: jest.fn().mockReturnThis(),
-    })),
-}))
-
-import { applyForceLayout, applyHierarchicalLayout } from '../../../utils/graphLayout'
+import { applyHorizontalLayout, applyVerticalLayout } from '../../../utils/graphLayout'
 
 const nodes: Node[] = [
     { id: 'a', position: { x: 0, y: 0 }, data: {} },
@@ -33,15 +13,15 @@ const edges: Edge[] = [
     { id: 'e2', source: 'b', target: 'c' },
 ]
 
-describe('applyHierarchicalLayout', () => {
+describe('applyVerticalLayout', () => {
     it('positions root at y=0', () => {
-        const result = applyHierarchicalLayout(nodes, edges)
+        const result = applyVerticalLayout(nodes, edges)
         const root = result.find(n => n.id === 'a')
         expect(root?.position.y).toBe(0)
     })
 
     it('positions children below parents', () => {
-        const result = applyHierarchicalLayout(nodes, edges)
+        const result = applyVerticalLayout(nodes, edges)
         const a = result.find(n => n.id === 'a')!
         const b = result.find(n => n.id === 'b')!
         const c = result.find(n => n.id === 'c')!
@@ -50,7 +30,7 @@ describe('applyHierarchicalLayout', () => {
     })
 
     it('returns empty array for empty input', () => {
-        expect(applyHierarchicalLayout([], [])).toEqual([])
+        expect(applyVerticalLayout([], [])).toEqual([])
     })
 
     it('handles disconnected nodes', () => {
@@ -58,26 +38,43 @@ describe('applyHierarchicalLayout', () => {
             ...nodes,
             { id: 'd', position: { x: 0, y: 0 }, data: {} },
         ]
-        const result = applyHierarchicalLayout(disconnected, edges)
+        const result = applyVerticalLayout(disconnected, edges)
         expect(result).toHaveLength(4)
-        // Disconnected node placed at level 0
         const d = result.find(n => n.id === 'd')!
         expect(d.position.y).toBe(0)
     })
 })
 
-describe('applyForceLayout', () => {
-    it('returns nodes with positions', () => {
-        const result = applyForceLayout(nodes, edges)
-        expect(result).toHaveLength(3)
-        result.forEach(n => {
-            expect(n.position).toBeDefined()
-            expect(typeof n.position.x).toBe('number')
-            expect(typeof n.position.y).toBe('number')
-        })
+describe('applyHorizontalLayout', () => {
+    it('positions root at x=0', () => {
+        const result = applyHorizontalLayout(nodes, edges)
+        const root = result.find(n => n.id === 'a')
+        expect(root?.position.x).toBe(0)
+    })
+
+    it('positions children to the right of parents', () => {
+        const result = applyHorizontalLayout(nodes, edges)
+        const a = result.find(n => n.id === 'a')!
+        const b = result.find(n => n.id === 'b')!
+        const c = result.find(n => n.id === 'c')!
+        expect(b.position.x).toBeGreaterThan(a.position.x)
+        expect(c.position.x).toBeGreaterThan(b.position.x)
     })
 
     it('returns empty array for empty input', () => {
-        expect(applyForceLayout([], [])).toEqual([])
+        expect(applyHorizontalLayout([], [])).toEqual([])
+    })
+
+    it('spreads siblings vertically', () => {
+        const twoChildren: Edge[] = [
+            { id: 'e1', source: 'a', target: 'b' },
+            { id: 'e2', source: 'a', target: 'c' },
+        ]
+        const result = applyHorizontalLayout(nodes, twoChildren)
+        const b = result.find(n => n.id === 'b')!
+        const c = result.find(n => n.id === 'c')!
+        // Same x (same level), different y
+        expect(b.position.x).toBe(c.position.x)
+        expect(b.position.y).not.toBe(c.position.y)
     })
 })

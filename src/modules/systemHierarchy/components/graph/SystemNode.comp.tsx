@@ -9,15 +9,17 @@ interface SystemNodeData {
     systemLevel: string
     systemType?: string | null
     nodeClasses: string
+    layoutMode?: string
     selected?: boolean
     selectionIndex?: number
     [key: string]: unknown
 }
 
 const SystemNodeComponent = ({ data }: NodeProps) => {
-    const { name, systemCode, systemType, nodeClasses, selected, selectionIndex } =
+    const { name, systemCode, systemType, nodeClasses, layoutMode, selected, selectionIndex } =
         data as unknown as SystemNodeData
 
+    const isVertical = layoutMode === 'vertical'
     const selectionRing = selected ? 'ring-2 ring-amber-500 ring-offset-1' : ''
 
     return (
@@ -25,7 +27,11 @@ const SystemNodeComponent = ({ data }: NodeProps) => {
             className={`rounded-lg border-2 shadow-sm px-3 py-2 min-w-[160px] max-w-[220px] ${nodeClasses} ${selectionRing}`}
             data-testid="system-node"
         >
-            <Handle type="target" position={Position.Top} className="!bg-slate-400 !w-2 !h-2" />
+            <Handle
+                type="target"
+                position={isVertical ? Position.Top : Position.Left}
+                className="!bg-slate-400 !w-2 !h-2"
+            />
             <div className="flex flex-col gap-1">
                 <span className="text-xs font-semibold truncate" title={name}>
                     {name}
@@ -46,7 +52,7 @@ const SystemNodeComponent = ({ data }: NodeProps) => {
             </div>
             <Handle
                 type="source"
-                position={Position.Bottom}
+                position={isVertical ? Position.Bottom : Position.Right}
                 className="!bg-slate-400 !w-2 !h-2"
             />
         </div>

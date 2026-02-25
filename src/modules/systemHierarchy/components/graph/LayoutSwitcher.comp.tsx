@@ -1,4 +1,4 @@
-import { GitBranch, Waypoints } from 'lucide-react'
+import { ArrowDown, ArrowRight } from 'lucide-react'
 import type { FC } from 'react'
 import { useIntl } from 'react-intl'
 
@@ -19,22 +19,22 @@ export const LayoutSwitcher: FC<LayoutSwitcherProps> = ({ activeLayout, onLayout
     return (
         <div className="flex gap-1">
             <Button
-                variant={activeLayout === GRAPH_LAYOUT_MODES.HIERARCHY ? 'default' : 'outline'}
+                variant={activeLayout === GRAPH_LAYOUT_MODES.VERTICAL ? 'default' : 'outline'}
                 size="sm"
-                data-state={activeLayout === GRAPH_LAYOUT_MODES.HIERARCHY ? 'on' : 'off'}
-                onClick={() => onLayoutChange(GRAPH_LAYOUT_MODES.HIERARCHY)}
-                title={fm({ id: message.systemHierarchy.graph.layout.hierarchy })}
+                data-state={activeLayout === GRAPH_LAYOUT_MODES.VERTICAL ? 'on' : 'off'}
+                onClick={() => onLayoutChange(GRAPH_LAYOUT_MODES.VERTICAL)}
+                title={fm({ id: message.systemHierarchy.graph.layout.vertical })}
             >
-                <GitBranch className="h-3.5 w-3.5" />
+                <ArrowDown className="h-3.5 w-3.5" />
             </Button>
             <Button
-                variant={activeLayout === GRAPH_LAYOUT_MODES.FORCE ? 'default' : 'outline'}
+                variant={activeLayout === GRAPH_LAYOUT_MODES.HORIZONTAL ? 'default' : 'outline'}
                 size="sm"
-                data-state={activeLayout === GRAPH_LAYOUT_MODES.FORCE ? 'on' : 'off'}
-                onClick={() => onLayoutChange(GRAPH_LAYOUT_MODES.FORCE)}
-                title={fm({ id: message.systemHierarchy.graph.layout.force })}
+                data-state={activeLayout === GRAPH_LAYOUT_MODES.HORIZONTAL ? 'on' : 'off'}
+                onClick={() => onLayoutChange(GRAPH_LAYOUT_MODES.HORIZONTAL)}
+                title={fm({ id: message.systemHierarchy.graph.layout.horizontal })}
             >
-                <Waypoints className="h-3.5 w-3.5" />
+                <ArrowRight className="h-3.5 w-3.5" />
             </Button>
         </div>
     )

@@ -4,6 +4,7 @@ import {
     type EdgeProps,
     getBezierPath,
 } from '@xyflow/react'
+import type { CSSProperties } from 'react'
 import { memo } from 'react'
 
 interface RelationshipEdgeData {
@@ -23,9 +24,10 @@ const RelationshipEdgeComponent = ({
     targetPosition,
     data,
     style,
-    markerEnd,
 }: EdgeProps) => {
     const { label } = (data ?? {}) as RelationshipEdgeData
+    const strokeColor = (style as CSSProperties)?.stroke ?? '#94a3b8'
+    const markerId = `arrow-${id}`
 
     const [edgePath, labelX, labelY] = getBezierPath({
         sourceX,
@@ -38,7 +40,31 @@ const RelationshipEdgeComponent = ({
 
     return (
         <>
-            <BaseEdge id={id} path={edgePath} style={style} markerEnd={markerEnd} />
+            <defs>
+                <marker
+                    id={markerId}
+                    markerWidth="12"
+                    markerHeight="12"
+                    viewBox="-10 -10 20 20"
+                    markerUnits="strokeWidth"
+                    orient="auto-start-reverse"
+                    refX="0"
+                    refY="0"
+                >
+                    <polyline
+                        points="-5,-4 0,0 -5,4 -5,-4"
+                        fill={String(strokeColor)}
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                    />
+                </marker>
+            </defs>
+            <BaseEdge
+                id={id}
+                path={edgePath}
+                style={style}
+                markerEnd={`url(#${markerId})`}
+            />
             {label && (
                 <EdgeLabelRenderer>
                     <div

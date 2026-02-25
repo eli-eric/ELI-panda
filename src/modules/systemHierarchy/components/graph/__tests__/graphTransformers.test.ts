@@ -29,7 +29,7 @@ const mockEdges: RelationshipGraphEdge[] = [
         uid: 'e1',
         source: 'n1',
         target: 'n2',
-        relationship: 'POWERED_BY',
+        relationship: 'IS_POWERED_BY',
         description: 'Motor powers pump',
     },
 ]
@@ -86,7 +86,7 @@ describe('toReactFlowEdges', () => {
 
     it('includes label from relationship type', () => {
         const result = toReactFlowEdges(mockEdges)
-        expect(result[0].data?.label).toBe('Powered By')
+        expect(result[0].data?.label).toBe('Is Powered By')
     })
 
     it('returns empty array for empty input', () => {
@@ -100,6 +100,7 @@ describe('fromSystemGraphResponse', () => {
             {
                 uid: 'n1',
                 name: 'Pump A',
+                label: 'System',
                 properties: {
                     systemCode: 'SYS-001',
                     systemLevel: 'KEY_SYSTEMS',
@@ -110,10 +111,11 @@ describe('fromSystemGraphResponse', () => {
             {
                 uid: 'n2',
                 name: 'Motor B',
+                label: 'System',
                 properties: { systemLevel: 'TECHNOLOGY_UNIT' },
             },
         ],
-        links: [{ source: 'n1', target: 'n2', relationship: 'POWERED_BY' }],
+        links: [{ source: 'n1', target: 'n2', relationship: 'IS_POWERED_BY' }],
     }
 
     it('maps API nodes to RelationshipGraphNode shape', () => {
@@ -139,6 +141,6 @@ describe('fromSystemGraphResponse', () => {
         expect(result.links[0].uid).toContain('edge-')
         expect(result.links[0].source).toBe('n1')
         expect(result.links[0].target).toBe('n2')
-        expect(result.links[0].relationship).toBe('POWERED_BY')
+        expect(result.links[0].relationship).toBe('IS_POWERED_BY')
     })
 })
