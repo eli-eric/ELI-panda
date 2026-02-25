@@ -1,8 +1,14 @@
-import { Link2, RotateCcw, Search } from 'lucide-react'
+import { ChevronDown, Link2, RotateCcw, Search } from 'lucide-react'
 import type { FC, ReactNode } from 'react'
 import { useIntl } from 'react-intl'
 
 import { Button } from '@/components/ui/button'
+import {
+    DropdownMenu,
+    DropdownMenuCheckboxItem,
+    DropdownMenuContent,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
 import {
     Select,
@@ -14,19 +20,19 @@ import {
 import { message } from '@/i18n/src/messages'
 
 import type { RelationshipType } from '../../types/graph'
-import { RELATIONSHIP_TYPE_LABELS } from '../../types/graph'
+import { RELATIONSHIP_TYPE_LABELS, RELATIONSHIP_TYPES } from '../../types/graph'
+import { RELATIONSHIP_COLORS, SYSTEM_LEVEL_LABELS } from '../../utils/graphColors'
 import type { GraphFilterState } from '../../utils/graphFilters'
 
 interface GraphToolbarProps {
     filters: GraphFilterState
     onSearchChange: (value: string) => void
-    onSystemLevelChange: (value: string | null) => void
+    onToggleSystemLevel: (level: string) => void
     onSystemTypeChange: (value: string | null) => void
-    onRelationshipTypeChange: (value: string | null) => void
+    onToggleRelationshipType: (type: string) => void
     onResetFilters: () => void
     systemTypes: string[]
     systemLevels: string[]
-    relationshipTypes: string[]
     selectionMode: boolean
     onToggleSelectionMode: () => void
     children?: ReactNode
@@ -34,21 +40,25 @@ interface GraphToolbarProps {
 
 const ALL = '__all__'
 
+const FIXED_RELATIONSHIP_TYPES = Object.values(RELATIONSHIP_TYPES)
+
 export const GraphToolbar: FC<GraphToolbarProps> = ({
     filters,
     onSearchChange,
-    onSystemLevelChange,
+    onToggleSystemLevel,
     onSystemTypeChange,
-    onRelationshipTypeChange,
+    onToggleRelationshipType,
     onResetFilters,
     systemTypes,
     systemLevels,
-    relationshipTypes,
     selectionMode,
     onToggleSelectionMode,
     children,
 }) => {
     const { formatMessage: fm } = useIntl()
+
+    const levelCount = filters.systemLevels.length
+    const relCount = filters.relationshipTypes.length
 
     return (
         <div className="flex flex-wrap items-center gap-2 px-3 py-2 border-b border-border bg-background shrink-0">
@@ -63,29 +73,33 @@ export const GraphToolbar: FC<GraphToolbarProps> = ({
                 />
             </div>
 
-            {/* System Level filter */}
-            <Select
-                value={filters.systemLevel ?? ALL}
-                onValueChange={v => onSystemLevelChange(v === ALL ? null : v)}
-            >
-                <SelectTrigger className="w-36 h-8 text-xs">
-                    <SelectValue
-                        placeholder={fm({
-                            id: message.systemHierarchy.graph.filters.allLevels,
-                        })}
-                    />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectItem value={ALL}>
+            {/* System Level multi-select */}
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm" className="h-8 text-xs gap-1">
                         {fm({ id: message.systemHierarchy.graph.filters.allLevels })}
-                    </SelectItem>
+                        {levelCount > 0 && (
+                            <span className="ml-0.5 rounded-full bg-primary px-1.5 text-[10px] text-primary-foreground">
+                                {levelCount}
+                            </span>
+                        )}
+                        <ChevronDown className="h-3.5 w-3.5 opacity-50" />
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start">
                     {systemLevels.map(level => (
-                        <SelectItem key={level} value={level}>
-                            {level.replace(/_/g, ' ')}
-                        </SelectItem>
+                        <DropdownMenuCheckboxItem
+                            key={level}
+                            checked={filters.systemLevels.includes(level)}
+                            onCheckedChange={() => onToggleSystemLevel(level)}
+                            onSelect={e => e.preventDefault()}
+                            className="text-xs"
+                        >
+                            {SYSTEM_LEVEL_LABELS[level] ?? level.replace(/_/g, ' ')}
+                        </DropdownMenuCheckboxItem>
                     ))}
-                </SelectContent>
-            </Select>
+                </DropdownMenuContent>
+            </DropdownMenu>
 
             {/* System Type filter */}
             {systemTypes.length > 0 && (
@@ -113,33 +127,40 @@ export const GraphToolbar: FC<GraphToolbarProps> = ({
                 </Select>
             )}
 
-            {/* Relationship Type filter */}
-            {relationshipTypes.length > 0 && (
-                <Select
-                    value={filters.relationshipType ?? ALL}
-                    onValueChange={v => onRelationshipTypeChange(v === ALL ? null : v)}
-                >
-                    <SelectTrigger className="w-40 h-8 text-xs">
-                        <SelectValue
-                            placeholder={fm({
-                                id: message.systemHierarchy.graph.filters.allRelationships,
-                            })}
-                        />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value={ALL}>
-                            {fm({
-                                id: message.systemHierarchy.graph.filters.allRelationships,
-                            })}
-                        </SelectItem>
-                        {relationshipTypes.map(type => (
-                            <SelectItem key={type} value={type}>
-                                {RELATIONSHIP_TYPE_LABELS[type as RelationshipType] ?? type}
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
-            )}
+            {/* Relationship Type multi-select */}
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm" className="h-8 text-xs gap-1">
+                        {fm({ id: message.systemHierarchy.graph.filters.allRelationships })}
+                        {relCount > 0 && (
+                            <span className="ml-0.5 rounded-full bg-primary px-1.5 text-[10px] text-primary-foreground">
+                                {relCount}
+                            </span>
+                        )}
+                        <ChevronDown className="h-3.5 w-3.5 opacity-50" />
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start">
+                    {FIXED_RELATIONSHIP_TYPES.map(type => (
+                        <DropdownMenuCheckboxItem
+                            key={type}
+                            checked={filters.relationshipTypes.includes(type)}
+                            onCheckedChange={() => onToggleRelationshipType(type)}
+                            onSelect={e => e.preventDefault()}
+                            className="text-xs"
+                        >
+                            <span
+                                className="inline-block w-3 h-1 rounded-full mr-1.5 shrink-0"
+                                style={{
+                                    backgroundColor:
+                                        RELATIONSHIP_COLORS[type as RelationshipType],
+                                }}
+                            />
+                            {RELATIONSHIP_TYPE_LABELS[type as RelationshipType] ?? type}
+                        </DropdownMenuCheckboxItem>
+                    ))}
+                </DropdownMenuContent>
+            </DropdownMenu>
 
             {/* Create relationship mode */}
             <Button

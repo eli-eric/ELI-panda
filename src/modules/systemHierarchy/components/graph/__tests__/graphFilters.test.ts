@@ -26,15 +26,16 @@ const nodes: RelationshipGraphNode[] = [
 ]
 
 const edges: RelationshipGraphEdge[] = [
-    { uid: 'e1', source: 'n1', target: 'n2', relationship: 'POWERED_BY' },
-    { uid: 'e2', source: 'n2', target: 'n3', relationship: 'DEPENDS_ON' },
+    { uid: 'e1', source: 'n1', target: 'n2', relationship: 'IS_POWERED_BY' },
+    { uid: 'e2', source: 'n2', target: 'n3', relationship: 'IS_COOLED_BY' },
+    { uid: 'e3', source: 'n1', target: 'n3', relationship: 'UNKNOWN_TYPE' },
 ]
 
 const baseFilters: GraphFilterState = {
     search: '',
-    systemLevel: null,
+    systemLevels: [],
     systemType: null,
-    relationshipType: null,
+    relationshipTypes: [],
 }
 
 describe('filterNodes', () => {
@@ -54,9 +55,17 @@ describe('filterNodes', () => {
         expect(result[0].uid).toBe('n2')
     })
 
-    it('filters by systemLevel', () => {
-        const result = filterNodes(nodes, { ...baseFilters, systemLevel: 'KEY_SYSTEMS' })
+    it('filters by systemLevels (multi-select)', () => {
+        const result = filterNodes(nodes, { ...baseFilters, systemLevels: ['KEY_SYSTEMS'] })
         expect(result).toHaveLength(2)
+    })
+
+    it('filters by multiple systemLevels', () => {
+        const result = filterNodes(nodes, {
+            ...baseFilters,
+            systemLevels: ['KEY_SYSTEMS', 'TECHNOLOGY_UNIT'],
+        })
+        expect(result).toHaveLength(3)
     })
 
     it('filters by systemType', () => {
@@ -68,7 +77,7 @@ describe('filterNodes', () => {
     it('combines multiple filters', () => {
         const result = filterNodes(nodes, {
             ...baseFilters,
-            systemLevel: 'KEY_SYSTEMS',
+            systemLevels: ['KEY_SYSTEMS'],
             search: 'valve',
         })
         expect(result).toHaveLength(1)
@@ -79,21 +88,38 @@ describe('filterNodes', () => {
 describe('filterEdges', () => {
     const allVisible = new Set(['n1', 'n2', 'n3'])
 
-    it('returns all edges when all nodes visible and no type filter', () => {
-        expect(filterEdges(edges, allVisible, baseFilters)).toHaveLength(2)
+    it('returns only allowed relationship types when no type filter', () => {
+        const result = filterEdges(edges, allVisible, baseFilters)
+        expect(result).toHaveLength(2)
+        expect(result.map(e => e.uid)).toEqual(['e1', 'e2'])
+    })
+
+    it('excludes edges with disallowed relationship types', () => {
+        const result = filterEdges(edges, allVisible, baseFilters)
+        expect(result.find(e => e.uid === 'e3')).toBeUndefined()
     })
 
     it('hides edges when source not visible', () => {
         const visible = new Set(['n2', 'n3'])
-        expect(filterEdges(edges, visible, baseFilters)).toHaveLength(1)
+        const result = filterEdges(edges, visible, baseFilters)
+        expect(result).toHaveLength(1)
+        expect(result[0].uid).toBe('e2')
     })
 
-    it('filters by relationship type', () => {
+    it('filters by relationship types (multi-select)', () => {
         const result = filterEdges(edges, allVisible, {
             ...baseFilters,
-            relationshipType: 'POWERED_BY',
+            relationshipTypes: ['IS_POWERED_BY'],
         })
         expect(result).toHaveLength(1)
         expect(result[0].uid).toBe('e1')
+    })
+
+    it('filters by multiple relationship types', () => {
+        const result = filterEdges(edges, allVisible, {
+            ...baseFilters,
+            relationshipTypes: ['IS_POWERED_BY', 'IS_COOLED_BY'],
+        })
+        expect(result).toHaveLength(2)
     })
 })

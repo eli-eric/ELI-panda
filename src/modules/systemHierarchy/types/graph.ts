@@ -2,19 +2,21 @@ import { z } from 'zod'
 
 // --- Relationship types ---
 export const RELATIONSHIP_TYPES = {
-    POWERED_BY: 'POWERED_BY',
-    CONTROLLED_BY: 'CONTROLLED_BY',
-    DEPENDS_ON: 'DEPENDS_ON',
     IS_SPARE_FOR: 'IS_SPARE_FOR',
+    IS_COOLED_BY: 'IS_COOLED_BY',
+    IS_POWERED_BY: 'IS_POWERED_BY',
+    IS_CONTROLED_BY: 'IS_CONTROLED_BY',
+    HAS_SUBSYSTEM: 'HAS_SUBSYSTEM',
 } as const
 
 export type RelationshipType = (typeof RELATIONSHIP_TYPES)[keyof typeof RELATIONSHIP_TYPES]
 
 export const RELATIONSHIP_TYPE_LABELS: Record<RelationshipType, string> = {
-    POWERED_BY: 'Powered By',
-    CONTROLLED_BY: 'Controlled By',
-    DEPENDS_ON: 'Depends On',
     IS_SPARE_FOR: 'Is Spare For',
+    IS_COOLED_BY: 'Is Cooled By',
+    IS_POWERED_BY: 'Is Powered By',
+    IS_CONTROLED_BY: 'Is Controlled By',
+    HAS_SUBSYSTEM: 'Has Subsystem',
 }
 
 // --- Zod schemas ---

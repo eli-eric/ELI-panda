@@ -1,17 +1,20 @@
 import type { RelationshipGraphEdge, RelationshipGraphNode } from '../types/graph'
+import { RELATIONSHIP_TYPES } from '../types/graph'
+
+const ALLOWED_RELATIONSHIP_TYPES = new Set<string>(Object.values(RELATIONSHIP_TYPES))
 
 export interface GraphFilterState {
     search: string
-    systemLevel: string | null
+    systemLevels: string[]
     systemType: string | null
-    relationshipType: string | null
+    relationshipTypes: string[]
 }
 
 export const DEFAULT_GRAPH_FILTERS: GraphFilterState = {
     search: '',
-    systemLevel: null,
+    systemLevels: [],
     systemType: null,
-    relationshipType: null,
+    relationshipTypes: [],
 }
 
 export const filterNodes = (
@@ -25,7 +28,8 @@ export const filterNodes = (
             const matchesCode = node.systemCode?.toLowerCase().includes(term) ?? false
             if (!matchesName && !matchesCode) return false
         }
-        if (filters.systemLevel && node.systemLevel !== filters.systemLevel) return false
+        if (filters.systemLevels.length > 0 && !filters.systemLevels.includes(node.systemLevel))
+            return false
         if (filters.systemType && node.systemType?.name !== filters.systemType) return false
         return true
     })
@@ -37,8 +41,14 @@ export const filterEdges = (
     filters: GraphFilterState,
 ): RelationshipGraphEdge[] => {
     return edges.filter(edge => {
+        // Only show allowed relationship types
+        if (!ALLOWED_RELATIONSHIP_TYPES.has(edge.relationship)) return false
         if (!visibleNodeUids.has(edge.source) || !visibleNodeUids.has(edge.target)) return false
-        if (filters.relationshipType && edge.relationship !== filters.relationshipType) return false
+        if (
+            filters.relationshipTypes.length > 0 &&
+            !filters.relationshipTypes.includes(edge.relationship)
+        )
+            return false
         return true
     })
 }

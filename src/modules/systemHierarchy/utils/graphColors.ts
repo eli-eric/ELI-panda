@@ -32,10 +32,11 @@ export const SYSTEM_LEVEL_LABELS: Record<string, string> = {
 
 // Edge colors by relationship type
 export const RELATIONSHIP_COLORS: Record<RelationshipType, string> = {
-    [RELATIONSHIP_TYPES.POWERED_BY]: '#f59e0b',
-    [RELATIONSHIP_TYPES.CONTROLLED_BY]: '#ef4444',
-    [RELATIONSHIP_TYPES.DEPENDS_ON]: '#3b82f6',
     [RELATIONSHIP_TYPES.IS_SPARE_FOR]: '#10b981',
+    [RELATIONSHIP_TYPES.IS_COOLED_BY]: '#3b82f6',
+    [RELATIONSHIP_TYPES.IS_POWERED_BY]: '#f59e0b',
+    [RELATIONSHIP_TYPES.IS_CONTROLED_BY]: '#ef4444',
+    [RELATIONSHIP_TYPES.HAS_SUBSYSTEM]: '#8b5cf6',
 }
 
 export const getNodeClasses = (systemLevel: string): string =>

@@ -48,9 +48,9 @@ export const RelationshipGraphContainer: FC = () => {
     const {
         filters,
         setSearch,
-        setSystemLevel,
+        toggleSystemLevel,
         setSystemType,
-        setRelationshipType,
+        toggleRelationshipType,
         resetFilters,
     } = useGraphFilters()
 
@@ -96,11 +96,6 @@ export const RelationshipGraphContainer: FC = () => {
         () => [...new Set(apiNodes.map(n => n.systemLevel))] as string[],
         [apiNodes],
     )
-    const relationshipTypes = useMemo(
-        () => [...new Set(apiEdges.map(e => e.relationship))] as string[],
-        [apiEdges],
-    )
-
     const handleInit = useCallback((instance: ReactFlowInstance) => {
         rfInstance.current = instance
         setTimeout(() => instance.fitView({ padding: 0.2 }), 100)
@@ -195,13 +190,12 @@ export const RelationshipGraphContainer: FC = () => {
             <GraphToolbar
                 filters={filters}
                 onSearchChange={setSearch}
-                onSystemLevelChange={setSystemLevel}
+                onToggleSystemLevel={toggleSystemLevel}
                 onSystemTypeChange={setSystemType}
-                onRelationshipTypeChange={setRelationshipType}
+                onToggleRelationshipType={toggleRelationshipType}
                 onResetFilters={resetFilters}
                 systemTypes={systemTypes}
                 systemLevels={systemLevels}
-                relationshipTypes={relationshipTypes}
                 selectionMode={selectionMode}
                 onToggleSelectionMode={toggleSelectionMode}
             >

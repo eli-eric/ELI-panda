@@ -9,16 +9,26 @@ export const useGraphFilters = () => {
         setFilters(prev => ({ ...prev, search }))
     }, [])
 
-    const setSystemLevel = useCallback((systemLevel: string | null) => {
-        setFilters(prev => ({ ...prev, systemLevel }))
+    const toggleSystemLevel = useCallback((level: string) => {
+        setFilters(prev => ({
+            ...prev,
+            systemLevels: prev.systemLevels.includes(level)
+                ? prev.systemLevels.filter(l => l !== level)
+                : [...prev.systemLevels, level],
+        }))
     }, [])
 
     const setSystemType = useCallback((systemType: string | null) => {
         setFilters(prev => ({ ...prev, systemType }))
     }, [])
 
-    const setRelationshipType = useCallback((relationshipType: string | null) => {
-        setFilters(prev => ({ ...prev, relationshipType }))
+    const toggleRelationshipType = useCallback((type: string) => {
+        setFilters(prev => ({
+            ...prev,
+            relationshipTypes: prev.relationshipTypes.includes(type)
+                ? prev.relationshipTypes.filter(t => t !== type)
+                : [...prev.relationshipTypes, type],
+        }))
     }, [])
 
     const resetFilters = useCallback(() => {
@@ -29,11 +39,11 @@ export const useGraphFilters = () => {
         () => ({
             filters,
             setSearch,
-            setSystemLevel,
+            toggleSystemLevel,
             setSystemType,
-            setRelationshipType,
+            toggleRelationshipType,
             resetFilters,
         }),
-        [filters, setSearch, setSystemLevel, setSystemType, setRelationshipType, resetFilters],
+        [filters, setSearch, toggleSystemLevel, setSystemType, toggleRelationshipType, resetFilters],
     )
 }
