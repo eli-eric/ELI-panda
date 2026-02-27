@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 
 import { FormWrapper } from '@/testutils'
@@ -34,6 +34,7 @@ describe('Input component', () => {
     })
 
     it('calls the onChange prop with the debounced value', async () => {
+        jest.useFakeTimers()
         const handleChange = jest.fn()
 
         render(
@@ -46,9 +47,12 @@ describe('Input component', () => {
         fireEvent.change(input, { target: { value: 'hello' } })
         fireEvent.change(input, { target: { value: 'hello world' } })
 
-        // Wait for debounce (500ms)
-        await waitFor(() => expect(handleChange).toHaveBeenCalledWith('hello world'), {
-            timeout: 600,
+        // Advance past debounce delay
+        await act(async () => {
+            jest.advanceTimersByTime(600)
         })
+
+        expect(handleChange).toHaveBeenCalledWith('hello world')
+        jest.useRealTimers()
     })
 })
