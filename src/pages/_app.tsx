@@ -74,6 +74,11 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
                     </IntlProvider>
                 </SessionProvider>
             </HydrationBoundary>
+            {process.env.NODE_ENV === 'development' && (
+                <Suspense fallback={null}>
+                    <ReactQueryDevtoolsProduction />
+                </Suspense>
+            )}
         </QueryClientProvider>
     )
 }
