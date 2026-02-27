@@ -1,13 +1,11 @@
-import { useRouter } from 'next/router'
 import { Fragment } from 'react'
 
 import { PlusButton } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
 import { Tooltip } from '@/components/Tooltip'
-import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import { cn } from '@/lib/utils'
+import { useAssignSparesNavigation } from '@/modules/shared/hooks/useAssignSparesNavigation'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
-import { PATH } from '@/types/constants/paths'
 
 import { useSystemDetail } from '../../hooks/useSystemDetail'
 import { getFontBySystemLevel } from '../../utils'
@@ -17,23 +15,24 @@ export const SparePartsFor = () => {
     const tableId = 'sparePartFor'
     const columns = useSpareForColumns(tableId)
 
-    const { systemDetail } = useSystemDetail()
-    const router = useRouter()
-    const { setFilter } = useFormFilterState({
-        tableId: 'spare-parts',
-        enableQueryUrl: false,
+    const { systemDetail, catalogueItem } = useSystemDetail()
+
+    const handleAssignSparePart = useAssignSparesNavigation({
+        uid: systemDetail?.uid ?? '',
+        parentPath:
+            systemDetail?.parentPath?.map(p => ({
+                uid: p?.uid ?? '',
+                name: p?.name ?? '',
+                systemLevel: p?.systemLevel ?? null,
+            })) ?? null,
+        catalogueNumber: catalogueItem?.catalogueNumber ?? null,
     })
 
     const AssignSparePartButton = () => {
         return (
             <Tooltip content="Redirect to assign Spare Part page">
                 <div>
-                    <PlusButton
-                        onClick={() => {
-                            setFilter('name')(systemDetail?.name)
-                            router.push(PATH.SPARE_PARTS)
-                        }}
-                    />
+                    <PlusButton onClick={handleAssignSparePart} />
                 </div>
             </Tooltip>
         )

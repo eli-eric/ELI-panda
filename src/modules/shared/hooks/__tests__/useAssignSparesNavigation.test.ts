@@ -1,6 +1,6 @@
 import { act, renderHook } from '@testing-library/react'
 
-import { useSparesStore } from '@/modules/systemsSpareParts/store/useSparesStore'
+import { useRelationsStore } from '@/modules/systemsRelations/store/useRelationsStore'
 import useTableStateStore from '@/store/useTableStateStore'
 import { SystemLevel } from '@/types/gql/graphql'
 
@@ -14,7 +14,7 @@ jest.mock('next/router', () => ({
 describe('useAssignSparesNavigation', () => {
     beforeEach(() => {
         jest.clearAllMocks()
-        useSparesStore.getState().setSelectedUidForSystem(undefined)
+        useRelationsStore.getState().setSelectedUidForSystem(undefined)
         useTableStateStore.getState().setSearch('for-system', undefined)
         useTableStateStore.getState().setColumnFilter('spare-parts', [])
     })
@@ -29,10 +29,10 @@ describe('useAssignSparesNavigation', () => {
         catalogueNumber: 'CAT-001',
     }
 
-    it('navigates to /systems/spareparts', () => {
+    it('navigates to /systems/relations', () => {
         const { result } = renderHook(() => useAssignSparesNavigation(baseParams))
         act(() => result.current())
-        expect(mockPush).toHaveBeenCalledWith('/systems/spareparts')
+        expect(mockPush).toHaveBeenCalledWith('/systems/relations')
     })
 
     it('sets catalogueNumber filter', () => {
@@ -75,7 +75,7 @@ describe('useAssignSparesNavigation', () => {
     it('sets selectedUidForSystem in spares store', () => {
         const { result } = renderHook(() => useAssignSparesNavigation(baseParams))
         act(() => result.current())
-        expect(useSparesStore.getState().selectedUidForSystem).toBe('system-1')
+        expect(useRelationsStore.getState().selectedUidForSystem).toBe('system-1')
     })
 
     it('sets search for for-system table', () => {
@@ -110,7 +110,7 @@ describe('useAssignSparesNavigation', () => {
         const { result } = renderHook(() => useAssignSparesNavigation(params))
         act(() => result.current())
 
-        expect(mockPush).toHaveBeenCalledWith('/systems/spareparts')
+        expect(mockPush).toHaveBeenCalledWith('/systems/relations')
         const filters = useTableStateStore.getState().instances['spare-parts']?.columnFilter
         expect(filters).not.toEqual(
             expect.arrayContaining([expect.objectContaining({ id: 'parentSystem' })]),
@@ -130,5 +130,18 @@ describe('useAssignSparesNavigation', () => {
         expect(filters).not.toEqual(
             expect.arrayContaining([expect.objectContaining({ id: 'catalogueNumber' })]),
         )
+    })
+
+    it('defaults relationshipType to IS_SPARE_FOR in store', () => {
+        const { result } = renderHook(() => useAssignSparesNavigation(baseParams))
+        act(() => result.current())
+        expect(useRelationsStore.getState().selectedRelationshipType).toBe('IS_SPARE_FOR')
+    })
+
+    it('sets explicit relationshipType in store', () => {
+        const params = { ...baseParams, relationshipType: 'IS_COOLED_BY' as const }
+        const { result } = renderHook(() => useAssignSparesNavigation(params))
+        act(() => result.current())
+        expect(useRelationsStore.getState().selectedRelationshipType).toBe('IS_COOLED_BY')
     })
 })

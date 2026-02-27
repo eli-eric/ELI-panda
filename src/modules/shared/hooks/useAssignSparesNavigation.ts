@@ -1,7 +1,9 @@
 import { useRouter } from 'next/router'
 import { useCallback } from 'react'
 
-import { useSparesStore } from '@/modules/systemsSpareParts/store/useSparesStore'
+import type { RelationshipType } from '@/modules/systemHierarchy/types/graph'
+import { RELATIONSHIP_TYPES } from '@/modules/systemHierarchy/types/graph'
+import { useRelationsStore } from '@/modules/systemsRelations/store/useRelationsStore'
 import useTableStateStore from '@/store/useTableStateStore'
 import { PATH } from '@/types/constants/paths'
 import { SystemLevel } from '@/types/gql/graphql'
@@ -18,15 +20,17 @@ interface AssignSparesParams {
     uid: string
     parentPath: Array<{ uid: string; name: string; systemLevel?: SystemLevel | null }> | null
     catalogueNumber: string | null
+    relationshipType?: RelationshipType
 }
 
 export const useAssignSparesNavigation = ({
     uid,
     parentPath,
     catalogueNumber,
+    relationshipType = RELATIONSHIP_TYPES.IS_SPARE_FOR,
 }: AssignSparesParams) => {
     const router = useRouter()
-    const { setSelectedUidForSystem } = useSparesStore()
+    const { setSelectedUidForSystem, setSelectedRelationshipType } = useRelationsStore()
     const { setSearch, setColumnFilter } = useTableStateStore()
 
     return useCallback(() => {
@@ -57,6 +61,7 @@ export const useAssignSparesNavigation = ({
         setColumnFilter('spare-parts', filters)
         setSearch('for-system', uid)
         setSelectedUidForSystem(uid)
-        router.push(PATH.SPARE_PARTS)
-    }, [uid, parentPath, catalogueNumber, router, setSelectedUidForSystem, setSearch, setColumnFilter])
+        setSelectedRelationshipType(relationshipType)
+        router.push(PATH.SYSTEM_RELATIONS)
+    }, [uid, parentPath, catalogueNumber, relationshipType, router, setSelectedUidForSystem, setSelectedRelationshipType, setSearch, setColumnFilter])
 }
