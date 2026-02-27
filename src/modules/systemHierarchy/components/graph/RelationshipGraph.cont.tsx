@@ -4,6 +4,7 @@ import { Controls, MiniMap, ReactFlowProvider } from '@xyflow/react'
 import { type FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { toast } from 'sonner'
 
+import type { SystemGraphResponse } from '@/modules/shared/d3/graph/types'
 import { useSystemEditSheet } from '@/modules/shared/system/system-edit/useSystemEditSheet'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { queryFetcher } from '@/utils/fetcher'
@@ -17,7 +18,11 @@ import type { GraphLayoutMode, RelationshipGraphResponse } from '../../types/gra
 import { GRAPH_LAYOUT_MODES } from '../../types/graph'
 import { filterEdges, filterNodes } from '../../utils/graphFilters'
 import { applyHorizontalLayout, applyVerticalLayout } from '../../utils/graphLayout'
-import { toReactFlowEdges, toReactFlowNodes } from '../../utils/graphTransformers'
+import {
+    fromSystemGraphResponse,
+    toReactFlowEdges,
+    toReactFlowNodes,
+} from '../../utils/graphTransformers'
 import { EdgeDetailSheet } from './EdgeDetailSheet.comp'
 import { GraphLegend } from './GraphLegend.comp'
 import { GraphToolbar } from './GraphToolbar.comp'
@@ -97,10 +102,11 @@ export const RelationshipGraphContainer: FC = () => {
     const handleExpand = useCallback(
         async (uid: string) => {
             try {
-                const data = await queryClient.fetchQuery({
-                    queryKey: [RELATIONSHIP_GRAPH_QUERY_KEY, { query: { uid } }],
-                    queryFn: queryFetcher<RelationshipGraphResponse>('relationshipGraph'),
+                const raw = await queryClient.fetchQuery({
+                    queryKey: [RELATIONSHIP_GRAPH_QUERY_KEY, { uid }],
+                    queryFn: queryFetcher<SystemGraphResponse>('generalGraph'),
                 })
+                const data: RelationshipGraphResponse = fromSystemGraphResponse(raw)
                 addGraphExpanded(data.nodes, data.links)
                 setFitViewVersion(v => v + 1)
             } catch (error) {
