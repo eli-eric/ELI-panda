@@ -5,7 +5,7 @@ export const RELATIONSHIP_TYPES = {
     IS_SPARE_FOR: 'IS_SPARE_FOR',
     IS_COOLED_BY: 'IS_COOLED_BY',
     IS_POWERED_BY: 'IS_POWERED_BY',
-    IS_CONTROLED_BY: 'IS_CONTROLED_BY',
+    IS_CONTROLLED_BY: 'IS_CONTROLLED_BY',
     HAS_SUBSYSTEM: 'HAS_SUBSYSTEM',
 } as const
 
@@ -15,7 +15,7 @@ export const RELATIONSHIP_TYPE_LABELS: Record<RelationshipType, string> = {
     IS_SPARE_FOR: 'Is Spare For',
     IS_COOLED_BY: 'Is Cooled By',
     IS_POWERED_BY: 'Is Powered By',
-    IS_CONTROLED_BY: 'Is Controlled By',
+    IS_CONTROLLED_BY: 'Is Controlled By',
     HAS_SUBSYSTEM: 'Has Subsystem',
 }
 
@@ -65,7 +65,7 @@ export const RELATIONSHIP_TYPE_RANK: Record<string, number> = {
     IS_SPARE_FOR: 1,
     IS_COOLED_BY: 2,
     IS_POWERED_BY: 3,
-    IS_CONTROLED_BY: 4,
+    IS_CONTROLLED_BY: 4,
 }
 
 export const DEFAULT_RELATIONSHIP_RANK = 99

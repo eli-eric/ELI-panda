@@ -341,8 +341,9 @@ export const messages = {
                 description: 'Configure the system settings before moving it',
             },
         },
-        systemsSpareParts: {
-            assignSpareParts: 'Assign Spare Parts',
+        systemsRelations: {
+            assignRelation: 'Assign Relationship',
+            selectRelationshipType: 'Relationship Type',
         },
         pages: {
             administration: 'Administration',
@@ -361,6 +362,7 @@ export const messages = {
             systemsOverview: 'Systems Overview',
             systemsMoving: 'Systems Moving',
             spareParts: 'Spare Parts',
+            systemRelations: 'System Relations',
         },
         table: {
             category: 'Category',
@@ -1467,6 +1469,14 @@ export const messages = {
             nodeDetail: {
                 title: 'System Detail',
                 viewFullDetail: 'View Full Detail',
+            },
+            selection: {
+                source: 'Source',
+                target: 'Target',
+            },
+            actions: {
+                expand: 'Expand',
+                viewDetail: 'View Detail',
             },
             edgeDetail: {
                 title: 'Relationship Detail',

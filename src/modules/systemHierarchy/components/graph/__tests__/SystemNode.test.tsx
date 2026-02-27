@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import { ReactFlowProvider } from '@xyflow/react'
 import React from 'react'
+import { IntlProvider } from 'react-intl'
 
 import { SystemNode } from '../SystemNode.comp'
 
@@ -26,7 +27,16 @@ if (typeof globalThis.DOMRect === 'undefined') {
             this.left = x
         }
         toJSON() {
-            return { x: this.x, y: this.y, width: this.width, height: this.height, top: this.top, right: this.right, bottom: this.bottom, left: this.left }
+            return {
+                x: this.x,
+                y: this.y,
+                width: this.width,
+                height: this.height,
+                top: this.top,
+                right: this.right,
+                bottom: this.bottom,
+                left: this.left,
+            }
         }
         static fromRect(rect?: { x?: number; y?: number; width?: number; height?: number }) {
             return new DOMRect(rect?.x, rect?.y, rect?.width, rect?.height)
@@ -54,9 +64,19 @@ const defaultProps = {
 
 const renderNode = (props = defaultProps) =>
     render(
-        <ReactFlowProvider>
-            <SystemNode {...(props as any)} />
-        </ReactFlowProvider>,
+        <IntlProvider
+            locale="en"
+            messages={{
+                'systemHierarchy.graph.selection.source': 'Source',
+                'systemHierarchy.graph.selection.target': 'Target',
+                'systemHierarchy.graph.actions.expand': 'Expand',
+                'systemHierarchy.graph.actions.viewDetail': 'View Detail',
+            }}
+        >
+            <ReactFlowProvider>
+                <SystemNode {...(props as any)} />
+            </ReactFlowProvider>
+        </IntlProvider>,
     )
 
 describe('SystemNode', () => {

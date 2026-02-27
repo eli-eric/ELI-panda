@@ -1,9 +1,8 @@
 import { useQueryClient } from '@tanstack/react-query'
-import type { Edge, Node, ReactFlowInstance } from '@xyflow/react'
+import type { Edge, Node } from '@xyflow/react'
 import { Controls, MiniMap, ReactFlowProvider } from '@xyflow/react'
 import { type FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
-import type { SystemGraphResponse } from '@/modules/shared/d3/graph/types'
 import { useSystemEditSheet } from '@/modules/shared/system/system-edit/useSystemEditSheet'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { queryFetcher } from '@/utils/fetcher'
@@ -13,15 +12,11 @@ import { useGraphFilters } from '../../hooks/useGraphFilters'
 import { useHierarchyNavigation } from '../../hooks/useHierarchyNavigation'
 import { useHierarchyStore } from '../../store/useHierarchyStore'
 import { RELATIONSHIP_GRAPH_QUERY_KEY } from '../../types/constants'
-import type { GraphLayoutMode } from '../../types/graph'
+import type { GraphLayoutMode, RelationshipGraphResponse } from '../../types/graph'
 import { GRAPH_LAYOUT_MODES } from '../../types/graph'
 import { filterEdges, filterNodes } from '../../utils/graphFilters'
 import { applyHorizontalLayout, applyVerticalLayout } from '../../utils/graphLayout'
-import {
-    fromSystemGraphResponse,
-    toReactFlowEdges,
-    toReactFlowNodes,
-} from '../../utils/graphTransformers'
+import { toReactFlowEdges, toReactFlowNodes } from '../../utils/graphTransformers'
 import { EdgeDetailSheet } from './EdgeDetailSheet.comp'
 import { GraphLegend } from './GraphLegend.comp'
 import { GraphToolbar } from './GraphToolbar.comp'
@@ -45,16 +40,19 @@ export const RelationshipGraphContainer: FC = () => {
         resetGraphExpanded,
     } = useHierarchyStore()
     const [layoutMode, setLayoutMode] = useState<GraphLayoutMode>(graphLayoutMode)
-    const rfInstance = useRef<ReactFlowInstance | null>(null)
+    const [fitViewVersion, setFitViewVersion] = useState(0)
     const contextMenuCloseRef = useRef(0)
 
     const { openModal } = useDynamicModalStore()
     const queryClient = useQueryClient()
     const openSystemEdit = useSystemEditSheet()
 
-    // generalGraph API requires a system uid — use selectedParentUid or selectedLeafUid
     const graphUid = selectedParentUid
-    const { nodes: apiNodes, edges: apiEdges, isLoading } = useRelationshipGraph({
+    const {
+        nodes: apiNodes,
+        edges: apiEdges,
+        isLoading,
+    } = useRelationshipGraph({
         systemUid: graphUid,
     })
 
@@ -97,13 +95,12 @@ export const RelationshipGraphContainer: FC = () => {
     // Expand handler — fetches subgraph for a node and merges into store
     const handleExpand = useCallback(
         async (uid: string) => {
-            const raw = await queryClient.fetchQuery({
-                queryKey: [RELATIONSHIP_GRAPH_QUERY_KEY, { uid }],
-                queryFn: queryFetcher<SystemGraphResponse>('generalGraph'),
+            const data = await queryClient.fetchQuery({
+                queryKey: [RELATIONSHIP_GRAPH_QUERY_KEY, { query: { uid } }],
+                queryFn: queryFetcher<RelationshipGraphResponse>('relationshipGraph'),
             })
-            const data = fromSystemGraphResponse(raw)
             addGraphExpanded(data.nodes, data.links)
-            setTimeout(() => rfInstance.current?.fitView({ padding: 0.2 }), 200)
+            setFitViewVersion(v => v + 1)
         },
         [queryClient, addGraphExpanded],
     )
@@ -121,7 +118,13 @@ export const RelationshipGraphContainer: FC = () => {
 
     // Transform to ReactFlow format
     const rawNodes = useMemo(
-        () => toReactFlowNodes(filteredNodes, { layoutMode, onExpand: handleExpand, onViewDetail: handleViewDetail, onContextMenuChange: handleContextMenuChange }),
+        () =>
+            toReactFlowNodes(filteredNodes, {
+                layoutMode,
+                onExpand: handleExpand,
+                onViewDetail: handleViewDetail,
+                onContextMenuChange: handleContextMenuChange,
+            }),
         [filteredNodes, layoutMode, handleExpand, handleViewDetail, handleContextMenuChange],
     )
     const rfEdges = useMemo(() => toReactFlowEdges(filteredEdges), [filteredEdges])
@@ -143,19 +146,18 @@ export const RelationshipGraphContainer: FC = () => {
         () => [...new Set(mergedNodes.map(n => n.systemLevel).filter(Boolean))] as string[],
         [mergedNodes],
     )
-    const handleInit = useCallback((instance: ReactFlowInstance) => {
-        rfInstance.current = instance
-        setTimeout(() => instance.fitView({ padding: 0.2 }), 100)
-    }, [])
-
     const handleLayoutChange = useCallback(
         (mode: GraphLayoutMode) => {
             setLayoutMode(mode)
             setGraphLayoutMode(mode)
-            setTimeout(() => rfInstance.current?.fitView({ padding: 0.2 }), 100)
+            setFitViewVersion(v => v + 1)
         },
         [setGraphLayoutMode],
     )
+
+    useEffect(() => {
+        setFitViewVersion(v => v + 1)
+    }, [rfNodes, rfEdges])
 
     const handleNodeClick = useCallback(
         (_event: React.MouseEvent, node: Node) => {
@@ -207,17 +209,14 @@ export const RelationshipGraphContainer: FC = () => {
                         nodes={rfNodes}
                         edges={rfEdges}
                         isLoading={isLoading}
-                        onInit={handleInit}
                         onNodeClick={handleNodeClick}
                         onEdgeClick={handleEdgeClick}
                         nodeTypes={nodeTypes}
                         edgeTypes={edgeTypes}
+                        fitViewVersion={fitViewVersion}
                     >
                         <Controls />
-                        <MiniMap
-                            nodeStrokeWidth={3}
-                            className="!bg-background !border-border"
-                        />
+                        <MiniMap nodeStrokeWidth={3} className="!bg-background !border-border" />
                     </RelationshipGraphComponent>
                 </ReactFlowProvider>
                 <GraphLegend />

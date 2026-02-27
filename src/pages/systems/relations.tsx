@@ -6,24 +6,24 @@ import { FormattedMessage } from 'react-intl'
 
 import { messages } from '@/i18n/src/locale/en'
 
-const SystemsSparePartsContainer = dynamic(
-    () => import('@/modules/systemsSpareParts/SystemSpareParts.cont'),
+const SystemRelationsContainer = dynamic(
+    () => import('@/modules/systemsRelations/SystemRelations.cont'),
     {
         ssr: false,
     },
 )
 
-const SystemsPage: NextPage = () => {
+const SystemRelationsPage: NextPage = () => {
     return (
         <Fragment>
             <Head>
                 <title>
-                    <FormattedMessage id={messages.common.pages.spareParts} />
+                    <FormattedMessage id={messages.common.pages.systemRelations} />
                 </title>
             </Head>
-            <SystemsSparePartsContainer />
+            <SystemRelationsContainer />
         </Fragment>
     )
 }
 
-export default SystemsPage
+export default SystemRelationsPage

@@ -15,10 +15,7 @@ import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import type { RelationshipType } from '@/modules/systemHierarchy/types/graph'
-import {
-    RELATIONSHIP_TYPE_LABELS,
-    RELATIONSHIP_TYPES,
-} from '@/modules/systemHierarchy/types/graph'
+import { RELATIONSHIP_TYPE_LABELS, RELATIONSHIP_TYPES } from '@/modules/systemHierarchy/types/graph'
 import type { SystemDetail } from '@/types/responses/systems'
 
 import { FilterBadges } from '../shared/form/FilterBadges'
@@ -49,14 +46,19 @@ export const SystemRelationsContainer = () => {
     const tableId1 = 'spare-parts'
     const tableId2 = 'for-system'
 
-    const { selectedUidForSystem, setSelectedUidForSystem, selectedRelationshipType, setSelectedRelationshipType } = useRelationsStore()
+    const {
+        selectedUidForSystem,
+        setSelectedUidForSystem,
+        selectedRelationshipType,
+        setSelectedRelationshipType,
+    } = useRelationsStore()
 
     const [relationshipType, setRelationshipType] = useState<RelationshipType>(
         selectedRelationshipType ?? RELATIONSHIP_TYPES.IS_SPARE_FOR,
     )
 
-    const sysetms1 = useSystems(tableId1)
-    const sysetms2 = useSystems(tableId2)
+    const systems1 = useSystems(tableId1)
+    const systems2 = useSystems(tableId2)
 
     const [table1SelectedUids, setTable1SelectedUids] = useState<string[]>([])
     const [table2SelectedUids, setTable2SelectedUids] = useState<string[]>([])
@@ -88,7 +90,7 @@ export const SystemRelationsContainer = () => {
 
     const table = usePandaTable<SystemDetail>({
         tableId: tableId1,
-        data: sysetms1.systems?.data,
+        data: systems1.systems?.data,
         columns: columns1.columns,
         settings: {
             enableRowSelection: row => !table2SelectedUids?.some(uid => row.original.uid === uid),
@@ -99,7 +101,7 @@ export const SystemRelationsContainer = () => {
 
     const table2 = usePandaTable<SystemDetail>({
         tableId: tableId2,
-        data: sysetms2.systems?.data,
+        data: systems2.systems?.data,
         columns: columns2.columns,
         settings: {
             enableRowSelection: row => !table1SelectedUids?.some(uid => row.original.uid === uid),
@@ -203,7 +205,7 @@ export const SystemRelationsContainer = () => {
         if (!isSamePartNumber) {
             withWarningModal(
                 saveRelations,
-                "'Are you sure you want to continue? The Part Numbers do not match.",
+                'Are you sure you want to continue? The Part Numbers do not match.',
             )()
             return
         }
@@ -233,7 +235,7 @@ export const SystemRelationsContainer = () => {
 
     return (
         <div className={cn('grid grid-cols-2')}>
-            <TableLayoutContainer deps={[sysetms1.systems]} className="border-r-4 border-gray-400">
+            <TableLayoutContainer deps={[systems1.systems]} className="border-r-4 border-gray-400">
                 <SearchBar
                     tableId={tableId1}
                     useQuery={false}
@@ -242,11 +244,11 @@ export const SystemRelationsContainer = () => {
                     onChange={() => table.resetExpanded()}
                 />
                 <PandaTableV2
-                    data={sysetms1.systems?.data}
+                    data={systems1.systems?.data}
                     tableHeading="Source Systems"
                     tableId={tableId1}
                     table={table}
-                    loading={sysetms1.loading || columns1.pending}
+                    loading={systems1.loading || columns1.pending}
                     className={'relative overflow-scroll scrollbar-style'}
                     settings={tableSettings}
                     getRowProps={({ original }) => ({
@@ -265,11 +267,11 @@ export const SystemRelationsContainer = () => {
                     tableId={tableId1}
                     settings={{
                         enableQueryURL: false,
-                        total: sysetms1.systems?.totalCount,
+                        total: systems1.systems?.totalCount,
                     }}
                 />
             </TableLayoutContainer>
-            <TableLayoutContainer deps={[sysetms2.systems]}>
+            <TableLayoutContainer deps={[systems2.systems]}>
                 <SearchBar
                     tableId={tableId2}
                     useQuery={false}
@@ -318,11 +320,11 @@ export const SystemRelationsContainer = () => {
                     onChange={() => table.resetExpanded()}
                 />
                 <PandaTableV2
-                    data={sysetms2.systems?.data}
+                    data={systems2.systems?.data}
                     tableHeading="Target Systems"
                     tableId={tableId2}
                     table={table2}
-                    loading={sysetms2.loading || columns2.pending}
+                    loading={systems2.loading || columns2.pending}
                     className={'relative overflow-scroll scrollbar-style'}
                     settings={tableSettings}
                     getRowProps={({ original }) => ({
@@ -341,7 +343,7 @@ export const SystemRelationsContainer = () => {
                     tableId={tableId2}
                     settings={{
                         enableQueryURL: false,
-                        total: sysetms2.systems?.totalCount,
+                        total: systems2.systems?.totalCount,
                     }}
                 />
             </TableLayoutContainer>

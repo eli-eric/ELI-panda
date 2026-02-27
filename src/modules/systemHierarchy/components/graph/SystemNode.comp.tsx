@@ -1,5 +1,6 @@
 import { Handle, type NodeProps, Position } from '@xyflow/react'
 import { memo } from 'react'
+import { useIntl } from 'react-intl'
 
 import { Badge } from '@/components/ui/badge'
 import {
@@ -8,6 +9,7 @@ import {
     ContextMenuItem,
     ContextMenuTrigger,
 } from '@/components/ui/context-menu'
+import { message } from '@/i18n/src/messages'
 
 interface SystemNodeData {
     name: string
@@ -25,6 +27,7 @@ interface SystemNodeData {
 }
 
 const SystemNodeComponent = ({ id, data }: NodeProps) => {
+    const { formatMessage: fm } = useIntl()
     const {
         name,
         systemCode,
@@ -67,7 +70,9 @@ const SystemNodeComponent = ({ id, data }: NodeProps) => {
                         )}
                         {selected && selectionIndex != null && (
                             <Badge className="text-[10px] w-fit bg-amber-500">
-                                {selectionIndex === 0 ? 'Source' : 'Target'}
+                                {selectionIndex === 0
+                                    ? fm({ id: message.systemHierarchy.graph.selection.source })
+                                    : fm({ id: message.systemHierarchy.graph.selection.target })}
                             </Badge>
                         )}
                     </div>
@@ -80,13 +85,13 @@ const SystemNodeComponent = ({ id, data }: NodeProps) => {
             </ContextMenuTrigger>
             <ContextMenuContent>
                 <ContextMenuItem onSelect={() => onExpand?.(id)} data-testid="context-expand">
-                    Expand
+                    {fm({ id: message.systemHierarchy.graph.actions.expand })}
                 </ContextMenuItem>
                 <ContextMenuItem
                     onSelect={() => onViewDetail?.(id)}
                     data-testid="context-view-detail"
                 >
-                    View Detail
+                    {fm({ id: message.systemHierarchy.graph.actions.viewDetail })}
                 </ContextMenuItem>
             </ContextMenuContent>
         </ContextMenu>

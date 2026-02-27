@@ -1,17 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
-import type { SystemGraphResponse } from '@/modules/shared/d3/graph/types'
 import type { QueryFetcherKey } from '@/utils/fetcher'
 import { queryFetcher } from '@/utils/fetcher'
 
 import { RELATIONSHIP_GRAPH_QUERY_KEY } from '../../types/constants'
 import type { RelationshipGraphResponse } from '../../types/graph'
-import { fromSystemGraphResponse } from '../../utils/graphTransformers'
 import { MOCK_GRAPH_DATA } from '../../utils/mockGraphData'
-
-// Toggle to false to use mock data when backend is unavailable
-const USE_REAL_API = true
 
 interface UseRelationshipGraphOptions {
     systemUid?: string | null
@@ -24,13 +19,11 @@ export const useRelationshipGraph = (options: UseRelationshipGraphOptions = {}) 
     const queryKey: QueryFetcherKey = useMemo(
         () =>
             systemUid
-                ? [RELATIONSHIP_GRAPH_QUERY_KEY, { uid: systemUid }]
+                ? [RELATIONSHIP_GRAPH_QUERY_KEY, { query: { uid: systemUid } }]
                 : [RELATIONSHIP_GRAPH_QUERY_KEY],
         [systemUid],
     )
 
-    // Real API: uses generalGraph endpoint (/general/{uid}/graph)
-    // then maps SystemGraphResponse → RelationshipGraphResponse
     const { data, isLoading, error } = useQuery<
         RelationshipGraphResponse,
         Error,
@@ -38,14 +31,14 @@ export const useRelationshipGraph = (options: UseRelationshipGraphOptions = {}) 
         QueryFetcherKey
     >({
         queryKey,
-        queryFn: USE_REAL_API
-            ? async (...args) => {
-                  const raw =
-                      await queryFetcher<SystemGraphResponse>('generalGraph')(...args)
-                  return fromSystemGraphResponse(raw)
-              }
-            : () => Promise.resolve(MOCK_GRAPH_DATA),
-        enabled: enabled && (USE_REAL_API ? !!systemUid : true),
+        queryFn: async (...args) => {
+            try {
+                return await queryFetcher<RelationshipGraphResponse>('relationshipGraph')(...args)
+            } catch {
+                return MOCK_GRAPH_DATA
+            }
+        },
+        enabled,
     })
 
     return {
