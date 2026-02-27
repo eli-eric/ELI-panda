@@ -2,6 +2,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import type { Edge, Node } from '@xyflow/react'
 import { Controls, MiniMap, ReactFlowProvider } from '@xyflow/react'
 import { type FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { toast } from 'sonner'
 
 import { useSystemEditSheet } from '@/modules/shared/system/system-edit/useSystemEditSheet'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
@@ -95,12 +96,20 @@ export const RelationshipGraphContainer: FC = () => {
     // Expand handler — fetches subgraph for a node and merges into store
     const handleExpand = useCallback(
         async (uid: string) => {
-            const data = await queryClient.fetchQuery({
-                queryKey: [RELATIONSHIP_GRAPH_QUERY_KEY, { query: { uid } }],
-                queryFn: queryFetcher<RelationshipGraphResponse>('relationshipGraph'),
-            })
-            addGraphExpanded(data.nodes, data.links)
-            setFitViewVersion(v => v + 1)
+            try {
+                const data = await queryClient.fetchQuery({
+                    queryKey: [RELATIONSHIP_GRAPH_QUERY_KEY, { query: { uid } }],
+                    queryFn: queryFetcher<RelationshipGraphResponse>('relationshipGraph'),
+                })
+                addGraphExpanded(data.nodes, data.links)
+                setFitViewVersion(v => v + 1)
+            } catch (error) {
+                toast.error(
+                    error instanceof Error
+                        ? `Failed to expand graph: ${error.message}`
+                        : 'Failed to expand graph',
+                )
+            }
         },
         [queryClient, addGraphExpanded],
     )

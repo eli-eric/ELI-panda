@@ -6,7 +6,6 @@ import { queryFetcher } from '@/utils/fetcher'
 
 import { RELATIONSHIP_GRAPH_QUERY_KEY } from '../../types/constants'
 import type { RelationshipGraphResponse } from '../../types/graph'
-import { MOCK_GRAPH_DATA } from '../../utils/mockGraphData'
 
 interface UseRelationshipGraphOptions {
     systemUid?: string | null
@@ -31,13 +30,7 @@ export const useRelationshipGraph = (options: UseRelationshipGraphOptions = {}) 
         QueryFetcherKey
     >({
         queryKey,
-        queryFn: async (...args) => {
-            try {
-                return await queryFetcher<RelationshipGraphResponse>('relationshipGraph')(...args)
-            } catch {
-                return MOCK_GRAPH_DATA
-            }
-        },
+        queryFn: queryFetcher<RelationshipGraphResponse>('relationshipGraph'),
         enabled,
     })
 
