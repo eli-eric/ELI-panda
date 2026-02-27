@@ -1,13 +1,21 @@
 import { memo, useEffect, useMemo, useState } from 'react'
 import { useIntl } from 'react-intl'
-import { toast } from 'sonner'
 
 import { Button } from '@/components/Buttons'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select'
 import useQueryManager from '@/hooks/useQueryManager'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
+import type { RelationshipType } from '@/modules/systemHierarchy/types/graph'
+import { RELATIONSHIP_TYPE_LABELS, RELATIONSHIP_TYPES } from '@/modules/systemHierarchy/types/graph'
 import type { SystemDetail } from '@/types/responses/systems'
 
 import { FilterBadges } from '../shared/form/FilterBadges'
@@ -17,28 +25,43 @@ import { useRowSelection } from '../shared/table/pandaTable/hooks/useRowSelectio
 import type { PandaTableSettings } from '../shared/table/pandaTable/PandaTable'
 import { PandaTableV2 } from '../shared/table/pandaTableV2/PandaTableV2'
 import { SearchBar } from '../shared/table/SearchBar'
-import { useRecalculate } from '../systemItem/hooks/useRecalculate'
 import { getColorBySystemLevel, getFontBySystemLevel } from '../systemItem/utils'
 import { SystemFilterButtonContainer } from '../systems/components/filters/SystemsFilterButton.cont'
 import { useSystems } from '../systems/hooks/useSystems'
-import { useAssignSpareParts } from './hooks/useAssignSpareParts'
-import { useSparesStore } from './store/useSparesStore'
-import { useSystemsSparePartsColumns } from './SystemSpareParts.columns'
+import { useAssignRelations } from './hooks/useAssignRelations'
+import { useRelationsStore } from './store/useRelationsStore'
+import { useSystemsRelationsColumns } from './SystemRelations.columns'
 
 const FilterMemoized = memo(SystemFilterButtonContainer)
 
-export const SystemsSparePartsContainer = () => {
+const ASSIGNABLE_RELATIONSHIP_TYPES: RelationshipType[] = [
+    RELATIONSHIP_TYPES.IS_SPARE_FOR,
+    RELATIONSHIP_TYPES.IS_COOLED_BY,
+    RELATIONSHIP_TYPES.IS_POWERED_BY,
+    RELATIONSHIP_TYPES.IS_CONTROLLED_BY,
+]
+
+export const SystemRelationsContainer = () => {
     const { formatMessage: fm } = useIntl()
     const tableId1 = 'spare-parts'
     const tableId2 = 'for-system'
 
-    const sysetms1 = useSystems(tableId1)
-    const sysetms2 = useSystems(tableId2)
+    const {
+        selectedUidForSystem,
+        setSelectedUidForSystem,
+        selectedRelationshipType,
+        setSelectedRelationshipType,
+    } = useRelationsStore()
+
+    const [relationshipType, setRelationshipType] = useState<RelationshipType>(
+        selectedRelationshipType ?? RELATIONSHIP_TYPES.IS_SPARE_FOR,
+    )
+
+    const systems1 = useSystems(tableId1)
+    const systems2 = useSystems(tableId2)
 
     const [table1SelectedUids, setTable1SelectedUids] = useState<string[]>([])
     const [table2SelectedUids, setTable2SelectedUids] = useState<string[]>([])
-
-    const { selectedUidForSystem, setSelectedUidForSystem } = useSparesStore()
 
     const {
         query: { search },
@@ -46,11 +69,11 @@ export const SystemsSparePartsContainer = () => {
 
     const [, setRowSelection] = useRowSelection(tableId2)
 
-    const columns1 = useSystemsSparePartsColumns({
+    const columns1 = useSystemsRelationsColumns({
         tableId: tableId1,
         setSelectedUids: setTable1SelectedUids,
     })
-    const columns2 = useSystemsSparePartsColumns({
+    const columns2 = useSystemsRelationsColumns({
         tableId: tableId2,
         setSelectedUids: setTable2SelectedUids,
     })
@@ -67,7 +90,7 @@ export const SystemsSparePartsContainer = () => {
 
     const table = usePandaTable<SystemDetail>({
         tableId: tableId1,
-        data: sysetms1.systems?.data,
+        data: systems1.systems?.data,
         columns: columns1.columns,
         settings: {
             enableRowSelection: row => !table2SelectedUids?.some(uid => row.original.uid === uid),
@@ -78,7 +101,7 @@ export const SystemsSparePartsContainer = () => {
 
     const table2 = usePandaTable<SystemDetail>({
         tableId: tableId2,
-        data: sysetms2.systems?.data,
+        data: systems2.systems?.data,
         columns: columns2.columns,
         settings: {
             enableRowSelection: row => !table1SelectedUids?.some(uid => row.original.uid === uid),
@@ -99,20 +122,18 @@ export const SystemsSparePartsContainer = () => {
     const withWarningModal = useWarningModal(
         'Are you sure you want to continue? The system types do not match.',
     )
-    const { assignSpareParts, loading } = useAssignSpareParts()
-
-    const [recalculate1] = useRecalculate({ tableId: tableId1 })
-    const [recalculate2] = useRecalculate({ tableId: tableId2 })
+    const { assignRelations, loading } = useAssignRelations()
 
     const saveRelations = () => {
         if (loading) {
             return
         }
 
-        assignSpareParts(
+        assignRelations(
             {
-                fromSystemIds: table1SelectedUids,
-                toSystemIds: table2SelectedUids,
+                sourceUids: table1SelectedUids,
+                targetUids: table2SelectedUids,
+                relationshipType,
             },
             {
                 onSuccess: () => {
@@ -120,19 +141,19 @@ export const SystemsSparePartsContainer = () => {
                     table2.resetRowSelection()
                     setTable1SelectedUids([])
                     setTable2SelectedUids([])
-                    recalculate1(null)
-                    recalculate2(null)
-                },
-                onError: erorr => {
-                    toast.error(erorr.message)
                 },
             },
         )
     }
 
-    const handleAssignSpareParts = () => {
-        // Prevent multiple calls while mutation is already running
+    const handleAssignRelations = () => {
         if (loading) {
+            return
+        }
+
+        // Only validate system type / part number for IS_SPARE_FOR
+        if (relationshipType !== RELATIONSHIP_TYPES.IS_SPARE_FOR) {
+            saveRelations()
             return
         }
 
@@ -184,7 +205,7 @@ export const SystemsSparePartsContainer = () => {
         if (!isSamePartNumber) {
             withWarningModal(
                 saveRelations,
-                "'Are you sure you want to continue? The Part Numbers do not match.",
+                'Are you sure you want to continue? The Part Numbers do not match.',
             )()
             return
         }
@@ -205,13 +226,16 @@ export const SystemsSparePartsContainer = () => {
             setRowSelection({})
             setSelectedUidForSystem(undefined)
         }
-        return () => setSelectedUidForSystem(undefined)
+        return () => {
+            setSelectedUidForSystem(undefined)
+            setSelectedRelationshipType(undefined)
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (
         <div className={cn('grid grid-cols-2')}>
-            <TableLayoutContainer deps={[sysetms1.systems]} className="border-r-4 border-gray-400">
+            <TableLayoutContainer deps={[systems1.systems]} className="border-r-4 border-gray-400">
                 <SearchBar
                     tableId={tableId1}
                     useQuery={false}
@@ -220,11 +244,11 @@ export const SystemsSparePartsContainer = () => {
                     onChange={() => table.resetExpanded()}
                 />
                 <PandaTableV2
-                    data={sysetms1.systems?.data}
-                    tableHeading="Spare Parts"
+                    data={systems1.systems?.data}
+                    tableHeading="Source Systems"
                     tableId={tableId1}
                     table={table}
-                    loading={sysetms1.loading || columns1.pending}
+                    loading={systems1.loading || columns1.pending}
                     className={'relative overflow-scroll scrollbar-style'}
                     settings={tableSettings}
                     getRowProps={({ original }) => ({
@@ -243,11 +267,11 @@ export const SystemsSparePartsContainer = () => {
                     tableId={tableId1}
                     settings={{
                         enableQueryURL: false,
-                        total: sysetms1.systems?.totalCount,
+                        total: systems1.systems?.totalCount,
                     }}
                 />
             </TableLayoutContainer>
-            <TableLayoutContainer deps={[sysetms2.systems]}>
+            <TableLayoutContainer deps={[systems2.systems]}>
                 <SearchBar
                     tableId={tableId2}
                     useQuery={false}
@@ -259,28 +283,48 @@ export const SystemsSparePartsContainer = () => {
                         />
                     }
                     right={
-                        <div className="flex">
+                        <div className="flex items-center gap-2">
                             <FilterBadges enableQueryURL={false} tableId={tableId2} />
+                            <Select
+                                value={relationshipType}
+                                onValueChange={v => setRelationshipType(v as RelationshipType)}
+                            >
+                                <SelectTrigger className="w-[180px]">
+                                    <SelectValue
+                                        placeholder={fm({
+                                            id: message.common.systemsRelations
+                                                .selectRelationshipType,
+                                        })}
+                                    />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {ASSIGNABLE_RELATIONSHIP_TYPES.map(type => (
+                                        <SelectItem key={type} value={type}>
+                                            {RELATIONSHIP_TYPE_LABELS[type]}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
                             <Button
                                 disabled={
                                     table1SelectedUids.length === 0 ||
                                     table2SelectedUids.length === 0
                                 }
                                 loading={loading}
-                                onClick={handleAssignSpareParts}
+                                onClick={handleAssignRelations}
                             >
-                                {fm({ id: message.common.systemsSpareParts.assignSpareParts })}
+                                {fm({ id: message.common.systemsRelations.assignRelation })}
                             </Button>
                         </div>
                     }
                     onChange={() => table.resetExpanded()}
                 />
                 <PandaTableV2
-                    data={sysetms2.systems?.data}
-                    tableHeading="For System"
+                    data={systems2.systems?.data}
+                    tableHeading="Target Systems"
                     tableId={tableId2}
                     table={table2}
-                    loading={sysetms2.loading || columns2.pending}
+                    loading={systems2.loading || columns2.pending}
                     className={'relative overflow-scroll scrollbar-style'}
                     settings={tableSettings}
                     getRowProps={({ original }) => ({
@@ -299,7 +343,7 @@ export const SystemsSparePartsContainer = () => {
                     tableId={tableId2}
                     settings={{
                         enableQueryURL: false,
-                        total: sysetms2.systems?.totalCount,
+                        total: systems2.systems?.totalCount,
                     }}
                 />
             </TableLayoutContainer>
@@ -307,4 +351,4 @@ export const SystemsSparePartsContainer = () => {
     )
 }
 
-export default SystemsSparePartsContainer
+export default SystemRelationsContainer

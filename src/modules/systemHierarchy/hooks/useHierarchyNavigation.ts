@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router'
 import { useCallback, useMemo } from 'react'
 
-import type { HierarchyTab } from '../types/constants'
-import { HIERARCHY_TABS } from '../types/constants'
+import type { HierarchyTab, HierarchyView } from '../types/constants'
+import { HIERARCHY_TABS, HIERARCHY_VIEWS } from '../types/constants'
 
 export const useHierarchyNavigation = () => {
     const router = useRouter()
@@ -10,6 +10,7 @@ export const useHierarchyNavigation = () => {
     const selectedParentUid = (router.query.parent as string) ?? null
     const selectedLeafUid = (router.query.leaf as string) ?? null
     const activeTab = ((router.query.tab as string) ?? HIERARCHY_TABS.DETAIL) as HierarchyTab
+    const activeView = ((router.query.view as string) ?? HIERARCHY_VIEWS.TREE) as HierarchyView
 
     const updateQuery = useCallback(
         (updates: Record<string, string | undefined>) => {
@@ -53,23 +54,34 @@ export const useHierarchyNavigation = () => {
         updateQuery({ leaf: undefined, tab: undefined })
     }, [updateQuery])
 
+    const setActiveView = useCallback(
+        (view: HierarchyView) => {
+            updateQuery({ view: view === HIERARCHY_VIEWS.TREE ? undefined : view })
+        },
+        [updateQuery],
+    )
+
     return useMemo(
         () => ({
             selectedParentUid,
             selectedLeafUid,
             activeTab,
+            activeView,
             selectParent,
             selectLeaf,
             setActiveTab,
+            setActiveView,
             goBackToLeaves,
         }),
         [
             selectedParentUid,
             selectedLeafUid,
             activeTab,
+            activeView,
             selectParent,
             selectLeaf,
             setActiveTab,
+            setActiveView,
             goBackToLeaves,
         ],
     )

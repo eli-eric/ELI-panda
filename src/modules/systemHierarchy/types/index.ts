@@ -14,4 +14,19 @@ export type SystemLeaf = z.infer<typeof systemLeafSchema>
 export type LeavesResponse = z.infer<typeof leavesResponseSchema>
 export type LeavesCountResponse = z.infer<typeof leavesCountResponseSchema>
 
+export type {
+    CreateRelationshipPayload,
+    GraphLayoutMode,
+    RelationshipGraphEdge,
+    RelationshipGraphNode,
+    RelationshipGraphResponse,
+    RelationshipType,
+} from './graph'
+export {
+    createRelationshipPayloadSchema,
+    GRAPH_LAYOUT_MODES,
+    RELATIONSHIP_TYPE_LABELS,
+    RELATIONSHIP_TYPES,
+    relationshipGraphResponseSchema,
+} from './graph'
 export { hierarchyResponseSchema, leavesCountResponseSchema, leavesResponseSchema } from './schemas'

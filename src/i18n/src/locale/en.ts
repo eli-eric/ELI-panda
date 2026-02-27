@@ -341,8 +341,9 @@ export const messages = {
                 description: 'Configure the system settings before moving it',
             },
         },
-        systemsSpareParts: {
-            assignSpareParts: 'Assign Spare Parts',
+        systemsRelations: {
+            assignRelation: 'Assign Relationship',
+            selectRelationshipType: 'Relationship Type',
         },
         pages: {
             administration: 'Administration',
@@ -361,6 +362,7 @@ export const messages = {
             systemsOverview: 'Systems Overview',
             systemsMoving: 'Systems Moving',
             spareParts: 'Spare Parts',
+            systemRelations: 'System Relations',
         },
         table: {
             category: 'Category',
@@ -1436,6 +1438,52 @@ export const messages = {
                 moves: 'System Moves',
                 itemMoves: 'Item Moves',
                 allUsers: 'All users',
+            },
+        },
+        graph: {
+            title: 'Relationship Graph',
+            viewTree: 'Tree View',
+            viewGraph: 'Graph View',
+            noNodes: 'No systems to display',
+            noEdges: 'No relationships found',
+            searchPlaceholder: 'Search nodes...',
+            allSystems: 'All Systems',
+            scopedToParent: 'Scoped to Parent',
+            layout: {
+                vertical: 'Vertical',
+                horizontal: 'Horizontal',
+            },
+            filters: {
+                systemType: 'System Type',
+                systemLevel: 'System Level',
+                relationshipType: 'Relationship Type',
+                allTypes: 'All Types',
+                allLevels: 'All Levels',
+                allRelationships: 'All Relationships',
+            },
+            legend: {
+                title: 'Legend',
+                nodes: 'Nodes',
+                edges: 'Edges',
+            },
+            nodeDetail: {
+                title: 'System Detail',
+                viewFullDetail: 'View Full Detail',
+            },
+            selection: {
+                source: 'Source',
+                target: 'Target',
+            },
+            actions: {
+                expand: 'Expand',
+                viewDetail: 'View Detail',
+            },
+            edgeDetail: {
+                title: 'Relationship Detail',
+                source: 'Source',
+                target: 'Target',
+                type: 'Type',
+                description: 'Description',
             },
         },
     },

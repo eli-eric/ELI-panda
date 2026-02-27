@@ -57,7 +57,7 @@ function IndeterminateCheckbox({
     )
 }
 
-export const useSystemsSparePartsColumns = ({ tableId, setSelectedUids }: SystemsColumnsProps) => {
+export const useSystemsRelationsColumns = ({ tableId, setSelectedUids }: SystemsColumnsProps) => {
     const { setUid, pending } = useSubsystems(tableId)
     const columns = useMemo(
         (): ColumnDef<SystemDetail, any>[] => [
