@@ -21,8 +21,10 @@ interface SystemNodeData {
     selected?: boolean
     selectionIndex?: number
     onExpand?: (uid: string) => void
+    onLoadMore?: (uid: string) => void
     onViewDetail?: (uid: string) => void
     onContextMenuChange?: (open: boolean) => void
+    hiddenRelationshipsCount?: number
     [key: string]: unknown
 }
 
@@ -37,8 +39,10 @@ const SystemNodeComponent = ({ id, data }: NodeProps) => {
         selected,
         selectionIndex,
         onExpand,
+        onLoadMore,
         onViewDetail,
         onContextMenuChange,
+        hiddenRelationshipsCount,
     } = data as unknown as SystemNodeData
 
     const isVertical = layoutMode === 'vertical'
@@ -48,7 +52,7 @@ const SystemNodeComponent = ({ id, data }: NodeProps) => {
         <ContextMenu onOpenChange={onContextMenuChange}>
             <ContextMenuTrigger asChild>
                 <div
-                    className={`rounded-lg border-2 shadow-sm px-3 py-2 min-w-[160px] max-w-[220px] ${nodeClasses} ${selectionRing}`}
+                    className={`group relative rounded-lg border-2 shadow-sm px-3 py-2 min-w-[160px] max-w-[220px] ${nodeClasses} ${selectionRing}`}
                     data-testid="system-node"
                 >
                     <Handle
@@ -81,12 +85,28 @@ const SystemNodeComponent = ({ id, data }: NodeProps) => {
                         position={isVertical ? Position.Bottom : Position.Right}
                         className="!bg-slate-400 !w-2 !h-2"
                     />
+                    {!!hiddenRelationshipsCount && hiddenRelationshipsCount > 0 && (
+                        <div
+                            className="absolute -top-2 -right-2 rounded-full bg-primary text-primary-foreground text-[10px] px-1.5 py-0.5 leading-none opacity-0 group-hover:opacity-100 transition-opacity"
+                            data-testid="system-node-hidden-badge"
+                        >
+                            +{hiddenRelationshipsCount}
+                        </div>
+                    )}
                 </div>
             </ContextMenuTrigger>
             <ContextMenuContent>
                 <ContextMenuItem onSelect={() => onExpand?.(id)} data-testid="context-expand">
                     {fm({ id: message.systemHierarchy.graph.actions.expand })}
                 </ContextMenuItem>
+                {!!hiddenRelationshipsCount && hiddenRelationshipsCount > 0 && onLoadMore && (
+                    <ContextMenuItem
+                        onSelect={() => onLoadMore(id)}
+                        data-testid="context-load-more"
+                    >
+                        {fm({ id: message.systemHierarchy.graph.actions.loadMore })}
+                    </ContextMenuItem>
+                )}
                 <ContextMenuItem
                     onSelect={() => onViewDetail?.(id)}
                     data-testid="context-view-detail"

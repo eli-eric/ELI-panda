@@ -71,6 +71,7 @@ const renderNode = (props = defaultProps) =>
                 'systemHierarchy.graph.selection.target': 'Target',
                 'systemHierarchy.graph.actions.expand': 'Expand',
                 'systemHierarchy.graph.actions.viewDetail': 'View Detail',
+                'systemHierarchy.graph.actions.loadMore': 'Load 10 More',
             }}
         >
             <ReactFlowProvider>
@@ -118,6 +119,55 @@ describe('SystemNode', () => {
         fireEvent.contextMenu(screen.getByTestId('system-node'))
         expect(screen.getByText('Expand')).toBeInTheDocument()
         expect(screen.getByText('View Detail')).toBeInTheDocument()
+    })
+
+    it('shows load more action when node has hidden relationships', () => {
+        const props = {
+            ...defaultProps,
+            data: {
+                ...defaultProps.data,
+                hiddenRelationshipsCount: 5,
+                onLoadMore: jest.fn(),
+            },
+        }
+
+        renderNode(props)
+        fireEvent.contextMenu(screen.getByTestId('system-node'))
+
+        expect(screen.getByText('Load 10 More')).toBeInTheDocument()
+    })
+
+    it('calls onLoadMore with node id when load more is clicked', () => {
+        const onLoadMore = jest.fn()
+        const props = {
+            ...defaultProps,
+            data: {
+                ...defaultProps.data,
+                hiddenRelationshipsCount: 5,
+                onLoadMore,
+            },
+        }
+
+        renderNode(props)
+        fireEvent.contextMenu(screen.getByTestId('system-node'))
+        fireEvent.click(screen.getByText('Load 10 More'))
+
+        expect(onLoadMore).toHaveBeenCalledWith('n1')
+    })
+
+    it('renders hidden relationship badge', () => {
+        const props = {
+            ...defaultProps,
+            data: {
+                ...defaultProps.data,
+                hiddenRelationshipsCount: 5,
+            },
+        }
+
+        renderNode(props)
+
+        expect(screen.getByTestId('system-node-hidden-badge')).toBeInTheDocument()
+        expect(screen.getByText('+5')).toBeInTheDocument()
     })
 
     it('calls onExpand with node id when Expand is clicked', () => {

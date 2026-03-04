@@ -41,9 +41,31 @@ export const relationshipGraphEdgeSchema = z.object({
     description: z.string().optional().nullable(),
 })
 
+export const relationshipGraphStatSchema = z.object({
+    total: z.number(),
+    returned: z.number(),
+    hasMore: z.boolean(),
+})
+
+export const relationshipGraphMetaSchema = z.object({
+    relationshipStats: z.record(z.string(), relationshipGraphStatSchema).optional(),
+    hiddenLinksTotal: z.number().optional(),
+})
+
+export const relationshipGraphPageSchema = z.object({
+    type: z.string(),
+    offset: z.number(),
+    limit: z.number(),
+    returned: z.number(),
+    total: z.number(),
+    hasMore: z.boolean(),
+})
+
 export const relationshipGraphResponseSchema = z.object({
     nodes: z.array(relationshipGraphNodeSchema),
     links: z.array(relationshipGraphEdgeSchema),
+    meta: relationshipGraphMetaSchema.optional(),
+    page: relationshipGraphPageSchema.optional(),
 })
 
 export const createRelationshipPayloadSchema = z.object({
@@ -56,6 +78,9 @@ export const createRelationshipPayloadSchema = z.object({
 // --- Inferred types ---
 export type RelationshipGraphNode = z.infer<typeof relationshipGraphNodeSchema>
 export type RelationshipGraphEdge = z.infer<typeof relationshipGraphEdgeSchema>
+export type RelationshipGraphStat = z.infer<typeof relationshipGraphStatSchema>
+export type RelationshipGraphMeta = z.infer<typeof relationshipGraphMetaSchema>
+export type RelationshipGraphPage = z.infer<typeof relationshipGraphPageSchema>
 export type RelationshipGraphResponse = z.infer<typeof relationshipGraphResponseSchema>
 export type CreateRelationshipPayload = z.infer<typeof createRelationshipPayloadSchema>
 

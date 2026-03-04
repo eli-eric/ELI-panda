@@ -9,6 +9,7 @@ const msgs: Record<string, string> = {
     'systemHierarchy.graph.noNodes': 'No systems to display',
     'systemHierarchy.graph.noConnectedNodes':
         'No connected systems for selected relationship filters',
+    'systemHierarchy.graph.updating': 'Updating...',
 }
 
 const renderWithIntl = (ui: React.JSX.Element) =>
@@ -47,5 +48,20 @@ describe('RelationshipGraphComponent', () => {
         const nodes = [{ id: 'n1', position: { x: 0, y: 0 }, data: { label: 'Test' } }]
         renderWithIntl(<RelationshipGraphComponent nodes={nodes} edges={[]} isLoading={false} />)
         expect(screen.getByTestId('relationship-graph')).toBeInTheDocument()
+    })
+
+    it('keeps graph visible and shows updating indicator while refreshing', () => {
+        const nodes = [{ id: 'n1', position: { x: 0, y: 0 }, data: { label: 'Test' } }]
+        renderWithIntl(
+            <RelationshipGraphComponent
+                nodes={nodes}
+                edges={[]}
+                isLoading={false}
+                isRefreshing={true}
+            />,
+        )
+
+        expect(screen.getByTestId('relationship-graph')).toBeInTheDocument()
+        expect(screen.getByText('Updating...')).toBeInTheDocument()
     })
 })

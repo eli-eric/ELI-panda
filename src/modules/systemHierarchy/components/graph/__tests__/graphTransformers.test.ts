@@ -143,4 +143,48 @@ describe('fromSystemGraphResponse', () => {
         expect(result.links[0].target).toBe('n2')
         expect(result.links[0].relationship).toBe('IS_POWERED_BY')
     })
+
+    it('prefers api link uid when present', () => {
+        const responseWithUid: SystemGraphResponse = {
+            ...apiResponse,
+            links: [
+                {
+                    uid: '12345',
+                    source: 'n1',
+                    target: 'n2',
+                    relationship: 'IS_POWERED_BY',
+                },
+            ],
+        }
+        const result = fromSystemGraphResponse(responseWithUid)
+
+        expect(result.links[0].uid).toBe('12345')
+    })
+
+    it('maps graph meta and page when present', () => {
+        const responseWithMeta: SystemGraphResponse = {
+            ...apiResponse,
+            meta: {
+                relationshipStats: {
+                    IS_POWERED_BY: { total: 30, returned: 20, hasMore: true },
+                },
+                hiddenLinksTotal: 10,
+            },
+            page: {
+                type: 'IS_POWERED_BY',
+                offset: 20,
+                limit: 10,
+                returned: 10,
+                total: 30,
+                hasMore: false,
+            },
+        }
+
+        const result = fromSystemGraphResponse(responseWithMeta)
+
+        expect(result.meta?.relationshipStats?.IS_POWERED_BY.total).toBe(30)
+        expect(result.meta?.hiddenLinksTotal).toBe(10)
+        expect(result.page?.type).toBe('IS_POWERED_BY')
+        expect(result.page?.returned).toBe(10)
+    })
 })

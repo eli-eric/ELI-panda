@@ -4,6 +4,8 @@ export const LEAVES_COUNT_QUERY_KEY = 'systemLeavesCount'
 export const LEAVES_TABLE_ID = 'systemLeaves'
 export const SYSTEM_DETAIL_QUERY_KEY = 'systemDetail'
 export const RELATIONSHIP_GRAPH_QUERY_KEY = 'relationshipGraph'
+export const RELATIONSHIP_GRAPH_INITIAL_LIMIT = 20
+export const RELATIONSHIP_GRAPH_LOAD_MORE_LIMIT = 10
 
 export const HIERARCHY_VIEWS = {
     TREE: 'tree',

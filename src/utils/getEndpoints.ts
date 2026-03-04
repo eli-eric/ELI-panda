@@ -92,7 +92,7 @@ export const getEndpoints = ({
         systemsHierarchy: `/systems/hierarchy`,
         systemLeaves: uid ? `/system/${uid}/leaves${query}` : null,
         systemLeavesCount: uid ? `/system/${uid}/leaves/count${query}` : null,
-        systemGraph: `/system/${uid}/graph`,
+        systemGraph: `/system/${uid}/graph${query}`,
         systemRelationshipsBatch: '/system/relationships/batch',
     }
     return endpoints

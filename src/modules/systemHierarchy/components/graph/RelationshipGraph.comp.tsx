@@ -21,6 +21,7 @@ interface RelationshipGraphComponentProps {
     nodes: Node[]
     edges: Edge[]
     isLoading: boolean
+    isRefreshing?: boolean
     isRelationshipFilterActive?: boolean
     onInit?: (instance: ReactFlowInstance) => void
     onNodeClick?: (event: React.MouseEvent, node: Node) => void
@@ -47,6 +48,7 @@ export const RelationshipGraphComponent: FC<RelationshipGraphComponentProps> = (
     nodes,
     edges,
     isLoading,
+    isRefreshing = false,
     isRelationshipFilterActive = false,
     onInit,
     onNodeClick,
@@ -58,6 +60,7 @@ export const RelationshipGraphComponent: FC<RelationshipGraphComponentProps> = (
 }) => {
     const { formatMessage: fm } = useIntl()
     const loadingText = `${fm({ id: message.systemHierarchy.graph.title })}...`
+    const refreshingText = fm({ id: message.systemHierarchy.graph.updating })
     const emptyText = isRelationshipFilterActive
         ? fm({ id: message.systemHierarchy.graph.noConnectedNodes })
         : fm({ id: message.systemHierarchy.graph.noNodes })
@@ -79,7 +82,15 @@ export const RelationshipGraphComponent: FC<RelationshipGraphComponentProps> = (
     }
 
     return (
-        <div className="h-full w-full" data-testid="relationship-graph">
+        <div className="h-full w-full relative" data-testid="relationship-graph">
+            {isRefreshing && (
+                <div className="absolute top-3 right-3 z-20 rounded-md border border-border bg-background/95 px-2 py-1 text-[11px] text-muted-foreground shadow-sm">
+                    <span className="inline-flex items-center gap-1.5">
+                        <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+                        {refreshingText}
+                    </span>
+                </div>
+            )}
             <ReactFlow
                 nodes={nodes}
                 edges={edges}

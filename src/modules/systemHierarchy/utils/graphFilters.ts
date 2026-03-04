@@ -17,11 +17,16 @@ export const DEFAULT_GRAPH_FILTERS: GraphFilterState = {
     relationshipTypes: [],
 }
 
+const EMPTY_PINNED_NODE_UIDS = new Set<string>()
+
 export const filterNodes = (
     nodes: RelationshipGraphNode[],
     filters: GraphFilterState,
+    pinnedNodeUids: Set<string> = EMPTY_PINNED_NODE_UIDS,
 ): RelationshipGraphNode[] => {
     return nodes.filter(node => {
+        if (pinnedNodeUids.has(node.uid)) return true
+
         if (filters.search) {
             const term = filters.search.toLowerCase()
             const matchesName = node.name.toLowerCase().includes(term)

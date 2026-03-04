@@ -89,6 +89,32 @@ describe('filterNodes', () => {
         expect(result).toHaveLength(1)
         expect(result[0].uid).toBe('n3')
     })
+
+    it('keeps pinned root node even when level filter excludes it', () => {
+        const result = filterNodes(
+            nodes,
+            {
+                ...baseFilters,
+                systemLevels: ['KEY_SYSTEMS'],
+            },
+            new Set(['n2']),
+        )
+
+        expect(result.map(node => node.uid)).toEqual(['n1', 'n2', 'n3'])
+    })
+
+    it('keeps pinned node even when search does not match', () => {
+        const result = filterNodes(
+            nodes,
+            {
+                ...baseFilters,
+                search: 'valve',
+            },
+            new Set(['n2']),
+        )
+
+        expect(result.map(node => node.uid)).toEqual(['n2', 'n3'])
+    })
 })
 
 describe('filterEdges', () => {

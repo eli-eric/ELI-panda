@@ -1447,6 +1447,7 @@ export const messages = {
             noNodes: 'No systems to display',
             noConnectedNodes: 'No connected systems for selected relationship filters',
             noEdges: 'No relationships found',
+            updating: 'Updating...',
             searchPlaceholder: 'Search nodes...',
             allSystems: 'All Systems',
             scopedToParent: 'Scoped to Parent',
@@ -1478,6 +1479,15 @@ export const messages = {
             actions: {
                 expand: 'Expand',
                 viewDetail: 'View Detail',
+                loadMore: 'Load 10 More',
+            },
+            loadMore: {
+                title: 'More Relationships',
+                hidden: 'Hidden relationships: {count}',
+                shownOfTotal: '{shown}/{total}',
+                button: '+10',
+                loading: 'Loading...',
+                backToGraph: 'Back to graph',
             },
             edgeDetail: {
                 title: 'Relationship Detail',

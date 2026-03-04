@@ -16,6 +16,7 @@ interface HierarchyStore {
     collapseAll: () => void
     setGraphLayoutMode: (mode: GraphLayoutMode) => void
     addGraphExpanded: (nodes: RelationshipGraphNode[], edges: RelationshipGraphEdge[]) => void
+    setGraphExpanded: (nodes: RelationshipGraphNode[], edges: RelationshipGraphEdge[]) => void
     resetGraphExpanded: () => void
 }
 
@@ -58,15 +59,24 @@ export const useHierarchyStore = create<HierarchyStore>()(
                 const seenNodes = new Set(graphExpandedNodes.map(n => n.uid))
                 const seenEdges = new Set(graphExpandedEdges.map(e => e.uid))
                 set({
-                    graphExpandedNodes: [...graphExpandedNodes, ...nodes.filter(n => !seenNodes.has(n.uid))],
-                    graphExpandedEdges: [...graphExpandedEdges, ...edges.filter(e => !seenEdges.has(e.uid))],
+                    graphExpandedNodes: [
+                        ...graphExpandedNodes,
+                        ...nodes.filter(n => !seenNodes.has(n.uid)),
+                    ],
+                    graphExpandedEdges: [
+                        ...graphExpandedEdges,
+                        ...edges.filter(e => !seenEdges.has(e.uid)),
+                    ],
                 })
+            },
+            setGraphExpanded: (nodes, edges) => {
+                set({ graphExpandedNodes: nodes, graphExpandedEdges: edges })
             },
             resetGraphExpanded: () => set({ graphExpandedNodes: [], graphExpandedEdges: [] }),
         }),
         {
             name: 'hierarchy-expanded-nodes',
-            partialize: (state) => ({
+            partialize: state => ({
                 expandedNodes: state.expandedNodes,
                 graphLayoutMode: state.graphLayoutMode,
             }),
