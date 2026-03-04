@@ -33,7 +33,7 @@ export const useRelationshipGraph = (options: UseRelationshipGraphOptions = {}) 
     >({
         queryKey,
         queryFn: async (...args) => {
-            const raw = await queryFetcher<SystemGraphResponse>('generalGraph')(...args)
+            const raw = await queryFetcher<SystemGraphResponse>('systemGraph')(...args)
             return fromSystemGraphResponse(raw)
         },
         enabled: enabled && !!systemUid,
