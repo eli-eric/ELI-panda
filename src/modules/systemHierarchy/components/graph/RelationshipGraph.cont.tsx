@@ -104,7 +104,7 @@ export const RelationshipGraphContainer: FC = () => {
             try {
                 const raw = await queryClient.fetchQuery({
                     queryKey: [RELATIONSHIP_GRAPH_QUERY_KEY, { uid }],
-                    queryFn: queryFetcher<SystemGraphResponse>('generalGraph'),
+                    queryFn: queryFetcher<SystemGraphResponse>('systemGraph'),
                 })
                 const data: RelationshipGraphResponse = fromSystemGraphResponse(raw)
                 addGraphExpanded(data.nodes, data.links)
