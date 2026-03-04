@@ -1445,6 +1445,7 @@ export const messages = {
             viewTree: 'Tree View',
             viewGraph: 'Graph View',
             noNodes: 'No systems to display',
+            noConnectedNodes: 'No connected systems for selected relationship filters',
             noEdges: 'No relationships found',
             searchPlaceholder: 'Search nodes...',
             allSystems: 'All Systems',

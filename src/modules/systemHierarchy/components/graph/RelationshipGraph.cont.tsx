@@ -16,7 +16,12 @@ import { useHierarchyStore } from '../../store/useHierarchyStore'
 import { RELATIONSHIP_GRAPH_QUERY_KEY } from '../../types/constants'
 import type { GraphLayoutMode, RelationshipGraphResponse } from '../../types/graph'
 import { GRAPH_LAYOUT_MODES } from '../../types/graph'
-import { filterEdges, filterNodes } from '../../utils/graphFilters'
+import {
+    filterConnectedNodes,
+    filterEdges,
+    filterNodes,
+    getConnectedNodeUids,
+} from '../../utils/graphFilters'
 import { applyHorizontalLayout, applyVerticalLayout } from '../../utils/graphLayout'
 import {
     fromSystemGraphResponse,
@@ -98,6 +103,12 @@ export const RelationshipGraphContainer: FC = () => {
         () => filterEdges(mergedEdges, visibleNodeUids, filters),
         [mergedEdges, visibleNodeUids, filters],
     )
+    const shouldFilterDisconnectedNodes = filters.relationshipTypes.length > 0
+    const connectedNodeUids = useMemo(() => getConnectedNodeUids(filteredEdges), [filteredEdges])
+    const visibleNodes = useMemo(
+        () => filterConnectedNodes(filteredNodes, connectedNodeUids, shouldFilterDisconnectedNodes),
+        [filteredNodes, connectedNodeUids, shouldFilterDisconnectedNodes],
+    )
     // Expand handler — fetches subgraph for a node and merges into store
     const handleExpand = useCallback(
         async (uid: string) => {
@@ -134,13 +145,13 @@ export const RelationshipGraphContainer: FC = () => {
     // Transform to ReactFlow format
     const rawNodes = useMemo(
         () =>
-            toReactFlowNodes(filteredNodes, {
+            toReactFlowNodes(visibleNodes, {
                 layoutMode,
                 onExpand: handleExpand,
                 onViewDetail: handleViewDetail,
                 onContextMenuChange: handleContextMenuChange,
             }),
-        [filteredNodes, layoutMode, handleExpand, handleViewDetail, handleContextMenuChange],
+        [visibleNodes, layoutMode, handleExpand, handleViewDetail, handleContextMenuChange],
     )
     const rfEdges = useMemo(() => toReactFlowEdges(filteredEdges), [filteredEdges])
 
@@ -224,6 +235,7 @@ export const RelationshipGraphContainer: FC = () => {
                         nodes={rfNodes}
                         edges={rfEdges}
                         isLoading={isLoading}
+                        isRelationshipFilterActive={shouldFilterDisconnectedNodes}
                         onNodeClick={handleNodeClick}
                         onEdgeClick={handleEdgeClick}
                         nodeTypes={nodeTypes}

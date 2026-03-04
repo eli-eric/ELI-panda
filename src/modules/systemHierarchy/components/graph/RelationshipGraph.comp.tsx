@@ -21,6 +21,7 @@ interface RelationshipGraphComponentProps {
     nodes: Node[]
     edges: Edge[]
     isLoading: boolean
+    isRelationshipFilterActive?: boolean
     onInit?: (instance: ReactFlowInstance) => void
     onNodeClick?: (event: React.MouseEvent, node: Node) => void
     onEdgeClick?: (event: React.MouseEvent, edge: Edge) => void
@@ -46,6 +47,7 @@ export const RelationshipGraphComponent: FC<RelationshipGraphComponentProps> = (
     nodes,
     edges,
     isLoading,
+    isRelationshipFilterActive = false,
     onInit,
     onNodeClick,
     onEdgeClick,
@@ -56,6 +58,9 @@ export const RelationshipGraphComponent: FC<RelationshipGraphComponentProps> = (
 }) => {
     const { formatMessage: fm } = useIntl()
     const loadingText = `${fm({ id: message.systemHierarchy.graph.title })}...`
+    const emptyText = isRelationshipFilterActive
+        ? fm({ id: message.systemHierarchy.graph.noConnectedNodes })
+        : fm({ id: message.systemHierarchy.graph.noNodes })
 
     if (isLoading) {
         return (
@@ -68,9 +73,7 @@ export const RelationshipGraphComponent: FC<RelationshipGraphComponentProps> = (
     if (nodes.length === 0) {
         return (
             <div className="flex items-center justify-center h-full w-full">
-                <div className="text-muted-foreground text-sm">
-                    {fm({ id: message.systemHierarchy.graph.noNodes })}
-                </div>
+                <div className="text-muted-foreground text-sm">{emptyText}</div>
             </div>
         )
     }

@@ -7,6 +7,8 @@ import { RelationshipGraphComponent } from '../RelationshipGraph.comp'
 const msgs: Record<string, string> = {
     'systemHierarchy.graph.title': 'Relationship Graph',
     'systemHierarchy.graph.noNodes': 'No systems to display',
+    'systemHierarchy.graph.noConnectedNodes':
+        'No connected systems for selected relationship filters',
 }
 
 const renderWithIntl = (ui: React.JSX.Element) =>
@@ -18,26 +20,32 @@ const renderWithIntl = (ui: React.JSX.Element) =>
 
 describe('RelationshipGraphComponent', () => {
     it('shows loading state', () => {
-        renderWithIntl(
-            <RelationshipGraphComponent nodes={[]} edges={[]} isLoading={true} />,
-        )
+        renderWithIntl(<RelationshipGraphComponent nodes={[]} edges={[]} isLoading={true} />)
         expect(screen.getByText('Relationship Graph...')).toBeInTheDocument()
     })
 
     it('shows empty state when no nodes', () => {
-        renderWithIntl(
-            <RelationshipGraphComponent nodes={[]} edges={[]} isLoading={false} />,
-        )
+        renderWithIntl(<RelationshipGraphComponent nodes={[]} edges={[]} isLoading={false} />)
         expect(screen.getByText('No systems to display')).toBeInTheDocument()
     })
 
-    it('renders ReactFlow when nodes exist', () => {
-        const nodes = [
-            { id: 'n1', position: { x: 0, y: 0 }, data: { label: 'Test' } },
-        ]
+    it('shows connected-empty state when relationship filter is active', () => {
         renderWithIntl(
-            <RelationshipGraphComponent nodes={nodes} edges={[]} isLoading={false} />,
+            <RelationshipGraphComponent
+                nodes={[]}
+                edges={[]}
+                isLoading={false}
+                isRelationshipFilterActive={true}
+            />,
         )
+        expect(
+            screen.getByText('No connected systems for selected relationship filters'),
+        ).toBeInTheDocument()
+    })
+
+    it('renders ReactFlow when nodes exist', () => {
+        const nodes = [{ id: 'n1', position: { x: 0, y: 0 }, data: { label: 'Test' } }]
+        renderWithIntl(<RelationshipGraphComponent nodes={nodes} edges={[]} isLoading={false} />)
         expect(screen.getByTestId('relationship-graph')).toBeInTheDocument()
     })
 })

@@ -52,3 +52,23 @@ export const filterEdges = (
         return true
     })
 }
+
+export const getConnectedNodeUids = (edges: RelationshipGraphEdge[]): Set<string> => {
+    const connectedNodeUids = new Set<string>()
+
+    edges.forEach(edge => {
+        connectedNodeUids.add(edge.source)
+        connectedNodeUids.add(edge.target)
+    })
+
+    return connectedNodeUids
+}
+
+export const filterConnectedNodes = (
+    nodes: RelationshipGraphNode[],
+    connectedNodeUids: Set<string>,
+    shouldFilter: boolean,
+): RelationshipGraphNode[] => {
+    if (!shouldFilter) return nodes
+    return nodes.filter(node => connectedNodeUids.has(node.uid))
+}

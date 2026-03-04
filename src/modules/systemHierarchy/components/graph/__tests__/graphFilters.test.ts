@@ -1,5 +1,11 @@
 import type { RelationshipGraphEdge, RelationshipGraphNode } from '../../../types/graph'
-import { filterEdges, filterNodes,type GraphFilterState } from '../../../utils/graphFilters'
+import {
+    filterConnectedNodes,
+    filterEdges,
+    filterNodes,
+    getConnectedNodeUids,
+    type GraphFilterState,
+} from '../../../utils/graphFilters'
 
 const nodes: RelationshipGraphNode[] = [
     {
@@ -121,5 +127,41 @@ describe('filterEdges', () => {
             relationshipTypes: ['IS_POWERED_BY', 'IS_COOLED_BY'],
         })
         expect(result).toHaveLength(2)
+    })
+})
+
+describe('filterConnectedNodes', () => {
+    it('keeps only nodes connected by visible filtered edges', () => {
+        const filteredEdges = filterEdges(edges, new Set(['n1', 'n2', 'n3']), {
+            ...baseFilters,
+            relationshipTypes: ['IS_POWERED_BY'],
+        })
+        const connectedNodeUids = getConnectedNodeUids(filteredEdges)
+
+        const result = filterConnectedNodes(nodes, connectedNodeUids, true)
+
+        expect(result.map(node => node.uid)).toEqual(['n1', 'n2'])
+    })
+
+    it('returns no nodes when relationship filter leaves no edges', () => {
+        const filteredEdges = filterEdges(edges, new Set(['n1', 'n2', 'n3']), {
+            ...baseFilters,
+            relationshipTypes: ['HAS_SUBSYSTEM'],
+        })
+        const connectedNodeUids = getConnectedNodeUids(filteredEdges)
+
+        const result = filterConnectedNodes(nodes, connectedNodeUids, true)
+
+        expect(result).toHaveLength(0)
+    })
+
+    it('does not prune nodes when relationship filter is not active', () => {
+        const connectedNodeUids = getConnectedNodeUids([
+            { uid: 'e1', source: 'n1', target: 'n2', relationship: 'IS_POWERED_BY' },
+        ])
+
+        const result = filterConnectedNodes(nodes, connectedNodeUids, false)
+
+        expect(result).toHaveLength(3)
     })
 })
