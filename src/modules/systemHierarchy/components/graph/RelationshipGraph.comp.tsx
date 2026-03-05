@@ -11,6 +11,7 @@ import {
     useNodesInitialized,
     useReactFlow,
 } from '@xyflow/react'
+import { useTheme } from 'next-themes'
 import type { FC } from 'react'
 import { useEffect } from 'react'
 import { useIntl } from 'react-intl'
@@ -59,6 +60,7 @@ export const RelationshipGraphComponent: FC<RelationshipGraphComponentProps> = (
     children,
 }) => {
     const { formatMessage: fm } = useIntl()
+    const { resolvedTheme } = useTheme()
     const loadingText = `${fm({ id: message.systemHierarchy.graph.title })}...`
     const refreshingText = fm({ id: message.systemHierarchy.graph.updating })
     const emptyText = isRelationshipFilterActive
@@ -99,6 +101,7 @@ export const RelationshipGraphComponent: FC<RelationshipGraphComponentProps> = (
                 onEdgeClick={onEdgeClick}
                 nodeTypes={nodeTypes}
                 edgeTypes={edgeTypes}
+                colorMode={resolvedTheme === 'dark' ? 'dark' : 'light'}
                 fitView
                 minZoom={0.1}
                 maxZoom={2}
