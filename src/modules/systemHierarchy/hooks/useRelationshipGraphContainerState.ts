@@ -147,34 +147,71 @@ export const useRelationshipGraphContainerState = () => {
             onGraphChanged,
         })
 
-    const headerProps = {
-        filters,
-        systemTypes,
-        systemLevels,
-        layoutMode,
-        onLayoutChange: handleLayoutChange,
-        onSearchChange: setSearch,
-        onToggleSystemLevel: toggleSystemLevel,
-        onSystemTypeChange: setSystemType,
-        onToggleRelationshipType: toggleRelationshipType,
-        onResetFilters: resetFilters,
-    }
+    const onBackToGraph = useCallback(() => {
+        setActiveScopeKey(graphScopeKey)
+    }, [graphScopeKey, setActiveScopeKey])
 
-    const canvasProps = {
-        nodes: rfNodes,
-        edges: rfEdges,
-        isLoading: isLoading && !hasGraphData,
-        isRefreshing: isFetching && hasGraphData,
-        isRelationshipFilterActive: shouldFilterDisconnectedNodes,
-        fitViewVersion,
-        hiddenTotal: visibleHiddenTotal,
-        rows: loadMoreRows,
-        showBackToGraph: (activeScopeKey ?? graphScopeKey).startsWith('node:'),
-        onBackToGraph: () => setActiveScopeKey(graphScopeKey),
-        onLoadMore: handleLoadMore,
-        onNodeClick: handleNodeClick,
-        onEdgeClick: handleEdgeClick,
-    }
+    const headerProps = useMemo(
+        () => ({
+            filters,
+            systemTypes,
+            systemLevels,
+            layoutMode,
+            onLayoutChange: handleLayoutChange,
+            onSearchChange: setSearch,
+            onToggleSystemLevel: toggleSystemLevel,
+            onSystemTypeChange: setSystemType,
+            onToggleRelationshipType: toggleRelationshipType,
+            onResetFilters: resetFilters,
+        }),
+        [
+            filters,
+            systemTypes,
+            systemLevels,
+            layoutMode,
+            handleLayoutChange,
+            setSearch,
+            toggleSystemLevel,
+            setSystemType,
+            toggleRelationshipType,
+            resetFilters,
+        ],
+    )
+
+    const canvasProps = useMemo(
+        () => ({
+            nodes: rfNodes,
+            edges: rfEdges,
+            isLoading: isLoading && !hasGraphData,
+            isRefreshing: isFetching && hasGraphData,
+            isRelationshipFilterActive: shouldFilterDisconnectedNodes,
+            fitViewVersion,
+            hiddenTotal: visibleHiddenTotal,
+            rows: loadMoreRows,
+            showBackToGraph: (activeScopeKey ?? graphScopeKey).startsWith('node:'),
+            onBackToGraph,
+            onLoadMore: handleLoadMore,
+            onNodeClick: handleNodeClick,
+            onEdgeClick: handleEdgeClick,
+        }),
+        [
+            rfNodes,
+            rfEdges,
+            isLoading,
+            hasGraphData,
+            isFetching,
+            shouldFilterDisconnectedNodes,
+            fitViewVersion,
+            visibleHiddenTotal,
+            loadMoreRows,
+            activeScopeKey,
+            graphScopeKey,
+            onBackToGraph,
+            handleLoadMore,
+            handleNodeClick,
+            handleEdgeClick,
+        ],
+    )
 
     return {
         headerProps,

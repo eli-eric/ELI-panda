@@ -9,7 +9,7 @@ import {
     type GraphFilterState,
 } from '../utils/graphFilters'
 import type { ScopeState } from '../utils/graphScope'
-import { compareRelationshipTypesByRank, isNodeScopeKey } from '../utils/graphScope'
+import { compareRelationshipTypesByRank, isNodeScopeKey, scopeKeyToUid } from '../utils/graphScope'
 
 interface LoadMoreRow {
     type: string
@@ -109,7 +109,9 @@ export const useRelationshipGraphViewModel = ({
             Object.entries(scopeStates).reduce<Record<string, number>>((acc, [scopeKey, scope]) => {
                 if (!isNodeScopeKey(scopeKey)) return acc
 
-                const nodeUid = scopeKey.slice('node:'.length)
+                const nodeUid = scopeKeyToUid(scopeKey)
+                if (!nodeUid) return acc
+
                 if (scope.hiddenLinksTotal > 0) {
                     acc[nodeUid] = scope.hiddenLinksTotal
                 }

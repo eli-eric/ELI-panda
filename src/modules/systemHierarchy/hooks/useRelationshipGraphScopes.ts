@@ -141,6 +141,7 @@ export const useRelationshipGraphScopes = ({
             loadMoreLoading,
             expandedScopeUids,
             registerExpandedScopeUid,
+            setActiveScopeKey,
             setNodeScopeMeta,
             setNodeScopesMeta,
             applyPageToScopeState,
