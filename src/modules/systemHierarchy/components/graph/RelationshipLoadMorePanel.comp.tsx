@@ -4,16 +4,9 @@ import { useIntl } from 'react-intl'
 import { Button } from '@/components/ui/button'
 import { message } from '@/i18n/src/messages'
 
-import type { RelationshipType } from '../../types/graph'
+import type { RelationshipLoadMoreRow, RelationshipType } from '../../types/graph'
 import { RELATIONSHIP_TYPE_LABELS } from '../../types/graph'
 import { RELATIONSHIP_COLORS } from '../../utils/graphColors'
-
-export interface RelationshipLoadMoreRow {
-    type: string
-    shown: number
-    total: number
-    isLoading: boolean
-}
 
 interface RelationshipLoadMorePanelProps {
     hiddenTotal: number

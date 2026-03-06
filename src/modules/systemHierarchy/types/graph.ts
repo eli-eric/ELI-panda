@@ -11,6 +11,13 @@ export const RELATIONSHIP_TYPES = {
 
 export type RelationshipType = (typeof RELATIONSHIP_TYPES)[keyof typeof RELATIONSHIP_TYPES]
 
+export interface RelationshipLoadMoreRow {
+    type: string
+    shown: number
+    total: number
+    isLoading: boolean
+}
+
 export const RELATIONSHIP_TYPE_LABELS: Record<RelationshipType, string> = {
     IS_SPARE_FOR: 'Is Spare For',
     IS_COOLED_BY: 'Is Cooled By',
