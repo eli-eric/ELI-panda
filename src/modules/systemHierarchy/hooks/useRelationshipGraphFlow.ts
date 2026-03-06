@@ -13,7 +13,7 @@ interface UseRelationshipGraphFlowParams {
     hiddenRelationshipsByNodeUid: Record<string, number>
     graphLayoutMode: GraphLayoutMode
     setGraphLayoutMode: (mode: GraphLayoutMode) => void
-    onExpand: (uid: string) => void | Promise<void>
+    onExpand: (uid: string) => void
     onNodeLoadMore: (uid: string) => void
     onViewDetail: (uid: string) => void
     onContextMenuChange: (open: boolean) => void
