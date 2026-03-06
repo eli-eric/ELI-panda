@@ -56,4 +56,10 @@ describe('graphScope utils', () => {
         expect(toNodeScopeKey('xyz')).toBe('node:xyz')
         expect(scopeKeyToUid('node:xyz')).toBe('xyz')
     })
+
+    it('normalizes empty graph scope keys to unknown', () => {
+        expect(toGraphScopeKey('')).toBe('graph:unknown')
+        expect(scopeKeyToUid('graph:')).toBeNull()
+        expect(scopeKeyToUid('graph:unknown')).toBeNull()
+    })
 })

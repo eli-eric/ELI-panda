@@ -3,10 +3,10 @@ import { Controls, MiniMap, ReactFlowProvider } from '@xyflow/react'
 import type { FC } from 'react'
 import type { MouseEvent } from 'react'
 
+import type { RelationshipLoadMoreRow } from '../../types/graph'
 import { GraphLegend } from './GraphLegend.comp'
 import { RelationshipEdge } from './RelationshipEdge.comp'
 import { RelationshipGraphComponent } from './RelationshipGraph.comp'
-import type { RelationshipLoadMoreRow } from './RelationshipLoadMorePanel.comp'
 import { RelationshipLoadMorePanel } from './RelationshipLoadMorePanel.comp'
 import { SystemNode } from './SystemNode.comp'
 

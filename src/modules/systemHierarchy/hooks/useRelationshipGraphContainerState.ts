@@ -4,7 +4,7 @@ import { useSystemEditSheet } from '@/modules/shared/system/system-edit/useSyste
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 
 import { useHierarchyStore } from '../store/useHierarchyStore'
-import { toGraphScopeKey } from '../utils/graphScope'
+import { isNodeScopeKey, toGraphScopeKey } from '../utils/graphScope'
 import { useRelationshipGraph } from './queries/useRelationshipGraph'
 import { useGraphFilters } from './useGraphFilters'
 import { useHierarchyNavigation } from './useHierarchyNavigation'
@@ -188,7 +188,7 @@ export const useRelationshipGraphContainerState = () => {
             fitViewVersion,
             hiddenTotal: visibleHiddenTotal,
             rows: loadMoreRows,
-            showBackToGraph: (activeScopeKey ?? graphScopeKey).startsWith('node:'),
+            showBackToGraph: isNodeScopeKey(activeScopeKey ?? graphScopeKey),
             onBackToGraph,
             onLoadMore: handleLoadMore,
             onNodeClick: handleNodeClick,

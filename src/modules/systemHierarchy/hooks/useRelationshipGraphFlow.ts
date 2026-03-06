@@ -1,5 +1,5 @@
 import type { Edge, Node } from '@xyflow/react'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 
 import type { GraphLayoutMode, RelationshipGraphEdge, RelationshipGraphNode } from '../types/graph'
 import { GRAPH_LAYOUT_MODES } from '../types/graph'
@@ -40,7 +40,8 @@ export const useRelationshipGraphFlow = ({
     onContextMenuChange,
     onGraphChanged,
 }: UseRelationshipGraphFlowParams): UseRelationshipGraphFlowResult => {
-    const [layoutMode, setLayoutMode] = useState<GraphLayoutMode>(graphLayoutMode)
+    const layoutMode = graphLayoutMode
+    const prevLayoutModeRef = useRef(graphLayoutMode)
     const prevGraphSizeRef = useRef({ nodes: 0, edges: 0 })
 
     const rawNodes = useMemo(
@@ -78,12 +79,18 @@ export const useRelationshipGraphFlow = ({
 
     const handleLayoutChange = useCallback(
         (mode: GraphLayoutMode) => {
-            setLayoutMode(mode)
+            if (mode === graphLayoutMode) return
             setGraphLayoutMode(mode)
-            onGraphChanged()
         },
-        [onGraphChanged, setGraphLayoutMode],
+        [graphLayoutMode, setGraphLayoutMode],
     )
+
+    useEffect(() => {
+        if (prevLayoutModeRef.current === graphLayoutMode) return
+
+        prevLayoutModeRef.current = graphLayoutMode
+        onGraphChanged()
+    }, [graphLayoutMode, onGraphChanged])
 
     useEffect(() => {
         const nextGraphSize = { nodes: rfNodes.length, edges: rfEdges.length }

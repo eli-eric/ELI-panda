@@ -94,7 +94,7 @@ export const applyPageToScope = (
 }
 
 export const toGraphScopeKey = (uid?: string | null) =>
-    `${GRAPH_SCOPE_PREFIX}${uid ?? UNKNOWN_SCOPE_UID}`
+    `${GRAPH_SCOPE_PREFIX}${uid ? uid : UNKNOWN_SCOPE_UID}`
 
 export const toNodeScopeKey = (uid: string) => `${NODE_SCOPE_PREFIX}${uid}`
 
@@ -107,7 +107,8 @@ export const scopeKeyToUid = (scopeKey: string): string | null => {
 
     if (scopeKey.startsWith(GRAPH_SCOPE_PREFIX)) {
         const uid = scopeKey.slice(GRAPH_SCOPE_PREFIX.length)
-        return uid === UNKNOWN_SCOPE_UID ? null : uid
+        if (!uid || uid === UNKNOWN_SCOPE_UID) return null
+        return uid
     }
 
     return null

@@ -1,6 +1,10 @@
 import { useMemo } from 'react'
 
-import type { RelationshipGraphEdge, RelationshipGraphNode } from '../types/graph'
+import type {
+    RelationshipGraphEdge,
+    RelationshipGraphNode,
+    RelationshipLoadMoreRow,
+} from '../types/graph'
 import {
     filterConnectedNodes,
     filterEdges,
@@ -10,13 +14,6 @@ import {
 } from '../utils/graphFilters'
 import type { ScopeState } from '../utils/graphScope'
 import { compareRelationshipTypesByRank, isNodeScopeKey, scopeKeyToUid } from '../utils/graphScope'
-
-interface LoadMoreRow {
-    type: string
-    shown: number
-    total: number
-    isLoading: boolean
-}
 
 interface UseRelationshipGraphViewModelParams {
     apiNodes: RelationshipGraphNode[]
@@ -40,7 +37,7 @@ interface UseRelationshipGraphViewModelResult {
     hasGraphData: boolean
     shouldFilterDisconnectedNodes: boolean
     hiddenRelationshipsByNodeUid: Record<string, number>
-    loadMoreRows: LoadMoreRow[]
+    loadMoreRows: RelationshipLoadMoreRow[]
     visibleHiddenTotal: number
     systemTypes: string[]
 }
@@ -146,10 +143,13 @@ export const useRelationshipGraphViewModel = ({
     )
 
     const systemTypes = useMemo(
-        () =>
-            [
-                ...new Set(mergedNodes.map(node => node.systemType?.name).filter(Boolean)),
-            ] as string[],
+        () => [
+            ...new Set(
+                mergedNodes
+                    .map(node => node.systemType?.name)
+                    .filter((name): name is string => Boolean(name)),
+            ),
+        ],
         [mergedNodes],
     )
 
