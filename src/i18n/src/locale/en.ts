@@ -1122,6 +1122,33 @@ export const messages = {
             },
             language: { label: 'Language (R07)' },
             note: { label: 'Note' },
+            // C or D
+            publisher: { label: 'Publisher*' },
+            publishPlace: { label: 'Place of Publishing*' },
+            publishFormatCb: { label: 'Publish Format*' },
+            // C only
+            isbn: { label: 'ISBN*' },
+            bookTitle: { label: 'Book Title*' },
+            bookPagesCount: { label: 'Book Pages Count*' },
+            editionVolume: { label: 'Edition/Volume*' },
+            // D only
+            proceedingsIsbn: { label: 'Proceedings ISBN*' },
+            conferenceDate: { label: 'Conference Date*' },
+            conferencePlace: { label: 'Conference Place*' },
+            conferenceScopeCb: { label: 'Conference Scope*' },
+        },
+        riv: {
+            buttonTooltip: 'Export to RIV',
+            dialogTitle: 'Export to RIV',
+            yearLabel: 'Year',
+            providerLabel: 'Provider',
+            validationTableCode: 'Publication Code',
+            validationTableMessage: 'Message',
+            noWarnings: 'No validation warnings',
+            downloadButton: 'Download XML',
+            validating: 'Validating...',
+            totalPublications: 'Total publications',
+            validPublications: 'Valid publications',
         },
     },
     grantsPage: {

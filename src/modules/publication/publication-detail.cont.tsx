@@ -1,8 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
-import { type FC } from 'react'
-import { useForm } from 'react-hook-form'
+import { type FC, useEffect } from 'react'
+import { useForm, useWatch } from 'react-hook-form'
 import { FormattedMessage } from 'react-intl'
 
 import { Form } from '@/components/form/Form'
@@ -17,6 +17,7 @@ import FileManager from '../shared/fileManager/FileManager'
 import { FILE_TYPE } from '../shared/fileManager/types'
 import { PublicationFormComponent } from './components/publication-form.comp'
 import { publicationOtherSchema, publicationPeerReviewedSchema } from './form/scheme'
+import { useMediaTypeStore } from './hooks/useMediaTypeStore'
 import { usePublicationMutation } from './hooks/usePublicationMutation'
 import { ELI_PUBLICATION, MEDIA_TYPE_UID } from './types/constants'
 import type { PublicationForm } from './types/form'
@@ -60,6 +61,14 @@ export const PublicationDetailContainer: FC<Props> = ({ publication, refetch }) 
         defaultValues: publication ? formatPublication(publication) : defaultValues,
         resolver: dynamicResolver,
     })
+
+    const { setMediaTypeCode } = useMediaTypeStore()
+
+    const watchedMediaTypeCb = useWatch({ control: formMethods.control, name: 'mediaTypeCb' })
+
+    useEffect(() => {
+        setMediaTypeCode(watchedMediaTypeCb?.code)
+    }, [watchedMediaTypeCb?.code, setMediaTypeCode])
 
     const { mutate, isPending } = usePublicationMutation()
 

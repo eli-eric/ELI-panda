@@ -5,7 +5,9 @@ import { Col, Grid } from '@/components/grid/Grid'
 import Card from '@/components/layout/Card'
 import { Separator } from '@/components/ui/separator'
 
+import { useMediaTypeStore } from '../hooks/useMediaTypeStore'
 import { usePublicationFields } from '../hooks/usePublicationFields'
+import { isMediaTypeC, isMediaTypeCOrD, isMediaTypeD } from '../types/constants'
 import { DepartmentsComponent } from './departments.comp'
 import { EliAuthorsSelectComponent } from './eli-authors-select.comp'
 import { GrantsSelectComponent } from './grants-select.comp'
@@ -23,6 +25,10 @@ export type Publication = {
 
 export const PublicationFormComponent = () => {
     const fields = usePublicationFields()
+    const { mediaTypeCode } = useMediaTypeStore()
+    const showCOrD = isMediaTypeCOrD(mediaTypeCode)
+    const showCOnly = isMediaTypeC(mediaTypeCode)
+    const showDOnly = isMediaTypeD(mediaTypeCode)
 
     return (
         <Card className="py-6">
@@ -140,6 +146,52 @@ export const PublicationFormComponent = () => {
                 <Col lg={2}>
                     <Input {...fields.eidScopus} />
                 </Col>
+                {showCOrD && (
+                    <>
+                        <Separator className="my-4 col-span-full" />
+                        <Col lg={4}>
+                            <Input {...fields.publisher} />
+                        </Col>
+                        <Col lg={4}>
+                            <Input {...fields.publishPlace} />
+                        </Col>
+                        <Col lg={4}>
+                            <Listbox {...fields.publishFormatCb} />
+                        </Col>
+                    </>
+                )}
+                {showCOnly && (
+                    <>
+                        <Col lg={3}>
+                            <Input {...fields.isbn} />
+                        </Col>
+                        <Col lg={5}>
+                            <Input {...fields.bookTitle} />
+                        </Col>
+                        <Col lg={2}>
+                            <Input {...fields.bookPagesCount} />
+                        </Col>
+                        <Col lg={2}>
+                            <Input {...fields.editionVolume} />
+                        </Col>
+                    </>
+                )}
+                {showDOnly && (
+                    <>
+                        <Col lg={3}>
+                            <Input {...fields.proceedingsIsbn} />
+                        </Col>
+                        <Col lg={3}>
+                            <Input {...fields.conferenceDate} />
+                        </Col>
+                        <Col lg={3}>
+                            <Input {...fields.conferencePlace} />
+                        </Col>
+                        <Col lg={3}>
+                            <Listbox {...fields.conferenceScopeCb} />
+                        </Col>
+                    </>
+                )}
                 <Col lg={6}>
                     <Combobox {...fields.publishingCountry} />
                 </Col>
