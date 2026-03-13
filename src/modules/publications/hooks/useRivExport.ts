@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { toast } from 'sonner'
 
-import { fetchRequest } from '@/core/http/fetchClient'
+import { fetchRequestDetailed } from '@/core/http/fetchClient'
 import { BASE_URL } from '@/types/constants/common'
 
 export const useRivExport = (year: string, provider: string) => {
@@ -10,15 +10,19 @@ export const useRivExport = (year: string, provider: string) => {
     const downloadXml = useCallback(async () => {
         setIsDownloading(true)
         try {
-            const data = await fetchRequest<Blob>(
+            const { data, headers } = await fetchRequestDetailed<Blob>(
                 `${BASE_URL}/publications/export/riv?year=${year}&provider=${provider}`,
                 { responseType: 'blob' },
             )
+            const disposition = headers['content-disposition'] ?? ''
+            const filenameMatch = disposition.match(/filename="?([^";\s]+)"?/)
+            const filename = filenameMatch?.[1] ?? `riv-export-${year}-${provider}.xml`
+
             const blob = new Blob([data], { type: 'application/xml' })
             const url = window.URL.createObjectURL(blob)
             const a = document.createElement('a')
             a.href = url
-            a.download = `riv-export-${year}-${provider}.xml`
+            a.download = filename
             a.click()
             window.URL.revokeObjectURL(url)
         } catch {

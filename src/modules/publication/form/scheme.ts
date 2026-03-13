@@ -14,10 +14,6 @@ const codebookSchema = z.object({
     name: z.string().min(1, 'Name is required'),
 })
 
-const codebookWithCodeSchema = codebookSchema.extend({
-    code: z.string().optional(),
-})
-
 /**
  * Schema for selected researcher (ELI Author).
  * Stores minimal data needed for display and API submission.
@@ -207,7 +203,7 @@ export const publicationOtherSchema = z.object({
 
     // Optional fields (different from peer-reviewed)
     mediaType: z.string().nullable().optional(),
-    mediaTypeCb: codebookWithCodeSchema.optional().refine(val => val !== undefined, {
+    mediaTypeCb: codebookSchema.optional().refine(val => val !== undefined, {
         message: 'Media Type is required',
     }),
     doi: z.string().nullable().optional(), // Optional for Other articles
@@ -264,19 +260,19 @@ export const publicationOtherSchema = z.object({
     conferencePlace: z.string().nullable().optional(),
     conferenceScopeCb: codebookSchema.nullable().optional(),
 }).superRefine((data, ctx) => {
-    const code = data.mediaTypeCb?.code
-    if (isMediaTypeCOrD(code)) {
+    const uid = data.mediaTypeCb?.uid
+    if (isMediaTypeCOrD(uid)) {
         if (!data.publisher) ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Publisher is required', path: ['publisher'] })
         if (!data.publishPlace) ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Publish place is required', path: ['publishPlace'] })
         if (!data.publishFormatCb?.uid) ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Publish format is required', path: ['publishFormatCb'] })
     }
-    if (isMediaTypeC(code)) {
+    if (isMediaTypeC(uid)) {
         if (!data.isbn) ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'ISBN is required', path: ['isbn'] })
         if (!data.bookTitle) ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Book title is required', path: ['bookTitle'] })
         if (!data.bookPagesCount) ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Book pages count is required', path: ['bookPagesCount'] })
         if (!data.editionVolume) ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Edition/volume is required', path: ['editionVolume'] })
     }
-    if (isMediaTypeD(code)) {
+    if (isMediaTypeD(uid)) {
         if (!data.proceedingsIsbn) ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Proceedings ISBN is required', path: ['proceedingsIsbn'] })
         if (!data.conferenceDate) ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Conference date is required', path: ['conferenceDate'] })
         if (!data.conferencePlace) ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Conference place is required', path: ['conferencePlace'] })

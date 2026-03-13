@@ -21,8 +21,8 @@ export const RivExportDialogContainer: FC = () => {
     const providerOptions = useMemo(
         () =>
             (grantGroups?.data ?? [])
-                .filter(g => g.code !== 'OTHER')
-                .map(g => ({ code: g.code ?? '', name: g.name })),
+                .filter((g): g is typeof g & { code: string } => !!g.code && g.code !== 'OTHER')
+                .map(g => ({ code: g.code, name: g.name })),
         [grantGroups],
     )
 

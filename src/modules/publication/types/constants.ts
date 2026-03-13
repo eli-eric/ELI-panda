@@ -6,6 +6,8 @@ import type { RadioSelectOption } from '@/components/form/radio-select.comp'
  */
 export const MEDIA_TYPE_UID = {
     PEER_REVIEWED_ARTICLE: '2a17af4e-806a-4189-9709-7565847e0619',
+    BOOK_CHAPTER: 'a17ab43b-897e-4c3b-9a83-34cfce7f44e6',
+    CONFERENCE_PROCEEDINGS: '37906038-04f6-4a2b-b189-c9411f2f0784',
 } as const
 
 export enum MEDIA_TYPE_LABEL {
@@ -40,11 +42,6 @@ export enum ELI_PUBLICATION {
     NO = 'NO',
 }
 
-// MediaType codebook codes
-export const MEDIA_TYPE_CODE_JOURNAL = 'J'
-export const MEDIA_TYPE_CODE_BOOK = 'C'
-export const MEDIA_TYPE_CODE_PROCEEDINGS = 'D'
-
-export const isMediaTypeC = (code?: string) => code === MEDIA_TYPE_CODE_BOOK
-export const isMediaTypeD = (code?: string) => code === MEDIA_TYPE_CODE_PROCEEDINGS
-export const isMediaTypeCOrD = (code?: string) => isMediaTypeC(code) || isMediaTypeD(code)
+export const isMediaTypeC = (uid?: string) => uid === MEDIA_TYPE_UID.BOOK_CHAPTER
+export const isMediaTypeD = (uid?: string) => uid === MEDIA_TYPE_UID.CONFERENCE_PROCEEDINGS
+export const isMediaTypeCOrD = (uid?: string) => isMediaTypeC(uid) || isMediaTypeD(uid)

@@ -71,9 +71,9 @@ export const RivExportDialogComponent: FC<Props> = ({
                     <label className="text-sm font-medium">
                         <FormattedMessage id={riv.providerLabel} />
                     </label>
-                    <Select value={provider} onValueChange={onProviderChange}>
+                    <Select value={provider || undefined} onValueChange={onProviderChange}>
                         <SelectTrigger className="w-64">
-                            <SelectValue />
+                            <SelectValue placeholder="Select provider" />
                         </SelectTrigger>
                         <SelectContent>
                             {providerOptions.map(p => {
