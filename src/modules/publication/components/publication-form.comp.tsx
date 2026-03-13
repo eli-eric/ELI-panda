@@ -25,10 +25,10 @@ export type Publication = {
 
 export const PublicationFormComponent = () => {
     const fields = usePublicationFields()
-    const { mediaTypeCode } = useMediaTypeStore()
-    const showCOrD = isMediaTypeCOrD(mediaTypeCode)
-    const showCOnly = isMediaTypeC(mediaTypeCode)
-    const showDOnly = isMediaTypeD(mediaTypeCode)
+    const { mediaTypeUid } = useMediaTypeStore()
+    const showCOrD = isMediaTypeCOrD(mediaTypeUid)
+    const showCOnly = isMediaTypeC(mediaTypeUid)
+    const showDOnly = isMediaTypeD(mediaTypeUid)
 
     return (
         <Card className="py-6">

@@ -62,13 +62,13 @@ export const PublicationDetailContainer: FC<Props> = ({ publication, refetch }) 
         resolver: dynamicResolver,
     })
 
-    const { setMediaTypeCode } = useMediaTypeStore()
+    const { setMediaTypeUid } = useMediaTypeStore()
 
     const watchedMediaTypeCb = useWatch({ control: formMethods.control, name: 'mediaTypeCb' })
 
     useEffect(() => {
-        setMediaTypeCode(watchedMediaTypeCb?.code)
-    }, [watchedMediaTypeCb?.code, setMediaTypeCode])
+        setMediaTypeUid(watchedMediaTypeCb?.uid)
+    }, [watchedMediaTypeCb?.uid, setMediaTypeUid])
 
     const { mutate, isPending } = usePublicationMutation()
 
