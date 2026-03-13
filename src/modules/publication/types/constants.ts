@@ -39,3 +39,12 @@ export enum ELI_PUBLICATION {
     YES = 'YES',
     NO = 'NO',
 }
+
+// MediaType codebook codes
+export const MEDIA_TYPE_CODE_JOURNAL = 'J'
+export const MEDIA_TYPE_CODE_BOOK = 'C'
+export const MEDIA_TYPE_CODE_PROCEEDINGS = 'D'
+
+export const isMediaTypeC = (code?: string) => code === MEDIA_TYPE_CODE_BOOK
+export const isMediaTypeD = (code?: string) => code === MEDIA_TYPE_CODE_PROCEEDINGS
+export const isMediaTypeCOrD = (code?: string) => isMediaTypeC(code) || isMediaTypeD(code)
