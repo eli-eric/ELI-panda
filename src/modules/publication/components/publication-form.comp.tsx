@@ -1,3 +1,6 @@
+import { useEffect } from 'react'
+import { useFormContext, useWatch } from 'react-hook-form'
+
 import Combobox from '@/components/form/Combobox'
 import { Input, TextArea } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
@@ -7,7 +10,13 @@ import { Separator } from '@/components/ui/separator'
 
 import { useMediaTypeStore } from '../hooks/useMediaTypeStore'
 import { usePublicationFields } from '../hooks/usePublicationFields'
-import { isMediaTypeC, isMediaTypeCOrD, isMediaTypeD } from '../types/constants'
+import {
+    isMediaTypeC,
+    isMediaTypeCOrD,
+    isMediaTypeD,
+    isPeerReviewedMediaType,
+    MEDIA_TYPE_CODE,
+} from '../types/constants'
 import { DepartmentsComponent } from './departments.comp'
 import { EliAuthorsSelectComponent } from './eli-authors-select.comp'
 import { GrantsSelectComponent } from './grants-select.comp'
@@ -24,6 +33,24 @@ export type Publication = {
 }
 
 export const PublicationFormComponent = () => {
+    const {
+        control,
+        trigger,
+        formState: { submitCount },
+    } = useFormContext()
+    const mediaTypeCb = useWatch({ control, name: 'mediaTypeCb' })
+    const { setMediaType } = useMediaTypeStore()
+
+    useEffect(() => {
+        const code = isPeerReviewedMediaType(mediaTypeCb)
+            ? MEDIA_TYPE_CODE.PeerReviewedArticle
+            : MEDIA_TYPE_CODE.OtherArticle
+        setMediaType(code)
+        if (submitCount > 0) {
+            trigger(['doi', 'volume', 'oecdFord'])
+        }
+    }, [mediaTypeCb, setMediaType, trigger, submitCount])
+
     const fields = usePublicationFields()
     const { mediaTypeUid } = useMediaTypeStore()
     const showCOrD = isMediaTypeCOrD(mediaTypeUid)

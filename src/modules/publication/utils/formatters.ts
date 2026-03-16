@@ -1,4 +1,3 @@
-import { isFeatureEnabled } from '@/config/featureFlags'
 import type { SelectedResearcher } from '@/modules/shared/form/researcherSelect'
 
 import { ELI_PUBLICATION } from '../types/constants'
@@ -26,9 +25,7 @@ export const formatFormData = (data: any): Publication => ({
     // Ensure eliResearchers is always an array
     eliResearchers: data.eliResearchers ?? [],
     // Generate eliAuthors string for backward compatibility
-    eliAuthors: isFeatureEnabled('enableEliAuthorsResearcherPicker')
-        ? generateEliAuthorsString(data.eliResearchers)
-        : data.eliAuthors,
+    eliAuthors: generateEliAuthorsString(data.eliResearchers),
 })
 
 /**

@@ -1,5 +1,5 @@
 import { Plus, X } from 'lucide-react'
-import { useFieldArray } from 'react-hook-form'
+import { useFieldArray, useFormContext } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 
 import { Badge } from '@/components/ui/badge'
@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { useAccessControl } from '@/hooks/useAccessControl'
 import { message } from '@/i18n/src/messages'
+import { cn } from '@/lib/utils'
 import { type SelectedGrant, useGrantSelectionModal } from '@/modules/shared/form/grantSelect'
 import { ROLE } from '@/types/constants/roles'
 
@@ -27,6 +28,10 @@ export const GrantsSelectComponent = () => {
         name: 'grants',
     })
 
+    const {
+        formState: { errors },
+    } = useFormContext()
+    const error = errors.grants
     const disabled = !useAccessControl(ROLE.PUBLICATIONS_EDIT)()
     const { openGrantModal } = useGrantSelectionModal()
 
@@ -45,7 +50,13 @@ export const GrantsSelectComponent = () => {
             <Label>{fm({ id: labels.label })}</Label>
 
             {/* Selected grants as badges */}
-            <div className="flex flex-wrap gap-2 min-h-[32px]">
+            <div
+                className={cn(
+                    'flex flex-wrap gap-2 min-h-[32px] rounded-md border p-2',
+                    error && 'border-destructive',
+                )}
+                aria-invalid={error ? 'true' : 'false'}
+            >
                 {fields.length === 0 ? (
                     <span className="text-sm text-muted-foreground">
                         {fm({ id: labels.noSelection })}
@@ -72,6 +83,11 @@ export const GrantsSelectComponent = () => {
                     ))
                 )}
             </div>
+            {error && (
+                <p className="text-sm text-destructive">
+                    {(error.message || error.root?.message) as string}
+                </p>
+            )}
 
             {/* Add button */}
             {!disabled && (

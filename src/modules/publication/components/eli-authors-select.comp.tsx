@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { useAccessControl } from '@/hooks/useAccessControl'
 import { message } from '@/i18n/src/messages'
+import { cn } from '@/lib/utils'
 import {
     type SelectedResearcher,
     useResearcherSelectionModal,
@@ -33,7 +34,11 @@ export const EliAuthorsSelectComponent = () => {
         name: 'eliResearchers',
     })
 
-    const { setValue } = useFormContext()
+    const {
+        setValue,
+        formState: { errors },
+    } = useFormContext()
+    const error = errors.eliResearchers
     const disabled = !useAccessControl(ROLE.PUBLICATIONS_EDIT)()
     const { openResearcherModal } = useResearcherSelectionModal()
 
@@ -60,7 +65,13 @@ export const EliAuthorsSelectComponent = () => {
             </Label>
 
             {/* Selected researchers as badges */}
-            <div className="flex flex-wrap gap-2 min-h-[32px]">
+            <div
+                className={cn(
+                    'flex flex-wrap gap-2 min-h-[32px] rounded-md border p-2',
+                    error && 'border-destructive',
+                )}
+                aria-invalid={error ? 'true' : 'false'}
+            >
                 {fields.length === 0 ? (
                     <span className="text-sm text-muted-foreground">
                         <FormattedMessage id={eliAuthorsMessages.noSelection} />
@@ -92,6 +103,11 @@ export const EliAuthorsSelectComponent = () => {
                     ))
                 )}
             </div>
+            {error && (
+                <p className="text-sm text-destructive">
+                    {(error.message || error.root?.message) as string}
+                </p>
+            )}
 
             {/* Add button */}
             {!disabled && (
