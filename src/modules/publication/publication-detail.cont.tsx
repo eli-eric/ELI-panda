@@ -1,8 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
-import { type FC } from 'react'
-import { useForm } from 'react-hook-form'
+import { type FC, useEffect } from 'react'
+import { useForm, useWatch } from 'react-hook-form'
 import { FormattedMessage } from 'react-intl'
 
 import { Form } from '@/components/form/Form'
@@ -17,6 +17,7 @@ import FileManager from '../shared/fileManager/FileManager'
 import { FILE_TYPE } from '../shared/fileManager/types'
 import { PublicationFormComponent } from './components/publication-form.comp'
 import { publicationOtherSchema, publicationPeerReviewedSchema } from './form/scheme'
+import { useMediaTypeStore } from './hooks/useMediaTypeStore'
 import { usePublicationMutation } from './hooks/usePublicationMutation'
 import { ELI_PUBLICATION, isPeerReviewedMediaType } from './types/constants'
 import type { PublicationForm } from './types/form'
@@ -61,6 +62,14 @@ export const PublicationDetailContainer: FC<Props> = ({ publication, refetch }) 
         resolver: dynamicResolver,
     })
 
+    const { setMediaTypeUid } = useMediaTypeStore()
+
+    const watchedMediaTypeCb = useWatch({ control: formMethods.control, name: 'mediaTypeCb' })
+
+    useEffect(() => {
+        setMediaTypeUid(watchedMediaTypeCb?.uid)
+    }, [watchedMediaTypeCb?.uid, setMediaTypeUid])
+
     const { mutate, isPending } = usePublicationMutation()
 
     const onSuccessfulSubmit = async () => {
@@ -72,6 +81,7 @@ export const PublicationDetailContainer: FC<Props> = ({ publication, refetch }) 
     }
 
     const onInvalid = (errors: any) => {
+        // eslint-disable-next-line no-console -- keep form validation diagnostics during submission failures
         console.error('Publication form validation errors:', errors)
     }
 

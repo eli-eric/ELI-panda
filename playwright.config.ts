@@ -28,7 +28,7 @@ export default defineConfig({
         },
     ],
     webServer: {
-        command: `yarn build && PORT=${E2E_PORT} next start --hostname 127.0.0.1`,
+        command: `rm -rf .next && yarn build && PORT=${E2E_PORT} next start --hostname 127.0.0.1`,
         url: E2E_BASE_URL,
         reuseExistingServer: false,
         timeout: 3 * 60 * 1000,

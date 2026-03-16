@@ -1,15 +1,22 @@
+import { useEffect } from 'react'
+import { useFormContext, useWatch } from 'react-hook-form'
+
 import Combobox from '@/components/form/Combobox'
 import { Input, TextArea } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
 import Card from '@/components/layout/Card'
 import { Separator } from '@/components/ui/separator'
-import { useEffect } from 'react'
-import { useFormContext, useWatch } from 'react-hook-form'
 
 import { useMediaTypeStore } from '../hooks/useMediaTypeStore'
 import { usePublicationFields } from '../hooks/usePublicationFields'
-import { isPeerReviewedMediaType, MEDIA_TYPE_CODE } from '../types/constants'
+import {
+    isMediaTypeC,
+    isMediaTypeCOrD,
+    isMediaTypeD,
+    isPeerReviewedMediaType,
+    MEDIA_TYPE_CODE,
+} from '../types/constants'
 import { DepartmentsComponent } from './departments.comp'
 import { EliAuthorsSelectComponent } from './eli-authors-select.comp'
 import { GrantsSelectComponent } from './grants-select.comp'
@@ -45,6 +52,10 @@ export const PublicationFormComponent = () => {
     }, [mediaTypeCb, setMediaType, trigger, submitCount])
 
     const fields = usePublicationFields()
+    const { mediaTypeUid } = useMediaTypeStore()
+    const showCOrD = isMediaTypeCOrD(mediaTypeUid)
+    const showCOnly = isMediaTypeC(mediaTypeUid)
+    const showDOnly = isMediaTypeD(mediaTypeUid)
 
     return (
         <Card className="py-6">
@@ -162,6 +173,52 @@ export const PublicationFormComponent = () => {
                 <Col lg={2}>
                     <Input {...fields.eidScopus} />
                 </Col>
+                {showCOrD && (
+                    <>
+                        <Separator className="my-4 col-span-full" />
+                        <Col lg={4}>
+                            <Input {...fields.publisher} />
+                        </Col>
+                        <Col lg={4}>
+                            <Input {...fields.publishPlace} />
+                        </Col>
+                        <Col lg={4}>
+                            <Listbox {...fields.publishFormatCb} />
+                        </Col>
+                    </>
+                )}
+                {showCOnly && (
+                    <>
+                        <Col lg={3}>
+                            <Input {...fields.isbn} />
+                        </Col>
+                        <Col lg={5}>
+                            <Input {...fields.bookTitle} />
+                        </Col>
+                        <Col lg={2}>
+                            <Input {...fields.bookPagesCount} />
+                        </Col>
+                        <Col lg={2}>
+                            <Input {...fields.editionVolume} />
+                        </Col>
+                    </>
+                )}
+                {showDOnly && (
+                    <>
+                        <Col lg={3}>
+                            <Input {...fields.proceedingsIsbn} />
+                        </Col>
+                        <Col lg={3}>
+                            <Input {...fields.conferenceDate} />
+                        </Col>
+                        <Col lg={3}>
+                            <Input {...fields.conferencePlace} />
+                        </Col>
+                        <Col lg={3}>
+                            <Listbox {...fields.conferenceScopeCb} />
+                        </Col>
+                    </>
+                )}
                 <Col lg={6}>
                     <Combobox {...fields.publishingCountry} />
                 </Col>

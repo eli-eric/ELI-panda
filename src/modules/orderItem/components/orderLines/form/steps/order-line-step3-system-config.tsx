@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react'
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 
 import { Col, Grid } from '@/components/grid/Grid'
 import {
@@ -10,6 +11,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/simple-table'
+import { message } from '@/i18n/src/messages'
 import type { OrderLineSystemConfig, OrderLineWizardFormType } from '@/modules/orderItem/types/form'
 import { parseSerialNumbers } from '@/modules/orderItem/utils/parseSerialNumbers'
 import { SelectSystemComboBox } from '@/modules/shared/form/systemSelect/SelectSystem.combo'
@@ -34,6 +36,7 @@ import useOrderLineFormFields from '../OrderLineForm.fields'
  * - Callbacks for user interactions (parent system change, type change)
  */
 export const OrderLineStep3SystemConfig = () => {
+    const { formatMessage: fm } = useIntl()
     const { setValue, control } = useFormContext<OrderLineWizardFormType>()
 
     const formFields = useOrderLineFormFields(true)
@@ -167,7 +170,7 @@ export const OrderLineStep3SystemConfig = () => {
                         onSystemDetailChange={handleSystemDetailChange}
                     />
                     <p className="text-sm text-muted-foreground mt-1">
-                        This parent system will be applied to all order lines
+                        {fm({ id: message.ordersPage.orderLines.step3.parentSystemHint })}
                     </p>
                 </div>
             </Col>
@@ -177,14 +180,38 @@ export const OrderLineStep3SystemConfig = () => {
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead className="w-[40px]">#</TableHead>
-                                <TableHead className="min-w-[200px]">Item Name</TableHead>
+                                <TableHead className="w-[40px]">
+                                    {fm({ id: message.ordersPage.orderLines.step3.columns.index })}
+                                </TableHead>
+                                <TableHead className="min-w-[200px]">
+                                    {fm({
+                                        id: message.ordersPage.orderLines.step3.columns.itemName,
+                                    })}
+                                </TableHead>
                                 {hasSerialNumbers && (
-                                    <TableHead className="min-w-[150px]">Serial Number</TableHead>
+                                    <TableHead className="min-w-[150px]">
+                                        {fm({
+                                            id: message.ordersPage.orderLines.step3.columns
+                                                .serialNumber,
+                                        })}
+                                    </TableHead>
                                 )}
-                                <TableHead className="min-w-[200px]">Parent System</TableHead>
-                                <TableHead className="min-w-[180px]">System Type</TableHead>
-                                <TableHead className="min-w-[200px]">System Name</TableHead>
+                                <TableHead className="min-w-[200px]">
+                                    {fm({
+                                        id: message.ordersPage.orderLines.step3.columns
+                                            .parentSystem,
+                                    })}
+                                </TableHead>
+                                <TableHead className="min-w-[180px]">
+                                    {fm({
+                                        id: message.ordersPage.orderLines.step3.columns.systemType,
+                                    })}
+                                </TableHead>
+                                <TableHead className="min-w-[200px]">
+                                    {fm({
+                                        id: message.ordersPage.orderLines.step3.columns.systemName,
+                                    })}
+                                </TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>

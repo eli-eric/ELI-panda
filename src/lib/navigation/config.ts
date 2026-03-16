@@ -31,7 +31,7 @@ export const NAV_ITEMS: NavigationItem[] = [
         items: [
             { title: 'Overview', url: PATH.SYSTEMS, role: ROLE.SYSTEMS_VIEW },
             { title: 'Moving', url: PATH.SYSTEMS_MOVING, role: ROLE.SYSTEM_EDIT },
-            { title: 'Spare Parts', url: PATH.SPARE_PARTS, role: ROLE.SYSTEM_EDIT },
+            { title: 'System Relations', url: PATH.SYSTEM_RELATIONS, role: ROLE.SYSTEM_EDIT },
             {
                 title: 'System Type Edit',
                 url: PATH.SYSTEM_TYPE_EDIT,
@@ -165,7 +165,7 @@ export const PATH_ROLES_CONFIG: Record<PATH, ROLE[]> = {
     [PATH.ORDER]: [ROLE.ORDERS_VIEW, ROLE.ORDERS_EDIT, ROLE.ORDERS_DELIVERY_EDIT],
     [PATH.SYSTEM]: [ROLE.SYSTEM_EDIT, ROLE.SYSTEMS_VIEW],
     [PATH.SYSTEMS_MOVING]: [ROLE.SYSTEM_EDIT],
-    [PATH.SPARE_PARTS]: [ROLE.SYSTEM_EDIT],
+    [PATH.SYSTEM_RELATIONS]: [ROLE.SYSTEM_EDIT],
     [PATH.CODEBOOKS]: [ROLE.ADMIN],
     [PATH.ROOM_CARD]: [ROLE.ROOM_CARD_VIEW, ROLE.ROOM_CARD_EDIT],
     [PATH.ROOM_CARDS]: [ROLE.ROOM_CARD_VIEW, ROLE.ROOM_CARD_EDIT],

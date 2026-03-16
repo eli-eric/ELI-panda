@@ -1,4 +1,3 @@
-import { sortBy } from 'lodash'
 import type { FC } from 'react'
 import { useCallback, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
@@ -13,6 +12,7 @@ import { message } from '@/i18n/src/messages'
 import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
 import type { ServiceLine } from '@/modules/orderItem/types/form'
 import { ROLE } from '@/types/constants/roles'
+import { sortBy } from '@/utils/sortBy'
 
 import { DetailPropertiesList } from '../form/details/detail-properties.list'
 import { useServiceLineFields } from '../form/hooks/useServiceLineFields'

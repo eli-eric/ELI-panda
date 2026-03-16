@@ -6,6 +6,12 @@ export const MEDIA_TYPE_CODEBOOK_CODE = 'J' as const
  * Checks if mediaTypeCb is peer-reviewed article.
  * Uses `code` field (from codebook dropdown) with `name` prefix fallback (from API response).
  */
+export const MEDIA_TYPE_UID = {
+    PEER_REVIEWED_ARTICLE: '2a17af4e-806a-4189-9709-7565847e0619',
+    BOOK_CHAPTER: 'a17ab43b-897e-4c3b-9a83-34cfce7f44e6',
+    CONFERENCE_PROCEEDINGS: '37906038-04f6-4a2b-b189-c9411f2f0784',
+} as const
+
 export const isPeerReviewedMediaType = (mediaTypeCb: { code?: string; name?: string } | null) =>
     mediaTypeCb?.code === MEDIA_TYPE_CODEBOOK_CODE ||
     mediaTypeCb?.name?.startsWith(MEDIA_TYPE_CODEBOOK_CODE + ' ')
@@ -41,3 +47,7 @@ export enum ELI_PUBLICATION {
     YES = 'YES',
     NO = 'NO',
 }
+
+export const isMediaTypeC = (uid?: string) => uid === MEDIA_TYPE_UID.BOOK_CHAPTER
+export const isMediaTypeD = (uid?: string) => uid === MEDIA_TYPE_UID.CONFERENCE_PROCEEDINGS
+export const isMediaTypeCOrD = (uid?: string) => isMediaTypeC(uid) || isMediaTypeD(uid)

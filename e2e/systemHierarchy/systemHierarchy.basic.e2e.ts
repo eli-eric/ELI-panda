@@ -1,4 +1,5 @@
 import { expect, test } from '../fixtures/test'
+import { setupSystemHierarchyNetworkMocks } from '../helpers/systemHierarchyMocks'
 import {
     getVisibleByTestId,
     gotoSystemHierarchyPage,
@@ -6,7 +7,6 @@ import {
     searchHierarchyTree,
     selectParentNode,
 } from '../helpers/systemHierarchyPage'
-import { setupSystemHierarchyNetworkMocks } from '../helpers/systemHierarchyMocks'
 import { expectQueryParam } from '../helpers/url'
 
 test.describe('System hierarchy module', () => {

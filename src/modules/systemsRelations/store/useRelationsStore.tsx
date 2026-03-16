@@ -1,21 +1,29 @@
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { createWithEqualityFn as create } from 'zustand/traditional'
 
-type SpareStore = {
+import type { RelationshipType } from '@/modules/systemHierarchy/types/graph'
+
+type RelationsStore = {
     selectedUidForSystem?: string
     setSelectedUidForSystem: (uid?: string) => void
+    selectedRelationshipType?: RelationshipType
+    setSelectedRelationshipType: (type?: RelationshipType) => void
 }
 
-export const useSparesStore = create<SpareStore>()(
+export const useRelationsStore = create<RelationsStore>()(
     persist(
         set => ({
             selectedUidForSystem: undefined,
             setSelectedUidForSystem: (uid?: string) => {
                 set(() => ({ selectedUidForSystem: uid }))
             },
+            selectedRelationshipType: undefined,
+            setSelectedRelationshipType: (type?: RelationshipType) => {
+                set(() => ({ selectedRelationshipType: type }))
+            },
         }),
         {
-            name: 'spares-store',
+            name: 'relations-store',
             storage: createJSONStorage(() =>
                 typeof window !== 'undefined' ? sessionStorage : (undefined as any),
             ),

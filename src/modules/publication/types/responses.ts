@@ -54,6 +54,20 @@ export interface Publication {
     language?: CodebookType
     note?: string
     shortJournalTitle?: string
+    // C or D
+    publisher?: string
+    publishPlace?: string
+    publishFormatCb?: CodebookType
+    // C only
+    isbn?: string
+    bookTitle?: string
+    bookPagesCount?: number
+    editionVolume?: string
+    // D only
+    proceedingsIsbn?: string
+    conferenceDate?: string
+    conferencePlace?: string
+    conferenceScopeCb?: CodebookType
 }
 
 export type AuthorsDepartment = {

@@ -1,9 +1,9 @@
 'use client'
-import { sortBy } from 'lodash'
 import { Fragment, useEffect, useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import { Heading } from '@/components/layout/Heading'
+import { sortBy } from '@/utils/sortBy'
 
 import useGroupDetails from '../../hooks/useGroupDetails'
 import { useCatalogueItem } from '../../hooks/useItem'

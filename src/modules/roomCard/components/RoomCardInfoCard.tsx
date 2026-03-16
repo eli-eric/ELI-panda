@@ -48,7 +48,7 @@ export const RoomCardInfoCard = ({
                     {/* Name Field */}
                     <div className="space-y-2">
                         <Label htmlFor="name" className="text-base font-medium">
-                            Room Card Name
+                            <FormattedMessage id={messages.name.label} />
                         </Label>
                         <Input
                             {...fields.name}
@@ -61,7 +61,7 @@ export const RoomCardInfoCard = ({
                     {/* Status Field */}
                     <div className="space-y-2">
                         <Label htmlFor="status" className="text-base font-medium">
-                            Status
+                            <FormattedMessage id={messages.status.label} />
                             <Badge
                                 className={cn(
                                     'text-gray-900 dark:text-white',
@@ -102,8 +102,7 @@ export const RoomCardInfoCard = ({
                         />
                         {fields.operationalState.disabled && (
                             <p className="text-sm text-red-500">
-                                This field can only be edited by Area Manager or Area Manager -
-                                Deputy
+                                <FormattedMessage id={messages.operationalState.noPermission} />
                             </p>
                         )}
                     </div>
@@ -112,7 +111,7 @@ export const RoomCardInfoCard = ({
                     {operationalStateLastUpdated && (
                         <div className="space-y-2">
                             <Label className="text-base font-medium">
-                                Last Updated Operational State
+                                <FormattedMessage id={messages.operationalState.lastUpdated} />
                             </Label>
                             <div className="flex gap-2">
                                 <p className="text-sm text-muted-foreground pt-2">

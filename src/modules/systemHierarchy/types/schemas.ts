@@ -19,6 +19,7 @@ export const employeeRefSchema = z.object({
 const parentPathItemSchema = z.object({
     uid: z.string(),
     name: z.string(),
+    systemLevel: z.string().optional().nullable(),
 })
 
 const historyEntrySchema = z.object({
@@ -97,4 +98,8 @@ export const systemLeafSchema = z.object({
 export const leavesResponseSchema = z.object({
     data: z.array(systemLeafSchema),
     totalCount: z.number(),
+})
+
+export const leavesCountResponseSchema = z.object({
+    count: z.number(),
 })

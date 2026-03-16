@@ -259,5 +259,77 @@ export const usePublicationFields = () => {
             name: 'note',
             disabled,
         },
+        // C or D
+        publisher: {
+            label: form.publisher.label,
+            name: 'publisher',
+            rounded: 'rounded-md',
+            disabled,
+        },
+        publishPlace: {
+            label: form.publishPlace.label,
+            name: 'publishPlace',
+            rounded: 'rounded-md',
+            disabled,
+        },
+        publishFormatCb: {
+            label: form.publishFormatCb.label,
+            name: 'publishFormatCb',
+            rounded: 'rounded-md',
+            disabled,
+            codebook: CODEBOOK.PUBLISH_FORMAT,
+        },
+        // C only
+        isbn: {
+            label: form.isbn.label,
+            name: 'isbn',
+            rounded: 'rounded-md',
+            disabled,
+        },
+        bookTitle: {
+            label: form.bookTitle.label,
+            name: 'bookTitle',
+            rounded: 'rounded-md',
+            disabled,
+        },
+        bookPagesCount: {
+            label: form.bookPagesCount.label,
+            name: 'bookPagesCount',
+            rounded: 'rounded-md',
+            type: 'number',
+            disabled,
+        },
+        editionVolume: {
+            label: form.editionVolume.label,
+            name: 'editionVolume',
+            rounded: 'rounded-md',
+            disabled,
+        },
+        // D only
+        proceedingsIsbn: {
+            label: form.proceedingsIsbn.label,
+            name: 'proceedingsIsbn',
+            rounded: 'rounded-md',
+            disabled,
+        },
+        conferenceDate: {
+            label: form.conferenceDate.label,
+            name: 'conferenceDate',
+            rounded: 'rounded-md',
+            disabled,
+        },
+        conferencePlace: {
+            label: form.conferencePlace.label,
+            name: 'conferencePlace',
+            rounded: 'rounded-md',
+            disabled,
+        },
+        conferenceScopeCb: {
+            label: form.conferenceScopeCb.label,
+            name: 'conferenceScopeCb',
+            rounded: 'rounded-md',
+            disabled,
+            codebook: CODEBOOK.CONFERENCE_SCOPE,
+        },
     })
 }

@@ -1,8 +1,8 @@
-import type { AxiosError } from 'axios'
 import { useRef, useState } from 'react'
 
 import axiosInstance from '@/core/axios/axiosInstance'
 import { BASE_URL } from '@/types/constants/common'
+import type { AxiosError } from '@/types/http'
 
 interface UseSubmitProps<T> {
     endpoint: string

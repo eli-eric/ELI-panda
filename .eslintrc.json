@@ -75,6 +75,12 @@
     },
     "overrides": [
         {
+            "files": ["**/*.ts", "**/*.tsx"],
+            "rules": {
+                "react/prop-types": "off"
+            }
+        },
+        {
             "files": ["**/constants/**"],
             "rules": {
                 "@typescript-eslint/naming-convention": [
@@ -88,6 +94,18 @@
             "files": ["tests/**/*"],
             "env": {
                 "jest": true
+            }
+        },
+        {
+            "files": ["e2e/**/*.{ts,tsx}"],
+            "rules": {
+                "react-hooks/rules-of-hooks": "off"
+            }
+        },
+        {
+            "files": ["next-env.d.ts"],
+            "rules": {
+                "@typescript-eslint/triple-slash-reference": "off"
             }
         }
     ]
