@@ -41,14 +41,13 @@ export function SystemModalContent({
     }
 
     return (
-        <div className="flex flex-col gap-4">
+        <div className="flex min-h-0 flex-col gap-4">
             <SystemSelect
                 selectedSystem={selectedSystem}
                 onSelect={handleSystemSelect}
                 tableId={TABLE_IDS.SYSTEM_SELECTION_MODAL}
-                className="h-[785px] overflow-y-auto"
             />
-            <div className="flex justify-end gap-2 pt-4 border-t">
+            <div className="relative z-20 flex shrink-0 justify-end gap-2 border-t bg-background pt-4">
                 <Button
                     type="button"
                     variant={'outline'}

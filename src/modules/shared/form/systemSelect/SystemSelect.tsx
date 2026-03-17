@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 import { cn } from '@/lib/utils'
 import { SystemFilterButtonContainer } from '@/modules/systems/components/filters/SystemsFilterButton.cont'
@@ -111,18 +111,34 @@ export const SystemSelect = ({
     const filter = instances[tableId]?.filter
     const search = instances[tableId]?.search
     const pagination = instances[tableId]?.pagination
+    const prevTableStateRef = useRef({ filter, search, pagination })
+    const isInitialTableStateRef = useRef(true)
 
     // Reset selection when filters, search, or pagination changes
     useEffect(() => {
+        if (isInitialTableStateRef.current) {
+            isInitialTableStateRef.current = false
+            prevTableStateRef.current = { filter, search, pagination }
+            return
+        }
+
+        const prev = prevTableStateRef.current
+        const isSearchBootstrap =
+            (prev.search === undefined || prev.search === null) && search === ''
+        const hasSearchChanged = prev.search !== search && !isSearchBootstrap
+        const hasTableStateChanged =
+            prev.filter !== filter || hasSearchChanged || prev.pagination !== pagination
+
+        prevTableStateRef.current = { filter, search, pagination }
+
         // Only reset if we have a selection
-        if (selectedSystem) {
+        if (hasTableStateChanged && selectedSystem) {
             onSelect(undefined)
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [filter, search, pagination])
+    }, [filter, search, pagination, selectedSystem, onSelect])
 
     return (
-        <div>
+        <div className={className}>
             <SearchBar
                 tableId={tableId}
                 useQuery={false}
@@ -132,7 +148,7 @@ export const SystemSelect = ({
 
             <FilterBadges tableId={tableId} enableQueryURL={false} />
 
-            <div className="h-[556px]">
+            <div className="h-[556px] overflow-hidden">
                 <SystemSelectTable
                     tableId={tableId}
                     systems={systems?.data}
@@ -141,7 +157,6 @@ export const SystemSelect = ({
                     loading={loading}
                     pageSizeDefault={pageSizeDefault}
                     enableQueryURL={false}
-                    className={className}
                     getRowProps={
                         getRowProps ||
                         (row => ({

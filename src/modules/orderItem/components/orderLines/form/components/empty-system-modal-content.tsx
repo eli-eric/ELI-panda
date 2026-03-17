@@ -43,12 +43,11 @@ export function EmptySystemModalContent({ onSelect, onClose }: EmptySystemModalC
     }
 
     return (
-        <div className="flex flex-col gap-4">
+        <div className="flex min-h-0 flex-col gap-4">
             <SystemSelect
                 selectedSystem={selectedSystem}
                 onSelect={handleSystemSelect}
                 tableId="emptySystemSelect"
-                className="h-[785px] overflow-y-auto"
                 getRowProps={row => {
                     const hasPhysicalItem = Boolean(row.original.physicalItem)
 
@@ -72,7 +71,7 @@ export function EmptySystemModalContent({ onSelect, onClose }: EmptySystemModalC
                     }
                 }}
             />
-            <div className="flex justify-end gap-2 pt-4 border-t">
+            <div className="relative z-20 flex shrink-0 justify-end gap-2 border-t bg-background pt-4">
                 <Button
                     type="button"
                     variant={'outline'}
