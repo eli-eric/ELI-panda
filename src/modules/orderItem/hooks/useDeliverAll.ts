@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import type { AxiosError, AxiosResponse } from 'axios'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { toast } from 'sonner'
 
+import type { AxiosError, AxiosResponse } from '@/types/http'
 import { queryMutate } from '@/utils/fetcher'
 
 import type { OrderLineFormType } from '../types/form'

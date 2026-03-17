@@ -91,6 +91,11 @@ export const getEndpoints = ({
         systemCodesPreview: `/systems/system-codes/preview${query}`,
         systemsHierarchy: `/systems/hierarchy`,
         systemLeaves: uid ? `/system/${uid}/leaves${query}` : null,
+        systemLeavesCount: uid ? `/system/${uid}/leaves/count${query}` : null,
+        systemGraph: `/system/${uid}/graph${query}`,
+        systemRelationshipsBatch: '/system/relationships/batch',
+        rivValidate: `/publications/export/riv/validate${query}`,
+        rivExport: `/publications/export/riv${query}`,
     }
     return endpoints
 }

@@ -71,6 +71,7 @@ export const useSystemDetail = (leafUid: string | null) => {
                       .map(p => ({
                           uid: p.uid ?? '',
                           name: p.name ?? '',
+                          systemLevel: p.systemLevel ?? null,
                       })) ?? null,
               physicalItem: physicalItem
                   ? {

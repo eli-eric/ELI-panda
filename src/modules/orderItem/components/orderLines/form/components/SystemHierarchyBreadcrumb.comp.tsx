@@ -34,7 +34,7 @@ export const SystemHierarchyBreadcrumb: FC<SystemHierarchyBreadcrumbProps> = ({
     if (!currentSystem) {
         return (
             <div className={cn('text-sm text-muted-foreground', className)}>
-                No parent system selected
+                {fm({ id: message.ordersPage.orderLines.systemHierarchy.noParentSelected })}
             </div>
         )
     }
@@ -44,7 +44,9 @@ export const SystemHierarchyBreadcrumb: FC<SystemHierarchyBreadcrumbProps> = ({
 
     return (
         <div className={cn('flex flex-wrap items-center gap-1 text-xs', className)}>
-            <span className="text-muted-foreground font-medium mr-1">System Hierarchy:</span>
+            <span className="text-muted-foreground font-medium mr-1">
+                {fm({ id: message.ordersPage.orderLines.systemHierarchy.label })}
+            </span>
             {fullPath.map((system, index) => (
                 <Fragment key={system?.uid || index}>
                     <span
@@ -57,7 +59,8 @@ export const SystemHierarchyBreadcrumb: FC<SystemHierarchyBreadcrumbProps> = ({
                                 'bg-lime-100 dark:bg-lime-900/30 text-lime-700 dark:text-lime-300',
                         )}
                     >
-                        {system?.name || 'Unknown'}
+                        {system?.name ||
+                            fm({ id: message.ordersPage.orderLines.systemHierarchy.unknown })}
                     </span>
                     {index < fullPath.length - 1 && (
                         <span className="text-gray-400 mx-1">

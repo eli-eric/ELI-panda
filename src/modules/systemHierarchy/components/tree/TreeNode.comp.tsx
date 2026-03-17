@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils'
 import { highlightText } from '@/utils'
 import { getFontBySystemLevel } from '@/utils/systemLevel'
 
+import { useSystemLeavesCount } from '../../hooks/queries/useSystemLeavesCount'
 import type { HierarchyNode } from '../../types'
 
 interface TreeNodeProps {
@@ -32,6 +33,7 @@ export const TreeNode: FC<TreeNodeProps> = ({
     const hasChildren = node.children.length > 0
     const ChevronIcon = isExpanded ? ChevronDown : ChevronRight
     const FolderIcon = isExpanded ? FolderOpen : Folder
+    const { count, isLoading: isLeavesCountLoading } = useSystemLeavesCount(node.uid)
 
     const handleToggle = useCallback(
         (e: React.MouseEvent) => {
@@ -65,7 +67,7 @@ export const TreeNode: FC<TreeNodeProps> = ({
                         <ChevronIcon className="size-3.5 text-muted-foreground" />
                     </button>
                 ) : (
-                    <span className="w-[18px] shrink-0" />
+                    <span className="w-4.5 shrink-0" />
                 )}
                 <FolderIcon
                     className={cn('size-4 shrink-0', getFontBySystemLevel(node.systemLevel))}
@@ -73,11 +75,9 @@ export const TreeNode: FC<TreeNodeProps> = ({
                 <span className="truncate flex-1">
                     {search ? highlightText(node.name, search) : node.name}
                 </span>
-                {node.systemCode && (
-                    <code className="text-[10px] text-muted-foreground shrink-0 rounded bg-muted px-1 py-0.5">
-                        {search ? highlightText(node.systemCode, search) : node.systemCode}
-                    </code>
-                )}
+                <code className="text-[10px] text-muted-foreground shrink-0 rounded bg-muted px-1 py-0.5">
+                    {isLeavesCountLoading ? '…' : count}
+                </code>
             </div>
             {isExpanded && children}
         </div>

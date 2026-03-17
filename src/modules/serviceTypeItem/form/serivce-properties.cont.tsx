@@ -1,4 +1,3 @@
-import { sortBy } from 'lodash'
 import { Fragment, useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
@@ -8,6 +7,7 @@ import usePermission from '@/hooks/usePermission'
 import useGroupDetails from '@/modules/catalogueItem/hooks/useGroupDetails'
 import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
 import { ROLE } from '@/types/constants/roles'
+import { sortBy } from '@/utils/sortBy'
 
 export const ServiceProperties = () => {
     const { unregister, watch } = useFormContext()

@@ -1,5 +1,3 @@
-import { get } from 'lodash'
-
 import { messages as en } from './locale/en'
 
 interface Payload {
@@ -9,17 +7,18 @@ interface Payload {
 // define all messages from modules HERE
 const dictionary: Record<string, Record<string, string>> = { en: {} }
 
-const enhanceMessages = (path: string, pureMessages: Payload, language: string): void => {
-    const actualObject: Record<string, string> = path ? get(pureMessages, path) : pureMessages
-    const keys = Object.keys(actualObject)
+const enhanceMessages = (path: string, payload: Payload, language: string): void => {
+    const keys = Object.keys(payload)
 
     keys.forEach((key: string) => {
-        const value: Record<string, string> | string | typeof undefined = actualObject[key]
+        const value: Record<string, string> | string | typeof undefined = payload[key]
         const fullPath: string = path ? `${path}.${key}` : key
 
         switch (typeof value) {
             case 'object':
-                enhanceMessages(fullPath, pureMessages, language)
+                if (value) {
+                    enhanceMessages(fullPath, value, language)
+                }
                 break
             case 'string':
                 const stringValue: string = value

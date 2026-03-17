@@ -6,9 +6,9 @@ import { FormattedMessage, useIntl } from 'react-intl'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
-import { cn } from '@/lib/utils'
 import { useAccessControl } from '@/hooks/useAccessControl'
 import { message } from '@/i18n/src/messages'
+import { cn } from '@/lib/utils'
 import {
     type SelectedResearcher,
     useResearcherSelectionModal,

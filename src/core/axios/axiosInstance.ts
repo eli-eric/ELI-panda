@@ -1,14 +1,44 @@
-import axios from 'axios'
-import { getSession } from 'next-auth/react'
+import { fetchRequestDetailed } from '@/core/http/fetchClient'
+import type { AxiosResponse } from '@/types/http'
+import { toAxiosError } from '@/types/http'
 
-const axiosInstance = axios.create()
-
-axiosInstance.interceptors.request.use(async config => {
-    const session = await getSession()
-    if (session?.user) {
-        config.headers['authorization'] = `Bearer ${session.user.apiAccessToken}`
+const createResponse = <T = any>(
+    data: T,
+    status: number,
+    statusText: string,
+    headers: Record<string, string>,
+): AxiosResponse<T> => {
+    return {
+        data,
+        status,
+        statusText,
+        headers,
+        config: {},
+        request: undefined,
     }
-    return config
-})
+}
+
+const request = async <T = any>(
+    method: string,
+    url: string,
+    body?: unknown,
+): Promise<AxiosResponse<T>> => {
+    try {
+        const response = await fetchRequestDetailed<T>(url, {
+            method,
+            body,
+        })
+        return createResponse(response.data, response.status, response.statusText, response.headers)
+    } catch (error) {
+        throw toAxiosError(error)
+    }
+}
+
+const axiosInstance = {
+    get: <T = any>(url: string) => request<T>('GET', url),
+    post: <T = any>(url: string, body?: unknown) => request<T>('POST', url, body),
+    put: <T = any>(url: string, body?: unknown) => request<T>('PUT', url, body),
+    delete: <T = any>(url: string) => request<T>('DELETE', url),
+}
 
 export default axiosInstance

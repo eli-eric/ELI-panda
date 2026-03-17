@@ -1,8 +1,8 @@
 import { useMutation } from '@tanstack/react-query'
-import type { AxiosError, AxiosResponse } from 'axios'
 import { useRouter } from 'next/router'
 import { toast } from 'sonner'
 
+import type { AxiosError, AxiosResponse } from '@/types/http'
 import { queryMutate } from '@/utils/fetcher'
 
 import type { OrderLineFormType } from '../types/form'

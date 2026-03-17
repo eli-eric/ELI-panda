@@ -447,3 +447,18 @@ input[type='number'] {
         fill: oklch(0.65 0.18 250) !important;
     }
 }
+
+/* ReactFlow controls dark mode — outside @layer to override preflight + xyflow defaults */
+.dark .react-flow__controls-button {
+    background-color: var(--card) !important;
+    color: var(--foreground) !important;
+    border-color: var(--border) !important;
+}
+
+.dark .react-flow__controls-button:hover {
+    background-color: var(--accent) !important;
+}
+
+.dark .react-flow__controls-button svg {
+    fill: var(--foreground) !important;
+}

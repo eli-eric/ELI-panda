@@ -1,6 +1,7 @@
 import type { CellContext } from '@tanstack/react-table'
 import { MoreVertical, Pencil, Trash2 } from 'lucide-react'
 import type { FC } from 'react'
+import { useIntl } from 'react-intl'
 import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
@@ -12,6 +13,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { useAccessControl } from '@/hooks/useAccessControl'
 import useWarningModal from '@/hooks/useWarningModal'
+import { message } from '@/i18n/src/messages'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { ROLE } from '@/types/constants/roles'
 
@@ -27,10 +29,12 @@ export const GrantActionsCell: FC<GrantActionsCellProps> = ({
         original: { uid },
     },
 }) => {
+    const { formatMessage: fm } = useIntl()
     const { openModal } = useDynamicModalStore()
+    const labels = message.grantsPage.actions
     const name = getValue()
     const deleteGrant = useGrantDelete(uid)
-    const withWarning = useWarningModal('Are you sure you want to delete this grant?')
+    const withWarning = useWarningModal(fm({ id: labels.deleteWarning }))
     const canEdit = useAccessControl(ROLE.PUBLICATIONS_EDIT)()
 
     const handleEdit = () => {
@@ -39,7 +43,7 @@ export const GrantActionsCell: FC<GrantActionsCellProps> = ({
             component: GrantEditContainer,
             props: {
                 uid,
-                title: 'Edit Grant',
+                title: fm({ id: labels.editTitle }),
             },
         })
     }
@@ -54,9 +58,9 @@ export const GrantActionsCell: FC<GrantActionsCellProps> = ({
                     })
                 }),
                 {
-                    loading: 'Deleting grant...',
-                    success: 'Grant deleted',
-                    error: 'Failed to delete grant',
+                    loading: fm({ id: labels.deleting }),
+                    success: fm({ id: labels.deleted }),
+                    error: fm({ id: labels.deleteFailed }),
                 },
             )
         })()
@@ -68,7 +72,7 @@ export const GrantActionsCell: FC<GrantActionsCellProps> = ({
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button
-                            aria-label="Grant actions"
+                            aria-label={fm({ id: labels.ariaLabel })}
                             variant="ghost"
                             tabIndex={0}
                             className="has-[>svg]:px-1 cursor-pointer"
@@ -79,11 +83,11 @@ export const GrantActionsCell: FC<GrantActionsCellProps> = ({
                     <DropdownMenuContent align="start" sideOffset={4}>
                         <DropdownMenuItem onClick={handleEdit}>
                             <Pencil className="size-4" />
-                            Edit
+                            {fm({ id: message.common.buttons.edit })}
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={handleDelete} className="text-destructive">
                             <Trash2 className="size-4" />
-                            Delete
+                            {fm({ id: message.common.buttons.delete })}
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>

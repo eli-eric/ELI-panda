@@ -1,6 +1,5 @@
 import { startTransition, useEffect } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
-import { useIntl } from 'react-intl'
 import { toast } from 'sonner'
 
 import CheckBox from '@/components/form/CheckBox'
@@ -11,7 +10,6 @@ import { Col, Grid } from '@/components/grid/Grid'
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
 import { useEmployee } from '@/hooks/graphql/useEmployee'
 import { gql } from '@/types/gql'
-import { generatePassword } from '@/utils'
 
 import { useUserFormFields } from './User.fields'
 
@@ -25,7 +23,6 @@ const GET_FACILITIES = gql(`
 `)
 
 export const UserForm = () => {
-    const { formatMessage: fm } = useIntl()
     const fields = useUserFormFields()
     const { setValue, control } = useFormContext()
     const { data, error } = useGraphQL(GET_FACILITIES)
@@ -52,12 +49,6 @@ export const UserForm = () => {
             }
         })
     }, [employee, setValue])
-
-    const generatePasswordHandler = () => {
-        const password = generatePassword()
-        setValue('password', password)
-        setValue('confirmPassword', password)
-    }
 
     return (
         <Grid>

@@ -1,6 +1,6 @@
 import { X } from 'lucide-react'
 import { useCallback, useRef, useState } from 'react'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import { PlusButton } from '@/components/Buttons'
 import { Tooltip } from '@/components/Tooltip'
@@ -50,6 +50,8 @@ export const GrantModalContent: React.FC<GrantModalContentProps> = ({
     onClose,
     initialSelected = [],
 }) => {
+    const { formatMessage: fm } = useIntl()
+    const labels = message.publication.form.grants
     // Local state for multi-selection
     const [selectedGrants, setSelectedGrants] = useState<SelectedGrant[]>(initialSelected)
     const tableRef = useRef<PandaTableV2Handle>(null)
@@ -114,7 +116,10 @@ export const GrantModalContent: React.FC<GrantModalContentProps> = ({
             {selectedGrants.length > 0 && (
                 <div className="flex flex-wrap gap-1 p-2 bg-muted/50 rounded-md">
                     <span className="text-sm text-muted-foreground mr-2 self-center">
-                        Selected ({selectedGrants.length}):
+                        <FormattedMessage
+                            id={labels.selectedCount}
+                            values={{ count: selectedGrants.length }}
+                        />
                     </span>
                     {selectedGrants.map(g => (
                         <Badge
@@ -142,7 +147,7 @@ export const GrantModalContent: React.FC<GrantModalContentProps> = ({
                 useQuery={false}
                 right={
                     canCreate ? (
-                        <Tooltip content="Create New Grant">
+                        <Tooltip content={fm({ id: labels.createNew })}>
                             <div>
                                 <PlusButton onClick={openGrantForm} />
                             </div>
@@ -193,7 +198,12 @@ export const GrantModalContent: React.FC<GrantModalContentProps> = ({
                     onClick={handleConfirm}
                 >
                     <FormattedMessage id={message.common.buttons.continue} />
-                    {selectedGrants.length > 0 && ` (${selectedGrants.length})`}
+                    {selectedGrants.length > 0 && (
+                        <FormattedMessage
+                            id={labels.countSuffix}
+                            values={{ count: selectedGrants.length }}
+                        />
+                    )}
                 </Button>
             </div>
         </div>

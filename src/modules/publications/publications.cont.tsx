@@ -12,6 +12,7 @@ import type { PandaTableSettings } from '../shared/table/pandaTable/PandaTable'
 import { PandaTableV2 } from '../shared/table/pandaTableV2/PandaTableV2'
 import { SearchBar, SearchBarButtonsComponent } from '../shared/table/SearchBar'
 import { ExportButton } from './components/export.button'
+import { RivExportButton } from './components/riv-export.button'
 import { usePublications } from './hooks/usePublications'
 import { usePublicationColumns } from './publications.columns'
 
@@ -56,6 +57,7 @@ export const PublicationsContainer: FC = () => {
                         handleRefresh={handleRefresh}
                     >
                         <ExportButton />
+                        <RivExportButton />
                     </SearchBarButtonsComponent>
                 }
             />

@@ -1,7 +1,9 @@
+import { useIntl } from 'react-intl'
 import { toast } from 'sonner'
 
 import { PlusButton } from '@/components/Buttons'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import { message } from '@/i18n/src/messages'
 import { useLocationSelectionModal } from '@/modules/shared/form/location/hooks/useLocationSelectionModal'
 import type { CodebookType } from '@/types/responses/codebook'
 
@@ -13,6 +15,8 @@ interface Props {
 }
 
 export const AddLocationButton = ({ roomCardUid }: Props) => {
+    const { formatMessage: fm } = useIntl()
+    const labels = message.roomCardsPage.table
     const { openLocationModal } = useLocationSelectionModal()
     const { connectLocation, isPending } = useConnectLocation(roomCardUid || '')
     const { locations } = useRoomCardLocations(roomCardUid)
@@ -26,7 +30,7 @@ export const AddLocationButton = ({ roomCardUid }: Props) => {
                         <PlusButton type="button" disabled />
                     </span>
                 </TooltipTrigger>
-                <TooltipContent>Save the Room Card first to add locations</TooltipContent>
+                <TooltipContent>{fm({ id: labels.saveFirstAddLocations })}</TooltipContent>
             </Tooltip>
         )
     }
@@ -35,14 +39,14 @@ export const AddLocationButton = ({ roomCardUid }: Props) => {
         if (!item) return
 
         if (locations?.some(loc => loc.uid === item.uid)) {
-            toast.error('Location already exists')
+            toast.error(fm({ id: labels.locationExists }))
             return
         }
 
         toast.promise(connectLocation(item.uid), {
-            loading: 'Adding location...',
-            success: 'Location added',
-            error: 'Failed to add location',
+            loading: fm({ id: labels.addingLocation }),
+            success: fm({ id: labels.locationAdded }),
+            error: fm({ id: labels.locationAddFailed }),
         })
     }
 

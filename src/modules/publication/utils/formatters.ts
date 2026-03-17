@@ -13,6 +13,7 @@ export const formatFormData = (data: any): Publication => ({
     allAuthorsCount: Number(data.allAuthorsCount),
     eliAuthorsCount: Number(data.eliAuthorsCount),
     volume: data.volume ? Number(data.volume) : null,
+    bookPagesCount: data.bookPagesCount ? Number(data.bookPagesCount) : null,
     pagesCount: Number(data.pagesCount),
     issue: data.issue ? Number(data.issue) : null,
     impactFactor: data.impactFactor ? Number(data.impactFactor) : null,

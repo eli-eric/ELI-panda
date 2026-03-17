@@ -14,14 +14,13 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { message } from '@/i18n/src/messages'
 import { openGraphModal } from '@/modules/shared/system/GraphModal'
-import { useSystemCreateSheet } from '@/modules/shared/system/system-create/useSystemCreateSheet'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 import { useSystemDelete } from '@/modules/systems/hooks/useSystemDelete'
-import { useSparePartsColumns } from '@/modules/systemsSpareParts/components/SpareParts.columns'
+import { useSparePartsColumns } from '@/modules/systemsRelations/components/SpareParts.columns'
 import {
     useGetSpareParts,
     useGetSparePartsFor,
-} from '@/modules/systemsSpareParts/hooks/useGetSpareParts'
+} from '@/modules/systemsRelations/hooks/useGetSpareParts'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { PATH } from '@/types/constants/paths'
 import type { SystemDetail } from '@/types/responses/systems'
@@ -94,7 +93,6 @@ export const SystemActionButtons = ({
     })
 
     const { openModal } = useDynamicModalStore()
-    const openSystemCreateSheet = useSystemCreateSheet()
 
     const handleDelete = () => {
         deleteSystem()

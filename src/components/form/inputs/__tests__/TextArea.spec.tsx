@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react'
-import { FormProvider, useForm } from 'react-hook-form'
 import { type FC, type PropsWithChildren, useEffect } from 'react'
+import { FormProvider, useForm } from 'react-hook-form'
 
 import { TextArea } from '../components/TextArea.comp'
 

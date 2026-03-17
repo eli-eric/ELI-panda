@@ -17,6 +17,13 @@ export interface NormalizedHttpError extends Error {
     details?: unknown
 }
 
+export interface FetchRequestResult<T = unknown> {
+    data: T
+    status: number
+    statusText: string
+    headers: Record<string, string>
+}
+
 const DEFAULT_TIMEOUT = 15000
 
 const withTimeout = (signal: AbortSignal | undefined, ms: number) => {
@@ -31,10 +38,50 @@ const withTimeout = (signal: AbortSignal | undefined, ms: number) => {
     }
 }
 
-export async function fetchRequest<T = unknown>(
+const toHeadersObject = (headers: Headers): Record<string, string> => {
+    return Object.fromEntries(headers.entries())
+}
+
+const parseResponseBody = async <T>(
+    response: Response,
+    responseType: FetchRequestOptions['responseType'] = 'json',
+): Promise<T> => {
+    if (responseType === 'text') return (await response.text()) as T
+    if (responseType === 'blob') return (await response.blob()) as T
+    if (response.status === 204) return undefined as T
+
+    const rawText = await response.text()
+
+    if (isFeatureEnabled('enableHttpLogging')) {
+        //eslint-disable-next-line
+        console.log('[fetchClient] Response details:', {
+            url: response.url,
+            status: response.status,
+            statusText: response.statusText,
+            contentType: response.headers.get('content-type'),
+            rawText: rawText.substring(0, 200),
+            rawTextLength: rawText.length,
+        })
+    }
+
+    try {
+        return JSON.parse(rawText) as T
+    } catch (error) {
+        if (isFeatureEnabled('enableHttpLogging')) {
+            //eslint-disable-next-line
+            console.error('[fetchClient] JSON parse error:', {
+                error,
+                rawText: rawText.substring(0, 500),
+            })
+        }
+        throw error
+    }
+}
+
+export async function fetchRequestDetailed<T = unknown>(
     url: string,
     options: FetchRequestOptions = {},
-): Promise<T> {
+): Promise<FetchRequestResult<T>> {
     const session = await getSession()
     const headers: Record<string, string> = { ...(options.headers || {}) }
 
@@ -91,39 +138,20 @@ export async function fetchRequest<T = unknown>(
         throw error
     }
 
-    const type = options.responseType || 'json'
-    if (type === 'text') return (await response.text()) as T
-    if (type === 'blob') return (await response.blob()) as T
-    // default json
-    if (response.status === 204) return undefined as T
+    const data = await parseResponseBody<T>(response, options.responseType)
 
-    // Get the raw text first to log it
-    const rawText = await response.text()
-
-    if (isFeatureEnabled('enableHttpLogging')) {
-        //eslint-disable-next-line
-        console.log('[fetchClient] Response details:', {
-            url,
-            method: options.method || 'GET',
-            status: response.status,
-            statusText: response.statusText,
-            contentType: response.headers.get('content-type'),
-            rawText: rawText.substring(0, 200), // First 200 chars
-            rawTextLength: rawText.length,
-        })
+    return {
+        data,
+        status: response.status,
+        statusText: response.statusText,
+        headers: toHeadersObject(response.headers),
     }
+}
 
-    // Try to parse as JSON
-    try {
-        return JSON.parse(rawText) as T
-    } catch (error) {
-        if (isFeatureEnabled('enableHttpLogging')) {
-            //eslint-disable-next-line
-            console.error('[fetchClient] JSON parse error:', {
-                error,
-                rawText: rawText.substring(0, 500),
-            })
-        }
-        throw error
-    }
+export async function fetchRequest<T = unknown>(
+    url: string,
+    options: FetchRequestOptions = {},
+): Promise<T> {
+    const result = await fetchRequestDetailed<T>(url, options)
+    return result.data
 }
