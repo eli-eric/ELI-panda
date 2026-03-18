@@ -96,6 +96,9 @@ export const getEndpoints = ({
         systemRelationshipsBatch: '/system/relationships/batch',
         rivValidate: `/publications/export/riv/validate${query}`,
         rivExport: `/publications/export/riv${query}`,
+        zone: `/zones${uidPart}`,
+        zones: `/zones${query}`,
+        zonesImport: '/zones/import',
     }
     return endpoints
 }
