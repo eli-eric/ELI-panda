@@ -80,7 +80,7 @@ export const ZoneFormContainer: FC<Props> = ({ zone, onSuccess }) => {
     return (
         <Form formMethods={formMethods}>
             <SheetFormButtons
-                editRole={ROLE.ADMIN}
+                editRole={ROLE.ZONES_EDIT}
                 loading={isPending}
                 onSubmit={handleSubmit}
                 onExit={handleExit}

@@ -35,7 +35,7 @@ export const ZoneActionsCell: FC<ZoneActionsCellProps> = ({
     const name = getValue()
     const deleteZone = useZoneDelete(uid)
     const withWarning = useWarningModal(fm({ id: labels.deleteWarning }))
-    const canEdit = useAccessControl(ROLE.ADMIN)()
+    const canEdit = useAccessControl(ROLE.ZONES_EDIT)()
 
     const handleEdit = () => {
         openModal('sheet', {

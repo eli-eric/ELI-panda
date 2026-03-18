@@ -19,7 +19,7 @@ export const ZoneImportButton: FC<Props> = ({ onSuccess }) => {
     const { formatMessage: fm } = useIntl()
     const fileInputRef = useRef<HTMLInputElement>(null)
     const { mutateAsync, isPending } = useZoneImport()
-    const canEdit = useAccessControl(ROLE.ADMIN)()
+    const canEdit = useAccessControl(ROLE.ZONES_EDIT)()
     const labels = message.zonesPage.import
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {

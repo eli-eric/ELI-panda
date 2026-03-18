@@ -43,7 +43,7 @@ export const ZonesContainer: FC = () => {
                 tableId={tableId}
                 left={
                     <SearchBarButtonsComponent
-                        editRole={ROLE.ADMIN}
+                        editRole={ROLE.ZONES_EDIT}
                         handleAdd={openZoneForm}
                         handleRefresh={refetch}
                     >
