@@ -5,13 +5,13 @@ import { queryMutate } from '@/utils/fetcher'
 export const useZoneDelete = (uid: string) => {
     const queryClient = useQueryClient()
 
-    const { mutate } = useMutation({
-        mutationFn: queryMutate('zone', 'delete', uid),
+    const { mutateAsync } = useMutation({
+        mutationFn: queryMutate('zone', 'delete', uid, undefined, undefined, 'text'),
         mutationKey: ['zone', { uid }],
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['zones'] })
         },
     })
 
-    return mutate
+    return mutateAsync
 }
