@@ -2,11 +2,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useQuery } from '@tanstack/react-query'
 import { type FC, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 import { toast } from 'sonner'
 
 import { Form } from '@/components/form/Form'
 import { SheetFormButtons } from '@/components/sheet-form-buttons'
 import { useFormDirtyProtection } from '@/hooks/useFormDirtyProtection'
+import { message } from '@/i18n/src/messages'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { useModalFormStateStore } from '@/store/useModalFormStateStore'
 import { ROLE } from '@/types/constants/roles'
@@ -25,6 +27,8 @@ interface Props {
 const getModalId = (uid?: string) => (uid ? `zone-edit-${uid}` : 'zone-create')
 
 export const ZoneFormContainer: FC<Props> = ({ zone, onSuccess }) => {
+    const { formatMessage: fm } = useIntl()
+    const labels = message.zonesPage.form
     const { closeModal } = useDynamicModalStore()
     const { setIsDirty, reset: resetModalFormState } = useModalFormStateStore()
 
@@ -60,13 +64,13 @@ export const ZoneFormContainer: FC<Props> = ({ zone, onSuccess }) => {
 
     const handleSubmit = formMethods.handleSubmit(async data => {
         toast.promise(mutateAsync(data), {
-            loading: zone ? 'Saving zone...' : 'Creating zone...',
+            loading: fm({ id: zone ? labels.saving : labels.creating }),
             success: () => {
                 onSuccess?.()
                 closeModal(getModalId(zone?.uid))
-                return zone ? 'Zone saved' : 'Zone created'
+                return fm({ id: zone ? labels.saved : labels.created })
             },
-            error: 'Failed to save zone',
+            error: fm({ id: labels.saveFailed }),
         })
     })
 
@@ -85,8 +89,8 @@ export const ZoneFormContainer: FC<Props> = ({ zone, onSuccess }) => {
                 onSubmit={handleSubmit}
                 onExit={handleExit}
                 isFormDirty={isDirty}
-                saveLabel={zone ? 'Save Zone' : 'Create Zone'}
-                loadingText={zone ? 'Saving zone...' : 'Creating zone...'}
+                saveLabel={fm({ id: zone ? labels.saveLabel : labels.createLabel })}
+                loadingText={fm({ id: zone ? labels.saving : labels.creating })}
             />
             <ZoneFormFields disabled={isPending} parentZoneOptions={parentZoneOptions} />
         </Form>

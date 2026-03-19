@@ -1,9 +1,11 @@
 import { type FC, useEffect } from 'react'
+import { useIntl } from 'react-intl'
 import { toast } from 'sonner'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import RecordNotFound from '@/components/pages/record-not-found.comp'
 import { Skeleton } from '@/components/ui/skeleton'
+import { message } from '@/i18n/src/messages'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 
 import { useZone } from '../hooks/useZone'
@@ -22,15 +24,16 @@ const ZoneFormSkeleton = () => (
 )
 
 export const ZoneEditContainer: FC<Props> = ({ uid }) => {
+    const { formatMessage: fm } = useIntl()
     const { closeModal } = useDynamicModalStore()
 
-    const { data: zone, isLoading, isFetching, isError, error, refetch } = useZone(uid)
+    const { data: zone, isLoading, isError, error, refetch } = useZone(uid)
 
     useEffect(() => {
         if (isError) {
-            toast.error('Failed to load zone')
+            toast.error(fm({ id: message.zonesPage.form.loadFailed }))
         }
-    }, [isError])
+    }, [isError, fm])
 
     const handleClose = () => {
         closeModal(`zone-edit-${uid}`)
@@ -44,7 +47,7 @@ export const ZoneEditContainer: FC<Props> = ({ uid }) => {
         return <ErrorPage />
     }
 
-    if (isLoading || isFetching) {
+    if (isLoading) {
         return <ZoneFormSkeleton />
     }
 

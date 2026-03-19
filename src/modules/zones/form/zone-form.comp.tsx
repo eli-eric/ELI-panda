@@ -42,7 +42,7 @@ export const ZoneFormFields: FC<Props> = ({ disabled = false, parentZoneOptions 
                 placeholder={fm({ id: labels.parentZone.placeholder })}
                 customOptions={parentOptions}
                 allowEmptyOption
-                emptyOption="None (root zone)"
+                emptyOption={fm({ id: labels.emptyParent })}
                 disabled={disabled}
             />
         </div>
