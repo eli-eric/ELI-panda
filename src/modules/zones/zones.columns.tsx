@@ -1,15 +1,21 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
+import { useIntl } from 'react-intl'
+
+import { message } from '@/i18n/src/messages'
 
 import { ZoneActionsCell } from './components/zone-actions.comp'
 import type { Zone } from './types/zone.types'
 
 export const useZoneColumns = () => {
+    const { formatMessage: fm } = useIntl()
+    const cols = message.zonesPage.columns
+
     const columns = useMemo(
         (): ColumnDef<Zone, any>[] => [
             {
                 id: 'name',
-                header: 'Name',
+                header: fm({ id: cols.name }),
                 accessorFn: row => row.name,
                 size: 400,
                 meta: { sticky: true },
@@ -17,18 +23,18 @@ export const useZoneColumns = () => {
             },
             {
                 id: 'code',
-                header: 'Code',
+                header: fm({ id: cols.code }),
                 accessorFn: row => row.code,
                 size: 150,
             },
             {
                 id: 'parentZone',
-                header: 'Parent Zone',
+                header: fm({ id: cols.parentZone }),
                 accessorFn: row => row.parentZone?.name ?? '—',
                 size: 200,
             },
         ],
-        [],
+        [fm, cols],
     )
 
     return columns

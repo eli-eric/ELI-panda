@@ -24,7 +24,7 @@ export const ZonesContainer: FC = () => {
 
     const tableSettings: PandaTableSettings<Zone> = {
         enableSorting: true,
-        manualSorting: false,
+        manualSorting: true,
         enableColumnReordering: true,
         enableQueryURL: true,
         enableColumnHiding: true,

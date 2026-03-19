@@ -29,7 +29,7 @@ export const ZoneFormContainer: FC<Props> = ({ zone, onSuccess }) => {
     const { setIsDirty, reset: resetModalFormState } = useModalFormStateStore()
 
     const { data: allZones } = useQuery({
-        queryKey: ['zones', {}],
+        queryKey: ['zones', { query: { pageSize: 200 } }],
         queryFn: queryFetcher<ZonesResponse>('zones'),
     })
 

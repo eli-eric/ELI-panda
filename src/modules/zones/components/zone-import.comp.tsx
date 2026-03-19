@@ -39,7 +39,10 @@ export const ZoneImportButton: FC<Props> = ({ onSuccess }) => {
             {
                 loading: fm({ id: labels.importing }),
                 success: data =>
-                    `Import complete: ${data.created} created, ${data.skipped} skipped`,
+                    fm(
+                        { id: labels.success },
+                        { created: data.created, skipped: data.skipped },
+                    ),
                 error: fm({ id: labels.error }),
             },
         )

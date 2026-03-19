@@ -1207,6 +1207,11 @@ export const messages = {
             code: { label: 'Code', placeholder: 'Enter zone code' },
             parentZone: { label: 'Parent Zone', placeholder: 'Select parent zone (optional)' },
         },
+        columns: {
+            name: 'Name',
+            code: 'Code',
+            parentZone: 'Parent Zone',
+        },
         import: {
             button: 'Import CSV',
             importing: 'Importing zones...',
