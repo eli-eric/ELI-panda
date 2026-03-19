@@ -30,7 +30,7 @@ export const ZoneImportButton: FC<Props> = ({ onSuccess }) => {
             mutateAsync(file).then(result => {
                 onSuccess?.()
 
-                if (result.errors.length > 0) {
+                if (result.errors && result.errors.length > 0) {
                     result.errors.forEach(err => toast.error(err))
                 }
 
