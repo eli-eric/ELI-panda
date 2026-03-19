@@ -33,6 +33,7 @@ export enum PATH {
     CONTROL_SYSTEMS = '/control-systems/overview',
     CONTROL_SYSTEMS_CREATE = '/control-systems/system-codes-create',
     SYSTEMS_HIERARCHY = '/systems/hierarchy',
+    ZONES = '/zones',
     NOT_FOUND = '/404',
 }
 
