@@ -43,7 +43,7 @@ export const NAV_ITEMS: NavigationItem[] = [
                 role: ROLE.SYSTEM_EDIT,
             },
             { title: 'Hierarchy', url: PATH.SYSTEMS_HIERARCHY, role: ROLE.SYSTEMS_VIEW },
-            { title: 'Zones', url: PATH.ZONES, role: ROLE.BASICS },
+            { title: 'Zones', url: PATH.ZONES, role: ROLE.ZONES_VIEW },
         ],
     },
     {
@@ -192,6 +192,6 @@ export const PATH_ROLES_CONFIG: Record<PATH, ROLE[]> = {
     [PATH.GRANTS]: [ROLE.PUBLICATIONS_EDIT],
     [PATH.CONTROL_SYSTEMS_CREATE]: [ROLE.CONTROL_SYSTEMS_EDIT],
     [PATH.SYSTEMS_HIERARCHY]: [ROLE.SYSTEM_EDIT, ROLE.SYSTEMS_VIEW],
-    [PATH.ZONES]: [ROLE.BASICS],
+    [PATH.ZONES]: [ROLE.ZONES_VIEW, ROLE.ZONES_EDIT],
     [PATH.NOT_FOUND]: [],
 }
