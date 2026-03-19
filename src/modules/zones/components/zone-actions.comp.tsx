@@ -50,7 +50,7 @@ export const ZoneActionsCell: FC<ZoneActionsCellProps> = ({
 
     const handleDelete = () => {
         withWarning(() => {
-            toast.promise(deleteZone(), {
+            toast.promise(deleteZone(undefined), {
                 loading: fm({ id: labels.deleting }),
                 success: fm({ id: labels.deleted }),
                 error: fm({ id: labels.deleteFailed }),
