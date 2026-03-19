@@ -31,7 +31,7 @@ export const useZoneColumns = () => {
                 id: 'parentZone',
                 header: fm({ id: cols.parentZone }),
                 accessorFn: row => row.parentZone?.name ?? '—',
-                size: 200,
+                size: 400,
             },
         ],
         [fm, cols],
