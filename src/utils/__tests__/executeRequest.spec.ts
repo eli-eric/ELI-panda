@@ -1,21 +1,30 @@
 import executeRequest from '../executeRequest'
 
-// Polyfill Request for jsdom
-if (typeof globalThis.Request === 'undefined') {
-  globalThis.Request = class Request {
-    url: string
-    method: string
-    headers: Headers
-    constructor(url: string, options: RequestInit = {}) {
-      this.url = url
-      this.method = options.method ?? 'GET'
-      this.headers = new Headers(options.headers)
-    }
-  } as any
-}
-
+const originalRequest = globalThis.Request
+const originalFetch = global.fetch
 const mockFetch = jest.fn()
-global.fetch = mockFetch
+
+beforeAll(() => {
+  // Polyfill Request for jsdom
+  if (typeof globalThis.Request === 'undefined') {
+    globalThis.Request = class Request {
+      url: string
+      method: string
+      headers: Headers
+      constructor(url: string, options: RequestInit = {}) {
+        this.url = url
+        this.method = options.method ?? 'GET'
+        this.headers = new Headers(options.headers)
+      }
+    } as any
+  }
+  global.fetch = mockFetch
+})
+
+afterAll(() => {
+  globalThis.Request = originalRequest
+  global.fetch = originalFetch
+})
 
 beforeEach(() => {
   jest.clearAllMocks()
