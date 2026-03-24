@@ -23,4 +23,6 @@ export enum ROLE {
     SERVICE_EDIT = 'catalogue-service-edit',
     CONTROL_SYSTEMS_VIEW = 'control-systems-view',
     CONTROL_SYSTEMS_EDIT = 'control-systems-edit',
+    ZONES_VIEW = 'zones-view',
+    ZONES_EDIT = 'zones-edit',
 }
