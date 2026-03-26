@@ -9,7 +9,11 @@ import { ROLE } from '@/types/constants/roles'
 import { CopySystemDialog } from '../components/copy/CopySystemDialog.comp'
 import { useHierarchyStore } from '../store/useHierarchyStore'
 
-export const useSystemCopyPaste = () => {
+interface UseSystemCopyPasteOptions {
+    onExpandNode?: (uid: string, forceRefresh?: boolean) => void
+}
+
+export const useSystemCopyPaste = (options?: UseSystemCopyPasteOptions) => {
     const { formatMessage: fm } = useIntl()
     const { copiedSystemUid, setCopiedSystemUid } = useHierarchyStore()
     const { openModal, closeModal } = useDynamicModalStore()
@@ -25,6 +29,7 @@ export const useSystemCopyPaste = () => {
     const handlePasteSystem = useCallback(
         (destinationUid: string) => {
             if (!copiedSystemUid || destinationUid === copiedSystemUid) return
+            const onExpandNode = options?.onExpandNode
             openModal('dialog', {
                 id: 'copy-system-dialog',
                 component: CopySystemDialog,
@@ -33,11 +38,14 @@ export const useSystemCopyPaste = () => {
                     description: fm({ id: message.systemHierarchy.copy.dialogDescription }),
                     sourceSystemUid: copiedSystemUid,
                     destinationSystemUid: destinationUid,
+                    onSuccess: onExpandNode
+                        ? () => onExpandNode(destinationUid, true)
+                        : undefined,
                     onClose: () => closeModal('copy-system-dialog'),
                 },
             })
         },
-        [copiedSystemUid, openModal, closeModal, fm],
+        [copiedSystemUid, openModal, closeModal, fm, options?.onExpandNode],
     )
 
     return {

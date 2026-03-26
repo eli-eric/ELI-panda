@@ -193,10 +193,10 @@ export const useRelationshipGraphExpansionActions = ({
     )
 
     const handleExpand = useCallback(
-        async (uid: string) => {
+        async (uid: string, forceRefresh?: boolean) => {
             const scopeKey = toNodeScopeKey(uid)
 
-            if (expandedScopeUids.includes(uid)) {
+            if (expandedScopeUids.includes(uid) && !forceRefresh) {
                 setActiveScopeKey(scopeKey)
                 return
             }

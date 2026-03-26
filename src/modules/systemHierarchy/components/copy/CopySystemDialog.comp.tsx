@@ -15,6 +15,7 @@ import { useSystemDetail } from '../../hooks/queries/useSystemDetail'
 interface CopySystemDialogProps {
     sourceSystemUid: string
     destinationSystemUid: string
+    onSuccess?: () => void
     onClose?: () => void
 }
 
@@ -71,6 +72,7 @@ const SystemInfo: FC<SystemInfoProps> = ({ label, system, isLoading }) => {
 export const CopySystemDialog: FC<CopySystemDialogProps> = ({
     sourceSystemUid,
     destinationSystemUid,
+    onSuccess,
     onClose,
 }) => {
     const { formatMessage: fm } = useIntl()
@@ -90,6 +92,7 @@ export const CopySystemDialog: FC<CopySystemDialogProps> = ({
                 copyOnlySourceSystemChildren: copyOnlyChildren,
                 copyRecursive,
             })
+            onSuccess?.()
             onClose?.()
         } catch {
             // error toast handled by mutation onError
