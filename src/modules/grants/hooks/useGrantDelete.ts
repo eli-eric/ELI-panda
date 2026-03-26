@@ -6,7 +6,7 @@ export const useGrantDelete = (uid: string) => {
     const queryClient = useQueryClient()
 
     const { mutate } = useMutation({
-        mutationFn: queryMutate('grant', 'delete', uid),
+        mutationFn: queryMutate('grant', 'delete', { uid }),
         mutationKey: ['grant', { uid }],
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['grants'] })

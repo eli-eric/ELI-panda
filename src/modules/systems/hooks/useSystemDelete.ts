@@ -44,7 +44,7 @@ export const useSystemDelete = ({ system, queryKey }: Props) => {
     })
 
     const { mutate, isPending } = useMutation<unknown, AxiosError>({
-        mutationFn: queryMutate('system', 'delete', system.uid),
+        mutationFn: queryMutate('system', 'delete', { uid: system.uid }),
         onSuccess: () => {
             recalculate(null)
         },

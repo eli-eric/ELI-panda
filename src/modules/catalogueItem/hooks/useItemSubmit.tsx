@@ -32,7 +32,7 @@ export const useItemSubmit = ({
         mutationFn: queryMutate<CatalogueItem, CatalogueItem>(
             'catalogueItem',
             uid ? 'put' : 'post',
-            uid,
+            { uid },
         ),
         onSuccess: catalogueItem => {
             if (uid) {

@@ -43,7 +43,7 @@ const CategoryItemActions = ({ uid }: { uid: string }) => {
     const { refetch } = useCategoryList()
 
     const { mutate } = useMutation({
-        mutationFn: queryMutate('catalogueCategoryEdit', 'delete', uid),
+        mutationFn: queryMutate('catalogueCategoryEdit', 'delete', { uid }),
         onSuccess: () => {
             refetch()
             toast.success(fm({ id: message.catalogue.category.deleted }))
@@ -59,7 +59,7 @@ const CategoryItemActions = ({ uid }: { uid: string }) => {
     const parentUID = useCategoryUid()
 
     const { mutate: copyCategory } = useMutation({
-        mutationFn: queryMutate<string, undefined>('catalogueCategoryCopy', 'post', uid),
+        mutationFn: queryMutate<string, undefined>('catalogueCategoryCopy', 'post', { uid }),
 
         onSuccess: ({ data }) => {
             const { openModal } = useDynamicModalStore.getState()

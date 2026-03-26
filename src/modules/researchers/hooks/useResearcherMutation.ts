@@ -18,7 +18,7 @@ export const useResearcherMutation = ({ uid, onSuccess }: UseResearcherMutationO
         mutationFn: queryMutate<Researcher, ResearcherFormData>(
             'researcher',
             uid ? 'put' : 'post',
-            uid,
+            { uid },
         ),
         onSuccess: async response => {
             await queryClient.invalidateQueries({ queryKey: ['researchers'] })

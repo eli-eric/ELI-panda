@@ -36,7 +36,7 @@ describe('useZoneDelete', () => {
         const { useZoneDelete } = require('../hooks/useZoneDelete')
         renderHook(() => useZoneDelete('zone-123'), { wrapper: createWrapper() })
 
-        expect(mockQueryMutate).toHaveBeenCalledWith('zone', 'delete', 'zone-123', undefined, undefined, 'text')
+        expect(mockQueryMutate).toHaveBeenCalledWith('zone', 'delete', { uid: 'zone-123', responseType: 'text' })
     })
 
     it('returns mutate function', () => {

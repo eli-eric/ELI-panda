@@ -18,7 +18,7 @@ export const useServiceDeliveryAll = (setServiceLine: (line: ServiceLine) => voi
     const serviceLines = useWatch({ control, name: 'serviceLines' })
 
     const { mutate, isPending } = useMutation({
-        mutationFn: queryMutate<ServiceLine[], string[]>('serviceLinesDeliverAll', 'put', uid),
+        mutationFn: queryMutate<ServiceLine[], string[]>('serviceLinesDeliverAll', 'put', { uid }),
         onError: (e: AxiosError) => {
             if (e.response?.status === 409) {
                 toast.error(

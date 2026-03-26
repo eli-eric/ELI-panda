@@ -11,7 +11,7 @@ export const useServiceTypeDelete = ({ uid }: Props) => {
     const { refetch } = useServiceTypeList()
     return useMutation({
         mutationKey: ['service', { uid }],
-        mutationFn: queryMutate<string, undefined>('serviceType', 'delete', uid),
+        mutationFn: queryMutate<string, undefined>('serviceType', 'delete', { uid }),
         onSuccess: () => {
             refetch()
         },

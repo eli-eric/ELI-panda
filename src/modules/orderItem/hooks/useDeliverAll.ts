@@ -18,7 +18,7 @@ export const useDeliverAll = (setOrderLine: (line: OrderLineFormType) => void) =
     const orderLines = useWatch({ control, name: 'orderLines' })
 
     const { mutate, isPending } = useMutation({
-        mutationFn: queryMutate<OrderLineFormType[], string[]>('orderLinesDeliverAll', 'put', uid),
+        mutationFn: queryMutate<OrderLineFormType[], string[]>('orderLinesDeliverAll', 'put', { uid }),
         onError: (e: AxiosError) => {
             if (e.response?.status === 409) {
                 toast.error(

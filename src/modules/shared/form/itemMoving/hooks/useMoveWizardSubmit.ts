@@ -90,10 +90,7 @@ export const useMoveWizardSubmit = () => {
         mutationFn: queryMutate<string, ItemMovePost>(
             'physicalItemMove',
             'post',
-            undefined,
-            undefined,
-            undefined,
-            'text',
+            { responseType: 'text' },
         ),
         onError: (e: AxiosError) => {
             toast.error(`Error: ${e.response?.data}`)
@@ -115,10 +112,7 @@ export const useMoveWizardSubmit = () => {
         mutationFn: queryMutate<string, ItemMovePost>(
             'physicalItemReplace',
             'post',
-            undefined,
-            undefined,
-            undefined,
-            'text',
+            { responseType: 'text' },
         ),
         onError: (e: AxiosError) => {
             toast.error(`Error: ${e.response?.data}`)

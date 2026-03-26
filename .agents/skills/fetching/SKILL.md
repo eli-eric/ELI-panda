@@ -16,11 +16,11 @@ Use TanStack Query with `queryFetcher` and `queryMutate` utilities from `@/utils
 - Parameters are automatically extracted from `queryKey[1]` and passed to `getEndpoints()`
 - Returns `QueryFunction` compatible with TanStack Query
 
-**`queryMutate<TResponse, TVariables>(endpointType, method, uid?, isDefaultUrl?, endpointVariables?, responseType?)`** - Factory for mutations:
+**`queryMutate<TResponse, TVariables>(endpointType, method, options?)`** - Factory for mutations:
 
 - `endpointType` - key from `getEndpoints()`
-- `method` - `'post'` | `'put'` | `'delete'`
-- `endpointVariables` - object with endpoint parameters (e.g., `{ path: 'resource/123' }`)
+- `method` - `'post'` | `'put'` | `'delete'` | `'get'`
+- `options` - `{ uid?, isDefaultUrl?, endpointVariables?, responseType?, query? }`
 - Returns `MutateFunction` compatible with TanStack Query
 
 ## Query Hook Pattern
@@ -90,9 +90,7 @@ const updateMutation = useMutation({
         const mutateFn = queryMutate<ResponseType, UpdateRequest>(
             'endpoint',
             'put',
-            undefined,
-            false,
-            { path: `resource/${uid}` },
+            { isDefaultUrl: false, endpointVariables: { path: `resource/${uid}` } },
         )
         return mutateFn(data)
     },
@@ -118,9 +116,7 @@ const deleteMutation = useMutation({
         const mutateFn = queryMutate<void, void>(
             'endpoint',
             'delete',
-            undefined,
-            false,
-            { path: `resource/${uid}` },
+            { isDefaultUrl: false, endpointVariables: { path: `resource/${uid}` } },
         )
         return mutateFn()
     },

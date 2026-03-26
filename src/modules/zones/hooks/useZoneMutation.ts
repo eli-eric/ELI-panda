@@ -18,7 +18,7 @@ export const useZoneMutation = ({ uid, onSuccess }: UseZoneMutationOptions = {})
         mutationFn: queryMutate<Zone, ZoneFormData>(
             'zone',
             uid ? 'put' : 'post',
-            uid,
+            { uid },
         ),
         onSuccess: async response => {
             await queryClient.invalidateQueries({ queryKey: ['zones'] })
