@@ -11,6 +11,9 @@ interface SystemTreeComponentProps {
     onToggle: (uid: string) => void
     onSelect: (uid: string) => void
     search?: string
+    copiedSystemUid?: string | null
+    onCopySystem?: (uid: string) => void
+    onPasteSystem?: (uid: string) => void
 }
 
 export const SystemTreeComponent: FC<SystemTreeComponentProps> = ({
@@ -20,6 +23,9 @@ export const SystemTreeComponent: FC<SystemTreeComponentProps> = ({
     onToggle,
     onSelect,
     search,
+    copiedSystemUid,
+    onCopySystem,
+    onPasteSystem,
 }) => {
     const renderNode = useCallback(
         (node: HierarchyNode, depth: number) => {
@@ -36,12 +42,15 @@ export const SystemTreeComponent: FC<SystemTreeComponentProps> = ({
                     onToggle={onToggle}
                     onSelect={onSelect}
                     search={search}
+                    copiedSystemUid={copiedSystemUid}
+                    onCopySystem={onCopySystem}
+                    onPasteSystem={onPasteSystem}
                 >
                     {isExpanded && node.children.map(child => renderNode(child, depth + 1))}
                 </TreeNode>
             )
         },
-        [expandedNodes, selectedParentUid, onToggle, onSelect, search],
+        [expandedNodes, selectedParentUid, onToggle, onSelect, search, copiedSystemUid, onCopySystem, onPasteSystem],
     )
 
     return <div className="py-1">{nodes.map(node => renderNode(node, 0))}</div>
