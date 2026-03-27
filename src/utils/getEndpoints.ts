@@ -75,6 +75,7 @@ export const getEndpoints = ({
         physicalItemReplace: `/physical-item/replace`,
         systemFilesCopy: `/api/system/images/copy`,
         systemsMove: `/systems/move`,
+        systemsCopy: '/systems/copy',
         publication: `/publication${uidPart}`,
         publications: `/publications${query}`,
         researcher: `/researcher${uidPart}`,

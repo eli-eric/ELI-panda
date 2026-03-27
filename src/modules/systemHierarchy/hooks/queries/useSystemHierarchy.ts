@@ -11,7 +11,7 @@ import { HIERARCHY_QUERY_KEY } from '../../types/constants'
 export const useSystemHierarchy = () => {
     const queryKey: QueryFetcherKey = [HIERARCHY_QUERY_KEY]
 
-    const { data, isFetching, isError, error } = useQuery<
+    const { data, isLoading, isError, error } = useQuery<
         HierarchyNode[],
         Error,
         HierarchyNode[],
@@ -32,7 +32,7 @@ export const useSystemHierarchy = () => {
 
     return {
         nodes: data ?? [],
-        isLoading: isFetching,
+        isLoading,
         error,
         queryKey,
     }

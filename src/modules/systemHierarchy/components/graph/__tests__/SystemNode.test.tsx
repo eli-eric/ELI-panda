@@ -5,45 +5,6 @@ import { IntlProvider } from 'react-intl'
 
 import { SystemNode } from '../SystemNode.comp'
 
-// Polyfill DOMRect for radix-ui context menu in jsdom
-if (typeof globalThis.DOMRect === 'undefined') {
-    globalThis.DOMRect = class DOMRect {
-        x = 0
-        y = 0
-        width = 0
-        height = 0
-        top = 0
-        right = 0
-        bottom = 0
-        left = 0
-        constructor(x = 0, y = 0, width = 0, height = 0) {
-            this.x = x
-            this.y = y
-            this.width = width
-            this.height = height
-            this.top = y
-            this.right = x + width
-            this.bottom = y + height
-            this.left = x
-        }
-        toJSON() {
-            return {
-                x: this.x,
-                y: this.y,
-                width: this.width,
-                height: this.height,
-                top: this.top,
-                right: this.right,
-                bottom: this.bottom,
-                left: this.left,
-            }
-        }
-        static fromRect(rect?: { x?: number; y?: number; width?: number; height?: number }) {
-            return new DOMRect(rect?.x, rect?.y, rect?.width, rect?.height)
-        }
-    } as any
-}
-
 // ReactFlow node props minimal mock
 const defaultProps = {
     id: 'n1',
@@ -72,6 +33,8 @@ const renderNode = (props = defaultProps) =>
                 'systemHierarchy.graph.actions.expand': 'Expand',
                 'systemHierarchy.graph.actions.viewDetail': 'View Detail',
                 'systemHierarchy.graph.actions.loadMore': 'Load 10 More',
+                'systemHierarchy.copy.copySystem': 'Copy System',
+                'systemHierarchy.copy.pasteSystem': 'Paste System',
             }}
         >
             <ReactFlowProvider>
@@ -192,5 +155,57 @@ describe('SystemNode', () => {
         fireEvent.contextMenu(screen.getByTestId('system-node'))
         fireEvent.click(screen.getByText('View Detail'))
         expect(onViewDetail).toHaveBeenCalledWith('n1')
+    })
+
+    it('shows Copy System in context menu when onCopySystem provided', () => {
+        const props = {
+            ...defaultProps,
+            data: { ...defaultProps.data, onCopySystem: jest.fn() },
+        }
+        renderNode(props)
+        fireEvent.contextMenu(screen.getByTestId('system-node'))
+        expect(screen.getByText('Copy System')).toBeInTheDocument()
+    })
+
+    it('calls onCopySystem with node id when Copy System clicked', () => {
+        const onCopySystem = jest.fn()
+        const props = {
+            ...defaultProps,
+            data: { ...defaultProps.data, onCopySystem },
+        }
+        renderNode(props)
+        fireEvent.contextMenu(screen.getByTestId('system-node'))
+        fireEvent.click(screen.getByText('Copy System'))
+        expect(onCopySystem).toHaveBeenCalledWith('n1')
+    })
+
+    it('shows disabled Paste System when copiedSystemUid equals node id', () => {
+        const props = {
+            ...defaultProps,
+            data: {
+                ...defaultProps.data,
+                onPasteSystem: jest.fn(),
+                copiedSystemUid: 'n1',
+            },
+        }
+        renderNode(props)
+        fireEvent.contextMenu(screen.getByTestId('system-node'))
+        const pasteItem = screen.getByTestId('context-paste-system')
+        expect(pasteItem).toHaveAttribute('data-disabled')
+    })
+
+    it('shows enabled Paste System when copiedSystemUid differs from node id', () => {
+        const props = {
+            ...defaultProps,
+            data: {
+                ...defaultProps.data,
+                onPasteSystem: jest.fn(),
+                copiedSystemUid: 'other-node',
+            },
+        }
+        renderNode(props)
+        fireEvent.contextMenu(screen.getByTestId('system-node'))
+        const pasteItem = screen.getByTestId('context-paste-system')
+        expect(pasteItem).not.toHaveAttribute('data-disabled')
     })
 })

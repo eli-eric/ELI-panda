@@ -14,6 +14,13 @@ export type SystemLeaf = z.infer<typeof systemLeafSchema>
 export type LeavesResponse = z.infer<typeof leavesResponseSchema>
 export type LeavesCountResponse = z.infer<typeof leavesCountResponseSchema>
 
+export interface CopySystemBody {
+    copyOnlySourceSystemChildren: boolean
+    copyRecursive: boolean
+    destinationSystemUid: string
+    sourceSystemUid: string
+}
+
 export type {
     CreateRelationshipPayload,
     GraphLayoutMode,
