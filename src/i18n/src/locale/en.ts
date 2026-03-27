@@ -1460,6 +1460,8 @@ export const messages = {
             copyRecursive: 'Copy recursively (include all nested subsystems)',
             submit: 'Copy',
             cancel: 'Cancel',
+            loading: 'Loading...',
+            notFound: 'System not found',
             copying: 'Copying system...',
             copied: 'System copied successfully',
             failedToCopy: 'Failed to copy system',

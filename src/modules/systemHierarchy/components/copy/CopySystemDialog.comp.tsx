@@ -26,19 +26,32 @@ interface SystemInfoProps {
 }
 
 const SystemInfo: FC<SystemInfoProps> = ({ label, system, isLoading }) => {
+    const { formatMessage: fm } = useIntl()
+
     if (isLoading) {
         return (
             <div className="space-y-1">
                 <span className="text-sm font-medium text-muted-foreground">{label}</span>
                 <div className="flex items-center gap-2">
                     <Loader2 className="size-4 animate-spin" />
-                    <span className="text-sm text-muted-foreground">Loading...</span>
+                    <span className="text-sm text-muted-foreground">
+                        {fm({ id: message.systemHierarchy.copy.loading })}
+                    </span>
                 </div>
             </div>
         )
     }
 
-    if (!system) return null
+    if (!system) {
+        return (
+            <div className="space-y-1">
+                <span className="text-sm font-medium text-muted-foreground">{label}</span>
+                <span className="text-sm text-muted-foreground">
+                    {fm({ id: message.systemHierarchy.copy.notFound })}
+                </span>
+            </div>
+        )
+    }
 
     return (
         <div className="space-y-1">

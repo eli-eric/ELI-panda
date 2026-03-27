@@ -5,45 +5,6 @@ import { IntlProvider } from 'react-intl'
 
 import { SystemNode } from '../SystemNode.comp'
 
-// Polyfill DOMRect for radix-ui context menu in jsdom
-if (typeof globalThis.DOMRect === 'undefined') {
-    globalThis.DOMRect = class DOMRect {
-        x = 0
-        y = 0
-        width = 0
-        height = 0
-        top = 0
-        right = 0
-        bottom = 0
-        left = 0
-        constructor(x = 0, y = 0, width = 0, height = 0) {
-            this.x = x
-            this.y = y
-            this.width = width
-            this.height = height
-            this.top = y
-            this.right = x + width
-            this.bottom = y + height
-            this.left = x
-        }
-        toJSON() {
-            return {
-                x: this.x,
-                y: this.y,
-                width: this.width,
-                height: this.height,
-                top: this.top,
-                right: this.right,
-                bottom: this.bottom,
-                left: this.left,
-            }
-        }
-        static fromRect(rect?: { x?: number; y?: number; width?: number; height?: number }) {
-            return new DOMRect(rect?.x, rect?.y, rect?.width, rect?.height)
-        }
-    } as any
-}
-
 // ReactFlow node props minimal mock
 const defaultProps = {
     id: 'n1',

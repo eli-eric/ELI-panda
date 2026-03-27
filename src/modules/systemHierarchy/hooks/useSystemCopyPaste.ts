@@ -30,8 +30,9 @@ export const useSystemCopyPaste = (options?: UseSystemCopyPasteOptions) => {
         (destinationUid: string) => {
             if (!copiedSystemUid || destinationUid === copiedSystemUid) return
             const onExpandNode = options?.onExpandNode
+            const modalId = `copy-system-${copiedSystemUid}-${destinationUid}`
             openModal('dialog', {
-                id: 'copy-system-dialog',
+                id: modalId,
                 component: CopySystemDialog,
                 props: {
                     title: fm({ id: message.systemHierarchy.copy.dialogTitle }),
@@ -41,7 +42,7 @@ export const useSystemCopyPaste = (options?: UseSystemCopyPasteOptions) => {
                     onSuccess: onExpandNode
                         ? () => onExpandNode(destinationUid, true)
                         : undefined,
-                    onClose: () => closeModal('copy-system-dialog'),
+                    onClose: () => closeModal(modalId),
                 },
             })
         },
