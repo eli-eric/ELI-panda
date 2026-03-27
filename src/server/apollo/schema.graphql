@@ -458,6 +458,7 @@ type Zone @authentication {
     facilitiesHasZone: [Facility!]! @relationship(type: "HAS_ZONE", direction: IN)
     hasSubzoneZones: [Zone!]! @relationship(type: "HAS_SUBZONE", direction: OUT)
     name: String!
+    notes: String
     uid: ID! @id
     zonesHasSubzone: [Zone!]! @relationship(type: "HAS_SUBZONE", direction: IN)
 }
