@@ -40,4 +40,14 @@ describe('zone columns accessors', () => {
         const zone: Zone = { uid: '4', name: 'Test', code: 'T' }
         expect(zone.parentZone?.name ?? '—').toBe('—')
     })
+
+    it('accesses notes correctly', () => {
+        const zone: Zone = { uid: '5', name: 'Test', code: 'T', notes: 'Some notes' }
+        expect(zone.notes ?? '—').toBe('Some notes')
+    })
+
+    it('shows dash for empty notes', () => {
+        const zone: Zone = { uid: '6', name: 'Test', code: 'T', notes: null }
+        expect(zone.notes ?? '—').toBe('—')
+    })
 })

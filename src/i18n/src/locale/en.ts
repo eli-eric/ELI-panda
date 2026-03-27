@@ -1206,6 +1206,7 @@ export const messages = {
             name: { label: 'Name', placeholder: 'Enter zone name' },
             code: { label: 'Code', placeholder: 'Enter zone code' },
             parentZone: { label: 'Parent Zone', placeholder: 'Select parent zone (optional)' },
+            notes: { label: 'Notes', placeholder: 'Enter zone notes' },
             emptyParent: 'None (root zone)',
             saving: 'Saving zone...',
             creating: 'Creating zone...',
@@ -1221,6 +1222,7 @@ export const messages = {
             name: 'Name',
             code: 'Code',
             parentZone: 'Parent Zone',
+            notes: 'Notes',
         },
         import: {
             button: 'Import CSV',

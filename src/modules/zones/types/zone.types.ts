@@ -4,6 +4,7 @@ export interface Zone {
     uid: string
     name: string
     code: string
+    notes?: string | null
     parentZone?: CodebookType | null
 }
 

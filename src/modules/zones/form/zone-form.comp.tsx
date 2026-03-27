@@ -2,6 +2,7 @@ import type { FC } from 'react'
 import { useIntl } from 'react-intl'
 
 import { Input } from '@/components/form/inputs'
+import { TextArea } from '@/components/form/inputs/components/TextArea.comp'
 import Listbox from '@/components/form/Listbox'
 import { message } from '@/i18n/src/messages'
 
@@ -43,6 +44,12 @@ export const ZoneFormFields: FC<Props> = ({ disabled = false, parentZoneOptions 
                 customOptions={parentOptions}
                 allowEmptyOption
                 emptyOption={fm({ id: labels.emptyParent })}
+                disabled={disabled}
+            />
+            <TextArea
+                name="notes"
+                label={fm({ id: labels.notes.label })}
+                placeholder={fm({ id: labels.notes.placeholder })}
                 disabled={disabled}
             />
         </div>
