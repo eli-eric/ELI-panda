@@ -2,6 +2,7 @@ import { ChevronRight, Copy, Loader2 } from 'lucide-react'
 import type { FC } from 'react'
 import { useState } from 'react'
 import { useIntl } from 'react-intl'
+import { toast } from 'sonner'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -98,17 +99,25 @@ export const CopySystemDialog: FC<CopySystemDialogProps> = ({
     const { mutateAsync, isPending } = useSystemCopy()
 
     const handleSubmit = async () => {
+        const promise = mutateAsync({
+            sourceSystemUid,
+            destinationSystemUid,
+            copyOnlySourceSystemChildren: copyOnlyChildren,
+            copyRecursive,
+        })
+
+        toast.promise(promise, {
+            loading: fm({ id: message.systemHierarchy.copy.copying }),
+            success: fm({ id: message.systemHierarchy.copy.copied }),
+            error: fm({ id: message.systemHierarchy.copy.failedToCopy }),
+        })
+
         try {
-            await mutateAsync({
-                sourceSystemUid,
-                destinationSystemUid,
-                copyOnlySourceSystemChildren: copyOnlyChildren,
-                copyRecursive,
-            })
+            await promise
             onSuccess?.()
             onClose?.()
         } catch {
-            // error toast handled by mutation onError
+            // toast.promise handles error display
         }
     }
 
@@ -149,7 +158,7 @@ export const CopySystemDialog: FC<CopySystemDialogProps> = ({
                 <Button variant="outline" onClick={onClose} disabled={isPending}>
                     {fm({ id: message.systemHierarchy.copy.cancel })}
                 </Button>
-                <Button onClick={handleSubmit} disabled={isPending}>
+                <Button onClick={handleSubmit} disabled={isPending || sourceLoading || destLoading}>
                     {isPending ? (
                         <Loader2 className="size-4 animate-spin mr-2" />
                     ) : (
