@@ -43,7 +43,7 @@ interface UseRelationshipGraphExpansionActionsParams {
 }
 
 interface UseRelationshipGraphExpansionActionsResult {
-    handleExpand: (uid: string) => Promise<void>
+    handleExpand: (uid: string, forceRefresh?: boolean) => Promise<void>
     handleLoadMore: (type: string) => void
     handleNodeLoadMore: (uid: string) => void
 }
