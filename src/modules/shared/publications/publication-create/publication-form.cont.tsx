@@ -67,7 +67,7 @@ export const PublicationFormContainer: FC<Props> = ({ publication, refetch }) =>
         mutationFn: queryMutate<Publication, Publication>(
             'publication',
             publication?.uid ? 'put' : 'post',
-            publication?.uid,
+            { uid: publication?.uid },
         ),
         onError: (error: any) => {
             toast.error(`Error: ${error.response?.data?.message}`)

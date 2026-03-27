@@ -58,11 +58,12 @@ jest.mock('sonner', () => ({
 
 const mockAllZones: ZonesResponse = {
     data: [
-        { uid: 'root-1', name: 'Root Zone', code: 'RZ', parentZone: null },
+        { uid: 'root-1', name: 'Root Zone', code: 'RZ', notes: 'Root notes', parentZone: null },
         {
             uid: 'child-1',
             name: 'Child Zone',
             code: 'CZ',
+            notes: null,
             parentZone: { uid: 'root-1', name: 'Root Zone' },
         },
     ],
@@ -110,6 +111,7 @@ describe('ZoneFormContainer', () => {
             uid: '1',
             name: 'Existing Zone',
             code: 'EZ',
+            notes: 'Some notes',
             parentZone: { uid: 'root-1', name: 'Root Zone' },
         }
 
@@ -117,9 +119,11 @@ describe('ZoneFormContainer', () => {
 
         const nameInput = screen.getByPlaceholderText('Enter zone name')
         const codeInput = screen.getByPlaceholderText('Enter zone code')
+        const notesInput = screen.getByPlaceholderText('Enter zone notes')
 
         expect(nameInput).toHaveValue('Existing Zone')
         expect(codeInput).toHaveValue('EZ')
+        expect(notesInput).toHaveValue('Some notes')
     })
 
     it('shows create label for new zone', () => {

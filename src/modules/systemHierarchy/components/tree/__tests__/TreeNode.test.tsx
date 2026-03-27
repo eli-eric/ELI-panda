@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
+import { IntlProvider } from 'react-intl'
 
 import { SystemLevel } from '@/types/gql/graphql'
 
@@ -24,6 +25,26 @@ const baseNode: HierarchyNode = {
     children: [],
 }
 
+const messages = {
+    'systemHierarchy.copy.copySystem': 'Copy System',
+    'systemHierarchy.copy.pasteSystem': 'Paste System',
+}
+
+const renderTreeNode = (props: Partial<React.ComponentProps<typeof TreeNode>> = {}) =>
+    render(
+        <IntlProvider locale="en" messages={messages}>
+            <TreeNode
+                node={baseNode}
+                depth={0}
+                isExpanded={false}
+                isSelected={false}
+                onToggle={jest.fn()}
+                onSelect={jest.fn()}
+                {...props}
+            />
+        </IntlProvider>,
+    )
+
 describe('TreeNode', () => {
     beforeEach(() => {
         jest.clearAllMocks()
@@ -36,16 +57,7 @@ describe('TreeNode', () => {
             error: null,
         })
 
-        render(
-            <TreeNode
-                node={baseNode}
-                depth={0}
-                isExpanded={false}
-                isSelected={false}
-                onToggle={jest.fn()}
-                onSelect={jest.fn()}
-            />,
-        )
+        renderTreeNode()
 
         expect(mockUseSystemLeavesCount).toHaveBeenCalledWith('node-1')
         expect(screen.getByText('…')).toBeInTheDocument()
@@ -58,16 +70,7 @@ describe('TreeNode', () => {
             error: null,
         })
 
-        render(
-            <TreeNode
-                node={baseNode}
-                depth={0}
-                isExpanded={false}
-                isSelected={false}
-                onToggle={jest.fn()}
-                onSelect={jest.fn()}
-            />,
-        )
+        renderTreeNode()
 
         expect(screen.getByText('7')).toBeInTheDocument()
     })
@@ -95,20 +98,65 @@ describe('TreeNode', () => {
             ],
         }
 
-        render(
-            <TreeNode
-                node={nodeWithChildren}
-                depth={0}
-                isExpanded={false}
-                isSelected={false}
-                onToggle={onToggle}
-                onSelect={onSelect}
-            />,
-        )
+        renderTreeNode({ node: nodeWithChildren, onToggle, onSelect })
 
         fireEvent.click(screen.getByRole('button', { name: 'Expand' }))
 
         expect(onToggle).toHaveBeenCalledWith('node-1')
         expect(onSelect).not.toHaveBeenCalled()
+    })
+
+    describe('context menu', () => {
+        beforeEach(() => {
+            mockUseSystemLeavesCount.mockReturnValue({ count: 0, isLoading: false, error: null })
+        })
+
+        it('shows Copy System on right-click when onCopySystem provided', () => {
+            const onCopySystem = jest.fn()
+            renderTreeNode({ onCopySystem })
+
+            fireEvent.contextMenu(screen.getByTestId('tree-node-node-1').firstChild!)
+            expect(screen.getByText('Copy System')).toBeInTheDocument()
+        })
+
+        it('calls onCopySystem with node uid when Copy System clicked', () => {
+            const onCopySystem = jest.fn()
+            renderTreeNode({ onCopySystem })
+
+            fireEvent.contextMenu(screen.getByTestId('tree-node-node-1').firstChild!)
+            fireEvent.click(screen.getByText('Copy System'))
+            expect(onCopySystem).toHaveBeenCalledWith('node-1')
+        })
+
+        it('shows disabled Paste System when copiedSystemUid is same as node', () => {
+            renderTreeNode({
+                onCopySystem: jest.fn(),
+                onPasteSystem: jest.fn(),
+                copiedSystemUid: 'node-1',
+            })
+
+            fireEvent.contextMenu(screen.getByTestId('tree-node-node-1').firstChild!)
+            const pasteItem = screen.getByTestId('context-paste-system')
+            expect(pasteItem).toHaveAttribute('data-disabled')
+        })
+
+        it('shows enabled Paste System when copiedSystemUid differs from node', () => {
+            renderTreeNode({
+                onCopySystem: jest.fn(),
+                onPasteSystem: jest.fn(),
+                copiedSystemUid: 'other-node',
+            })
+
+            fireEvent.contextMenu(screen.getByTestId('tree-node-node-1').firstChild!)
+            const pasteItem = screen.getByTestId('context-paste-system')
+            expect(pasteItem).not.toHaveAttribute('data-disabled')
+        })
+
+        it('does not show context menu when no copy/paste handlers provided', () => {
+            renderTreeNode()
+
+            fireEvent.contextMenu(screen.getByTestId('tree-node-node-1').firstChild!)
+            expect(screen.queryByText('Copy System')).not.toBeInTheDocument()
+        })
     })
 })

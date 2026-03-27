@@ -15,7 +15,7 @@ export const useGrantMutation = ({ uid, onSuccess }: UseGrantMutationOptions = {
 
     return useMutation({
         mutationKey: uid ? ['grant', uid] : ['create-grant'],
-        mutationFn: queryMutate<Grant, GrantFormData>('grant', uid ? 'put' : 'post', uid),
+        mutationFn: queryMutate<Grant, GrantFormData>('grant', uid ? 'put' : 'post', { uid }),
         onSuccess: async response => {
             await queryClient.invalidateQueries({ queryKey: ['grants'] })
             if (uid) {

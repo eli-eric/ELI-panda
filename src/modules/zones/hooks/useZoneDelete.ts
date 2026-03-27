@@ -6,7 +6,7 @@ export const useZoneDelete = (uid: string) => {
     const queryClient = useQueryClient()
 
     const { mutateAsync } = useMutation({
-        mutationFn: queryMutate('zone', 'delete', uid, undefined, undefined, 'text'),
+        mutationFn: queryMutate('zone', 'delete', { uid, responseType: 'text' }),
         mutationKey: ['zone', { uid }],
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['zones'] })

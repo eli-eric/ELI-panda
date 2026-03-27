@@ -27,7 +27,7 @@ export const useDeliver = (orderLine: OrderLineFormType) => {
         mutationFn: queryMutate<
             OrderLineFormType,
             { isDelivered: boolean; eun?: string; serialNumber?: string }
-        >('orderLineDelivery', 'put', uid, undefined, { itemUid: orderLine.uid! }),
+        >('orderLineDelivery', 'put', { uid, endpointVariables: { itemUid: orderLine.uid! } }),
         onError: (e: AxiosError) => {
             if (e.response?.status === 409) {
                 toast.error(

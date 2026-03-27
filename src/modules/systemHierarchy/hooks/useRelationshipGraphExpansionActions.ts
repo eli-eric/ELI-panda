@@ -43,7 +43,7 @@ interface UseRelationshipGraphExpansionActionsParams {
 }
 
 interface UseRelationshipGraphExpansionActionsResult {
-    handleExpand: (uid: string) => Promise<void>
+    handleExpand: (uid: string, forceRefresh?: boolean) => Promise<void>
     handleLoadMore: (type: string) => void
     handleNodeLoadMore: (uid: string) => void
 }
@@ -193,10 +193,10 @@ export const useRelationshipGraphExpansionActions = ({
     )
 
     const handleExpand = useCallback(
-        async (uid: string) => {
+        async (uid: string, forceRefresh?: boolean) => {
             const scopeKey = toNodeScopeKey(uid)
 
-            if (expandedScopeUids.includes(uid)) {
+            if (expandedScopeUids.includes(uid) && !forceRefresh) {
                 setActiveScopeKey(scopeKey)
                 return
             }

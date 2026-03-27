@@ -7,6 +7,7 @@ import {
     ContextMenu,
     ContextMenuContent,
     ContextMenuItem,
+    ContextMenuSeparator,
     ContextMenuTrigger,
 } from '@/components/ui/context-menu'
 import { message } from '@/i18n/src/messages'
@@ -24,6 +25,9 @@ interface SystemNodeData {
     onLoadMore?: (uid: string) => void
     onViewDetail?: (uid: string) => void
     onContextMenuChange?: (open: boolean) => void
+    onCopySystem?: (uid: string) => void
+    onPasteSystem?: (uid: string) => void
+    copiedSystemUid?: string | null
     hiddenRelationshipsCount?: number
     [key: string]: unknown
 }
@@ -42,11 +46,15 @@ const SystemNodeComponent = ({ id, data }: NodeProps) => {
         onLoadMore,
         onViewDetail,
         onContextMenuChange,
+        onCopySystem,
+        onPasteSystem,
+        copiedSystemUid,
         hiddenRelationshipsCount,
     } = data as unknown as SystemNodeData
 
     const isVertical = layoutMode === 'vertical'
     const selectionRing = selected ? 'ring-2 ring-amber-500 ring-offset-1' : ''
+    const canPaste = !!copiedSystemUid && copiedSystemUid !== id
 
     return (
         <ContextMenu onOpenChange={onContextMenuChange}>
@@ -113,6 +121,24 @@ const SystemNodeComponent = ({ id, data }: NodeProps) => {
                 >
                     {fm({ id: message.systemHierarchy.graph.actions.viewDetail })}
                 </ContextMenuItem>
+                {(onCopySystem || onPasteSystem) && <ContextMenuSeparator />}
+                {onCopySystem && (
+                    <ContextMenuItem
+                        onSelect={() => onCopySystem(id)}
+                        data-testid="context-copy-system"
+                    >
+                        {fm({ id: message.systemHierarchy.copy.copySystem })}
+                    </ContextMenuItem>
+                )}
+                {onPasteSystem && (
+                    <ContextMenuItem
+                        onSelect={() => onPasteSystem(id)}
+                        disabled={!canPaste}
+                        data-testid="context-paste-system"
+                    >
+                        {fm({ id: message.systemHierarchy.copy.pasteSystem })}
+                    </ContextMenuItem>
+                )}
             </ContextMenuContent>
         </ContextMenu>
     )

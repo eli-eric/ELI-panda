@@ -29,9 +29,7 @@ export const useCodebookValueMutations = ({ codebookType, queryKey }: Props) => 
             const mutateFn = queryMutate<CodebookType, { name: string }>(
                 'codebook',
                 'post',
-                undefined,
-                false,
-                { path: codebookType ?? '' },
+                { isDefaultUrl: false, endpointVariables: { path: codebookType ?? '' } },
             )
             return mutateFn({ name: sanitizeName(name) })
         },
@@ -43,7 +41,7 @@ export const useCodebookValueMutations = ({ codebookType, queryKey }: Props) => 
             const mutateFn = queryMutate<
                 CodebookType,
                 { name: string; uid: string; code?: string }
-            >('codebook', 'put', undefined, false, { path: `${codebookType}/${uid}` })
+            >('codebook', 'put', { isDefaultUrl: false, endpointVariables: { path: `${codebookType}/${uid}` } })
             return mutateFn({
                 uid,
                 name: sanitizeName(name),
@@ -55,8 +53,9 @@ export const useCodebookValueMutations = ({ codebookType, queryKey }: Props) => 
 
     const deleteMutation = useMutation({
         mutationFn: (uid: string) => {
-            const mutateFn = queryMutate<void, void>('codebook', 'delete', undefined, false, {
-                path: `${codebookType}/${uid}`,
+            const mutateFn = queryMutate<void, void>('codebook', 'delete', {
+                isDefaultUrl: false,
+                endpointVariables: { path: `${codebookType}/${uid}` },
             })
             return mutateFn(undefined as void)
         },

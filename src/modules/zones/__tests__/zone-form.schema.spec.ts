@@ -1,7 +1,7 @@
 import { zoneSchema } from '../form/zone-form.schema'
 
 describe('zoneSchema', () => {
-    const validData = { name: 'Zone A', code: 'Z-001', parentUid: null }
+    const validData = { name: 'Zone A', code: 'Z-001', parentUid: null, notes: 'Some notes' }
 
     it('validates correct data', () => {
         const result = zoneSchema.safeParse(validData)
@@ -59,6 +59,21 @@ describe('zoneSchema', () => {
 
     it('accepts undefined parentUid', () => {
         const result = zoneSchema.safeParse({ ...validData, parentUid: undefined })
+        expect(result.success).toBe(true)
+    })
+
+    it('accepts null notes', () => {
+        const result = zoneSchema.safeParse({ ...validData, notes: null })
+        expect(result.success).toBe(true)
+    })
+
+    it('accepts undefined notes', () => {
+        const result = zoneSchema.safeParse({ ...validData, notes: undefined })
+        expect(result.success).toBe(true)
+    })
+
+    it('accepts empty string notes', () => {
+        const result = zoneSchema.safeParse({ ...validData, notes: '' })
         expect(result.success).toBe(true)
     })
 })
