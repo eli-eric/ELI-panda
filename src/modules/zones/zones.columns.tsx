@@ -33,6 +33,12 @@ export const useZoneColumns = () => {
                 accessorFn: row => row.parentZone?.name ?? '—',
                 size: 400,
             },
+            {
+                id: 'notes',
+                header: fm({ id: cols.notes }),
+                accessorFn: row => row.notes ?? '—',
+                size: 300,
+            },
         ],
         [fm, cols],
     )

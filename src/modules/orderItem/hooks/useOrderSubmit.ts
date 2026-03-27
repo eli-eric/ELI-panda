@@ -59,7 +59,7 @@ export const useOrderSubmit = (formReset: (t: any) => void) => {
         mutationFn: queryMutate<OrderDetailFormType, OrderDetailFormType>(
             'order',
             uid ? 'put' : 'post',
-            uid,
+            { uid },
         ),
         onError: (e: AxiosError) => {
             if (e.response?.status === 409) {

@@ -9,6 +9,7 @@ import { message } from '@/i18n/src/messages'
 
 import { useSystemHierarchy } from '../../hooks/queries/useSystemHierarchy'
 import { useHierarchyNavigation } from '../../hooks/useHierarchyNavigation'
+import { useSystemCopyPaste } from '../../hooks/useSystemCopyPaste'
 import { useHierarchyStore } from '../../store/useHierarchyStore'
 import { collectAllNodeUids, filterTree } from '../../utils/treeSearch'
 import { SystemTreeComponent } from './SystemTree.comp'
@@ -20,6 +21,7 @@ export const SystemTreeContainer: FC = () => {
     const { selectedParentUid, selectParent } = useHierarchyNavigation()
     const { expandedNodes, toggleNode, collapseAll, expandNodes, setExpandedNodes } =
         useHierarchyStore()
+    const { copiedSystemUid, canEdit, handleCopySystem, handlePasteSystem } = useSystemCopyPaste()
 
     const [searchInput, setSearchInput] = useState('')
     const [search, setSearch] = useState('')
@@ -96,6 +98,9 @@ export const SystemTreeContainer: FC = () => {
                         onToggle={toggleNode}
                         onSelect={selectParent}
                         search={search}
+                        copiedSystemUid={copiedSystemUid}
+                        onCopySystem={canEdit ? handleCopySystem : undefined}
+                        onPasteSystem={canEdit ? handlePasteSystem : undefined}
                     />
                 )}
             </div>

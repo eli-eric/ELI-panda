@@ -56,7 +56,7 @@ const normalizeError = (error: unknown): NormalizedError => {
     return { message: 'Unknown error' }
 }
 
-const buildUrl = (endpoint: string, isDefaultUrl?: boolean) => {
+export const buildUrl = (endpoint: string, isDefaultUrl?: boolean) => {
     const base = (isDefaultUrl ? '' : BASE_URL).replace(/\/+$/, '')
     const ep = endpoint.replace(/^\/+/, '')
     return base ? `${base}/${ep}` : `/${ep}`
@@ -123,14 +123,20 @@ export const queryFetcher = <T = unknown>(endpointType: string) => {
     return querFn
 }
 
+interface QueryMutateOptions {
+    uid?: string
+    isDefaultUrl?: boolean
+    endpointVariables?: Record<string, string>
+    responseType?: 'json' | 'text' | 'blob'
+    query?: EndpointProps['query']
+}
+
 export const queryMutate = <TResponse, TVariables>(
     endpointType: keyof ReturnType<typeof getEndpoints>,
-    mutationType: 'post' | 'put' | 'delete',
-    uid?: string,
-    isDefaultUrl?: boolean,
-    endpointVariables?: Record<string, string>,
-    responseType?: 'json' | 'text' | 'blob',
+    mutationType: 'post' | 'put' | 'delete' | 'get',
+    options?: QueryMutateOptions,
 ) => {
+    const { uid, isDefaultUrl, endpointVariables, responseType, query } = options ?? {}
     const mutateFn: MutateFunction<
         AxiosResponse<TResponse>,
         AxiosError,
@@ -138,15 +144,16 @@ export const queryMutate = <TResponse, TVariables>(
     > = async variables => {
         const ep = resolveEndpoint(endpointType as EndpointKey, {
             uid,
+            query,
             ...endpointVariables,
         })
         const url = buildUrl(ep, isDefaultUrl)
         try {
             const method = mutationType.toUpperCase()
-            // For delete do not send body
+            const hasNoBody = mutationType === 'delete' || mutationType === 'get'
             const response = await fetchRequestDetailed<TResponse>(url, {
                 method,
-                body: mutationType === 'delete' ? undefined : (variables as any),
+                body: hasNoBody ? undefined : (variables as any),
                 responseType,
             })
             // Adapt to AxiosResponse shape expected by existing code

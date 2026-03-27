@@ -160,7 +160,7 @@ export const useSystemDelete = ({ system, queryKey }) => {
     const queryClient = useQueryClient()
 
     const { mutate, isPending } = useMutation({
-        mutationFn: queryMutate('system', 'delete', system.uid),
+        mutationFn: queryMutate('system', 'delete', { uid: system.uid }),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey })
             toast.success('System deleted successfully')
@@ -231,7 +231,7 @@ export const useSystemDelete = ({ system, queryKey }) => {
     const withWarningModal = useWarningModal()
 
     const { mutate, isPending } = useMutation({
-        mutationFn: queryMutate('system', 'delete', system.uid),
+        mutationFn: queryMutate('system', 'delete', { uid: system.uid }),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey })
             toast.success('System deleted successfully')
@@ -265,7 +265,7 @@ return {
 ### Data Fetching Utilities
 
 - **`queryFetcher<T>(endpointKey)`** - Factory for TanStack Query fetch functions
-- **`queryMutate(endpointKey, method, uid?)`** - Factory for mutation functions
+- **`queryMutate(endpointKey, method, options?)`** - Factory for mutation functions (options: `{ uid, responseType, query, ... }`)
 - **`getEndpoints(options)`** - Central endpoint configuration
 - **`useGraphQL(document, options)`** - Custom GraphQL query hook
 - **`useGraphQLMutation(document, options)`** - Custom GraphQL mutation hook
@@ -295,7 +295,7 @@ useEffect(() => {
 
 // In mutations - handle both success and error
 const { mutate } = useMutation({
-    mutationFn: queryMutate('system', 'delete', uid),
+    mutationFn: queryMutate('system', 'delete', { uid }),
     onSuccess: () => toast.success('System deleted'),
     onError: error => toast.error(`Failed: ${error.message}`),
 })
@@ -471,7 +471,7 @@ return axiosInstance.get(BASE_URL + endpoint).then(res => res.data)
 ### TanStack Query Integration
 
 - Use `queryFetcher<ResponseType>('endpointKey')` for GET requests
-- Use `queryMutate('endpointKey', 'post|put|delete', uid)` for mutations
+- Use `queryMutate('endpointKey', 'post|put|delete|get', { uid, responseType, query })` for mutations
 - Always use `QueryFetcherKey` type for query keys
 - Use `placeholderData: keepPreviousData` for smooth UX transitions
 - Use `useMemo` for query keys when they depend on computed values

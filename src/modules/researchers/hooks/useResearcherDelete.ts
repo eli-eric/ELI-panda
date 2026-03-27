@@ -6,7 +6,7 @@ export const useResearcherDelete = (uid: string) => {
     const queryClient = useQueryClient()
 
     const { mutate } = useMutation({
-        mutationFn: queryMutate('researcher', 'delete', uid),
+        mutationFn: queryMutate('researcher', 'delete', { uid }),
         mutationKey: ['researcher', { uid }],
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['researchers'] })

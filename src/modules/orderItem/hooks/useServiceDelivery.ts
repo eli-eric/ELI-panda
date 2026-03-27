@@ -25,9 +25,7 @@ export const useServiceLineDeliver = (serviceLine: ServiceLine) => {
         mutationFn: queryMutate<OrderLineFormType, { isDelivered: boolean }>(
             'serviceLineDelivery',
             'put',
-            uid,
-            undefined,
-            { itemUid: serviceLine?.uid || '' },
+            { uid, endpointVariables: { itemUid: serviceLine?.uid || '' } },
         ),
         onError: (e: AxiosError) => {
             if (e.response?.status === 409) {

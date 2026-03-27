@@ -14,6 +14,7 @@ import { useRelationshipGraphFlow } from './useRelationshipGraphFlow'
 import { useRelationshipGraphInteractions } from './useRelationshipGraphInteractions'
 import { useRelationshipGraphScopes } from './useRelationshipGraphScopes'
 import { useRelationshipGraphViewModel } from './useRelationshipGraphViewModel'
+import { useSystemCopyPaste } from './useSystemCopyPaste'
 
 export const useRelationshipGraphContainerState = () => {
     const { selectedParentUid, selectLeaf } = useHierarchyNavigation()
@@ -28,7 +29,6 @@ export const useRelationshipGraphContainerState = () => {
     } = useHierarchyStore()
     const { openModal } = useDynamicModalStore()
     const openSystemEdit = useSystemEditSheet()
-
     const [fitViewVersion, setFitViewVersion] = useState(0)
     const onGraphChanged = useCallback(() => {
         setFitViewVersion(version => version + 1)
@@ -133,6 +133,9 @@ export const useRelationshipGraphContainerState = () => {
             onGraphChanged,
         })
 
+    const { copiedSystemUid, canEdit, handleCopySystem, handlePasteSystem } =
+        useSystemCopyPaste({ onExpandNode: handleExpand })
+
     const { layoutMode, systemLevels, rfNodes, rfEdges, handleLayoutChange } =
         useRelationshipGraphFlow({
             visibleNodes,
@@ -144,6 +147,9 @@ export const useRelationshipGraphContainerState = () => {
             onNodeLoadMore: handleNodeLoadMore,
             onViewDetail: handleViewDetail,
             onContextMenuChange: handleContextMenuChange,
+            onCopySystem: canEdit ? handleCopySystem : undefined,
+            onPasteSystem: canEdit ? handlePasteSystem : undefined,
+            copiedSystemUid,
             onGraphChanged,
         })
 

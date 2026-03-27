@@ -45,7 +45,7 @@ describe('useZoneMutation', () => {
         const { useZoneMutation } = require('../hooks/useZoneMutation')
         renderHook(() => useZoneMutation({}), { wrapper: createWrapper() })
 
-        expect(mockQueryMutate).toHaveBeenCalledWith('zone', 'post', undefined)
+        expect(mockQueryMutate).toHaveBeenCalledWith('zone', 'post', { uid: undefined })
     })
 
     it('uses PUT for update (with uid)', () => {
@@ -53,7 +53,7 @@ describe('useZoneMutation', () => {
         const { useZoneMutation } = require('../hooks/useZoneMutation')
         renderHook(() => useZoneMutation({ uid: '1' }), { wrapper: createWrapper() })
 
-        expect(mockQueryMutate).toHaveBeenCalledWith('zone', 'put', '1')
+        expect(mockQueryMutate).toHaveBeenCalledWith('zone', 'put', { uid: '1' })
     })
 
     it('invalidates zones query on success', async () => {

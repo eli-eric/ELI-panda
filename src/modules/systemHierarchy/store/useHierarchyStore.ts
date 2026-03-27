@@ -9,11 +9,13 @@ interface HierarchyStore {
     graphLayoutMode: GraphLayoutMode
     graphExpandedNodes: RelationshipGraphNode[]
     graphExpandedEdges: RelationshipGraphEdge[]
+    copiedSystemUid: string | null
     toggleNode: (uid: string) => void
     expandNode: (uid: string) => void
     expandNodes: (uids: string[]) => void
     setExpandedNodes: (uids: string[]) => void
     collapseAll: () => void
+    setCopiedSystemUid: (uid: string | null) => void
     setGraphLayoutMode: (mode: GraphLayoutMode) => void
     addGraphExpanded: (nodes: RelationshipGraphNode[], edges: RelationshipGraphEdge[]) => void
     setGraphExpanded: (nodes: RelationshipGraphNode[], edges: RelationshipGraphEdge[]) => void
@@ -27,6 +29,7 @@ export const useHierarchyStore = create<HierarchyStore>()(
             graphLayoutMode: GRAPH_LAYOUT_MODES.VERTICAL as GraphLayoutMode,
             graphExpandedNodes: [],
             graphExpandedEdges: [],
+            copiedSystemUid: null,
             toggleNode: (uid: string) => {
                 const current = get().expandedNodes
                 const isExpanded = current.includes(uid)
@@ -53,6 +56,7 @@ export const useHierarchyStore = create<HierarchyStore>()(
                 set({ expandedNodes: uids })
             },
             collapseAll: () => set({ expandedNodes: [] }),
+            setCopiedSystemUid: (uid: string | null) => set({ copiedSystemUid: uid }),
             setGraphLayoutMode: (mode: GraphLayoutMode) => set({ graphLayoutMode: mode }),
             addGraphExpanded: (nodes, edges) => {
                 const { graphExpandedNodes, graphExpandedEdges } = get()

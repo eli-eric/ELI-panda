@@ -140,10 +140,7 @@ export const useMoveSubmit = ({
         mutationFn: queryMutate<string, MoveSystemsBody>(
             'systemsMove',
             'post',
-            undefined,
-            undefined,
-            undefined,
-            'text', // Server returns text/plain instead of application/json),
+            { responseType: 'text' }, // Server returns text/plain instead of application/json),
         ),
         onSuccess,
         onError: () => {

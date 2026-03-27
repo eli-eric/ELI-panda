@@ -15,7 +15,7 @@ export const useServiceMutation = ({ uid }: Props) => {
         mutationFn: queryMutate<ServiceTypeResponse, ServiceTypeResponse>(
             'serviceType',
             uid ? 'put' : 'post',
-            uid,
+            { uid },
         ),
         onError: () => {
             toast.error('An error occurred while saving the service, try again later.')

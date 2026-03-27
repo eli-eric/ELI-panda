@@ -41,6 +41,7 @@ export const ZoneFormContainer: FC<Props> = ({ zone, onSuccess }) => {
         name: zone?.name ?? '',
         code: zone?.code ?? '',
         parentUid: zone?.parentZone?.uid ?? null,
+        notes: zone?.notes ?? '',
     }
 
     const formMethods = useForm<ZoneFormData>({
