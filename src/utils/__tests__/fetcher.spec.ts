@@ -68,7 +68,7 @@ describe('queryFetcher', () => {
 
 describe('queryMutate', () => {
   it('returns a function', () => {
-    const fn = queryMutate('system', 'post', '123')
+    const fn = queryMutate('system', 'post', { uid: '123' })
     expect(typeof fn).toBe('function')
   })
 
@@ -80,7 +80,7 @@ describe('queryMutate', () => {
       headers: {},
     })
 
-    const fn = queryMutate('system', 'post', '123')
+    const fn = queryMutate('system', 'post', { uid: '123' })
     const result = await fn({ name: 'Test' })
 
     expect(mockFetchRequestDetailed).toHaveBeenCalledWith(
@@ -102,7 +102,7 @@ describe('queryMutate', () => {
       headers: {},
     })
 
-    const fn = queryMutate('system', 'delete', '123')
+    const fn = queryMutate('system', 'delete', { uid: '123' })
     await fn({ name: 'ignored' })
 
     expect(mockFetchRequestDetailed).toHaveBeenCalledWith(
@@ -122,7 +122,7 @@ describe('queryMutate', () => {
       headers: {},
     })
 
-    const fn = queryMutate('system', 'post', '123', false, undefined, 'blob')
+    const fn = queryMutate('system', 'post', { uid: '123', responseType: 'blob' })
     await fn({})
 
     expect(mockFetchRequestDetailed).toHaveBeenCalledWith(
