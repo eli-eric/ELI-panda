@@ -1149,6 +1149,7 @@ export const messages = {
             validating: 'Validating...',
             totalPublications: 'Total publications',
             validPublications: 'Valid publications',
+            deliveryRefLabel: 'Delivery Reference Number',
         },
     },
     grantsPage: {

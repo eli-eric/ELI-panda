@@ -16,6 +16,7 @@ export const RivExportDialogContainer: FC = () => {
 
     const [year, setYear] = useState(String(currentYear))
     const [provider, setProvider] = useState('')
+    const [deliveryRef, setDeliveryRef] = useState('')
 
     const { data: grantGroups } = useCodebook(CODEBOOK.GRANT_GROUP)
     const providerOptions = useMemo(
@@ -28,7 +29,7 @@ export const RivExportDialogContainer: FC = () => {
 
     const canValidate = !!year && !!provider
     const { data: validation, isLoading: isValidating } = useRivValidate(year, provider, canValidate)
-    const { downloadXml, isDownloading } = useRivExport(year, provider)
+    const { downloadXml, isDownloading } = useRivExport(year, provider, deliveryRef)
 
     return (
         <RivExportDialogComponent
@@ -38,6 +39,8 @@ export const RivExportDialogContainer: FC = () => {
             provider={provider}
             providerOptions={providerOptions}
             onProviderChange={setProvider}
+            deliveryRef={deliveryRef}
+            onDeliveryRefChange={setDeliveryRef}
             validation={validation}
             isValidating={isValidating}
             onDownload={downloadXml}
