@@ -1,11 +1,15 @@
 import type { ColumnDef } from '@tanstack/react-table'
-import { useMemo } from 'react'
+import { Fragment, useMemo } from 'react'
 import { useIntl } from 'react-intl'
 
 import { Tooltip } from '@/components/Tooltip'
+import { Badge } from '@/components/ui/badge'
 import { message } from '@/i18n/src/messages'
+import { cn } from '@/lib/utils'
 import { IconCell } from '@/modules/systems/components/table/cells/IconCell'
 import type { ITEM_USAGE } from '@/modules/systems/types/constants'
+import type { SystemLevel } from '@/types/gql/graphql'
+import { getBadgeVariantBySystemLevel } from '@/utils/systemLevel'
 
 import type { SystemLeaf } from '../../types'
 
@@ -34,10 +38,60 @@ export const useLeavesColumns = () => {
                 size: 160,
                 enableSorting: true,
                 cell: ({ row }) => (
-                    <code className="rounded bg-muted px-1.5 py-0.5 text-xs">
+                    <Badge
+                        variant="outline"
+                        className={cn(
+                            'text-xs',
+                            getBadgeVariantBySystemLevel(
+                                row.original.systemLevel as SystemLevel,
+                            ),
+                        )}
+                    >
                         {row.original.systemCode}
-                    </code>
+                    </Badge>
                 ),
+            },
+            {
+                header: fm({ id: message.systemHierarchy.columns.systemPath }),
+                accessorFn: row =>
+                    row.parentPath?.map(p => p.name).join(' → '),
+                id: 'systemPath',
+                size: 300,
+                cell: ({ row }) => {
+                    const parentPath = row.original.parentPath
+                    if (!parentPath?.length) return null
+                    const fullPath = parentPath
+                        .map(p => p.name)
+                        .join(' → ')
+                    return (
+                        <Tooltip content={fullPath}>
+                            <div className="flex items-center gap-1 overflow-hidden">
+                                {parentPath.map((item, index) => (
+                                    <Fragment key={item.uid}>
+                                        <Badge
+                                            variant="outline"
+                                            className={cn(
+                                                'text-xs shrink-0 px-1.5 py-0',
+                                                getBadgeVariantBySystemLevel(
+                                                    item.systemLevel as SystemLevel,
+                                                ),
+                                            )}
+                                        >
+                                            {item.name}
+                                        </Badge>
+                                        {index < parentPath.length - 1 && (
+                                            <span className="text-muted-foreground shrink-0">
+                                                {fm({
+                                                    id: message.common.system.arrow,
+                                                })}
+                                            </span>
+                                        )}
+                                    </Fragment>
+                                ))}
+                            </div>
+                        </Tooltip>
+                    )
+                },
             },
             {
                 header: fm({ id: message.systemHierarchy.columns.name }),

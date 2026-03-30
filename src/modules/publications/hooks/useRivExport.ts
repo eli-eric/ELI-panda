@@ -4,14 +4,14 @@ import { toast } from 'sonner'
 import { fetchRequestDetailed } from '@/core/http/fetchClient'
 import { BASE_URL } from '@/types/constants/common'
 
-export const useRivExport = (year: string, provider: string) => {
+export const useRivExport = (year: string, provider: string, deliveryRef: string) => {
     const [isDownloading, setIsDownloading] = useState(false)
 
     const downloadXml = useCallback(async () => {
         setIsDownloading(true)
         try {
             const { data, headers } = await fetchRequestDetailed<Blob>(
-                `${BASE_URL}/publications/export/riv?year=${year}&provider=${provider}`,
+                `${BASE_URL}/publications/export/riv?year=${year}&provider=${provider}&deliveryRef=${encodeURIComponent(deliveryRef)}`,
                 { responseType: 'blob' },
             )
             const disposition = headers['content-disposition'] ?? ''
@@ -30,7 +30,7 @@ export const useRivExport = (year: string, provider: string) => {
         } finally {
             setIsDownloading(false)
         }
-    }, [year, provider])
+    }, [year, provider, deliveryRef])
 
     return { downloadXml, isDownloading }
 }

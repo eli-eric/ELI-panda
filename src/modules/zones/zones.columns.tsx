@@ -4,6 +4,7 @@ import { useIntl } from 'react-intl'
 
 import { message } from '@/i18n/src/messages'
 
+import { NotesCell } from './components/notes-cell.comp'
 import { ZoneActionsCell } from './components/zone-actions.comp'
 import type { Zone } from './types/zone.types'
 
@@ -37,7 +38,8 @@ export const useZoneColumns = () => {
                 id: 'notes',
                 header: fm({ id: cols.notes }),
                 accessorFn: row => row.notes ?? '—',
-                size: 300,
+                size: 400,
+                cell: NotesCell,
             },
         ],
         [fm, cols],

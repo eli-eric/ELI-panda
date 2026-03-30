@@ -1149,6 +1149,7 @@ export const messages = {
             validating: 'Validating...',
             totalPublications: 'Total publications',
             validPublications: 'Valid publications',
+            deliveryRefLabel: 'Delivery Reference Number',
         },
     },
     grantsPage: {
@@ -1403,6 +1404,7 @@ export const messages = {
         columns: {
             name: 'Name',
             systemCode: 'System Code',
+            systemPath: 'System Path',
             systemType: 'System Type',
             location: 'Location',
             zone: 'Zone',
