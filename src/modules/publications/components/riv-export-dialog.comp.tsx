@@ -2,6 +2,7 @@ import type { FC } from 'react'
 import { FormattedMessage } from 'react-intl'
 
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import {
     Select,
     SelectContent,
@@ -27,6 +28,8 @@ interface Props {
     provider: string
     providerOptions: ProviderOption[]
     onProviderChange: (provider: string) => void
+    deliveryRef: string
+    onDeliveryRefChange: (value: string) => void
     validation?: RivValidationResponse
     isValidating: boolean
     onDownload: () => void
@@ -41,6 +44,8 @@ export const RivExportDialogComponent: FC<Props> = ({
     provider,
     providerOptions,
     onProviderChange,
+    deliveryRef,
+    onDeliveryRefChange,
     validation,
     isValidating,
     onDownload,
@@ -87,7 +92,17 @@ export const RivExportDialogComponent: FC<Props> = ({
                         </SelectContent>
                     </Select>
                 </div>
-                <Button onClick={onDownload} disabled={isDownloading || isValidating || !canExport}>
+                <div className="flex flex-col gap-1">
+                    <label className="text-sm font-medium">
+                        <FormattedMessage id={riv.deliveryRefLabel} />
+                    </label>
+                    <Input
+                        value={deliveryRef}
+                        onChange={e => onDeliveryRefChange(e.target.value)}
+                        className="w-64"
+                    />
+                </div>
+                <Button onClick={onDownload} disabled={isDownloading || isValidating || !canExport || !deliveryRef.trim()}>
                     <FormattedMessage id={riv.downloadButton} />
                 </Button>
             </div>
