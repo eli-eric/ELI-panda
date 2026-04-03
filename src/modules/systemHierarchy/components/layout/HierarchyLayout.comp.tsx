@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/collapsible'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import { SidebarTrigger } from '@/components/ui/sidebar'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
@@ -55,18 +56,25 @@ export const HierarchyLayoutComponent: FC<HierarchyLayoutProps> = ({ tree, middl
         return (
             <div className="h-dvh flex flex-col overflow-hidden">
                 <Collapsible open={treeOpen} onOpenChange={setTreeOpen}>
-                    <CollapsibleTrigger asChild>
-                        <Button
-                            type="button"
-                            variant="ghost"
-                            className="flex w-full justify-between rounded-none border-b border-border px-3 py-2 text-sm font-semibold"
-                        >
-                            {fm({ id: message.systemHierarchy.tree.title })}
-                            <ChevronDown
-                                className={cn('size-4 transition-transform', treeOpen && 'rotate-180')}
-                            />
-                        </Button>
-                    </CollapsibleTrigger>
+                    <div className="flex items-center gap-1 border-b border-border px-2 py-1.5">
+                        <SidebarTrigger />
+                        <CollapsibleTrigger asChild>
+                            <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                className="flex-1 justify-between text-sm font-semibold"
+                            >
+                                {fm({ id: message.systemHierarchy.tree.title })}
+                                <ChevronDown
+                                    className={cn(
+                                        'size-4 transition-transform',
+                                        treeOpen && 'rotate-180',
+                                    )}
+                                />
+                            </Button>
+                        </CollapsibleTrigger>
+                    </div>
                     <CollapsibleContent className="max-h-[50vh] overflow-y-auto border-b border-border">
                         {tree}
                     </CollapsibleContent>
