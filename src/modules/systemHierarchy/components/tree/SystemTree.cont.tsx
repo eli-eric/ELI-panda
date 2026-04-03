@@ -5,6 +5,7 @@ import { useIntl } from 'react-intl'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { SidebarTrigger } from '@/components/ui/sidebar'
 import { message } from '@/i18n/src/messages'
 
 import { useSystemHierarchy } from '../../hooks/queries/useSystemHierarchy'
@@ -54,9 +55,12 @@ export const SystemTreeContainer: FC = () => {
         <div className="flex flex-col h-full" data-testid="system-hierarchy-tree-panel">
             <div className="flex flex-col gap-2 border-b border-border px-3 py-2">
                 <div className="flex items-center justify-between">
-                    <h2 className="text-sm font-semibold">
-                        {fm({ id: message.systemHierarchy.tree.title })}
-                    </h2>
+                    <div className="flex items-center gap-2">
+                        <SidebarTrigger className="hidden md:flex" />
+                        <h2 className="text-sm font-semibold">
+                            {fm({ id: message.systemHierarchy.tree.title })}
+                        </h2>
+                    </div>
                     <Button
                         variant="ghost"
                         size="sm"

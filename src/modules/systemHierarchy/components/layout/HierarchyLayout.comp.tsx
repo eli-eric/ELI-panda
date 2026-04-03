@@ -75,7 +75,13 @@ export const HierarchyLayoutComponent: FC<HierarchyLayoutProps> = ({ tree, middl
                             </Button>
                         </CollapsibleTrigger>
                     </div>
-                    <CollapsibleContent className="max-h-[50vh] overflow-y-auto border-b border-border">
+                    <CollapsibleContent
+                        forceMount
+                        className={cn(
+                            'max-h-[50vh] overflow-y-auto border-b border-border',
+                            !treeOpen && 'hidden',
+                        )}
+                    >
                         {tree}
                     </CollapsibleContent>
                 </Collapsible>
