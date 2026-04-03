@@ -1,6 +1,6 @@
 import { ChevronDown, Info } from 'lucide-react'
 import type { FC, ReactNode } from 'react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useIntl } from 'react-intl'
 
 import { Button } from '@/components/ui/button'
@@ -13,6 +13,7 @@ import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/componen
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { message } from '@/i18n/src/messages'
+import { cn } from '@/lib/utils'
 
 interface HierarchyLayoutProps {
     tree: ReactNode
@@ -20,17 +21,35 @@ interface HierarchyLayoutProps {
     sidebar?: ReactNode
 }
 
+const SidebarSheet: FC<{ sidebar: ReactNode; className?: string; label: string }> = ({
+    sidebar,
+    className,
+    label,
+}) => (
+    <Sheet>
+        <SheetTrigger asChild>
+            <Button
+                type="button"
+                variant="outline"
+                size="icon"
+                className={cn('fixed bottom-4 right-4 z-40 rounded-full shadow-lg', className)}
+                aria-label={label}
+            >
+                <Info className="size-4" />
+            </Button>
+        </SheetTrigger>
+        <SheetContent side="right" size="m">
+            {sidebar}
+        </SheetContent>
+    </Sheet>
+)
+
 export const HierarchyLayoutComponent: FC<HierarchyLayoutProps> = ({ tree, middle, sidebar }) => {
     const isMobile = useIsMobile()
-    const [hasMounted, setHasMounted] = useState(false)
     const [treeOpen, setTreeOpen] = useState(false)
     const { formatMessage: fm } = useIntl()
 
-    useEffect(() => {
-        setHasMounted(true)
-    }, [])
-
-    if (!hasMounted) return null
+    const sidebarLabel = fm({ id: message.systemHierarchy.sidebar.title })
 
     if (isMobile) {
         return (
@@ -44,7 +63,7 @@ export const HierarchyLayoutComponent: FC<HierarchyLayoutProps> = ({ tree, middl
                         >
                             {fm({ id: message.systemHierarchy.tree.title })}
                             <ChevronDown
-                                className={`size-4 transition-transform ${treeOpen ? 'rotate-180' : ''}`}
+                                className={cn('size-4 transition-transform', treeOpen && 'rotate-180')}
                             />
                         </Button>
                     </CollapsibleTrigger>
@@ -55,23 +74,7 @@ export const HierarchyLayoutComponent: FC<HierarchyLayoutProps> = ({ tree, middl
 
                 <div className="flex-1 flex flex-col min-h-0 overflow-hidden">{middle}</div>
 
-                {sidebar && (
-                    <Sheet>
-                        <SheetTrigger asChild>
-                            <Button
-                                variant="outline"
-                                size="icon"
-                                className="fixed bottom-4 right-4 z-40 rounded-full shadow-lg"
-                                aria-label={fm({ id: message.systemHierarchy.sidebar.title })}
-                            >
-                                <Info className="size-4" />
-                            </Button>
-                        </SheetTrigger>
-                        <SheetContent side="right" size="m">
-                            {sidebar}
-                        </SheetContent>
-                    </Sheet>
-                )}
+                {sidebar && <SidebarSheet sidebar={sidebar} label={sidebarLabel} />}
             </div>
         )
     }
@@ -97,9 +100,16 @@ export const HierarchyLayoutComponent: FC<HierarchyLayoutProps> = ({ tree, middl
                 >
                     <div className="flex-1 flex flex-col overflow-hidden">{middle}</div>
                     {sidebar && (
-                        <aside className="hidden lg:flex flex-col w-80 border-l border-border bg-background overflow-hidden shrink-0">
-                            {sidebar}
-                        </aside>
+                        <>
+                            <aside className="hidden lg:flex flex-col w-80 border-l border-border bg-background overflow-hidden shrink-0">
+                                {sidebar}
+                            </aside>
+                            <SidebarSheet
+                                sidebar={sidebar}
+                                className="lg:hidden"
+                                label={sidebarLabel}
+                            />
+                        </>
                     )}
                 </ResizablePanel>
             </ResizablePanelGroup>
