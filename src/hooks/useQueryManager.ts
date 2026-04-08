@@ -27,6 +27,7 @@ export default function useQueryManager(
     )
 
     const [searchQuery] = useQueryState('search')
+    const [filterQuery] = useQueryState('filter')
     const [pageQuery] = useQueryState('page')
     const [pageSizeQuery] = useQueryState('pageSize')
 
@@ -60,11 +61,13 @@ export default function useQueryManager(
 
     const search = instances[tableId]?.search || searchQuery || ''
 
-    //columnFilter merge with categoryFilter
-    const columnFilter = useMemo(
-        () => JSON.stringify((instances[tableId]?.columnFilter || []).concat(categoryFilter || [])),
-        [instances, tableId, categoryFilter],
-    )
+    //columnFilter merge with categoryFilter, fallback to URL params
+    const columnFilter = useMemo(() => {
+        const storeFilters = instances[tableId]?.columnFilter || []
+        const urlFilters = storeFilters.length === 0 && filterQuery ? JSON.parse(filterQuery) : []
+        const filters = storeFilters.length > 0 ? storeFilters : urlFilters
+        return JSON.stringify(filters.concat(categoryFilter || []))
+    }, [instances, tableId, categoryFilter, filterQuery])
     const custom = useMemo(() => instances[tableId]?.custom || {}, [instances, tableId])
 
     const query = useMemo(

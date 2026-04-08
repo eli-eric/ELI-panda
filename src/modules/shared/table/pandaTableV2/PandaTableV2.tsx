@@ -28,6 +28,8 @@ interface Props<T> {
     skeletonRowCount?: number
     tableId: string
     table: Table<T>
+    toolbar?: React.ReactNode
+    emptyState?: React.ReactNode
 }
 
 /**
@@ -54,6 +56,8 @@ function PandaTableV2Inner<T>(
         tableId,
         getRowProps = defaultPropGetter,
         skeletonRowCount = 5,
+        toolbar,
+        emptyState,
     }: Props<T>,
     ref: React.ForwardedRef<PandaTableV2Handle>,
 ) {
@@ -123,6 +127,8 @@ function PandaTableV2Inner<T>(
             isLoading={isInitialLoad}
             isRefetching={isRefetching}
             isEmpty={data && isEmptyArray(data)}
+            toolbar={toolbar}
+            emptyState={emptyState}
         >
             <thead className="sticky top-0 z-10 bg-background/95 backdrop-blur backdrop-filter">
                 {table.getHeaderGroups().map(headerGroup => {

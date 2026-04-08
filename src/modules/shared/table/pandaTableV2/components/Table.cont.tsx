@@ -5,7 +5,7 @@ import EmptyResults from '@/components/empty-section/EmptyResults'
 import { PaginationV2 } from '@/components/table/PaginationV2.comp'
 import { cn } from '@/lib/utils'
 
-import { TableSettings } from '../../pandaTable/components/TableSettings'
+import { ColumnVisibilityDropdown } from '../../ColumnVisibilityDropdown.comp'
 
 interface Props {
     table: Table<any>
@@ -18,6 +18,8 @@ interface Props {
     tableContainerRef?: any
     enablePagination?: boolean
     itemsTotalCount?: number
+    toolbar?: React.ReactNode
+    emptyState?: React.ReactNode
 }
 
 export const TableContainer: FC<PropsWithChildren<Props>> = ({
@@ -32,6 +34,8 @@ export const TableContainer: FC<PropsWithChildren<Props>> = ({
     isLoading,
     isRefetching,
     isEmpty,
+    toolbar,
+    emptyState,
 }) => {
     return (
         <Fragment>
@@ -43,14 +47,11 @@ export const TableContainer: FC<PropsWithChildren<Props>> = ({
                     <span>{tableHeading}</span>
                 </div>
             )}
-            {enableColumnHiding && (
-                <TableSettings
-                    getAllLeafColumns={table.getAllLeafColumns}
-                    getIsAllColumnsVisible={table.getIsAllColumnsVisible}
-                    getToggleAllColumnsVisibilityHandler={
-                        table.getToggleAllColumnsVisibilityHandler
-                    }
-                />
+            {toolbar}
+            {enableColumnHiding && !toolbar && (
+                <div id="column-hiding" className="flex justify-end px-4 py-1.5 border-b border-border">
+                    <ColumnVisibilityDropdown table={table} />
+                </div>
             )}
             <div
                 ref={tableContainerRef}
@@ -62,7 +63,7 @@ export const TableContainer: FC<PropsWithChildren<Props>> = ({
                 <table className={cn('min-w-full', isRefetching && 'opacity-60 animate-pulse')}>
                     {children}
                 </table>
-                {isEmpty && !isLoading && <EmptyResults />}
+                {isEmpty && !isLoading && (emptyState ?? <EmptyResults />)}
             </div>
             {enablePagination && (
                 <PaginationV2
