@@ -64,7 +64,15 @@ export default function useQueryManager(
     //columnFilter merge with categoryFilter, fallback to URL params
     const columnFilter = useMemo(() => {
         const storeFilters = instances[tableId]?.columnFilter || []
-        const urlFilters = storeFilters.length === 0 && filterQuery ? JSON.parse(filterQuery) : []
+        let urlFilters: any[] = []
+        if (storeFilters.length === 0 && filterQuery) {
+            try {
+                const parsed = JSON.parse(filterQuery)
+                urlFilters = Array.isArray(parsed) ? parsed : []
+            } catch {
+                urlFilters = []
+            }
+        }
         const filters = storeFilters.length > 0 ? storeFilters : urlFilters
         return JSON.stringify(filters.concat(categoryFilter || []))
     }, [instances, tableId, categoryFilter, filterQuery])

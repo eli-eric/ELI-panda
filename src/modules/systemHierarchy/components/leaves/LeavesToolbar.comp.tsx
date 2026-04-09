@@ -33,12 +33,12 @@ export const LeavesToolbar: FC<LeavesToolbarProps> = ({
         enableQueryUrl: enableQueryURL,
     })
 
-    const [, setQuerySearch] = useQueryState('search', {
+    const [querySearch, setQuerySearch] = useQueryState('search', {
         history: 'replace',
     })
 
     const { setSearch, instances, setSearchValue } = useTableStateStore()
-    const searchInstance = instances[tableId]?.search
+    const searchInstance = querySearch || instances[tableId]?.search
     const storeValue = instances[tableId]?.searchBarValue
     const deferredStoreValue = useDeferredValue(storeValue || '')
 

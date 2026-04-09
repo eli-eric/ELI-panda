@@ -41,7 +41,9 @@ export const ColumnVisibilityDropdown: FC<ColumnVisibilityDropdownProps> = ({
                 <DropdownMenuSeparator />
                 <DropdownMenuCheckboxItem
                     checked={table.getIsAllColumnsVisible()}
-                    onCheckedChange={table.getToggleAllColumnsVisibilityHandler()}
+                    onCheckedChange={checked =>
+                        table.getToggleAllColumnsVisibilityHandler()({ target: { checked } })
+                    }
                 >
                     Toggle All
                 </DropdownMenuCheckboxItem>

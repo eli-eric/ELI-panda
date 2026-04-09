@@ -48,9 +48,14 @@ export const LeavesPanelContainer: FC = () => {
 
     useEffect(() => {
         if (filterQuery) {
-            const urlFilters = JSON.parse(filterQuery)
-            if (urlFilters.length > 0) {
-                setColumnFilter(LEAVES_TABLE_ID, urlFilters)
+            try {
+                const parsed = JSON.parse(filterQuery)
+                const urlFilters = Array.isArray(parsed) ? parsed : []
+                if (urlFilters.length > 0) {
+                    setColumnFilter(LEAVES_TABLE_ID, urlFilters)
+                }
+            } catch {
+                // ignore malformed filter query
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
