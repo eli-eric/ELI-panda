@@ -14,6 +14,9 @@ const updateSystemFieldMutation = gql(`
   mutation UpdateSystemField(
     $where: SystemWhere!
     $update: SystemUpdateInput!
+    $node: String
+    $nodeUid: String
+    $action: String
   ) {
     updateSystems(where: $where, update: $update) {
       systems {
@@ -44,6 +47,7 @@ const updateSystemFieldMutation = gql(`
         }
       }
     }
+    updatedByResolver(node: $node, nodeUid: $nodeUid, action: $action)
   }
 `)
 
@@ -102,9 +106,10 @@ export const useSystemFieldUpdate = (currentSystem?: SystemFieldCache) => {
 
     const { mutateAsync, isPending } = useGraphQLMutation(updateSystemFieldMutation, {
         onSuccess: () => {
-            // Invalidate to sync sidebar and other components
+            // Invalidate to sync sidebar, history, and other components
             // Components have optimistic state so they won't flicker
             queryClient.invalidateQueries({ queryKey: [SYSTEM_DETAIL_QUERY_KEY] })
+            queryClient.invalidateQueries({ queryKey: ['history'] })
         },
     })
 
@@ -146,6 +151,9 @@ export const useSystemFieldUpdate = (currentSystem?: SystemFieldCache) => {
             const promise = mutateAsync({
                 where: { uid },
                 update,
+                node: 'System',
+                nodeUid: uid,
+                action: 'UPDATE',
             })
 
             // Custom toast messages for systemCode
