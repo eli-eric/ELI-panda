@@ -16,6 +16,7 @@ interface Query {
 export default function useQueryManager(
     tableId: string,
     pageSizeDefault?: number,
+    enableQueryURL: boolean = false,
 ): { query: Query } {
     const { instances } = useTableStateStore()
     const [categoryQuery] = useQueryState('category', { history: 'push' })
@@ -61,11 +62,11 @@ export default function useQueryManager(
 
     const search = instances[tableId]?.search || searchQuery || ''
 
-    //columnFilter merge with categoryFilter, fallback to URL params
+    //columnFilter merge with categoryFilter, fallback to URL params only when opted in
     const columnFilter = useMemo(() => {
         const storeFilters = instances[tableId]?.columnFilter || []
         let urlFilters: any[] = []
-        if (storeFilters.length === 0 && filterQuery) {
+        if (enableQueryURL && storeFilters.length === 0 && filterQuery) {
             try {
                 const parsed = JSON.parse(filterQuery)
                 urlFilters = Array.isArray(parsed) ? parsed : []
@@ -75,7 +76,7 @@ export default function useQueryManager(
         }
         const filters = storeFilters.length > 0 ? storeFilters : urlFilters
         return JSON.stringify(filters.concat(categoryFilter || []))
-    }, [instances, tableId, categoryFilter, filterQuery])
+    }, [instances, tableId, categoryFilter, filterQuery, enableQueryURL])
     const custom = useMemo(() => instances[tableId]?.custom || {}, [instances, tableId])
 
     const query = useMemo(

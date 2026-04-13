@@ -44,7 +44,10 @@ export const useSystemRelationships = (systemUid: string | undefined) => {
     }, [edges, systemUid, nodeMap])
 
     const relatedUids = useMemo(
-        () => [...new Set([...inbound, ...outbound].map(r => r.node.uid))],
+        () =>
+            [...new Set([...inbound, ...outbound].map(r => r.node.uid))].sort((a, b) =>
+                a.localeCompare(b),
+            ),
         [inbound, outbound],
     )
 
