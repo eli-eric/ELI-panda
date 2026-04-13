@@ -1,5 +1,4 @@
-import type { Row } from '@tanstack/react-table'
-import type { Table } from '@tanstack/react-table'
+import type { Row, Table } from '@tanstack/react-table'
 import { forwardRef, useEffect } from 'react'
 
 import type { GetCategoriesQuery } from '@/types/gql/graphql'

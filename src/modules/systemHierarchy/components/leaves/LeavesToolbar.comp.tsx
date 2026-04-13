@@ -3,11 +3,13 @@ import { Filter, Search } from 'lucide-react'
 import { useQueryState } from 'next-usequerystate'
 import type { FC } from 'react'
 import { useDeferredValue, useEffect, useRef, useState } from 'react'
+import { useIntl } from 'react-intl'
 
 import { Tooltip } from '@/components/Tooltip'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
+import { message } from '@/i18n/src/messages'
 import { FilterBadges } from '@/modules/shared/form/FilterBadges'
 import { ColumnVisibilityDropdown } from '@/modules/shared/table/ColumnVisibilityDropdown.comp'
 import useTableStateStore from '@/store/useTableStateStore'
@@ -26,6 +28,7 @@ export const LeavesToolbar: FC<LeavesToolbarProps> = ({
     table,
     enableQueryURL = true,
 }) => {
+    const { formatMessage: fm } = useIntl()
     const openFilterSheet = useLeavesFilterSheet()
 
     const { storeFilters } = useFormFilterState({
@@ -77,7 +80,7 @@ export const LeavesToolbar: FC<LeavesToolbarProps> = ({
     return (
         <div className="border-b border-border px-4 py-2 space-y-2" data-testid="leaves-toolbar">
             <div className="flex items-center gap-2">
-                <Tooltip content={hasActiveFilters ? 'Filters Applied' : 'Open Filters'}>
+                <Tooltip content={hasActiveFilters ? fm({ id: message.systemHierarchy.leaves.filtersApplied }) : fm({ id: message.systemHierarchy.leaves.openFilters })}>
                     <div>
                         <Button
                             size="sm"

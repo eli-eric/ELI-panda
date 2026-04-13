@@ -1400,6 +1400,8 @@ export const messages = {
             noLeaves: 'No subsystems found',
             selectParent: 'Select a system from the tree to view its subsystems',
             viewParent: 'View Detail',
+            filtersApplied: 'Filters Applied',
+            openFilters: 'Open Filters',
         },
         columns: {
             name: 'Name',
