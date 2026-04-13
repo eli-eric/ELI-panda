@@ -1,4 +1,4 @@
-import { ArrowDownLeft, ArrowUpRight } from 'lucide-react'
+import { ArrowDownLeft, ArrowRight, ArrowUpRight } from 'lucide-react'
 import type { FC } from 'react'
 import { useIntl } from 'react-intl'
 
@@ -25,20 +25,20 @@ const DIRECTION_LABELS: Record<
     { inbound: string; outbound: string }
 > = {
     [RELATIONSHIP_TYPES.IS_COOLED_BY]: {
-        inbound: 'systemHierarchy.relationships.cooledBy',
-        outbound: 'systemHierarchy.relationships.cools',
+        inbound: message.systemHierarchy.relationships.cooledBy,
+        outbound: message.systemHierarchy.relationships.cools,
     },
     [RELATIONSHIP_TYPES.IS_POWERED_BY]: {
-        inbound: 'systemHierarchy.relationships.poweredBy',
-        outbound: 'systemHierarchy.relationships.powers',
+        inbound: message.systemHierarchy.relationships.poweredBy,
+        outbound: message.systemHierarchy.relationships.powers,
     },
     [RELATIONSHIP_TYPES.IS_CONTROLLED_BY]: {
-        inbound: 'systemHierarchy.relationships.controlledBy',
-        outbound: 'systemHierarchy.relationships.controls',
+        inbound: message.systemHierarchy.relationships.controlledBy,
+        outbound: message.systemHierarchy.relationships.controls,
     },
     [RELATIONSHIP_TYPES.IS_SPARE_FOR]: {
-        inbound: 'systemHierarchy.relationships.spareFor',
-        outbound: 'systemHierarchy.relationships.hasSpare',
+        inbound: message.systemHierarchy.relationships.spareFor,
+        outbound: message.systemHierarchy.relationships.hasSpare,
     },
 }
 
@@ -66,7 +66,7 @@ const RelationshipRowItem: FC<{
             >
                 {fm({ id: labelId })}
             </span>
-            <span className="text-muted-foreground text-xs">{'──→'}</span>
+            <ArrowRight className="h-3 w-3 text-muted-foreground shrink-0" />
             <button
                 type="button"
                 onClick={() => onNavigate(row.node.uid)}

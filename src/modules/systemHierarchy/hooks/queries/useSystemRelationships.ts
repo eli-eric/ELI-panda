@@ -16,6 +16,7 @@ export const useSystemRelationships = (systemUid: string | undefined) => {
     const { nodes, edges, isLoading, isFetching } = useRelationshipGraph({
         systemUid,
         paged: false,
+        staleTime: 5 * 60 * 1000,
     })
 
     const nodeMap = useMemo(

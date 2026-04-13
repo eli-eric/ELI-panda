@@ -17,10 +17,11 @@ interface UseRelationshipGraphOptions {
     enabled?: boolean
     query?: Record<string, string | number | boolean>
     paged?: boolean
+    staleTime?: number
 }
 
 export const useRelationshipGraph = (options: UseRelationshipGraphOptions = {}) => {
-    const { systemUid, enabled = true, query, paged = true } = options
+    const { systemUid, enabled = true, query, paged = true, staleTime } = options
 
     const requestQuery = useMemo(() => {
         const base = query ?? {}
@@ -54,6 +55,7 @@ export const useRelationshipGraph = (options: UseRelationshipGraphOptions = {}) 
         },
         enabled: enabled && !!systemUid,
         placeholderData: keepPreviousData,
+        staleTime,
     })
 
     return {

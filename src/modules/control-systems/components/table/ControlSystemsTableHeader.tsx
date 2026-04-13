@@ -100,7 +100,7 @@ export const ControlSystemsTableHeader = ({ tableId, enableQueryURL = true, tabl
         <Form formMethods={formMethods}>
             <SearchBarWrapper>
                 <div className="flex items-center gap-4">
-                <SidebarTrigger />
+                    <SidebarTrigger />
                 {/* Search field with help icon */}
                 <div className="flex items-start gap-1 shrink-0">
                     {/* Search input - wider with shadow badge inside */}
