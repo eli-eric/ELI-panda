@@ -1426,6 +1426,7 @@ export const messages = {
             physicalItem: 'Physical Item',
             spareParts: 'Spare Parts',
             spareFor: 'Spare For',
+            relationships: 'Relationships',
             attachments: 'Attachments',
             history: 'History',
         },
@@ -1507,6 +1508,19 @@ export const messages = {
         spareFor: {
             title: 'Spare For',
             noSpareFor: 'Not a spare for any system',
+        },
+        relationships: {
+            noRelationships: 'No relationships',
+            inbound: 'Inbound',
+            outbound: 'Outbound',
+            cooledBy: 'Cooled by',
+            cools: 'Cools',
+            poweredBy: 'Powered by',
+            powers: 'Powers',
+            controlledBy: 'Controlled by',
+            controls: 'Controls',
+            spareFor: 'Spare for',
+            hasSpare: 'Has spare',
         },
         history: {
             title: 'History',

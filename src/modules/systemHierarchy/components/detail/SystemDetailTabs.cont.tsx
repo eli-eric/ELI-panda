@@ -4,6 +4,7 @@ import { useIntl } from 'react-intl'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { message } from '@/i18n/src/messages'
 
+import { useSystemRelationships } from '../../hooks/queries/useSystemRelationships'
 import { useHierarchyNavigation } from '../../hooks/useHierarchyNavigation'
 import type { SystemLeaf } from '../../types'
 import type { HierarchyTab } from '../../types/constants'
@@ -14,6 +15,7 @@ import { DetailTabContainer } from '../tabs/DetailTab.cont'
 import { HistoryTabContainer } from '../tabs/HistoryTab.cont'
 import { PersonsTabContainer } from '../tabs/PersonsTab.cont'
 import { PhysicalItemTabContainer } from '../tabs/PhysicalItemTab.cont'
+import { RelationshipsTabContainer } from '../tabs/RelationshipsTab.cont'
 import { SpareForTabContainer } from '../tabs/SpareForTab.cont'
 import { SparePartsTabContainer } from '../tabs/SparePartsTab.cont'
 
@@ -24,11 +26,13 @@ interface SystemDetailTabsProps {
 export const SystemDetailTabsContainer: FC<SystemDetailTabsProps> = ({ system }) => {
     const { formatMessage: fm } = useIntl()
     const { activeTab, setActiveTab } = useHierarchyNavigation()
+    const { hasRelationships } = useSystemRelationships(system.uid)
 
     const isTabHidden =
         (activeTab === HIERARCHY_TABS.PHYSICAL_ITEM && !hasPhysicalItem(system)) ||
         (activeTab === HIERARCHY_TABS.SPARE_PARTS && !hasSpareParts(system)) ||
-        (activeTab === HIERARCHY_TABS.SPARE_FOR && !hasSpareFor(system))
+        (activeTab === HIERARCHY_TABS.SPARE_FOR && !hasSpareFor(system)) ||
+        (activeTab === HIERARCHY_TABS.RELATIONSHIPS && !hasRelationships)
     const effectiveTab = isTabHidden ? HIERARCHY_TABS.DETAIL : activeTab
 
     return (
@@ -72,6 +76,14 @@ export const SystemDetailTabsContainer: FC<SystemDetailTabsProps> = ({ system })
                         data-testid="system-hierarchy-tab-spare-for"
                     >
                         {fm({ id: message.systemHierarchy.tabs.spareFor })}
+                    </TabsTrigger>
+                )}
+                {hasRelationships && (
+                    <TabsTrigger
+                        value={HIERARCHY_TABS.RELATIONSHIPS}
+                        data-testid="system-hierarchy-tab-relationships"
+                    >
+                        {fm({ id: message.systemHierarchy.tabs.relationships })}
                     </TabsTrigger>
                 )}
                 <TabsTrigger
@@ -122,6 +134,14 @@ export const SystemDetailTabsContainer: FC<SystemDetailTabsProps> = ({ system })
                         className="h-full min-h-0 overflow-y-auto scrollbar-style"
                     >
                         <SpareForTabContainer system={system} />
+                    </TabsContent>
+                )}
+                {hasRelationships && (
+                    <TabsContent
+                        value={HIERARCHY_TABS.RELATIONSHIPS}
+                        className="h-full min-h-0 overflow-y-auto scrollbar-style"
+                    >
+                        <RelationshipsTabContainer system={system} />
                     </TabsContent>
                 )}
                 <TabsContent
