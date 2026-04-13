@@ -1,6 +1,7 @@
 import type { Row } from '@tanstack/react-table'
 import { Fragment, memo, useCallback, useEffect, useRef } from 'react'
 
+import { ColumnVisibilityDropdown } from '@/modules/shared/table/ColumnVisibilityDropdown.comp'
 import { PaginationV2 as Pagination } from '@/modules/shared/table/PaginationV2'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import type {
@@ -31,7 +32,7 @@ interface Props {
     enableDragAndDrop?: boolean
     getRowProps?: (row: Row<SystemDetail>) => GetRowPropsReturnType
     settings?: PandaTableSettings<SystemDetail>
-    RightSearchBarElement?: () => JSX.Element
+    SecondRowElement?: () => JSX.Element
     LeftSearchBarElement?: () => JSX.Element
     isGlobalSearch?: boolean
 }
@@ -45,7 +46,7 @@ export const SystemsTable = ({
     settings,
     enableDragAndDrop,
     LeftSearchBarElement,
-    RightSearchBarElement,
+    SecondRowElement,
     collapseOnUnMount,
     isGlobalSearch = false,
 }: Props) => {
@@ -110,7 +111,8 @@ export const SystemsTable = ({
                     ) : undefined
                 }
                 onChange={onChangeSearch}
-                right={RightSearchBarElement && <RightSearchBarElement />}
+                right={<ColumnVisibilityDropdown table={table} />}
+                secondRow={SecondRowElement && <SecondRowElement />}
             />
             <PandaTableV2
                 ref={tableRef}

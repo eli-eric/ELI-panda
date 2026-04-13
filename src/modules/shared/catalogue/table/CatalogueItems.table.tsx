@@ -1,4 +1,5 @@
 import type { Row } from '@tanstack/react-table'
+import type { Table } from '@tanstack/react-table'
 import { forwardRef, useEffect } from 'react'
 
 import type { GetCategoriesQuery } from '@/types/gql/graphql'
@@ -21,6 +22,7 @@ interface CatalogueTableProps {
     setCategoryFilter?: (value: CodebookType) => void
     getRowProps?: (row: Row<any>) => GetRowPropsReturnType
     pageSize?: number
+    onTableReady?: (table: Table<any>) => void
 }
 
 export const CatalogueTable = forwardRef<PandaTableV2Handle, CatalogueTableProps>(
@@ -35,6 +37,7 @@ export const CatalogueTable = forwardRef<PandaTableV2Handle, CatalogueTableProps
             loading,
             pageSize = 10,
             setCategoryFilter,
+            onTableReady,
         },
         ref,
     ) => {
@@ -52,7 +55,7 @@ export const CatalogueTable = forwardRef<PandaTableV2Handle, CatalogueTableProps
             settings: {
                 enableSorting: true,
                 enableQueryURL: true,
-                enableColumnHiding: true,
+                enableColumnHiding: false,
                 enableColumnReordering: true,
                 manualSorting: true,
                 defaultColumnOrder: ['miniImageUrl', 'name'],
@@ -65,6 +68,10 @@ export const CatalogueTable = forwardRef<PandaTableV2Handle, CatalogueTableProps
             })
             table.setColumnOrder(table.getAllLeafColumns().map(column => column.id))
         }, [categoryList, columns, table])
+
+        useEffect(() => {
+            onTableReady?.(table)
+        }, [table, onTableReady])
 
         return (
             <PandaTableV2
@@ -79,7 +86,7 @@ export const CatalogueTable = forwardRef<PandaTableV2Handle, CatalogueTableProps
                 settings={{
                     enableQueryURL,
                     defaultColumnOrder: ['miniImageUrl', 'name'],
-                    enableColumnHiding: tableId === 'catalogueItems',
+                    enableColumnHiding: false,
                     enableColumnReordering: tableId === 'catalogueItems',
                     enableSorting: tableId === 'catalogueItems',
                     manualSorting: tableId === 'catalogueItems',

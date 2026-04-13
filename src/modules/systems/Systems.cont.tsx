@@ -12,7 +12,7 @@ const SystemsContainer: FC = () => (
             tableId={'systems'}
             hideButtons={false}
             isGlobalSearch={true}
-            RightSearchBarElement={() => <FilterBadges tableId={'systems'} />}
+            SecondRowElement={() => <FilterBadges tableId={'systems'} />}
         />
         <DeviceInfoOverlay />
     </>

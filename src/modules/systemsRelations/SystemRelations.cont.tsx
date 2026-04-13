@@ -19,6 +19,7 @@ import { RELATIONSHIP_TYPE_LABELS, RELATIONSHIP_TYPES } from '@/modules/systemHi
 import type { SystemDetail } from '@/types/responses/systems'
 
 import { FilterBadges } from '../shared/form/FilterBadges'
+import { ColumnVisibilityDropdown } from '../shared/table/ColumnVisibilityDropdown.comp'
 import { PaginationV2 as Pagination } from '../shared/table/PaginationV2'
 import { usePandaTable } from '../shared/table/pandaTable/hooks/usePandaTable'
 import { useRowSelection } from '../shared/table/pandaTable/hooks/useRowSelection'
@@ -81,7 +82,7 @@ export const SystemRelationsContainer = () => {
     const tableSettings: PandaTableSettings<SystemDetail> = useMemo(
         () => ({
             enableMultiRowSelection: true,
-            enableColumnHiding: true,
+            enableColumnHiding: false,
             enableColumnReordering: false,
             enableQueryURL: false,
         }),
@@ -240,7 +241,8 @@ export const SystemRelationsContainer = () => {
                     tableId={tableId1}
                     useQuery={false}
                     left={<FilterMemoized tableId={tableId1} enableQueryURL={false} />}
-                    right={<FilterBadges enableQueryURL={false} tableId={tableId1} />}
+                    right={<ColumnVisibilityDropdown table={table} />}
+                    secondRow={<FilterBadges enableQueryURL={false} tableId={tableId1} />}
                     onChange={() => table.resetExpanded()}
                 />
                 <PandaTableV2
@@ -282,9 +284,10 @@ export const SystemRelationsContainer = () => {
                             enableQueryURL={false}
                         />
                     }
+                    secondRow={<FilterBadges enableQueryURL={false} tableId={tableId2} />}
                     right={
                         <div className="flex items-center gap-2">
-                            <FilterBadges enableQueryURL={false} tableId={tableId2} />
+                            <ColumnVisibilityDropdown table={table2} />
                             <Select
                                 value={relationshipType}
                                 onValueChange={v => setRelationshipType(v as RelationshipType)}

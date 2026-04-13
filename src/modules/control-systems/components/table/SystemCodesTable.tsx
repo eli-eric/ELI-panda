@@ -60,7 +60,7 @@ export const SystemCodesTable = ({
 
     return (
         <Fragment>
-            <ControlSystemsTableHeader tableId={tableId} enableQueryURL={enableQueryURL} />
+            <ControlSystemsTableHeader tableId={tableId} enableQueryURL={enableQueryURL} table={table} />
             <PandaTableV2
                 ref={tableRef}
                 data={systemCodes?.data}

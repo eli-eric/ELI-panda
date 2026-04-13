@@ -4,6 +4,7 @@ import { useEffect, useMemo } from 'react'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 import { cn } from '@/lib/utils'
 import { FilterBadges } from '@/modules/shared/form/FilterBadges'
+import { ColumnVisibilityDropdown } from '@/modules/shared/table/ColumnVisibilityDropdown.comp'
 import { PaginationV2 as Pagination } from '@/modules/shared/table/PaginationV2'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import type { PandaTableSettings } from '@/modules/shared/table/pandaTable/PandaTable'
@@ -33,7 +34,7 @@ export const MovingSystemsTable: FC<MovingSystemsTableProps> = ({
     const tableSettings: PandaTableSettings<SystemDetail> = useMemo(
         () => ({
             enableMultiRowSelection: true,
-            enableColumnHiding: true,
+            enableColumnHiding: false,
             enableColumnReordering: false,
             enableQueryURL: false,
         }),
@@ -70,11 +71,8 @@ export const MovingSystemsTable: FC<MovingSystemsTableProps> = ({
                         enableQueryURL={false}
                     />
                 }
-                right={
-                    <div className="flex">
-                        <FilterBadges enableQueryURL={false} tableId={tableId} />
-                    </div>
-                }
+                right={<ColumnVisibilityDropdown table={table} />}
+                secondRow={<FilterBadges enableQueryURL={false} tableId={tableId} />}
                 onChange={() => table.resetExpanded()}
             />
             <PandaTableV2

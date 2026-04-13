@@ -96,7 +96,14 @@ jest.mock('../../shared/table/PaginationV2', () => ({
 }))
 
 jest.mock('../../shared/table/pandaTable/hooks/usePandaTable', () => ({
-    usePandaTable: () => ({}),
+    usePandaTable: () => ({
+        getAllLeafColumns: () => [],
+        getIsAllColumnsVisible: () => true,
+        getToggleAllColumnsVisibilityHandler: () => jest.fn(),
+        getHeaderGroups: () => [],
+        getRowModel: () => ({ rows: [] }),
+        getState: () => ({ columnOrder: [], pagination: { pageIndex: 0, pageSize: 50 } }),
+    }),
 }))
 
 const queryClient = new QueryClient({

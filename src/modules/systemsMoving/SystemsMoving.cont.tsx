@@ -71,7 +71,7 @@ const SystemsMovingContainer = () => {
                                 enableQueryURL={false}
                             />
                         )}
-                        RightSearchBarElement={() => (
+                        SecondRowElement={() => (
                             <>
                                 <FilterBadges tableId={tableIdLeft} />
                                 {showRight ? (
@@ -105,7 +105,7 @@ const SystemsMovingContainer = () => {
                             />
                         )}
                         enableQueryURL={false}
-                        RightSearchBarElement={() => (
+                        SecondRowElement={() => (
                             <>
                                 <FilterBadges tableId={tableIdRight} />
                                 {showLeft ? (
