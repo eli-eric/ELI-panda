@@ -1,8 +1,8 @@
-import type { FC } from 'react'
+import type { Table } from '@tanstack/react-table'
+import type { FC, ReactNode } from 'react'
 import { useCallback, useRef } from 'react'
 
 import { PaginationV2 as Pagination } from '@/modules/shared/table/PaginationV2'
-import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import {
     PandaTableV2,
     type PandaTableV2Handle,
@@ -10,13 +10,15 @@ import {
 
 import type { SystemLeaf } from '../../types'
 import { LEAVES_TABLE_ID } from '../../types/constants'
-import { useLeavesColumns } from './useLeavesColumns'
 
 interface LeavesTableProps {
     data: SystemLeaf[]
     totalCount: number
     isLoading: boolean
     onRowClick: (uid: string) => void
+    table: Table<SystemLeaf>
+    toolbar?: ReactNode
+    emptyState?: ReactNode
 }
 
 export const LeavesTableComponent: FC<LeavesTableProps> = ({
@@ -24,22 +26,11 @@ export const LeavesTableComponent: FC<LeavesTableProps> = ({
     totalCount,
     isLoading,
     onRowClick,
+    table,
+    toolbar,
+    emptyState,
 }) => {
-    const { columns } = useLeavesColumns()
     const tableRef = useRef<PandaTableV2Handle>(null)
-
-    const table = usePandaTable({
-        tableId: LEAVES_TABLE_ID,
-        columns,
-        data,
-        settings: {
-            enableSorting: true,
-            enableColumnHiding: true,
-            enableFiltering: true,
-            manualFiltering: true,
-            enableColumnReordering: false,
-        },
-    })
 
     const handlePageChange = useCallback(() => {
         tableRef.current?.scrollToTop()
@@ -64,6 +55,8 @@ export const LeavesTableComponent: FC<LeavesTableProps> = ({
                         enableColumnHiding: true,
                         enableColumnReordering: false,
                     }}
+                    toolbar={toolbar}
+                    emptyState={emptyState}
                     className="flex-1 min-h-0"
                 />
             </div>
@@ -71,7 +64,7 @@ export const LeavesTableComponent: FC<LeavesTableProps> = ({
                 <Pagination
                     tableId={LEAVES_TABLE_ID}
                     settings={{
-                        enableQueryURL: false,
+                        enableQueryURL: true,
                         pageSizeDefault: 25,
                         total: totalCount,
                     }}
