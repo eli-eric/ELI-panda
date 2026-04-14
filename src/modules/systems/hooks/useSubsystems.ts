@@ -8,9 +8,9 @@ import { queryFetcher } from '@/utils/fetcher'
 import { addSubsystems } from '../utils'
 import { useSystems } from './useSystems'
 
-export const useSubsystems = (tableId: string) => {
+export const useSubsystems = (tableId: string, enableQueryURL: boolean = false) => {
     const [uid, setUid] = useState<string | null>(null)
-    const { queryKey } = useSystems(tableId)
+    const { queryKey } = useSystems(tableId, false, undefined, enableQueryURL)
 
     const queryClient = useQueryClient()
 

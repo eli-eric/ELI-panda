@@ -23,7 +23,7 @@ export const ControlSystemsOverviewComponent: FC<Props> = ({
                 className="relative overflow-scroll scrollbar-style"
                 settings={{
                     enableSorting: true,
-                    enableColumnHiding: true,
+                    enableColumnHiding: false,
                     enableFiltering: true,
                     manualFiltering: true,
                     enableQueryURL: enableQueryURL,

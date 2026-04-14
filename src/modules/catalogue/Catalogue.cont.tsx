@@ -1,3 +1,4 @@
+import type { Table } from '@tanstack/react-table'
 import { X } from 'lucide-react'
 import { useQueryState } from 'next-usequerystate'
 import { useCallback, useMemo, useRef, useState } from 'react'
@@ -13,6 +14,7 @@ import type { CodebookType } from '@/types/responses/codebook'
 import type { CatalogueItemForm } from '../catalogueItem/types/responses'
 import { CatalogueTable } from '../shared/catalogue/table/CatalogueItems.table'
 import { FilterBadges } from '../shared/form/FilterBadges'
+import { ColumnVisibilityDropdown } from '../shared/table/ColumnVisibilityDropdown.comp'
 import { PaginationV2 as Pagination } from '../shared/table/PaginationV2'
 import type { PandaTableV2Handle } from '../shared/table/pandaTableV2/PandaTableV2'
 import { SearchBar } from '../shared/table/SearchBar'
@@ -25,7 +27,7 @@ import type { SystemFilterType } from './types/filter'
 
 const CatalogueContainer = () => {
     const tableId = 'catalogueItems'
-    const { catalogueItems, error, loading } = useCatalogueItems(tableId)
+    const { catalogueItems, error, loading } = useCatalogueItems(tableId, undefined, true)
     const { catalogueCategories } = useCategoryList()
     const [categoryQuery, setCategoryQuery] = useQueryState('category', {
         history: 'push',
@@ -44,6 +46,7 @@ const CatalogueContainer = () => {
         [],
     )
     const [open, setOpen] = useState(true)
+    const [catalogueTable, setCatalogueTable] = useState<Table<any> | null>(null)
 
     const filterFormMethods = useFormFilter<SystemFilterType>({
         tableId,
@@ -71,6 +74,9 @@ const CatalogueContainer = () => {
                 left={<SearchBarButtons filterFormMethods={filterFormMethods} />}
                 tableId={tableId}
                 right={
+                    catalogueTable ? <ColumnVisibilityDropdown table={catalogueTable} /> : undefined
+                }
+                secondRow={
                     <FilterBadges
                         tableId={tableId}
                         additionalBadge={
@@ -105,6 +111,7 @@ const CatalogueContainer = () => {
                     loading={loading}
                     pageSize={50}
                     categoryList={catalogueCategories}
+                    onTableReady={setCatalogueTable}
                 />
                 <Pagination
                     tableId={tableId}

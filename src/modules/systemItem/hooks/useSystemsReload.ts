@@ -11,10 +11,15 @@ import { type PruneSystemDetail, pruneSystemDetail } from './utils'
 type Props = {
     onSuccess?: () => void
     tableId?: string
+    enableQueryURL?: boolean
 }
 
-export const useSystemsReload = ({ tableId = 'systems', onSuccess }: Props) => {
-    const { query } = useQueryManager(tableId)
+export const useSystemsReload = ({
+    tableId = 'systems',
+    onSuccess,
+    enableQueryURL = true,
+}: Props) => {
+    const { query } = useQueryManager(tableId, undefined, enableQueryURL)
 
     const queryClient = useQueryClient()
 
@@ -44,6 +49,7 @@ export const useSystemsReload = ({ tableId = 'systems', onSuccess }: Props) => {
             const body = systems?.data.map(pruneSystemDetail)
             mutate(body)
         } else {
+            void queryClient.invalidateQueries({ queryKey: [tableId] })
             onSuccess?.()
         }
     }

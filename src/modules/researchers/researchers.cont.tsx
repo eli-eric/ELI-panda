@@ -3,6 +3,7 @@ import type { FC } from 'react'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 import { ROLE } from '@/types/constants/roles'
 
+import { ColumnVisibilityDropdown } from '../shared/table/ColumnVisibilityDropdown.comp'
 import { PaginationV2 as Pagination } from '../shared/table/PaginationV2'
 import { usePandaTable } from '../shared/table/pandaTable/hooks/usePandaTable'
 import type { PandaTableSettings } from '../shared/table/pandaTable/PandaTable'
@@ -26,7 +27,7 @@ export const ResearchersContainer: FC = () => {
         manualSorting: false,
         enableColumnReordering: true,
         enableQueryURL: true,
-        enableColumnHiding: true,
+        enableColumnHiding: false,
     }
 
     const table = usePandaTable<Researcher>({
@@ -47,6 +48,7 @@ export const ResearchersContainer: FC = () => {
                         handleRefresh={refetch}
                     />
                 }
+                right={<ColumnVisibilityDropdown table={table} />}
             />
             <PandaTableV2
                 tableId={tableId}

@@ -1,3 +1,4 @@
+import type { Table } from '@tanstack/react-table'
 import { CircleHelp, Plus, Search, X } from 'lucide-react'
 import Link from 'next/link'
 import { useDeferredValue, useEffect, useMemo, useState } from 'react'
@@ -9,12 +10,14 @@ import { Form } from '@/components/form/Form'
 import { Tooltip } from '@/components/Tooltip'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { SidebarTrigger } from '@/components/ui/sidebar'
 import { useFormFilter, useFormFilterState } from '@/hooks/form/useFormFilters'
 import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import { FilterBadges } from '@/modules/shared/form/FilterBadges'
 import { SystemTypeComboBox } from '@/modules/shared/form/systemType/SelectSystemType.combo'
+import { ColumnVisibilityDropdown } from '@/modules/shared/table/ColumnVisibilityDropdown.comp'
 import { SearchBarWrapper } from '@/modules/shared/table/SearchBarWrapper'
 import { CODEBOOK } from '@/types/constants/codebook'
 import { PATH } from '@/types/constants/paths'
@@ -35,9 +38,10 @@ type ControlSystemsFilterType = {
 interface Props {
     tableId: string
     enableQueryURL?: boolean
+    table?: Table<any>
 }
 
-export const ControlSystemsTableHeader = ({ tableId, enableQueryURL = true }: Props) => {
+export const ControlSystemsTableHeader = ({ tableId, enableQueryURL = true, table: tableInstance }: Props) => {
     const { formatMessage: fm } = useIntl()
     const canCreate = usePermission([ROLE.CONTROL_SYSTEMS_EDIT])
 
@@ -95,6 +99,8 @@ export const ControlSystemsTableHeader = ({ tableId, enableQueryURL = true }: Pr
     return (
         <Form formMethods={formMethods}>
             <SearchBarWrapper>
+                <div className="flex items-center gap-4">
+                    <SidebarTrigger />
                 {/* Search field with help icon */}
                 <div className="flex items-start gap-1 shrink-0">
                     {/* Search input - wider with shadow badge inside */}
@@ -192,8 +198,11 @@ export const ControlSystemsTableHeader = ({ tableId, enableQueryURL = true }: Pr
                     <FilterBadges tableId={tableId} enableQueryURL={enableQueryURL} />
                 </div>
 
-                {/* Spacer to push button to the right */}
+                {/* Spacer to push buttons to the right */}
                 <div className="flex-1" />
+
+                {/* Column visibility */}
+                {tableInstance && <ColumnVisibilityDropdown table={tableInstance} />}
 
                 {/* Create button */}
                 {canCreate && (
@@ -204,6 +213,7 @@ export const ControlSystemsTableHeader = ({ tableId, enableQueryURL = true }: Pr
                         </Link>
                     </Button>
                 )}
+                </div>
             </SearchBarWrapper>
         </Form>
     )

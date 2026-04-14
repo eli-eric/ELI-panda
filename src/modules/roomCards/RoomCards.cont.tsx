@@ -6,6 +6,7 @@ import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 import type { RoomCard } from '@/types/gql/graphql'
 
+import { ColumnVisibilityDropdown } from '../shared/table/ColumnVisibilityDropdown.comp'
 import { usePandaTable } from '../shared/table/pandaTable/hooks/usePandaTable'
 import { PandaTableV2 } from '../shared/table/pandaTableV2/PandaTableV2'
 import { SearchBar, SearchBarButtonsComponent } from '../shared/table/SearchBar'
@@ -27,7 +28,7 @@ export const RoomCardsContainer = () => {
             enableSorting: true,
             manualSorting: false,
             enableColumnReordering: false,
-            enableColumnHiding: true,
+            enableColumnHiding: false,
         },
     })
 
@@ -52,6 +53,7 @@ export const RoomCardsContainer = () => {
                             editRole={ROLE.ROOM_CARD_EDIT}
                         />
                     ),
+                    right: <ColumnVisibilityDropdown table={table} />,
                     tableId,
                 }}
             />
@@ -65,7 +67,7 @@ export const RoomCardsContainer = () => {
                     enableSorting: true,
                     manualSorting: false,
                     enableColumnReordering: false,
-                    enableColumnHiding: true,
+                    enableColumnHiding: false,
                     enablePagination: true,
                 }}
                 className="relative overflow-x-auto scrollbar-style"
