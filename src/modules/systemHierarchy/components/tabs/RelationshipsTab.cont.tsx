@@ -25,20 +25,20 @@ const DIRECTION_LABELS: Record<
     { inbound: string; outbound: string }
 > = {
     [RELATIONSHIP_TYPES.IS_COOLED_BY]: {
-        inbound: message.systemHierarchy.relationships.cooledBy,
-        outbound: message.systemHierarchy.relationships.cools,
+        inbound: message.systemHierarchy.relationships.cools,
+        outbound: message.systemHierarchy.relationships.cooledBy,
     },
     [RELATIONSHIP_TYPES.IS_POWERED_BY]: {
-        inbound: message.systemHierarchy.relationships.poweredBy,
-        outbound: message.systemHierarchy.relationships.powers,
+        inbound: message.systemHierarchy.relationships.powers,
+        outbound: message.systemHierarchy.relationships.poweredBy,
     },
     [RELATIONSHIP_TYPES.IS_CONTROLLED_BY]: {
-        inbound: message.systemHierarchy.relationships.controlledBy,
-        outbound: message.systemHierarchy.relationships.controls,
+        inbound: message.systemHierarchy.relationships.controls,
+        outbound: message.systemHierarchy.relationships.controlledBy,
     },
     [RELATIONSHIP_TYPES.IS_SPARE_FOR]: {
-        inbound: message.systemHierarchy.relationships.spareFor,
-        outbound: message.systemHierarchy.relationships.hasSpare,
+        inbound: message.systemHierarchy.relationships.hasSpare,
+        outbound: message.systemHierarchy.relationships.spareFor,
     },
 }
 
