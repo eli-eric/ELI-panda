@@ -47,18 +47,21 @@ export const useMoveWizardSubmit = () => {
 
     const [systemsReload, isLoadingSystems] = useSystemsReload({
         tableId: 'systems',
+        enableQueryURL: false,
         onSuccess: () => {
             onSuccessRedirect()
         },
     })
     const [destinationSystemsReload, isLoadingDestination] = useSystemsReload({
         tableId: 'destination-systems',
+        enableQueryURL: false,
         onSuccess: () => {
             systemsReload()
         },
     })
     const [assignSystemsReload, isLoadingAssign] = useSystemsReload({
         tableId: 'assign-item-systems',
+        enableQueryURL: false,
         onSuccess: () => {
             destinationSystemsReload()
         },
@@ -87,11 +90,9 @@ export const useMoveWizardSubmit = () => {
 
     const { mutate, isPending } = useMutation({
         mutationKey: ['moveItem'],
-        mutationFn: queryMutate<string, ItemMovePost>(
-            'physicalItemMove',
-            'post',
-            { responseType: 'text' },
-        ),
+        mutationFn: queryMutate<string, ItemMovePost>('physicalItemMove', 'post', {
+            responseType: 'text',
+        }),
         onError: (e: AxiosError) => {
             toast.error(`Error: ${e.response?.data}`)
         },
@@ -109,11 +110,9 @@ export const useMoveWizardSubmit = () => {
 
     const { mutate: mutateReplace, isPending: isPendingReplace } = useMutation({
         mutationKey: ['moveItem'],
-        mutationFn: queryMutate<string, ItemMovePost>(
-            'physicalItemReplace',
-            'post',
-            { responseType: 'text' },
-        ),
+        mutationFn: queryMutate<string, ItemMovePost>('physicalItemReplace', 'post', {
+            responseType: 'text',
+        }),
         onError: (e: AxiosError) => {
             toast.error(`Error: ${e.response?.data}`)
         },

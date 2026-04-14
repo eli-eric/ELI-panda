@@ -17,7 +17,7 @@ type Props = {
 export const useSystemsReload = ({
     tableId = 'systems',
     onSuccess,
-    enableQueryURL = false,
+    enableQueryURL = true,
 }: Props) => {
     const { query } = useQueryManager(tableId, undefined, enableQueryURL)
 
@@ -49,6 +49,7 @@ export const useSystemsReload = ({
             const body = systems?.data.map(pruneSystemDetail)
             mutate(body)
         } else {
+            void queryClient.invalidateQueries({ queryKey: [tableId] })
             onSuccess?.()
         }
     }

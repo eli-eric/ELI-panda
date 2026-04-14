@@ -9,7 +9,7 @@ import { useSystemsReload } from './useSystemsReload'
 export const useRecalculate = ({
     onSuccess,
     tableId = 'systems',
-    enableQueryURL = false,
+    enableQueryURL = true,
 }: {
     onSuccess?: () => void
     tableId?: string

@@ -17,7 +17,9 @@ export const TableLayoutContainer = ({ children, deps, className }: Props) => {
     useIsomorphicLayoutEffect(
         () => {
             const handleResize = () => {
-                const searchBar = document.getElementById('search-bar')?.clientHeight || 0
+                const searchBar = Array.from(
+                    document.querySelectorAll('[data-layout-slot="search-bar"]'),
+                ).reduce((sum, element) => sum + (element as HTMLElement).clientHeight, 0)
                 const tableHeading = document.getElementById('table-heading')?.clientHeight || 0
                 const pageHead = document.getElementById('page-head')?.clientHeight || 0
                 const emptyResults = document.getElementById('empty-results')?.clientHeight || 0
