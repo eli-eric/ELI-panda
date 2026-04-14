@@ -26,13 +26,16 @@ interface SystemDetailTabsProps {
 export const SystemDetailTabsContainer: FC<SystemDetailTabsProps> = ({ system }) => {
     const { formatMessage: fm } = useIntl()
     const { activeTab, setActiveTab } = useHierarchyNavigation()
-    const { hasRelationships } = useSystemRelationships(system.uid)
+    const { hasRelationships, isError: relationshipsError } = useSystemRelationships(system.uid)
+
+    // Keep Relationships tab visible on transient errors so user can retry instead of tab vanishing
+    const showRelationshipsTab = hasRelationships || relationshipsError
 
     const isTabHidden =
         (activeTab === HIERARCHY_TABS.PHYSICAL_ITEM && !hasPhysicalItem(system)) ||
         (activeTab === HIERARCHY_TABS.SPARE_PARTS && !hasSpareParts(system)) ||
         (activeTab === HIERARCHY_TABS.SPARE_FOR && !hasSpareFor(system)) ||
-        (activeTab === HIERARCHY_TABS.RELATIONSHIPS && !hasRelationships)
+        (activeTab === HIERARCHY_TABS.RELATIONSHIPS && !showRelationshipsTab)
     const effectiveTab = isTabHidden ? HIERARCHY_TABS.DETAIL : activeTab
 
     return (
@@ -78,7 +81,7 @@ export const SystemDetailTabsContainer: FC<SystemDetailTabsProps> = ({ system })
                         {fm({ id: message.systemHierarchy.tabs.spareFor })}
                     </TabsTrigger>
                 )}
-                {hasRelationships && (
+                {showRelationshipsTab && (
                     <TabsTrigger
                         value={HIERARCHY_TABS.RELATIONSHIPS}
                         data-testid="system-hierarchy-tab-relationships"
@@ -136,7 +139,7 @@ export const SystemDetailTabsContainer: FC<SystemDetailTabsProps> = ({ system })
                         <SpareForTabContainer system={system} />
                     </TabsContent>
                 )}
-                {hasRelationships && (
+                {showRelationshipsTab && (
                     <TabsContent
                         value={HIERARCHY_TABS.RELATIONSHIPS}
                         className="h-full min-h-0 overflow-y-auto scrollbar-style"
