@@ -27,7 +27,7 @@ import type { SystemFilterType } from './types/filter'
 
 const CatalogueContainer = () => {
     const tableId = 'catalogueItems'
-    const { catalogueItems, error, loading } = useCatalogueItems(tableId)
+    const { catalogueItems, error, loading } = useCatalogueItems(tableId, undefined, true)
     const { catalogueCategories } = useCategoryList()
     const [categoryQuery, setCategoryQuery] = useQueryState('category', {
         history: 'push',
@@ -73,7 +73,9 @@ const CatalogueContainer = () => {
             <SearchBar
                 left={<SearchBarButtons filterFormMethods={filterFormMethods} />}
                 tableId={tableId}
-                right={catalogueTable ? <ColumnVisibilityDropdown table={catalogueTable} /> : undefined}
+                right={
+                    catalogueTable ? <ColumnVisibilityDropdown table={catalogueTable} /> : undefined
+                }
                 secondRow={
                     <FilterBadges
                         tableId={tableId}

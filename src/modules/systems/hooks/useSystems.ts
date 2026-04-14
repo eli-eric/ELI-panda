@@ -13,8 +13,9 @@ export const useSystems = (
     tableId: string = 'systems',
     refetchOnMount: boolean = false,
     pageSizeDefault?: PageSizeOption,
+    enableQueryURL: boolean = false,
 ) => {
-    const { query } = useQueryManager(tableId, pageSizeDefault)
+    const { query } = useQueryManager(tableId, pageSizeDefault, enableQueryURL)
 
     const queryKey: QueryFetcherKey = [tableId, { query }]
 

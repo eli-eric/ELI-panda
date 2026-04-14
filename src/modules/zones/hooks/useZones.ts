@@ -6,7 +6,7 @@ import { queryFetcher } from '@/utils/fetcher'
 import type { ZonesResponse } from '../types/zone.types'
 
 export const useZones = (tableId: string) => {
-    const query = useQueryManager(tableId)
+    const query = useQueryManager(tableId, undefined, true)
 
     return useQuery({
         queryKey: ['zones', { query: query.query }],

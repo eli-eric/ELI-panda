@@ -7,7 +7,7 @@ import type { QueryFetcherKey } from '@/utils/fetcher'
 import { queryFetcher } from '@/utils/fetcher'
 
 export const useOrders = () => {
-    const { query } = useQueryManager('orders')
+    const { query } = useQueryManager('orders', undefined, true)
 
     const queryKey: QueryFetcherKey = useMemo(() => ['orders', { query }], [query])
 

@@ -50,13 +50,15 @@ export const SystemsTable = ({
     collapseOnUnMount,
     isGlobalSearch = false,
 }: Props) => {
-    const { systems, loading } = useSystems(tableId)
+    const enableQueryURL = Boolean(settings?.enableQueryURL)
+    const { systems, loading } = useSystems(tableId, false, pageSizeDefault, enableQueryURL)
     const { columns, pending } = useSystemsColumns({
         tableId,
         hideButtons,
         enableDragAndDrop: enableDragAndDrop,
+        enableQueryURL,
     })
-    const [recalculate] = useRecalculate({ tableId })
+    const [recalculate] = useRecalculate({ tableId, enableQueryURL })
     const tableRef = useRef<PandaTableV2Handle>(null)
 
     useEffect(() => {

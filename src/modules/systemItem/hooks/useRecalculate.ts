@@ -9,11 +9,13 @@ import { useSystemsReload } from './useSystemsReload'
 export const useRecalculate = ({
     onSuccess,
     tableId = 'systems',
+    enableQueryURL = false,
 }: {
     onSuccess?: () => void
     tableId?: string
+    enableQueryURL?: boolean
 }) => {
-    const [reloadSystems] = useSystemsReload({ tableId, onSuccess })
+    const [reloadSystems] = useSystemsReload({ tableId, onSuccess, enableQueryURL })
 
     const { mutate, isPending } = useMutation({
         mutationFn: queryMutate<SystemsResponse, any>('recalculateSpareParts', 'post'),
