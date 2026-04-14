@@ -2,6 +2,7 @@ import { ArrowDownLeft, ArrowRight, ArrowUpRight } from 'lucide-react'
 import type { FC } from 'react'
 import { useIntl } from 'react-intl'
 
+import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
@@ -20,10 +21,7 @@ interface RelationshipsTabProps {
     system: SystemLeaf
 }
 
-const DIRECTION_LABELS: Record<
-    string,
-    { inbound: string; outbound: string }
-> = {
+const DIRECTION_LABELS: Record<string, { inbound: string; outbound: string }> = {
     [RELATIONSHIP_TYPES.IS_COOLED_BY]: {
         inbound: message.systemHierarchy.relationships.cools,
         outbound: message.systemHierarchy.relationships.cooledBy,
@@ -60,10 +58,7 @@ const RelationshipRowItem: FC<{
 
     return (
         <div className="flex items-center gap-3 py-1.5">
-            <span
-                className="text-xs font-medium min-w-[100px] text-right"
-                style={{ color }}
-            >
+            <span className="text-xs font-medium min-w-[100px] text-right" style={{ color }}>
                 {fm({ id: labelId })}
             </span>
             <ArrowRight className="h-3 w-3 text-muted-foreground shrink-0" />
@@ -92,7 +87,7 @@ const RelationshipRowItem: FC<{
 export const RelationshipsTabContainer: FC<RelationshipsTabProps> = ({ system }) => {
     const { formatMessage: fm } = useIntl()
     const { selectLeaf } = useHierarchyNavigation()
-    const { inbound, outbound, relatedUids, hasRelationships, isLoading } =
+    const { inbound, outbound, relatedUids, hasRelationships, isLoading, isError, refetch } =
         useSystemRelationships(system.uid)
     const { itemUsageMap } = useRelationshipItemUsage(relatedUids)
 
@@ -102,6 +97,19 @@ export const RelationshipsTabContainer: FC<RelationshipsTabProps> = ({ system })
                 <Skeleton className="h-4 w-32" />
                 <Skeleton className="h-8 w-64" />
                 <Skeleton className="h-8 w-56" />
+            </div>
+        )
+    }
+
+    if (isError) {
+        return (
+            <div className="p-4 space-y-3">
+                <p className="text-sm text-muted-foreground">
+                    {fm({ id: message.common.errors.somethingWentWrong })}
+                </p>
+                <Button size="sm" variant="outline" onClick={() => refetch()}>
+                    {fm({ id: message.common.buttons.retry })}
+                </Button>
             </div>
         )
     }

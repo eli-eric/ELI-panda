@@ -21,6 +21,7 @@ export const messages = {
             generate: 'Gen',
             edit: 'Edit',
             addTag: 'Add Tag',
+            retry: 'Retry',
         },
         custom404: {
             title: '404',

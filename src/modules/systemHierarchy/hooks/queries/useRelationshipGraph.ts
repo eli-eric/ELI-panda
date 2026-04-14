@@ -42,7 +42,7 @@ export const useRelationshipGraph = (options: UseRelationshipGraphOptions = {}) 
         [systemUid, requestQuery],
     )
 
-    const { data, isLoading, isFetching, error } = useQuery<
+    const { data, isLoading, isFetching, error, refetch } = useQuery<
         RelationshipGraphResponse,
         Error,
         RelationshipGraphResponse,
@@ -65,6 +65,7 @@ export const useRelationshipGraph = (options: UseRelationshipGraphOptions = {}) 
         isLoading,
         isFetching,
         error,
+        refetch,
         queryKey,
     }
 }

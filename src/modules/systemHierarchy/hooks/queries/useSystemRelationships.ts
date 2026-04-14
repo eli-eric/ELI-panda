@@ -13,16 +13,13 @@ export interface RelationshipRow {
 const EXCLUDED_TYPES: Set<string> = new Set([RELATIONSHIP_TYPES.HAS_SUBSYSTEM])
 
 export const useSystemRelationships = (systemUid: string | undefined) => {
-    const { nodes, edges, isLoading, isFetching, error } = useRelationshipGraph({
+    const { nodes, edges, isLoading, isFetching, error, refetch } = useRelationshipGraph({
         systemUid,
         paged: false,
         staleTime: 5 * 60 * 1000,
     })
 
-    const nodeMap = useMemo(
-        () => new Map(nodes.map(n => [n.uid, n])),
-        [nodes],
-    )
+    const nodeMap = useMemo(() => new Map(nodes.map(n => [n.uid, n])), [nodes])
 
     const { inbound, outbound } = useMemo(() => {
         const inbound: RelationshipRow[] = []
@@ -53,5 +50,14 @@ export const useSystemRelationships = (systemUid: string | undefined) => {
 
     const hasRelationships = inbound.length > 0 || outbound.length > 0
 
-    return { inbound, outbound, relatedUids, hasRelationships, isLoading, isFetching, isError: !!error }
+    return {
+        inbound,
+        outbound,
+        relatedUids,
+        hasRelationships,
+        isLoading,
+        isFetching,
+        isError: !!error,
+        refetch,
+    }
 }
