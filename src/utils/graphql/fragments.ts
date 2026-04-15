@@ -315,6 +315,7 @@ export const SystemDetailFragment = gql(`
         node {
           name
           uid
+          systemLevel
           parentPath {
             name
             uid
