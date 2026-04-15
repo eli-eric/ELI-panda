@@ -12,7 +12,7 @@ import type { SparePartEdge } from './SparePartsTab.types'
 export const useSparePartsTabColumns = () => {
     const { formatMessage: fm } = useIntl()
 
-    return useMemo<ColumnDef<SparePartEdge, string>[]>(
+    return useMemo<ColumnDef<SparePartEdge>[]>(
         () => [
             {
                 id: 'icon',
@@ -42,7 +42,7 @@ export const useSparePartsTabColumns = () => {
                     },
                 }) => (
                     <SystemPathTooltip parentPath={parentPath}>
-                        <span>{getValue()}</span>
+                        <span>{String(getValue() ?? '')}</span>
                     </SystemPathTooltip>
                 ),
             },
@@ -61,8 +61,9 @@ export const useSparePartsTabColumns = () => {
                 header: fm({ id: message.systemHierarchy.spareParts.coverage }),
                 size: 100,
                 meta: { className: 'text-right' },
-                accessorFn: row =>
-                    row.coverage != null ? Number(row.coverage).toFixed(2) : '',
+                accessorFn: row => row.coverage ?? 0,
+                sortingFn: 'basic',
+                cell: ({ getValue }) => Number(getValue() ?? 0).toFixed(2),
             },
             {
                 id: 'partNumber',
@@ -72,7 +73,7 @@ export const useSparePartsTabColumns = () => {
             },
             {
                 id: 'eun',
-                header: 'EUN',
+                header: fm({ id: message.systemHierarchy.spareParts.eun }),
                 size: 120,
                 accessorFn: row => row.node.physicalItem?.eun ?? '',
             },

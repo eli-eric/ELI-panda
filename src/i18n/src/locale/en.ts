@@ -1509,6 +1509,7 @@ export const messages = {
             noSpareParts: 'No spare parts assigned',
             coverage: 'Coverage',
             partNumber: 'Part Number',
+            eun: 'EUN',
         },
         spareFor: {
             title: 'Spare For',

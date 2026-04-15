@@ -1,4 +1,4 @@
-import type { FC } from 'react'
+import type { FC, KeyboardEvent } from 'react'
 import { useEffect } from 'react'
 import { useIntl } from 'react-intl'
 
@@ -7,6 +7,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
+import type { PandaTableSettings } from '@/modules/shared/table/pandaTable/PandaTable'
 import { PandaTableV2 } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
 import { getFontBySystemLevel } from '@/utils/systemLevel'
 
@@ -18,6 +19,19 @@ import { useSparePartsTabColumns } from './SparePartsTab.columns'
 import type { SparePartEdge } from './SparePartsTab.types'
 
 const SPARE_PARTS_TAB_TABLE_ID = 'systemHierarchySpareParts'
+
+const TABLE_SETTINGS: PandaTableSettings<SparePartEdge> = {
+    enableSorting: true,
+    enableColumnHiding: true,
+    enableColumnReordering: true,
+}
+
+const getCoverageColorClass = (sum: number | null, min: number | null): string => {
+    if (!min) return 'text-gray-500 dark:text-gray-300'
+    return (sum ?? 0) < min
+        ? 'text-red-500 dark:text-red-500'
+        : 'text-green-500 dark:text-green-500'
+}
 
 interface SparePartsTabProps {
     system: SystemLeaf
@@ -37,22 +51,23 @@ export const SparePartsTabContainer: FC<SparePartsTabProps> = ({ system }) => {
         refetch,
     } = useSystemDetail(hasSpareParts(system) ? system.uid : null)
 
-    const edges = sparePartsEdges as unknown as SparePartEdge[]
+    const edges: SparePartEdge[] = sparePartsEdges
 
     const table = usePandaTable<SparePartEdge>({
         tableId: SPARE_PARTS_TAB_TABLE_ID,
         columns,
         data: edges,
-        settings: {
-            enableSorting: true,
-            enableColumnHiding: true,
-            enableColumnReordering: true,
-        },
+        settings: TABLE_SETTINGS,
     })
 
-    // Initialize column order so DnD reordering has a baseline to mutate
+    // Seed DnD reordering baseline on first mount only; don't overwrite persisted order.
+    // Re-seed if column count drifts (columns added/removed between versions).
     useEffect(() => {
-        table.setColumnOrder(table.getAllLeafColumns().map(column => column.id))
+        const allIds = table.getAllLeafColumns().map(column => column.id)
+        const current = table.getState().columnOrder
+        if (current.length !== allIds.length) {
+            table.setColumnOrder(allIds)
+        }
     }, [table])
 
     if (!hasSpareParts(system)) {
@@ -95,19 +110,18 @@ export const SparePartsTabContainer: FC<SparePartsTabProps> = ({ system }) => {
         )
     }
 
-    const coverageColor = !minimalSpareParstCount
-        ? 'text-gray-500 dark:text-gray-300'
-        : (sparePartsCoverageSum ?? 0) < minimalSpareParstCount
-          ? 'text-red-500 dark:text-red-500'
-          : 'text-green-500 dark:text-green-500'
-
     return (
         <div className="flex flex-col h-full overflow-hidden">
             <div className="flex items-center justify-between shrink-0 px-4 pt-4 pb-2">
                 <h3 className="text-sm font-semibold">
                     {fm({ id: message.systemHierarchy.tabs.spareParts })}
                 </h3>
-                <h3 className={cn('text-sm font-medium', coverageColor)}>
+                <h3
+                    className={cn(
+                        'text-sm font-medium',
+                        getCoverageColorClass(sparePartsCoverageSum, minimalSpareParstCount),
+                    )}
+                >
                     {fm(
                         { id: message.common.systemItem.sparePartsAvailable },
                         {
@@ -122,17 +136,22 @@ export const SparePartsTabContainer: FC<SparePartsTabProps> = ({ system }) => {
                     data={edges}
                     table={table}
                     tableId={SPARE_PARTS_TAB_TABLE_ID}
-                    settings={{
-                        enableSorting: true,
-                        enableColumnHiding: true,
-                        enableColumnReordering: true,
-                    }}
+                    settings={TABLE_SETTINGS}
                     getRowProps={({ original }) => ({
-                        onClick: () => original?.node?.uid && selectLeaf(original.node.uid),
+                        onClick: () => selectLeaf(original.node.uid),
+                        onKeyDown: (e: KeyboardEvent<HTMLTableRowElement>) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault()
+                                selectLeaf(original.node.uid)
+                            }
+                        },
+                        role: 'button',
+                        tabIndex: 0,
                         className: cn(
                             'cursor-pointer hover:text-primary hover:bg-primary/10',
-                            original?.node?.physicalItem && 'font-bold',
-                            getFontBySystemLevel(original?.node?.systemLevel ?? undefined),
+                            'focus:outline-none focus-visible:ring-2 focus-visible:ring-primary',
+                            original.node.physicalItem && 'font-bold',
+                            getFontBySystemLevel(original.node.systemLevel ?? undefined),
                         ),
                     })}
                     className="flex-1 min-h-0"

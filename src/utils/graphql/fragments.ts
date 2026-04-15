@@ -325,7 +325,16 @@ export const SystemDetailFragment = gql(`
             code
           }
           physicalItem {
-            ...PhysicalItem
+            uid
+            eun
+            itemUsage {
+              uid
+              name
+            }
+            catalogueItem {
+              uid
+              catalogueNumber
+            }
           }
         }
       }
