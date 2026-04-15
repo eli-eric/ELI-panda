@@ -126,7 +126,7 @@ export const SystemDetailTabsContainer: FC<SystemDetailTabsProps> = ({ system })
                 {hasSpareParts(system) && (
                     <TabsContent
                         value={HIERARCHY_TABS.SPARE_PARTS}
-                        className="h-full min-h-0 overflow-y-auto scrollbar-style"
+                        className="h-full min-h-0 overflow-hidden"
                     >
                         <SparePartsTabContainer system={system} />
                     </TabsContent>
