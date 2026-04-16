@@ -99,4 +99,3 @@ describe('useServiceLineEditSheet', () => {
         expect(modalMock.__modalHandles.closeModal).toHaveBeenCalledWith('returned-modal-id')
     })
 })
-

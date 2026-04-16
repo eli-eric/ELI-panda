@@ -13,11 +13,13 @@ describe('OrderIsDeliveryModal', () => {
     it('renders the inner delivery form', () => {
         renderWithProviders(
             <OrderIsDeliveryModal
-                orderLine={{
-                    name: 'L',
-                    catalogueNumber: 'CAT',
-                    serialNumber: 'SN-1',
-                } as never}
+                orderLine={
+                    {
+                        name: 'L',
+                        catalogueNumber: 'CAT',
+                        serialNumber: 'SN-1',
+                    } as never
+                }
                 onClose={jest.fn()}
                 onSubmit={jest.fn()}
             />,
@@ -34,9 +36,7 @@ describe('OrderIsDeliveryModal', () => {
                 onSubmit={jest.fn()}
             />,
         )
-        const closeBtn = screen
-            .getAllByRole('button')
-            .find(b => /close/i.test(b.textContent ?? ''))
+        const closeBtn = screen.getAllByRole('button').find(b => /close/i.test(b.textContent ?? ''))
         if (!closeBtn) throw new Error('close button not found')
         fireEvent.click(closeBtn)
         expect(onClose).toHaveBeenCalled()
@@ -47,18 +47,18 @@ describe('OrderIsDeliveryModal', () => {
         const onClose = jest.fn()
         renderWithProviders(
             <OrderIsDeliveryModal
-                orderLine={{
-                    name: 'L',
-                    catalogueNumber: 'CAT',
-                    serialNumber: 'default-sn',
-                } as never}
+                orderLine={
+                    {
+                        name: 'L',
+                        catalogueNumber: 'CAT',
+                        serialNumber: 'default-sn',
+                    } as never
+                }
                 onClose={onClose}
                 onSubmit={onSubmit}
             />,
         )
-        const saveBtn = screen
-            .getAllByRole('button')
-            .find(b => /save/i.test(b.textContent ?? ''))
+        const saveBtn = screen.getAllByRole('button').find(b => /save/i.test(b.textContent ?? ''))
         if (!saveBtn) throw new Error('save button not found')
         fireEvent.click(saveBtn)
         await waitFor(() => expect(onSubmit).toHaveBeenCalled())
@@ -76,9 +76,7 @@ describe('OrderIsDeliveryModal', () => {
                 onSubmit={onSubmit}
             />,
         )
-        const saveBtn = screen
-            .getAllByRole('button')
-            .find(b => /save/i.test(b.textContent ?? ''))
+        const saveBtn = screen.getAllByRole('button').find(b => /save/i.test(b.textContent ?? ''))
         if (!saveBtn) throw new Error('save button not found')
         fireEvent.click(saveBtn)
         await waitFor(() => expect(onClose).toHaveBeenCalled())

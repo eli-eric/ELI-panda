@@ -92,10 +92,9 @@ describe('ServiceLinesAddButton', () => {
         expect(mockSetServiceLine).toHaveBeenCalledTimes(1)
         const call = mockSetServiceLine.mock.calls[0][0]
         expect(call.details).toHaveLength(2)
-        expect(call.details.map((d: { property: { uid: string } }) => d.property.uid).sort()).toEqual([
-            'p-a',
-            'p-c',
-        ])
+        expect(
+            call.details.map((d: { property: { uid: string } }) => d.property.uid).sort(),
+        ).toEqual(['p-a', 'p-c'])
     })
 
     it('skips when no items selected', () => {

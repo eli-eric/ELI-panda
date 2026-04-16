@@ -13,9 +13,7 @@ describe('OrderForm schema', () => {
     })
 
     it('rejects missing name', async () => {
-        await expect(schema.validate({ ...validOrder, name: '' })).rejects.toThrow(
-            /name/i,
-        )
+        await expect(schema.validate({ ...validOrder, name: '' })).rejects.toThrow(/name/i)
     })
 
     it('accepts order with only requestNumber', async () => {

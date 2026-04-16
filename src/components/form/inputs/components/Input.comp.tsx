@@ -81,76 +81,78 @@ export const Input = ({
                 control={control}
                 defaultValue={defaultValue || ''}
                 render={({ field, fieldState: { error } }) => {
-                return (
-                    <div className={cn('space-y-1 w-full', className)}>
-                        {label && <Label htmlFor={idHtml}>{label}</Label>}
-                        <div className="relative">
-                            <ShadcnInput
-                                {...field}
-                                {...rest}
-                                id={idHtml}
-                                step={step}
-                                value={field.value || ''}
-                                required={required}
-                                type={
-                                    type === 'password'
-                                        ? showPassword
-                                            ? 'text'
-                                            : 'password'
-                                        : type
-                                }
-                                disabled={disabled}
-                                onChange={e => {
-                                    field.onChange(e.target.value)
-                                }}
-                                placeholder={placeholder}
-                                className={cn(
-                                    isFilter && field.value && 'border-2 border-lime-500',
-                                    type === 'password' && 'pr-10',
-                                    unit && type !== 'password' && 'pr-10',
-                                )}
-                                aria-invalid={error ? 'true' : 'false'}
-                            />
-
-                            {type === 'password' && (
-                                <div className="absolute inset-y-0 right-0 cursor-pointer flex items-center pr-3">
-                                    {showPassword ? (
-                                        <Tooltip content="Hide password">
-                                            <EyeOff
-                                                data-testid="toggle-password-visibility"
-                                                aria-label="Show password"
-                                                role="button"
-                                                className="text-muted-foreground hover:text-foreground h-4 w-4 cursor-pointer"
-                                                onClick={toogleShowPassword}
-                                            />
-                                        </Tooltip>
-                                    ) : (
-                                        <Tooltip content="Show password">
-                                            <Eye
-                                                data-testid="toggle-password-visibility"
-                                                role="button"
-                                                aria-label="Hide password"
-                                                className="text-muted-foreground hover:text-foreground h-4 w-4 cursor-pointer"
-                                                onClick={toogleShowPassword}
-                                            />
-                                        </Tooltip>
+                    return (
+                        <div className={cn('space-y-1 w-full', className)}>
+                            {label && <Label htmlFor={idHtml}>{label}</Label>}
+                            <div className="relative">
+                                <ShadcnInput
+                                    {...field}
+                                    {...rest}
+                                    id={idHtml}
+                                    step={step}
+                                    value={field.value || ''}
+                                    required={required}
+                                    type={
+                                        type === 'password'
+                                            ? showPassword
+                                                ? 'text'
+                                                : 'password'
+                                            : type
+                                    }
+                                    disabled={disabled}
+                                    onChange={e => {
+                                        field.onChange(e.target.value)
+                                    }}
+                                    placeholder={placeholder}
+                                    className={cn(
+                                        isFilter && field.value && 'border-2 border-lime-500',
+                                        type === 'password' && 'pr-10',
+                                        unit && type !== 'password' && 'pr-10',
                                     )}
-                                </div>
-                            )}
+                                    aria-invalid={error ? 'true' : 'false'}
+                                />
 
-                            {unit && type !== 'password' && (
-                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                                    <span className="text-muted-foreground text-sm">{unit}</span>
-                                </div>
-                            )}
+                                {type === 'password' && (
+                                    <div className="absolute inset-y-0 right-0 cursor-pointer flex items-center pr-3">
+                                        {showPassword ? (
+                                            <Tooltip content="Hide password">
+                                                <EyeOff
+                                                    data-testid="toggle-password-visibility"
+                                                    aria-label="Show password"
+                                                    role="button"
+                                                    className="text-muted-foreground hover:text-foreground h-4 w-4 cursor-pointer"
+                                                    onClick={toogleShowPassword}
+                                                />
+                                            </Tooltip>
+                                        ) : (
+                                            <Tooltip content="Show password">
+                                                <Eye
+                                                    data-testid="toggle-password-visibility"
+                                                    role="button"
+                                                    aria-label="Hide password"
+                                                    className="text-muted-foreground hover:text-foreground h-4 w-4 cursor-pointer"
+                                                    onClick={toogleShowPassword}
+                                                />
+                                            </Tooltip>
+                                        )}
+                                    </div>
+                                )}
+
+                                {unit && type !== 'password' && (
+                                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                        <span className="text-muted-foreground text-sm">
+                                            {unit}
+                                        </span>
+                                    </div>
+                                )}
+                            </div>
+
+                            {error && <p className="text-sm text-destructive">{error.message}</p>}
+
+                            {children && <div className="mt-2">{children}</div>}
                         </div>
-
-                        {error && <p className="text-sm text-destructive">{error.message}</p>}
-
-                        {children && <div className="mt-2">{children}</div>}
-                    </div>
-                )
-            }}
+                    )
+                }}
             />
         </>
     )

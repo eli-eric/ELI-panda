@@ -23,9 +23,7 @@ const buildWrapper = (initialOrderLines: OrderLineFormType[] = []): FC<PropsWith
 describe('OrderLineContext', () => {
     it('throws when used outside provider', () => {
         const err = jest.spyOn(console, 'error').mockImplementation(() => {})
-        expect(() => renderHook(() => useOrderLineContext())).toThrow(
-            /OrderLineProvider/,
-        )
+        expect(() => renderHook(() => useOrderLineContext())).toThrow(/OrderLineProvider/)
         err.mockRestore()
     })
 
@@ -77,9 +75,7 @@ describe('OrderLineContext', () => {
 
     it('deletes order line by RHF id', () => {
         const { result } = renderHook(() => useOrderLineContext(), {
-            wrapper: buildWrapper([
-                { name: 'A', catalogueNumber: 'X' } as OrderLineFormType,
-            ]),
+            wrapper: buildWrapper([{ name: 'A', catalogueNumber: 'X' } as OrderLineFormType]),
         })
         const id = result.current.fields[0].id
         act(() => {

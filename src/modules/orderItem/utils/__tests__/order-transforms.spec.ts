@@ -1,10 +1,6 @@
 import { makeOrder, makeOrderLine, makeServiceLine } from '@/testutils'
 
-import {
-    addUuidsToOrderData,
-    hasEmptyLines,
-    prepareOrderForSubmit,
-} from '../order-transforms'
+import { addUuidsToOrderData, hasEmptyLines, prepareOrderForSubmit } from '../order-transforms'
 
 describe('addUuidsToOrderData', () => {
     it('preserves orderLines and serviceLines', () => {
@@ -70,18 +66,14 @@ describe('hasEmptyLines', () => {
     })
 
     it('returns false when order lines has entries', () => {
-        expect(
-            hasEmptyLines(
-                makeOrder({ orderLines: [makeOrderLine()], serviceLines: [] }),
-            ),
-        ).toBe(false)
+        expect(hasEmptyLines(makeOrder({ orderLines: [makeOrderLine()], serviceLines: [] }))).toBe(
+            false,
+        )
     })
 
     it('returns false when service lines has entries', () => {
         expect(
-            hasEmptyLines(
-                makeOrder({ orderLines: [], serviceLines: [makeServiceLine()] }),
-            ),
+            hasEmptyLines(makeOrder({ orderLines: [], serviceLines: [makeServiceLine()] })),
         ).toBe(false)
     })
 

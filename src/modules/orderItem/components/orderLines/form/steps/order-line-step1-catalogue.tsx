@@ -21,7 +21,7 @@ interface OrderLineStep1Props {
 
 export const OrderLineStep1Catalogue = ({ handleNext, isProcessing }: OrderLineStep1Props) => {
     const { formatMessage: fm } = useIntl()
-    const { setValue, watch, clearErrors } = useFormContext<OrderLineFormType>()
+    const { setValue, watch } = useFormContext<OrderLineFormType>()
     const openCreateDialog = UseItemCreateDialog()
     const [isApplyingFilter, setIsApplyingFilter] = useState(false)
 
@@ -42,15 +42,13 @@ export const OrderLineStep1Catalogue = ({ handleNext, isProcessing }: OrderLineS
         (item: CatalogueItem | undefined) => {
             setValue('_selectedCatalogueItem', item)
             if (item) {
-                // Auto-fill form values when item is selected. Use shouldValidate
-                // so the resolver re-runs with the fresh values — otherwise any
-                // stale type-mismatch errors from an earlier (undefined) state
-                // would persist into Step 2 and show as "Invalid input" under
+                // Auto-fill form values when item is selected. `shouldValidate: true`
+                // re-runs the resolver so stale type-mismatch errors from an earlier
+                // (undefined) state don't persist into Step 2 as "Invalid input" under
                 // the name / Part Number inputs.
                 setValue('name', item.name || '', { shouldValidate: true })
                 setValue('catalogueNumber', item.catalogueNumber || '', { shouldValidate: true })
                 setValue('catalogueUid', item.uid || '')
-                clearErrors(['name', 'catalogueNumber'])
             } else {
                 // Clear form values when item is deselected
                 setValue('catalogueUid', '')
@@ -59,7 +57,7 @@ export const OrderLineStep1Catalogue = ({ handleNext, isProcessing }: OrderLineS
                 setColumnFilters(prev => prev.filter(f => f.id !== 'itemUID'))
             }
         },
-        [setValue, setColumnFilters, clearErrors],
+        [setValue, setColumnFilters],
     )
 
     // Handle newly created item - filter to show it and select it

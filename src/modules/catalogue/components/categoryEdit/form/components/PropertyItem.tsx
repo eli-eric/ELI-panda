@@ -80,8 +80,6 @@ const ListDefaultValue = memo(({ name, control }: ListDefaultValueProps) => {
 })
 ListDefaultValue.displayName = 'ListDefaultValue'
 
-const BOOL_OPTIONS = [...defaultBoolOptions]
-
 const BoolDefaultValue = memo(({ name }: { name: string }) => {
     const { formatMessage: fm } = useIntl()
     return (
@@ -89,7 +87,7 @@ const BoolDefaultValue = memo(({ name }: { name: string }) => {
             name={`${name}.defaultValue`}
             allowEmptyOption={true}
             emptyOption={fm({ id: message.catalogue.category.selectDefaultValue })}
-            customOptions={BOOL_OPTIONS}
+            customOptions={defaultBoolOptions}
         />
     )
 })

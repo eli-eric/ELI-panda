@@ -15,9 +15,7 @@ export const detailsToObject = (
     return details
 }
 
-export const detailsToArray = (
-    details: ServiceLineDetails | undefined,
-): CatalogueItemDetail[] => {
+export const detailsToArray = (details: ServiceLineDetails | undefined): CatalogueItemDetail[] => {
     if (!details) return []
     if (Array.isArray(details)) return details
     return Object.values(details)

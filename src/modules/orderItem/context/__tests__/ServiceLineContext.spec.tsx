@@ -23,9 +23,7 @@ const buildWrapper = (initialServiceLines: ServiceLine[] = []): FC<PropsWithChil
 describe('ServiceLineContext', () => {
     it('throws when used outside provider', () => {
         const err = jest.spyOn(console, 'error').mockImplementation(() => {})
-        expect(() => renderHook(() => useServiceLineContext())).toThrow(
-            /ServiceLineProvider/,
-        )
+        expect(() => renderHook(() => useServiceLineContext())).toThrow(/ServiceLineProvider/)
         err.mockRestore()
     })
 

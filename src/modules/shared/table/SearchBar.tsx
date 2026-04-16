@@ -68,9 +68,7 @@ export const SearchBar = ({
 
                 {right && <div className="flex items-center gap-2 flex-shrink-0">{right}</div>}
             </div>
-            {secondRow && (
-                <div className="flex flex-wrap items-center gap-2 pt-2">{secondRow}</div>
-            )}
+            {secondRow && <div className="flex flex-wrap items-center gap-2 pt-2">{secondRow}</div>}
         </SearchBarWrapper>
     )
 }

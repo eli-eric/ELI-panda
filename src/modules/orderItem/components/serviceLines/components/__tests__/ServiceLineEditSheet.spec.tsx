@@ -31,15 +31,16 @@ const makeDetail = (
     typeUid: string,
     value: unknown,
     propertyGroup = 'General',
-): CatalogueItemDetail => ({
-    propertyGroup,
-    value,
-    property: {
-        uid,
-        name,
-        type: { uid: typeUid, name: 'type' },
-    },
-}) as CatalogueItemDetail
+): CatalogueItemDetail =>
+    ({
+        propertyGroup,
+        value,
+        property: {
+            uid,
+            name,
+            type: { uid: typeUid, name: 'type' },
+        },
+    }) as CatalogueItemDetail
 
 const makeServiceLine = (details: CatalogueItemDetail[]): ServiceLine => ({
     uuid: 'sl-1',
@@ -82,9 +83,7 @@ describe('ServiceLineEditSheet — dynamic details edit', () => {
 
     it('propagates edited TEXT detail value to onSubmit as array', async () => {
         const onSubmit = jest.fn()
-        const sl = makeServiceLine([
-            makeDetail('p-text', 'Material', PROPERTY_TYPE.TEXT, 'steel'),
-        ])
+        const sl = makeServiceLine([makeDetail('p-text', 'Material', PROPERTY_TYPE.TEXT, 'steel')])
         renderSheet(sl, onSubmit)
 
         fireEvent.change(screen.getByLabelText('Material'), { target: { value: 'aluminum' } })
@@ -100,9 +99,7 @@ describe('ServiceLineEditSheet — dynamic details edit', () => {
 
     it('propagates edited NUMBER detail value to onSubmit as array', async () => {
         const onSubmit = jest.fn()
-        const sl = makeServiceLine([
-            makeDetail('p-num', 'Weight', PROPERTY_TYPE.NUMBER, 42),
-        ])
+        const sl = makeServiceLine([makeDetail('p-num', 'Weight', PROPERTY_TYPE.NUMBER, 42)])
         renderSheet(sl, onSubmit)
 
         fireEvent.change(screen.getByLabelText('Weight'), { target: { value: '99' } })

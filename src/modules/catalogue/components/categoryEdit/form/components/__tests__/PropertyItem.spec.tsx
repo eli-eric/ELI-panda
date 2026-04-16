@@ -16,9 +16,10 @@ jest.mock('@/components/form/inputs', () => ({
     Input: ({ name }: { name: string }) => <input data-testid={`input-${name}`} />,
 }))
 
-const Wrapper: FC<
-    PropsWithChildren<{ defaultValues?: Record<string, unknown> }>
-> = ({ children, defaultValues }) => {
+const Wrapper: FC<PropsWithChildren<{ defaultValues?: Record<string, unknown> }>> = ({
+    children,
+    defaultValues,
+}) => {
     const methods = useForm({ defaultValues })
     return (
         <IntlProvider locale="en" messages={messages.en}>
@@ -61,17 +62,13 @@ describe('PropertyItem', () => {
 
     it('renders TEXT default input for TEXT property type', () => {
         renderWithType(PROPERTY_TYPE.TEXT)
-        expect(
-            screen.getByTestId('input-groups.0.properties.0.defaultValue'),
-        ).toBeInTheDocument()
+        expect(screen.getByTestId('input-groups.0.properties.0.defaultValue')).toBeInTheDocument()
     })
 
     it('renders list of values UI only for LIST property type', () => {
         renderWithType(PROPERTY_TYPE.LIST, { listOfValues: ['a', 'b'] })
         // Listbox for defaultValue selected from listOfValues
-        expect(
-            screen.getByTestId('listbox-groups.0.properties.0.defaultValue'),
-        ).toBeInTheDocument()
+        expect(screen.getByTestId('listbox-groups.0.properties.0.defaultValue')).toBeInTheDocument()
     })
 
     it('does NOT render list of values section for non-LIST types', () => {
@@ -87,9 +84,7 @@ describe('PropertyItem', () => {
                     groups: [
                         {
                             name: 'G',
-                            properties: [
-                                { name: 'Prop', type: { uid: PROPERTY_TYPE.TEXT } },
-                            ],
+                            properties: [{ name: 'Prop', type: { uid: PROPERTY_TYPE.TEXT } }],
                         },
                     ],
                 }}
@@ -115,11 +110,7 @@ describe('PropertyItem', () => {
     it('renders unit and name inputs regardless of type', () => {
         renderWithType(PROPERTY_TYPE.BOOLEAN)
         expect(screen.getByTestId('input-groups.0.properties.0.name')).toBeInTheDocument()
-        expect(
-            screen.getByTestId('listbox-groups.0.properties.0.type'),
-        ).toBeInTheDocument()
-        expect(
-            screen.getByTestId('listbox-groups.0.properties.0.unit'),
-        ).toBeInTheDocument()
+        expect(screen.getByTestId('listbox-groups.0.properties.0.type')).toBeInTheDocument()
+        expect(screen.getByTestId('listbox-groups.0.properties.0.unit')).toBeInTheDocument()
     })
 })

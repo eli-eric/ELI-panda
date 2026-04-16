@@ -63,6 +63,14 @@ export const useDebouncedSearchInput = ({
     // empty-string commit ('') stays authoritative — `||` would fall back to stale
     // querySearch during our own commit window and cause a flash.
     //
+    // Priority `storeSearch ?? querySearch`: Zustand updates synchronously on commit,
+    // URL (next-usequerystate) updates async. Reading store first avoids the brief
+    // window where store has new value but URL is still stale. Back-button URL sync is
+    // not affected because `{ history: 'replace' }` (see useQueryState options above)
+    // means search-value typing does NOT create history entries — so there is no
+    // "back through search values" scenario that would require URL priority. Bookmarked
+    // URL + remount is handled by the lazy initialValue above, not by this effect.
+    //
     // Also cancel any pending debounced commit: if user was mid-typing when external
     // clear landed, we must not let the stale timer revert the external state (500ms
     // later the timer would fire with the abandoned typed text).

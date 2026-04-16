@@ -51,11 +51,7 @@ export const ServiceLineSelectionProvider = ({ children }: { children: ReactNode
     if (!storeRef.current) {
         storeRef.current = createSelectionStore()
     }
-    return createElement(
-        SelectionStoreContext.Provider,
-        { value: storeRef.current },
-        children,
-    )
+    return createElement(SelectionStoreContext.Provider, { value: storeRef.current }, children)
 }
 
 export const useServiceLineSelectionStore = (): ServiceLineSelectionState => {
@@ -65,5 +61,5 @@ export const useServiceLineSelectionStore = (): ServiceLineSelectionState => {
             'useServiceLineSelectionStore must be used within ServiceLineSelectionProvider',
         )
     }
-    return useStore(store, state => state)
+    return useStore(store)
 }

@@ -1,10 +1,6 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react'
 
-import {
-    mockDynamicModalStore,
-    mockUsePermission,
-    renderWithProviders,
-} from '@/testutils'
+import { mockDynamicModalStore, mockUsePermission, renderWithProviders } from '@/testutils'
 
 const modalMock = mockDynamicModalStore()
 
@@ -90,11 +86,7 @@ describe('CategoryEditForm', () => {
     it('does not submit when required fields missing (no uid, no categoryDetail)', async () => {
         const onSubmit = jest.fn()
         renderWithProviders(
-            <CategoryEditForm
-                onSubmit={onSubmit}
-                categoryDetail={{} as never}
-                modalId="m-1"
-            />,
+            <CategoryEditForm onSubmit={onSubmit} categoryDetail={{} as never} modalId="m-1" />,
         )
         const saveBtn = screen.getAllByRole('button').find(b => /save/i.test(b.textContent ?? ''))
         if (!saveBtn) throw new Error('save button not found')

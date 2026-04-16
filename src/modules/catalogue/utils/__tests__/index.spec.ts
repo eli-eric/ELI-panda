@@ -51,10 +51,7 @@ describe('formatData', () => {
         it('maps physicalItemProperties with listOfValues', () => {
             const input = baseCategory({
                 groups: [{ name: 'G', properties: [] }],
-                physicalItemProperties: [
-                    { name: 'phys1', listOfValues: ['x'] },
-                    { name: 'phys2' },
-                ],
+                physicalItemProperties: [{ name: 'phys1', listOfValues: ['x'] }, { name: 'phys2' }],
             })
             const result = formatData(input, 'p')
             expect(result.physicalItemProperties?.[0].listOfValues).toEqual(['x'])

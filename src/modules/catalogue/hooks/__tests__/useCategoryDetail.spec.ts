@@ -54,4 +54,3 @@ describe('useCategoryDetail', () => {
         expect(result.current.queryKey).toEqual(['categoryDetail', { uid: 'c-2' }])
     })
 })
-
