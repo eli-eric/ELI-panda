@@ -52,10 +52,11 @@ export const LeavesToolbar: FC<LeavesToolbarProps> = ({
     const [, startTransition] = useTransition()
 
     // Store updates synchronously via Zustand; URL updates async via next-usequerystate.
-    // Reading store first prevents the flash where sync effect sees old URL + new store
-    // during our own commit window.
+    // Use `??` (not `||`) so an empty-string commit ('') is authoritative —
+    // `||` would treat '' as falsy and fall back to stale querySearch, causing a flash
+    // when user clears the input.
     useEffect(() => {
-        const next = storeSearch || querySearch || ''
+        const next = storeSearch ?? querySearch ?? ''
         if (next === lastCommittedRef.current) return
         lastCommittedRef.current = next
         if (inputRef.current && inputRef.current.value !== next) {
