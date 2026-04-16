@@ -45,7 +45,9 @@ export const useDebouncedSearchInput = ({
     const setSearch = useTableStateStore(s => s.setSearch)
     const storeSearch = useTableStateStore(s => s.instances[tableId]?.search)
 
-    const initialValue = useRef(querySearch || storeSearch || '').current
+    // `??` not `||` so `?search=` (empty string) stays authoritative
+    // over a stale store value — consistent with the sync effect below.
+    const initialValue = useRef(querySearch ?? storeSearch ?? '').current
 
     const inputRef = useRef<HTMLInputElement | null>(null)
     const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)

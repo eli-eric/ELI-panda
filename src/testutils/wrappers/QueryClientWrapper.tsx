@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import type { FC, PropsWithChildren } from 'react'
+import { useState } from 'react'
 
 export const createTestQueryClient = () =>
     new QueryClient({
@@ -14,6 +15,9 @@ interface Props extends PropsWithChildren {
 }
 
 export const QueryClientWrapper: FC<Props> = ({ children, client }) => {
-    const qc = client ?? createTestQueryClient()
+    // Keep the QueryClient stable across re-renders (StrictMode double-mount,
+    // parent prop changes). Only the explicit `client` prop overrides it.
+    const [fallbackClient] = useState(() => createTestQueryClient())
+    const qc = client ?? fallbackClient
     return <QueryClientProvider client={qc}>{children}</QueryClientProvider>
 }

@@ -1,6 +1,7 @@
 import { waitFor } from '@testing-library/react'
 
 import { mockUsePermission, renderHookWithProviders } from '@/testutils'
+import { ROLE } from '@/types/constants/roles'
 import * as fetcher from '@/utils/fetcher'
 
 jest.mock('@/utils/fetcher')
@@ -66,12 +67,9 @@ describe('useOrderDetail', () => {
 
     it('disabledEdit is false when user has ORDERS_EDIT role', async () => {
         mockUid = 'o-1'
-        mockSessionRoles = ['ORDERS_EDIT']
+        mockSessionRoles = [ROLE.ORDERS_EDIT]
         const { result } = renderHookWithProviders(() => useOrderDetail())
-        // role check is text-based — use actual constant
-        // but role matching done via .includes — matches any equal string
         await waitFor(() => expect(result.current.loading).toBe(false))
-        // disabledEdit is only true when role IS NOT in list; with match it must be false
-        expect(typeof result.current.disabledEdit).toBe('boolean')
+        expect(result.current.disabledEdit).toBe(false)
     })
 })
