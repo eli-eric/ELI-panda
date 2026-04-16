@@ -62,9 +62,17 @@ export const useDebouncedSearchInput = ({
     // or URL back-nav), mirror to the DOM imperatively. Using `??` (not `||`) so an
     // empty-string commit ('') stays authoritative — `||` would fall back to stale
     // querySearch during our own commit window and cause a flash.
+    //
+    // Also cancel any pending debounced commit: if user was mid-typing when external
+    // clear landed, we must not let the stale timer revert the external state (500ms
+    // later the timer would fire with the abandoned typed text).
     useEffect(() => {
         const next = storeSearch ?? querySearch ?? ''
         if (next === lastCommittedRef.current) return
+        if (timerRef.current) {
+            clearTimeout(timerRef.current)
+            timerRef.current = null
+        }
         lastCommittedRef.current = next
         if (inputRef.current && inputRef.current.value !== next) {
             inputRef.current.value = next
