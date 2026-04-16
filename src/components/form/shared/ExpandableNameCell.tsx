@@ -4,21 +4,21 @@ import { ChevronDown, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { highlightText } from '@/utils'
 
-import type { Codebooktree } from './CodebookTreeModalGraphql'
+type ExpandableRow = { uid: string; isExpandable?: boolean }
 
-interface ExpandableNameCellProps {
-    row: Row<Codebooktree>
+interface ExpandableNameCellProps<T extends ExpandableRow> {
+    row: Row<T>
     filterName?: string
     fetchChildren?: (uid: string) => void
     getValue: () => string
 }
 
-export const ExpandableNameCell = ({
+export const ExpandableNameCell = <T extends ExpandableRow>({
     row,
     filterName,
     fetchChildren,
     getValue,
-}: ExpandableNameCellProps) => (
+}: ExpandableNameCellProps<T>) => (
     <div
         style={{
             paddingLeft: `${row.depth * 2}rem`,
