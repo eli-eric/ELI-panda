@@ -59,10 +59,7 @@ export const GraphLegend: FC = () => {
                         <div className="space-y-1">
                             {Object.entries(RELATIONSHIP_COLORS).map(([type, color]) => (
                                 <div key={type} className="flex items-center gap-2">
-                                    <div
-                                        className="w-4 h-0.5"
-                                        style={{ backgroundColor: color }}
-                                    />
+                                    <div className="w-4 h-0.5" style={{ backgroundColor: color }} />
                                     <span>
                                         {RELATIONSHIP_TYPE_LABELS[
                                             type as keyof typeof RELATIONSHIP_TYPE_LABELS

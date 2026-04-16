@@ -1,7 +1,4 @@
-import {
-    publicationOtherSchema,
-    publicationPeerReviewedSchema,
-} from '../scheme'
+import { publicationOtherSchema, publicationPeerReviewedSchema } from '../scheme'
 
 const validCodebook = { uid: 'test-uid', name: 'Test Name', code: 'T' }
 
@@ -49,9 +46,7 @@ describe('publicationPeerReviewedSchema', () => {
         })
         expect(result.success).toBe(false)
         if (!result.success) {
-            const issue = result.error.issues.find(i =>
-                i.path.includes('openAccessType'),
-            )
+            const issue = result.error.issues.find(i => i.path.includes('openAccessType'))
             expect(issue?.message).toBe('Open Access Type is required')
         }
     })
@@ -63,9 +58,7 @@ describe('publicationPeerReviewedSchema', () => {
         })
         expect(result.success).toBe(false)
         if (!result.success) {
-            const issue = result.error.issues.find(i =>
-                i.path.includes('publishingCountry'),
-            )
+            const issue = result.error.issues.find(i => i.path.includes('publishingCountry'))
             expect(issue?.message).toBe('Publishing Country is required')
         }
     })
@@ -77,9 +70,7 @@ describe('publicationPeerReviewedSchema', () => {
         })
         expect(result.success).toBe(false)
         if (!result.success) {
-            const issue = result.error.issues.find(i =>
-                i.path.includes('mediaTypeCb'),
-            )
+            const issue = result.error.issues.find(i => i.path.includes('mediaTypeCb'))
             expect(issue?.message).toBe('Media Type is required')
         }
     })
@@ -150,9 +141,7 @@ describe('publicationOtherSchema', () => {
         })
         expect(result.success).toBe(false)
         if (!result.success) {
-            const issue = result.error.issues.find(i =>
-                i.path.includes('openAccessType'),
-            )
+            const issue = result.error.issues.find(i => i.path.includes('openAccessType'))
             expect(issue?.message).toBe('Open Access Type is required')
         }
     })
@@ -164,9 +153,7 @@ describe('publicationOtherSchema', () => {
         })
         expect(result.success).toBe(false)
         if (!result.success) {
-            const issue = result.error.issues.find(i =>
-                i.path.includes('mediaTypeCb'),
-            )
+            const issue = result.error.issues.find(i => i.path.includes('mediaTypeCb'))
             expect(issue?.message).toBe('Media Type is required')
         }
     })

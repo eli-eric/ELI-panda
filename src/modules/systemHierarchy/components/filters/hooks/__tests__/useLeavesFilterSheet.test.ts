@@ -34,27 +34,33 @@ describe('useLeavesFilterSheet', () => {
         const { result } = renderHook(() => useLeavesFilterSheet())
         result.current()
 
-        expect(mockOpenModal).toHaveBeenCalledWith('sheet', expect.objectContaining({
-            id: `leaves-filters-${LEAVES_TABLE_ID}`,
-            props: expect.objectContaining({
-                title: 'Leaves Filters',
-                size: 'l',
-                side: 'left',
-                tableId: LEAVES_TABLE_ID,
-                enableQueryURL: true,
+        expect(mockOpenModal).toHaveBeenCalledWith(
+            'sheet',
+            expect.objectContaining({
+                id: `leaves-filters-${LEAVES_TABLE_ID}`,
+                props: expect.objectContaining({
+                    title: 'Leaves Filters',
+                    size: 'l',
+                    side: 'left',
+                    tableId: LEAVES_TABLE_ID,
+                    enableQueryURL: true,
+                }),
             }),
-        }))
+        )
     })
 
     it('supports custom side prop', () => {
         const { result } = renderHook(() => useLeavesFilterSheet())
         result.current({ side: 'right' })
 
-        expect(mockOpenModal).toHaveBeenCalledWith('sheet', expect.objectContaining({
-            props: expect.objectContaining({
-                side: 'right',
+        expect(mockOpenModal).toHaveBeenCalledWith(
+            'sheet',
+            expect.objectContaining({
+                props: expect.objectContaining({
+                    side: 'right',
+                }),
             }),
-        }))
+        )
     })
 
     it('returns modal id', () => {

@@ -44,7 +44,13 @@ export const LeavesToolbar: FC<LeavesToolbarProps> = ({
     return (
         <div className="border-b border-border px-4 py-2 space-y-2" data-testid="leaves-toolbar">
             <div className="flex items-center gap-2">
-                <Tooltip content={hasActiveFilters ? fm({ id: message.systemHierarchy.leaves.filtersApplied }) : fm({ id: message.systemHierarchy.leaves.openFilters })}>
+                <Tooltip
+                    content={
+                        hasActiveFilters
+                            ? fm({ id: message.systemHierarchy.leaves.filtersApplied })
+                            : fm({ id: message.systemHierarchy.leaves.openFilters })
+                    }
+                >
                     <div>
                         <Button
                             size="sm"

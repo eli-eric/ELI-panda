@@ -51,11 +51,7 @@ const mockSystem = {
 const renderDialog = (props: Partial<React.ComponentProps<typeof CopySystemDialog>> = {}) =>
     render(
         <IntlProvider locale="en" messages={messages}>
-            <CopySystemDialog
-                sourceSystemUid="src-1"
-                destinationSystemUid="dest-1"
-                {...props}
-            />
+            <CopySystemDialog sourceSystemUid="src-1" destinationSystemUid="dest-1" {...props} />
         </IntlProvider>,
     )
 

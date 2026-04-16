@@ -1,4 +1,8 @@
-import type { CatalogueCategoryProperty, CatalogueItem, CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
+import type {
+    CatalogueCategoryProperty,
+    CatalogueItem,
+    CatalogueItemDetail,
+} from '@/modules/catalogueItem/types/responses'
 import type { CodebookType } from '@/types/responses/codebook'
 
 let uidCounter = 0

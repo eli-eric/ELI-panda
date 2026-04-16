@@ -133,8 +133,9 @@ export const useRelationshipGraphContainerState = () => {
             onGraphChanged,
         })
 
-    const { copiedSystemUid, canEdit, handleCopySystem, handlePasteSystem } =
-        useSystemCopyPaste({ onExpandNode: handleExpand })
+    const { copiedSystemUid, canEdit, handleCopySystem, handlePasteSystem } = useSystemCopyPaste({
+        onExpandNode: handleExpand,
+    })
 
     const { layoutMode, systemLevels, rfNodes, rfEdges, handleLayoutChange } =
         useRelationshipGraphFlow({

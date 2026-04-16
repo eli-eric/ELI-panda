@@ -39,9 +39,7 @@ export const useSystemCopyPaste = (options?: UseSystemCopyPasteOptions) => {
                     description: fm({ id: message.systemHierarchy.copy.dialogDescription }),
                     sourceSystemUid: copiedSystemUid,
                     destinationSystemUid: destinationUid,
-                    onSuccess: onExpandNode
-                        ? () => onExpandNode(destinationUid, true)
-                        : undefined,
+                    onSuccess: onExpandNode ? () => onExpandNode(destinationUid, true) : undefined,
                     onClose: () => closeModal(modalId),
                 },
             })

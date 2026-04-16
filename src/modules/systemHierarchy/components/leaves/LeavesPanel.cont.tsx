@@ -115,13 +115,7 @@ export const LeavesPanelContainer: FC = () => {
         )
     }
 
-    const toolbar = (
-        <LeavesToolbar
-            tableId={LEAVES_TABLE_ID}
-            table={table}
-            enableQueryURL={true}
-        />
-    )
+    const toolbar = <LeavesToolbar tableId={LEAVES_TABLE_ID} table={table} enableQueryURL={true} />
 
     const emptyState = hasActiveFilters ? (
         <div className="flex items-center justify-center py-12 text-muted-foreground text-sm">

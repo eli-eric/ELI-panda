@@ -44,10 +44,9 @@ const useFormNotification = <T extends FieldValues>({ control }: Props<T>) => {
 
         const errorCount = countErrors(errors as FieldErrors)
         if (errorCount > 0) {
-            toast.error(
-                `Please fix ${errorCount} invalid field${errorCount > 1 ? 's' : ''}`,
-                { duration: 4000 },
-            )
+            toast.error(`Please fix ${errorCount} invalid field${errorCount > 1 ? 's' : ''}`, {
+                duration: 4000,
+            })
             scrollToFirstError()
         }
     }, [submitCount, errors])

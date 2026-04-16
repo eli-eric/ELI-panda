@@ -61,9 +61,7 @@ describe('useZones', () => {
     })
 
     it('returns loading state initially', () => {
-        mockQueryFetcher.mockReturnValue(
-            jest.fn().mockReturnValue(new Promise(() => {})),
-        )
+        mockQueryFetcher.mockReturnValue(jest.fn().mockReturnValue(new Promise(() => {})))
         // eslint-disable-next-line @typescript-eslint/no-require-imports
         const { useZones } = require('../hooks/useZones')
         const { result } = renderHook(() => useZones('zones'), {
@@ -75,9 +73,7 @@ describe('useZones', () => {
     })
 
     it('handles error state', async () => {
-        mockQueryFetcher.mockReturnValue(
-            jest.fn().mockRejectedValue(new Error('Network error')),
-        )
+        mockQueryFetcher.mockReturnValue(jest.fn().mockRejectedValue(new Error('Network error')))
         // eslint-disable-next-line @typescript-eslint/no-require-imports
         const { useZones } = require('../hooks/useZones')
         const { result } = renderHook(() => useZones('zones'), {

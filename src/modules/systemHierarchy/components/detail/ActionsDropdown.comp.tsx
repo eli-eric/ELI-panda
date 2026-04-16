@@ -27,7 +27,12 @@ export const ActionsDropdown: FC<ActionsDropdownProps> = ({ system }) => {
 
     const handleAssignSpares = useAssignSparesNavigation({
         uid: system.uid,
-        parentPath: (system.parentPath as Array<{ uid: string; name: string; systemLevel?: SystemLevel | null }>) ?? null,
+        parentPath:
+            (system.parentPath as Array<{
+                uid: string
+                name: string
+                systemLevel?: SystemLevel | null
+            }>) ?? null,
         catalogueNumber: system.physicalItem?.catalogueNumber ?? null,
     })
 

@@ -13,10 +13,7 @@ const ZonesPage: NextPage = (): JSX.Element => {
         <Fragment>
             <Head>
                 <title>{fm({ id: message.zonesPage.head })}</title>
-                <meta
-                    name="description"
-                    content={fm({ id: message.zonesPage.description })}
-                />
+                <meta name="description" content={fm({ id: message.zonesPage.description })} />
             </Head>
             <ZonesContainer />
         </Fragment>

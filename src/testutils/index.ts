@@ -35,10 +35,7 @@ export {
     mockUsePermission,
 } from './mocks/common'
 export { AllProvidersWrapper } from './wrappers/AllProvidersWrapper'
-export {
-    createTestQueryClient,
-    QueryClientWrapper,
-} from './wrappers/QueryClientWrapper'
+export { createTestQueryClient, QueryClientWrapper } from './wrappers/QueryClientWrapper'
 export {
     renderHookWithProviders,
     renderHookWithQuery,

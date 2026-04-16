@@ -68,50 +68,38 @@ describe('LeavesToolbar', () => {
 
     it('renders search input', () => {
         const table = createMockTable()
-        renderWithIntl(
-            <LeavesToolbar tableId={LEAVES_TABLE_ID} table={table as any} />,
-        )
+        renderWithIntl(<LeavesToolbar tableId={LEAVES_TABLE_ID} table={table as any} />)
         expect(screen.getByTestId('leaves-toolbar-search')).toBeInTheDocument()
     })
 
     it('renders filter button', () => {
         const table = createMockTable()
-        renderWithIntl(
-            <LeavesToolbar tableId={LEAVES_TABLE_ID} table={table as any} />,
-        )
+        renderWithIntl(<LeavesToolbar tableId={LEAVES_TABLE_ID} table={table as any} />)
         expect(screen.getByTestId('leaves-toolbar-filter-btn')).toBeInTheDocument()
     })
 
     it('opens filter sheet on filter button click', () => {
         const table = createMockTable()
-        renderWithIntl(
-            <LeavesToolbar tableId={LEAVES_TABLE_ID} table={table as any} />,
-        )
+        renderWithIntl(<LeavesToolbar tableId={LEAVES_TABLE_ID} table={table as any} />)
         fireEvent.click(screen.getByTestId('leaves-toolbar-filter-btn'))
         expect(mockOpenFilterSheet).toHaveBeenCalled()
     })
 
     it('renders column visibility dropdown', () => {
         const table = createMockTable()
-        renderWithIntl(
-            <LeavesToolbar tableId={LEAVES_TABLE_ID} table={table as any} />,
-        )
+        renderWithIntl(<LeavesToolbar tableId={LEAVES_TABLE_ID} table={table as any} />)
         expect(screen.getByTestId('column-visibility-dropdown')).toBeInTheDocument()
     })
 
     it('renders toolbar container', () => {
         const table = createMockTable()
-        renderWithIntl(
-            <LeavesToolbar tableId={LEAVES_TABLE_ID} table={table as any} />,
-        )
+        renderWithIntl(<LeavesToolbar tableId={LEAVES_TABLE_ID} table={table as any} />)
         expect(screen.getByTestId('leaves-toolbar')).toBeInTheDocument()
     })
 
     it('updates local value on search input change', () => {
         const table = createMockTable()
-        renderWithIntl(
-            <LeavesToolbar tableId={LEAVES_TABLE_ID} table={table as any} />,
-        )
+        renderWithIntl(<LeavesToolbar tableId={LEAVES_TABLE_ID} table={table as any} />)
         const searchInput = screen.getByTestId('leaves-toolbar-search')
         fireEvent.change(searchInput, { target: { value: 'test search' } })
         expect(searchInput).toHaveValue('test search')

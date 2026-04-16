@@ -43,10 +43,9 @@ describe('useFormNotification', () => {
 
         await waitFor(() => {
             expect(toast.error).toHaveBeenCalledTimes(1)
-            expect(toast.error).toHaveBeenCalledWith(
-                'Please fix 2 invalid fields',
-                { duration: 4000 },
-            )
+            expect(toast.error).toHaveBeenCalledWith('Please fix 2 invalid fields', {
+                duration: 4000,
+            })
         })
     })
 
@@ -68,10 +67,9 @@ describe('useFormNotification', () => {
         })
 
         await waitFor(() => {
-            expect(toast.error).toHaveBeenCalledWith(
-                'Please fix 1 invalid field',
-                { duration: 4000 },
-            )
+            expect(toast.error).toHaveBeenCalledWith('Please fix 1 invalid field', {
+                duration: 4000,
+            })
         })
     })
 

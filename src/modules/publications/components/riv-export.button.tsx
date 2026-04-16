@@ -13,11 +13,15 @@ export const RivExportButton = () => (
                 size="sm"
                 variant="outline"
                 onClick={() =>
-                    openModal(RivExportDialogContainer, {}, {
-                        title: 'Export to RIV',
-                        size: 'l',
-                        id: 'riv-export',
-                    })
+                    openModal(
+                        RivExportDialogContainer,
+                        {},
+                        {
+                            title: 'Export to RIV',
+                            size: 'l',
+                            id: 'riv-export',
+                        },
+                    )
                 }
             >
                 <FileOutput className="h-4 w-4" />

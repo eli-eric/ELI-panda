@@ -4,11 +4,7 @@ import { useState } from 'react'
 import { useIntl } from 'react-intl'
 
 import { Button } from '@/components/ui/button'
-import {
-    Collapsible,
-    CollapsibleContent,
-    CollapsibleTrigger,
-} from '@/components/ui/collapsible'
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { SidebarTrigger } from '@/components/ui/sidebar'
@@ -107,11 +103,7 @@ export const HierarchyLayoutComponent: FC<HierarchyLayoutProps> = ({ tree, middl
 
                 <ResizableHandle withHandle />
 
-                <ResizablePanel
-                    defaultSize="75%"
-                    minSize="50%"
-                    className="flex overflow-hidden"
-                >
+                <ResizablePanel defaultSize="75%" minSize="50%" className="flex overflow-hidden">
                     <div className="flex-1 flex flex-col overflow-hidden">{middle}</div>
                     {sidebar && (
                         <>
