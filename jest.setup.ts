@@ -56,6 +56,15 @@ global.ResizeObserver = class ResizeObserver {
 } as any
 /* eslint-enable @typescript-eslint/no-empty-function */
 
+// Polyfill crypto.randomUUID for jsdom (used in per-instance id generation)
+if (typeof globalThis.crypto !== 'undefined' && !globalThis.crypto.randomUUID) {
+    Object.defineProperty(globalThis.crypto, 'randomUUID', {
+        value: () =>
+            ('uuid-' + Math.random().toString(36).slice(2)) as `${string}-${string}-${string}-${string}-${string}`,
+        configurable: true,
+    })
+}
+
 // Polyfill DOMRect for radix-ui context menu in jsdom
 if (typeof globalThis.DOMRect === 'undefined') {
     globalThis.DOMRect = class DOMRect {
