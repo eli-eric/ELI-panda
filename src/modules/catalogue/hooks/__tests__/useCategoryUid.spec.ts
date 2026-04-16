@@ -31,10 +31,9 @@ describe('useCategoryUid', () => {
         expect(result.current).toBeUndefined()
     })
 
-    it('throws on invalid JSON (caller must ensure valid URL state)', () => {
+    it('returns undefined on malformed JSON instead of throwing', () => {
         mockQueryValue = 'not-json-{'
-        const consoleErr = jest.spyOn(console, 'error').mockImplementation(() => {})
-        expect(() => renderHook(() => useCategoryUid())).toThrow()
-        consoleErr.mockRestore()
+        const { result } = renderHook(() => useCategoryUid())
+        expect(result.current).toBeUndefined()
     })
 })

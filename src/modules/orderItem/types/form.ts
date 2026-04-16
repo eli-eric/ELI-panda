@@ -7,9 +7,9 @@ export interface OrderDetailFormType extends FieldValues {
     uid: string
     lastUpdateTime?: string
     name: string
-    orderNumber: number
-    requestNumber: number
-    contractNumber: number
+    orderNumber: string
+    requestNumber: string
+    contractNumber: string
     notes: string
     supplier: CodebookType
     orderStatus: CodebookType
