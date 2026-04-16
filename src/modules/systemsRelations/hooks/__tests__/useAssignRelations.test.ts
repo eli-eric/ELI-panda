@@ -11,10 +11,9 @@ import { useAssignRelations } from '../useAssignRelations'
 jest.mock('@/core/http/fetchClient')
 jest.mock('sonner')
 
-const mockFetchRequestDetailed =
-    fetchClient.fetchRequestDetailed as jest.MockedFunction<
-        typeof fetchClient.fetchRequestDetailed
-    >
+const mockFetchRequestDetailed = fetchClient.fetchRequestDetailed as jest.MockedFunction<
+    typeof fetchClient.fetchRequestDetailed
+>
 const mockToast = toast as jest.Mocked<typeof toast>
 
 describe('useAssignRelations', () => {
@@ -147,9 +146,7 @@ describe('useAssignRelations', () => {
             result.current.assignRelations(payload)
         })
 
-        await waitFor(() =>
-            expect(mockToast.error).toHaveBeenCalledWith('Network error'),
-        )
+        await waitFor(() => expect(mockToast.error).toHaveBeenCalledWith('Network error'))
     })
 
     it('invalidates systemsList query on success', async () => {

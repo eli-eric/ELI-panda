@@ -49,7 +49,10 @@ export const TableContainer: FC<PropsWithChildren<Props>> = ({
             )}
             {toolbar}
             {enableColumnHiding && !toolbar && (
-                <div id="column-hiding" className="flex justify-end px-4 py-1.5 border-b border-border">
+                <div
+                    id="column-hiding"
+                    className="flex justify-end px-4 py-1.5 border-b border-border"
+                >
                     <ColumnVisibilityDropdown table={table} />
                 </div>
             )}

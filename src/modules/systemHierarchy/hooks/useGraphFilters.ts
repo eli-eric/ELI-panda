@@ -44,6 +44,13 @@ export const useGraphFilters = () => {
             toggleRelationshipType,
             resetFilters,
         }),
-        [filters, setSearch, toggleSystemLevel, setSystemType, toggleRelationshipType, resetFilters],
+        [
+            filters,
+            setSearch,
+            toggleSystemLevel,
+            setSystemType,
+            toggleRelationshipType,
+            resetFilters,
+        ],
     )
 }

@@ -27,10 +27,7 @@ describe('ColumnVisibilityDropdown', () => {
     })
 
     it('shows column items when opened', async () => {
-        const columns = [
-            createMockColumn('name', 'Name'),
-            createMockColumn('code', 'System Code'),
-        ]
+        const columns = [createMockColumn('name', 'Name'), createMockColumn('code', 'System Code')]
         const table = createMockTable(columns)
 
         render(<ColumnVisibilityDropdown table={table as any} />)
@@ -47,10 +44,7 @@ describe('ColumnVisibilityDropdown', () => {
     })
 
     it('excludes columns specified in excludeColumns', () => {
-        const columns = [
-            createMockColumn('icon', 'Icon'),
-            createMockColumn('name', 'Name'),
-        ]
+        const columns = [createMockColumn('icon', 'Icon'), createMockColumn('name', 'Name')]
         const table = createMockTable(columns)
 
         render(<ColumnVisibilityDropdown table={table as any} excludeColumns={['icon']} />)

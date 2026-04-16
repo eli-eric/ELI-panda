@@ -11,6 +11,7 @@ import { SheetFormButtons } from '@/components/sheet-form-buttons'
 import { message } from '@/i18n/src/messages'
 import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
 import type { ServiceLine } from '@/modules/orderItem/types/form'
+import { detailsToArray, detailsToObject } from '@/modules/orderItem/utils/service-line-details'
 import { ROLE } from '@/types/constants/roles'
 import { sortBy } from '@/utils/sortBy'
 
@@ -42,7 +43,7 @@ export const ServiceLineEditSheet: FC<ServiceLineEditSheetProps> = ({
             item: serviceLine.item,
             eun: serviceLine.eun,
             isDelivered: serviceLine.isDelivered,
-            details: Array.isArray(serviceLine.details) ? serviceLine.details : [],
+            details: detailsToObject(serviceLine.details),
         },
     })
 
@@ -50,12 +51,7 @@ export const ServiceLineEditSheet: FC<ServiceLineEditSheetProps> = ({
 
     const handleSubmit = useCallback(
         (data: ServiceLine) => {
-            const dataToSave = {
-                ...data,
-                details: Array.isArray(data.details) ? data.details : [],
-            }
-            // Call the onSubmit prop which comes from modal store
-            onSubmit?.(dataToSave)
+            onSubmit?.({ ...data, details: detailsToArray(data.details) })
         },
         [onSubmit],
     )
@@ -65,28 +61,25 @@ export const ServiceLineEditSheet: FC<ServiceLineEditSheetProps> = ({
         onClose?.()
     }, [formMethods, onClose])
 
-    // Transform details for properties list - memoized to prevent infinite loops
-    const details = useMemo(() => watch('details') ?? [], [watch])
+    const watchedDetails = watch('details')
     const detailsMap = useMemo(() => {
-        const map = Array.isArray(details)
-            ? details.reduce((map, detail) => {
-                  if (!detail?.propertyGroup) return map
-                  const group = detail.propertyGroup
-                  if (!map.has(group)) {
-                      map.set(group, [])
-                  }
-                  map.get(group)?.push(detail)
-                  return map
-              }, new Map<string, CatalogueItemDetail[]>())
-            : new Map<string, CatalogueItemDetail[]>()
+        const details = detailsToArray(watchedDetails)
+        const map = details.reduce((acc, detail) => {
+            if (!detail?.propertyGroup) return acc
+            const group = detail.propertyGroup
+            if (!acc.has(group)) {
+                acc.set(group, [])
+            }
+            acc.get(group)?.push(detail)
+            return acc
+        }, new Map<string, CatalogueItemDetail[]>())
 
-        // Sort properties within each group
         map.forEach((properties, group) => {
             map.set(group, sortBy(properties, ['property.name']))
         })
 
         return map
-    }, [details])
+    }, [watchedDetails])
 
     return (
         <Form formMethods={formMethods} className="space-y-4">

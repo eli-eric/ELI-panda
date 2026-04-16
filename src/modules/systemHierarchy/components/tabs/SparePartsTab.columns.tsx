@@ -25,9 +25,7 @@ export const useSparePartsTabColumns = () => {
                             node: { physicalItem },
                         },
                     },
-                }) => (
-                    <IconCell itemUsageUid={physicalItem?.itemUsage?.uid as ITEM_USAGE} />
-                ),
+                }) => <IconCell itemUsageUid={physicalItem?.itemUsage?.uid as ITEM_USAGE} />,
             },
             {
                 id: 'name',
@@ -68,8 +66,7 @@ export const useSparePartsTabColumns = () => {
             {
                 id: 'partNumber',
                 header: fm({ id: message.systemHierarchy.spareParts.partNumber }),
-                accessorFn: row =>
-                    row.node.physicalItem?.catalogueItem?.catalogueNumber ?? '',
+                accessorFn: row => row.node.physicalItem?.catalogueItem?.catalogueNumber ?? '',
             },
             {
                 id: 'eun',

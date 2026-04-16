@@ -41,7 +41,11 @@ interface Props {
     table?: Table<any>
 }
 
-export const ControlSystemsTableHeader = ({ tableId, enableQueryURL = true, table: tableInstance }: Props) => {
+export const ControlSystemsTableHeader = ({
+    tableId,
+    enableQueryURL = true,
+    table: tableInstance,
+}: Props) => {
     const { formatMessage: fm } = useIntl()
     const canCreate = usePermission([ROLE.CONTROL_SYSTEMS_EDIT])
 
@@ -101,118 +105,121 @@ export const ControlSystemsTableHeader = ({ tableId, enableQueryURL = true, tabl
             <SearchBarWrapper>
                 <div className="flex items-center gap-4">
                     <SidebarTrigger />
-                {/* Search field with help icon */}
-                <div className="flex items-start gap-1 shrink-0">
-                    {/* Search input - wider with shadow badge inside */}
-                    <div className="w-80 relative">
-                        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground z-10" />
+                    {/* Search field with help icon */}
+                    <div className="flex items-start gap-1 shrink-0">
+                        {/* Search input - wider with shadow badge inside */}
+                        <div className="w-80 relative">
+                            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground z-10" />
 
-                        {/* Styled overlay for asterisk visualization - only when asterisks present */}
-                        {hasPattern && <StyledSearchOverlay value={localSearchValue} />}
+                            {/* Styled overlay for asterisk visualization - only when asterisks present */}
+                            {hasPattern && <StyledSearchOverlay value={localSearchValue} />}
 
-                        {/* Shadow badge + Clear button - positioned at end */}
-                        {localSearchValue && (
-                            <div className="absolute right-3 top-1/2 -translate-y-1/2 z-10 flex items-center gap-1">
-                                {/* Shadow badge */}
-                                {searchPattern && (
-                                    <SearchPatternBadge pattern={searchPattern} variant="shadow" />
-                                )}
+                            {/* Shadow badge + Clear button - positioned at end */}
+                            {localSearchValue && (
+                                <div className="absolute right-3 top-1/2 -translate-y-1/2 z-10 flex items-center gap-1">
+                                    {/* Shadow badge */}
+                                    {searchPattern && (
+                                        <SearchPatternBadge
+                                            pattern={searchPattern}
+                                            variant="shadow"
+                                        />
+                                    )}
 
-                                {/* Custom clear button */}
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        setLocalSearchValue('')
-                                        formMethods.setValue('search', '')
-                                        setFilter('search')('')
-                                    }}
-                                    className="flex items-center justify-center h-5 w-5 rounded-full hover:bg-muted/50 transition-colors"
-                                    aria-label="Clear search"
-                                >
-                                    <X className="h-4 w-4 text-muted-foreground hover:text-foreground" />
-                                </button>
-                            </div>
-                        )}
-
-                        {/* Native input with transparent text only when overlay is visible */}
-                        <Input
-                            name="search"
-                            value={localSearchValue}
-                            onChange={e => setLocalSearchValue(e.target.value)}
-                            placeholder={fm({ id: message.common.ui.search })}
-                            className={cn(
-                                'pl-10 h-9',
-                                // Hide native search clear button (X) using WebKit pseudo-element
-                                '[&::-webkit-search-cancel-button]:hidden',
-                                localSearchValue ? 'pr-32' : 'pr-3',
-                                hasPattern && 'ring-1 ring-lime-500/30 border-lime-500/50',
-                                hasPattern && 'text-transparent caret-foreground',
+                                    {/* Custom clear button */}
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setLocalSearchValue('')
+                                            formMethods.setValue('search', '')
+                                            setFilter('search')('')
+                                        }}
+                                        className="flex items-center justify-center h-5 w-5 rounded-full hover:bg-muted/50 transition-colors"
+                                        aria-label="Clear search"
+                                    >
+                                        <X className="h-4 w-4 text-muted-foreground hover:text-foreground" />
+                                    </button>
+                                </div>
                             )}
-                            type="search"
+
+                            {/* Native input with transparent text only when overlay is visible */}
+                            <Input
+                                name="search"
+                                value={localSearchValue}
+                                onChange={e => setLocalSearchValue(e.target.value)}
+                                placeholder={fm({ id: message.common.ui.search })}
+                                className={cn(
+                                    'pl-10 h-9',
+                                    // Hide native search clear button (X) using WebKit pseudo-element
+                                    '[&::-webkit-search-cancel-button]:hidden',
+                                    localSearchValue ? 'pr-32' : 'pr-3',
+                                    hasPattern && 'ring-1 ring-lime-500/30 border-lime-500/50',
+                                    hasPattern && 'text-transparent caret-foreground',
+                                )}
+                                type="search"
+                            />
+                        </div>
+
+                        {/* Help icon with tooltip - close to input, aligned to top */}
+                        <Tooltip
+                            content={fm({ id: message.controlSystems.form.searchHelpTooltip })}
+                            maxWidth="max-w-md"
+                        >
+                            <button
+                                type="button"
+                                className="flex items-center justify-center h-9 w-6 shrink-0"
+                                aria-label="Search pattern help"
+                            >
+                                <CircleHelp className="h-4 w-4 text-muted-foreground hover:text-foreground cursor-help transition-colors" />
+                            </button>
+                        </Tooltip>
+                    </div>
+
+                    {/* Zone filter */}
+                    <div className="w-56 shrink-0">
+                        <Combobox
+                            name="zone"
+                            filter={ONLY_ROOT_ZONES}
+                            codebook={CODEBOOK.ZONE}
+                            label=""
+                            placeholder={fm({ id: message.controlSystems.form.zone })}
+                            onSelect={setFilter('zone')}
+                            isFilter={true}
                         />
                     </div>
 
-                    {/* Help icon with tooltip - close to input, aligned to top */}
-                    <Tooltip
-                        content={fm({ id: message.controlSystems.form.searchHelpTooltip })}
-                        maxWidth="max-w-md"
-                    >
-                        <button
-                            type="button"
-                            className="flex items-center justify-center h-9 w-6 shrink-0"
-                            aria-label="Search pattern help"
-                        >
-                            <CircleHelp className="h-4 w-4 text-muted-foreground hover:text-foreground cursor-help transition-colors" />
-                        </button>
-                    </Tooltip>
-                </div>
+                    {/* System Type filter */}
+                    <div className="w-56 shrink-0">
+                        <SystemTypeComboBox
+                            systemTypeField={{
+                                name: 'systemType',
+                                placeholder: fm({ id: message.controlSystems.form.systemType }),
+                                disabled: false,
+                            }}
+                            onChange={setFilter('systemType')}
+                            isFilter={true}
+                        />
+                    </div>
 
-                {/* Zone filter */}
-                <div className="w-56 shrink-0">
-                    <Combobox
-                        name="zone"
-                        filter={ONLY_ROOT_ZONES}
-                        codebook={CODEBOOK.ZONE}
-                        label=""
-                        placeholder={fm({ id: message.controlSystems.form.zone })}
-                        onSelect={setFilter('zone')}
-                        isFilter={true}
-                    />
-                </div>
+                    {/* Filter badges */}
+                    <div className="flex-shrink-0">
+                        <FilterBadges tableId={tableId} enableQueryURL={enableQueryURL} />
+                    </div>
 
-                {/* System Type filter */}
-                <div className="w-56 shrink-0">
-                    <SystemTypeComboBox
-                        systemTypeField={{
-                            name: 'systemType',
-                            placeholder: fm({ id: message.controlSystems.form.systemType }),
-                            disabled: false,
-                        }}
-                        onChange={setFilter('systemType')}
-                        isFilter={true}
-                    />
-                </div>
+                    {/* Spacer to push buttons to the right */}
+                    <div className="flex-1" />
 
-                {/* Filter badges */}
-                <div className="flex-shrink-0">
-                    <FilterBadges tableId={tableId} enableQueryURL={enableQueryURL} />
-                </div>
+                    {/* Column visibility */}
+                    {tableInstance && <ColumnVisibilityDropdown table={tableInstance} />}
 
-                {/* Spacer to push buttons to the right */}
-                <div className="flex-1" />
-
-                {/* Column visibility */}
-                {tableInstance && <ColumnVisibilityDropdown table={tableInstance} />}
-
-                {/* Create button */}
-                {canCreate && (
-                    <Button asChild size="sm">
-                        <Link href={PATH.CONTROL_SYSTEMS_CREATE}>
-                            <Plus className="mr-2 h-4 w-4" />
-                            {fm({ id: message.controlSystems.buttons.create })}
-                        </Link>
-                    </Button>
-                )}
+                    {/* Create button */}
+                    {canCreate && (
+                        <Button asChild size="sm">
+                            <Link href={PATH.CONTROL_SYSTEMS_CREATE}>
+                                <Plus className="mr-2 h-4 w-4" />
+                                {fm({ id: message.controlSystems.buttons.create })}
+                            </Link>
+                        </Button>
+                    )}
                 </div>
             </SearchBarWrapper>
         </Form>

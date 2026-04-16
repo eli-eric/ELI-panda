@@ -21,18 +21,12 @@ export const ColumnVisibilityDropdown: FC<ColumnVisibilityDropdownProps> = ({
     table,
     excludeColumns = [],
 }) => {
-    const columns = table
-        .getAllLeafColumns()
-        .filter(column => !excludeColumns.includes(column.id))
+    const columns = table.getAllLeafColumns().filter(column => !excludeColumns.includes(column.id))
 
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button
-                    variant="outline"
-                    size="sm"
-                    data-testid="column-visibility-trigger"
-                >
+                <Button variant="outline" size="sm" data-testid="column-visibility-trigger">
                     <SlidersHorizontal className="h-4 w-4" />
                 </Button>
             </DropdownMenuTrigger>

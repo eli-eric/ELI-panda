@@ -15,13 +15,12 @@ interface groupProps {
     name: `groups.${number}`
     remove: (index: number) => void
     index: number
-    lenght: number
-
+    length: number
     moveUp: (index: number) => void
     moveDown: (index: number) => void
 }
 
-const Group = ({ name, remove, index, moveDown, moveUp, lenght }: groupProps) => {
+const Group = ({ name, remove, index, moveDown, moveUp, length }: groupProps) => {
     const handleRemoveGroup = () => {
         remove(index)
     }
@@ -43,7 +42,7 @@ const Group = ({ name, remove, index, moveDown, moveUp, lenght }: groupProps) =>
                         <MoveButtons
                             moveDown={moveDown}
                             moveUp={moveUp}
-                            lenght={lenght}
+                            length={length}
                             index={index}
                         />
                         <Button
@@ -110,7 +109,7 @@ const GroupList = () => {
                             name={`groups.${index}`}
                             moveUp={handleMoveUp}
                             moveDown={handleMoveDown}
-                            lenght={fields.length}
+                            length={fields.length}
                         />
                     ))}
                 </div>

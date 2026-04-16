@@ -40,12 +40,14 @@ export const OrderLineStep1Catalogue = ({ handleNext, isProcessing }: OrderLineS
     // Handle catalogue item selection - save to form state
     const handleItemSelect = useCallback(
         (item: CatalogueItem | undefined) => {
-            // Save entire item to form state for persistence
             setValue('_selectedCatalogueItem', item)
             if (item) {
-                // Auto-fill form values when item is selected
-                setValue('name', item.name || '')
-                setValue('catalogueNumber', item.catalogueNumber || '')
+                // Auto-fill form values when item is selected. `shouldValidate: true`
+                // re-runs the resolver so stale type-mismatch errors from an earlier
+                // (undefined) state don't persist into Step 2 as "Invalid input" under
+                // the name / Part Number inputs.
+                setValue('name', item.name || '', { shouldValidate: true })
+                setValue('catalogueNumber', item.catalogueNumber || '', { shouldValidate: true })
                 setValue('catalogueUid', item.uid || '')
             } else {
                 // Clear form values when item is deselected

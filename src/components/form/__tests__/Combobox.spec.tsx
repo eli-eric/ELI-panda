@@ -48,9 +48,7 @@ describe('Combobox component', () => {
     it('renders error message when validation fails', async () => {
         render(<WithError field="country" message="Publishing Country is required" />)
         await waitFor(() => {
-            expect(
-                screen.getByText('Publishing Country is required'),
-            ).toBeInTheDocument()
+            expect(screen.getByText('Publishing Country is required')).toBeInTheDocument()
         })
     })
 
@@ -68,9 +66,7 @@ describe('Combobox component', () => {
                 <Combobox name="test" label="Country" />
             </FormWrapper>,
         )
-        expect(
-            screen.queryByText('Publishing Country is required'),
-        ).not.toBeInTheDocument()
+        expect(screen.queryByText('Publishing Country is required')).not.toBeInTheDocument()
         const button = screen.getByRole('combobox')
         expect(button).toHaveAttribute('aria-invalid', 'false')
     })

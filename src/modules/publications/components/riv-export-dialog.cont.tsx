@@ -28,7 +28,11 @@ export const RivExportDialogContainer: FC = () => {
     )
 
     const canValidate = !!year && !!provider
-    const { data: validation, isLoading: isValidating } = useRivValidate(year, provider, canValidate)
+    const { data: validation, isLoading: isValidating } = useRivValidate(
+        year,
+        provider,
+        canValidate,
+    )
     const { downloadXml, isDownloading } = useRivExport(year, provider, deliveryRef)
 
     return (

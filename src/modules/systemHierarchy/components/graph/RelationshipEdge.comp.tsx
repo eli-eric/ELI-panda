@@ -1,9 +1,4 @@
-import {
-    BaseEdge,
-    EdgeLabelRenderer,
-    type EdgeProps,
-    getBezierPath,
-} from '@xyflow/react'
+import { BaseEdge, EdgeLabelRenderer, type EdgeProps, getBezierPath } from '@xyflow/react'
 import type { CSSProperties } from 'react'
 import { memo } from 'react'
 
@@ -59,12 +54,7 @@ const RelationshipEdgeComponent = ({
                     />
                 </marker>
             </defs>
-            <BaseEdge
-                id={id}
-                path={edgePath}
-                style={style}
-                markerEnd={`url(#${markerId})`}
-            />
+            <BaseEdge id={id} path={edgePath} style={style} markerEnd={`url(#${markerId})`} />
             {label && (
                 <EdgeLabelRenderer>
                     <div

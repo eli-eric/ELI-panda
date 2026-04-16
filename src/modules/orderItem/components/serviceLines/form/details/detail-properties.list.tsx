@@ -1,6 +1,3 @@
-import { useEffect } from 'react'
-import { useFormContext } from 'react-hook-form'
-
 import { Heading } from '@/components/layout/Heading'
 import GroupProperty from '@/modules/catalogueItem/components/form/GroupProperty'
 import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
@@ -11,41 +8,7 @@ type Props = {
 }
 
 export const DetailPropertiesList = ({ groupMap = new Map(), disabled }: Props) => {
-    // Convert Map entries to array and flatten properties with their group info
-    const allProperties = Array.from(groupMap.entries()).flatMap(([group, properties]) =>
-        properties.map(property => ({ group, property })),
-    )
-    const { setValue } = useFormContext()
-
-    // Create an array of all details with their indices for useEffect
-    const detailsWithIndices = Array.from(groupMap.entries()).flatMap(([, properties]) =>
-        properties.map(property => {
-            const globalIndex = allProperties.findIndex(
-                p => p.property.property.uid === property.property.uid,
-            )
-            return {
-                index: globalIndex,
-                detail: {
-                    property: property.property,
-                    propertyGroup: property.propertyGroup,
-                    value: property.value || property.property.defaultValue,
-                },
-            }
-        }),
-    )
-
-    // Use effect to set form values using property.uid instead of index
-    useEffect(() => {
-        detailsWithIndices.forEach(({ detail }) => {
-            const uid = detail.property.uid
-            setValue(`details.${uid}.property`, detail.property)
-            setValue(`details.${uid}.propertyGroup`, detail.propertyGroup)
-            setValue(`details.${uid}.value`, detail.value)
-        })
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [setValue, groupMap])
-
-    if (allProperties.length === 0) {
+    if (groupMap.size === 0) {
         return null
     }
 
@@ -56,20 +19,13 @@ export const DetailPropertiesList = ({ groupMap = new Map(), disabled }: Props) 
                     <Heading customText={group} />
                     <div className="px-4 sm:px-6">
                         <div className="grid grid-cols-1 gap-x-4 gap-y-4">
-                            {properties.map(property => {
-                                const detail = {
-                                    property: property.property,
-                                    propertyGroup: property.propertyGroup,
-                                    value: property.value,
-                                }
-                                return (
-                                    <GroupProperty
-                                        key={property.property.uid}
-                                        detail={detail}
-                                        disabled={disabled}
-                                    />
-                                )
-                            })}
+                            {properties.map(property => (
+                                <GroupProperty
+                                    key={property.property.uid}
+                                    detail={property}
+                                    disabled={disabled}
+                                />
+                            ))}
                         </div>
                     </div>
                 </div>

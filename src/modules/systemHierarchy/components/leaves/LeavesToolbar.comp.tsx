@@ -1,8 +1,6 @@
 import type { Table } from '@tanstack/react-table'
 import { Filter, Search } from 'lucide-react'
-import { useQueryState } from 'next-usequerystate'
 import type { FC } from 'react'
-import { useDeferredValue, useEffect, useRef, useState } from 'react'
 import { useIntl } from 'react-intl'
 
 import { Tooltip } from '@/components/Tooltip'
@@ -12,7 +10,7 @@ import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import { message } from '@/i18n/src/messages'
 import { FilterBadges } from '@/modules/shared/form/FilterBadges'
 import { ColumnVisibilityDropdown } from '@/modules/shared/table/ColumnVisibilityDropdown.comp'
-import useTableStateStore from '@/store/useTableStateStore'
+import { useDebouncedSearchInput } from '@/modules/shared/table/hooks/useDebouncedSearchInput'
 
 import type { SystemLeaf } from '../../types'
 import { useLeavesFilterSheet } from '../filters/hooks/useLeavesFilterSheet'
@@ -36,51 +34,23 @@ export const LeavesToolbar: FC<LeavesToolbarProps> = ({
         enableQueryUrl: enableQueryURL,
     })
 
-    const [querySearch, setQuerySearch] = useQueryState('search', {
-        history: 'replace',
+    const { inputRef, defaultValue, handleChange } = useDebouncedSearchInput({
+        tableId,
+        enableQueryURL,
     })
-
-    const { setSearch, instances, setSearchValue } = useTableStateStore()
-    const searchInstance = querySearch || instances[tableId]?.search
-    const storeValue = instances[tableId]?.searchBarValue
-    const deferredStoreValue = useDeferredValue(storeValue || '')
-
-    const [localValue, setLocalValue] = useState(deferredStoreValue)
-    const [mounted, setMounted] = useState(false)
-
-    useEffect(() => {
-        setLocalValue(deferredStoreValue)
-    }, [deferredStoreValue])
-
-    useEffect(() => {
-        if (!mounted) {
-            setMounted(true)
-            setSearchValue(tableId, searchInstance || '')
-        }
-    }, [mounted, searchInstance, setSearchValue, tableId])
-
-    const mountedRef = useRef(mounted)
-    mountedRef.current = mounted
-
-    useEffect(() => {
-        const delayInputTimeoutId = setTimeout(() => {
-            if (mountedRef.current) {
-                setSearch(tableId, localValue)
-                if (enableQueryURL) {
-                    setQuerySearch(localValue || '', { shallow: true })
-                }
-            }
-        }, 500)
-        return () => clearTimeout(delayInputTimeoutId)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [localValue])
 
     const hasActiveFilters = storeFilters.length > 0
 
     return (
         <div className="border-b border-border px-4 py-2 space-y-2" data-testid="leaves-toolbar">
             <div className="flex items-center gap-2">
-                <Tooltip content={hasActiveFilters ? fm({ id: message.systemHierarchy.leaves.filtersApplied }) : fm({ id: message.systemHierarchy.leaves.openFilters })}>
+                <Tooltip
+                    content={
+                        hasActiveFilters
+                            ? fm({ id: message.systemHierarchy.leaves.filtersApplied })
+                            : fm({ id: message.systemHierarchy.leaves.openFilters })
+                    }
+                >
                     <div>
                         <Button
                             size="sm"
@@ -99,12 +69,9 @@ export const LeavesToolbar: FC<LeavesToolbarProps> = ({
                     <div className="relative max-w-md">
                         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                         <Input
-                            value={localValue}
-                            onChange={e => {
-                                const newValue = e.target.value
-                                setLocalValue(newValue)
-                                setSearchValue(tableId, newValue)
-                            }}
+                            ref={inputRef}
+                            defaultValue={defaultValue}
+                            onChange={handleChange}
                             placeholder="Search..."
                             className="pl-10"
                             type="search"

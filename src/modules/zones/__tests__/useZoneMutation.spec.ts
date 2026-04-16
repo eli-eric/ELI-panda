@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { act,renderHook, waitFor } from '@testing-library/react'
+import { act, renderHook, waitFor } from '@testing-library/react'
 import React from 'react'
 
 import * as fetcher from '@/utils/fetcher'
@@ -35,9 +35,7 @@ describe('useZoneMutation', () => {
 
     beforeEach(() => {
         jest.clearAllMocks()
-        mockQueryMutate.mockReturnValue(
-            jest.fn().mockResolvedValue({ data: mockZone }),
-        )
+        mockQueryMutate.mockReturnValue(jest.fn().mockResolvedValue({ data: mockZone }))
     })
 
     it('uses POST for create (no uid)', () => {
@@ -98,10 +96,9 @@ describe('useZoneMutation', () => {
         // eslint-disable-next-line @typescript-eslint/no-require-imports
         const { useZoneMutation } = require('../hooks/useZoneMutation')
 
-        const { result } = renderHook(
-            () => useZoneMutation({ onSuccess }),
-            { wrapper: createWrapper() },
-        )
+        const { result } = renderHook(() => useZoneMutation({ onSuccess }), {
+            wrapper: createWrapper(),
+        })
 
         await act(async () => {
             await result.current.mutateAsync({ name: 'New', code: 'N1' })
@@ -113,9 +110,7 @@ describe('useZoneMutation', () => {
     })
 
     it('handles mutation error', async () => {
-        mockQueryMutate.mockReturnValue(
-            jest.fn().mockRejectedValue(new Error('Server error')),
-        )
+        mockQueryMutate.mockReturnValue(jest.fn().mockRejectedValue(new Error('Server error')))
         // eslint-disable-next-line @typescript-eslint/no-require-imports
         const { useZoneMutation } = require('../hooks/useZoneMutation')
 

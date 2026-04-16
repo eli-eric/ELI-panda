@@ -35,10 +35,7 @@ interface LeavesFilterSheetProps {
     enableQueryURL: boolean
 }
 
-export const LeavesFilterSheet = ({
-    tableId,
-    enableQueryURL,
-}: LeavesFilterSheetProps) => {
+export const LeavesFilterSheet = ({ tableId, enableQueryURL }: LeavesFilterSheetProps) => {
     const { minMaxPrice } = useMinMaxPrice()
 
     const defaultValues = useMemo<LeavesFilterType>(
@@ -84,10 +81,7 @@ export const LeavesFilterSheet = ({
 
     return (
         <Form className="flex flex-col h-full justify-between" formMethods={formMethods}>
-            <LeavesFilterForm
-                tableId={tableId}
-                enableQueryUrl={enableQueryURL}
-            />
+            <LeavesFilterForm tableId={tableId} enableQueryUrl={enableQueryURL} />
             <LeavesFilterFooter
                 tableId={tableId}
                 enableQueryURL={enableQueryURL}

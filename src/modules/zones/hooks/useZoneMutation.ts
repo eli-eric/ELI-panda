@@ -15,11 +15,7 @@ export const useZoneMutation = ({ uid, onSuccess }: UseZoneMutationOptions = {})
 
     return useMutation({
         mutationKey: uid ? ['zone', uid] : ['create-zone'],
-        mutationFn: queryMutate<Zone, ZoneFormData>(
-            'zone',
-            uid ? 'put' : 'post',
-            { uid },
-        ),
+        mutationFn: queryMutate<Zone, ZoneFormData>('zone', uid ? 'put' : 'post', { uid }),
         onSuccess: async response => {
             await queryClient.invalidateQueries({ queryKey: ['zones'] })
             if (uid) {
