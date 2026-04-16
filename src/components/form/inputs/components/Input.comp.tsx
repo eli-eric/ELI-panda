@@ -1,5 +1,5 @@
 import { Eye, EyeOff } from 'lucide-react'
-import React, { useEffect, useId, useState } from 'react'
+import React, { useEffect, useId, useRef, useState } from 'react'
 import type { Control } from 'react-hook-form'
 import { Controller, useFormContext, useWatch } from 'react-hook-form'
 import { useDebounce, useIsFirstRender } from 'usehooks-ts'
@@ -28,9 +28,15 @@ const DebouncedChangeObserver = ({ control, name, onChange }: DebouncedChangeObs
     const inputValueDebounced = useDebounce(inputValue, 500)
     const isFirstRender = useIsFirstRender()
 
+    // Keep latest onChange in a ref to avoid stale closure when parent passes a
+    // fresh function identity each render. The effect fires only on debounced
+    // value changes; using a ref keeps deps minimal without recreating timers.
+    const onChangeRef = useRef(onChange)
+    onChangeRef.current = onChange
+
     useEffect(() => {
         if (!isFirstRender) {
-            onChange(inputValueDebounced)
+            onChangeRef.current(inputValueDebounced)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [inputValueDebounced])

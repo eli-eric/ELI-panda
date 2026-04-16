@@ -61,7 +61,6 @@ const PropertyList = ({ name }: Props) => {
                             length={fields.length}
                             moveDown={handleMoveDown}
                             moveUp={handleMoveUp}
-                            lenght={fields.length}
                         />
                     ))}
                 </div>

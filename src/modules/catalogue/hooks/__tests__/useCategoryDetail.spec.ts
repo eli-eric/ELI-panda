@@ -1,4 +1,4 @@
-import { renderHook, waitFor } from '@testing-library/react'
+import { waitFor } from '@testing-library/react'
 
 import { renderHookWithQuery } from '@/testutils'
 import * as fetcher from '@/utils/fetcher'
@@ -55,5 +55,3 @@ describe('useCategoryDetail', () => {
     })
 })
 
-// Avoid unused-import noise — renderHook re-exported via testutils helper
-void renderHook

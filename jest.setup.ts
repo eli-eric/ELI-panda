@@ -56,11 +56,12 @@ global.ResizeObserver = class ResizeObserver {
 } as any
 /* eslint-enable @typescript-eslint/no-empty-function */
 
-// Polyfill crypto.randomUUID for jsdom (used in per-instance id generation)
+// Polyfill crypto.randomUUID for jsdom — delegate to node:crypto for a real UUID
 if (typeof globalThis.crypto !== 'undefined' && !globalThis.crypto.randomUUID) {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const nodeCrypto = require('node:crypto') as { randomUUID: () => string }
     Object.defineProperty(globalThis.crypto, 'randomUUID', {
-        value: () =>
-            ('uuid-' + Math.random().toString(36).slice(2)) as `${string}-${string}-${string}-${string}-${string}`,
+        value: () => nodeCrypto.randomUUID(),
         configurable: true,
     })
 }

@@ -1,6 +1,6 @@
 import { Plus, Trash2 } from 'lucide-react'
 import { memo, startTransition, useEffect, useMemo } from 'react'
-import type { Control, FieldArrayPath } from 'react-hook-form'
+import type { Control, FieldArrayPath, FieldPath } from 'react-hook-form'
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 
@@ -56,9 +56,10 @@ type ListDefaultValueProps = {
 
 const ListDefaultValue = memo(({ name, control }: ListDefaultValueProps) => {
     const { formatMessage: fm } = useIntl()
-    const listOfValues = useWatch({ control, name: `${name}.listOfValues` as never }) as
-        | string[]
-        | undefined
+    const listOfValues = useWatch({
+        control,
+        name: `${name}.listOfValues` as FieldPath<CategoryFormType>,
+    }) as string[] | undefined
 
     const customOptions = useMemo(
         () =>
@@ -98,13 +99,11 @@ interface Props {
     removeProp: (index: number) => void
     index: number
     length: number
-    lenght: number
     moveDown: (index: number) => void
-
     moveUp: (index: number) => void
 }
 
-const PropertyItem = ({ name, removeProp, index, moveDown, moveUp, lenght }: Props) => {
+const PropertyItem = ({ name, removeProp, index, moveDown, moveUp, length }: Props) => {
     const { control, unregister } = useFormContext<CategoryFormType>()
     const { formatMessage: fm } = useIntl()
     const { fields, append, remove } = useFieldArray<
@@ -161,7 +160,7 @@ const PropertyItem = ({ name, removeProp, index, moveDown, moveUp, lenght }: Pro
                     <MoveButtons
                         moveDown={moveDown}
                         moveUp={moveUp}
-                        lenght={lenght}
+                        length={length}
                         index={index}
                     />
 

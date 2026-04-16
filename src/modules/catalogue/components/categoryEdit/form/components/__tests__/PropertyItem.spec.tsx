@@ -53,7 +53,6 @@ describe('PropertyItem', () => {
                     removeProp={jest.fn()}
                     index={0}
                     length={1}
-                    lenght={1}
                     moveUp={jest.fn()}
                     moveDown={jest.fn()}
                 />
@@ -100,7 +99,6 @@ describe('PropertyItem', () => {
                     removeProp={removeProp}
                     index={2}
                     length={3}
-                    lenght={3}
                     moveUp={jest.fn()}
                     moveDown={jest.fn()}
                 />

@@ -1,5 +1,3 @@
-import { renderHook } from '@testing-library/react'
-
 import { mockDynamicModalStore, renderHookWithProviders } from '@/testutils'
 
 const modalMock = mockDynamicModalStore()
@@ -102,4 +100,3 @@ describe('useServiceLineEditSheet', () => {
     })
 })
 
-void renderHook

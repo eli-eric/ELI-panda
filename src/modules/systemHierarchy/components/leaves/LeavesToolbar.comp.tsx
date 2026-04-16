@@ -1,8 +1,6 @@
 import type { Table } from '@tanstack/react-table'
 import { Filter, Search } from 'lucide-react'
-import { useQueryState } from 'next-usequerystate'
-import type { ChangeEvent, FC } from 'react'
-import { useEffect, useRef, useTransition } from 'react'
+import type { FC } from 'react'
 import { useIntl } from 'react-intl'
 
 import { Tooltip } from '@/components/Tooltip'
@@ -12,7 +10,7 @@ import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import { message } from '@/i18n/src/messages'
 import { FilterBadges } from '@/modules/shared/form/FilterBadges'
 import { ColumnVisibilityDropdown } from '@/modules/shared/table/ColumnVisibilityDropdown.comp'
-import useTableStateStore from '@/store/useTableStateStore'
+import { useDebouncedSearchInput } from '@/modules/shared/table/hooks/useDebouncedSearchInput'
 
 import type { SystemLeaf } from '../../types'
 import { useLeavesFilterSheet } from '../filters/hooks/useLeavesFilterSheet'
@@ -36,53 +34,10 @@ export const LeavesToolbar: FC<LeavesToolbarProps> = ({
         enableQueryUrl: enableQueryURL,
     })
 
-    const [querySearch, setQuerySearch] = useQueryState('search', {
-        history: 'replace',
+    const { inputRef, defaultValue, handleChange } = useDebouncedSearchInput({
+        tableId,
+        enableQueryURL,
     })
-
-    const setSearch = useTableStateStore(s => s.setSearch)
-    const storeSearch = useTableStateStore(s => s.instances[tableId]?.search)
-
-    const initialValue = useRef(querySearch || storeSearch || '').current
-
-    const inputRef = useRef<HTMLInputElement>(null)
-    const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-    const lastCommittedRef = useRef(initialValue)
-
-    const [, startTransition] = useTransition()
-
-    // Store updates synchronously via Zustand; URL updates async via next-usequerystate.
-    // Use `??` (not `||`) so an empty-string commit ('') is authoritative —
-    // `||` would treat '' as falsy and fall back to stale querySearch, causing a flash
-    // when user clears the input.
-    useEffect(() => {
-        const next = storeSearch ?? querySearch ?? ''
-        if (next === lastCommittedRef.current) return
-        lastCommittedRef.current = next
-        if (inputRef.current && inputRef.current.value !== next) {
-            inputRef.current.value = next
-        }
-    }, [querySearch, storeSearch])
-
-    useEffect(() => {
-        return () => {
-            if (timerRef.current) clearTimeout(timerRef.current)
-        }
-    }, [])
-
-    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value
-        if (timerRef.current) clearTimeout(timerRef.current)
-        timerRef.current = setTimeout(() => {
-            lastCommittedRef.current = value
-            startTransition(() => {
-                setSearch(tableId, value)
-                if (enableQueryURL) {
-                    setQuerySearch(value || '', { shallow: true })
-                }
-            })
-        }, 500)
-    }
 
     const hasActiveFilters = storeFilters.length > 0
 
@@ -109,8 +64,8 @@ export const LeavesToolbar: FC<LeavesToolbarProps> = ({
                         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                         <Input
                             ref={inputRef}
-                            defaultValue={initialValue}
-                            onChange={handleInputChange}
+                            defaultValue={defaultValue}
+                            onChange={handleChange}
                             placeholder="Search..."
                             className="pl-10"
                             type="search"
