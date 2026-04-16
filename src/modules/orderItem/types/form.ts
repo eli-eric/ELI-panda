@@ -77,6 +77,8 @@ export interface OrderLineWizardFormType extends OrderLineFormType {
     systemConfigs?: OrderLineSystemConfig[]
 }
 
+export type ServiceLineDetails = CatalogueItemDetail[] | Record<string, CatalogueItemDetail>
+
 export interface ServiceLine extends FieldValues {
     uuid?: string
     uid?: string
@@ -90,7 +92,7 @@ export interface ServiceLine extends FieldValues {
     serialNumber?: string
     isDelivered?: boolean
     lastUpdateTime?: string
-    details?: CatalogueItemDetail[]
+    details?: ServiceLineDetails
 }
 
 export interface ServiceLineFormType extends FieldValues {
@@ -104,7 +106,7 @@ export interface ServiceLineFormType extends FieldValues {
     notes?: string
     isDelivered?: boolean
     lastUpdateTime?: string
-    details?: CatalogueItemDetail[]
+    details?: ServiceLineDetails
     selectedProperties?: string[]
 }
 
