@@ -28,11 +28,14 @@ const mockSetSearch = jest.fn()
 const mockSetSearchValue = jest.fn()
 jest.mock('@/store/useTableStateStore', () => ({
     __esModule: true,
-    default: () => ({
-        setSearch: mockSetSearch,
-        setSearchValue: mockSetSearchValue,
-        instances: { [LEAVES_TABLE_ID]: { search: '', searchBarValue: '' } },
-    }),
+    default: (selector?: (state: any) => unknown) => {
+        const state = {
+            setSearch: mockSetSearch,
+            setSearchValue: mockSetSearchValue,
+            instances: { [LEAVES_TABLE_ID]: { search: '', searchBarValue: '' } },
+        }
+        return selector ? selector(state) : state
+    },
 }))
 
 jest.mock('@/hooks/form/useFormFilters', () => ({

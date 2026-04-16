@@ -1,6 +1,6 @@
 import { Plus, Trash2 } from 'lucide-react'
-import { startTransition, useEffect } from 'react'
-import type { FieldArrayPath } from 'react-hook-form'
+import { memo, startTransition, useEffect, useMemo } from 'react'
+import type { Control, FieldArrayPath } from 'react-hook-form'
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 
@@ -16,10 +16,13 @@ import { CODEBOOK } from '@/types/constants/codebook'
 import type { CategoryFormType } from '../../types'
 import MoveButtons from './MoveButtons'
 
-//TODO: fix bugs
+type ValueItemProps = {
+    removeValue: (index: number) => void
+    index: number
+    name: string
+}
 
-//eslint-disable-next-line
-const ValueItem = ({ removeValue, index, name }) => {
+const ValueItem = memo(({ removeValue, index, name }: ValueItemProps) => {
     const { formatMessage: fm } = useIntl()
     const handleRemoveValue = () => {
         removeValue(index)
@@ -28,7 +31,7 @@ const ValueItem = ({ removeValue, index, name }) => {
     return (
         <div className="flex gap-2 mb-2">
             <Input
-                name={`${name}`}
+                name={name}
                 placeholder={fm({ id: message.catalogue.category.propertyEnterValue })}
                 className="flex-1"
             />
@@ -43,7 +46,53 @@ const ValueItem = ({ removeValue, index, name }) => {
             </Button>
         </div>
     )
+})
+ValueItem.displayName = 'ValueItem'
+
+type ListDefaultValueProps = {
+    name: string
+    control: Control<CategoryFormType>
 }
+
+const ListDefaultValue = memo(({ name, control }: ListDefaultValueProps) => {
+    const { formatMessage: fm } = useIntl()
+    const listOfValues = useWatch({ control, name: `${name}.listOfValues` as never }) as
+        | string[]
+        | undefined
+
+    const customOptions = useMemo(
+        () =>
+            (listOfValues ?? [])
+                .map(v => (typeof v === 'string' ? v : ''))
+                .filter(v => v.trim() !== ''),
+        [listOfValues],
+    )
+
+    return (
+        <Listbox
+            name={`${name}.defaultValue`}
+            allowEmptyOption={true}
+            emptyOption={fm({ id: message.catalogue.category.selectDefaultValue })}
+            customOptions={customOptions}
+        />
+    )
+})
+ListDefaultValue.displayName = 'ListDefaultValue'
+
+const BOOL_OPTIONS = [...defaultBoolOptions]
+
+const BoolDefaultValue = memo(({ name }: { name: string }) => {
+    const { formatMessage: fm } = useIntl()
+    return (
+        <Listbox
+            name={`${name}.defaultValue`}
+            allowEmptyOption={true}
+            emptyOption={fm({ id: message.catalogue.category.selectDefaultValue })}
+            customOptions={BOOL_OPTIONS}
+        />
+    )
+})
+BoolDefaultValue.displayName = 'BoolDefaultValue'
 interface Props {
     name: `groups.${number}.properties.${number}` | `physicalItemProperties.${number}`
     removeProp: (index: number) => void
@@ -56,14 +105,13 @@ interface Props {
 }
 
 const PropertyItem = ({ name, removeProp, index, moveDown, moveUp, lenght }: Props) => {
-    const { watch, control, unregister } = useFormContext<CategoryFormType>()
+    const { control, unregister } = useFormContext<CategoryFormType>()
     const { formatMessage: fm } = useIntl()
     const { fields, append, remove } = useFieldArray<
         CategoryFormType,
         FieldArrayPath<CategoryFormType>
     >({
         control,
-        // name needs to be a FieldArrayPath for the form type; cast to satisfy TS
         name: `${name}.listOfValues` as FieldArrayPath<CategoryFormType>,
     })
 
@@ -76,12 +124,6 @@ const PropertyItem = ({ name, removeProp, index, moveDown, moveUp, lenght }: Pro
     const type = useWatch({ control, name: `${name}.type` })
     const propertyName = useWatch({ control, name: `${name}.name` })
 
-    /* const getDefaultOption = (name, disabled = false) => ({
-    value: '',
-    name,
-    disabled
-  }) */
-
     useEffect(() => {
         startTransition(() => {
             if (type?.uid !== PROPERTY_TYPE.LIST && fields.length !== 0) {
@@ -90,48 +132,23 @@ const PropertyItem = ({ name, removeProp, index, moveDown, moveUp, lenght }: Pro
         })
     }, [type, unregister, name, fields.length])
 
-    const getDefaultField = (type?: PROPERTY_TYPE | string) => {
-        switch (type) {
+    const renderDefaultField = () => {
+        switch (type?.uid) {
             case PROPERTY_TYPE.LIST:
-                const currentListValues = fields
-                    .map((field, index) => {
-                        const fieldValue = watch(`${name}.listOfValues.${index}`)
-                        return fieldValue || ''
-                    })
-                    .filter(value => value.trim() !== '')
-
-                return (
-                    <Listbox
-                        name={`${name}.defaultValue`}
-                        allowEmptyOption={true}
-                        emptyOption={fm({
-                            id: message.catalogue.category.selectDefaultValue,
-                        })}
-                        customOptions={currentListValues}
-                    />
-                )
+                return <ListDefaultValue name={name} control={control} />
             case PROPERTY_TYPE.BOOLEAN:
-                return (
-                    <Listbox
-                        name={`${name}.defaultValue`}
-                        allowEmptyOption={true}
-                        emptyOption={fm({
-                            id: message.catalogue.category.selectDefaultValue,
-                        })}
-                        customOptions={[...defaultBoolOptions]}
-                    />
-                )
+                return <BoolDefaultValue name={name} />
             case PROPERTY_TYPE.RANGE:
                 return null
             default:
                 return (
                     <Input
                         name={`${name}.defaultValue`}
-                        type={type && PROPERTY_INPUT_TYPE[type]}
+                        type={type?.uid && PROPERTY_INPUT_TYPE[type.uid]}
                         placeholder={fm({
                             id: message.catalogue.category.propertyDefaultValue,
                         })}
-                        disabled={!type}
+                        disabled={!type?.uid}
                     />
                 )
         }
@@ -197,7 +214,7 @@ const PropertyItem = ({ name, removeProp, index, moveDown, moveUp, lenght }: Pro
                                 <label className="text-sm font-medium text-muted-foreground">
                                     {fm({ id: message.catalogue.category.propertyDefaultValue })}
                                 </label>
-                                {getDefaultField(type?.uid)}
+                                {renderDefaultField()}
                             </div>
                         </div>
 
@@ -266,4 +283,4 @@ const PropertyItem = ({ name, removeProp, index, moveDown, moveUp, lenght }: Pro
     )
 }
 
-export default PropertyItem
+export default memo(PropertyItem)

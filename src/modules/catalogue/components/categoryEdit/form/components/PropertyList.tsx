@@ -1,4 +1,5 @@
 import { Plus } from 'lucide-react'
+import { useCallback } from 'react'
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 
@@ -31,12 +32,18 @@ const PropertyList = ({ name }: Props) => {
         })
     }
 
-    const handleMoveDown = index => {
-        if (index < fields.length - 1) move(index, index + 1)
-    }
-    const handleMoveUp = index => {
-        if (index > 0) move(index, index - 1)
-    }
+    const handleMoveDown = useCallback(
+        (index: number) => {
+            if (index < fields.length - 1) move(index, index + 1)
+        },
+        [fields.length, move],
+    )
+    const handleMoveUp = useCallback(
+        (index: number) => {
+            if (index > 0) move(index, index - 1)
+        },
+        [move],
+    )
     return (
         <div className="space-y-3">
             <div className="text-sm text-muted-foreground">

@@ -1,7 +1,7 @@
 import { Eye, EyeOff } from 'lucide-react'
 import React, { useEffect, useId, useState } from 'react'
-import { Controller, useWatch } from 'react-hook-form'
-import { useFormContext } from 'react-hook-form'
+import type { Control } from 'react-hook-form'
+import { Controller, useFormContext, useWatch } from 'react-hook-form'
 import { useDebounce, useIsFirstRender } from 'usehooks-ts'
 
 import { Tooltip } from '@/components/Tooltip'
@@ -16,6 +16,28 @@ export type InputProps = FieldProps &
         onChange?: (value: string | number | readonly string[] | undefined) => void
         isFilter?: boolean
     }
+
+type DebouncedChangeObserverProps = {
+    control: Control
+    name: string
+    onChange: (value: string | number | readonly string[] | undefined) => void
+}
+
+const DebouncedChangeObserver = ({ control, name, onChange }: DebouncedChangeObserverProps) => {
+    const inputValue = useWatch({ control, name })
+    const inputValueDebounced = useDebounce(inputValue, 500)
+    const isFirstRender = useIsFirstRender()
+
+    useEffect(() => {
+        if (!isFirstRender) {
+            onChange(inputValueDebounced)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [inputValueDebounced])
+
+    return null
+}
+
 export const Input = ({
     name,
     placeholder,
@@ -37,21 +59,6 @@ export const Input = ({
 
     const [showPassword, setShowPassword] = useState(false)
 
-    const inputValue = useWatch({
-        control,
-        name,
-    })
-
-    const inputValueDebounced = useDebounce(inputValue, 500)
-    const isFirstRender = useIsFirstRender()
-
-    useEffect(() => {
-        if (!isFirstRender && onChange) {
-            onChange(inputValueDebounced)
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [inputValueDebounced])
-
     const toogleShowPassword = () => setShowPassword(!showPassword)
 
     const idHtml = useId()
@@ -59,11 +66,15 @@ export const Input = ({
     if (hidden) return null
 
     return (
-        <Controller
-            name={name}
-            control={control}
-            defaultValue={defaultValue || ''}
-            render={({ field, fieldState: { error } }) => {
+        <>
+            {onChange && (
+                <DebouncedChangeObserver control={control} name={name} onChange={onChange} />
+            )}
+            <Controller
+                name={name}
+                control={control}
+                defaultValue={defaultValue || ''}
+                render={({ field, fieldState: { error } }) => {
                 return (
                     <div className={cn('space-y-1 w-full', className)}>
                         {label && <Label htmlFor={idHtml}>{label}</Label>}
@@ -134,6 +145,7 @@ export const Input = ({
                     </div>
                 )
             }}
-        />
+            />
+        </>
     )
 }
