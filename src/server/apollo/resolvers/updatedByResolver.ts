@@ -10,12 +10,14 @@ const updatedByResolver = async (
         action,
         previousState,
         newState,
+        changes,
     }: {
         node: string
         nodeUid: string
         action: string
         previousState?: string
         newState?: string
+        changes?: string
     },
     context: {
         executor: { executionContext: Driver }
@@ -48,6 +50,10 @@ const updatedByResolver = async (
             properties.newState = '$newState'
         }
 
+        if (changes !== undefined && changes !== null) {
+            properties.changes = '$changes'
+        }
+
         const propsString = Object.entries(properties)
             .map(([key, value]) => `${key}: ${value}`)
             .join(', ')
@@ -70,6 +76,10 @@ const updatedByResolver = async (
 
         if (newState !== undefined && newState !== null) {
             params.newState = newState
+        }
+
+        if (changes !== undefined && changes !== null) {
+            params.changes = changes
         }
 
         await transaction.run(createRelationQuery, params)

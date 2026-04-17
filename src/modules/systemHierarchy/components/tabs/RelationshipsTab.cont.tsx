@@ -19,6 +19,7 @@ import { RELATIONSHIP_COLORS } from '../../utils/graphColors'
 
 interface RelationshipsTabProps {
     system: SystemLeaf
+    compact?: boolean
 }
 
 const DIRECTION_LABELS: Record<string, { inbound: string; outbound: string }> = {
@@ -51,14 +52,21 @@ const RelationshipRowItem: FC<{
     row: RelationshipRow
     itemUsage?: ITEM_USAGE
     onNavigate: (uid: string) => void
-}> = ({ row, itemUsage, onNavigate }) => {
+    compact?: boolean
+}> = ({ row, itemUsage, onNavigate, compact }) => {
     const { formatMessage: fm } = useIntl()
     const color = getRelationshipColor(row.edge.relationship)
     const labelId = getRelationshipLabel(row.edge.relationship, row.direction)
 
     return (
-        <div className="flex items-center gap-3 py-1.5">
-            <span className="text-xs font-medium min-w-[100px] text-right" style={{ color }}>
+        <div className={cn('flex items-center py-1.5', compact ? 'gap-2' : 'gap-3')}>
+            <span
+                className={cn(
+                    'text-xs font-medium text-right',
+                    compact ? 'min-w-[72px]' : 'min-w-[100px]',
+                )}
+                style={{ color }}
+            >
                 {fm({ id: labelId })}
             </span>
             <ArrowRight className="h-3 w-3 text-muted-foreground shrink-0" />
@@ -66,15 +74,15 @@ const RelationshipRowItem: FC<{
                 type="button"
                 onClick={() => onNavigate(row.node.uid)}
                 className={cn(
-                    'inline-flex items-center gap-1.5 rounded-full',
+                    'inline-flex items-center gap-1.5 rounded-full min-w-0',
                     'bg-muted px-3 py-1 text-sm',
                     'cursor-pointer hover:bg-accent transition-colors',
                 )}
             >
                 <IconCell itemUsageUid={itemUsage} />
-                <span className="font-medium">{row.node.name}</span>
+                <span className="font-medium truncate">{row.node.name}</span>
                 {row.node.systemCode && (
-                    <span className="text-muted-foreground text-xs">
+                    <span className="text-muted-foreground text-xs truncate">
                         {'· '}
                         {row.node.systemCode}
                     </span>
@@ -84,16 +92,19 @@ const RelationshipRowItem: FC<{
     )
 }
 
-export const RelationshipsTabContainer: FC<RelationshipsTabProps> = ({ system }) => {
+export const RelationshipsTabContainer: FC<RelationshipsTabProps> = ({ system, compact }) => {
     const { formatMessage: fm } = useIntl()
     const { selectLeaf } = useHierarchyNavigation()
     const { inbound, outbound, relatedUids, hasRelationships, isLoading, isError, refetch } =
         useSystemRelationships(system.uid)
     const { itemUsageMap } = useRelationshipItemUsage(relatedUids)
 
+    const containerPadding = compact ? 'p-0' : 'p-4'
+    const rowIndent = compact ? 'ml-0' : 'ml-6'
+
     if (isLoading) {
         return (
-            <div className="p-4 space-y-3">
+            <div className={cn(containerPadding, 'space-y-3')}>
                 <Skeleton className="h-4 w-32" />
                 <Skeleton className="h-8 w-64" />
                 <Skeleton className="h-8 w-56" />
@@ -103,7 +114,7 @@ export const RelationshipsTabContainer: FC<RelationshipsTabProps> = ({ system })
 
     if (isError) {
         return (
-            <div className="p-4 space-y-3">
+            <div className={cn(containerPadding, 'space-y-3')}>
                 <p className="text-sm text-muted-foreground">
                     {fm({ id: message.common.errors.somethingWentWrong })}
                 </p>
@@ -116,14 +127,14 @@ export const RelationshipsTabContainer: FC<RelationshipsTabProps> = ({ system })
 
     if (!hasRelationships) {
         return (
-            <div className="p-4 text-sm text-muted-foreground">
+            <div className={cn(containerPadding, 'text-sm text-muted-foreground')}>
                 {fm({ id: message.systemHierarchy.relationships.noRelationships })}
             </div>
         )
     }
 
     return (
-        <div className="p-4 space-y-6">
+        <div className={cn(containerPadding, 'space-y-6')}>
             {inbound.length > 0 && (
                 <section>
                     <div className="flex items-center gap-2 mb-3">
@@ -132,13 +143,14 @@ export const RelationshipsTabContainer: FC<RelationshipsTabProps> = ({ system })
                             {fm({ id: message.systemHierarchy.relationships.inbound })}
                         </h3>
                     </div>
-                    <div className="space-y-1 ml-6">
+                    <div className={cn('space-y-1', rowIndent)}>
                         {inbound.map(row => (
                             <RelationshipRowItem
                                 key={row.edge.uid}
                                 row={row}
                                 itemUsage={itemUsageMap[row.node.uid]}
                                 onNavigate={selectLeaf}
+                                compact={compact}
                             />
                         ))}
                     </div>
@@ -152,13 +164,14 @@ export const RelationshipsTabContainer: FC<RelationshipsTabProps> = ({ system })
                             {fm({ id: message.systemHierarchy.relationships.outbound })}
                         </h3>
                     </div>
-                    <div className="space-y-1 ml-6">
+                    <div className={cn('space-y-1', rowIndent)}>
                         {outbound.map(row => (
                             <RelationshipRowItem
                                 key={row.edge.uid}
                                 row={row}
                                 itemUsage={itemUsageMap[row.node.uid]}
                                 onNavigate={selectLeaf}
+                                compact={compact}
                             />
                         ))}
                     </div>
