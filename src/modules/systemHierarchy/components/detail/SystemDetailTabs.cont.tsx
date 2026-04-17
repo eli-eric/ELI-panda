@@ -2,6 +2,7 @@ import type { FC } from 'react'
 import { useIntl } from 'react-intl'
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useIsLargeScreen } from '@/hooks/use-large-screen'
 import { message } from '@/i18n/src/messages'
 
 import { useSystemRelationships } from '../../hooks/queries/useSystemRelationships'
@@ -27,9 +28,11 @@ export const SystemDetailTabsContainer: FC<SystemDetailTabsProps> = ({ system })
     const { formatMessage: fm } = useIntl()
     const { activeTab, setActiveTab } = useHierarchyNavigation()
     const { hasRelationships, isError: relationshipsError } = useSystemRelationships(system.uid)
+    const isLargeScreen = useIsLargeScreen()
 
-    // Keep Relationships tab visible on transient errors so user can retry instead of tab vanishing
-    const showRelationshipsTab = hasRelationships || relationshipsError
+    // Relationships live in the right sidebar at lg+; fall back to a tab when sidebar is hidden.
+    // Keep tab visible on transient errors so user can retry instead of tab vanishing.
+    const showRelationshipsTab = (hasRelationships || relationshipsError) && !isLargeScreen
 
     const isTabHidden =
         (activeTab === HIERARCHY_TABS.PHYSICAL_ITEM && !hasPhysicalItem(system)) ||
