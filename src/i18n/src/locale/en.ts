@@ -1545,6 +1545,12 @@ export const messages = {
                 itemMoves: 'Item Moves',
                 allUsers: 'All users',
             },
+            diff: {
+                changed: 'changed {field} from {oldValue} to {newValue}',
+                set: 'set {field} to {newValue}',
+                cleared: 'cleared {field}',
+                emptyValue: '(empty)',
+            },
         },
         graph: {
             title: 'Relationship Graph',

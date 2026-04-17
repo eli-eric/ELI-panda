@@ -44,7 +44,9 @@ export const useSystemCodeGenerate = (system: SystemLeaf) => {
         onSuccess: async generatedCode => {
             try {
                 // Save generated code immediately
-                await updateField(system.uid, 'systemCode', generatedCode)
+                await updateField(system.uid, 'systemCode', generatedCode, {
+                    previousValue: system.systemCode,
+                })
                 // Success toast is handled by updateField via toast.promise
             } catch (error) {
                 // Error toast is handled by updateField

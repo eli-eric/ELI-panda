@@ -28,7 +28,7 @@ interface InlineFieldComboboxProps extends InlineFieldBaseProps {
     value: string | null
     displayValue?: string | null
     codebook: CODEBOOK
-    onSave: (uid: string) => Promise<void>
+    onSave: (uid: string, displayName?: string) => Promise<void>
     isPending?: boolean
     placeholder?: string
     filter?: CodebookFilter[]
@@ -86,7 +86,7 @@ export const InlineFieldCombobox: FC<InlineFieldComboboxProps> = ({
             setSearchText('')
 
             try {
-                await onSave(selected.uid)
+                await onSave(selected.uid, selected.name)
             } catch {
                 // Revert on error
                 setOptimisticValue(value)
