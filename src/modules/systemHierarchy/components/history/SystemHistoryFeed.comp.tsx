@@ -127,6 +127,8 @@ interface FieldDiffProps {
     fm: IntlShape['formatMessage']
 }
 
+const diffValues = { b: (chunks: ReactNode) => <strong>{chunks}</strong> }
+
 const FieldDiff: FC<FieldDiffProps> = ({ entry, fm }) => {
     const field = resolveFieldLabel(entry.field, fm)
     const hasOld = entry.oldValue !== null && entry.oldValue !== undefined
@@ -135,10 +137,7 @@ const FieldDiff: FC<FieldDiffProps> = ({ entry, fm }) => {
     if (!hasNew && hasOld) {
         return (
             <span>
-                {fm(
-                    { id: message.systemHierarchy.history.diff.cleared },
-                    { field: <strong>{field}</strong> },
-                )}
+                {fm({ id: message.systemHierarchy.history.diff.cleared }, { ...diffValues, field })}
             </span>
         )
     }
@@ -149,8 +148,9 @@ const FieldDiff: FC<FieldDiffProps> = ({ entry, fm }) => {
                 {fm(
                     { id: message.systemHierarchy.history.diff.set },
                     {
-                        field: <strong>{field}</strong>,
-                        newValue: <strong>{formatChangeValue(entry.newValue, fm)}</strong>,
+                        ...diffValues,
+                        field,
+                        newValue: formatChangeValue(entry.newValue, fm),
                     },
                 )}
             </span>
@@ -162,9 +162,10 @@ const FieldDiff: FC<FieldDiffProps> = ({ entry, fm }) => {
             {fm(
                 { id: message.systemHierarchy.history.diff.changed },
                 {
-                    field: <strong>{field}</strong>,
-                    oldValue: <strong>{formatChangeValue(entry.oldValue, fm)}</strong>,
-                    newValue: <strong>{formatChangeValue(entry.newValue, fm)}</strong>,
+                    ...diffValues,
+                    field,
+                    oldValue: formatChangeValue(entry.oldValue, fm),
+                    newValue: formatChangeValue(entry.newValue, fm),
                 },
             )}
         </span>

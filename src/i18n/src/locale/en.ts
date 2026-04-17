@@ -1546,9 +1546,9 @@ export const messages = {
                 allUsers: 'All users',
             },
             diff: {
-                changed: 'changed {field} from {oldValue} to {newValue}',
-                set: 'set {field} to {newValue}',
-                cleared: 'cleared {field}',
+                changed: 'changed <b>{field}</b> from <b>{oldValue}</b> to <b>{newValue}</b>',
+                set: 'set <b>{field}</b> to <b>{newValue}</b>',
+                cleared: 'cleared <b>{field}</b>',
                 emptyValue: '(empty)',
             },
         },
