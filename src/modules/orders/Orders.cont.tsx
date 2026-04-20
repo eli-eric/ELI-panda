@@ -5,6 +5,7 @@ import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 import type { Order } from '@/types/responses/orders'
 
 import { FilterBadges } from '../shared/form/FilterBadges'
+import { ColumnVisibilityDropdown } from '../shared/table/ColumnVisibilityDropdown.comp'
 import { PaginationV2 as Pagination } from '../shared/table/PaginationV2'
 import { usePandaTable } from '../shared/table/pandaTable/hooks/usePandaTable'
 import type { PandaTableSettings } from '../shared/table/pandaTable/PandaTable'
@@ -23,7 +24,7 @@ const OrdersContainer = () => {
     const tableSettings: PandaTableSettings<Order> = {
         enableSorting: true,
         enableQueryURL: true,
-        enableColumnHiding: true,
+        enableColumnHiding: false,
         enableColumnReordering: true,
         defaultColumnOrder: ['name'],
     }
@@ -49,7 +50,8 @@ const OrdersContainer = () => {
             <SearchBar
                 tableId="orders"
                 left={<HeaderButtons />}
-                right={<FilterBadges tableId="orders" />}
+                right={<ColumnVisibilityDropdown table={table} />}
+                secondRow={<FilterBadges tableId="orders" />}
             />
             {!error && (
                 <PandaTableV2<Order>

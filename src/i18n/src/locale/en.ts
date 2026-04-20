@@ -21,6 +21,7 @@ export const messages = {
             generate: 'Gen',
             edit: 'Edit',
             addTag: 'Add Tag',
+            retry: 'Retry',
         },
         custom404: {
             title: '404',
@@ -1400,6 +1401,8 @@ export const messages = {
             noLeaves: 'No subsystems found',
             selectParent: 'Select a system from the tree to view its subsystems',
             viewParent: 'View Detail',
+            filtersApplied: 'Filters Applied',
+            openFilters: 'Open Filters',
         },
         columns: {
             name: 'Name',
@@ -1426,6 +1429,7 @@ export const messages = {
             physicalItem: 'Physical Item',
             spareParts: 'Spare Parts',
             spareFor: 'Spare For',
+            relationships: 'Relationships',
             attachments: 'Attachments',
             history: 'History',
         },
@@ -1503,10 +1507,26 @@ export const messages = {
         spareParts: {
             title: 'Spare Parts',
             noSpareParts: 'No spare parts assigned',
+            coverage: 'Coverage',
+            partNumber: 'Part Number',
+            eun: 'EUN',
         },
         spareFor: {
             title: 'Spare For',
             noSpareFor: 'Not a spare for any system',
+        },
+        relationships: {
+            noRelationships: 'No relationships',
+            inbound: 'Inbound',
+            outbound: 'Outbound',
+            cooledBy: 'Cooled by',
+            cools: 'Cools',
+            poweredBy: 'Powered by',
+            powers: 'Powers',
+            controlledBy: 'Controlled by',
+            controls: 'Controls',
+            spareFor: 'Spare for',
+            hasSpare: 'Has spare',
         },
         history: {
             title: 'History',
@@ -1524,6 +1544,12 @@ export const messages = {
                 moves: 'System Moves',
                 itemMoves: 'Item Moves',
                 allUsers: 'All users',
+            },
+            diff: {
+                changed: 'changed <b>{field}</b> from <b>{oldValue}</b> to <b>{newValue}</b>',
+                set: 'set <b>{field}</b> to <b>{newValue}</b>',
+                cleared: 'cleared <b>{field}</b>',
+                emptyValue: '(empty)',
             },
         },
         graph: {

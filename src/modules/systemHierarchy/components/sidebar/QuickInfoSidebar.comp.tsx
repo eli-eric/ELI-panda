@@ -94,7 +94,7 @@ export const QuickInfoSidebar: FC<QuickInfoSidebarProps> = ({ system }) => {
     ]
 
     return (
-        <div className="flex flex-col h-full overflow-y-auto scrollbar-style">
+        <div className="flex flex-col">
             <div className="border-b border-border px-3 py-2">
                 <h2 className="text-sm font-semibold">
                     {fm({ id: message.systemHierarchy.sidebar.title })}

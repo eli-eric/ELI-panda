@@ -1,4 +1,4 @@
-import React, { startTransition, useEffect, useLayoutEffect, useState } from 'react'
+import React, { startTransition, useEffect, useLayoutEffect, useRef, useState } from 'react'
 
 import { cn } from '@/lib/utils'
 
@@ -13,11 +13,19 @@ interface Props {
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect
 export const TableLayoutContainer = ({ children, deps, className }: Props) => {
     const [height, setHeight] = useState<number>(0)
+    const containerRef = useRef<HTMLDivElement>(null)
 
     useIsomorphicLayoutEffect(
         () => {
             const handleResize = () => {
-                const searchBar = document.getElementById('search-bar')?.clientHeight || 0
+                const searchBarInContainer = containerRef.current?.querySelector<HTMLElement>(
+                    '[data-layout-slot="search-bar"]',
+                )
+                const searchBar =
+                    searchBarInContainer?.clientHeight ||
+                    document.querySelector<HTMLElement>('[data-layout-slot="search-bar"]')
+                        ?.clientHeight ||
+                    0
                 const tableHeading = document.getElementById('table-heading')?.clientHeight || 0
                 const pageHead = document.getElementById('page-head')?.clientHeight || 0
                 const emptyResults = document.getElementById('empty-results')?.clientHeight || 0
@@ -71,6 +79,7 @@ export const TableLayoutContainer = ({ children, deps, className }: Props) => {
 
     return (
         <div
+            ref={containerRef}
             style={{
                 height: `calc(100vh - ${height}px)`,
             }}

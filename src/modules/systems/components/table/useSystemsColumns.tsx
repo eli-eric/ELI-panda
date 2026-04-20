@@ -24,16 +24,18 @@ interface SystemsColumnsProps {
     tableId: string
     hideButtons?: boolean
     enableDragAndDrop?: boolean
+    enableQueryURL?: boolean
 }
 
 export const useSystemsColumns = ({
     tableId,
     hideButtons,
     enableDragAndDrop,
+    enableQueryURL = false,
 }: SystemsColumnsProps) => {
-    const { setUid, pending } = useSubsystems(tableId)
+    const { setUid, pending } = useSubsystems(tableId, enableQueryURL)
     const canEdit = usePermission([ROLE.SYSTEM_EDIT])
-    const { queryKey } = useSystems(tableId)
+    const { queryKey } = useSystems(tableId, false, undefined, enableQueryURL)
     const { setUID, setOpenDeviceInfo } = useShowDeviceStore()
 
     const columns = useMemo(

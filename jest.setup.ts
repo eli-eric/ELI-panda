@@ -56,6 +56,16 @@ global.ResizeObserver = class ResizeObserver {
 } as any
 /* eslint-enable @typescript-eslint/no-empty-function */
 
+// Polyfill crypto.randomUUID for jsdom — delegate to node:crypto for a real UUID
+if (typeof globalThis.crypto !== 'undefined' && !globalThis.crypto.randomUUID) {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const nodeCrypto = require('node:crypto') as { randomUUID: () => string }
+    Object.defineProperty(globalThis.crypto, 'randomUUID', {
+        value: () => nodeCrypto.randomUUID(),
+        configurable: true,
+    })
+}
+
 // Polyfill DOMRect for radix-ui context menu in jsdom
 if (typeof globalThis.DOMRect === 'undefined') {
     globalThis.DOMRect = class DOMRect {

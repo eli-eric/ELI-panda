@@ -28,7 +28,6 @@ const GroupProperty = ({ detail, disabled: forceDisabled }: Props) => {
                     label={detail.property.name}
                     disabled={disabled}
                     rounded={'rounded-md'}
-                    defaultValue={detail.value ?? detail.property.defaultValue}
                 />
             )
         case PROPERTY_TYPE.NUMBER:
@@ -40,7 +39,6 @@ const GroupProperty = ({ detail, disabled: forceDisabled }: Props) => {
                     disabled={disabled}
                     rounded={'rounded-md'}
                     type={'number'}
-                    defaultValue={detail.value ?? detail.property.defaultValue}
                 />
             )
         case PROPERTY_TYPE.BOOLEAN:
@@ -52,7 +50,6 @@ const GroupProperty = ({ detail, disabled: forceDisabled }: Props) => {
                     customLabel={detail.property.name}
                     rounded={'rounded-md'}
                     customOptions={['true', 'false']}
-                    defaultValue={detail.value ?? detail.property.defaultValue}
                 />
             )
         case PROPERTY_TYPE.LIST:
@@ -65,7 +62,6 @@ const GroupProperty = ({ detail, disabled: forceDisabled }: Props) => {
                     customLabel={detail.property.name}
                     rounded={'rounded-md'}
                     customOptions={detail.property.listOfValues}
-                    defaultValue={detail.value ?? detail.property.defaultValue}
                 />
             )
         case PROPERTY_TYPE.RANGE: {
@@ -81,7 +77,6 @@ const GroupProperty = ({ detail, disabled: forceDisabled }: Props) => {
                     disabled={disabled}
                     label={detail.property.name}
                     rounded={'rounded-md'}
-                    defaultValue={detail.value}
                 />
             )
         }

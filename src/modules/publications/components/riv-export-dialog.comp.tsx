@@ -102,7 +102,10 @@ export const RivExportDialogComponent: FC<Props> = ({
                         className="w-64"
                     />
                 </div>
-                <Button onClick={onDownload} disabled={isDownloading || isValidating || !canExport || !deliveryRef.trim()}>
+                <Button
+                    onClick={onDownload}
+                    disabled={isDownloading || isValidating || !canExport || !deliveryRef.trim()}
+                >
                     <FormattedMessage id={riv.downloadButton} />
                 </Button>
             </div>

@@ -11,7 +11,7 @@ import type { SystemCodesOverviewResponse } from '../types'
 export const CONTROL_SYSTEMS_TABLE_ID = 'controlSystems'
 
 export const useSystemCodes = (tableId: string = CONTROL_SYSTEMS_TABLE_ID) => {
-    const { query } = useQueryManager(tableId)
+    const { query } = useQueryManager(tableId, undefined, true)
 
     const queryKey: QueryFetcherKey = ['systemCodes', { query }]
 

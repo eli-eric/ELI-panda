@@ -4,12 +4,12 @@ import { Button } from '@/components/ui/button'
 
 interface Props {
     index: number
-    lenght: number
+    length: number
     moveDown: (index: number) => void
     moveUp: (index: number) => void
 }
 
-const MoveButtons = ({ index, lenght, moveDown, moveUp }: Props) => (
+const MoveButtons = ({ index, length, moveDown, moveUp }: Props) => (
     <div className="flex flex-col gap-1">
         <Button
             type="button"
@@ -25,7 +25,7 @@ const MoveButtons = ({ index, lenght, moveDown, moveUp }: Props) => (
         </Button>
         <Button
             type="button"
-            disabled={index === lenght - 1}
+            disabled={index === length - 1}
             variant="outline"
             size="sm"
             onClick={() => {

@@ -79,7 +79,8 @@ const CellActionDropdown = ({
 }) => {
     const { catalogueItem } = useEndpoint({ uid })
     const { formatMessage } = useIntl()
-    const { refetch, catalogueItems } = useCatalogueItems(tableId)
+    const enableQueryURL = tableId === 'catalogueItems'
+    const { refetch, catalogueItems } = useCatalogueItems(tableId, undefined, enableQueryURL)
     const canEdit = usePermission([ROLE.CATALOGUE_EDIT])
     const openModal = useDynamicModalStore(state => state.openModal)
     const withWarningModal = useWarningModal()

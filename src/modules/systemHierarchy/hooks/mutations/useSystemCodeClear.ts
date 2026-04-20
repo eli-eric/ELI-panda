@@ -11,8 +11,8 @@ export const useSystemCodeClear = (system: SystemLeaf) => {
     })
 
     const clearCode = useCallback(async () => {
-        await updateField(system.uid, 'systemCode', null)
-    }, [system.uid, updateField])
+        await updateField(system.uid, 'systemCode', null, { previousValue: system.systemCode })
+    }, [system.uid, system.systemCode, updateField])
 
     return {
         clearCode,

@@ -14,11 +14,7 @@ interface EdgeDetailSheetProps {
     targetName: string
 }
 
-export const EdgeDetailSheet: FC<EdgeDetailSheetProps> = ({
-    edge,
-    sourceName,
-    targetName,
-}) => {
+export const EdgeDetailSheet: FC<EdgeDetailSheetProps> = ({ edge, sourceName, targetName }) => {
     const { formatMessage: fm } = useIntl()
 
     const items = [

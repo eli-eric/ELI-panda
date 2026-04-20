@@ -1,5 +1,6 @@
 import { memo, useMemo } from 'react'
 
+import { ColumnVisibilityDropdown } from '@/modules/shared/table/ColumnVisibilityDropdown.comp'
 import { PaginationV2 as Pagination } from '@/modules/shared/table/PaginationV2'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import type { PandaTableSettings } from '@/modules/shared/table/pandaTable/PandaTable'
@@ -19,7 +20,7 @@ export const ItemsSelectTable = () => {
     const settings = useMemo<PandaTableSettings<SystemDetail>>(
         () => ({
             enableMultiRowSelection: true,
-            enableColumnHiding: true,
+            enableColumnHiding: false,
             enableColumnReordering: false,
             enableQueryURL: false,
             enableRowSelection: row => !!row.original.physicalItem?.uid,
@@ -61,6 +62,7 @@ export const ItemsSelectTable = () => {
                         enableQueryURL={settings?.enableQueryURL}
                     />
                 }
+                right={<ColumnVisibilityDropdown table={table} />}
             />
             <PandaTableV2
                 data={systems?.data}

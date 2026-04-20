@@ -14,6 +14,7 @@ const mockUseQueryState = useQueryState as jest.Mock
 const queryState: Record<string, string | null> = {}
 
 const getPagination = (pagination?: string) => JSON.parse(pagination || '{}')
+const getColumnFilters = (columnFilter?: string) => JSON.parse(columnFilter || '[]')
 
 describe('useQueryManager', () => {
     beforeEach(() => {
@@ -105,5 +106,23 @@ describe('useQueryManager', () => {
             page: 4,
             pageSize: 25,
         })
+    })
+
+    it('ignores URL filter when enableQueryURL is false', () => {
+        queryState.filter = JSON.stringify([{ id: 'name', value: 'abc' }])
+
+        const { result } = renderHook(() => useQueryManager('systemLeaves'))
+
+        expect(getColumnFilters(result.current.query.columnFilter)).toEqual([])
+    })
+
+    it('uses URL filter when enableQueryURL is true and store has no filters', () => {
+        queryState.filter = JSON.stringify([{ id: 'name', value: 'abc' }])
+
+        const { result } = renderHook(() => useQueryManager('systemLeaves', undefined, true))
+
+        expect(getColumnFilters(result.current.query.columnFilter)).toEqual([
+            { id: 'name', value: 'abc' },
+        ])
     })
 })

@@ -7,7 +7,7 @@ import useQueryManager from '@/hooks/useQueryManager'
 import { queryMutate } from '@/utils/fetcher'
 
 export const ExportButton = () => {
-    const { query } = useQueryManager('publications')
+    const { query } = useQueryManager('publications', undefined, true)
 
     const exportMutation = useMutation({
         mutationKey: ['publicationsExport', query],

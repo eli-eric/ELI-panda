@@ -63,5 +63,15 @@ export const useAssignSparesNavigation = ({
         setSelectedUidForSystem(uid)
         setSelectedRelationshipType(relationshipType)
         router.push(PATH.SYSTEM_RELATIONS)
-    }, [uid, parentPath, catalogueNumber, relationshipType, router, setSelectedUidForSystem, setSelectedRelationshipType, setSearch, setColumnFilter])
+    }, [
+        uid,
+        parentPath,
+        catalogueNumber,
+        relationshipType,
+        router,
+        setSelectedUidForSystem,
+        setSelectedRelationshipType,
+        setSearch,
+        setColumnFilter,
+    ])
 }

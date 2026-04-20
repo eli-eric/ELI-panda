@@ -7,10 +7,15 @@ import { Badge } from '@/components/ui/badge'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import { HISTORY_TYPE } from '@/modules/systemItem/types/constants'
-import type { HistoryResponse } from '@/modules/systemItem/types/responses'
+import type {
+    ChangeValue,
+    FieldChangeEntry,
+    HistoryResponse,
+} from '@/modules/systemItem/types/responses'
 import { PATH } from '@/types/constants/paths'
 import { formatDate } from '@/utils/formatters'
 
+import { getFieldLabelKey } from '../../utils/fieldChangeBuilder'
 import { getHistoryTypeVisual } from './historyFeed.visuals'
 
 interface SystemHistoryFeedProps {
@@ -104,11 +109,84 @@ const getHistoryTypeLabel = (historyType: HISTORY_TYPE, fm: IntlShape['formatMes
     }
 }
 
+const formatChangeValue = (value: ChangeValue | null, fm: IntlShape['formatMessage']): string => {
+    if (value === null || value === undefined)
+        return fm({ id: message.systemHierarchy.history.diff.emptyValue })
+    if (typeof value === 'object') return value.name
+    if (typeof value === 'boolean') return String(value)
+    return String(value)
+}
+
+const resolveFieldLabel = (field: string, fm: IntlShape['formatMessage']): string => {
+    const labelKey = getFieldLabelKey(field)
+    return labelKey ? fm({ id: labelKey }) : field
+}
+
+interface FieldDiffProps {
+    entry: FieldChangeEntry
+    fm: IntlShape['formatMessage']
+}
+
+const diffValues = { b: (chunks: ReactNode) => <strong>{chunks}</strong> }
+
+const FieldDiff: FC<FieldDiffProps> = ({ entry, fm }) => {
+    const field = resolveFieldLabel(entry.field, fm)
+    const hasOld = entry.oldValue !== null && entry.oldValue !== undefined
+    const hasNew = entry.newValue !== null && entry.newValue !== undefined
+
+    if (!hasNew && hasOld) {
+        return (
+            <span>
+                {fm({ id: message.systemHierarchy.history.diff.cleared }, { ...diffValues, field })}
+            </span>
+        )
+    }
+
+    if (!hasOld && hasNew) {
+        return (
+            <span>
+                {fm(
+                    { id: message.systemHierarchy.history.diff.set },
+                    {
+                        ...diffValues,
+                        field,
+                        newValue: formatChangeValue(entry.newValue, fm),
+                    },
+                )}
+            </span>
+        )
+    }
+
+    return (
+        <span>
+            {fm(
+                { id: message.systemHierarchy.history.diff.changed },
+                {
+                    ...diffValues,
+                    field,
+                    oldValue: formatChangeValue(entry.oldValue, fm),
+                    newValue: formatChangeValue(entry.newValue, fm),
+                },
+            )}
+        </span>
+    )
+}
+
 const renderHistoryMessage = (
     historyItem: HistoryResponse,
     fm: IntlShape['formatMessage'],
 ): ReactNode => {
-    const { action, detail, historyType } = historyItem
+    const { action, detail, historyType, changes } = historyItem
+
+    if (changes?.length) {
+        return (
+            <span className="flex flex-col gap-0.5">
+                {changes.map((entry, idx) => (
+                    <FieldDiff key={`${entry.field}-${idx}`} entry={entry} fm={fm} />
+                ))}
+            </span>
+        )
+    }
 
     switch (historyType) {
         case HISTORY_TYPE.GENERAL:

@@ -17,7 +17,7 @@ interface SearchBarButtonsProps {
 export const SearchBarButtons = ({ filterFormMethods }: SearchBarButtonsProps) => {
     const router = useRouter()
     const uid = useCategoryUid()
-    const { refetch } = useCatalogueItems()
+    const { refetch } = useCatalogueItems('catalogueItems', undefined, true)
     const handleRefresh = () => {
         refetch()
     }

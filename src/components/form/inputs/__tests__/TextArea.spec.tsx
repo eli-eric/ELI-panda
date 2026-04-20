@@ -41,10 +41,7 @@ describe('TextArea component', () => {
     it('sets aria-invalid when error exists', async () => {
         render(<WithError field="test" message="Required" />)
         await waitFor(() => {
-            expect(screen.getByLabelText('Test')).toHaveAttribute(
-                'aria-invalid',
-                'true',
-            )
+            expect(screen.getByLabelText('Test')).toHaveAttribute('aria-invalid', 'true')
         })
     })
 
@@ -55,9 +52,6 @@ describe('TextArea component', () => {
             </FormWrapper>,
         )
         expect(screen.queryByText('Field is required')).not.toBeInTheDocument()
-        expect(screen.getByLabelText('Test')).toHaveAttribute(
-            'aria-invalid',
-            'false',
-        )
+        expect(screen.getByLabelText('Test')).toHaveAttribute('aria-invalid', 'false')
     })
 })
