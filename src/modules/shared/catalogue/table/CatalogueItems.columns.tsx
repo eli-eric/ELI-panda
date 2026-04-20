@@ -25,6 +25,7 @@ type Props = {
     hideButtons?: boolean
     catalogueItems?: CatalogueItemsResponse
     setCategoryFilter?: (value: CodebookType) => void
+    onSelectItem?: (uid: string) => void
 }
 
 export const useCatalogueItemsColumns = ({
@@ -32,6 +33,7 @@ export const useCatalogueItemsColumns = ({
     hideButtons,
     catalogueItems,
     setCategoryFilter,
+    onSelectItem,
 }: Props) => {
     const intl = useIntl()
     const uid = useCategoryUid()
@@ -64,7 +66,14 @@ export const useCatalogueItemsColumns = ({
                 header: intl.formatMessage({ id: messages.name }),
                 accessorFn: row => row.name,
                 id: 'name',
-                cell: props => <NameCell {...props} hideButtons={hideButtons} tableId={tableId} />,
+                cell: props => (
+                    <NameCell
+                        {...props}
+                        hideButtons={hideButtons}
+                        tableId={tableId}
+                        onSelectItem={onSelectItem}
+                    />
+                ),
                 size: 440,
                 meta: {
                     sticky: hideButtons ? false : true,
@@ -206,7 +215,15 @@ export const useCatalogueItemsColumns = ({
 
         return [...columns, ...updateColumns]
         // eslint-disable-next-line
-    }, [intl, catalogueItems, tableId, catalogueCategoryProperties, hideButtons])
+    }, [
+        intl,
+        catalogueItems,
+        tableId,
+        catalogueCategoryProperties,
+        hideButtons,
+        onSelectItem,
+        setCategoryFilter,
+    ])
 
     return columns
 }

@@ -23,6 +23,7 @@ export type Scalars = {
 };
 
 export enum Actions {
+  Create = 'CREATE',
   Delete = 'DELETE',
   Insert = 'INSERT',
   OperationState = 'OPERATION_STATE',
@@ -69,6 +70,9 @@ export type CatalogueCategory = {
   systemTypeAggregate?: Maybe<CatalogueCategorySystemTypeSystemTypeAggregationSelection>;
   systemTypeConnection: CatalogueCategorySystemTypeConnection;
   uid: Scalars['ID']['output'];
+  updatedBy: Array<User>;
+  updatedByAggregate?: Maybe<CatalogueCategoryUserUpdatedByAggregationSelection>;
+  updatedByConnection: CatalogueCategoryUpdatedByConnection;
 };
 
 
@@ -201,6 +205,28 @@ export type CatalogueCategorySystemTypeConnectionArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   sort?: InputMaybe<Array<CatalogueCategorySystemTypeConnectionSort>>;
   where?: InputMaybe<CatalogueCategorySystemTypeConnectionWhere>;
+};
+
+
+export type CatalogueCategoryUpdatedByArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  options?: InputMaybe<UserOptions>;
+  where?: InputMaybe<UserWhere>;
+};
+
+
+export type CatalogueCategoryUpdatedByAggregateArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  where?: InputMaybe<UserWhere>;
+};
+
+
+export type CatalogueCategoryUpdatedByConnectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<CatalogueCategoryUpdatedByConnectionSort>>;
+  where?: InputMaybe<CatalogueCategoryUpdatedByConnectionWhere>;
 };
 
 export type CatalogueCategoryAggregateSelection = {
@@ -570,6 +596,7 @@ export type CatalogueCategoryConnectInput = {
   hasSubcategoryCatalogueCategories?: InputMaybe<Array<CatalogueCategoryHasSubcategoryCatalogueCategoriesConnectFieldInput>>;
   parentCategory?: InputMaybe<CatalogueCategoryParentCategoryConnectFieldInput>;
   systemType?: InputMaybe<CatalogueCategorySystemTypeConnectFieldInput>;
+  updatedBy?: InputMaybe<Array<CatalogueCategoryUpdatedByConnectFieldInput>>;
 };
 
 export type CatalogueCategoryConnectWhere = {
@@ -586,6 +613,7 @@ export type CatalogueCategoryCreateInput = {
   name: Scalars['String']['input'];
   parentCategory?: InputMaybe<CatalogueCategoryParentCategoryFieldInput>;
   systemType?: InputMaybe<CatalogueCategorySystemTypeFieldInput>;
+  updatedBy?: InputMaybe<CatalogueCategoryUpdatedByFieldInput>;
 };
 
 export type CatalogueCategoryDeleteInput = {
@@ -595,6 +623,7 @@ export type CatalogueCategoryDeleteInput = {
   hasSubcategoryCatalogueCategories?: InputMaybe<Array<CatalogueCategoryHasSubcategoryCatalogueCategoriesDeleteFieldInput>>;
   parentCategory?: InputMaybe<CatalogueCategoryParentCategoryDeleteFieldInput>;
   systemType?: InputMaybe<CatalogueCategorySystemTypeDeleteFieldInput>;
+  updatedBy?: InputMaybe<Array<CatalogueCategoryUpdatedByDeleteFieldInput>>;
 };
 
 export type CatalogueCategoryDisconnectInput = {
@@ -604,6 +633,7 @@ export type CatalogueCategoryDisconnectInput = {
   hasSubcategoryCatalogueCategories?: InputMaybe<Array<CatalogueCategoryHasSubcategoryCatalogueCategoriesDisconnectFieldInput>>;
   parentCategory?: InputMaybe<CatalogueCategoryParentCategoryDisconnectFieldInput>;
   systemType?: InputMaybe<CatalogueCategorySystemTypeDisconnectFieldInput>;
+  updatedBy?: InputMaybe<Array<CatalogueCategoryUpdatedByDisconnectFieldInput>>;
 };
 
 export type CatalogueCategoryEdge = {
@@ -2160,6 +2190,7 @@ export type CatalogueCategoryRelationInput = {
   hasSubcategoryCatalogueCategories?: InputMaybe<Array<CatalogueCategoryHasSubcategoryCatalogueCategoriesCreateFieldInput>>;
   parentCategory?: InputMaybe<CatalogueCategoryParentCategoryCreateFieldInput>;
   systemType?: InputMaybe<CatalogueCategorySystemTypeCreateFieldInput>;
+  updatedBy?: InputMaybe<Array<CatalogueCategoryUpdatedByCreateFieldInput>>;
 };
 
 /** Fields to sort CatalogueCategories by. The order in which sorts are applied is not guaranteed when specifying many fields in one CatalogueCategorySort object. */
@@ -2320,6 +2351,260 @@ export type CatalogueCategoryUpdateInput = {
   name?: InputMaybe<Scalars['String']['input']>;
   parentCategory?: InputMaybe<CatalogueCategoryParentCategoryUpdateFieldInput>;
   systemType?: InputMaybe<CatalogueCategorySystemTypeUpdateFieldInput>;
+  updatedBy?: InputMaybe<Array<CatalogueCategoryUpdatedByUpdateFieldInput>>;
+};
+
+export type CatalogueCategoryUpdatedByAggregateInput = {
+  AND?: InputMaybe<Array<CatalogueCategoryUpdatedByAggregateInput>>;
+  NOT?: InputMaybe<CatalogueCategoryUpdatedByAggregateInput>;
+  OR?: InputMaybe<Array<CatalogueCategoryUpdatedByAggregateInput>>;
+  count?: InputMaybe<Scalars['Int']['input']>;
+  count_GT?: InputMaybe<Scalars['Int']['input']>;
+  count_GTE?: InputMaybe<Scalars['Int']['input']>;
+  count_LT?: InputMaybe<Scalars['Int']['input']>;
+  count_LTE?: InputMaybe<Scalars['Int']['input']>;
+  edge?: InputMaybe<CatalogueCategoryUpdatedByEdgeAggregationWhereInput>;
+  node?: InputMaybe<CatalogueCategoryUpdatedByNodeAggregationWhereInput>;
+};
+
+export type CatalogueCategoryUpdatedByConnectFieldInput = {
+  connect?: InputMaybe<Array<UserConnectInput>>;
+  edge: WasUpdatedByCreateInput;
+  /** Whether or not to overwrite any matching relationship with the new properties. */
+  overwrite?: Scalars['Boolean']['input'];
+  where?: InputMaybe<UserConnectWhere>;
+};
+
+export type CatalogueCategoryUpdatedByConnection = {
+  __typename?: 'CatalogueCategoryUpdatedByConnection';
+  edges: Array<CatalogueCategoryUpdatedByRelationship>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type CatalogueCategoryUpdatedByConnectionSort = {
+  edge?: InputMaybe<WasUpdatedBySort>;
+  node?: InputMaybe<UserSort>;
+};
+
+export type CatalogueCategoryUpdatedByConnectionWhere = {
+  AND?: InputMaybe<Array<CatalogueCategoryUpdatedByConnectionWhere>>;
+  NOT?: InputMaybe<CatalogueCategoryUpdatedByConnectionWhere>;
+  OR?: InputMaybe<Array<CatalogueCategoryUpdatedByConnectionWhere>>;
+  edge?: InputMaybe<WasUpdatedByWhere>;
+  node?: InputMaybe<UserWhere>;
+};
+
+export type CatalogueCategoryUpdatedByCreateFieldInput = {
+  edge: WasUpdatedByCreateInput;
+  node: UserCreateInput;
+};
+
+export type CatalogueCategoryUpdatedByDeleteFieldInput = {
+  delete?: InputMaybe<UserDeleteInput>;
+  where?: InputMaybe<CatalogueCategoryUpdatedByConnectionWhere>;
+};
+
+export type CatalogueCategoryUpdatedByDisconnectFieldInput = {
+  disconnect?: InputMaybe<UserDisconnectInput>;
+  where?: InputMaybe<CatalogueCategoryUpdatedByConnectionWhere>;
+};
+
+export type CatalogueCategoryUpdatedByEdgeAggregationWhereInput = {
+  AND?: InputMaybe<Array<CatalogueCategoryUpdatedByEdgeAggregationWhereInput>>;
+  NOT?: InputMaybe<CatalogueCategoryUpdatedByEdgeAggregationWhereInput>;
+  OR?: InputMaybe<Array<CatalogueCategoryUpdatedByEdgeAggregationWhereInput>>;
+  at_MAX_EQUAL?: InputMaybe<Scalars['DateTime']['input']>;
+  at_MAX_GT?: InputMaybe<Scalars['DateTime']['input']>;
+  at_MAX_GTE?: InputMaybe<Scalars['DateTime']['input']>;
+  at_MAX_LT?: InputMaybe<Scalars['DateTime']['input']>;
+  at_MAX_LTE?: InputMaybe<Scalars['DateTime']['input']>;
+  at_MIN_EQUAL?: InputMaybe<Scalars['DateTime']['input']>;
+  at_MIN_GT?: InputMaybe<Scalars['DateTime']['input']>;
+  at_MIN_GTE?: InputMaybe<Scalars['DateTime']['input']>;
+  at_MIN_LT?: InputMaybe<Scalars['DateTime']['input']>;
+  at_MIN_LTE?: InputMaybe<Scalars['DateTime']['input']>;
+  changes_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  changes_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  changes_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  changes_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  changes_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  changes_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  changes_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  changes_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  changes_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  changes_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  changes_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  changes_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  changes_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  changes_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  changes_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  newState_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  newState_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  newState_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  newState_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  newState_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  newState_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  newState_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  newState_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  newState_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  newState_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  newState_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  newState_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  newState_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  newState_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  newState_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  previousState_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  previousState_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  previousState_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  previousState_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  previousState_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  previousState_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  previousState_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  previousState_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  previousState_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  previousState_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  previousState_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  previousState_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  previousState_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  previousState_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  previousState_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type CatalogueCategoryUpdatedByFieldInput = {
+  connect?: InputMaybe<Array<CatalogueCategoryUpdatedByConnectFieldInput>>;
+  create?: InputMaybe<Array<CatalogueCategoryUpdatedByCreateFieldInput>>;
+};
+
+export type CatalogueCategoryUpdatedByNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<CatalogueCategoryUpdatedByNodeAggregationWhereInput>>;
+  NOT?: InputMaybe<CatalogueCategoryUpdatedByNodeAggregationWhereInput>;
+  OR?: InputMaybe<Array<CatalogueCategoryUpdatedByNodeAggregationWhereInput>>;
+  email_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  email_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  email_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  email_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  email_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  email_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  email_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  email_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  email_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  email_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  firstName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  firstName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  firstName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  firstName_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  firstName_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  firstName_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  firstName_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  firstName_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  firstName_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  firstName_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  lastName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  lastName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  lastName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  lastName_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  lastName_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  lastName_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  lastName_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  lastName_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  lastName_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  lastName_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  passwordHash_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  passwordHash_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  passwordHash_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  passwordHash_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  passwordHash_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  username_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  username_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  username_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  username_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  username_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  username_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  username_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  username_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  username_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  username_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  username_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  username_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  username_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  username_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  username_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type CatalogueCategoryUpdatedByRelationship = WasUpdatedBy & {
+  __typename?: 'CatalogueCategoryUpdatedByRelationship';
+  action: Actions;
+  at: Scalars['DateTime']['output'];
+  changes?: Maybe<Scalars['String']['output']>;
+  cursor: Scalars['String']['output'];
+  newState?: Maybe<Scalars['String']['output']>;
+  node: User;
+  previousState?: Maybe<Scalars['String']['output']>;
+};
+
+export type CatalogueCategoryUpdatedByUpdateConnectionInput = {
+  edge?: InputMaybe<WasUpdatedByUpdateInput>;
+  node?: InputMaybe<UserUpdateInput>;
+};
+
+export type CatalogueCategoryUpdatedByUpdateFieldInput = {
+  connect?: InputMaybe<Array<CatalogueCategoryUpdatedByConnectFieldInput>>;
+  create?: InputMaybe<Array<CatalogueCategoryUpdatedByCreateFieldInput>>;
+  delete?: InputMaybe<Array<CatalogueCategoryUpdatedByDeleteFieldInput>>;
+  disconnect?: InputMaybe<Array<CatalogueCategoryUpdatedByDisconnectFieldInput>>;
+  update?: InputMaybe<CatalogueCategoryUpdatedByUpdateConnectionInput>;
+  where?: InputMaybe<CatalogueCategoryUpdatedByConnectionWhere>;
+};
+
+export type CatalogueCategoryUserUpdatedByAggregationSelection = {
+  __typename?: 'CatalogueCategoryUserUpdatedByAggregationSelection';
+  count: Scalars['Int']['output'];
+  edge?: Maybe<CatalogueCategoryUserUpdatedByEdgeAggregateSelection>;
+  node?: Maybe<CatalogueCategoryUserUpdatedByNodeAggregateSelection>;
+};
+
+export type CatalogueCategoryUserUpdatedByEdgeAggregateSelection = {
+  __typename?: 'CatalogueCategoryUserUpdatedByEdgeAggregateSelection';
+  at: DateTimeAggregateSelectionNonNullable;
+  changes: StringAggregateSelectionNullable;
+  newState: StringAggregateSelectionNullable;
+  previousState: StringAggregateSelectionNullable;
+};
+
+export type CatalogueCategoryUserUpdatedByNodeAggregateSelection = {
+  __typename?: 'CatalogueCategoryUserUpdatedByNodeAggregateSelection';
+  email: StringAggregateSelectionNonNullable;
+  firstName: StringAggregateSelectionNonNullable;
+  lastName: StringAggregateSelectionNonNullable;
+  passwordHash: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
+  username: StringAggregateSelectionNonNullable;
 };
 
 export type CatalogueCategoryWhere = {
@@ -2424,6 +2709,23 @@ export type CatalogueCategoryWhere = {
   uid_ENDS_WITH?: InputMaybe<Scalars['ID']['input']>;
   uid_IN?: InputMaybe<Array<Scalars['ID']['input']>>;
   uid_STARTS_WITH?: InputMaybe<Scalars['ID']['input']>;
+  updatedByAggregate?: InputMaybe<CatalogueCategoryUpdatedByAggregateInput>;
+  /** Return CatalogueCategories where all of the related CatalogueCategoryUpdatedByConnections match this filter */
+  updatedByConnection_ALL?: InputMaybe<CatalogueCategoryUpdatedByConnectionWhere>;
+  /** Return CatalogueCategories where none of the related CatalogueCategoryUpdatedByConnections match this filter */
+  updatedByConnection_NONE?: InputMaybe<CatalogueCategoryUpdatedByConnectionWhere>;
+  /** Return CatalogueCategories where one of the related CatalogueCategoryUpdatedByConnections match this filter */
+  updatedByConnection_SINGLE?: InputMaybe<CatalogueCategoryUpdatedByConnectionWhere>;
+  /** Return CatalogueCategories where some of the related CatalogueCategoryUpdatedByConnections match this filter */
+  updatedByConnection_SOME?: InputMaybe<CatalogueCategoryUpdatedByConnectionWhere>;
+  /** Return CatalogueCategories where all of the related Users match this filter */
+  updatedBy_ALL?: InputMaybe<UserWhere>;
+  /** Return CatalogueCategories where none of the related Users match this filter */
+  updatedBy_NONE?: InputMaybe<UserWhere>;
+  /** Return CatalogueCategories where one of the related Users match this filter */
+  updatedBy_SINGLE?: InputMaybe<UserWhere>;
+  /** Return CatalogueCategories where some of the related Users match this filter */
+  updatedBy_SOME?: InputMaybe<UserWhere>;
 };
 
 export type CatalogueItem = {
@@ -2454,6 +2756,9 @@ export type CatalogueItem = {
   supplierAggregate?: Maybe<CatalogueItemSupplierSupplierAggregationSelection>;
   supplierConnection: CatalogueItemSupplierConnection;
   uid: Scalars['String']['output'];
+  updatedBy: Array<User>;
+  updatedByAggregate?: Maybe<CatalogueItemUserUpdatedByAggregationSelection>;
+  updatedByConnection: CatalogueItemUpdatedByConnection;
 };
 
 
@@ -2608,6 +2913,28 @@ export type CatalogueItemSupplierConnectionArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   sort?: InputMaybe<Array<CatalogueItemSupplierConnectionSort>>;
   where?: InputMaybe<CatalogueItemSupplierConnectionWhere>;
+};
+
+
+export type CatalogueItemUpdatedByArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  options?: InputMaybe<UserOptions>;
+  where?: InputMaybe<UserWhere>;
+};
+
+
+export type CatalogueItemUpdatedByAggregateArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  where?: InputMaybe<UserWhere>;
+};
+
+
+export type CatalogueItemUpdatedByConnectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<CatalogueItemUpdatedByConnectionSort>>;
+  where?: InputMaybe<CatalogueItemUpdatedByConnectionWhere>;
 };
 
 export type CatalogueItemAggregateSelection = {
@@ -2819,6 +3146,7 @@ export type CatalogueItemConnectInput = {
   relatedCatalogueItems?: InputMaybe<Array<CatalogueItemRelatedCatalogueItemsConnectFieldInput>>;
   relatedCatalogueItemsFor?: InputMaybe<Array<CatalogueItemRelatedCatalogueItemsForConnectFieldInput>>;
   supplier?: InputMaybe<CatalogueItemSupplierConnectFieldInput>;
+  updatedBy?: InputMaybe<Array<CatalogueItemUpdatedByConnectFieldInput>>;
 };
 
 export type CatalogueItemConnectWhere = {
@@ -2838,6 +3166,7 @@ export type CatalogueItemCreateInput = {
   relatedCatalogueItemsFor?: InputMaybe<CatalogueItemRelatedCatalogueItemsForFieldInput>;
   supplier?: InputMaybe<CatalogueItemSupplierFieldInput>;
   uid: Scalars['String']['input'];
+  updatedBy?: InputMaybe<CatalogueItemUpdatedByFieldInput>;
 };
 
 export type CatalogueItemDeleteInput = {
@@ -2848,6 +3177,7 @@ export type CatalogueItemDeleteInput = {
   relatedCatalogueItems?: InputMaybe<Array<CatalogueItemRelatedCatalogueItemsDeleteFieldInput>>;
   relatedCatalogueItemsFor?: InputMaybe<Array<CatalogueItemRelatedCatalogueItemsForDeleteFieldInput>>;
   supplier?: InputMaybe<CatalogueItemSupplierDeleteFieldInput>;
+  updatedBy?: InputMaybe<Array<CatalogueItemUpdatedByDeleteFieldInput>>;
 };
 
 export type CatalogueItemDisconnectInput = {
@@ -2858,6 +3188,7 @@ export type CatalogueItemDisconnectInput = {
   relatedCatalogueItems?: InputMaybe<Array<CatalogueItemRelatedCatalogueItemsDisconnectFieldInput>>;
   relatedCatalogueItemsFor?: InputMaybe<Array<CatalogueItemRelatedCatalogueItemsForDisconnectFieldInput>>;
   supplier?: InputMaybe<CatalogueItemSupplierDisconnectFieldInput>;
+  updatedBy?: InputMaybe<Array<CatalogueItemUpdatedByDisconnectFieldInput>>;
 };
 
 export type CatalogueItemEdge = {
@@ -3686,6 +4017,7 @@ export type CatalogueItemRelationInput = {
   relatedCatalogueItems?: InputMaybe<Array<CatalogueItemRelatedCatalogueItemsCreateFieldInput>>;
   relatedCatalogueItemsFor?: InputMaybe<Array<CatalogueItemRelatedCatalogueItemsForCreateFieldInput>>;
   supplier?: InputMaybe<CatalogueItemSupplierCreateFieldInput>;
+  updatedBy?: InputMaybe<Array<CatalogueItemUpdatedByCreateFieldInput>>;
 };
 
 /** Fields to sort CatalogueItems by. The order in which sorts are applied is not guaranteed when specifying many fields in one CatalogueItemSort object. */
@@ -3815,6 +4147,260 @@ export type CatalogueItemUpdateInput = {
   relatedCatalogueItemsFor?: InputMaybe<Array<CatalogueItemRelatedCatalogueItemsForUpdateFieldInput>>;
   supplier?: InputMaybe<CatalogueItemSupplierUpdateFieldInput>;
   uid?: InputMaybe<Scalars['String']['input']>;
+  updatedBy?: InputMaybe<Array<CatalogueItemUpdatedByUpdateFieldInput>>;
+};
+
+export type CatalogueItemUpdatedByAggregateInput = {
+  AND?: InputMaybe<Array<CatalogueItemUpdatedByAggregateInput>>;
+  NOT?: InputMaybe<CatalogueItemUpdatedByAggregateInput>;
+  OR?: InputMaybe<Array<CatalogueItemUpdatedByAggregateInput>>;
+  count?: InputMaybe<Scalars['Int']['input']>;
+  count_GT?: InputMaybe<Scalars['Int']['input']>;
+  count_GTE?: InputMaybe<Scalars['Int']['input']>;
+  count_LT?: InputMaybe<Scalars['Int']['input']>;
+  count_LTE?: InputMaybe<Scalars['Int']['input']>;
+  edge?: InputMaybe<CatalogueItemUpdatedByEdgeAggregationWhereInput>;
+  node?: InputMaybe<CatalogueItemUpdatedByNodeAggregationWhereInput>;
+};
+
+export type CatalogueItemUpdatedByConnectFieldInput = {
+  connect?: InputMaybe<Array<UserConnectInput>>;
+  edge: WasUpdatedByCreateInput;
+  /** Whether or not to overwrite any matching relationship with the new properties. */
+  overwrite?: Scalars['Boolean']['input'];
+  where?: InputMaybe<UserConnectWhere>;
+};
+
+export type CatalogueItemUpdatedByConnection = {
+  __typename?: 'CatalogueItemUpdatedByConnection';
+  edges: Array<CatalogueItemUpdatedByRelationship>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type CatalogueItemUpdatedByConnectionSort = {
+  edge?: InputMaybe<WasUpdatedBySort>;
+  node?: InputMaybe<UserSort>;
+};
+
+export type CatalogueItemUpdatedByConnectionWhere = {
+  AND?: InputMaybe<Array<CatalogueItemUpdatedByConnectionWhere>>;
+  NOT?: InputMaybe<CatalogueItemUpdatedByConnectionWhere>;
+  OR?: InputMaybe<Array<CatalogueItemUpdatedByConnectionWhere>>;
+  edge?: InputMaybe<WasUpdatedByWhere>;
+  node?: InputMaybe<UserWhere>;
+};
+
+export type CatalogueItemUpdatedByCreateFieldInput = {
+  edge: WasUpdatedByCreateInput;
+  node: UserCreateInput;
+};
+
+export type CatalogueItemUpdatedByDeleteFieldInput = {
+  delete?: InputMaybe<UserDeleteInput>;
+  where?: InputMaybe<CatalogueItemUpdatedByConnectionWhere>;
+};
+
+export type CatalogueItemUpdatedByDisconnectFieldInput = {
+  disconnect?: InputMaybe<UserDisconnectInput>;
+  where?: InputMaybe<CatalogueItemUpdatedByConnectionWhere>;
+};
+
+export type CatalogueItemUpdatedByEdgeAggregationWhereInput = {
+  AND?: InputMaybe<Array<CatalogueItemUpdatedByEdgeAggregationWhereInput>>;
+  NOT?: InputMaybe<CatalogueItemUpdatedByEdgeAggregationWhereInput>;
+  OR?: InputMaybe<Array<CatalogueItemUpdatedByEdgeAggregationWhereInput>>;
+  at_MAX_EQUAL?: InputMaybe<Scalars['DateTime']['input']>;
+  at_MAX_GT?: InputMaybe<Scalars['DateTime']['input']>;
+  at_MAX_GTE?: InputMaybe<Scalars['DateTime']['input']>;
+  at_MAX_LT?: InputMaybe<Scalars['DateTime']['input']>;
+  at_MAX_LTE?: InputMaybe<Scalars['DateTime']['input']>;
+  at_MIN_EQUAL?: InputMaybe<Scalars['DateTime']['input']>;
+  at_MIN_GT?: InputMaybe<Scalars['DateTime']['input']>;
+  at_MIN_GTE?: InputMaybe<Scalars['DateTime']['input']>;
+  at_MIN_LT?: InputMaybe<Scalars['DateTime']['input']>;
+  at_MIN_LTE?: InputMaybe<Scalars['DateTime']['input']>;
+  changes_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  changes_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  changes_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  changes_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  changes_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  changes_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  changes_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  changes_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  changes_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  changes_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  changes_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  changes_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  changes_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  changes_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  changes_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  newState_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  newState_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  newState_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  newState_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  newState_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  newState_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  newState_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  newState_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  newState_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  newState_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  newState_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  newState_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  newState_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  newState_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  newState_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  previousState_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  previousState_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  previousState_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  previousState_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  previousState_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  previousState_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  previousState_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  previousState_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  previousState_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  previousState_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  previousState_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  previousState_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  previousState_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  previousState_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  previousState_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type CatalogueItemUpdatedByFieldInput = {
+  connect?: InputMaybe<Array<CatalogueItemUpdatedByConnectFieldInput>>;
+  create?: InputMaybe<Array<CatalogueItemUpdatedByCreateFieldInput>>;
+};
+
+export type CatalogueItemUpdatedByNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<CatalogueItemUpdatedByNodeAggregationWhereInput>>;
+  NOT?: InputMaybe<CatalogueItemUpdatedByNodeAggregationWhereInput>;
+  OR?: InputMaybe<Array<CatalogueItemUpdatedByNodeAggregationWhereInput>>;
+  email_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  email_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  email_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  email_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  email_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  email_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  email_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  email_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  email_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  email_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  firstName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  firstName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  firstName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  firstName_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  firstName_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  firstName_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  firstName_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  firstName_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  firstName_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  firstName_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  lastName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  lastName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  lastName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  lastName_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  lastName_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  lastName_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  lastName_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  lastName_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  lastName_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  lastName_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  passwordHash_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  passwordHash_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  passwordHash_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  passwordHash_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  passwordHash_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  username_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  username_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  username_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  username_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  username_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  username_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  username_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  username_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  username_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  username_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  username_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  username_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  username_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  username_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  username_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type CatalogueItemUpdatedByRelationship = WasUpdatedBy & {
+  __typename?: 'CatalogueItemUpdatedByRelationship';
+  action: Actions;
+  at: Scalars['DateTime']['output'];
+  changes?: Maybe<Scalars['String']['output']>;
+  cursor: Scalars['String']['output'];
+  newState?: Maybe<Scalars['String']['output']>;
+  node: User;
+  previousState?: Maybe<Scalars['String']['output']>;
+};
+
+export type CatalogueItemUpdatedByUpdateConnectionInput = {
+  edge?: InputMaybe<WasUpdatedByUpdateInput>;
+  node?: InputMaybe<UserUpdateInput>;
+};
+
+export type CatalogueItemUpdatedByUpdateFieldInput = {
+  connect?: InputMaybe<Array<CatalogueItemUpdatedByConnectFieldInput>>;
+  create?: InputMaybe<Array<CatalogueItemUpdatedByCreateFieldInput>>;
+  delete?: InputMaybe<Array<CatalogueItemUpdatedByDeleteFieldInput>>;
+  disconnect?: InputMaybe<Array<CatalogueItemUpdatedByDisconnectFieldInput>>;
+  update?: InputMaybe<CatalogueItemUpdatedByUpdateConnectionInput>;
+  where?: InputMaybe<CatalogueItemUpdatedByConnectionWhere>;
+};
+
+export type CatalogueItemUserUpdatedByAggregationSelection = {
+  __typename?: 'CatalogueItemUserUpdatedByAggregationSelection';
+  count: Scalars['Int']['output'];
+  edge?: Maybe<CatalogueItemUserUpdatedByEdgeAggregateSelection>;
+  node?: Maybe<CatalogueItemUserUpdatedByNodeAggregateSelection>;
+};
+
+export type CatalogueItemUserUpdatedByEdgeAggregateSelection = {
+  __typename?: 'CatalogueItemUserUpdatedByEdgeAggregateSelection';
+  at: DateTimeAggregateSelectionNonNullable;
+  changes: StringAggregateSelectionNullable;
+  newState: StringAggregateSelectionNullable;
+  previousState: StringAggregateSelectionNullable;
+};
+
+export type CatalogueItemUserUpdatedByNodeAggregateSelection = {
+  __typename?: 'CatalogueItemUserUpdatedByNodeAggregateSelection';
+  email: StringAggregateSelectionNonNullable;
+  firstName: StringAggregateSelectionNonNullable;
+  lastName: StringAggregateSelectionNonNullable;
+  passwordHash: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
+  username: StringAggregateSelectionNonNullable;
 };
 
 export type CatalogueItemWhere = {
@@ -3941,6 +4527,23 @@ export type CatalogueItemWhere = {
   uid_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
   uid_IN?: InputMaybe<Array<Scalars['String']['input']>>;
   uid_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  updatedByAggregate?: InputMaybe<CatalogueItemUpdatedByAggregateInput>;
+  /** Return CatalogueItems where all of the related CatalogueItemUpdatedByConnections match this filter */
+  updatedByConnection_ALL?: InputMaybe<CatalogueItemUpdatedByConnectionWhere>;
+  /** Return CatalogueItems where none of the related CatalogueItemUpdatedByConnections match this filter */
+  updatedByConnection_NONE?: InputMaybe<CatalogueItemUpdatedByConnectionWhere>;
+  /** Return CatalogueItems where one of the related CatalogueItemUpdatedByConnections match this filter */
+  updatedByConnection_SINGLE?: InputMaybe<CatalogueItemUpdatedByConnectionWhere>;
+  /** Return CatalogueItems where some of the related CatalogueItemUpdatedByConnections match this filter */
+  updatedByConnection_SOME?: InputMaybe<CatalogueItemUpdatedByConnectionWhere>;
+  /** Return CatalogueItems where all of the related Users match this filter */
+  updatedBy_ALL?: InputMaybe<UserWhere>;
+  /** Return CatalogueItems where none of the related Users match this filter */
+  updatedBy_NONE?: InputMaybe<UserWhere>;
+  /** Return CatalogueItems where one of the related Users match this filter */
+  updatedBy_SINGLE?: InputMaybe<UserWhere>;
+  /** Return CatalogueItems where some of the related Users match this filter */
+  updatedBy_SOME?: InputMaybe<UserWhere>;
 };
 
 export type CatalogueItemsConnection = {
@@ -24288,6 +24891,128 @@ export type UsersQueryQueryVariables = Exact<{
 
 export type UsersQueryQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', uid: string, email: string, firstName: string, isEnabled: boolean, lastName: string, passwordToChange?: boolean | null, username: string, employee?: { __typename?: 'Employee', uid: string, fullName?: string | null } | null, roles: Array<{ __typename?: 'Role', name: string, code: string, uid: string }>, facility?: { __typename?: 'Facility', name: string, code: string } | null }> };
 
+export type CreateCatalogueCategoryQuickMutationVariables = Exact<{
+  input: Array<CatalogueCategoryCreateInput> | CatalogueCategoryCreateInput;
+}>;
+
+
+export type CreateCatalogueCategoryQuickMutation = { __typename?: 'Mutation', createCatalogueCategories: { __typename?: 'CreateCatalogueCategoriesMutationResponse', catalogueCategories: Array<{ __typename?: 'CatalogueCategory', uid: string, name: string, code: string }> } };
+
+export type UpdateCatalogueCategoryFieldMutationVariables = Exact<{
+  where: CatalogueCategoryWhere;
+  update: CatalogueCategoryUpdateInput;
+  node?: InputMaybe<Scalars['String']['input']>;
+  nodeUid?: InputMaybe<Scalars['String']['input']>;
+  action?: InputMaybe<Scalars['String']['input']>;
+  changes?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type UpdateCatalogueCategoryFieldMutation = { __typename?: 'Mutation', updatedByResolver?: string | null, updateCatalogueCategories: { __typename?: 'UpdateCatalogueCategoriesMutationResponse', catalogueCategories: Array<{ __typename?: 'CatalogueCategory', uid: string, name: string, code: string, systemType?: { __typename?: 'SystemType', uid: string, name: string } | null }> } };
+
+export type UpdateCatalogueItemFieldMutationVariables = Exact<{
+  where: CatalogueItemWhere;
+  update: CatalogueItemUpdateInput;
+  node?: InputMaybe<Scalars['String']['input']>;
+  nodeUid?: InputMaybe<Scalars['String']['input']>;
+  action?: InputMaybe<Scalars['String']['input']>;
+  changes?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type UpdateCatalogueItemFieldMutation = { __typename?: 'Mutation', updatedByResolver?: string | null, updateCatalogueItems: { __typename?: 'UpdateCatalogueItemsMutationResponse', catalogueItems: Array<{ __typename?: 'CatalogueItem', uid: string, name: string, catalogueNumber: string, description?: string | null, manufacturerUrl?: string | null, catalogueCategory: { __typename?: 'CatalogueCategory', uid: string, name: string }, supplier?: { __typename?: 'Supplier', uid: string, name: string } | null }> } };
+
+export type UpdateCatalogueItemPropertyValueMutationVariables = Exact<{
+  where: CatalogueItemWhere;
+  update: CatalogueItemUpdateInput;
+}>;
+
+
+export type UpdateCatalogueItemPropertyValueMutation = { __typename?: 'Mutation', updateCatalogueItems: { __typename?: 'UpdateCatalogueItemsMutationResponse', catalogueItems: Array<{ __typename?: 'CatalogueItem', uid: string }> } };
+
+export type CreateCategoryPropertyGroupMutationVariables = Exact<{
+  categoryUid: Scalars['ID']['input'];
+  name: Scalars['String']['input'];
+  groupUid: Scalars['String']['input'];
+}>;
+
+
+export type CreateCategoryPropertyGroupMutation = { __typename?: 'Mutation', updateCatalogueCategories: { __typename?: 'UpdateCatalogueCategoriesMutationResponse', catalogueCategories: Array<{ __typename?: 'CatalogueCategory', uid: string }> } };
+
+export type UpdateCategoryPropertyGroupMutationVariables = Exact<{
+  groupUid: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+}>;
+
+
+export type UpdateCategoryPropertyGroupMutation = { __typename?: 'Mutation', updateCatalogueCategoryPropertyGroups: { __typename?: 'UpdateCatalogueCategoryPropertyGroupsMutationResponse', catalogueCategoryPropertyGroups: Array<{ __typename?: 'CatalogueCategoryPropertyGroup', uid: string }> } };
+
+export type DeleteCategoryPropertyGroupMutationVariables = Exact<{
+  groupUid: Scalars['String']['input'];
+}>;
+
+
+export type DeleteCategoryPropertyGroupMutation = { __typename?: 'Mutation', deleteCatalogueCategoryPropertyGroups: { __typename?: 'DeleteInfo', nodesDeleted: number } };
+
+export type CreateCategoryPropertyMutationVariables = Exact<{
+  groupUid: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  propertyUid: Scalars['String']['input'];
+}>;
+
+
+export type CreateCategoryPropertyMutation = { __typename?: 'Mutation', updateCatalogueCategoryPropertyGroups: { __typename?: 'UpdateCatalogueCategoryPropertyGroupsMutationResponse', catalogueCategoryPropertyGroups: Array<{ __typename?: 'CatalogueCategoryPropertyGroup', uid: string }> } };
+
+export type UpdateCategoryPropertyMutationVariables = Exact<{
+  propertyUid: Scalars['String']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
+  defaultValue?: InputMaybe<Scalars['String']['input']>;
+  listOfValues?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type UpdateCategoryPropertyMutation = { __typename?: 'Mutation', updateCatalogueCategoryProperties: { __typename?: 'UpdateCatalogueCategoryPropertiesMutationResponse', catalogueCategoryProperties: Array<{ __typename?: 'CatalogueCategoryProperty', uid: string }> } };
+
+export type DeleteCategoryPropertyMutationVariables = Exact<{
+  propertyUid: Scalars['String']['input'];
+}>;
+
+
+export type DeleteCategoryPropertyMutation = { __typename?: 'Mutation', deleteCatalogueCategoryProperties: { __typename?: 'DeleteInfo', nodesDeleted: number } };
+
+export type CatalogueCategoryContextInExplorerQueryVariables = Exact<{
+  where?: InputMaybe<CatalogueCategoryWhere>;
+}>;
+
+
+export type CatalogueCategoryContextInExplorerQuery = { __typename?: 'Query', catalogueCategories: Array<{ __typename?: 'CatalogueCategory', uid: string, name: string, code: string, miniImageUrl?: string | null, systemType?: { __typename?: 'SystemType', uid: string, name: string } | null, parentPath: Array<{ __typename?: 'ParentPathItem', uid?: string | null, name?: string | null } | null>, hasSubcategoryCatalogueCategoriesAggregate?: { __typename?: 'CatalogueCategoryCatalogueCategoryHasSubcategoryCatalogueCategoriesAggregationSelection', count: number } | null, catalogueItemsBelongsToCategoryAggregate?: { __typename?: 'CatalogueCategoryCatalogueItemCatalogueItemsBelongsToCategoryAggregationSelection', count: number } | null }> };
+
+export type CatalogueCategoryHistoryInExplorerQueryVariables = Exact<{
+  where?: InputMaybe<CatalogueCategoryWhere>;
+}>;
+
+
+export type CatalogueCategoryHistoryInExplorerQuery = { __typename?: 'Query', catalogueCategories: Array<{ __typename?: 'CatalogueCategory', uid: string, updatedByConnection: { __typename?: 'CatalogueCategoryUpdatedByConnection', edges: Array<{ __typename?: 'CatalogueCategoryUpdatedByRelationship', at: any, action: Actions, changes?: string | null, node: { __typename?: 'User', uid: string, firstName: string, lastName: string } }> } }> };
+
+export type CatalogueCategoriesTreeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CatalogueCategoriesTreeQuery = { __typename?: 'Query', catalogueCategories: Array<{ __typename?: 'CatalogueCategory', uid: string, name: string, code: string, miniImageUrl?: string | null, systemType?: { __typename?: 'SystemType', uid: string, name: string } | null, parentCategory?: { __typename?: 'CatalogueCategory', uid: string } | null, catalogueItemsBelongsToCategoryAggregate?: { __typename?: 'CatalogueCategoryCatalogueItemCatalogueItemsBelongsToCategoryAggregationSelection', count: number } | null }> };
+
+export type CatalogueItemContextInExplorerQueryVariables = Exact<{
+  where?: InputMaybe<CatalogueItemWhere>;
+}>;
+
+
+export type CatalogueItemContextInExplorerQuery = { __typename?: 'Query', catalogueItems: Array<{ __typename?: 'CatalogueItem', uid: string, catalogueCategory: { __typename?: 'CatalogueCategory', uid: string, name: string, parentPath: Array<{ __typename?: 'ParentPathItem', uid?: string | null, name?: string | null } | null> }, supplier?: { __typename?: 'Supplier', uid: string, name: string } | null, itemAggregate?: { __typename?: 'CatalogueItemItemItemAggregationSelection', count: number } | null, relatedCatalogueItemsAggregate?: { __typename?: 'CatalogueItemCatalogueItemRelatedCatalogueItemsAggregationSelection', count: number } | null }> };
+
+export type CatalogueItemHistoryInExplorerQueryVariables = Exact<{
+  where?: InputMaybe<CatalogueItemWhere>;
+}>;
+
+
+export type CatalogueItemHistoryInExplorerQuery = { __typename?: 'Query', catalogueItems: Array<{ __typename?: 'CatalogueItem', uid: string, updatedByConnection: { __typename?: 'CatalogueItemUpdatedByConnection', edges: Array<{ __typename?: 'CatalogueItemUpdatedByRelationship', at: any, action: Actions, changes?: string | null, node: { __typename?: 'User', uid: string, firstName: string, lastName: string } }> } }> };
+
 export type GetCategoryQueryVariables = Exact<{
   uid?: InputMaybe<Scalars['ID']['input']>;
 }>;
@@ -24699,6 +25424,21 @@ export const UserQueryDocument = {"kind":"Document","definitions":[{"kind":"Oper
 export const UpdateUsersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateUsers"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"UserWhere"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"update"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"UserUpdateInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateUsers"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}},{"kind":"Argument","name":{"kind":"Name","value":"update"},"value":{"kind":"Variable","name":{"kind":"Name","value":"update"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}}]}}]}}]} as unknown as DocumentNode<UpdateUsersMutation, UpdateUsersMutationVariables>;
 export const DeleteUsersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteUsers"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"UserWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteUsers"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodesDeleted"}}]}}]}}]} as unknown as DocumentNode<DeleteUsersMutation, DeleteUsersMutationVariables>;
 export const UsersQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"UsersQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"UserWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"isEnabled"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"passwordToChange"}},{"kind":"Field","name":{"kind":"Name","value":"employee"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"roles"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"facility"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}}]}}]} as unknown as DocumentNode<UsersQueryQuery, UsersQueryQueryVariables>;
+export const CreateCatalogueCategoryQuickDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateCatalogueCategoryQuick"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CatalogueCategoryCreateInput"}}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createCatalogueCategories"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogueCategories"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}}]}}]} as unknown as DocumentNode<CreateCatalogueCategoryQuickMutation, CreateCatalogueCategoryQuickMutationVariables>;
+export const UpdateCatalogueCategoryFieldDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateCatalogueCategoryField"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CatalogueCategoryWhere"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"update"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CatalogueCategoryUpdateInput"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"node"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"nodeUid"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"action"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"changes"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateCatalogueCategories"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}},{"kind":"Argument","name":{"kind":"Name","value":"update"},"value":{"kind":"Variable","name":{"kind":"Name","value":"update"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogueCategories"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"systemType"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"updatedByResolver"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"node"},"value":{"kind":"Variable","name":{"kind":"Name","value":"node"}}},{"kind":"Argument","name":{"kind":"Name","value":"nodeUid"},"value":{"kind":"Variable","name":{"kind":"Name","value":"nodeUid"}}},{"kind":"Argument","name":{"kind":"Name","value":"action"},"value":{"kind":"Variable","name":{"kind":"Name","value":"action"}}},{"kind":"Argument","name":{"kind":"Name","value":"changes"},"value":{"kind":"Variable","name":{"kind":"Name","value":"changes"}}}]}]}}]} as unknown as DocumentNode<UpdateCatalogueCategoryFieldMutation, UpdateCatalogueCategoryFieldMutationVariables>;
+export const UpdateCatalogueItemFieldDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateCatalogueItemField"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CatalogueItemWhere"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"update"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CatalogueItemUpdateInput"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"node"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"nodeUid"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"action"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"changes"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateCatalogueItems"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}},{"kind":"Argument","name":{"kind":"Name","value":"update"},"value":{"kind":"Variable","name":{"kind":"Name","value":"update"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogueItems"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"catalogueNumber"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"manufacturerUrl"}},{"kind":"Field","name":{"kind":"Name","value":"catalogueCategory"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"supplier"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"updatedByResolver"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"node"},"value":{"kind":"Variable","name":{"kind":"Name","value":"node"}}},{"kind":"Argument","name":{"kind":"Name","value":"nodeUid"},"value":{"kind":"Variable","name":{"kind":"Name","value":"nodeUid"}}},{"kind":"Argument","name":{"kind":"Name","value":"action"},"value":{"kind":"Variable","name":{"kind":"Name","value":"action"}}},{"kind":"Argument","name":{"kind":"Name","value":"changes"},"value":{"kind":"Variable","name":{"kind":"Name","value":"changes"}}}]}]}}]} as unknown as DocumentNode<UpdateCatalogueItemFieldMutation, UpdateCatalogueItemFieldMutationVariables>;
+export const UpdateCatalogueItemPropertyValueDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateCatalogueItemPropertyValue"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CatalogueItemWhere"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"update"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CatalogueItemUpdateInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateCatalogueItems"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}},{"kind":"Argument","name":{"kind":"Name","value":"update"},"value":{"kind":"Variable","name":{"kind":"Name","value":"update"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogueItems"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}}]}}]}}]} as unknown as DocumentNode<UpdateCatalogueItemPropertyValueMutation, UpdateCatalogueItemPropertyValueMutationVariables>;
+export const CreateCategoryPropertyGroupDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateCategoryPropertyGroup"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"categoryUid"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"name"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"groupUid"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateCatalogueCategories"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"uid"},"value":{"kind":"Variable","name":{"kind":"Name","value":"categoryUid"}}}]}},{"kind":"Argument","name":{"kind":"Name","value":"update"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"hasGroupCatalogueCategoryPropertyGroups"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"create"},"value":{"kind":"ListValue","values":[{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"node"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"uid"},"value":{"kind":"Variable","name":{"kind":"Name","value":"groupUid"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"name"}}}]}}]}]}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogueCategories"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}}]}}]}}]} as unknown as DocumentNode<CreateCategoryPropertyGroupMutation, CreateCategoryPropertyGroupMutationVariables>;
+export const UpdateCategoryPropertyGroupDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateCategoryPropertyGroup"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"groupUid"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"name"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateCatalogueCategoryPropertyGroups"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"uid"},"value":{"kind":"Variable","name":{"kind":"Name","value":"groupUid"}}}]}},{"kind":"Argument","name":{"kind":"Name","value":"update"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"name"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogueCategoryPropertyGroups"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}}]}}]}}]} as unknown as DocumentNode<UpdateCategoryPropertyGroupMutation, UpdateCategoryPropertyGroupMutationVariables>;
+export const DeleteCategoryPropertyGroupDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteCategoryPropertyGroup"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"groupUid"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteCatalogueCategoryPropertyGroups"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"uid"},"value":{"kind":"Variable","name":{"kind":"Name","value":"groupUid"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodesDeleted"}}]}}]}}]} as unknown as DocumentNode<DeleteCategoryPropertyGroupMutation, DeleteCategoryPropertyGroupMutationVariables>;
+export const CreateCategoryPropertyDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateCategoryProperty"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"groupUid"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"name"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"propertyUid"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateCatalogueCategoryPropertyGroups"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"uid"},"value":{"kind":"Variable","name":{"kind":"Name","value":"groupUid"}}}]}},{"kind":"Argument","name":{"kind":"Name","value":"update"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"containsPropertyCatalogueCategoryProperties"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"create"},"value":{"kind":"ListValue","values":[{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"node"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"uid"},"value":{"kind":"Variable","name":{"kind":"Name","value":"propertyUid"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"name"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"defaultValue"},"value":{"kind":"StringValue","value":"","block":false}},{"kind":"ObjectField","name":{"kind":"Name","value":"listOfValues"},"value":{"kind":"StringValue","value":"","block":false}}]}}]}]}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogueCategoryPropertyGroups"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}}]}}]}}]} as unknown as DocumentNode<CreateCategoryPropertyMutation, CreateCategoryPropertyMutationVariables>;
+export const UpdateCategoryPropertyDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateCategoryProperty"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"propertyUid"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"name"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"defaultValue"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"listOfValues"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateCatalogueCategoryProperties"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"uid"},"value":{"kind":"Variable","name":{"kind":"Name","value":"propertyUid"}}}]}},{"kind":"Argument","name":{"kind":"Name","value":"update"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"name"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"defaultValue"},"value":{"kind":"Variable","name":{"kind":"Name","value":"defaultValue"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"listOfValues"},"value":{"kind":"Variable","name":{"kind":"Name","value":"listOfValues"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogueCategoryProperties"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}}]}}]}}]} as unknown as DocumentNode<UpdateCategoryPropertyMutation, UpdateCategoryPropertyMutationVariables>;
+export const DeleteCategoryPropertyDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteCategoryProperty"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"propertyUid"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteCatalogueCategoryProperties"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"uid"},"value":{"kind":"Variable","name":{"kind":"Name","value":"propertyUid"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodesDeleted"}}]}}]}}]} as unknown as DocumentNode<DeleteCategoryPropertyMutation, DeleteCategoryPropertyMutationVariables>;
+export const CatalogueCategoryContextInExplorerDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CatalogueCategoryContextInExplorer"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"CatalogueCategoryWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogueCategories"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"miniImageUrl"}},{"kind":"Field","name":{"kind":"Name","value":"systemType"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"parentPath"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"hasSubcategoryCatalogueCategoriesAggregate"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}}]}},{"kind":"Field","name":{"kind":"Name","value":"catalogueItemsBelongsToCategoryAggregate"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}}]}}]}}]}}]} as unknown as DocumentNode<CatalogueCategoryContextInExplorerQuery, CatalogueCategoryContextInExplorerQueryVariables>;
+export const CatalogueCategoryHistoryInExplorerDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CatalogueCategoryHistoryInExplorer"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"CatalogueCategoryWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogueCategories"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"updatedByConnection"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"at"}},{"kind":"Field","name":{"kind":"Name","value":"action"}},{"kind":"Field","name":{"kind":"Name","value":"changes"}},{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<CatalogueCategoryHistoryInExplorerQuery, CatalogueCategoryHistoryInExplorerQueryVariables>;
+export const CatalogueCategoriesTreeDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CatalogueCategoriesTree"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogueCategories"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"miniImageUrl"}},{"kind":"Field","name":{"kind":"Name","value":"systemType"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"parentCategory"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}},{"kind":"Field","name":{"kind":"Name","value":"catalogueItemsBelongsToCategoryAggregate"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}}]}}]}}]}}]} as unknown as DocumentNode<CatalogueCategoriesTreeQuery, CatalogueCategoriesTreeQueryVariables>;
+export const CatalogueItemContextInExplorerDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CatalogueItemContextInExplorer"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"CatalogueItemWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogueItems"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"catalogueCategory"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"parentPath"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"supplier"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"itemAggregate"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}}]}},{"kind":"Field","name":{"kind":"Name","value":"relatedCatalogueItemsAggregate"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}}]}}]}}]}}]} as unknown as DocumentNode<CatalogueItemContextInExplorerQuery, CatalogueItemContextInExplorerQueryVariables>;
+export const CatalogueItemHistoryInExplorerDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CatalogueItemHistoryInExplorer"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"CatalogueItemWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogueItems"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"updatedByConnection"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"at"}},{"kind":"Field","name":{"kind":"Name","value":"action"}},{"kind":"Field","name":{"kind":"Name","value":"changes"}},{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<CatalogueItemHistoryInExplorerQuery, CatalogueItemHistoryInExplorerQueryVariables>;
 export const GetCategoryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCategory"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"uid"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}},"defaultValue":{"kind":"NullValue"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogueCategories"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"uid"},"value":{"kind":"Variable","name":{"kind":"Name","value":"uid"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"systemType"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"parentPath"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<GetCategoryQuery, GetCategoryQueryVariables>;
 export const GetCategoriesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCategories"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"CatalogueCategoryWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogueCategories"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"miniImageUrl"}}]}}]}}]} as unknown as DocumentNode<GetCategoriesQuery, GetCategoriesQueryVariables>;
 export const CreateRelatedItemMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateRelatedItemMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"CatalogueItemWhere"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"update"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"CatalogueItemUpdateInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateCatalogueItems"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}},{"kind":"Argument","name":{"kind":"Name","value":"update"},"value":{"kind":"Variable","name":{"kind":"Name","value":"update"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogueItems"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"relatedCatalogueItems"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]}}]} as unknown as DocumentNode<CreateRelatedItemMutationMutation, CreateRelatedItemMutationMutationVariables>;

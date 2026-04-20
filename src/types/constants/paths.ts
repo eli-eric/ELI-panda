@@ -3,6 +3,7 @@ export enum PATH {
     DASHBOARD = '/dashboard',
     CATALOGUE = '/catalogue',
     CATALOGUE_ITEM = '/catalogue/item',
+    CATALOGUE_EXPLORER = '/catalogue/explorer',
     SYSTEMS = '/systems/overview',
     SYSTEMS_MOVING = '/systems/moving',
     SYSTEMS_MULTI_MOVE = '/systems/multi-move',

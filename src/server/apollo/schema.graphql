@@ -158,6 +158,8 @@ type CatalogueCategory @authentication {
         @relationship(type: "HAS_GROUP", direction: OUT)
     hasSubcategoryCatalogueCategories: [CatalogueCategory!]!
         @relationship(type: "HAS_SUBCATEGORY", direction: OUT)
+    updatedBy: [User!]!
+        @relationship(type: "WAS_UPDATED_BY", direction: OUT, properties: "wasUpdatedBy")
     parentPath: [ParentPathItem]!
         @cypher(
             statement: """
@@ -216,6 +218,8 @@ type CatalogueItem @authentication {
     uid: String!
     item: [Item!]! @relationship(type: "IS_BASED_ON", direction: IN)
     links: [Link!]! @relationship(type: "HAS_LINK", direction: OUT)
+    updatedBy: [User!]!
+        @relationship(type: "WAS_UPDATED_BY", direction: OUT, properties: "wasUpdatedBy")
 }
 
 interface hasCatalogueProperty @relationshipProperties {
@@ -257,6 +261,7 @@ enum Actions {
     UPDATE
     DELETE
     OPERATION_STATE
+    CREATE
 }
 
 interface IsSpareFor @relationshipProperties {

@@ -22,6 +22,7 @@ interface CatalogueTableProps {
     getRowProps?: (row: Row<any>) => GetRowPropsReturnType
     pageSize?: number
     onTableReady?: (table: Table<any>) => void
+    onSelectItem?: (uid: string) => void
 }
 
 export const CatalogueTable = forwardRef<PandaTableV2Handle, CatalogueTableProps>(
@@ -37,6 +38,7 @@ export const CatalogueTable = forwardRef<PandaTableV2Handle, CatalogueTableProps
             pageSize = 10,
             setCategoryFilter,
             onTableReady,
+            onSelectItem,
         },
         ref,
     ) => {
@@ -45,6 +47,7 @@ export const CatalogueTable = forwardRef<PandaTableV2Handle, CatalogueTableProps
             hideButtons,
             catalogueItems,
             setCategoryFilter,
+            onSelectItem,
         })
 
         const table = usePandaTable({
