@@ -3,13 +3,7 @@ import { useState } from 'react'
 import { useIntl } from 'react-intl'
 
 import { Button } from '@/components/ui/button'
-import {
-    Dialog,
-    DialogContent,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-} from '@/components/ui/dialog'
+import { DialogFooter } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { message } from '@/i18n/src/messages'
@@ -17,7 +11,6 @@ import { useItemCreate } from '@/modules/catalogueItem/hooks/useItemCreate'
 import type { CatalogueItem } from '@/modules/catalogueItem/types/responses'
 
 export interface QuickCreateItemModalProps {
-    open: boolean
     onClose: () => void
     categoryUid: string
     categoryName?: string
@@ -25,7 +18,6 @@ export interface QuickCreateItemModalProps {
 }
 
 export const QuickCreateItemModal: FC<QuickCreateItemModalProps> = ({
-    open,
     onClose,
     categoryUid,
     categoryName,
@@ -55,53 +47,46 @@ export const QuickCreateItemModal: FC<QuickCreateItemModalProps> = ({
     }
 
     return (
-        <Dialog open={open} onOpenChange={o => !o && onClose()}>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>{fm({ id: message.catalogue.quickCreate.itemTitle })}</DialogTitle>
-                </DialogHeader>
-                <form onSubmit={handleSubmit} data-testid="quick-create-item-form">
-                    <div className="space-y-4">
-                        <div>
-                            <Label htmlFor="qc-item-name">
-                                {fm({ id: message.catalogue.quickCreate.nameLabel })}
-                            </Label>
-                            <Input
-                                id="qc-item-name"
-                                data-testid="quick-create-item-name"
-                                value={name}
-                                onChange={e => setName(e.target.value)}
-                                autoFocus
-                            />
-                        </div>
-                        <div>
-                            <Label htmlFor="qc-item-number">
-                                {fm({ id: message.catalogue.quickCreate.catalogueNumberLabel })}
-                            </Label>
-                            <Input
-                                id="qc-item-number"
-                                data-testid="quick-create-item-number"
-                                value={catalogueNumber}
-                                onChange={e => setCatalogueNumber(e.target.value)}
-                            />
-                        </div>
-                        {categoryName && (
-                            <div className="text-xs text-muted-foreground">
-                                {fm({ id: message.catalogue.quickCreate.category })}:{' '}
-                                <span className="font-medium">{categoryName}</span>
-                            </div>
-                        )}
+        <form onSubmit={handleSubmit} data-testid="quick-create-item-form">
+            <div className="space-y-4">
+                <div>
+                    <Label htmlFor="qc-item-name">
+                        {fm({ id: message.catalogue.quickCreate.nameLabel })}
+                    </Label>
+                    <Input
+                        id="qc-item-name"
+                        data-testid="quick-create-item-name"
+                        value={name}
+                        onChange={e => setName(e.target.value)}
+                        autoFocus
+                    />
+                </div>
+                <div>
+                    <Label htmlFor="qc-item-number">
+                        {fm({ id: message.catalogue.quickCreate.catalogueNumberLabel })}
+                    </Label>
+                    <Input
+                        id="qc-item-number"
+                        data-testid="quick-create-item-number"
+                        value={catalogueNumber}
+                        onChange={e => setCatalogueNumber(e.target.value)}
+                    />
+                </div>
+                {categoryName && (
+                    <div className="text-xs text-muted-foreground">
+                        {fm({ id: message.catalogue.quickCreate.category })}:{' '}
+                        <span className="font-medium">{categoryName}</span>
                     </div>
-                    <DialogFooter className="mt-4">
-                        <Button type="button" variant="outline" onClick={onClose}>
-                            {fm({ id: message.catalogue.quickCreate.cancel })}
-                        </Button>
-                        <Button type="submit" disabled={!isValid || loading}>
-                            {fm({ id: message.catalogue.quickCreate.submit })}
-                        </Button>
-                    </DialogFooter>
-                </form>
-            </DialogContent>
-        </Dialog>
+                )}
+            </div>
+            <DialogFooter className="mt-4">
+                <Button type="button" variant="outline" onClick={onClose}>
+                    {fm({ id: message.catalogue.quickCreate.cancel })}
+                </Button>
+                <Button type="submit" disabled={!isValid || loading}>
+                    {fm({ id: message.catalogue.quickCreate.submit })}
+                </Button>
+            </DialogFooter>
+        </form>
     )
 }

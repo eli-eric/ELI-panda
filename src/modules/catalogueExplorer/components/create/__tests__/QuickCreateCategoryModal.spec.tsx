@@ -16,7 +16,6 @@ const renderModal = (props: Partial<React.ComponentProps<typeof QuickCreateCateg
         <IntlProvider locale="en" messages={{}}>
             <QueryClientProvider client={new QueryClient()}>
                 <QuickCreateCategoryModal
-                    open
                     onClose={props.onClose ?? jest.fn()}
                     onCreated={props.onCreated ?? jest.fn()}
                     parentUid={props.parentUid ?? null}

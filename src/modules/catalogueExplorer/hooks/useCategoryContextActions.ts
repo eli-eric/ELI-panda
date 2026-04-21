@@ -33,7 +33,7 @@ export const useCategoryContextActions = () => {
                 id: modalId,
                 component: QuickCreateCategoryModal,
                 props: {
-                    open: true,
+                    title: fm({ id: message.catalogue.quickCreate.categoryTitle }),
                     parentUid,
                     onClose: () => closeModal(modalId),
                     onCreated: (newUid: string) => {
@@ -42,7 +42,7 @@ export const useCategoryContextActions = () => {
                 },
             })
         },
-        [canEditCategory, openModal, closeModal, openCategoryDetail],
+        [canEditCategory, openModal, closeModal, openCategoryDetail, fm],
     )
 
     const handleCreateItem = useCallback(
@@ -53,7 +53,7 @@ export const useCategoryContextActions = () => {
                 id: modalId,
                 component: QuickCreateItemModal,
                 props: {
-                    open: true,
+                    title: fm({ id: message.catalogue.quickCreate.itemTitle }),
                     categoryUid,
                     categoryName,
                     onClose: () => closeModal(modalId),
@@ -63,7 +63,7 @@ export const useCategoryContextActions = () => {
                 },
             })
         },
-        [canEditItem, openModal, closeModal, selectItem],
+        [canEditItem, openModal, closeModal, selectItem, fm],
     )
 
     const handleEditCategory = useCallback(
