@@ -6,8 +6,6 @@ const resetStore = () => {
     act(() => {
         useCatalogueTreeStore.setState({
             expandedNodes: [],
-            copiedCategoryUid: null,
-            copiedItemUid: null,
         })
     })
 }
@@ -36,12 +34,5 @@ describe('useCatalogueTreeStore', () => {
         act(() => useCatalogueTreeStore.getState().expandNodes(['a', 'b']))
         act(() => useCatalogueTreeStore.getState().collapseAll())
         expect(useCatalogueTreeStore.getState().expandedNodes).toEqual([])
-    })
-
-    it('setCopiedCategoryUid sets and clears copy state', () => {
-        act(() => useCatalogueTreeStore.getState().setCopiedCategoryUid('cat-1'))
-        expect(useCatalogueTreeStore.getState().copiedCategoryUid).toBe('cat-1')
-        act(() => useCatalogueTreeStore.getState().setCopiedCategoryUid(null))
-        expect(useCatalogueTreeStore.getState().copiedCategoryUid).toBeNull()
     })
 })

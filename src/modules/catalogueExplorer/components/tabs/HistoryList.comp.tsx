@@ -6,10 +6,7 @@ import { FormattedDate, FormattedTime, useIntl } from 'react-intl'
 import { Badge } from '@/components/ui/badge'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
-import type {
-    ChangeValue,
-    FieldChangeEntry,
-} from '@/modules/systemItem/types/responses'
+import type { ChangeValue, FieldChangeEntry } from '@/modules/systemItem/types/responses'
 
 import type { CatalogueHistoryEntry } from '../../hooks/queries/useCatalogueItemHistory'
 
@@ -43,10 +40,7 @@ const actionVisual = (action: string) => {
     }
 }
 
-const formatChangeValue = (
-    value: ChangeValue | null,
-    fm: IntlShape['formatMessage'],
-): string => {
+const formatChangeValue = (value: ChangeValue | null, fm: IntlShape['formatMessage']): string => {
     if (value === null || value === undefined)
         return fm({ id: message.systemHierarchy.history.diff.emptyValue })
     if (typeof value === 'object') return value.name
@@ -148,11 +142,7 @@ export const HistoryList: FC<Props> = ({ entries, isLoading, error }) => {
                                 {entry.changes.length > 0 && (
                                     <p className="mt-0.5 flex flex-col gap-0.5 break-words pr-2 text-sm leading-5 text-muted-foreground">
                                         {entry.changes.map((e, i) => (
-                                            <FieldDiff
-                                                key={`${e.field}-${i}`}
-                                                entry={e}
-                                                fm={fm}
-                                            />
+                                            <FieldDiff key={`${e.field}-${i}`} entry={e} fm={fm} />
                                         ))}
                                     </p>
                                 )}

@@ -7,10 +7,9 @@ import { CategoryTreeContainer } from './components/tree/CategoryTree.cont'
 import { useCatalogueNavigation } from './hooks/useCatalogueNavigation'
 
 const CatalogueExplorerContainer: FC = () => {
-    const { selectedCategoryUid, selectedItemUid, isCategoryDetailView } = useCatalogueNavigation()
+    const { selectedCategoryUid, selectedItemUid } = useCatalogueNavigation()
 
-    const showSidebar =
-        !!selectedItemUid || (!!selectedCategoryUid && (isCategoryDetailView || true))
+    const showSidebar = !!selectedItemUid || !!selectedCategoryUid
 
     return (
         <CatalogueLayoutContainer

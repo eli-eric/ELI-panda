@@ -1,4 +1,7 @@
 import type { FC } from 'react'
+import { useIntl } from 'react-intl'
+
+import { message } from '@/i18n/src/messages'
 
 import { useCatalogueCategoryDetail } from '../../hooks/queries/useCatalogueCategoryDetail'
 import { useCatalogueNavigation } from '../../hooks/useCatalogueNavigation'
@@ -23,14 +26,23 @@ const toCatalogueProperty = (p: {
 })
 
 export const CategoryDetailViewContainer: FC = () => {
+    const { formatMessage: fm } = useIntl()
     const { selectedCategoryUid, backToTable } = useCatalogueNavigation()
     const { category, isLoading, error } = useCatalogueCategoryDetail(selectedCategoryUid)
 
     if (isLoading) {
-        return <div className="p-4 text-sm text-muted-foreground">Loading category...</div>
+        return (
+            <div className="p-4 text-sm text-muted-foreground">
+                {fm({ id: message.catalogue.detail.loadingCategory })}
+            </div>
+        )
     }
     if (error || !category) {
-        return <div className="p-4 text-sm text-destructive">Category not found.</div>
+        return (
+            <div className="p-4 text-sm text-destructive">
+                {fm({ id: message.catalogue.detail.categoryNotFound })}
+            </div>
+        )
     }
 
     const propertyGroups = category.groups.map(g => ({

@@ -1,13 +1,13 @@
 import type { FC } from 'react'
+import { useIntl } from 'react-intl'
 
-interface Props {
-    itemUid: string
-}
+import { message } from '@/i18n/src/messages'
 
-export const CatalogueItemOrdersTab: FC<Props> = ({ itemUid }) => {
+export const CatalogueItemOrdersTab: FC = () => {
+    const { formatMessage: fm } = useIntl()
     return (
         <div className="p-4 text-sm text-muted-foreground">
-            Orders for {itemUid} — integration with existing CatalogueOrders pending.
+            {fm({ id: message.catalogue.detail.pendingIntegration })}
         </div>
     )
 }

@@ -26,12 +26,10 @@ export const CategoryTreeContainer: FC = () => {
     const {
         canEditCategory,
         canEditItem,
-        copiedCategoryUid,
         handleCreateSubCategory,
         handleCreateItem,
         handleEditCategory,
         handleCopyCategory,
-        handlePasteCategory,
         handleDeleteCategory,
     } = useCategoryContextActions()
 
@@ -137,14 +135,12 @@ export const CategoryTreeContainer: FC = () => {
                         search={search}
                         canEditCategory={canEditCategory}
                         canEditItem={canEditItem}
-                        copiedCategoryUid={copiedCategoryUid}
                         onCreateSubCategory={canEditCategory ? handleCreateSubCategory : undefined}
                         onCreateItem={
                             canEditItem ? (uid: string) => handleCreateItem(uid) : undefined
                         }
                         onEditCategory={canEditCategory ? handleEditCategory : undefined}
                         onCopyCategory={canEditCategory ? handleCopyCategory : undefined}
-                        onPasteCategory={canEditCategory ? handlePasteCategory : undefined}
                         onDeleteCategory={canEditCategory ? handleDeleteCategory : undefined}
                     />
                 )}

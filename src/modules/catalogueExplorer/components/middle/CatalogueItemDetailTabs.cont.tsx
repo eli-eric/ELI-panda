@@ -73,25 +73,25 @@ export const CatalogueItemDetailTabs: FC<Props> = ({ item }) => {
                     value={CATALOGUE_ITEM_TABS.RELATED_ITEMS}
                     className="h-full min-h-0 overflow-y-auto scrollbar-style"
                 >
-                    <CatalogueItemRelatedItemsTab itemUid={item.uid} />
+                    <CatalogueItemRelatedItemsTab />
                 </TabsContent>
                 <TabsContent
                     value={CATALOGUE_ITEM_TABS.ORDERS}
                     className="h-full min-h-0 overflow-y-auto scrollbar-style"
                 >
-                    <CatalogueItemOrdersTab itemUid={item.uid} />
+                    <CatalogueItemOrdersTab />
                 </TabsContent>
                 <TabsContent
                     value={CATALOGUE_ITEM_TABS.STATISTICS}
                     className="h-full min-h-0 overflow-y-auto scrollbar-style"
                 >
-                    <CatalogueItemStatisticsTab itemUid={item.uid} />
+                    <CatalogueItemStatisticsTab />
                 </TabsContent>
                 <TabsContent
                     value={CATALOGUE_ITEM_TABS.ATTACHMENTS}
                     className="h-full min-h-0 overflow-y-auto scrollbar-style"
                 >
-                    <CatalogueItemAttachmentsTab itemUid={item.uid} />
+                    <CatalogueItemAttachmentsTab />
                 </TabsContent>
                 <TabsContent
                     value={CATALOGUE_ITEM_TABS.HISTORY}

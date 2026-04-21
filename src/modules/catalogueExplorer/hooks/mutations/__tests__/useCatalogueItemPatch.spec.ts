@@ -81,11 +81,7 @@ describe('useCatalogueItemPatch', () => {
                 c => (c[0] as { queryKey: string[] }).queryKey[0],
             )
             expect(keys).toEqual(
-                expect.arrayContaining([
-                    'catalogueItem',
-                    'catalogueItems',
-                    'catalogueItemHistory',
-                ]),
+                expect.arrayContaining(['catalogueItem', 'catalogueItems', 'catalogueItemHistory']),
             )
         })
         invalidateSpy.mockRestore()

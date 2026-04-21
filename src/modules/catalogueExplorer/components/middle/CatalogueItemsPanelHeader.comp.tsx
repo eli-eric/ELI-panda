@@ -24,7 +24,9 @@ export const CatalogueItemsPanelHeader: FC<Props> = ({ categoryName, categoryUid
     return (
         <div className="flex items-center justify-between px-4 py-2 border-b border-border">
             <div className="flex items-center gap-2">
-                <h2 className="text-sm font-semibold">{categoryName ?? 'All catalogue items'}</h2>
+                <h2 className="text-sm font-semibold">
+                    {categoryName ?? fm({ id: message.catalogue.detail.allItems })}
+                </h2>
             </div>
             <div className="flex items-center gap-2">
                 {categoryUid && (

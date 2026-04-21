@@ -11,11 +11,7 @@ import { message } from '@/i18n/src/messages'
 import { CATALOGUE_CATEGORY_DETAIL_QUERY_KEY } from '../../types/constants'
 
 const createPropertyMutation = gql`
-    mutation CreateCategoryProperty(
-        $groupUid: String!
-        $name: String!
-        $propertyUid: String!
-    ) {
+    mutation CreateCategoryProperty($groupUid: String!, $name: String!, $propertyUid: String!) {
         updateCatalogueCategoryPropertyGroups(
             where: { uid: $groupUid }
             update: {

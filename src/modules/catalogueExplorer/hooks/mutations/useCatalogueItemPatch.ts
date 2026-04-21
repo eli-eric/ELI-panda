@@ -34,7 +34,7 @@ export const useCatalogueItemPatch = (itemUid: string) => {
     })
 
     const withToast = useCallback(
-        <T,>(promise: Promise<T>) => {
+        <T>(promise: Promise<T>) => {
             toast.promise(promise, {
                 loading: fm({ id: message.catalogue.toast.saving }),
                 success: fm({ id: message.catalogue.toast.saved }),

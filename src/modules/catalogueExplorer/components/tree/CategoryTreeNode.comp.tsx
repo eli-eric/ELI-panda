@@ -27,12 +27,10 @@ export interface CategoryTreeNodeProps {
     search?: string
     canEditCategory: boolean
     canEditItem: boolean
-    copiedCategoryUid?: string | null
     onCreateSubCategory?: (parentUid: string) => void
     onCreateItem?: (categoryUid: string) => void
     onEditCategory?: (uid: string) => void
     onCopyCategory?: (uid: string) => void
-    onPasteCategory?: (targetUid: string) => void
     onDeleteCategory?: (uid: string) => void
 }
 
@@ -47,12 +45,10 @@ export const CategoryTreeNode: FC<CategoryTreeNodeProps> = ({
     search,
     canEditCategory,
     canEditItem,
-    copiedCategoryUid,
     onCreateSubCategory,
     onCreateItem,
     onEditCategory,
     onCopyCategory,
-    onPasteCategory,
     onDeleteCategory,
 }) => {
     const { formatMessage: fm } = useIntl()
@@ -72,17 +68,14 @@ export const CategoryTreeNode: FC<CategoryTreeNodeProps> = ({
         onSelect(node.uid)
     }, [node.uid, onSelect])
 
-    const canPaste = !!copiedCategoryUid && copiedCategoryUid !== node.uid
-
     const showCreateSubCategory = canEditCategory && !!onCreateSubCategory
     const showCreateItem = canEditItem && !!onCreateItem
     const showEdit = canEditCategory && !!onEditCategory
     const showCopy = canEditCategory && !!onCopyCategory
-    const showPaste = canEditCategory && !!onPasteCategory && canPaste
     const showDelete = canEditCategory && !!onDeleteCategory
 
     const hasContextMenu =
-        showCreateSubCategory || showCreateItem || showEdit || showCopy || showPaste || showDelete
+        showCreateSubCategory || showCreateItem || showEdit || showCopy || showDelete
 
     const nodeContent = (
         <div
@@ -140,9 +133,7 @@ export const CategoryTreeNode: FC<CategoryTreeNodeProps> = ({
                             </ContextMenuItem>
                         )}
                         {(showCreateSubCategory || showCreateItem) &&
-                            (showEdit || showCopy || showPaste || showDelete) && (
-                                <ContextMenuSeparator />
-                            )}
+                            (showEdit || showCopy || showDelete) && <ContextMenuSeparator />}
                         {showEdit && (
                             <ContextMenuItem
                                 onSelect={() => onEditCategory!(node.uid)}
@@ -157,14 +148,6 @@ export const CategoryTreeNode: FC<CategoryTreeNodeProps> = ({
                                 data-testid="context-copy-category"
                             >
                                 {fm({ id: message.catalogue.tree.copyCategory })}
-                            </ContextMenuItem>
-                        )}
-                        {showPaste && (
-                            <ContextMenuItem
-                                onSelect={() => onPasteCategory!(node.uid)}
-                                data-testid="context-paste-category"
-                            >
-                                {fm({ id: message.catalogue.tree.pasteCategory })}
                             </ContextMenuItem>
                         )}
                         {showDelete && (

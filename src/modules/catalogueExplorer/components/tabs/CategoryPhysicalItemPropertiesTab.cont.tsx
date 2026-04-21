@@ -1,24 +1,23 @@
 import type { FC } from 'react'
+import { useIntl } from 'react-intl'
+
+import { message } from '@/i18n/src/messages'
 
 import type { CatalogueCategoryProperty } from '../../types'
 
 interface Props {
-    categoryUid: string
     properties: CatalogueCategoryProperty[]
-    canEdit: boolean
 }
 
-export const CategoryPhysicalItemPropertiesTab: FC<Props> = ({
-    categoryUid,
-    properties,
-    canEdit,
-}) => {
-    void categoryUid
-    void canEdit
+export const CategoryPhysicalItemPropertiesTab: FC<Props> = ({ properties }) => {
+    const { formatMessage: fm } = useIntl()
+
     return (
         <div className="p-4 space-y-2 text-sm">
             {properties.length === 0 ? (
-                <div className="text-muted-foreground">No physical item properties yet.</div>
+                <div className="text-muted-foreground">
+                    {fm({ id: message.catalogue.category.physicalProperties })}
+                </div>
             ) : (
                 <ul className="space-y-1">
                     {properties.map(p => (

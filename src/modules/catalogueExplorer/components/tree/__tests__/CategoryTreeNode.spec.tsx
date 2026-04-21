@@ -31,12 +31,10 @@ const renderNode = (props: Partial<Parameters<typeof CategoryTreeNode>[0]> = {})
                 search={props.search}
                 canEditCategory={props.canEditCategory ?? false}
                 canEditItem={props.canEditItem ?? false}
-                copiedCategoryUid={props.copiedCategoryUid ?? null}
                 onCreateSubCategory={props.onCreateSubCategory}
                 onCreateItem={props.onCreateItem}
                 onEditCategory={props.onEditCategory}
                 onCopyCategory={props.onCopyCategory}
-                onPasteCategory={props.onPasteCategory}
                 onDeleteCategory={props.onDeleteCategory}
             />
         </IntlProvider>,
@@ -94,47 +92,18 @@ describe('CategoryTreeNode context menu permission gating', () => {
         expect(screen.queryByTestId('context-delete-category')).toBeNull()
     })
 
-    it('hides paste when no category copied', async () => {
+    it('shows copy and delete items when canEditCategory is true', async () => {
         renderNode({
             canEditCategory: true,
-            copiedCategoryUid: null,
-            onPasteCategory: jest.fn(),
+            onCopyCategory: jest.fn(),
+            onDeleteCategory: jest.fn(),
             onCreateSubCategory: jest.fn(),
         })
 
         const trigger = screen.getByText('Node 1')
         fireEvent.contextMenu(trigger)
 
-        await screen.findByTestId('context-create-subcategory')
-        expect(screen.queryByTestId('context-paste-category')).toBeNull()
-    })
-
-    it('shows paste when a different category is copied', async () => {
-        renderNode({
-            canEditCategory: true,
-            copiedCategoryUid: 'other-uid',
-            onPasteCategory: jest.fn(),
-            onCreateSubCategory: jest.fn(),
-        })
-
-        const trigger = screen.getByText('Node 1')
-        fireEvent.contextMenu(trigger)
-
-        expect(await screen.findByTestId('context-paste-category')).toBeInTheDocument()
-    })
-
-    it('hides paste when copied category is the current node', async () => {
-        renderNode({
-            canEditCategory: true,
-            copiedCategoryUid: 'n1',
-            onPasteCategory: jest.fn(),
-            onCreateSubCategory: jest.fn(),
-        })
-
-        const trigger = screen.getByText('Node 1')
-        fireEvent.contextMenu(trigger)
-
-        await screen.findByTestId('context-create-subcategory')
-        expect(screen.queryByTestId('context-paste-category')).toBeNull()
+        expect(await screen.findByTestId('context-copy-category')).toBeInTheDocument()
+        expect(screen.getByTestId('context-delete-category')).toBeInTheDocument()
     })
 })

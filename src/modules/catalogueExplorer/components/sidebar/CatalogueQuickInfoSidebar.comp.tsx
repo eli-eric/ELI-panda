@@ -1,4 +1,7 @@
 import type { FC } from 'react'
+import { useIntl } from 'react-intl'
+
+import { message } from '@/i18n/src/messages'
 
 import { useCatalogueCategoryDetail } from '../../hooks/queries/useCatalogueCategoryDetail'
 import { useCatalogueItemDetail } from '../../hooks/queries/useCatalogueItemDetail'
@@ -8,6 +11,7 @@ import { CategorySidebar } from './CategorySidebar.comp'
 import { ItemSidebar } from './ItemSidebar.comp'
 
 export const CatalogueQuickInfoSidebar: FC = () => {
+    const { formatMessage: fm } = useIntl()
     const { selectedItemUid, selectedCategoryUid, selectCategory, setActiveTab } =
         useCatalogueNavigation()
 
@@ -52,7 +56,7 @@ export const CatalogueQuickInfoSidebar: FC = () => {
 
     return (
         <div className="p-4 text-xs text-muted-foreground">
-            Select a category or item to see details.
+            {fm({ id: message.catalogue.sidebar.emptyHint })}
         </div>
     )
 }

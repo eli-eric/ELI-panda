@@ -90,40 +90,39 @@ export const useCatalogueItemDetail = (uid: string | null) => {
     const context = graphQL.data?.catalogueItems?.[0] ?? null
     const restData = rest.data ?? null
 
-    const item: CatalogueItemExplorerDetail | null =
-        restData && context
-            ? {
-                  uid: restData.uid,
-                  name: restData.name,
-                  catalogueNumber: restData.catalogueNumber,
-                  description: restData.description ?? null,
-                  manufacturerUrl: restData.manufacturerUrl ?? null,
-                  miniImageUrl: null,
-                  lastUpdateTime: restData.lastUpdateTime ?? null,
-                  lastUpdateBy: (restData as CatalogueItemWithAudit).lastUpdateBy ?? null,
-                  catalogueCategory:
-                      context.catalogueCategory ??
-                      (restData.category
-                          ? {
-                                uid: restData.category.uid,
-                                name: restData.category.name,
-                                parentPath: null,
-                            }
-                          : null),
-                  supplier:
-                      context.supplier ??
-                      (restData.supplier
-                          ? { uid: restData.supplier.uid, name: restData.supplier.name }
-                          : null),
-                  physicalItemsCount: context.itemAggregate?.count ?? 0,
-                  relatedItemsCount: context.relatedCatalogueItemsAggregate?.count ?? 0,
-              }
-            : null
+    const item: CatalogueItemExplorerDetail | null = restData
+        ? {
+              uid: restData.uid,
+              name: restData.name,
+              catalogueNumber: restData.catalogueNumber,
+              description: restData.description ?? null,
+              manufacturerUrl: restData.manufacturerUrl ?? null,
+              miniImageUrl: null,
+              lastUpdateTime: restData.lastUpdateTime ?? null,
+              lastUpdateBy: (restData as CatalogueItemWithAudit).lastUpdateBy ?? null,
+              catalogueCategory:
+                  context?.catalogueCategory ??
+                  (restData.category
+                      ? {
+                            uid: restData.category.uid,
+                            name: restData.category.name,
+                            parentPath: null,
+                        }
+                      : null),
+              supplier:
+                  context?.supplier ??
+                  (restData.supplier
+                      ? { uid: restData.supplier.uid, name: restData.supplier.name }
+                      : null),
+              physicalItemsCount: context?.itemAggregate?.count ?? 0,
+              relatedItemsCount: context?.relatedCatalogueItemsAggregate?.count ?? 0,
+          }
+        : null
 
     return {
         item,
-        isLoading: graphQL.isLoading || rest.isLoading,
-        error: graphQL.error || rest.error,
+        isLoading: rest.isLoading,
+        error: rest.error,
         refetch: () => {
             void graphQL.refetch()
             void rest.refetch()

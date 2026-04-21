@@ -1,20 +1,23 @@
 import type { FC } from 'react'
+import { useIntl } from 'react-intl'
+
+import { message } from '@/i18n/src/messages'
 
 import type { CatalogueCategoryPropertyGroup } from '../../types'
 
 interface Props {
-    categoryUid: string
     groups: CatalogueCategoryPropertyGroup[]
-    canEdit: boolean
 }
 
-export const CategoryPropertyGroupsTab: FC<Props> = ({ categoryUid, groups, canEdit }) => {
-    void categoryUid
-    void canEdit
+export const CategoryPropertyGroupsTab: FC<Props> = ({ groups }) => {
+    const { formatMessage: fm } = useIntl()
+
     return (
         <div className="p-4 space-y-3 text-sm">
             {groups.length === 0 ? (
-                <div className="text-muted-foreground">No property groups yet.</div>
+                <div className="text-muted-foreground">
+                    {fm({ id: message.catalogue.category.propertyGroups })}
+                </div>
             ) : (
                 groups.map(group => (
                     <div key={group.uid} className="border border-border rounded p-3">

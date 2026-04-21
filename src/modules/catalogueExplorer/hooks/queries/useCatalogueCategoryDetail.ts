@@ -81,27 +81,27 @@ export const useCatalogueCategoryDetail = (uid: string | null) => {
     const restData = rest.data ?? null
 
     const category: CatalogueCategoryDetail | null =
-        context && restData
+        context || restData
             ? {
-                  uid: context.uid,
-                  name: context.name,
-                  code: context.code,
-                  miniImageUrl: context.miniImageUrl ?? restData.image ?? null,
-                  systemType: context.systemType ?? restData.systemType ?? null,
-                  parentPath: context.parentPath,
-                  groups: restData.groups ?? [],
-                  physicalItemProperties: restData.physicalItemProperties ?? [],
+                  uid: context?.uid ?? uid ?? '',
+                  name: context?.name ?? restData?.name ?? '',
+                  code: context?.code ?? restData?.code ?? '',
+                  miniImageUrl: context?.miniImageUrl ?? restData?.image ?? null,
+                  systemType: context?.systemType ?? restData?.systemType ?? null,
+                  parentPath: context?.parentPath ?? null,
+                  groups: restData?.groups ?? [],
+                  physicalItemProperties: restData?.physicalItemProperties ?? [],
                   hasSubcategoryCatalogueCategoriesAggregate:
-                      context.hasSubcategoryCatalogueCategoriesAggregate,
+                      context?.hasSubcategoryCatalogueCategoriesAggregate ?? null,
                   catalogueItemsBelongsToCategoryAggregate:
-                      context.catalogueItemsBelongsToCategoryAggregate,
+                      context?.catalogueItemsBelongsToCategoryAggregate ?? null,
               }
             : null
 
     return {
         category,
         isLoading: graphQL.isLoading || rest.isLoading,
-        error: graphQL.error || rest.error,
+        error: graphQL.error && rest.error ? (graphQL.error ?? rest.error) : null,
         refetch: () => {
             void graphQL.refetch()
             void rest.refetch()

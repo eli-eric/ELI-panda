@@ -14,12 +14,10 @@ interface CategoryTreeComponentProps {
     search?: string
     canEditCategory: boolean
     canEditItem: boolean
-    copiedCategoryUid: string | null
     onCreateSubCategory?: CategoryTreeNodeProps['onCreateSubCategory']
     onCreateItem?: CategoryTreeNodeProps['onCreateItem']
     onEditCategory?: CategoryTreeNodeProps['onEditCategory']
     onCopyCategory?: CategoryTreeNodeProps['onCopyCategory']
-    onPasteCategory?: CategoryTreeNodeProps['onPasteCategory']
     onDeleteCategory?: CategoryTreeNodeProps['onDeleteCategory']
 }
 
@@ -32,12 +30,10 @@ export const CategoryTreeComponent: FC<CategoryTreeComponentProps> = ({
     search,
     canEditCategory,
     canEditItem,
-    copiedCategoryUid,
     onCreateSubCategory,
     onCreateItem,
     onEditCategory,
     onCopyCategory,
-    onPasteCategory,
     onDeleteCategory,
 }) => {
     const renderNode = useCallback(
@@ -57,12 +53,10 @@ export const CategoryTreeComponent: FC<CategoryTreeComponentProps> = ({
                     search={search}
                     canEditCategory={canEditCategory}
                     canEditItem={canEditItem}
-                    copiedCategoryUid={copiedCategoryUid}
                     onCreateSubCategory={onCreateSubCategory}
                     onCreateItem={onCreateItem}
                     onEditCategory={onEditCategory}
                     onCopyCategory={onCopyCategory}
-                    onPasteCategory={onPasteCategory}
                     onDeleteCategory={onDeleteCategory}
                 >
                     {isExpanded && node.children.map(child => renderNode(child, depth + 1))}
@@ -77,12 +71,10 @@ export const CategoryTreeComponent: FC<CategoryTreeComponentProps> = ({
             search,
             canEditCategory,
             canEditItem,
-            copiedCategoryUid,
             onCreateSubCategory,
             onCreateItem,
             onEditCategory,
             onCopyCategory,
-            onPasteCategory,
             onDeleteCategory,
         ],
     )

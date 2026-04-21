@@ -1,13 +1,13 @@
 import type { FC } from 'react'
+import { useIntl } from 'react-intl'
 
-interface Props {
-    itemUid: string
-}
+import { message } from '@/i18n/src/messages'
 
-export const CatalogueItemStatisticsTab: FC<Props> = ({ itemUid }) => {
+export const CatalogueItemStatisticsTab: FC = () => {
+    const { formatMessage: fm } = useIntl()
     return (
         <div className="p-4 text-sm text-muted-foreground">
-            Statistics for {itemUid} — integration with CatalogueStatistics pending.
+            {fm({ id: message.catalogue.detail.pendingIntegration })}
         </div>
     )
 }

@@ -1,5 +1,7 @@
 import type { FC } from 'react'
+import { useIntl } from 'react-intl'
 
+import { message } from '@/i18n/src/messages'
 import { MetadataSection } from '@/modules/systemHierarchy/components/sidebar/MetadataSection.comp'
 
 export interface CategorySidebarData {
@@ -18,6 +20,7 @@ interface CategorySidebarProps {
 }
 
 export const CategorySidebar: FC<CategorySidebarProps> = ({ category, onSelectCategory }) => {
+    const { formatMessage: fm } = useIntl()
     const path = category.parentPath ?? []
 
     return (
@@ -25,7 +28,7 @@ export const CategorySidebar: FC<CategorySidebarProps> = ({ category, onSelectCa
             {path.length > 0 && (
                 <div>
                     <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
-                        Path
+                        {fm({ id: message.catalogue.sidebar.path })}
                     </h3>
                     <nav className="flex flex-wrap gap-1 text-xs">
                         {path.map((p, i) => (
@@ -47,18 +50,30 @@ export const CategorySidebar: FC<CategorySidebarProps> = ({ category, onSelectCa
             )}
 
             <MetadataSection
-                title="Details"
+                title={fm({ id: message.catalogue.sidebar.details })}
                 items={[
-                    { label: 'Code', value: category.code },
-                    { label: 'System Type', value: category.systemType?.name ?? null },
+                    {
+                        label: fm({ id: message.catalogue.sidebar.code }),
+                        value: category.code,
+                    },
+                    {
+                        label: fm({ id: message.catalogue.sidebar.systemType }),
+                        value: category.systemType?.name ?? null,
+                    },
                 ]}
             />
 
             <MetadataSection
-                title="Statistics"
+                title={fm({ id: message.catalogue.sidebar.statistics })}
                 items={[
-                    { label: 'Items', value: category.itemsCount ?? 0 },
-                    { label: 'Sub-categories', value: category.subCategoriesCount ?? 0 },
+                    {
+                        label: fm({ id: message.catalogue.sidebar.itemsCount }),
+                        value: category.itemsCount ?? 0,
+                    },
+                    {
+                        label: fm({ id: message.catalogue.sidebar.subCategoriesCount }),
+                        value: category.subCategoriesCount ?? 0,
+                    },
                 ]}
             />
         </div>

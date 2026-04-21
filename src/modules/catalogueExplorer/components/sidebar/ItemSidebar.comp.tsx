@@ -1,5 +1,7 @@
 import type { FC } from 'react'
+import { useIntl } from 'react-intl'
 
+import { message } from '@/i18n/src/messages'
 import { MetadataSection } from '@/modules/systemHierarchy/components/sidebar/MetadataSection.comp'
 
 export interface ItemSidebarData {
@@ -35,6 +37,7 @@ const formatDate = (s?: string | null): string | null => {
 }
 
 export const ItemSidebar: FC<ItemSidebarProps> = ({ item, onSelectCategory, onViewRelated }) => {
+    const { formatMessage: fm } = useIntl()
     const path = item.catalogueCategory
         ? [
               ...(item.catalogueCategory.parentPath ?? []),
@@ -50,7 +53,7 @@ export const ItemSidebar: FC<ItemSidebarProps> = ({ item, onSelectCategory, onVi
             {path.length > 0 && (
                 <div data-testid="item-sidebar-breadcrumb">
                     <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
-                        Category
+                        {fm({ id: message.catalogue.sidebar.category })}
                     </h3>
                     <nav className="flex flex-wrap gap-1 text-xs">
                         {path.map((p, i) => (
@@ -73,21 +76,42 @@ export const ItemSidebar: FC<ItemSidebarProps> = ({ item, onSelectCategory, onVi
             )}
 
             <MetadataSection
-                title="Metadata"
+                title={fm({ id: message.catalogue.sidebar.metadata })}
                 items={[
-                    { label: 'Created', value: formatDate(item.createdAt) },
-                    { label: 'Created by', value: item.createdBy?.fullName ?? null },
-                    { label: 'Modified', value: formatDate(item.modifiedAt) },
-                    { label: 'Modified by', value: item.modifiedBy?.fullName ?? null },
+                    {
+                        label: fm({ id: message.catalogue.sidebar.createdAt }),
+                        value: formatDate(item.createdAt),
+                    },
+                    {
+                        label: fm({ id: message.catalogue.sidebar.createdBy }),
+                        value: item.createdBy?.fullName ?? null,
+                    },
+                    {
+                        label: fm({ id: message.catalogue.sidebar.modifiedAt }),
+                        value: formatDate(item.modifiedAt),
+                    },
+                    {
+                        label: fm({ id: message.catalogue.sidebar.modifiedBy }),
+                        value: item.modifiedBy?.fullName ?? null,
+                    },
                 ]}
             />
 
             <MetadataSection
-                title="Statistics"
+                title={fm({ id: message.catalogue.sidebar.statistics })}
                 items={[
-                    { label: 'Physical Items', value: item.physicalItemsCount ?? 0 },
-                    { label: 'Orders', value: item.ordersCount ?? 0 },
-                    { label: 'Related Items', value: item.relatedItemsCount ?? 0 },
+                    {
+                        label: fm({ id: message.catalogue.sidebar.physicalItems }),
+                        value: item.physicalItemsCount ?? 0,
+                    },
+                    {
+                        label: fm({ id: message.catalogue.sidebar.ordersCount }),
+                        value: item.ordersCount ?? 0,
+                    },
+                    {
+                        label: fm({ id: message.catalogue.sidebar.relatedCount }),
+                        value: item.relatedItemsCount ?? 0,
+                    },
                 ]}
             />
 
@@ -98,7 +122,7 @@ export const ItemSidebar: FC<ItemSidebarProps> = ({ item, onSelectCategory, onVi
                     onClick={onViewRelated}
                     data-testid="item-sidebar-view-related"
                 >
-                    View related items
+                    {fm({ id: message.catalogue.sidebar.viewRelatedItems })}
                 </button>
             )}
         </div>

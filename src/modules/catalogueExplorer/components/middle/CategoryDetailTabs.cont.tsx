@@ -62,21 +62,13 @@ export const CategoryDetailTabs: FC<Props> = ({
                     value={CATALOGUE_CATEGORY_TABS.PROPERTY_GROUPS}
                     className="h-full min-h-0 overflow-y-auto scrollbar-style"
                 >
-                    <CategoryPropertyGroupsTab
-                        categoryUid={category.uid}
-                        groups={propertyGroups}
-                        canEdit={canEdit}
-                    />
+                    <CategoryPropertyGroupsTab groups={propertyGroups} />
                 </TabsContent>
                 <TabsContent
                     value={CATALOGUE_CATEGORY_TABS.PHYSICAL_ITEM_PROPERTIES}
                     className="h-full min-h-0 overflow-y-auto scrollbar-style"
                 >
-                    <CategoryPhysicalItemPropertiesTab
-                        categoryUid={category.uid}
-                        properties={physicalItemProperties}
-                        canEdit={canEdit}
-                    />
+                    <CategoryPhysicalItemPropertiesTab properties={physicalItemProperties} />
                 </TabsContent>
                 <TabsContent
                     value={CATALOGUE_CATEGORY_TABS.HISTORY}

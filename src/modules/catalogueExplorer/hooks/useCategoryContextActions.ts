@@ -1,6 +1,5 @@
 import { useCallback } from 'react'
 import { useIntl } from 'react-intl'
-import { toast } from 'sonner'
 
 import { usePermission } from '@/hooks/usePermission'
 import useWarningModal from '@/hooks/useWarningModal'
@@ -10,7 +9,8 @@ import { ROLE } from '@/types/constants/roles'
 
 import { QuickCreateCategoryModal } from '../components/create/QuickCreateCategoryModal.comp'
 import { QuickCreateItemModal } from '../components/create/QuickCreateItemModal.comp'
-import { useCatalogueTreeStore } from '../store/useCatalogueTreeStore'
+import { useCatalogueCategoryCopy } from './mutations/useCatalogueCategoryCopy'
+import { useCatalogueCategoryDelete } from './mutations/useCatalogueCategoryDelete'
 import { useCatalogueNavigation } from './useCatalogueNavigation'
 
 export const useCategoryContextActions = () => {
@@ -19,9 +19,11 @@ export const useCategoryContextActions = () => {
     const canEditItem = !!usePermission([ROLE.CATALOGUE_EDIT])
 
     const { openModal, closeModal } = useDynamicModalStore()
-    const { openCategoryDetail, selectItem } = useCatalogueNavigation()
-    const { copiedCategoryUid, setCopiedCategoryUid } = useCatalogueTreeStore()
+    const { openCategoryDetail, selectItem, selectedCategoryUid, backToTable } =
+        useCatalogueNavigation()
     const withWarning = useWarningModal()
+    const { copyCategory } = useCatalogueCategoryCopy()
+    const { deleteCategory } = useCatalogueCategoryDelete()
 
     const handleCreateSubCategory = useCallback(
         (parentUid: string) => {
@@ -74,44 +76,36 @@ export const useCategoryContextActions = () => {
     const handleCopyCategory = useCallback(
         (uid: string) => {
             if (!canEditCategory) return
-            setCopiedCategoryUid(uid)
-            toast.success(fm({ id: message.catalogue.category.copy }))
+            const run = (id: string) => {
+                void copyCategory(id).then(newUid => {
+                    if (newUid) openCategoryDetail(newUid)
+                })
+            }
+            withWarning(run, fm({ id: message.catalogue.category.confirmCopy }))(uid)
         },
-        [canEditCategory, setCopiedCategoryUid, fm],
-    )
-
-    const handlePasteCategory = useCallback(
-        (_targetUid: string) => {
-            if (!canEditCategory || !copiedCategoryUid) return
-            toast.info('Paste action: backend copy flow pending implementation')
-        },
-        [canEditCategory, copiedCategoryUid],
+        [canEditCategory, copyCategory, openCategoryDetail, withWarning, fm],
     )
 
     const handleDeleteCategory = useCallback(
         (uid: string) => {
             if (!canEditCategory) return
-            const confirm = withWarning(
-                (_u: string) => {
-                    void _u
-                    toast.info('Delete action: backend wiring pending')
-                },
-                fm({ id: message.catalogue.category.confirmDelete }),
-            )
-            confirm(uid)
+            const run = (id: string) => {
+                void deleteCategory(id).then(() => {
+                    if (selectedCategoryUid === id) backToTable()
+                })
+            }
+            withWarning(run, fm({ id: message.catalogue.category.confirmDelete }))(uid)
         },
-        [canEditCategory, withWarning, fm],
+        [canEditCategory, deleteCategory, selectedCategoryUid, backToTable, withWarning, fm],
     )
 
     return {
         canEditCategory,
         canEditItem,
-        copiedCategoryUid,
         handleCreateSubCategory,
         handleCreateItem,
         handleEditCategory,
         handleCopyCategory,
-        handlePasteCategory,
         handleDeleteCategory,
     }
 }

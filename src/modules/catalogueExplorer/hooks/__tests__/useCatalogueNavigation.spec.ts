@@ -50,9 +50,7 @@ describe('useCatalogueNavigation', () => {
 
     it('selectCategory accepts a CodebookType-like object and encodes name/code', () => {
         const { result } = renderHook(() => useCatalogueNavigation())
-        act(() =>
-            result.current.selectCategory({ uid: 'cat-1', name: 'Widgets', code: 'WID' }),
-        )
+        act(() => result.current.selectCategory({ uid: 'cat-1', name: 'Widgets', code: 'WID' }))
         const raw = lastPushQuery().category!
         expect(JSON.parse(raw)).toEqual({ uid: 'cat-1', name: 'Widgets', code: 'WID' })
     })
