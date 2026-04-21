@@ -9,7 +9,7 @@ import { message } from '@/i18n/src/messages'
 const { head } = message.cataloguePage
 
 const NoSSRCatalogueExplorer = dynamic(
-    () => import('@/modules/catalogue/CatalogueExplorer.cont'),
+    () => import('@/modules/catalogueExplorer/CatalogueExplorer.cont'),
     { ssr: false },
 )
 

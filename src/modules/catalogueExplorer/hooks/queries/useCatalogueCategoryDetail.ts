@@ -3,10 +3,10 @@ import { useQuery } from '@tanstack/react-query'
 import gql from 'graphql-tag'
 
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
+import type { CategoryFormType } from '@/modules/catalogue/components/categoryEdit/types'
 import type { QueryFetcherKey } from '@/utils/fetcher'
 import { queryFetcher } from '@/utils/fetcher'
 
-import type { CategoryFormType } from '../../components/categoryEdit/types'
 import { CATALOGUE_CATEGORY_DETAIL_QUERY_KEY } from '../../types/constants'
 
 interface CategoryContextResponse {
