@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/inline-field'
 import { CODEBOOK } from '@/types/constants/codebook'
 
-import { useCatalogueItemFieldUpdate } from '../../hooks/mutations/useCatalogueItemFieldUpdate'
+import { useCatalogueItemPatch } from '../../hooks/mutations/useCatalogueItemPatch'
 
 export interface CatalogueItemForDetail {
     uid: string
@@ -18,6 +18,7 @@ export interface CatalogueItemForDetail {
     catalogueNumber: string
     description?: string | null
     manufacturerUrl?: string | null
+    lastUpdateTime?: string | null
     catalogueCategory?: { uid: string; name: string } | null
     supplier?: { uid: string; name: string } | null
 }
@@ -27,30 +28,72 @@ interface Props {
     canEdit: boolean
 }
 
+const toNullable = (v: unknown): string | null => {
+    if (v === null || v === undefined) return null
+    if (typeof v === 'string') return v === '' ? null : v
+    return String(v)
+}
+
 export const CatalogueItemDetailTabContainer: FC<Props> = ({ item, canEdit }) => {
     const { openCodebookTreeModal } = useCodebookTreeModal()
+    const { patchItem, isPending } = useCatalogueItemPatch(item.uid)
+    const lastUpdateTime = item.lastUpdateTime ?? ''
 
-    const { updateField, isPending } = useCatalogueItemFieldUpdate({
-        name: item.name,
-        catalogueNumber: item.catalogueNumber,
-        description: item.description ?? null,
-        manufacturerUrl: item.manufacturerUrl ?? null,
-        catalogueCategory: item.catalogueCategory,
-        supplier: item.supplier,
-    })
-
-    const saveScalar = useCallback(
-        async (field: string, value: unknown, previousValue: unknown) => {
-            await updateField(item.uid, field, value, { previousValue })
+    const saveName = useCallback(
+        async (v: unknown) => {
+            const next = toNullable(v)
+            if (!next) return
+            await patchItem({ lastUpdateTime, name: next })
         },
-        [item.uid, updateField],
+        [patchItem, lastUpdateTime],
     )
 
-    const saveRelation = useCallback(
-        async (field: string, value: string | null, displayName?: string | null) => {
-            await updateField(item.uid, field, value, { displayName })
+    const saveCatalogueNumber = useCallback(
+        async (v: unknown) => {
+            const next = toNullable(v)
+            if (!next) return
+            await patchItem({ lastUpdateTime, catalogueNumber: next })
         },
-        [item.uid, updateField],
+        [patchItem, lastUpdateTime],
+    )
+
+    const saveDescription = useCallback(
+        async (v: unknown) => {
+            await patchItem({ lastUpdateTime, description: toNullable(v) })
+        },
+        [patchItem, lastUpdateTime],
+    )
+
+    const saveManufacturerUrl = useCallback(
+        async (v: unknown) => {
+            await patchItem({ lastUpdateTime, manufacturerUrl: toNullable(v) })
+        },
+        [patchItem, lastUpdateTime],
+    )
+
+    const saveCategory = useCallback(
+        async (uid: string | null, displayName?: string | null) => {
+            if (!uid) return
+            await patchItem({
+                lastUpdateTime,
+                category: { uid, ...(displayName ? { name: displayName } : {}) },
+            })
+        },
+        [patchItem, lastUpdateTime],
+    )
+
+    const saveSupplier = useCallback(
+        async (uid: string | null, displayName?: string | null) => {
+            if (!uid) {
+                await patchItem({ lastUpdateTime, supplier: null })
+                return
+            }
+            await patchItem({
+                lastUpdateTime,
+                supplier: { uid, ...(displayName ? { name: displayName } : {}) },
+            })
+        },
+        [patchItem, lastUpdateTime],
     )
 
     return (
@@ -58,14 +101,14 @@ export const CatalogueItemDetailTabContainer: FC<Props> = ({ item, canEdit }) =>
             <InlineFieldInput
                 label="Name"
                 value={item.name}
-                onSave={v => saveScalar('name', v, item.name)}
+                onSave={saveName}
                 isPending={isPending}
                 disabled={!canEdit}
             />
             <InlineFieldInput
                 label="Part Number"
                 value={item.catalogueNumber}
-                onSave={v => saveScalar('catalogueNumber', v, item.catalogueNumber)}
+                onSave={saveCatalogueNumber}
                 isPending={isPending}
                 disabled={!canEdit}
             />
@@ -73,7 +116,7 @@ export const CatalogueItemDetailTabContainer: FC<Props> = ({ item, canEdit }) =>
                 label="Category"
                 value={item.catalogueCategory?.uid ?? null}
                 displayValue={item.catalogueCategory?.name ?? null}
-                onSave={(v, displayName) => saveRelation('categoryUid', v, displayName)}
+                onSave={(v, displayName) => saveCategory(v, displayName)}
                 isPending={isPending}
                 disabled={!canEdit}
                 onOpenModal={onSelect => {
@@ -94,21 +137,21 @@ export const CatalogueItemDetailTabContainer: FC<Props> = ({ item, canEdit }) =>
                 value={item.supplier?.uid ?? null}
                 displayValue={item.supplier?.name ?? null}
                 codebook={CODEBOOK.SUPPLIER}
-                onSave={(v, displayName) => saveRelation('supplierUid', v, displayName)}
+                onSave={(v, displayName) => saveSupplier(v, displayName)}
                 isPending={isPending}
                 disabled={!canEdit}
             />
             <InlineFieldInput
                 label="Manufacturer URL"
                 value={item.manufacturerUrl ?? null}
-                onSave={v => saveScalar('manufacturerUrl', v, item.manufacturerUrl ?? null)}
+                onSave={saveManufacturerUrl}
                 isPending={isPending}
                 disabled={!canEdit}
             />
             <InlineFieldTextArea
                 label="Description"
                 value={item.description ?? null}
-                onSave={v => saveScalar('description', v, item.description ?? null)}
+                onSave={saveDescription}
                 isPending={isPending}
                 disabled={!canEdit}
             />

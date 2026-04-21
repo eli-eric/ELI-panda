@@ -3,14 +3,14 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import { IntlProvider } from 'react-intl'
 
-const updateFieldMock = jest.fn().mockResolvedValue(undefined)
+const patchItemMock = jest.fn().mockResolvedValue(undefined)
 
-jest.mock('../../../hooks/mutations/useCatalogueItemFieldUpdate', () => ({
-    useCatalogueItemFieldUpdate: () => ({ updateField: updateFieldMock, isPending: false }),
-}))
-
-jest.mock('@/modules/shared/form/systemType/hooks/useSystemTypeSelectionModal', () => ({
-    useSystemTypeSelectionModal: () => ({ openSystemTypeModal: jest.fn() }),
+jest.mock('../../../hooks/mutations/useCatalogueItemPatch', () => ({
+    useCatalogueItemPatch: () => ({
+        patchItem: patchItemMock,
+        patchDetail: jest.fn(),
+        isPending: false,
+    }),
 }))
 
 jest.mock('@/components/form/shared/hooks/useCodebookTreeModal', () => ({
@@ -42,14 +42,14 @@ jest.mock('@/components/ui/inline-field', () => ({
             data-testid={`inline-combobox-${label}`}
             defaultValue={value ?? ''}
             disabled={disabled}
-            onBlur={e => onSave(e.target.value)}
+            onBlur={e => onSave(e.target.value || null)}
         />
     ),
     InlineFieldModalSelect: ({ label, value, onSave, disabled }: any) => (
         <button
             data-testid={`inline-modal-${label}`}
             disabled={disabled}
-            onClick={() => onSave('new-cat-uid')}
+            onClick={() => onSave('new-cat-uid', 'New Category')}
         >
             {value ?? 'none'}
         </button>
@@ -64,8 +64,9 @@ const item = {
     catalogueNumber: 'WID-001',
     description: 'desc',
     manufacturerUrl: null,
+    lastUpdateTime: '2026-04-21T10:00:00Z',
     catalogueCategory: { uid: 'cat-1', name: 'Cat One' },
-    supplier: null,
+    supplier: { uid: 'sup-1', name: 'Sup One' },
 }
 
 const wrap = (ui: React.ReactElement) => (
@@ -74,24 +75,48 @@ const wrap = (ui: React.ReactElement) => (
     </IntlProvider>
 )
 
-describe('CatalogueItemDetailTab', () => {
-    beforeEach(() => updateFieldMock.mockClear())
+describe('CatalogueItemDetailTab (PATCH REST)', () => {
+    beforeEach(() => patchItemMock.mockClear())
 
-    it('dispatches scalar field save with field name', () => {
+    it('scalar save sends PATCH with lastUpdateTime + field', () => {
         render(wrap(<CatalogueItemDetailTabContainer item={item as any} canEdit />))
         const input = screen.getByTestId('inline-input-Name')
         fireEvent.change(input, { target: { value: 'Renamed' } })
         fireEvent.blur(input)
-        expect(updateFieldMock).toHaveBeenCalledWith('item-1', 'name', 'Renamed', {
-            previousValue: 'Widget',
+        expect(patchItemMock).toHaveBeenCalledWith({
+            lastUpdateTime: '2026-04-21T10:00:00Z',
+            name: 'Renamed',
         })
     })
 
-    it('dispatches relationship save with categoryUid', () => {
+    it('nullable scalar (description) sends null when cleared', () => {
+        render(wrap(<CatalogueItemDetailTabContainer item={item as any} canEdit />))
+        const input = screen.getByTestId('inline-textarea-Description')
+        fireEvent.change(input, { target: { value: '' } })
+        fireEvent.blur(input)
+        expect(patchItemMock).toHaveBeenCalledWith({
+            lastUpdateTime: '2026-04-21T10:00:00Z',
+            description: null,
+        })
+    })
+
+    it('category relation sends {uid, name} in category key', () => {
         render(wrap(<CatalogueItemDetailTabContainer item={item as any} canEdit />))
         fireEvent.click(screen.getByTestId('inline-modal-Category'))
-        expect(updateFieldMock).toHaveBeenCalledWith('item-1', 'categoryUid', 'new-cat-uid', {
-            displayName: undefined,
+        expect(patchItemMock).toHaveBeenCalledWith({
+            lastUpdateTime: '2026-04-21T10:00:00Z',
+            category: { uid: 'new-cat-uid', name: 'New Category' },
+        })
+    })
+
+    it('supplier cleared sends supplier: null', () => {
+        render(wrap(<CatalogueItemDetailTabContainer item={item as any} canEdit />))
+        const input = screen.getByTestId('inline-combobox-Supplier')
+        fireEvent.change(input, { target: { value: '' } })
+        fireEvent.blur(input)
+        expect(patchItemMock).toHaveBeenCalledWith({
+            lastUpdateTime: '2026-04-21T10:00:00Z',
+            supplier: null,
         })
     })
 

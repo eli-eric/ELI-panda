@@ -106,13 +106,13 @@ describe('CatalogueItemParametersTab', () => {
     })
 
     it('renders properties grouped by propertyGroup', () => {
-        render(wrap(<CatalogueItemParametersTab itemUid="item-1" canEdit />))
+        render(wrap(<CatalogueItemParametersTab itemUid="item-1" lastUpdateTime="2026-04-21T10:00:00Z" canEdit />))
         expect(screen.getByText('Specs')).toBeInTheDocument()
         expect(screen.getByText('Operating')).toBeInTheDocument()
     })
 
     it('patches TEXT property on blur with uid + group + value', () => {
-        render(wrap(<CatalogueItemParametersTab itemUid="item-1" canEdit />))
+        render(wrap(<CatalogueItemParametersTab itemUid="item-1" lastUpdateTime="2026-04-21T10:00:00Z" canEdit />))
         const input = screen.getByTestId('inline-input-Voltage')
         fireEvent.change(input, { target: { value: '240V' } })
         fireEvent.blur(input)
@@ -122,11 +122,12 @@ describe('CatalogueItemParametersTab', () => {
                 propertyGroup: 'Specs',
                 value: '240V',
             }),
+            '2026-04-21T10:00:00Z',
         )
     })
 
     it('patches LIST property on change', () => {
-        render(wrap(<CatalogueItemParametersTab itemUid="item-1" canEdit />))
+        render(wrap(<CatalogueItemParametersTab itemUid="item-1" lastUpdateTime="2026-04-21T10:00:00Z" canEdit />))
         const select = screen.getByTestId('inline-select-Mode')
         fireEvent.change(select, { target: { value: 'B' } })
         expect(patchDetailMock).toHaveBeenCalledWith(
@@ -135,22 +136,33 @@ describe('CatalogueItemParametersTab', () => {
                 propertyGroup: 'Specs',
                 value: 'B',
             }),
+            '2026-04-21T10:00:00Z',
         )
     })
 
     it('patches RANGE property with JSON {from,to}', () => {
-        render(wrap(<CatalogueItemParametersTab itemUid="item-1" canEdit />))
+        render(wrap(<CatalogueItemParametersTab itemUid="item-1" lastUpdateTime="2026-04-21T10:00:00Z" canEdit />))
         const from = screen.getByTestId('inline-input-Temperature (from)')
         fireEvent.change(from, { target: { value: '15' } })
         fireEvent.blur(from)
 
-        const lastCall = patchDetailMock.mock.calls[patchDetailMock.mock.calls.length - 1][0]
-        expect(lastCall.property.uid).toBe('prop-range')
-        expect(JSON.parse(lastCall.value)).toEqual({ from: '15', to: '20' })
+        const [detailArg, lastUpdate] =
+            patchDetailMock.mock.calls[patchDetailMock.mock.calls.length - 1]
+        expect(detailArg.property.uid).toBe('prop-range')
+        expect(JSON.parse(detailArg.value)).toEqual({ from: '15', to: '20' })
+        expect(lastUpdate).toBe('2026-04-21T10:00:00Z')
     })
 
     it('disables fields when canEdit is false', () => {
-        render(wrap(<CatalogueItemParametersTab itemUid="item-1" canEdit={false} />))
+        render(
+            wrap(
+                <CatalogueItemParametersTab
+                    itemUid="item-1"
+                    lastUpdateTime="2026-04-21T10:00:00Z"
+                    canEdit={false}
+                />,
+            ),
+        )
         expect(screen.getByTestId('inline-input-Voltage')).toBeDisabled()
         expect(screen.getByTestId('inline-select-Mode')).toBeDisabled()
     })

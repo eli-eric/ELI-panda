@@ -67,7 +67,11 @@ export const CatalogueItemDetailTabs: FC<Props> = ({ item }) => {
                     value={CATALOGUE_ITEM_TABS.PARAMETERS}
                     className="h-full min-h-0 overflow-y-auto scrollbar-style"
                 >
-                    <CatalogueItemParametersTab itemUid={item.uid} canEdit={canEdit} />
+                    <CatalogueItemParametersTab
+                        itemUid={item.uid}
+                        lastUpdateTime={item.lastUpdateTime ?? ''}
+                        canEdit={canEdit}
+                    />
                 </TabsContent>
                 <TabsContent
                     value={CATALOGUE_ITEM_TABS.RELATED_ITEMS}

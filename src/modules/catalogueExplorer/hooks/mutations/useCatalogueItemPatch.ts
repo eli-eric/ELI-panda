@@ -4,7 +4,7 @@ import { useIntl } from 'react-intl'
 import { toast } from 'sonner'
 
 import { message } from '@/i18n/src/messages'
-import type { CatalogueItem, CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
+import type { CatalogueItem } from '@/modules/catalogueItem/types/responses'
 import { queryMutate } from '@/utils/fetcher'
 
 import {
@@ -12,8 +12,22 @@ import {
     CATALOGUE_ITEM_HISTORY_QUERY_KEY,
 } from '../../types/constants'
 
-export type CatalogueItemPatchBody = Partial<CatalogueItem> & {
-    details?: CatalogueItemDetail[]
+export type CatalogueItemDetailPatch = {
+    property: { uid: string }
+    propertyGroup?: string
+    value?: string | number | boolean | { min?: number; max?: number } | null
+}
+
+export interface CatalogueItemPatchBody {
+    lastUpdateTime: string
+    name?: string
+    catalogueNumber?: string
+    description?: string | null
+    manufacturerUrl?: string | null
+    manufacturerNumber?: string | null
+    supplier?: { uid: string; name?: string } | null
+    category?: { uid: string; name?: string }
+    details?: CatalogueItemDetailPatch[]
 }
 
 export const useCatalogueItemPatch = (itemUid: string) => {
@@ -51,7 +65,8 @@ export const useCatalogueItemPatch = (itemUid: string) => {
     )
 
     const patchDetail = useCallback(
-        (detail: CatalogueItemDetail) => withToast(mutateAsync({ details: [detail] })),
+        (detail: CatalogueItemDetailPatch, lastUpdateTime: string) =>
+            withToast(mutateAsync({ lastUpdateTime, details: [detail] })),
         [mutateAsync, withToast],
     )
 

@@ -34,21 +34,24 @@ describe('useCatalogueItemPatch', () => {
         fetchMock.mockClear()
     })
 
-    it('patchItem sends PATCH to /catalogue/item/{uid} with body', async () => {
+    it('patchItem sends PATCH to /catalogue/item/{uid} with body incl. lastUpdateTime', async () => {
         const { useCatalogueItemPatch } = await import('../useCatalogueItemPatch')
         const { result } = renderHook(() => useCatalogueItemPatch('item-1'), { wrapper })
 
         await act(async () => {
-            await result.current.patchItem({ name: 'Renamed' })
+            await result.current.patchItem({ lastUpdateTime: 'ts', name: 'Renamed' })
         })
 
         await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1))
         const [url, options] = fetchMock.mock.calls[0]
         expect(url).toMatch(/\/catalogue\/item\/item-1$/)
-        expect(options).toMatchObject({ method: 'PATCH', body: { name: 'Renamed' } })
+        expect(options).toMatchObject({
+            method: 'PATCH',
+            body: { lastUpdateTime: 'ts', name: 'Renamed' },
+        })
     })
 
-    it('patchDetail wraps single detail into details array', async () => {
+    it('patchDetail wraps single detail into details array with lastUpdateTime', async () => {
         const { useCatalogueItemPatch } = await import('../useCatalogueItemPatch')
         const { result } = renderHook(() => useCatalogueItemPatch('item-1'), { wrapper })
 
@@ -59,12 +62,12 @@ describe('useCatalogueItemPatch', () => {
         }
 
         await act(async () => {
-            await result.current.patchDetail(detail as any)
+            await result.current.patchDetail(detail, 'ts')
         })
 
         const [, options] = fetchMock.mock.calls[0]
         expect(options.method).toBe('PATCH')
-        expect(options.body).toEqual({ details: [detail] })
+        expect(options.body).toEqual({ lastUpdateTime: 'ts', details: [detail] })
     })
 
     it('invalidates catalogueItem, catalogueItems, and history query keys on success', async () => {
@@ -73,7 +76,7 @@ describe('useCatalogueItemPatch', () => {
         const invalidateSpy = jest.spyOn(qc, 'invalidateQueries')
 
         await act(async () => {
-            await result.current.patchItem({ name: 'X' })
+            await result.current.patchItem({ lastUpdateTime: 'ts', name: 'X' })
         })
 
         await waitFor(() => {
@@ -94,7 +97,7 @@ describe('useCatalogueItemPatch', () => {
 
         await act(async () => {
             try {
-                await result.current.patchItem({ name: 'fail' })
+                await result.current.patchItem({ lastUpdateTime: 'ts', name: 'fail' })
             } catch {
                 /* expected */
             }

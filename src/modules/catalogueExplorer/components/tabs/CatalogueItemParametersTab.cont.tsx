@@ -11,6 +11,7 @@ import { useCatalogueItemPatch } from '../../hooks/mutations/useCatalogueItemPat
 
 interface Props {
     itemUid: string
+    lastUpdateTime: string
     canEdit: boolean
 }
 
@@ -113,7 +114,7 @@ const PropertyRow: FC<RowProps> = ({ detail, canEdit, isPending, onSave }) => {
     )
 }
 
-export const CatalogueItemParametersTab: FC<Props> = ({ itemUid, canEdit }) => {
+export const CatalogueItemParametersTab: FC<Props> = ({ itemUid, lastUpdateTime, canEdit }) => {
     const { item } = useCatalogueItem(itemUid)
     const { catalogueCategoryProperties } = useCategoryProperties(item?.category?.uid ?? undefined)
     const { patchDetail, isPending } = useCatalogueItemPatch(itemUid)
@@ -146,13 +147,16 @@ export const CatalogueItemParametersTab: FC<Props> = ({ itemUid, canEdit }) => {
 
     const handleSave = useCallback(
         (detail: CatalogueItemDetail) => async (value: unknown) => {
-            await patchDetail({
-                property: { uid: detail.property.uid } as CatalogueItemDetail['property'],
-                propertyGroup: detail.propertyGroup,
-                value,
-            })
+            await patchDetail(
+                {
+                    property: { uid: detail.property.uid },
+                    propertyGroup: detail.propertyGroup,
+                    value: value as string | number | boolean | null,
+                },
+                lastUpdateTime,
+            )
         },
-        [patchDetail],
+        [patchDetail, lastUpdateTime],
     )
 
     if (!item) {
