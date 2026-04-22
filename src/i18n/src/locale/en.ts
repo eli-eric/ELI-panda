@@ -1835,6 +1835,11 @@ export const messages = {
             itemsCount: 'Items',
             systemType: 'System Type',
             emptyHint: 'Select a category or item to see details.',
+            parameters: 'Parameters',
+            noParameters: 'No parameters',
+            yes: 'Yes',
+            no: 'No',
+            emDash: '—',
         },
         quickCreate: {
             categoryTitle: 'Create sub-category',

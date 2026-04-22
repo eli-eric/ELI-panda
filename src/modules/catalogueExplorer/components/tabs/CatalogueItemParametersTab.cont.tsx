@@ -8,21 +8,12 @@ import { useCategoryProperties } from '@/modules/systems/hooks/useCategoryProper
 import { PROPERTY_TYPE } from '@/types/catalogue/constants'
 
 import { useCatalogueItemPatch } from '../../hooks/mutations/useCatalogueItemPatch'
+import { parseRange } from '../../utils/formatPropertyValue'
 
 interface Props {
     itemUid: string
     lastUpdateTime: string
     canEdit: boolean
-}
-
-const parseRange = (raw: unknown): { from: string; to: string } => {
-    if (typeof raw !== 'string' || raw === '') return { from: '', to: '' }
-    try {
-        const parsed = JSON.parse(raw) as { from?: string; to?: string }
-        return { from: parsed.from ?? '', to: parsed.to ?? '' }
-    } catch {
-        return { from: '', to: '' }
-    }
 }
 
 const booleanOptions = [

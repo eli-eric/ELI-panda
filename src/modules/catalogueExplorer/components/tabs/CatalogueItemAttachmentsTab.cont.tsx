@@ -1,13 +1,20 @@
 import type { FC } from 'react'
-import { useIntl } from 'react-intl'
 
-import { message } from '@/i18n/src/messages'
+import FileManager from '@/modules/shared/fileManager/FileManager'
+import { FILE_TYPE } from '@/modules/shared/fileManager/types'
 
-export const CatalogueItemAttachmentsTab: FC = () => {
-    const { formatMessage: fm } = useIntl()
-    return (
-        <div className="p-4 text-sm text-muted-foreground">
-            {fm({ id: message.catalogue.detail.pendingIntegration })}
-        </div>
-    )
+interface Props {
+    itemUid: string
+    canEdit: boolean
 }
+
+export const CatalogueItemAttachmentsTab: FC<Props> = ({ itemUid, canEdit }) => (
+    <div className="p-4">
+        <FileManager
+            itemType={FILE_TYPE.CATALOGUE}
+            uid={itemUid}
+            hasEditRole={canEdit}
+            allowMultiple
+        />
+    </div>
+)

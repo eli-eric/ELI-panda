@@ -2,6 +2,7 @@ import type { FC } from 'react'
 import { useIntl } from 'react-intl'
 
 import { message } from '@/i18n/src/messages'
+import { useCatalogueItem } from '@/modules/catalogueItem/hooks/useItem'
 
 import { useCatalogueCategoryDetail } from '../../hooks/queries/useCatalogueCategoryDetail'
 import { useCatalogueItemDetail } from '../../hooks/queries/useCatalogueItemDetail'
@@ -16,6 +17,7 @@ export const CatalogueQuickInfoSidebar: FC = () => {
         useCatalogueNavigation()
 
     const { item } = useCatalogueItemDetail(selectedItemUid)
+    const { item: restItem } = useCatalogueItem(selectedItemUid ?? undefined)
     const { category } = useCatalogueCategoryDetail(selectedItemUid ? null : selectedCategoryUid)
 
     if (selectedItemUid && item) {
@@ -30,6 +32,7 @@ export const CatalogueQuickInfoSidebar: FC = () => {
                     physicalItemsCount: item.physicalItemsCount,
                     ordersCount: 0,
                     relatedItemsCount: item.relatedItemsCount,
+                    details: restItem?.details,
                 }}
                 onSelectCategory={selectCategory}
                 onViewRelated={() => setActiveTab(CATALOGUE_ITEM_TABS.RELATED_ITEMS)}

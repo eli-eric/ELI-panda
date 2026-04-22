@@ -2,6 +2,14 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import { IntlProvider } from 'react-intl'
 
+jest.mock('@/hooks/usePermission', () => ({
+    usePermission: () => true,
+}))
+
+jest.mock('@/modules/shared/imageManager/v2/ImageGalleryV2', () => ({
+    ImageGalleryV2: () => null,
+}))
+
 import { ItemSidebar } from '../ItemSidebar.comp'
 
 const baseItem = {

@@ -1,13 +1,13 @@
 import type { FC } from 'react'
-import { useIntl } from 'react-intl'
 
-import { message } from '@/i18n/src/messages'
+import { RelatedItemsContainer } from '@/modules/catalogueItem/components/related-items/RelatedItems.cont'
 
-export const CatalogueItemRelatedItemsTab: FC = () => {
-    const { formatMessage: fm } = useIntl()
-    return (
-        <div className="p-4 text-sm text-muted-foreground">
-            {fm({ id: message.catalogue.detail.pendingIntegration })}
-        </div>
-    )
+interface Props {
+    itemUid: string
 }
+
+export const CatalogueItemRelatedItemsTab: FC<Props> = ({ itemUid }) => (
+    <div className="p-4">
+        <RelatedItemsContainer itemUid={itemUid} />
+    </div>
+)
