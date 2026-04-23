@@ -1,7 +1,7 @@
 import { Eye, EyeOff } from 'lucide-react'
-import React, { useEffect, useId, useState } from 'react'
-import { Controller, useWatch } from 'react-hook-form'
-import { useFormContext } from 'react-hook-form'
+import React, { useEffect, useId, useRef, useState } from 'react'
+import type { Control } from 'react-hook-form'
+import { Controller, useFormContext, useWatch } from 'react-hook-form'
 import { useDebounce, useIsFirstRender } from 'usehooks-ts'
 
 import { Tooltip } from '@/components/Tooltip'
@@ -16,6 +16,34 @@ export type InputProps = FieldProps &
         onChange?: (value: string | number | readonly string[] | undefined) => void
         isFilter?: boolean
     }
+
+type DebouncedChangeObserverProps = {
+    control: Control
+    name: string
+    onChange: (value: string | number | readonly string[] | undefined) => void
+}
+
+const DebouncedChangeObserver = ({ control, name, onChange }: DebouncedChangeObserverProps) => {
+    const inputValue = useWatch({ control, name })
+    const inputValueDebounced = useDebounce(inputValue, 500)
+    const isFirstRender = useIsFirstRender()
+
+    // Keep latest onChange in a ref to avoid stale closure when parent passes a
+    // fresh function identity each render. The effect fires only on debounced
+    // value changes; using a ref keeps deps minimal without recreating timers.
+    const onChangeRef = useRef(onChange)
+    onChangeRef.current = onChange
+
+    useEffect(() => {
+        if (!isFirstRender) {
+            onChangeRef.current(inputValueDebounced)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [inputValueDebounced])
+
+    return null
+}
+
 export const Input = ({
     name,
     placeholder,
@@ -37,21 +65,6 @@ export const Input = ({
 
     const [showPassword, setShowPassword] = useState(false)
 
-    const inputValue = useWatch({
-        control,
-        name,
-    })
-
-    const inputValueDebounced = useDebounce(inputValue, 500)
-    const isFirstRender = useIsFirstRender()
-
-    useEffect(() => {
-        if (!isFirstRender && onChange) {
-            onChange(inputValueDebounced)
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [inputValueDebounced])
-
     const toogleShowPassword = () => setShowPassword(!showPassword)
 
     const idHtml = useId()
@@ -59,81 +72,88 @@ export const Input = ({
     if (hidden) return null
 
     return (
-        <Controller
-            name={name}
-            control={control}
-            defaultValue={defaultValue || ''}
-            render={({ field, fieldState: { error } }) => {
-                return (
-                    <div className={cn('space-y-1 w-full', className)}>
-                        {label && <Label htmlFor={idHtml}>{label}</Label>}
-                        <div className="relative">
-                            <ShadcnInput
-                                {...field}
-                                {...rest}
-                                id={idHtml}
-                                step={step}
-                                value={field.value || ''}
-                                required={required}
-                                type={
-                                    type === 'password'
-                                        ? showPassword
-                                            ? 'text'
-                                            : 'password'
-                                        : type
-                                }
-                                disabled={disabled}
-                                onChange={e => {
-                                    field.onChange(e.target.value)
-                                }}
-                                placeholder={placeholder}
-                                className={cn(
-                                    isFilter && field.value && 'border-2 border-lime-500',
-                                    type === 'password' && 'pr-10',
-                                    unit && type !== 'password' && 'pr-10',
-                                )}
-                                aria-invalid={error ? 'true' : 'false'}
-                            />
-
-                            {type === 'password' && (
-                                <div className="absolute inset-y-0 right-0 cursor-pointer flex items-center pr-3">
-                                    {showPassword ? (
-                                        <Tooltip content="Hide password">
-                                            <EyeOff
-                                                data-testid="toggle-password-visibility"
-                                                aria-label="Show password"
-                                                role="button"
-                                                className="text-muted-foreground hover:text-foreground h-4 w-4 cursor-pointer"
-                                                onClick={toogleShowPassword}
-                                            />
-                                        </Tooltip>
-                                    ) : (
-                                        <Tooltip content="Show password">
-                                            <Eye
-                                                data-testid="toggle-password-visibility"
-                                                role="button"
-                                                aria-label="Hide password"
-                                                className="text-muted-foreground hover:text-foreground h-4 w-4 cursor-pointer"
-                                                onClick={toogleShowPassword}
-                                            />
-                                        </Tooltip>
+        <>
+            {onChange && (
+                <DebouncedChangeObserver control={control} name={name} onChange={onChange} />
+            )}
+            <Controller
+                name={name}
+                control={control}
+                defaultValue={defaultValue || ''}
+                render={({ field, fieldState: { error } }) => {
+                    return (
+                        <div className={cn('space-y-1 w-full', className)}>
+                            {label && <Label htmlFor={idHtml}>{label}</Label>}
+                            <div className="relative">
+                                <ShadcnInput
+                                    {...field}
+                                    {...rest}
+                                    id={idHtml}
+                                    step={step}
+                                    value={field.value || ''}
+                                    required={required}
+                                    type={
+                                        type === 'password'
+                                            ? showPassword
+                                                ? 'text'
+                                                : 'password'
+                                            : type
+                                    }
+                                    disabled={disabled}
+                                    onChange={e => {
+                                        field.onChange(e.target.value)
+                                    }}
+                                    placeholder={placeholder}
+                                    className={cn(
+                                        isFilter && field.value && 'border-2 border-lime-500',
+                                        type === 'password' && 'pr-10',
+                                        unit && type !== 'password' && 'pr-10',
                                     )}
-                                </div>
-                            )}
+                                    aria-invalid={error ? 'true' : 'false'}
+                                />
 
-                            {unit && type !== 'password' && (
-                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                                    <span className="text-muted-foreground text-sm">{unit}</span>
-                                </div>
-                            )}
+                                {type === 'password' && (
+                                    <div className="absolute inset-y-0 right-0 cursor-pointer flex items-center pr-3">
+                                        {showPassword ? (
+                                            <Tooltip content="Hide password">
+                                                <EyeOff
+                                                    data-testid="toggle-password-visibility"
+                                                    aria-label="Show password"
+                                                    role="button"
+                                                    className="text-muted-foreground hover:text-foreground h-4 w-4 cursor-pointer"
+                                                    onClick={toogleShowPassword}
+                                                />
+                                            </Tooltip>
+                                        ) : (
+                                            <Tooltip content="Show password">
+                                                <Eye
+                                                    data-testid="toggle-password-visibility"
+                                                    role="button"
+                                                    aria-label="Hide password"
+                                                    className="text-muted-foreground hover:text-foreground h-4 w-4 cursor-pointer"
+                                                    onClick={toogleShowPassword}
+                                                />
+                                            </Tooltip>
+                                        )}
+                                    </div>
+                                )}
+
+                                {unit && type !== 'password' && (
+                                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                        <span className="text-muted-foreground text-sm">
+                                            {unit}
+                                        </span>
+                                    </div>
+                                )}
+                            </div>
+
+                            {error && <p className="text-sm text-destructive">{error.message}</p>}
+
+                            {children && <div className="mt-2">{children}</div>}
                         </div>
-
-                        {error && <p className="text-sm text-destructive">{error.message}</p>}
-
-                        {children && <div className="mt-2">{children}</div>}
-                    </div>
-                )
-            }}
-        />
+                    )
+                }}
+            />
+        </>
     )
 }

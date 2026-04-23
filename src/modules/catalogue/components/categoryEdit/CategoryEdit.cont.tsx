@@ -34,7 +34,7 @@ const CategoryEditContainer = ({ setOpen, parentUID, uid, modalId }: Props) => {
         uid,
     })
 
-    const { refetch: refetchItems } = useCatalogueItems()
+    const { refetch: refetchItems } = useCatalogueItems('catalogueItems', undefined, true)
 
     const imageRef = useRef<ImageGalleryRef>(null)
 

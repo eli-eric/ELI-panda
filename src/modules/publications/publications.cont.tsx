@@ -6,6 +6,7 @@ import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
 import type { Publication } from '../publication/types/responses'
+import { ColumnVisibilityDropdown } from '../shared/table/ColumnVisibilityDropdown.comp'
 import { PaginationV2 as Pagination } from '../shared/table/PaginationV2'
 import { usePandaTable } from '../shared/table/pandaTable/hooks/usePandaTable'
 import type { PandaTableSettings } from '../shared/table/pandaTable/PandaTable'
@@ -28,7 +29,7 @@ export const PublicationsContainer: FC = () => {
         manualSorting: false,
         enableColumnReordering: true,
         enableQueryURL: true,
-        enableColumnHiding: true,
+        enableColumnHiding: false,
     }
 
     const table = usePandaTable<Publication>({
@@ -60,6 +61,7 @@ export const PublicationsContainer: FC = () => {
                         <RivExportButton />
                     </SearchBarButtonsComponent>
                 }
+                right={<ColumnVisibilityDropdown table={table} />}
             />
             <PandaTableV2
                 tableId={tableId}

@@ -12,7 +12,7 @@ interface Props {
     dropsettings?: any
     className?: string
     hideButtons?: boolean
-    RightSearchBarElement?: () => JSX.Element
+    SecondRowElement?: () => JSX.Element
     LeftSearchBarElement?: () => JSX.Element
     isGlobalSearch?: boolean
 }
@@ -25,7 +25,7 @@ export const SystemsComponent: FC<Props> = ({
     className,
     hideButtons = false,
     LeftSearchBarElement,
-    RightSearchBarElement,
+    SecondRowElement,
     isGlobalSearch,
 }: Props) => {
     return (
@@ -35,7 +35,7 @@ export const SystemsComponent: FC<Props> = ({
                 enableDragAndDrop={enableDragAndDrop}
                 tableId={tableId}
                 isGlobalSearch={isGlobalSearch}
-                RightSearchBarElement={RightSearchBarElement}
+                SecondRowElement={SecondRowElement}
                 LeftSearchBarElement={LeftSearchBarElement}
                 pageSizeDefault={50}
                 className={'relative overflow-scroll scrollbar-style'}
@@ -50,7 +50,7 @@ export const SystemsComponent: FC<Props> = ({
                 })}
                 settings={{
                     enableSorting: true,
-                    enableColumnHiding: true,
+                    enableColumnHiding: false,
                     enableFiltering: true,
                     manualFiltering: true,
                     enableQueryURL: enableQueryURL,

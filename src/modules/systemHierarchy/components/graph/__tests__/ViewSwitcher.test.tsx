@@ -19,25 +19,19 @@ const renderWithIntl = (ui: React.JSX.Element) =>
 
 describe('ViewSwitcher', () => {
     it('renders tree and graph buttons', () => {
-        renderWithIntl(
-            <ViewSwitcher activeView={HIERARCHY_VIEWS.TREE} onViewChange={jest.fn()} />,
-        )
+        renderWithIntl(<ViewSwitcher activeView={HIERARCHY_VIEWS.TREE} onViewChange={jest.fn()} />)
         expect(screen.getByText('Tree View')).toBeInTheDocument()
         expect(screen.getByText('Graph View')).toBeInTheDocument()
     })
 
     it('highlights active tree view', () => {
-        renderWithIntl(
-            <ViewSwitcher activeView={HIERARCHY_VIEWS.TREE} onViewChange={jest.fn()} />,
-        )
+        renderWithIntl(<ViewSwitcher activeView={HIERARCHY_VIEWS.TREE} onViewChange={jest.fn()} />)
         const treeBtn = screen.getByText('Tree View').closest('button')
         expect(treeBtn).toHaveAttribute('data-state', 'on')
     })
 
     it('highlights active graph view', () => {
-        renderWithIntl(
-            <ViewSwitcher activeView={HIERARCHY_VIEWS.GRAPH} onViewChange={jest.fn()} />,
-        )
+        renderWithIntl(<ViewSwitcher activeView={HIERARCHY_VIEWS.GRAPH} onViewChange={jest.fn()} />)
         const graphBtn = screen.getByText('Graph View').closest('button')
         expect(graphBtn).toHaveAttribute('data-state', 'on')
     })

@@ -42,9 +42,7 @@ export const useLeavesColumns = () => {
                         variant="outline"
                         className={cn(
                             'text-xs',
-                            getBadgeVariantBySystemLevel(
-                                row.original.systemLevel as SystemLevel,
-                            ),
+                            getBadgeVariantBySystemLevel(row.original.systemLevel as SystemLevel),
                         )}
                     >
                         {row.original.systemCode}
@@ -53,16 +51,13 @@ export const useLeavesColumns = () => {
             },
             {
                 header: fm({ id: message.systemHierarchy.columns.systemPath }),
-                accessorFn: row =>
-                    row.parentPath?.map(p => p.name).join(' → '),
+                accessorFn: row => row.parentPath?.map(p => p.name).join(' → '),
                 id: 'systemPath',
                 size: 300,
                 cell: ({ row }) => {
                     const parentPath = row.original.parentPath
                     if (!parentPath?.length) return null
-                    const fullPath = parentPath
-                        .map(p => p.name)
-                        .join(' → ')
+                    const fullPath = parentPath.map(p => p.name).join(' → ')
                     return (
                         <Tooltip content={fullPath}>
                             <div className="flex items-center gap-1 overflow-hidden">

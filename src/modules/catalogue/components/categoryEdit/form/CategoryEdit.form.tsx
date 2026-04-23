@@ -36,12 +36,10 @@ const CategoryEditForm = ({
     modalId,
 }: Props) => {
     const formMethods = useForm<CategoryFormType>({
-        defaultValues: !uid
-            ? {
-                  systemType,
-              }
-            : categoryDetail,
+        values: uid ? categoryDetail : undefined,
+        defaultValues: !uid ? { systemType } : undefined,
         resolver: yupResolver(categoryValidationschema),
+        resetOptions: { keepDirtyValues: true },
     })
 
     const { handleSubmit } = formMethods

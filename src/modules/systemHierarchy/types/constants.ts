@@ -20,6 +20,7 @@ export const HIERARCHY_TABS = {
     PHYSICAL_ITEM: 'physical-item',
     SPARE_PARTS: 'spare-parts',
     SPARE_FOR: 'spare-for',
+    RELATIONSHIPS: 'relationships',
     ATTACHMENTS: 'attachments',
     HISTORY: 'history',
 } as const

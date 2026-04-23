@@ -14,6 +14,7 @@ import { SERVICE_LINE_DEFAULTS } from '@/types/constants/formDefaults'
 import { ITEM_USAGE_FILTERS } from '@/types/constants/itemUsageFilters'
 import { TABLE_IDS } from '@/types/constants/tableIds'
 
+import { ServiceLineSelectionProvider } from './details/store/useServiceLineSelectionStore'
 import { ServiceLineStep1BasicInfo } from './steps/service-line-step1-basic-info'
 import { ServiceLineStep2Details } from './steps/service-line-step2-details'
 import { ServiceLineStep3Items } from './steps/service-line-step3-items'
@@ -108,34 +109,36 @@ export const ServiceLineV3Wizard = ({ handleSubmit }: Props) => {
     }, [])
 
     return (
-        <FormWizard<ServiceLineFormType>
-            onSubmit={handleSubmit}
-            initialValues={SERVICE_LINE_DEFAULTS}
-        >
-            <WizardStep
-                id="basicInfo"
-                title={fm({ id: messages.steps.step1.title })}
-                validate={validateStep1}
-                onStepComplete={handleStep1Complete}
+        <ServiceLineSelectionProvider>
+            <FormWizard<ServiceLineFormType>
+                onSubmit={handleSubmit}
+                initialValues={SERVICE_LINE_DEFAULTS}
             >
-                <ServiceLineStep1BasicInfo onServiceTypeChange={onServiceTypeChange} />
-            </WizardStep>
+                <WizardStep
+                    id="basicInfo"
+                    title={fm({ id: messages.steps.step1.title })}
+                    validate={validateStep1}
+                    onStepComplete={handleStep1Complete}
+                >
+                    <ServiceLineStep1BasicInfo onServiceTypeChange={onServiceTypeChange} />
+                </WizardStep>
 
-            <WizardStep
-                id="serviceLineDetails"
-                title={fm({ id: messages.steps.step2.title })}
-                shouldShow={shouldShowDetails}
-            >
-                <ServiceLineStep2Details serviceType={serviceTypeData} />
-            </WizardStep>
+                <WizardStep
+                    id="serviceLineDetails"
+                    title={fm({ id: messages.steps.step2.title })}
+                    shouldShow={shouldShowDetails}
+                >
+                    <ServiceLineStep2Details serviceType={serviceTypeData} />
+                </WizardStep>
 
-            <WizardStep
-                id="items"
-                title={fm({ id: messages.steps.step3.title })}
-                validate={validateSelectedSystems}
-            >
-                <ServiceLineStep3Items />
-            </WizardStep>
-        </FormWizard>
+                <WizardStep
+                    id="items"
+                    title={fm({ id: messages.steps.step3.title })}
+                    validate={validateSelectedSystems}
+                >
+                    <ServiceLineStep3Items />
+                </WizardStep>
+            </FormWizard>
+        </ServiceLineSelectionProvider>
     )
 }

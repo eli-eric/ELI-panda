@@ -26,6 +26,7 @@ interface DetailTabProps {
 }
 
 const SYSTEM_LEVEL_OPTIONS = [
+    { value: SystemLevel.SystemDomain, label: 'System Domain' },
     { value: SystemLevel.KeySystems, label: 'Key Systems' },
     { value: SystemLevel.TechnologyUnit, label: 'Technology Unit' },
     { value: SystemLevel.SubsystemsAndParts, label: 'Subsystems and Parts' },
@@ -44,8 +45,12 @@ export const DetailTabContainer: FC<DetailTabProps> = ({ system }) => {
     const { openSystemTypeModal } = useSystemTypeSelectionModal()
 
     const handleSaveField = useCallback(
-        async (fieldName: string, value: unknown) => {
-            await updateField(system.uid, fieldName, value)
+        async (
+            fieldName: string,
+            value: unknown,
+            options?: { displayName?: string | null; previousValue?: unknown },
+        ) => {
+            await updateField(system.uid, fieldName, value, options)
         },
         [system.uid, updateField],
     )
@@ -55,14 +60,16 @@ export const DetailTabContainer: FC<DetailTabProps> = ({ system }) => {
             <InlineFieldInput
                 label={fm({ id: message.systemHierarchy.fields.name })}
                 value={system.name}
-                onSave={value => handleSaveField('name', value)}
+                onSave={value => handleSaveField('name', value, { previousValue: system.name })}
                 isPending={isPending}
             />
 
             <InlineFieldInput
                 label={fm({ id: message.systemHierarchy.fields.systemCode })}
                 value={system.systemCode ?? null}
-                onSave={value => handleSaveField('systemCode', value)}
+                onSave={value =>
+                    handleSaveField('systemCode', value, { previousValue: system.systemCode })
+                }
                 isPending={isPending}
                 rightAction={<SystemCodeActions system={system} disabled={isPending} />}
             />
@@ -71,7 +78,9 @@ export const DetailTabContainer: FC<DetailTabProps> = ({ system }) => {
                 label={fm({ id: message.systemHierarchy.fields.systemLevel })}
                 value={system.systemLevel ?? null}
                 options={SYSTEM_LEVEL_OPTIONS}
-                onSave={value => handleSaveField('systemLevel', value)}
+                onSave={value =>
+                    handleSaveField('systemLevel', value, { previousValue: system.systemLevel })
+                }
                 isPending={isPending}
             />
 
@@ -80,7 +89,9 @@ export const DetailTabContainer: FC<DetailTabProps> = ({ system }) => {
                 value={system.systemType?.uid ?? null}
                 displayValue={system.systemType?.name ?? null}
                 onOpenModal={onSelect => openSystemTypeModal(onSelect)}
-                onSave={uid => handleSaveField('systemTypeUid', uid)}
+                onSave={(uid, displayName) =>
+                    handleSaveField('systemTypeUid', uid, { displayName })
+                }
                 isPending={isPending}
             />
 
@@ -89,7 +100,7 @@ export const DetailTabContainer: FC<DetailTabProps> = ({ system }) => {
                 value={system.location?.uid ?? null}
                 displayValue={system.location?.name ?? null}
                 onOpenModal={onSelect => openLocationModal(onSelect)}
-                onSave={uid => handleSaveField('locationUid', uid)}
+                onSave={(uid, displayName) => handleSaveField('locationUid', uid, { displayName })}
                 isPending={isPending}
             />
 
@@ -98,14 +109,16 @@ export const DetailTabContainer: FC<DetailTabProps> = ({ system }) => {
                 value={system.zone?.uid ?? null}
                 displayValue={system.zone?.name ?? null}
                 codebook={CODEBOOK.ZONE}
-                onSave={uid => handleSaveField('zoneUid', uid)}
+                onSave={(uid, displayName) => handleSaveField('zoneUid', uid, { displayName })}
                 isPending={isPending}
             />
 
             <InlineFieldTextArea
                 label={fm({ id: message.systemHierarchy.fields.description })}
                 value={system.description ?? null}
-                onSave={value => handleSaveField('description', value)}
+                onSave={value =>
+                    handleSaveField('description', value, { previousValue: system.description })
+                }
                 isPending={isPending}
             />
         </div>

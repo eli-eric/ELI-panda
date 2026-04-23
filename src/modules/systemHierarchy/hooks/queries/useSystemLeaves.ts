@@ -10,7 +10,7 @@ import type { LeavesResponse } from '../../types'
 import { LEAVES_QUERY_KEY, LEAVES_TABLE_ID } from '../../types/constants'
 
 export const useSystemLeaves = (parentUid: string | null) => {
-    const { query } = useQueryManager(LEAVES_TABLE_ID)
+    const { query } = useQueryManager(LEAVES_TABLE_ID, undefined, true)
 
     const queryKey: QueryFetcherKey = [LEAVES_QUERY_KEY, { uid: parentUid, query }]
 

@@ -24,12 +24,7 @@ const mockEdge: RelationshipGraphEdge = {
 const renderSheet = (props: Partial<React.ComponentProps<typeof EdgeDetailSheet>> = {}) =>
     render(
         <IntlProvider locale="en" messages={msgs}>
-            <EdgeDetailSheet
-                edge={mockEdge}
-                sourceName="Pump A"
-                targetName="Motor B"
-                {...props}
-            />
+            <EdgeDetailSheet edge={mockEdge} sourceName="Pump A" targetName="Motor B" {...props} />
         </IntlProvider>,
     )
 

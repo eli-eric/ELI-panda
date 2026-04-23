@@ -7,7 +7,7 @@ import useQueryManager from '@/hooks/useQueryManager'
 import { makeQuery } from '@/utils/formatters'
 
 export const ExportCsvButton = () => {
-    const { query } = useQueryManager('systems')
+    const { query } = useQueryManager('systems', undefined, true)
 
     const { submit } = useSubmit<Blob>({
         endpoint: '/systems/export-to-csv' + makeQuery(query),

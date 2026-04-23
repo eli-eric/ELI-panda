@@ -50,7 +50,16 @@ export const SystemTreeComponent: FC<SystemTreeComponentProps> = ({
                 </TreeNode>
             )
         },
-        [expandedNodes, selectedParentUid, onToggle, onSelect, search, copiedSystemUid, onCopySystem, onPasteSystem],
+        [
+            expandedNodes,
+            selectedParentUid,
+            onToggle,
+            onSelect,
+            search,
+            copiedSystemUid,
+            onCopySystem,
+            onPasteSystem,
+        ],
     )
 
     return <div className="py-1">{nodes.map(node => renderNode(node, 0))}</div>

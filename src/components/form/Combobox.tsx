@@ -225,11 +225,7 @@ const Combobox = ({
                                 </Button>
                             )}
                         </div>
-                        {error && (
-                            <p className="text-sm text-destructive">
-                                {error.message}
-                            </p>
-                        )}
+                        {error && <p className="text-sm text-destructive">{error.message}</p>}
                     </div>
                 )}
             />

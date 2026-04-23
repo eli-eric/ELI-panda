@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label'
 import { message } from '@/i18n/src/messages'
 import { SelectLocationCombo } from '@/modules/shared/form/location/SelectLocation.combo'
 import { FormWizard, WizardStep } from '@/modules/shared/form/wizardV3'
+import { RELATIONSHIP_GRAPH_QUERY_KEY } from '@/modules/systemHierarchy/types/constants'
 import { useRecalculate } from '@/modules/systemItem/hooks/useRecalculate'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import useTableStateStore from '@/store/useTableStateStore'
@@ -128,6 +129,7 @@ export const SpareAssignmentWizardContainer = ({
             await Promise.all([
                 queryClient.invalidateQueries({ queryKey: [systemUid] }),
                 queryClient.invalidateQueries({ queryKey: ['system-detail'] }),
+                queryClient.invalidateQueries({ queryKey: [RELATIONSHIP_GRAPH_QUERY_KEY] }),
             ])
             recalculate(null)
             reset()

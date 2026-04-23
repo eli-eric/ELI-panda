@@ -10,8 +10,12 @@ import type { CatalogueItemsResponse } from '@/types/responses/catalogue'
 import type { QueryFetcherKey } from '@/utils/fetcher'
 import { queryFetcher } from '@/utils/fetcher'
 
-export const useCatalogueItems = (tableId = 'catalogueItems', pageSizeDefault?: PageSizeOption) => {
-    const { query } = useQueryManager(tableId, pageSizeDefault)
+export const useCatalogueItems = (
+    tableId = 'catalogueItems',
+    pageSizeDefault?: PageSizeOption,
+    enableQueryURL: boolean = false,
+) => {
+    const { query } = useQueryManager(tableId, pageSizeDefault, enableQueryURL)
     const pagination = JSON.parse(query.pagination || '{}')
     const queryKey: QueryFetcherKey = ['catalogueItems', { query: { ...pagination, ...query } }]
     const {

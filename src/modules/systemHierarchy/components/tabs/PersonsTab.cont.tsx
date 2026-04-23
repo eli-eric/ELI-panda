@@ -60,8 +60,12 @@ export const PersonsTabContainer: FC<PersonsTabProps> = ({ system }) => {
         })
 
     const handleSaveField = useCallback(
-        async (fieldName: string, value: unknown) => {
-            await updateField(system.uid, fieldName, value)
+        async (
+            fieldName: string,
+            value: unknown,
+            options?: { displayName?: string | null; previousValue?: unknown },
+        ) => {
+            await updateField(system.uid, fieldName, value, options)
         },
         [system.uid, updateField],
     )
@@ -79,7 +83,9 @@ export const PersonsTabContainer: FC<PersonsTabProps> = ({ system }) => {
                 value={system.responsible?.uid ?? null}
                 displayValue={system.responsible?.name ?? null}
                 codebook={CODEBOOK.EMPLOYEE}
-                onSave={uid => handleSaveField('responsibleUid', uid)}
+                onSave={(uid, displayName) =>
+                    handleSaveField('responsibleUid', uid, { displayName })
+                }
                 isPending={isPending}
             />
 
@@ -88,7 +94,7 @@ export const PersonsTabContainer: FC<PersonsTabProps> = ({ system }) => {
                 value={system.owner?.uid ?? null}
                 displayValue={system.owner?.name ?? null}
                 codebook={CODEBOOK.EMPLOYEE}
-                onSave={uid => handleSaveField('ownerUid', uid)}
+                onSave={(uid, displayName) => handleSaveField('ownerUid', uid, { displayName })}
                 isPending={isPending}
                 disabled
             />
@@ -98,7 +104,9 @@ export const PersonsTabContainer: FC<PersonsTabProps> = ({ system }) => {
                 value={system.responsibleTeam?.uid ?? null}
                 displayValue={system.responsibleTeam?.name ?? null}
                 codebook={CODEBOOK.TEAM}
-                onSave={uid => handleSaveField('responsibleTeamUid', uid)}
+                onSave={(uid, displayName) =>
+                    handleSaveField('responsibleTeamUid', uid, { displayName })
+                }
                 isPending={isPending}
             />
 

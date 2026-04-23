@@ -1,4 +1,6 @@
-import { create } from 'zustand'
+import type { ReactNode } from 'react'
+import { createContext, createElement, useContext, useRef } from 'react'
+import { createStore, useStore } from 'zustand'
 
 interface ServiceLineSelectionState {
     selectedProperties: string[]
@@ -8,33 +10,56 @@ interface ServiceLineSelectionState {
     clearSelections: () => void
 }
 
-export const useServiceLineSelectionStore = create<ServiceLineSelectionState>((set, get) => ({
-    selectedProperties: [],
+type SelectionStoreApi = ReturnType<typeof createSelectionStore>
 
-    setSelectedProperties: properties => {
-        set({ selectedProperties: properties })
-    },
+const createSelectionStore = () =>
+    createStore<ServiceLineSelectionState>((set, get) => ({
+        selectedProperties: [],
 
-    toggleProperty: propertyUid => {
-        const { selectedProperties } = get()
-        const isAlreadySelected = selectedProperties.includes(propertyUid)
+        setSelectedProperties: properties => {
+            set({ selectedProperties: properties })
+        },
 
-        if (isAlreadySelected) {
-            set({
-                selectedProperties: selectedProperties.filter(uid => uid !== propertyUid),
-            })
-        } else {
-            set({
-                selectedProperties: [...selectedProperties, propertyUid],
-            })
-        }
-    },
+        toggleProperty: propertyUid => {
+            const { selectedProperties } = get()
+            const isAlreadySelected = selectedProperties.includes(propertyUid)
 
-    isPropertySelected: propertyUid => {
-        return get().selectedProperties.includes(propertyUid)
-    },
+            if (isAlreadySelected) {
+                set({
+                    selectedProperties: selectedProperties.filter(uid => uid !== propertyUid),
+                })
+            } else {
+                set({
+                    selectedProperties: [...selectedProperties, propertyUid],
+                })
+            }
+        },
 
-    clearSelections: () => {
-        set({ selectedProperties: [] })
-    },
-}))
+        isPropertySelected: propertyUid => {
+            return get().selectedProperties.includes(propertyUid)
+        },
+
+        clearSelections: () => {
+            set({ selectedProperties: [] })
+        },
+    }))
+
+const SelectionStoreContext = createContext<SelectionStoreApi | null>(null)
+
+export const ServiceLineSelectionProvider = ({ children }: { children: ReactNode }) => {
+    const storeRef = useRef<SelectionStoreApi | null>(null)
+    if (!storeRef.current) {
+        storeRef.current = createSelectionStore()
+    }
+    return createElement(SelectionStoreContext.Provider, { value: storeRef.current }, children)
+}
+
+export const useServiceLineSelectionStore = (): ServiceLineSelectionState => {
+    const store = useContext(SelectionStoreContext)
+    if (!store) {
+        throw new Error(
+            'useServiceLineSelectionStore must be used within ServiceLineSelectionProvider',
+        )
+    }
+    return useStore(store)
+}

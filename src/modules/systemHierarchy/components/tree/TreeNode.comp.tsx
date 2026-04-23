@@ -86,9 +86,7 @@ export const TreeNode: FC<TreeNodeProps> = ({
             ) : (
                 <span className="w-4.5 shrink-0" />
             )}
-            <FolderIcon
-                className={cn('size-4 shrink-0', getFontBySystemLevel(node.systemLevel))}
-            />
+            <FolderIcon className={cn('size-4 shrink-0', getFontBySystemLevel(node.systemLevel))} />
             <span className="truncate flex-1">
                 {search ? highlightText(node.name, search) : node.name}
             </span>

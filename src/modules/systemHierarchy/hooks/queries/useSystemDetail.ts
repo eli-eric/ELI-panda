@@ -20,7 +20,7 @@ const systemHierarchyDetailQuery = gql(`
 `)
 
 export const useSystemDetail = (leafUid: string | null) => {
-    const { data, error, isLoading } = useGraphQL(systemHierarchyDetailQuery, {
+    const { data, error, isLoading, refetch } = useGraphQL(systemHierarchyDetailQuery, {
         variables: {
             where: {
                 deleted: false,
@@ -93,10 +93,16 @@ export const useSystemDetail = (leafUid: string | null) => {
           }
         : null
 
+    const sparePartsEdges = systemDetail?.sparePartsConnection?.edges ?? []
+
     return {
         system,
         physicalItem,
         catalogueItem,
+        sparePartsEdges,
+        sparePartsCoverageSum: systemDetail?.sparePartsCoverageSum ?? null,
+        minimalSpareParstCount: systemDetail?.minimalSpareParstCount ?? null,
+        refetch,
         isLoading,
         error,
     }

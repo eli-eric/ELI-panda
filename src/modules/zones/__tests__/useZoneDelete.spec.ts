@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { act,renderHook, waitFor } from '@testing-library/react'
+import { act, renderHook, waitFor } from '@testing-library/react'
 import React from 'react'
 
 import * as fetcher from '@/utils/fetcher'
@@ -36,7 +36,10 @@ describe('useZoneDelete', () => {
         const { useZoneDelete } = require('../hooks/useZoneDelete')
         renderHook(() => useZoneDelete('zone-123'), { wrapper: createWrapper() })
 
-        expect(mockQueryMutate).toHaveBeenCalledWith('zone', 'delete', { uid: 'zone-123', responseType: 'text' })
+        expect(mockQueryMutate).toHaveBeenCalledWith('zone', 'delete', {
+            uid: 'zone-123',
+            responseType: 'text',
+        })
     })
 
     it('returns mutate function', () => {

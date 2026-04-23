@@ -87,9 +87,7 @@ describe('useAssignSparesNavigation', () => {
     it('skips parentSystem filter when no tech unit in path', () => {
         const params = {
             uid: 'system-2',
-            parentPath: [
-                { uid: 'root', name: 'Root', systemLevel: SystemLevel.KeySystems },
-            ],
+            parentPath: [{ uid: 'root', name: 'Root', systemLevel: SystemLevel.KeySystems }],
             catalogueNumber: 'CAT-002',
         }
         const { result } = renderHook(() => useAssignSparesNavigation(params))

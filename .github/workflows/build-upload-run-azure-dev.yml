@@ -1,0 +1,185 @@
+name: Build and Deploy Frontend to Azure DEV
+
+on:
+    push:
+        branches:
+            - 'dev'
+    workflow_dispatch:
+
+env:
+    IMAGE_NAME: panda-frontend
+    CONTAINER_PORT: '5001'
+    PANDA_API_GW_URL: https://api-dev.panda.eli-beams.eu/v1
+    NEXTAUTH_URL: https://dev.panda.eli-beams.eu/
+    PANDA_ENV: dev
+    MINIO_ENDPOINT: minio-main
+    MINIO_BUCKET_NAME: panda-dev
+    MINIO_PORT: '9000'
+    MINIO_USE_SSL: 'false'
+    NEO4J_USER: neo4j
+    NEO4J_URI: bolt://panda-neo4j-dev:7687
+
+jobs:
+    validate-secrets:
+        runs-on: czechia-server
+        steps:
+            - name: Validate required secrets are set
+              run: |
+                  test -n "${{ secrets.NEXTAUTH_SECRET }}" || { echo "Error: NEXTAUTH_SECRET is not set."; exit 1; }
+                  test -n "${{ secrets.MINIO_ACCESS_KEY_DEV }}" || { echo "Error: MINIO_ACCESS_KEY_DEV is not set."; exit 1; }
+                  test -n "${{ secrets.MINIO_SECRET_KEY_DEV }}" || { echo "Error: MINIO_SECRET_KEY_DEV is not set."; exit 1; }
+                  test -n "${{ secrets.NEO4J_PASSWORD }}" || { echo "Error: NEO4J_PASSWORD is not set."; exit 1; }
+                  test -n "${{ secrets.AZURE_AD_BEAMLINES_CLIENT_ID }}" || { echo "Error: AZURE_AD_BEAMLINES_CLIENT_ID is not set."; exit 1; }
+                  test -n "${{ secrets.AZURE_AD_BEAMLINES_CLIENT_SECRET }}" || { echo "Error: AZURE_AD_BEAMLINES_CLIENT_SECRET is not set."; exit 1; }
+                  test -n "${{ secrets.AZURE_AD_BEAMLINES_TENANT_ID }}" || { echo "Error: AZURE_AD_BEAMLINES_TENANT_ID is not set."; exit 1; }
+                  test -n "${{ secrets.AZURE_DEV_CLIENT_ID }}" || { echo "Error: AZURE_DEV_CLIENT_ID is not set."; exit 1; }
+                  test -n "${{ secrets.AZURE_DEV_CONTAINER_REGISTRY_NAME }}" || { echo "Error: AZURE_DEV_CONTAINER_REGISTRY_NAME is not set."; exit 1; }
+                  test -n "${{ secrets.AZURE_DEV_RESOURCE_GROUP }}" || { echo "Error: AZURE_DEV_RESOURCE_GROUP is not set."; exit 1; }
+                  test -n "${{ secrets.AZURE_DEV_CONTAINER_APP_NAME_FRONTEND }}" || { echo "Error: AZURE_DEV_CONTAINER_APP_NAME_FRONTEND is not set."; exit 1; }
+    unit-tests:
+        runs-on: czechia-server
+        needs: validate-secrets
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+            - name: Install Yarn
+              run: npm install -g yarn
+            - name: Install dependencies
+              run: yarn install --frozen-lockfile
+            - name: Run unit tests
+              run: yarn test
+    e2e-tests:
+        runs-on: czechia-server
+        needs: unit-tests
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+            - name: Build E2E Docker image
+              run: docker build -f Dockerfile.e2e -t panda-e2e:${{ github.sha }} .
+            - name: Prepare E2E artifact directories
+              run: mkdir -p playwright-report test-results
+            - name: Run E2E tests
+              run: |
+                  docker run --rm --shm-size=1g \
+                    -v ${{ github.workspace }}/playwright-report:/app/playwright-report \
+                    -v ${{ github.workspace }}/test-results:/app/test-results \
+                    panda-e2e:${{ github.sha }}
+            - name: Upload E2E report
+              uses: actions/upload-artifact@v4
+              if: ${{ always() && !cancelled() }}
+              with:
+                  name: playwright-report-dev-${{ github.run_id }}
+                  path: playwright-report/
+                  retention-days: 14
+            - name: Cleanup Docker image
+              if: always()
+              run: docker rmi panda-e2e:${{ github.sha }} || true
+    build-and-deploy:
+        runs-on: ecz-vm-panda-dev-gwc-01
+        needs: [unit-tests, e2e-tests]
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Login to Azure using managed identity
+              run: |
+                  az login --identity --client-id ${{ secrets.AZURE_DEV_CLIENT_ID }}
+
+            - name: Login to Azure Container Registry
+              run: |
+                  az acr login --name ${{ secrets.AZURE_DEV_CONTAINER_REGISTRY_NAME }}
+
+            - name: Build and push Docker image
+              env:
+                  ACR_NAME: ${{ secrets.AZURE_DEV_CONTAINER_REGISTRY_NAME }}
+              run: |
+                  docker build . \
+                    -f ./Dockerfile.azure-dev \
+                    --build-arg PANDA_API_GW_URL="${PANDA_API_GW_URL}" \
+                    --build-arg NEXTAUTH_URL="${NEXTAUTH_URL}" \
+                    --build-arg PANDA_ENV="${PANDA_ENV}" \
+                    --build-arg MINIO_ENDPOINT="${MINIO_ENDPOINT}" \
+                    --build-arg MINIO_BUCKET_NAME="${MINIO_BUCKET_NAME}" \
+                    --build-arg MINIO_PORT="${MINIO_PORT}" \
+                    --build-arg MINIO_USE_SSL="${MINIO_USE_SSL}" \
+                    --build-arg NEO4J_USER="${NEO4J_USER}" \
+                    --build-arg NEO4J_URI="${NEO4J_URI}" \
+                    -t "${ACR_NAME}.azurecr.io/${IMAGE_NAME}:${{ github.sha }}"
+                  docker tag "${ACR_NAME}.azurecr.io/${IMAGE_NAME}:${{ github.sha }}" "${ACR_NAME}.azurecr.io/${IMAGE_NAME}:latest"
+                  docker push "${ACR_NAME}.azurecr.io/${IMAGE_NAME}:${{ github.sha }}"
+                  docker push "${ACR_NAME}.azurecr.io/${IMAGE_NAME}:latest"
+
+            - name: Ensure Azure Container Apps CLI
+              run: |
+                  az config set extension.use_dynamic_install=yes_without_prompt
+                  az extension add --name containerapp --upgrade
+
+            - name: Deploy to Azure Container Apps (update-only)
+              env:
+                  RG: ${{ secrets.AZURE_DEV_RESOURCE_GROUP }}
+                  APP_NAME: ${{ secrets.AZURE_DEV_CONTAINER_APP_NAME_FRONTEND }}
+                  ACR_NAME: ${{ secrets.AZURE_DEV_CONTAINER_REGISTRY_NAME }}
+              run: |
+                  set -euo pipefail
+
+                  if ! az containerapp show -g "${RG}" -n "${APP_NAME}" >/dev/null 2>&1; then
+                      echo "ERROR: Container App '${APP_NAME}' not found in RG '${RG}'. Refusing to create."
+                      exit 1
+                  fi
+
+                  ACR_SERVER="${ACR_NAME}.azurecr.io"
+                  IMAGE="${ACR_SERVER}/${IMAGE_NAME}:${{ github.sha }}"
+
+                  ACR_USERNAME="$(az acr credential show -n "${ACR_NAME}" --query username -o tsv)"
+                  ACR_PASSWORD="$(az acr credential show -n "${ACR_NAME}" --query "passwords[0].value" -o tsv)"
+
+                  az containerapp registry set \
+                    -g "${RG}" \
+                    -n "${APP_NAME}" \
+                    --server "${ACR_SERVER}" \
+                    --username "${ACR_USERNAME}" \
+                    --password "${ACR_PASSWORD}"
+
+                  az containerapp secret set \
+                    -g "${RG}" \
+                    -n "${APP_NAME}" \
+                    --secrets \
+                    nextauth-secret="${{ secrets.NEXTAUTH_SECRET }}" \
+                    neo4j-password="${{ secrets.NEO4J_PASSWORD }}" \
+                    minio-access-key="${{ secrets.MINIO_ACCESS_KEY_DEV }}" \
+                    minio-secret-key="${{ secrets.MINIO_SECRET_KEY_DEV }}" \
+                    azure-ad-client-id="${{ secrets.AZURE_AD_BEAMLINES_CLIENT_ID }}" \
+                    azure-ad-client-secret="${{ secrets.AZURE_AD_BEAMLINES_CLIENT_SECRET }}" \
+                    azure-ad-tenant-id="${{ secrets.AZURE_AD_BEAMLINES_TENANT_ID }}"
+
+                  az containerapp update -g "${RG}" -n "${APP_NAME}" --image "${IMAGE}"
+                  az containerapp update \
+                    -g "${RG}" \
+                    -n "${APP_NAME}" \
+                    --set-env-vars \
+                    NEXTAUTH_SECRET=secretref:nextauth-secret \
+                    MINIO_ACCESS_KEY=secretref:minio-access-key \
+                    MINIO_SECRET_KEY=secretref:minio-secret-key \
+                    NEO4J_PASSWORD=secretref:neo4j-password \
+                    AZURE_AD_BEAMLINES_CLIENT_ID=secretref:azure-ad-client-id \
+                    AZURE_AD_BEAMLINES_CLIENT_SECRET=secretref:azure-ad-client-secret \
+                    AZURE_AD_BEAMLINES_TENANT_ID=secretref:azure-ad-tenant-id \
+                    PANDA_API_GW_URL="${PANDA_API_GW_URL}" \
+                    NEXTAUTH_URL="${NEXTAUTH_URL}" \
+                    PANDA_ENV="${PANDA_ENV}" \
+                    MINIO_ENDPOINT="${MINIO_ENDPOINT}" \
+                    MINIO_BUCKET_NAME="${MINIO_BUCKET_NAME}" \
+                    MINIO_PORT="${MINIO_PORT}" \
+                    MINIO_USE_SSL="${MINIO_USE_SSL}" \
+                    NEO4J_USER="${NEO4J_USER}" \
+                    NEO4J_URI="${NEO4J_URI}" \
+                    PORT="${CONTAINER_PORT}" \
+                    HOSTNAME=0.0.0.0
+                  az containerapp ingress update \
+                    -g "${RG}" \
+                    -n "${APP_NAME}" \
+                    --target-port "${CONTAINER_PORT}" \
+                    --transport auto

@@ -148,8 +148,7 @@ export const GraphToolbar: FC<GraphToolbarProps> = ({
                             <span
                                 className="inline-block w-3 h-1 rounded-full mr-1.5 shrink-0"
                                 style={{
-                                    backgroundColor:
-                                        RELATIONSHIP_COLORS[type as RelationshipType],
+                                    backgroundColor: RELATIONSHIP_COLORS[type as RelationshipType],
                                 }}
                             />
                             {RELATIONSHIP_TYPE_LABELS[type as RelationshipType] ?? type}

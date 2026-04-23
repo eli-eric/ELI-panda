@@ -5,6 +5,7 @@ type Mutation {
         action: String
         previousState: String
         newState: String
+        changes: String
     ): String
     itemOriginatedResolver(itemUid: String, systemOriginatedUid: String): String
     systemMovedFromResolver(systemFromUid: String, systemUid: String): String
@@ -248,6 +249,7 @@ interface wasUpdatedBy @relationshipProperties {
     action: Actions!
     previousState: String
     newState: String
+    changes: String
 }
 
 enum Actions {
@@ -363,6 +365,7 @@ type Link @authentication {
 }
 
 enum SystemLevel {
+    SYSTEM_DOMAIN
     TECHNOLOGY_UNIT
     KEY_SYSTEMS
     SUBSYSTEMS_AND_PARTS

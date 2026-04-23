@@ -19,7 +19,7 @@ interface InlineFieldModalSelectProps extends InlineFieldBaseProps {
     value: string | null
     displayValue?: string | null
     onOpenModal: (onSelect: (selected: SelectedValue | null) => void) => void
-    onSave: (uid: string | null) => Promise<void>
+    onSave: (uid: string | null, displayName?: string | null) => Promise<void>
     isPending?: boolean
     placeholder?: string
 }
@@ -57,7 +57,7 @@ export const InlineFieldModalSelect: FC<InlineFieldModalSelectProps> = ({
             setIsSaving(true)
 
             try {
-                await onSave(selected.uid)
+                await onSave(selected.uid, selected.name)
             } catch {
                 // Revert on error
                 setOptimisticValue(value)
@@ -81,7 +81,7 @@ export const InlineFieldModalSelect: FC<InlineFieldModalSelectProps> = ({
             setIsSaving(true)
 
             try {
-                await onSave(null)
+                await onSave(null, null)
             } catch {
                 // Revert on error
                 setOptimisticValue(prevValue)
