@@ -8,6 +8,10 @@ export const getColorBySystemLevel = (level?: SystemLevel) => {
             return 'border-sky-600 dark:border-sky-300 backend border-1'
         case SystemLevel.TechnologyUnit:
             return 'border-lime-600 dark:border-lime-300 backend border-1'
+        case SystemLevel.Trash:
+            return 'border-red-600 dark:border-red-300 backend border-1'
+        case SystemLevel.SystemDomain:
+            return 'border-gray-800 dark:border-gray-400 backend border-1'
         default:
             return ''
     }
@@ -21,6 +25,10 @@ export const getBorderBySystemLevel = (level?: SystemLevel) => {
             return 'border-sky-600 dark:border-sky-300 backend border-2'
         case SystemLevel.TechnologyUnit:
             return 'border-lime-600 dark:border-lime-300 backend border-2'
+        case SystemLevel.Trash:
+            return 'border-red-600 dark:border-red-300 backend border-2'
+        case SystemLevel.SystemDomain:
+            return 'border-gray-800 dark:border-gray-400 backend border-2'
         default:
             return ''
     }
@@ -34,6 +42,10 @@ export const getFontBySystemLevel = (level?: SystemLevel) => {
             return 'text-sky-600 dark:text-sky-300 '
         case SystemLevel.TechnologyUnit:
             return 'text-lime-600 dark:text-lime-300'
+        case SystemLevel.Trash:
+            return 'text-red-600 dark:text-red-300'
+        case SystemLevel.SystemDomain:
+            return 'text-gray-800 dark:text-gray-400'
         default:
             return ''
     }
@@ -49,6 +61,8 @@ export const getBadgeVariantBySystemLevel = (level?: SystemLevel) => {
             return 'border-lime-600 bg-lime-50 text-lime-700 dark:border-lime-300 dark:bg-lime-950 dark:text-lime-300'
         case SystemLevel.Trash:
             return 'border-red-600 bg-red-50 text-red-700 dark:border-red-300 dark:bg-red-950 dark:text-red-300'
+        case SystemLevel.SystemDomain:
+            return 'border-gray-800 bg-gray-50 text-gray-700 dark:border-gray-400 dark:bg-gray-800 dark:text-gray-300'
         default:
             return 'border-gray-200 bg-gray-50 text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300'
     }

@@ -15220,6 +15220,7 @@ export type SystemItemPhysicalItemNodeAggregateSelection = {
 export enum SystemLevel {
   KeySystems = 'KEY_SYSTEMS',
   SubsystemsAndParts = 'SUBSYSTEMS_AND_PARTS',
+  SystemDomain = 'SYSTEM_DOMAIN',
   TechnologyUnit = 'TECHNOLOGY_UNIT',
   Trash = 'TRASH'
 }
