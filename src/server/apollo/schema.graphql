@@ -365,6 +365,7 @@ type Link @authentication {
 }
 
 enum SystemLevel {
+    SYSTEM_DOMAIN
     TECHNOLOGY_UNIT
     KEY_SYSTEMS
     SUBSYSTEMS_AND_PARTS

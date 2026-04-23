@@ -26,6 +26,7 @@ interface DetailTabProps {
 }
 
 const SYSTEM_LEVEL_OPTIONS = [
+    { value: SystemLevel.SystemDomain, label: 'System Domain' },
     { value: SystemLevel.KeySystems, label: 'Key Systems' },
     { value: SystemLevel.TechnologyUnit, label: 'Technology Unit' },
     { value: SystemLevel.SubsystemsAndParts, label: 'Subsystems and Parts' },
