@@ -1,21 +1,23 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { act, renderHook } from '@testing-library/react'
-import { request } from 'graphql-request'
 import React from 'react'
 
-jest.mock('graphql-request', () => ({ request: jest.fn() }))
+const fetchMock = jest.fn().mockResolvedValue({
+    data: { uid: 'new-uid', name: 'Widget', code: 'widget' },
+    status: 200,
+    statusText: 'OK',
+    headers: {},
+})
+
+jest.mock('@/core/http/fetchClient', () => ({
+    fetchRequestDetailed: (...args: unknown[]) => fetchMock(...args),
+    fetchRequest: jest.fn(),
+}))
+
 jest.mock('sonner', () => ({ toast: { promise: jest.fn() } }))
 jest.mock('react-intl', () => ({
     useIntl: () => ({ formatMessage: ({ id }: { id: string }) => id }),
 }))
-
-const mockRequest = request as jest.Mock
-
-const mockSuccess = {
-    createCatalogueCategories: {
-        catalogueCategories: [{ uid: 'new-uid', name: 'Widget', code: 'WID' }],
-    },
-}
 
 describe('useCatalogueCategoryCreate', () => {
     const createWrapper = () => {
@@ -29,11 +31,10 @@ describe('useCatalogueCategoryCreate', () => {
     }
 
     beforeEach(() => {
-        jest.clearAllMocks()
-        mockRequest.mockResolvedValue(mockSuccess)
+        fetchMock.mockClear()
     })
 
-    it('connects parentCategory when parentUid provided', async () => {
+    it('POSTs to /catalogue/category with parentUID when parentUid provided', async () => {
         const { useCatalogueCategoryCreate } = await import('../useCatalogueCategoryCreate')
         const { result } = renderHook(() => useCatalogueCategoryCreate(), {
             wrapper: createWrapper(),
@@ -42,34 +43,40 @@ describe('useCatalogueCategoryCreate', () => {
         await act(async () => {
             await result.current.createCategory({
                 name: 'Widget',
-                code: 'WID',
+                code: 'widget',
                 parentUid: 'parent-1',
             })
         })
 
-        const vars = mockRequest.mock.calls[0][2]
-        expect(vars.input[0]).toMatchObject({
+        const [url, options] = fetchMock.mock.calls[0]
+        expect(url).toMatch(/\/catalogue\/category$/)
+        expect(options.method).toBe('POST')
+        expect(options.body).toEqual({
             name: 'Widget',
-            code: 'WID',
-            parentCategory: { connect: { where: { node: { uid: 'parent-1' } } } },
+            code: 'widget',
+            parentUID: 'parent-1',
         })
     })
 
-    it('omits parentCategory when parentUid is null (top-level)', async () => {
+    it('omits parentUID when parentUid is null (top-level)', async () => {
         const { useCatalogueCategoryCreate } = await import('../useCatalogueCategoryCreate')
         const { result } = renderHook(() => useCatalogueCategoryCreate(), {
             wrapper: createWrapper(),
         })
 
         await act(async () => {
-            await result.current.createCategory({ name: 'Widget', code: 'WID', parentUid: null })
+            await result.current.createCategory({
+                name: 'Widget',
+                code: 'widget',
+                parentUid: null,
+            })
         })
 
-        const vars = mockRequest.mock.calls[0][2]
-        expect(vars.input[0].parentCategory).toBeUndefined()
+        const [, options] = fetchMock.mock.calls[0]
+        expect(options.body.parentUID).toBeUndefined()
     })
 
-    it('returns newly created category', async () => {
+    it('returns newly created category from response data', async () => {
         const { useCatalogueCategoryCreate } = await import('../useCatalogueCategoryCreate')
         const { result } = renderHook(() => useCatalogueCategoryCreate(), {
             wrapper: createWrapper(),
@@ -77,7 +84,7 @@ describe('useCatalogueCategoryCreate', () => {
 
         let created
         await act(async () => {
-            created = await result.current.createCategory({ name: 'Widget', code: 'WID' })
+            created = await result.current.createCategory({ name: 'Widget', code: 'widget' })
         })
 
         expect(created).toMatchObject({ uid: 'new-uid' })
