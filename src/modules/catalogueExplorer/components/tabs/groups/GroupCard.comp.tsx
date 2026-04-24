@@ -1,11 +1,11 @@
 import { ChevronDown, ChevronUp, Trash2 } from 'lucide-react'
 import type { FC } from 'react'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useIntl } from 'react-intl'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import { InlineFieldInput } from '@/components/ui/inline-field'
+import { Input } from '@/components/ui/input'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 
@@ -49,9 +49,7 @@ export const GroupCard: FC<Props> = ({
     otherGroups,
 }) => {
     const { formatMessage: fm } = useIntl()
-    const withWarn = useWarningModal(
-        fm({ id: message.catalogue.category.confirmDeleteGroup }),
-    )
+    const withWarn = useWarningModal(fm({ id: message.catalogue.category.confirmDeleteGroup }))
     const {
         createProperty,
         updateProperty,
@@ -59,7 +57,19 @@ export const GroupCard: FC<Props> = ({
         isPending: isPropPending,
     } = useCategoryPropertyMutations(categoryUid)
 
+    const [nameLocal, setNameLocal] = useState(group.name)
+    useEffect(() => setNameLocal(group.name), [group.name])
+
     const isPending = isGroupPending || isPropPending
+
+    const commitName = async () => {
+        if (nameLocal === group.name) return
+        if (!nameLocal.trim()) {
+            setNameLocal(group.name)
+            return
+        }
+        await onRename(nameLocal.trim())
+    }
 
     const handleDelete = useCallback(() => {
         withWarn(() => {
@@ -90,23 +100,29 @@ export const GroupCard: FC<Props> = ({
         <Card className="border-l-4 border-l-primary">
             <CardHeader className="p-3">
                 <div className="flex items-center gap-2">
-                    <div className="flex-1">
-                        <InlineFieldInput
-                            label={fm({ id: message.catalogue.category.groupName })}
-                            value={group.name}
-                            onSave={async v => {
-                                if (v) await onRename(String(v))
-                            }}
-                            isPending={isPending}
-                            disabled={!canEdit}
-                        />
-                    </div>
+                    <Input
+                        value={nameLocal}
+                        onChange={e => setNameLocal(e.target.value)}
+                        onBlur={commitName}
+                        onKeyDown={e => {
+                            if (e.key === 'Enter') {
+                                e.preventDefault()
+                                ;(e.target as HTMLInputElement).blur()
+                            } else if (e.key === 'Escape') {
+                                setNameLocal(group.name)
+                                ;(e.target as HTMLInputElement).blur()
+                            }
+                        }}
+                        placeholder={fm({ id: message.catalogue.category.groupName })}
+                        disabled={!canEdit || isPending}
+                        className="h-9 text-sm font-medium flex-1"
+                    />
                     {canEdit && onMoveUp && (
                         <Button
                             type="button"
                             size="icon"
                             variant="ghost"
-                            disabled={!canMoveUp}
+                            disabled={!canMoveUp || isPending}
                             onClick={onMoveUp}
                             aria-label={fm({ id: message.catalogue.category.moveUp })}
                         >
@@ -118,7 +134,7 @@ export const GroupCard: FC<Props> = ({
                             type="button"
                             size="icon"
                             variant="ghost"
-                            disabled={!canMoveDown}
+                            disabled={!canMoveDown || isPending}
                             onClick={onMoveDown}
                             aria-label={fm({ id: message.catalogue.category.moveDown })}
                         >
@@ -131,6 +147,7 @@ export const GroupCard: FC<Props> = ({
                             size="icon"
                             variant="ghost"
                             onClick={handleDelete}
+                            disabled={isPending}
                             className="text-destructive hover:text-destructive"
                             aria-label={fm({ id: message.catalogue.category.delete })}
                         >
