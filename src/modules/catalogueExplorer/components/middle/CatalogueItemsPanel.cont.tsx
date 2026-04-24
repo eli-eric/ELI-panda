@@ -69,6 +69,7 @@ export const CatalogueItemsPanelContainer: FC = () => {
         <div className="flex flex-col h-full overflow-hidden">
             <SearchBar
                 tableId={CATALOGUE_ITEMS_TABLE_ID}
+                hideSidebarTrigger
                 left={
                     <CatalogueFilterButtonContainer
                         filterFormMethods={filterFormMethods}
