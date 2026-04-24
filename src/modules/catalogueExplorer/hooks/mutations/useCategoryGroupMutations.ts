@@ -9,39 +9,26 @@ import { queryMutate } from '@/utils/fetcher'
 
 import { CATALOGUE_CATEGORY_DETAIL_QUERY_KEY } from '../../types/constants'
 
-export interface CategoryProperty {
+export interface CategoryGroup {
     uid: string
     name: string
-    type?: { uid: string; name?: string } | null
-    unit?: { uid: string; name?: string } | null
-    defaultValue?: string | null
-    listOfValues?: string[] | null
     order?: number
 }
 
-export interface CreatePropertyBody {
+export interface CreateGroupBody {
     name: string
-    type: { uid: string; name?: string }
-    unit?: { uid: string; name?: string }
-    defaultValue?: string
-    listOfValues?: string[]
     order?: number
 }
 
-export interface PatchPropertyBody {
+export interface PatchGroupBody {
     name?: string
     order?: number
-    type?: { uid: string; name?: string }
-    unit?: { uid: string; name?: string } | null
-    defaultValue?: string | null
-    listOfValues?: string[] | null
-    groupUid?: string
 }
 
 const getStatus = (e: unknown): number | undefined =>
     (e as AxiosError | undefined)?.response?.status
 
-export const useCategoryPropertyMutations = (categoryUid: string) => {
+export const useCategoryGroupMutations = (categoryUid: string) => {
     const { formatMessage: fm } = useIntl()
     const queryClient = useQueryClient()
 
@@ -51,12 +38,12 @@ export const useCategoryPropertyMutations = (categoryUid: string) => {
     }
 
     const { mutateAsync: createAsync, isPending: createPending } = useMutation({
-        mutationKey: ['catalogueCategoryPropertyCreate', categoryUid],
-        mutationFn: async ({ groupUid, body }: { groupUid: string; body: CreatePropertyBody }) => {
-            const fn = queryMutate<CategoryProperty, CreatePropertyBody>(
-                'catalogueCategoryGroupProperty',
+        mutationKey: ['catalogueCategoryGroupCreate', categoryUid],
+        mutationFn: async (body: CreateGroupBody) => {
+            const fn = queryMutate<CategoryGroup, CreateGroupBody>(
+                'catalogueCategoryGroup',
                 'post',
-                { uid: categoryUid, endpointVariables: { itemUid: groupUid } },
+                { uid: categoryUid },
             )
             const response = await fn(body)
             return response.data
@@ -65,12 +52,12 @@ export const useCategoryPropertyMutations = (categoryUid: string) => {
     })
 
     const { mutateAsync: updateAsync, isPending: updatePending } = useMutation({
-        mutationKey: ['catalogueCategoryPropertyUpdate', categoryUid],
-        mutationFn: async ({ pid, body }: { pid: string; body: PatchPropertyBody }) => {
-            const fn = queryMutate<CategoryProperty, PatchPropertyBody>(
-                'catalogueCategoryPropertyItem',
+        mutationKey: ['catalogueCategoryGroupUpdate', categoryUid],
+        mutationFn: async ({ gid, body }: { gid: string; body: PatchGroupBody }) => {
+            const fn = queryMutate<CategoryGroup, PatchGroupBody>(
+                'catalogueCategoryGroupItem',
                 'patch',
-                { uid: categoryUid, endpointVariables: { itemUid: pid } },
+                { uid: categoryUid, endpointVariables: { itemUid: gid } },
             )
             const response = await fn(body)
             return response.data
@@ -79,20 +66,20 @@ export const useCategoryPropertyMutations = (categoryUid: string) => {
     })
 
     const { mutateAsync: removeAsync, isPending: removePending } = useMutation({
-        mutationKey: ['catalogueCategoryPropertyDelete', categoryUid],
-        mutationFn: async (pid: string) => {
-            const fn = queryMutate<void, undefined>('catalogueCategoryPropertyItem', 'delete', {
+        mutationKey: ['catalogueCategoryGroupDelete', categoryUid],
+        mutationFn: async (gid: string) => {
+            const fn = queryMutate<void, undefined>('catalogueCategoryGroupItem', 'delete', {
                 uid: categoryUid,
-                endpointVariables: { itemUid: pid },
+                endpointVariables: { itemUid: gid },
             })
             await fn(undefined)
         },
         onSuccess: invalidate,
     })
 
-    const createProperty = useCallback(
-        (groupUid: string, body: CreatePropertyBody) => {
-            const promise = createAsync({ groupUid, body })
+    const createGroup = useCallback(
+        (body: CreateGroupBody) => {
+            const promise = createAsync(body)
             toast.promise(promise, {
                 loading: fm({ id: message.catalogue.toast.creating }),
                 success: fm({ id: message.catalogue.toast.created }),
@@ -103,9 +90,9 @@ export const useCategoryPropertyMutations = (categoryUid: string) => {
         [createAsync, fm],
     )
 
-    const updateProperty = useCallback(
-        (pid: string, body: PatchPropertyBody) => {
-            const promise = updateAsync({ pid, body })
+    const updateGroup = useCallback(
+        (gid: string, body: PatchGroupBody) => {
+            const promise = updateAsync({ gid, body })
             toast.promise(promise, {
                 loading: fm({ id: message.catalogue.toast.saving }),
                 success: fm({ id: message.catalogue.toast.saved }),
@@ -116,16 +103,16 @@ export const useCategoryPropertyMutations = (categoryUid: string) => {
         [updateAsync, fm],
     )
 
-    const deleteProperty = useCallback(
-        async (pid: string) => {
+    const deleteGroup = useCallback(
+        async (gid: string) => {
             try {
-                const promise = removeAsync(pid)
+                const promise = removeAsync(gid)
                 toast.promise(promise, {
                     loading: fm({ id: message.catalogue.toast.deleting }),
                     success: fm({ id: message.catalogue.toast.deleted }),
                     error: e =>
                         getStatus(e) === 409
-                            ? fm({ id: message.catalogue.category.cannotDeletePropertyInUse })
+                            ? fm({ id: message.catalogue.category.cannotDeleteGroupInUse })
                             : fm({ id: message.common.errors.somethingWentWrong }),
                 })
                 await promise
@@ -137,9 +124,9 @@ export const useCategoryPropertyMutations = (categoryUid: string) => {
     )
 
     return {
-        createProperty,
-        updateProperty,
-        deleteProperty,
+        createGroup,
+        updateGroup,
+        deleteGroup,
         isPending: createPending || updatePending || removePending,
     }
 }
