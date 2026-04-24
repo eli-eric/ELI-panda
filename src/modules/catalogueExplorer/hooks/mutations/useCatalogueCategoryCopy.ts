@@ -18,7 +18,10 @@ export const useCatalogueCategoryCopy = () => {
     const { mutateAsync, isPending } = useMutation({
         mutationKey: ['catalogueCategoryCopy'],
         mutationFn: async (uid: string) => {
-            const fn = queryMutate<string, undefined>('catalogueCategoryCopy', 'post', { uid })
+            const fn = queryMutate<string, undefined>('catalogueCategoryCopy', 'post', {
+                uid,
+                responseType: 'text',
+            })
             const response = await fn(undefined)
             return response.data
         },
