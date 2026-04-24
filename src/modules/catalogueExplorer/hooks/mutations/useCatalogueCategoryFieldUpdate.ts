@@ -113,7 +113,11 @@ export const useCatalogueCategoryFieldUpdate = (
             uid: string,
             fieldName: string,
             value: unknown,
-            options?: { displayName?: string | null; previousValue?: unknown },
+            options?: {
+                displayName?: string | null
+                previousValue?: unknown
+                extraScalars?: Record<string, { value: unknown; previousValue?: unknown }>
+            },
         ) => {
             const displayName = options?.displayName
             let update: Record<string, unknown>
@@ -170,7 +174,23 @@ export const useCatalogueCategoryFieldUpdate = (
                 })
             }
 
-            const changesPayload = changeEntry ? JSON.stringify([changeEntry]) : undefined
+            const extraEntries: FieldChangeEntry[] = []
+            if (options?.extraScalars) {
+                for (const [extraField, extra] of Object.entries(options.extraScalars)) {
+                    update[extraField] = extra.value
+                    const entry = buildChangeEntry({
+                        field: extraField,
+                        oldValue: toChangeValue(extra.previousValue),
+                        newValue: toChangeValue(extra.value),
+                    })
+                    if (entry) extraEntries.push(entry)
+                }
+            }
+
+            const allEntries = [changeEntry, ...extraEntries].filter(
+                (e): e is FieldChangeEntry => e !== null,
+            )
+            const changesPayload = allEntries.length > 0 ? JSON.stringify(allEntries) : undefined
 
             const promise = mutateAsync({
                 where: { uid },

@@ -29,30 +29,36 @@ describe('QuickCreateCategoryModal', () => {
         createCategoryMock.mockReset()
     })
 
-    it('submits name + code + parentUid and calls onCreated with result', async () => {
-        createCategoryMock.mockResolvedValue({ uid: 'new-uid', name: 'Widget', code: 'WID' })
+    it('submits name with auto-derived code (lowercase + hyphens) and parentUid', async () => {
+        createCategoryMock.mockResolvedValue({
+            uid: 'new-uid',
+            name: 'Laser Modules',
+            code: 'laser-modules',
+        })
         const onCreated = jest.fn()
         const onClose = jest.fn()
 
         renderModal({ parentUid: 'parent-1', onCreated, onClose })
 
         fireEvent.change(screen.getByTestId('quick-create-category-name'), {
-            target: { value: 'Widget' },
-        })
-        fireEvent.change(screen.getByTestId('quick-create-category-code'), {
-            target: { value: 'WID' },
+            target: { value: 'Laser Modules' },
         })
         fireEvent.submit(screen.getByTestId('quick-create-category-form'))
 
         await waitFor(() =>
             expect(createCategoryMock).toHaveBeenCalledWith({
-                name: 'Widget',
-                code: 'WID',
+                name: 'Laser Modules',
+                code: 'laser-modules',
                 parentUid: 'parent-1',
             }),
         )
         await waitFor(() => expect(onCreated).toHaveBeenCalledWith('new-uid'))
         expect(onClose).toHaveBeenCalled()
+    })
+
+    it('code field is read-only (disabled)', () => {
+        renderModal()
+        expect(screen.getByTestId('quick-create-category-code')).toBeDisabled()
     })
 
     it('blocks submit when name is empty', async () => {

@@ -5,6 +5,7 @@ import { InlineFieldInput, InlineFieldModalSelect } from '@/components/ui/inline
 import { useSystemTypeSelectionModal } from '@/modules/shared/form/systemType/hooks/useSystemTypeSelectionModal'
 
 import { useCatalogueCategoryFieldUpdate } from '../../hooks/mutations/useCatalogueCategoryFieldUpdate'
+import { toCategoryCode } from '../../utils/toCategoryCode'
 
 export interface CatalogueCategoryForDetail {
     uid: string
@@ -27,11 +28,18 @@ export const CategoryDetailTabContainer: FC<Props> = ({ category, canEdit }) => 
         systemType: category.systemType,
     })
 
-    const saveScalar = useCallback(
-        async (field: string, value: unknown, previousValue: unknown) => {
-            await updateField(category.uid, field, value, { previousValue })
+    const saveName = useCallback(
+        async (value: unknown) => {
+            const newName = typeof value === 'string' ? value : String(value ?? '')
+            const newCode = toCategoryCode(newName)
+            await updateField(category.uid, 'name', newName, {
+                previousValue: category.name,
+                extraScalars: {
+                    code: { value: newCode, previousValue: category.code },
+                },
+            })
         },
-        [category.uid, updateField],
+        [category.uid, category.name, category.code, updateField],
     )
 
     const saveRelation = useCallback(
@@ -46,16 +54,16 @@ export const CategoryDetailTabContainer: FC<Props> = ({ category, canEdit }) => 
             <InlineFieldInput
                 label="Name"
                 value={category.name}
-                onSave={v => saveScalar('name', v, category.name)}
+                onSave={saveName}
                 isPending={isPending}
                 disabled={!canEdit}
             />
             <InlineFieldInput
                 label="Code"
                 value={category.code}
-                onSave={v => saveScalar('code', v, category.code)}
+                onSave={() => Promise.resolve()}
                 isPending={isPending}
-                disabled={!canEdit}
+                disabled
             />
             <InlineFieldModalSelect
                 label="System Type"
