@@ -70,6 +70,10 @@ export const useCatalogueNavigation = () => {
         [updateQuery],
     )
 
+    const clearCategory = useCallback(() => {
+        updateQuery({ category: undefined, item: undefined, view: undefined, tab: undefined })
+    }, [updateQuery])
+
     const selectItem = useCallback(
         (uid: string) => {
             updateQuery({ item: uid, tab: CATALOGUE_ITEM_TABS.DETAIL })
@@ -107,6 +111,7 @@ export const useCatalogueNavigation = () => {
             activeTab,
             isCategoryDetailView,
             selectCategory,
+            clearCategory,
             selectItem,
             openCategoryDetail,
             backToTable,
@@ -118,6 +123,7 @@ export const useCatalogueNavigation = () => {
             activeTab,
             isCategoryDetailView,
             selectCategory,
+            clearCategory,
             selectItem,
             openCategoryDetail,
             backToTable,
