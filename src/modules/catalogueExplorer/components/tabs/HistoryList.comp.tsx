@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils'
 import type { ChangeValue, FieldChangeEntry } from '@/modules/systemItem/types/responses'
 
 import type { CatalogueHistoryEntry } from '../../hooks/queries/useCatalogueItemHistory'
+import { renderChangeLabel } from '../../utils/renderChangeLabel'
 
 interface Props {
     entries: CatalogueHistoryEntry[]
@@ -56,13 +57,14 @@ const FieldDiff: FC<{ entry: FieldChangeEntry; fm: IntlShape['formatMessage'] }>
 }) => {
     const hasOld = entry.oldValue !== null && entry.oldValue !== undefined
     const hasNew = entry.newValue !== null && entry.newValue !== undefined
+    const fieldLabel = renderChangeLabel(entry)
 
     if (!hasNew && hasOld) {
         return (
             <span>
                 {fm(
                     { id: message.systemHierarchy.history.diff.cleared },
-                    { ...diffValues, field: entry.field },
+                    { ...diffValues, field: fieldLabel },
                 )}
             </span>
         )
@@ -75,7 +77,7 @@ const FieldDiff: FC<{ entry: FieldChangeEntry; fm: IntlShape['formatMessage'] }>
                     { id: message.systemHierarchy.history.diff.set },
                     {
                         ...diffValues,
-                        field: entry.field,
+                        field: fieldLabel,
                         newValue: formatChangeValue(entry.newValue, fm),
                     },
                 )}
@@ -89,7 +91,7 @@ const FieldDiff: FC<{ entry: FieldChangeEntry; fm: IntlShape['formatMessage'] }>
                 { id: message.systemHierarchy.history.diff.changed },
                 {
                     ...diffValues,
-                    field: entry.field,
+                    field: fieldLabel,
                     oldValue: formatChangeValue(entry.oldValue, fm),
                     newValue: formatChangeValue(entry.newValue, fm),
                 },

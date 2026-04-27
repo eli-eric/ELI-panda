@@ -15,11 +15,22 @@ export type CodebookSnapshot = {
 
 export type ChangeValue = string | number | boolean | CodebookSnapshot
 
+export type ChangeEntryEntity = {
+    type: 'category' | 'group' | 'property' | 'physicalProperty'
+    uid: string
+    name: string
+}
+
 export type FieldChangeEntry = {
     field: string
     type: FieldChangeType
     oldValue: ChangeValue | null
     newValue: ChangeValue | null
+    /**
+     * Entity context for nested-entity audit (category groups/properties — post #410).
+     * Absent for legacy flat audit (item / system).
+     */
+    entity?: ChangeEntryEntity
 }
 
 export type HistoryResponse = {
