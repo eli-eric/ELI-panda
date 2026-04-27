@@ -3,6 +3,7 @@ import type { FC } from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import { useIntl } from 'react-intl'
 
+import { Tooltip } from '@/components/Tooltip'
 import { Button } from '@/components/ui/button'
 import {
     Command,
@@ -193,41 +194,49 @@ export const PropertyRow: FC<PropertyRowProps> = ({
                 </div>
                 <div className="flex items-center gap-1 shrink-0">
                     {canEdit && onMoveUp && (
-                        <Button
-                            type="button"
-                            size="icon"
-                            variant="ghost"
-                            disabled={!canMoveUp || isPending}
-                            onClick={onMoveUp}
-                            aria-label={fm({ id: message.catalogue.category.moveUp })}
-                        >
-                            <ChevronUp className="size-4" />
-                        </Button>
+                        <Tooltip content={fm({ id: message.catalogue.category.moveUp })}>
+                            <Button
+                                type="button"
+                                size="icon"
+                                variant="ghost"
+                                disabled={!canMoveUp || isPending}
+                                onClick={onMoveUp}
+                                aria-label={fm({ id: message.catalogue.category.moveUp })}
+                            >
+                                <ChevronUp className="size-4" />
+                            </Button>
+                        </Tooltip>
                     )}
                     {canEdit && onMoveDown && (
-                        <Button
-                            type="button"
-                            size="icon"
-                            variant="ghost"
-                            disabled={!canMoveDown || isPending}
-                            onClick={onMoveDown}
-                            aria-label={fm({ id: message.catalogue.category.moveDown })}
-                        >
-                            <ChevronDown className="size-4" />
-                        </Button>
+                        <Tooltip content={fm({ id: message.catalogue.category.moveDown })}>
+                            <Button
+                                type="button"
+                                size="icon"
+                                variant="ghost"
+                                disabled={!canMoveDown || isPending}
+                                onClick={onMoveDown}
+                                aria-label={fm({ id: message.catalogue.category.moveDown })}
+                            >
+                                <ChevronDown className="size-4" />
+                            </Button>
+                        </Tooltip>
                     )}
                     {canEdit && otherGroups && otherGroups.length > 0 && (
                         <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button
-                                    type="button"
-                                    size="icon"
-                                    variant="ghost"
-                                    aria-label={fm({ id: message.catalogue.category.moveToGroup })}
-                                >
-                                    <MoveRight className="size-4" />
-                                </Button>
-                            </DropdownMenuTrigger>
+                            <Tooltip content={fm({ id: message.catalogue.category.moveToGroup })}>
+                                <DropdownMenuTrigger asChild>
+                                    <Button
+                                        type="button"
+                                        size="icon"
+                                        variant="ghost"
+                                        aria-label={fm({
+                                            id: message.catalogue.category.moveToGroup,
+                                        })}
+                                    >
+                                        <MoveRight className="size-4" />
+                                    </Button>
+                                </DropdownMenuTrigger>
+                            </Tooltip>
                             <DropdownMenuContent align="end">
                                 {otherGroups.map(g => (
                                     <DropdownMenuItem
@@ -241,17 +250,19 @@ export const PropertyRow: FC<PropertyRowProps> = ({
                         </DropdownMenu>
                     )}
                     {canEdit && (
-                        <Button
-                            type="button"
-                            size="icon"
-                            variant="ghost"
-                            onClick={handleDelete}
-                            disabled={isPending}
-                            className="text-destructive hover:text-destructive"
-                            aria-label={fm({ id: message.catalogue.category.propertyRemove })}
-                        >
-                            <Trash2 className="size-4" />
-                        </Button>
+                        <Tooltip content={fm({ id: message.catalogue.category.propertyRemove })}>
+                            <Button
+                                type="button"
+                                size="icon"
+                                variant="ghost"
+                                onClick={handleDelete}
+                                disabled={isPending}
+                                className="text-destructive hover:text-destructive"
+                                aria-label={fm({ id: message.catalogue.category.propertyRemove })}
+                            >
+                                <Trash2 className="size-4" />
+                            </Button>
+                        </Tooltip>
                     )}
                 </div>
             </div>

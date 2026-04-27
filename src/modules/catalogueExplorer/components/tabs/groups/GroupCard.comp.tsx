@@ -3,6 +3,7 @@ import type { FC } from 'react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useIntl } from 'react-intl'
 
+import { Tooltip } from '@/components/Tooltip'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -118,41 +119,47 @@ export const GroupCard: FC<Props> = ({
                         className="h-9 text-sm font-medium flex-1"
                     />
                     {canEdit && onMoveUp && (
-                        <Button
-                            type="button"
-                            size="icon"
-                            variant="ghost"
-                            disabled={!canMoveUp || isPending}
-                            onClick={onMoveUp}
-                            aria-label={fm({ id: message.catalogue.category.moveUp })}
-                        >
-                            <ChevronUp className="size-4" />
-                        </Button>
+                        <Tooltip content={fm({ id: message.catalogue.category.moveUp })}>
+                            <Button
+                                type="button"
+                                size="icon"
+                                variant="ghost"
+                                disabled={!canMoveUp || isPending}
+                                onClick={onMoveUp}
+                                aria-label={fm({ id: message.catalogue.category.moveUp })}
+                            >
+                                <ChevronUp className="size-4" />
+                            </Button>
+                        </Tooltip>
                     )}
                     {canEdit && onMoveDown && (
-                        <Button
-                            type="button"
-                            size="icon"
-                            variant="ghost"
-                            disabled={!canMoveDown || isPending}
-                            onClick={onMoveDown}
-                            aria-label={fm({ id: message.catalogue.category.moveDown })}
-                        >
-                            <ChevronDown className="size-4" />
-                        </Button>
+                        <Tooltip content={fm({ id: message.catalogue.category.moveDown })}>
+                            <Button
+                                type="button"
+                                size="icon"
+                                variant="ghost"
+                                disabled={!canMoveDown || isPending}
+                                onClick={onMoveDown}
+                                aria-label={fm({ id: message.catalogue.category.moveDown })}
+                            >
+                                <ChevronDown className="size-4" />
+                            </Button>
+                        </Tooltip>
                     )}
                     {canEdit && (
-                        <Button
-                            type="button"
-                            size="icon"
-                            variant="ghost"
-                            onClick={handleDelete}
-                            disabled={isPending}
-                            className="text-destructive hover:text-destructive"
-                            aria-label={fm({ id: message.catalogue.category.delete })}
-                        >
-                            <Trash2 className="size-4" />
-                        </Button>
+                        <Tooltip content={fm({ id: message.catalogue.category.delete })}>
+                            <Button
+                                type="button"
+                                size="icon"
+                                variant="ghost"
+                                onClick={handleDelete}
+                                disabled={isPending}
+                                className="text-destructive hover:text-destructive"
+                                aria-label={fm({ id: message.catalogue.category.delete })}
+                            >
+                                <Trash2 className="size-4" />
+                            </Button>
+                        </Tooltip>
                     )}
                 </div>
             </CardHeader>
