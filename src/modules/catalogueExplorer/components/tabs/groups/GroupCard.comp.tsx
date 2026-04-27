@@ -93,7 +93,8 @@ export const GroupCard: FC<Props> = ({
         const target = sortedProps[index + direction]
         const current = sortedProps[index]
         if (!target || !current) return
-        const newOrder = (target.order ?? (index + 1 + direction) * 10) + direction * -1
+        // Push current past target in `direction`: newOrder = target.order ± 1
+        const newOrder = (target.order ?? (index + 1 + direction) * 10) + direction
         void updateProperty(current.uid, { order: newOrder })
     }
 
