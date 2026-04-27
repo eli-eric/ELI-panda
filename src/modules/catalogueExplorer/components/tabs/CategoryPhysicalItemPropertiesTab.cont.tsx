@@ -39,7 +39,7 @@ const toCategoryProperty = (p: CatalogueCategoryProperty): CategoryProperty => (
     unit: p.unit ? { uid: p.unit.uid, name: p.unit.name } : null,
     defaultValue: p.defaultValue ?? null,
     listOfValues: p.listOfValues ?? null,
-    order: (p as { order?: number }).order,
+    order: p.order ?? undefined,
 })
 
 export const CategoryPhysicalItemPropertiesTab: FC<Props> = ({

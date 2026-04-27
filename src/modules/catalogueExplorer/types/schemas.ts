@@ -77,6 +77,7 @@ export const catalogueCategoryPropertySchema = z.object({
     unit: codebookRefSchema.optional().nullable(),
     defaultValue: z.string().optional().nullable(),
     listOfValues: z.array(z.string()).optional().nullable(),
+    order: z.number().optional().nullable(),
 })
 
 export type CatalogueCategoryProperty = z.infer<typeof catalogueCategoryPropertySchema>
@@ -84,6 +85,7 @@ export type CatalogueCategoryProperty = z.infer<typeof catalogueCategoryProperty
 export const catalogueCategoryPropertyGroupSchema = z.object({
     uid: z.string(),
     name: z.string(),
+    order: z.number().optional().nullable(),
     properties: z.array(catalogueCategoryPropertySchema),
 })
 

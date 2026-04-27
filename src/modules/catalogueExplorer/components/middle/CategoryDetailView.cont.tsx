@@ -16,6 +16,7 @@ const toCatalogueProperty = (p: {
     unit?: { uid?: string; name?: string } | null
     defaultValue?: string | null
     listOfValues?: string[]
+    order?: number | null
 }): CatalogueCategoryProperty => ({
     uid: p.uid ?? '',
     name: p.name,
@@ -23,6 +24,7 @@ const toCatalogueProperty = (p: {
     unit: p.unit?.uid ? { uid: p.unit.uid, name: p.unit.name ?? '' } : null,
     defaultValue: p.defaultValue,
     listOfValues: p.listOfValues,
+    order: p.order ?? null,
 })
 
 export const CategoryDetailViewContainer: FC = () => {
@@ -48,6 +50,7 @@ export const CategoryDetailViewContainer: FC = () => {
     const propertyGroups = category.groups.map(g => ({
         uid: g.uid ?? '',
         name: g.name,
+        order: (g as { order?: number | null }).order ?? null,
         properties: g.properties.map(toCatalogueProperty),
     }))
 

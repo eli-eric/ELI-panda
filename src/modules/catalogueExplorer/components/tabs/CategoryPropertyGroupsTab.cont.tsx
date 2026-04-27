@@ -19,7 +19,7 @@ interface Props {
 const toGroupCardData = (g: CatalogueCategoryPropertyGroup): GroupCardData => ({
     uid: g.uid ?? '',
     name: g.name,
-    order: (g as { order?: number }).order,
+    order: g.order ?? undefined,
     properties: (g.properties ?? []).map(p => ({
         uid: p.uid ?? '',
         name: p.name,
@@ -27,7 +27,7 @@ const toGroupCardData = (g: CatalogueCategoryPropertyGroup): GroupCardData => ({
         unit: p.unit ? { uid: p.unit.uid, name: p.unit.name } : null,
         defaultValue: p.defaultValue ?? null,
         listOfValues: p.listOfValues ?? null,
-        order: (p as { order?: number }).order,
+        order: p.order ?? undefined,
     })) as CategoryProperty[],
 })
 
