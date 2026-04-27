@@ -55,7 +55,8 @@ export const CategoryPropertyGroupsTab: FC<Props> = ({ categoryUid, groups, canE
         const target = sortedGroups[index + direction]
         const current = sortedGroups[index]
         if (!target || !current) return
-        const newOrder = (target.order ?? (index + 1 + direction) * 10) + direction * -1
+        // Push current past target in `direction`: newOrder = target.order ± 1
+        const newOrder = (target.order ?? (index + 1 + direction) * 10) + direction
         void updateGroup(current.uid, { order: newOrder })
     }
 
