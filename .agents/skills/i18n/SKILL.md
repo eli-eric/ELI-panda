@@ -214,28 +214,50 @@ Organize messages by feature in the locale file:
 export const messages = {
     // Common/shared messages
     common: {
-        ui: { /* ... */ },
-        actions: { /* ... */ },
-        validation: { /* ... */ },
+        ui: {
+            /* ... */
+        },
+        actions: {
+            /* ... */
+        },
+        validation: {
+            /* ... */
+        },
     },
 
     // Feature-specific messages
     orders: {
-        list: { /* ... */ },
-        create: { /* ... */ },
-        edit: { /* ... */ },
+        list: {
+            /* ... */
+        },
+        create: {
+            /* ... */
+        },
+        edit: {
+            /* ... */
+        },
     },
 
     systems: {
-        list: { /* ... */ },
-        details: { /* ... */ },
-        filters: { /* ... */ },
+        list: {
+            /* ... */
+        },
+        details: {
+            /* ... */
+        },
+        filters: {
+            /* ... */
+        },
     },
 
     // Forms
     forms: {
-        user: { /* ... */ },
-        order: { /* ... */ },
+        user: {
+            /* ... */
+        },
+        order: {
+            /* ... */
+        },
     },
 }
 ```

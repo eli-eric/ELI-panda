@@ -60,4 +60,3 @@ Use TanStack Query with `queryFetcher` and `queryMutate` utilities from `@/utils
 - **Small Functions**: Under 20 lines. Extract complex logic. Use early returns to reduce nesting.
 - **Type Safety**: Strict mode. Avoid `any` (use `unknown`). Use type guards and predicates. Interfaces for shapes, types for unions.
 - **Predicates for Logic**: Extract boolean conditions to named functions (`hasEditPermission`, `isResourceActive`).
-
