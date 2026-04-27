@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils'
 import type { ChangeValue, FieldChangeEntry } from '@/modules/systemItem/types/responses'
 
 import type { CatalogueHistoryEntry } from '../../hooks/queries/useCatalogueItemHistory'
-import { renderChangeLabel } from '../../utils/renderChangeLabel'
+import { getEntityTypeI18nKey, renderChangeLabel } from '../../utils/renderChangeLabel'
 
 interface Props {
     entries: CatalogueHistoryEntry[]
@@ -51,6 +51,22 @@ const formatChangeValue = (value: ChangeValue | null, fm: IntlShape['formatMessa
 
 const diffValues = { b: (chunks: ReactNode) => <strong>{chunks}</strong> }
 
+const EntityTypeBadge: FC<{ entry: FieldChangeEntry; fm: IntlShape['formatMessage'] }> = ({
+    entry,
+    fm,
+}) => {
+    const i18nKey = getEntityTypeI18nKey(entry)
+    if (!i18nKey) return null
+    return (
+        <Badge
+            variant="outline"
+            className="mr-2 h-4 rounded px-1 text-[10px] font-medium uppercase tracking-wide border-muted-foreground/40 text-muted-foreground"
+        >
+            {fm({ id: i18nKey })}
+        </Badge>
+    )
+}
+
 const FieldDiff: FC<{ entry: FieldChangeEntry; fm: IntlShape['formatMessage'] }> = ({
     entry,
     fm,
@@ -59,43 +75,37 @@ const FieldDiff: FC<{ entry: FieldChangeEntry; fm: IntlShape['formatMessage'] }>
     const hasNew = entry.newValue !== null && entry.newValue !== undefined
     const fieldLabel = renderChangeLabel(entry)
 
+    let body: ReactNode
     if (!hasNew && hasOld) {
-        return (
-            <span>
-                {fm(
-                    { id: message.systemHierarchy.history.diff.cleared },
-                    { ...diffValues, field: fieldLabel },
-                )}
-            </span>
+        body = fm(
+            { id: message.systemHierarchy.history.diff.cleared },
+            { ...diffValues, field: fieldLabel },
         )
-    }
-
-    if (!hasOld && hasNew) {
-        return (
-            <span>
-                {fm(
-                    { id: message.systemHierarchy.history.diff.set },
-                    {
-                        ...diffValues,
-                        field: fieldLabel,
-                        newValue: formatChangeValue(entry.newValue, fm),
-                    },
-                )}
-            </span>
+    } else if (!hasOld && hasNew) {
+        body = fm(
+            { id: message.systemHierarchy.history.diff.set },
+            {
+                ...diffValues,
+                field: fieldLabel,
+                newValue: formatChangeValue(entry.newValue, fm),
+            },
+        )
+    } else {
+        body = fm(
+            { id: message.systemHierarchy.history.diff.changed },
+            {
+                ...diffValues,
+                field: fieldLabel,
+                oldValue: formatChangeValue(entry.oldValue, fm),
+                newValue: formatChangeValue(entry.newValue, fm),
+            },
         )
     }
 
     return (
         <span>
-            {fm(
-                { id: message.systemHierarchy.history.diff.changed },
-                {
-                    ...diffValues,
-                    field: fieldLabel,
-                    oldValue: formatChangeValue(entry.oldValue, fm),
-                    newValue: formatChangeValue(entry.newValue, fm),
-                },
-            )}
+            <EntityTypeBadge entry={entry} fm={fm} />
+            {body}
         </span>
     )
 }

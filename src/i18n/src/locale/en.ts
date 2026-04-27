@@ -1775,6 +1775,10 @@ export const messages = {
             moveToGroup: 'Move to group',
             newGroupPlaceholder: 'New group name',
             newPropertyPlaceholder: 'New property name',
+            entityCategory: 'Category',
+            entityGroup: 'Group',
+            entityProperty: 'Property',
+            entityPhysicalProperty: 'Physical property',
         },
         items: {
             errorFetching: 'Error fetching catalogue items: {reason}',

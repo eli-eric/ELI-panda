@@ -1,6 +1,6 @@
 import type { FieldChangeEntry } from '@/modules/systemItem/types/responses'
 
-import { isEntityEntry, renderChangeLabel } from '../renderChangeLabel'
+import { getEntityTypeI18nKey, isEntityEntry, renderChangeLabel } from '../renderChangeLabel'
 
 const legacyEntry: FieldChangeEntry = {
     field: 'supplier',
@@ -47,5 +47,32 @@ describe('renderChangeLabel', () => {
 
     it('prefixes with entity.name for property-scoped entry', () => {
         expect(renderChangeLabel(propertyEntry)).toBe('Voltage: groupUid')
+    })
+})
+
+describe('getEntityTypeI18nKey', () => {
+    it('returns null for legacy entry', () => {
+        expect(getEntityTypeI18nKey(legacyEntry)).toBeNull()
+    })
+
+    it('returns category key for category entry', () => {
+        const key = getEntityTypeI18nKey(categoryEntry)
+        expect(key).toContain('entityCategory')
+    })
+
+    it('returns property key for property entry', () => {
+        const key = getEntityTypeI18nKey(propertyEntry)
+        expect(key).toContain('entityProperty')
+    })
+
+    it('returns group key for group entry', () => {
+        const groupEntry: FieldChangeEntry = {
+            field: 'name',
+            type: 'string',
+            oldValue: 'a',
+            newValue: 'b',
+            entity: { type: 'group', uid: 'g-1', name: 'Specs' },
+        }
+        expect(getEntityTypeI18nKey(groupEntry)).toContain('entityGroup')
     })
 })
