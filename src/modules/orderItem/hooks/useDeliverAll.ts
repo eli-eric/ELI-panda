@@ -32,8 +32,11 @@ export const useDeliverAll = (setOrderLine: (line: OrderLineFormType) => void) =
         },
     })
 
+    const getExistingLine = (lineUid: string) =>
+        (orderLines as OrderLineFormType[] | undefined)?.find(l => l.uid === lineUid)
+
     const onSuccess = (data: AxiosResponse<OrderLineFormType[]>) => {
-        handleSuccessfulDelivery(data.data, { setOrderLine, refetch })
+        handleSuccessfulDelivery(data.data, { setOrderLine, refetch, getExistingLine })
         queryClient.invalidateQueries({ queryKey })
         queryClient.invalidateQueries({ queryKey: ['orders'] })
         toast.success('Order all delivered successfully')
