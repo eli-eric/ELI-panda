@@ -30,8 +30,15 @@ export const useServiceDeliveryAll = (setServiceLine: (line: ServiceLine) => voi
         },
     })
 
+    const getExistingLine = (lineUid: string) =>
+        (serviceLines as ServiceLine[] | undefined)?.find(l => l.uid === lineUid)
+
     const onSuccess = (data: AxiosResponse<ServiceLine[]>) => {
-        handleSuccessfulDelivery(data.data, { setOrderLine: setServiceLine, refetch })
+        handleSuccessfulDelivery(data.data, {
+            setOrderLine: setServiceLine,
+            refetch,
+            getExistingLine,
+        })
         queryClient.invalidateQueries({ queryKey })
         queryClient.invalidateQueries({ queryKey: ['orders'] })
         toast.success('Services all delivered successfully')
