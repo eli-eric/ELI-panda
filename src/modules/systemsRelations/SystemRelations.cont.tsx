@@ -15,7 +15,11 @@ import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import type { RelationshipType } from '@/modules/systemHierarchy/types/graph'
-import { RELATIONSHIP_TYPE_LABELS, RELATIONSHIP_TYPES } from '@/modules/systemHierarchy/types/graph'
+import {
+    ASSIGNABLE_RELATIONSHIP_TYPES,
+    RELATIONSHIP_TYPE_LABELS,
+    RELATIONSHIP_TYPES,
+} from '@/modules/systemHierarchy/types/graph'
 import type { SystemDetail } from '@/types/responses/systems'
 
 import { FilterBadges } from '../shared/form/FilterBadges'
@@ -34,13 +38,6 @@ import { useRelationsStore } from './store/useRelationsStore'
 import { useSystemsRelationsColumns } from './SystemRelations.columns'
 
 const FilterMemoized = memo(SystemFilterButtonContainer)
-
-const ASSIGNABLE_RELATIONSHIP_TYPES: RelationshipType[] = [
-    RELATIONSHIP_TYPES.IS_SPARE_FOR,
-    RELATIONSHIP_TYPES.IS_COOLED_BY,
-    RELATIONSHIP_TYPES.IS_POWERED_BY,
-    RELATIONSHIP_TYPES.IS_CONTROLLED_BY,
-]
 
 export const SystemRelationsContainer = () => {
     const { formatMessage: fm } = useIntl()

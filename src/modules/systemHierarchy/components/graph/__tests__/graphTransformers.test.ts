@@ -29,7 +29,7 @@ const mockEdges: RelationshipGraphEdge[] = [
         uid: 'e1',
         source: 'n1',
         target: 'n2',
-        relationship: 'IS_POWERED_BY',
+        relationship: 'IS_POWERED_FROM',
         description: 'Motor powers pump',
     },
 ]
@@ -86,7 +86,7 @@ describe('toReactFlowEdges', () => {
 
     it('includes label from relationship type', () => {
         const result = toReactFlowEdges(mockEdges)
-        expect(result[0].data?.label).toBe('Is Powered By')
+        expect(result[0].data?.label).toBe('Is Powered From')
     })
 
     it('returns empty array for empty input', () => {
@@ -115,7 +115,7 @@ describe('fromSystemGraphResponse', () => {
                 properties: { systemLevel: 'TECHNOLOGY_UNIT' },
             },
         ],
-        links: [{ source: 'n1', target: 'n2', relationship: 'IS_POWERED_BY' }],
+        links: [{ source: 'n1', target: 'n2', relationship: 'IS_POWERED_FROM' }],
     }
 
     it('maps API nodes to RelationshipGraphNode shape', () => {
@@ -141,7 +141,7 @@ describe('fromSystemGraphResponse', () => {
         expect(result.links[0].uid).toContain('edge-')
         expect(result.links[0].source).toBe('n1')
         expect(result.links[0].target).toBe('n2')
-        expect(result.links[0].relationship).toBe('IS_POWERED_BY')
+        expect(result.links[0].relationship).toBe('IS_POWERED_FROM')
     })
 
     it('prefers api link uid when present', () => {
@@ -152,7 +152,7 @@ describe('fromSystemGraphResponse', () => {
                     uid: '12345',
                     source: 'n1',
                     target: 'n2',
-                    relationship: 'IS_POWERED_BY',
+                    relationship: 'IS_POWERED_FROM',
                 },
             ],
         }
@@ -166,12 +166,12 @@ describe('fromSystemGraphResponse', () => {
             ...apiResponse,
             meta: {
                 relationshipStats: {
-                    IS_POWERED_BY: { total: 30, returned: 20, hasMore: true },
+                    IS_POWERED_FROM: { total: 30, returned: 20, hasMore: true },
                 },
                 hiddenLinksTotal: 10,
             },
             page: {
-                type: 'IS_POWERED_BY',
+                type: 'IS_POWERED_FROM',
                 offset: 20,
                 limit: 10,
                 returned: 10,
@@ -182,9 +182,9 @@ describe('fromSystemGraphResponse', () => {
 
         const result = fromSystemGraphResponse(responseWithMeta)
 
-        expect(result.meta?.relationshipStats?.IS_POWERED_BY.total).toBe(30)
+        expect(result.meta?.relationshipStats?.IS_POWERED_FROM.total).toBe(30)
         expect(result.meta?.hiddenLinksTotal).toBe(10)
-        expect(result.page?.type).toBe('IS_POWERED_BY')
+        expect(result.page?.type).toBe('IS_POWERED_FROM')
         expect(result.page?.returned).toBe(10)
     })
 })

@@ -1,5 +1,7 @@
 import type { RelationshipType } from '../types/graph'
-import { RELATIONSHIP_TYPES } from '../types/graph'
+import { RELATIONSHIP_COLORS } from '../types/graph'
+
+export { RELATIONSHIP_COLORS }
 
 // Node Tailwind classes by systemLevel — matches src/utils/systemLevel.ts
 export const SYSTEM_LEVEL_NODE_CLASSES: Record<string, string> = {
@@ -28,15 +30,6 @@ export const SYSTEM_LEVEL_LABELS: Record<string, string> = {
     TECHNOLOGY_UNIT: 'Technology Unit',
     SUBSYSTEMS_AND_PARTS: 'Subsystems & Parts',
     TRASH: 'Trash',
-}
-
-// Edge colors by relationship type
-export const RELATIONSHIP_COLORS: Record<RelationshipType, string> = {
-    [RELATIONSHIP_TYPES.IS_SPARE_FOR]: '#10b981',
-    [RELATIONSHIP_TYPES.IS_COOLED_BY]: '#3b82f6',
-    [RELATIONSHIP_TYPES.IS_POWERED_BY]: '#f59e0b',
-    [RELATIONSHIP_TYPES.IS_CONTROLLED_BY]: '#ef4444',
-    [RELATIONSHIP_TYPES.HAS_SUBSYSTEM]: '#8b5cf6',
 }
 
 export const getNodeClasses = (systemLevel: string): string =>

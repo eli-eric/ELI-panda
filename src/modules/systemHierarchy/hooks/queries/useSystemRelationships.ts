@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
 import type { RelationshipGraphEdge, RelationshipGraphNode } from '../../types/graph'
-import { RELATIONSHIP_TYPES } from '../../types/graph'
+import { EXCLUDED_RELATIONSHIP_TYPES } from '../../types/graph'
 import { useRelationshipGraph } from './useRelationshipGraph'
 
 export interface RelationshipRow {
@@ -9,8 +9,6 @@ export interface RelationshipRow {
     node: RelationshipGraphNode
     direction: 'inbound' | 'outbound'
 }
-
-const EXCLUDED_TYPES: Set<string> = new Set([RELATIONSHIP_TYPES.HAS_SUBSYSTEM])
 
 export const useSystemRelationships = (systemUid: string | undefined) => {
     const { nodes, edges, isLoading, isFetching, error, refetch } = useRelationshipGraph({
@@ -26,7 +24,7 @@ export const useSystemRelationships = (systemUid: string | undefined) => {
         const outbound: RelationshipRow[] = []
 
         for (const edge of edges) {
-            if (EXCLUDED_TYPES.has(edge.relationship)) continue
+            if (EXCLUDED_RELATIONSHIP_TYPES.has(edge.relationship)) continue
 
             if (edge.target === systemUid) {
                 const node = nodeMap.get(edge.source)
