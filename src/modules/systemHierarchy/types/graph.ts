@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+import { message } from '@/i18n/src/messages'
+
 // --- Single source of truth: relationship registry ---
 interface RelationshipDef {
     label: string
@@ -9,7 +11,7 @@ interface RelationshipDef {
     direction?: { inbound: string; outbound: string }
 }
 
-const messageBase = 'message.systemHierarchy.relationships'
+const m = message.systemHierarchy.relationships
 
 export const RELATIONSHIP_DEFINITIONS = {
     HAS_SUBSYSTEM: {
@@ -23,68 +25,56 @@ export const RELATIONSHIP_DEFINITIONS = {
         color: '#10b981',
         rank: 1,
         assignable: true,
-        direction: { inbound: `${messageBase}.hasSpare`, outbound: `${messageBase}.spareFor` },
+        direction: { inbound: m.hasSpare, outbound: m.spareFor },
     },
     IS_COOLED_FROM: {
         label: 'Is Cooled From',
         color: '#3b82f6',
         rank: 2,
         assignable: true,
-        direction: { inbound: `${messageBase}.cools`, outbound: `${messageBase}.cooledFrom` },
+        direction: { inbound: m.cools, outbound: m.cooledFrom },
     },
     IS_POWERED_FROM: {
         label: 'Is Powered From',
         color: '#f59e0b',
         rank: 3,
         assignable: true,
-        direction: { inbound: `${messageBase}.powers`, outbound: `${messageBase}.poweredFrom` },
+        direction: { inbound: m.powers, outbound: m.poweredFrom },
     },
     IS_CONTROLLED_BY: {
         label: 'Is Controlled By',
         color: '#ef4444',
         rank: 4,
         assignable: true,
-        direction: { inbound: `${messageBase}.controls`, outbound: `${messageBase}.controlledBy` },
+        direction: { inbound: m.controls, outbound: m.controlledBy },
     },
     IS_INTERLOCKED_BY: {
         label: 'Is Interlocked By',
         color: '#14b8a6',
         rank: 5,
         assignable: true,
-        direction: {
-            inbound: `${messageBase}.interlocks`,
-            outbound: `${messageBase}.interlockedBy`,
-        },
+        direction: { inbound: m.interlocks, outbound: m.interlockedBy },
     },
     PROVIDES_DATA_TO: {
         label: 'Provides Data To',
         color: '#6366f1',
         rank: 6,
         assignable: true,
-        direction: {
-            inbound: `${messageBase}.receivesDataFrom`,
-            outbound: `${messageBase}.providesDataTo`,
-        },
+        direction: { inbound: m.receivesDataFrom, outbound: m.providesDataTo },
     },
     DIRECTS_BEAM_TO: {
         label: 'Directs Beam To',
         color: '#f43f5e',
         rank: 7,
         assignable: true,
-        direction: {
-            inbound: `${messageBase}.receivesBeamFrom`,
-            outbound: `${messageBase}.directsBeamTo`,
-        },
+        direction: { inbound: m.receivesBeamFrom, outbound: m.directsBeamTo },
     },
     PROVIDES_VACUUM_FOR: {
         label: 'Provides Vacuum For',
         color: '#84cc16',
         rank: 8,
         assignable: true,
-        direction: {
-            inbound: `${messageBase}.receivesVacuumFrom`,
-            outbound: `${messageBase}.providesVacuumFor`,
-        },
+        direction: { inbound: m.receivesVacuumFrom, outbound: m.providesVacuumFor },
     },
 } as const satisfies Record<string, RelationshipDef>
 
