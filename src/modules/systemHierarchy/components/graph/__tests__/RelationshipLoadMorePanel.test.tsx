@@ -26,15 +26,15 @@ describe('RelationshipLoadMorePanel', () => {
             <RelationshipLoadMorePanel
                 hiddenTotal={12}
                 rows={[
-                    { type: 'IS_POWERED_BY', shown: 20, total: 30, isLoading: false },
-                    { type: 'IS_COOLED_BY', shown: 20, total: 25, isLoading: false },
+                    { type: 'IS_POWERED_FROM', shown: 20, total: 30, isLoading: false },
+                    { type: 'IS_COOLED_FROM', shown: 20, total: 25, isLoading: false },
                 ]}
                 onLoadMore={jest.fn()}
             />,
         )
 
         expect(screen.getByText('Hidden relationships: 12')).toBeInTheDocument()
-        expect(screen.getByTestId('load-more-row-IS_POWERED_BY')).toBeInTheDocument()
+        expect(screen.getByTestId('load-more-row-IS_POWERED_FROM')).toBeInTheDocument()
         expect(screen.getByText('20/30')).toBeInTheDocument()
     })
 
@@ -43,13 +43,13 @@ describe('RelationshipLoadMorePanel', () => {
         renderPanel(
             <RelationshipLoadMorePanel
                 hiddenTotal={10}
-                rows={[{ type: 'IS_POWERED_BY', shown: 20, total: 30, isLoading: false }]}
+                rows={[{ type: 'IS_POWERED_FROM', shown: 20, total: 30, isLoading: false }]}
                 onLoadMore={onLoadMore}
             />,
         )
 
         fireEvent.click(screen.getByRole('button', { name: '+10' }))
-        expect(onLoadMore).toHaveBeenCalledWith('IS_POWERED_BY')
+        expect(onLoadMore).toHaveBeenCalledWith('IS_POWERED_FROM')
     })
 
     it('renders back button when node scope active', () => {
@@ -57,7 +57,7 @@ describe('RelationshipLoadMorePanel', () => {
         renderPanel(
             <RelationshipLoadMorePanel
                 hiddenTotal={10}
-                rows={[{ type: 'IS_POWERED_BY', shown: 20, total: 30, isLoading: false }]}
+                rows={[{ type: 'IS_POWERED_FROM', shown: 20, total: 30, isLoading: false }]}
                 showBackToGraph={true}
                 onBackToGraph={onBackToGraph}
                 onLoadMore={jest.fn()}

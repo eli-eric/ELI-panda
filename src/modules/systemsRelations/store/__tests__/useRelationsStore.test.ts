@@ -32,8 +32,8 @@ describe('useRelationsStore', () => {
     })
 
     it('sets selectedRelationshipType', () => {
-        useRelationsStore.getState().setSelectedRelationshipType('IS_COOLED_BY')
-        expect(useRelationsStore.getState().selectedRelationshipType).toBe('IS_COOLED_BY')
+        useRelationsStore.getState().setSelectedRelationshipType('IS_COOLED_FROM')
+        expect(useRelationsStore.getState().selectedRelationshipType).toBe('IS_COOLED_FROM')
     })
 
     it('resets selectedRelationshipType to undefined', () => {
@@ -44,7 +44,7 @@ describe('useRelationsStore', () => {
 
     it('overwrites selectedRelationshipType on successive calls', () => {
         useRelationsStore.getState().setSelectedRelationshipType('IS_SPARE_FOR')
-        useRelationsStore.getState().setSelectedRelationshipType('IS_POWERED_BY')
-        expect(useRelationsStore.getState().selectedRelationshipType).toBe('IS_POWERED_BY')
+        useRelationsStore.getState().setSelectedRelationshipType('IS_POWERED_FROM')
+        expect(useRelationsStore.getState().selectedRelationshipType).toBe('IS_POWERED_FROM')
     })
 })

@@ -17,7 +17,7 @@ const mockEdge: RelationshipGraphEdge = {
     uid: 'e1',
     source: 'n1',
     target: 'n2',
-    relationship: 'IS_POWERED_BY',
+    relationship: 'IS_POWERED_FROM',
     description: 'UPS powers server',
 }
 
@@ -37,7 +37,7 @@ describe('EdgeDetailSheet', () => {
 
     it('renders relationship type label', () => {
         renderSheet()
-        expect(screen.getByText('Is Powered By')).toBeInTheDocument()
+        expect(screen.getByText('Is Powered From')).toBeInTheDocument()
     })
 
     it('renders description', () => {

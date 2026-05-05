@@ -137,9 +137,9 @@ describe('useAssignSparesNavigation', () => {
     })
 
     it('sets explicit relationshipType in store', () => {
-        const params = { ...baseParams, relationshipType: 'IS_COOLED_BY' as const }
+        const params = { ...baseParams, relationshipType: 'IS_COOLED_FROM' as const }
         const { result } = renderHook(() => useAssignSparesNavigation(params))
         act(() => result.current())
-        expect(useRelationsStore.getState().selectedRelationshipType).toBe('IS_COOLED_BY')
+        expect(useRelationsStore.getState().selectedRelationshipType).toBe('IS_COOLED_FROM')
     })
 })

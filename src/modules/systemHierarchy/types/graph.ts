@@ -1,29 +1,129 @@
 import { z } from 'zod'
 
-// --- Relationship types ---
-export const RELATIONSHIP_TYPES = {
-    IS_SPARE_FOR: 'IS_SPARE_FOR',
-    IS_COOLED_BY: 'IS_COOLED_BY',
-    IS_POWERED_BY: 'IS_POWERED_BY',
-    IS_CONTROLLED_BY: 'IS_CONTROLLED_BY',
-    HAS_SUBSYSTEM: 'HAS_SUBSYSTEM',
-} as const
+import { message } from '@/i18n/src/messages'
 
-export type RelationshipType = (typeof RELATIONSHIP_TYPES)[keyof typeof RELATIONSHIP_TYPES]
+// --- Single source of truth: relationship registry ---
+interface RelationshipDef {
+    label: string
+    color: string
+    rank: number
+    assignable: boolean
+    direction?: { inbound: string; outbound: string }
+}
+
+const m = message.systemHierarchy.relationships
+
+export const RELATIONSHIP_DEFINITIONS = {
+    HAS_SUBSYSTEM: {
+        label: 'Has Subsystem',
+        color: '#8b5cf6',
+        rank: 0,
+        assignable: false,
+    },
+    IS_SPARE_FOR: {
+        label: 'Is Spare For',
+        color: '#10b981',
+        rank: 1,
+        assignable: true,
+        direction: { inbound: m.hasSpare, outbound: m.spareFor },
+    },
+    IS_COOLED_FROM: {
+        label: 'Is Cooled From',
+        color: '#3b82f6',
+        rank: 2,
+        assignable: true,
+        direction: { inbound: m.cools, outbound: m.cooledFrom },
+    },
+    IS_POWERED_FROM: {
+        label: 'Is Powered From',
+        color: '#f59e0b',
+        rank: 3,
+        assignable: true,
+        direction: { inbound: m.powers, outbound: m.poweredFrom },
+    },
+    IS_CONTROLLED_BY: {
+        label: 'Is Controlled By',
+        color: '#ef4444',
+        rank: 4,
+        assignable: true,
+        direction: { inbound: m.controls, outbound: m.controlledBy },
+    },
+    IS_INTERLOCKED_BY: {
+        label: 'Is Interlocked By',
+        color: '#14b8a6',
+        rank: 5,
+        assignable: true,
+        direction: { inbound: m.interlocks, outbound: m.interlockedBy },
+    },
+    PROVIDES_DATA_TO: {
+        label: 'Provides Data To',
+        color: '#6366f1',
+        rank: 6,
+        assignable: true,
+        direction: { inbound: m.receivesDataFrom, outbound: m.providesDataTo },
+    },
+    DIRECTS_BEAM_TO: {
+        label: 'Directs Beam To',
+        color: '#f43f5e',
+        rank: 7,
+        assignable: true,
+        direction: { inbound: m.receivesBeamFrom, outbound: m.directsBeamTo },
+    },
+    PROVIDES_VACUUM_FOR: {
+        label: 'Provides Vacuum For',
+        color: '#84cc16',
+        rank: 8,
+        assignable: true,
+        direction: { inbound: m.receivesVacuumFrom, outbound: m.providesVacuumFor },
+    },
+} as const satisfies Record<string, RelationshipDef>
+
+export type RelationshipType = keyof typeof RELATIONSHIP_DEFINITIONS
+
+const RELATIONSHIP_CODES = Object.keys(RELATIONSHIP_DEFINITIONS) as RelationshipType[]
+
+// --- Derived maps (kept for existing call sites) ---
+export const RELATIONSHIP_TYPES = Object.fromEntries(
+    RELATIONSHIP_CODES.map(code => [code, code]),
+) as { [K in RelationshipType]: K }
+
+export const RELATIONSHIP_TYPE_LABELS = Object.fromEntries(
+    RELATIONSHIP_CODES.map(code => [code, RELATIONSHIP_DEFINITIONS[code].label]),
+) as Record<RelationshipType, string>
+
+export const RELATIONSHIP_COLORS = Object.fromEntries(
+    RELATIONSHIP_CODES.map(code => [code, RELATIONSHIP_DEFINITIONS[code].color]),
+) as Record<RelationshipType, string>
+
+export const RELATIONSHIP_TYPE_RANK: Record<string, number> = Object.fromEntries(
+    RELATIONSHIP_CODES.map(code => [code, RELATIONSHIP_DEFINITIONS[code].rank]),
+)
+
+export const ASSIGNABLE_RELATIONSHIP_TYPES: RelationshipType[] = RELATIONSHIP_CODES.filter(
+    code => RELATIONSHIP_DEFINITIONS[code].assignable,
+)
+
+export const EXCLUDED_RELATIONSHIP_TYPES: Set<string> = new Set(
+    RELATIONSHIP_CODES.filter(code => !RELATIONSHIP_DEFINITIONS[code].assignable),
+)
+
+export const getRelationshipDirectionLabel = (
+    code: string,
+    direction: 'inbound' | 'outbound',
+): string | undefined => {
+    const def = RELATIONSHIP_DEFINITIONS[code as RelationshipType] as
+        | RelationshipDef
+        | undefined
+    return def?.direction?.[direction]
+}
+
+export const DEFAULT_RELATIONSHIP_RANK = 99
 
 export interface RelationshipLoadMoreRow {
     type: string
     shown: number
     total: number
     isLoading: boolean
-}
-
-export const RELATIONSHIP_TYPE_LABELS: Record<RelationshipType, string> = {
-    IS_SPARE_FOR: 'Is Spare For',
-    IS_COOLED_BY: 'Is Cooled By',
-    IS_POWERED_BY: 'Is Powered By',
-    IS_CONTROLLED_BY: 'Is Controlled By',
-    HAS_SUBSYSTEM: 'Has Subsystem',
 }
 
 // --- Zod schemas ---
@@ -90,17 +190,6 @@ export type RelationshipGraphMeta = z.infer<typeof relationshipGraphMetaSchema>
 export type RelationshipGraphPage = z.infer<typeof relationshipGraphPageSchema>
 export type RelationshipGraphResponse = z.infer<typeof relationshipGraphResponseSchema>
 export type CreateRelationshipPayload = z.infer<typeof createRelationshipPayloadSchema>
-
-// --- Relationship type rank (lower = higher visual priority) ---
-export const RELATIONSHIP_TYPE_RANK: Record<string, number> = {
-    HAS_SUBSYSTEM: 0,
-    IS_SPARE_FOR: 1,
-    IS_COOLED_BY: 2,
-    IS_POWERED_BY: 3,
-    IS_CONTROLLED_BY: 4,
-}
-
-export const DEFAULT_RELATIONSHIP_RANK = 99
 
 // --- Graph view modes ---
 export const GRAPH_LAYOUT_MODES = {
