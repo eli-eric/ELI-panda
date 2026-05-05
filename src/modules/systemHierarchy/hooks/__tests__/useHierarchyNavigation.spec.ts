@@ -65,4 +65,11 @@ describe('useHierarchyNavigation', () => {
         act(() => result.current.selectParent('B'))
         expect(lastPushedQuery()).toEqual({ parent: 'B', view: 'graph' })
     })
+
+    it('selectLeaf from graph view keeps view=graph', () => {
+        mockQuery = { parent: 'A', view: 'graph' }
+        const { result } = renderHook(() => useHierarchyNavigation())
+        act(() => result.current.selectLeaf('X'))
+        expect(lastPushedQuery()).toEqual({ parent: 'A', view: 'graph', leaf: 'X', tab: 'detail' })
+    })
 })
