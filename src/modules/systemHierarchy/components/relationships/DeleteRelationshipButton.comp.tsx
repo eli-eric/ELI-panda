@@ -30,20 +30,31 @@ export const DeleteRelationshipButton: FC<Props> = ({
         fm({ id: message.systemHierarchy.relationships.deleteConfirm }),
     )
 
-    const handleDelete = () => {
-        toast.promise(
-            deleteRelationship({
+    const handleDelete = async () => {
+        const toastId = toast.loading(
+            fm({ id: message.systemHierarchy.relationships.deleteLoading }),
+        )
+        try {
+            const deletedCount = await deleteRelationship({
                 currentSystemUid,
                 relatedSystemUid,
                 relationshipType,
                 direction,
-            }),
-            {
-                loading: fm({ id: message.systemHierarchy.relationships.deleteLoading }),
-                success: fm({ id: message.systemHierarchy.relationships.deleteSuccess }),
-                error: fm({ id: message.systemHierarchy.relationships.deleteError }),
-            },
-        )
+            })
+            if (deletedCount > 0) {
+                toast.success(fm({ id: message.systemHierarchy.relationships.deleteSuccess }), {
+                    id: toastId,
+                })
+            } else {
+                toast.warning(fm({ id: message.systemHierarchy.relationships.deleteNotFound }), {
+                    id: toastId,
+                })
+            }
+        } catch {
+            toast.error(fm({ id: message.systemHierarchy.relationships.deleteError }), {
+                id: toastId,
+            })
+        }
     }
 
     return (

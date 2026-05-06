@@ -5,6 +5,7 @@ import { gql } from '@/types/gql'
 import type { SystemDisconnectInput } from '@/types/gql/graphql'
 
 import { RELATIONSHIP_GRAPH_QUERY_KEY } from '../../types/constants'
+import { getDisconnectField, isSpareDisconnect } from '../../types/relationshipDisconnect'
 
 const DELETE_RELATIONSHIP = gql(`
     mutation DeleteSystemRelationship($where: SystemWhere, $disconnect: SystemDisconnectInput) {
@@ -16,27 +17,6 @@ const DELETE_RELATIONSHIP = gql(`
     }
 `)
 
-type DisconnectField = keyof SystemDisconnectInput
-
-const DISCONNECT_FIELD_MAP: Record<
-    string,
-    { inbound: DisconnectField; outbound: DisconnectField } | undefined
-> = {
-    IS_SPARE_FOR: { inbound: 'spareParts', outbound: 'sparePartsFor' },
-    IS_COOLED_FROM: { inbound: 'cools', outbound: 'cooledFrom' },
-    IS_POWERED_FROM: { inbound: 'powers', outbound: 'poweredFrom' },
-    IS_CONTROLLED_BY: { inbound: 'controls', outbound: 'controlledBy' },
-    IS_INTERLOCKED_BY: { inbound: 'interlocks', outbound: 'interlockedBy' },
-    PROVIDES_DATA_TO: { inbound: 'receivesDataFrom', outbound: 'providesDataTo' },
-    DIRECTS_BEAM_TO: { inbound: 'receivesBeamFrom', outbound: 'directsBeamTo' },
-    PROVIDES_VACUUM_FOR: { inbound: 'receivesVacuumFrom', outbound: 'providesVacuumFor' },
-}
-
-export const getDisconnectField = (
-    relationshipType: string,
-    direction: 'inbound' | 'outbound',
-): DisconnectField | undefined => DISCONNECT_FIELD_MAP[relationshipType]?.[direction]
-
 interface DeleteRelationshipParams {
     currentSystemUid: string
     relatedSystemUid: string
@@ -47,28 +27,35 @@ interface DeleteRelationshipParams {
 export const useDeleteRelationship = () => {
     const queryClient = useQueryClient()
 
-    const { mutateAsync, isPending } = useGraphQLMutation(DELETE_RELATIONSHIP, {
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: [RELATIONSHIP_GRAPH_QUERY_KEY] })
-        },
-    })
+    const { mutateAsync, isPending } = useGraphQLMutation(DELETE_RELATIONSHIP)
 
-    const deleteRelationship = ({
+    const deleteRelationship = async ({
         currentSystemUid,
         relatedSystemUid,
         relationshipType,
         direction,
-    }: DeleteRelationshipParams) => {
+    }: DeleteRelationshipParams): Promise<number> => {
         const field = getDisconnectField(relationshipType, direction)
         if (!field) {
-            return Promise.reject(new Error(`Unsupported relationship type: ${relationshipType}`))
+            throw new Error(`Unsupported relationship type: ${relationshipType}`)
         }
-        return mutateAsync({
+        const result = await mutateAsync({
             where: { uid: currentSystemUid },
             disconnect: {
                 [field]: [{ where: { node: { uid: relatedSystemUid } } }],
             } as SystemDisconnectInput,
         })
+
+        const deletedCount = result.updateSystems?.info.relationshipsDeleted ?? 0
+
+        queryClient.invalidateQueries({ queryKey: [RELATIONSHIP_GRAPH_QUERY_KEY] })
+        if (isSpareDisconnect(field)) {
+            queryClient.invalidateQueries({
+                predicate: q => q.queryKey?.[0] === 'SystemDetail',
+            })
+        }
+
+        return deletedCount
     }
 
     return { deleteRelationship, isPending }

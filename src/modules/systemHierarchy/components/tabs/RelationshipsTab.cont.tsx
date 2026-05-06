@@ -89,7 +89,7 @@ const RelationshipRowItem: FC<{
 export const RelationshipsTabContainer: FC<RelationshipsTabProps> = ({ system, compact }) => {
     const { formatMessage: fm } = useIntl()
     const { selectLeaf } = useHierarchyNavigation()
-    const canEdit = usePermission([ROLE.SYSTEM_EDIT])
+    const canEdit = !!usePermission([ROLE.SYSTEM_EDIT])
     const { inbound, outbound, relatedUids, hasRelationships, isLoading, isError, refetch } =
         useSystemRelationships(system.uid)
     const { itemUsageMap } = useRelationshipItemUsage(relatedUids)

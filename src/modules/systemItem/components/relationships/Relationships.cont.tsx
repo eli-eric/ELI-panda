@@ -28,6 +28,7 @@ export const RelationshipsContainer = () => {
     const canEdit = !!usePermission([ROLE.SYSTEM_EDIT])
     const columns = useRelationshipsColumns(canEdit, systemDetail?.uid)
 
+    const isSystemReady = !!systemDetail?.uid
     const { inbound, outbound, relatedUids, isLoading, isError, refetch } = useSystemRelationships(
         systemDetail?.uid,
     )
@@ -89,7 +90,7 @@ export const RelationshipsContainer = () => {
             />
             <Table<RelationshipTableRow>
                 columns={columns}
-                data={isLoading ? undefined : rows}
+                data={!isSystemReady || isLoading ? undefined : rows}
                 enablePagination
                 emptyMessage={fm({ id: message.systemHierarchy.relationships.noRelationships })}
                 className="relative overflow-x-auto mb-0 pb-0"
