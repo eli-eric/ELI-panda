@@ -79,6 +79,28 @@ describe('useDetailGraphFilters', () => {
         )
     })
 
+    it('toggling off the last remaining type writes null sentinel (no empty-list inversion)', () => {
+        const { result } = renderHook(() => useDetailGraphFilters())
+        act(() => {
+            result.current.toggleRelationshipType('HAS_SUBSYSTEM')
+        })
+        const explicitNine = useDetailGraphStore.getState().relationshipTypes ?? []
+        expect(explicitNine).toHaveLength(9)
+
+        act(() => {
+            useDetailGraphStore.getState().setRelationshipTypes(['IS_SPARE_FOR'])
+        })
+        expect(useDetailGraphStore.getState().relationshipTypes).toEqual(['IS_SPARE_FOR'])
+
+        act(() => {
+            result.current.toggleRelationshipType('IS_SPARE_FOR')
+        })
+        expect(useDetailGraphStore.getState().relationshipTypes).toBeNull()
+        expect(result.current.filters.relationshipTypes).toEqual(
+            getDefaultDetailGraphRelationshipTypes(),
+        )
+    })
+
     it('search is session-only — does not persist to localStorage', () => {
         const { result } = renderHook(() => useDetailGraphFilters())
         act(() => {

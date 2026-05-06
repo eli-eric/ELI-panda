@@ -6,7 +6,7 @@ import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import type { GraphLayoutMode, RelationshipGraphEdge, RelationshipGraphNode } from '../types/graph'
 import { isNodeScopeKey, toGraphScopeKey } from '../utils/graphScope'
 import { useRelationshipGraph } from './queries/useRelationshipGraph'
-import type { useDetailGraphFilters, useGraphFilters } from './useGraphFilters'
+import type { GraphFiltersApi } from './useGraphFilters'
 import { useHierarchyNavigation } from './useHierarchyNavigation'
 import { useRelationshipGraphApiQuery } from './useRelationshipGraphApiQuery'
 import { useRelationshipGraphExpansionActions } from './useRelationshipGraphExpansionActions'
@@ -15,10 +15,6 @@ import { useRelationshipGraphInteractions } from './useRelationshipGraphInteract
 import { useRelationshipGraphScopes } from './useRelationshipGraphScopes'
 import { useRelationshipGraphViewModel } from './useRelationshipGraphViewModel'
 import { useSystemCopyPaste } from './useSystemCopyPaste'
-
-type FiltersHookResult =
-    | ReturnType<typeof useGraphFilters>
-    | ReturnType<typeof useDetailGraphFilters>
 
 interface UseRelationshipGraphContainerStateParams {
     rootUid: string | null
@@ -29,7 +25,7 @@ interface UseRelationshipGraphContainerStateParams {
     addExpanded: (nodes: RelationshipGraphNode[], edges: RelationshipGraphEdge[]) => void
     setExpanded: (nodes: RelationshipGraphNode[], edges: RelationshipGraphEdge[]) => void
     resetExpanded: () => void
-    filtersHook: FiltersHookResult
+    filtersHook: GraphFiltersApi
 }
 
 export const useRelationshipGraphContainerState = ({

@@ -1,8 +1,19 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import type { GraphLayoutMode, RelationshipGraphEdge, RelationshipGraphNode } from '../types/graph'
+import type {
+    GraphLayoutMode,
+    RelationshipGraphEdge,
+    RelationshipGraphNode,
+    RelationshipType,
+} from '../types/graph'
 import { GRAPH_LAYOUT_MODES, RELATIONSHIP_DEFINITIONS } from '../types/graph'
+
+const HIDDEN_BY_DEFAULT: RelationshipType[] = ['HAS_SUBSYSTEM']
+
+const DEFAULT_DETAIL_GRAPH_RELATIONSHIP_TYPES: string[] = (
+    Object.keys(RELATIONSHIP_DEFINITIONS) as RelationshipType[]
+).filter(type => !HIDDEN_BY_DEFAULT.includes(type))
 
 interface DetailGraphStore {
     relationshipTypes: string[] | null
@@ -55,4 +66,4 @@ export const useDetailGraphStore = create<DetailGraphStore>()(
 )
 
 export const getDefaultDetailGraphRelationshipTypes = (): string[] =>
-    Object.keys(RELATIONSHIP_DEFINITIONS).filter(type => type !== 'HAS_SUBSYSTEM')
+    DEFAULT_DETAIL_GRAPH_RELATIONSHIP_TYPES

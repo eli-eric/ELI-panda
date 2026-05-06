@@ -6,7 +6,16 @@ import {
 } from '../store/useDetailGraphStore'
 import { DEFAULT_GRAPH_FILTERS, type GraphFilterState } from '../utils/graphFilters'
 
-export const useGraphFilters = () => {
+export interface GraphFiltersApi {
+    filters: GraphFilterState
+    setSearch: (value: string) => void
+    toggleSystemLevel: (level: string) => void
+    setSystemType: (value: string | null) => void
+    toggleRelationshipType: (type: string) => void
+    resetFilters: () => void
+}
+
+export const useGraphFilters = (): GraphFiltersApi => {
     const [filters, setFilters] = useState<GraphFilterState>(DEFAULT_GRAPH_FILTERS)
 
     const setSearch = useCallback((search: string) => {
@@ -59,7 +68,7 @@ export const useGraphFilters = () => {
     )
 }
 
-export const useDetailGraphFilters = () => {
+export const useDetailGraphFilters = (): GraphFiltersApi => {
     const storedRelationshipTypes = useDetailGraphStore(state => state.relationshipTypes)
     const setStoredRelationshipTypes = useDetailGraphStore(state => state.setRelationshipTypes)
 
@@ -103,7 +112,8 @@ export const useDetailGraphFilters = () => {
             const next = current.includes(type)
                 ? current.filter(t => t !== type)
                 : [...current, type]
-            setStoredRelationshipTypes(next)
+            // Empty list would invert filterEdges to "show all" (incl. HAS_SUBSYSTEM); fall back to default.
+            setStoredRelationshipTypes(next.length === 0 ? null : next)
         },
         [setStoredRelationshipTypes],
     )
