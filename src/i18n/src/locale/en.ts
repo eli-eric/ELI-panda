@@ -1517,7 +1517,12 @@ export const messages = {
             noSpareFor: 'Not a spare for any system',
         },
         relationships: {
+            title: 'Relationships',
             noRelationships: 'No relationships',
+            deleteConfirm: 'Delete this relationship?',
+            deleteLoading: 'Deleting relationship…',
+            deleteSuccess: 'Relationship deleted',
+            deleteError: 'Failed to delete relationship',
             inbound: 'Inbound',
             outbound: 'Outbound',
             cooledFrom: 'Cooled from',

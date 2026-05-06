@@ -11,6 +11,7 @@ import { ROLE } from '@/types/constants/roles'
 
 import FileManager from '../shared/fileManager/FileManager'
 import { SystemForm } from './components/form/SystemForm.cont'
+import { RelationshipsContainer } from './components/relationships/Relationships.cont'
 import { SparePartsFor } from './components/spare-for/SpareFor.cont'
 import { SparePartsContainer } from './components/spare-parts/SpareParts.cont'
 import { SubSystemsContainer } from './components/subsystems/SubSystems.cont'
@@ -51,6 +52,13 @@ export const SystemItemContainer = ({ uid }: Props) => {
                                 <CardContent className="space-y-6">
                                     <ErrorBoundary fallback={<ErrorPage />}>
                                         <SubSystemsContainer />
+                                    </ErrorBoundary>
+                                </CardContent>
+                            </CardUI>
+                            <CardUI>
+                                <CardContent className="space-y-6">
+                                    <ErrorBoundary fallback={<ErrorPage />}>
+                                        <RelationshipsContainer />
                                     </ErrorBoundary>
                                 </CardContent>
                             </CardUI>
