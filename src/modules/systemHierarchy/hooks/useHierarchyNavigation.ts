@@ -31,16 +31,18 @@ export const useHierarchyNavigation = () => {
 
     const selectParent = useCallback(
         (uid: string) => {
-            updateQuery({ parent: uid, leaf: undefined, tab: undefined })
+            const inDetail = !!(router.query.leaf as string | undefined)
+            updateQuery(inDetail ? { parent: uid, leaf: uid } : { parent: uid })
         },
-        [updateQuery],
+        [router, updateQuery],
     )
 
     const selectLeaf = useCallback(
         (uid: string) => {
-            updateQuery({ leaf: uid, tab: HIERARCHY_TABS.DETAIL })
+            const inDetail = !!(router.query.leaf as string | undefined)
+            updateQuery(inDetail ? { leaf: uid } : { leaf: uid, tab: HIERARCHY_TABS.DETAIL })
         },
-        [updateQuery],
+        [router, updateQuery],
     )
 
     const setActiveTab = useCallback(

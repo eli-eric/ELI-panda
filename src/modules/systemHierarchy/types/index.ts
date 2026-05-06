@@ -30,8 +30,13 @@ export type {
     RelationshipType,
 } from './graph'
 export {
+    ASSIGNABLE_RELATIONSHIP_TYPES,
     createRelationshipPayloadSchema,
+    EXCLUDED_RELATIONSHIP_TYPES,
+    getRelationshipDirectionLabel,
     GRAPH_LAYOUT_MODES,
+    RELATIONSHIP_COLORS,
+    RELATIONSHIP_DEFINITIONS,
     RELATIONSHIP_TYPE_LABELS,
     RELATIONSHIP_TYPES,
     relationshipGraphResponseSchema,

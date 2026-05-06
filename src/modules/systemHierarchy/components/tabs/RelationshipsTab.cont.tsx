@@ -14,36 +14,15 @@ import type { RelationshipRow } from '../../hooks/queries/useSystemRelationships
 import { useSystemRelationships } from '../../hooks/queries/useSystemRelationships'
 import { useHierarchyNavigation } from '../../hooks/useHierarchyNavigation'
 import type { SystemLeaf } from '../../types'
-import { RELATIONSHIP_TYPES } from '../../types/graph'
-import { RELATIONSHIP_COLORS } from '../../utils/graphColors'
+import { getRelationshipDirectionLabel, RELATIONSHIP_COLORS } from '../../types/graph'
 
 interface RelationshipsTabProps {
     system: SystemLeaf
     compact?: boolean
 }
 
-const DIRECTION_LABELS: Record<string, { inbound: string; outbound: string }> = {
-    [RELATIONSHIP_TYPES.IS_COOLED_BY]: {
-        inbound: message.systemHierarchy.relationships.cools,
-        outbound: message.systemHierarchy.relationships.cooledBy,
-    },
-    [RELATIONSHIP_TYPES.IS_POWERED_BY]: {
-        inbound: message.systemHierarchy.relationships.powers,
-        outbound: message.systemHierarchy.relationships.poweredBy,
-    },
-    [RELATIONSHIP_TYPES.IS_CONTROLLED_BY]: {
-        inbound: message.systemHierarchy.relationships.controls,
-        outbound: message.systemHierarchy.relationships.controlledBy,
-    },
-    [RELATIONSHIP_TYPES.IS_SPARE_FOR]: {
-        inbound: message.systemHierarchy.relationships.hasSpare,
-        outbound: message.systemHierarchy.relationships.spareFor,
-    },
-}
-
-const getRelationshipLabel = (relationship: string, direction: 'inbound' | 'outbound'): string => {
-    return DIRECTION_LABELS[relationship]?.[direction] ?? relationship
-}
+const getRelationshipLabel = (relationship: string, direction: 'inbound' | 'outbound'): string =>
+    getRelationshipDirectionLabel(relationship, direction) ?? relationship
 
 const getRelationshipColor = (relationship: string): string =>
     RELATIONSHIP_COLORS[relationship as keyof typeof RELATIONSHIP_COLORS] ?? '#94a3b8'
