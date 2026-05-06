@@ -6,16 +6,14 @@ import { Button } from '@/components/ui/button'
 import { message } from '@/i18n/src/messages'
 
 import type { SystemLeaf } from '../../types'
+import type { SelectAncestorHandler } from '../shared/SystemBreadcrumbs.comp'
 import { SystemBreadcrumbs } from '../shared/SystemBreadcrumbs.comp'
 import { ActionsDropdown } from './ActionsDropdown.comp'
 
 interface SystemDetailHeaderProps {
     system: SystemLeaf
     onBack: () => void
-    onSelectAncestor: (
-        uid: string,
-        hint: { name: string; parentPath: { uid: string; name: string }[] },
-    ) => void
+    onSelectAncestor: SelectAncestorHandler
 }
 
 export const SystemDetailHeader: FC<SystemDetailHeaderProps> = ({

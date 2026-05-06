@@ -52,6 +52,10 @@ export const LeavesPanelContainer: FC = () => {
     const [filterQuery] = useQueryState('filter')
     const { setColumnFilter, setSearch, setSearchValue, setPaginationState } = useTableStateStore()
 
+    // Pagination reset on parent change has two halves: selectParent clears the ?page
+    // URL param; this effect clears the zustand paginationState (which useQueryManager
+    // reads with higher priority than the URL). Mount guard via prevParentRef preserves
+    // ?page on initial deep-link reload.
     const prevParentRef = useRef<string | null>(null)
     useEffect(() => {
         if (prevParentRef.current && prevParentRef.current !== selectedParentUid) {

@@ -10,21 +10,23 @@ import {
     BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 
-interface ParentPathItem {
+export interface ParentPathItem {
     uid: string
     name: string
 }
 
-interface AncestorClickHint {
+export interface AncestorClickHint {
     name: string
     parentPath: ParentPathItem[]
 }
+
+export type SelectAncestorHandler = (uid: string, hint: AncestorClickHint) => void
 
 interface SystemBreadcrumbsProps {
     parentPath: ParentPathItem[] | null
     currentName: string
     currentCode?: string | null
-    onSelectAncestor: (uid: string, hint: AncestorClickHint) => void
+    onSelectAncestor: SelectAncestorHandler
 }
 
 const COLLAPSE_THRESHOLD = 4
@@ -94,6 +96,7 @@ export const SystemBreadcrumbs: FC<SystemBreadcrumbsProps> = ({
                     </Fragment>
                 ))}
                 <BreadcrumbItem className="min-w-0">
+                    <h2 className="sr-only">{currentName}</h2>
                     <BreadcrumbPage
                         data-testid="system-breadcrumb-current"
                         className="font-semibold truncate"

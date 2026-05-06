@@ -19,6 +19,10 @@ export interface OptimisticSystemHint {
     parentPath?: { uid: string; name: string }[]
 }
 
+// Seeds a partial SystemDetailFragment so the breadcrumb renders before the network
+// resolves. Only sets fields the breadcrumb reads (name, systemCode, parentPath).
+// useSystemDetail's mapping defends missing fields with ?? null. Skips when an entry
+// already exists — relies on staleTime (60s) to refresh stale paths via background refetch.
 export const primeSystemDetailCache = (
     queryClient: QueryClient,
     uid: string,

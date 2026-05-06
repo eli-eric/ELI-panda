@@ -8,20 +8,21 @@ import { message } from '@/i18n/src/messages'
 
 import type { HierarchyView } from '../../types/constants'
 import { ViewSwitcher } from '../graph/ViewSwitcher.comp'
+import type {
+    ParentPathItem,
+    SelectAncestorHandler,
+} from '../shared/SystemBreadcrumbs.comp'
 import { SystemBreadcrumbs } from '../shared/SystemBreadcrumbs.comp'
 
 interface LeavesPanelHeaderProps {
     parentName: string | null
     parentSystemCode: string | null
     parentSystemType: string | null
-    parentPath: { uid: string; name: string }[] | null
+    parentPath: ParentPathItem[] | null
     totalCount: number
     isLoading: boolean
     onViewParentDetail: () => void
-    onSelectAncestor: (
-        uid: string,
-        hint: { name: string; parentPath: { uid: string; name: string }[] },
-    ) => void
+    onSelectAncestor: SelectAncestorHandler
     activeView: HierarchyView
     onViewChange: (view: HierarchyView) => void
 }
