@@ -13,6 +13,7 @@ import { HIERARCHY_TABS } from '../../types/constants'
 import { hasPhysicalItem, hasSpareFor, hasSpareParts } from '../../utils/predicates'
 import { AttachmentsTabContainer } from '../tabs/AttachmentsTab.cont'
 import { DetailTabContainer } from '../tabs/DetailTab.cont'
+import { GraphTabContainer } from '../tabs/GraphTab.cont'
 import { HistoryTabContainer } from '../tabs/HistoryTab.cont'
 import { PersonsTabContainer } from '../tabs/PersonsTab.cont'
 import { PhysicalItemTabContainer } from '../tabs/PhysicalItemTab.cont'
@@ -104,6 +105,12 @@ export const SystemDetailTabsContainer: FC<SystemDetailTabsProps> = ({ system })
                 >
                     {fm({ id: message.systemHierarchy.tabs.history })}
                 </TabsTrigger>
+                <TabsTrigger
+                    value={HIERARCHY_TABS.GRAPH}
+                    data-testid="system-hierarchy-tab-graph"
+                >
+                    {fm({ id: message.systemHierarchy.tabs.graph })}
+                </TabsTrigger>
             </TabsList>
             <div className="flex-1 min-h-0">
                 <TabsContent
@@ -161,6 +168,12 @@ export const SystemDetailTabsContainer: FC<SystemDetailTabsProps> = ({ system })
                     className="h-full min-h-0 overflow-hidden"
                 >
                     <HistoryTabContainer system={system} />
+                </TabsContent>
+                <TabsContent
+                    value={HIERARCHY_TABS.GRAPH}
+                    className="h-full min-h-0 overflow-hidden"
+                >
+                    <GraphTabContainer system={system} />
                 </TabsContent>
             </div>
         </Tabs>
