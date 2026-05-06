@@ -23,6 +23,7 @@ export const HIERARCHY_TABS = {
     RELATIONSHIPS: 'relationships',
     ATTACHMENTS: 'attachments',
     HISTORY: 'history',
+    GRAPH: 'graph',
 } as const
 
 export type HierarchyTab = (typeof HIERARCHY_TABS)[keyof typeof HIERARCHY_TABS]

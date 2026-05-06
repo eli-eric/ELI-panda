@@ -1,3 +1,6 @@
+import type { QueryClient } from '@tanstack/react-query'
+import { keepPreviousData } from '@tanstack/react-query'
+import { request } from 'graphql-request'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
 
@@ -19,6 +22,55 @@ const systemHierarchyDetailQuery = gql(`
   }
 `)
 
+const fetchSystemDetail = (uid: string) =>
+    request('/api/graphql', systemHierarchyDetailQuery, {
+        where: { deleted: false, uid },
+    })
+
+export interface OptimisticSystemHint {
+    name: string
+    systemCode?: string | null
+    parentPath?: { uid: string; name: string }[]
+}
+
+// Seeds a partial SystemDetailFragment so the breadcrumb renders before the network
+// resolves, then kicks off a background fetch to replace the seed with the full fragment.
+// Background fetch is required because useSystemDetail uses refetchOnMount: false — a
+// seed alone would otherwise stick and the consumer would never see physicalItem,
+// operators, etc. Skips when an entry already exists (live cache or in-flight fetch).
+export const primeSystemDetailCache = (
+    queryClient: QueryClient,
+    uid: string,
+    hint: OptimisticSystemHint,
+) => {
+    if (queryClient.getQueryData([SYSTEM_DETAIL_QUERY_KEY, uid])) return
+    queryClient.setQueryData([SYSTEM_DETAIL_QUERY_KEY, uid], {
+        systems: [
+            {
+                __typename: 'System',
+                uid,
+                name: hint.name,
+                systemCode: hint.systemCode ?? null,
+                parentPath: (hint.parentPath ?? []).map(p => ({
+                    __typename: 'System',
+                    uid: p.uid,
+                    name: p.name,
+                    systemLevel: null,
+                })),
+            },
+        ],
+    })
+    queryClient
+        .fetchQuery({
+            queryKey: [SYSTEM_DETAIL_QUERY_KEY, uid],
+            queryFn: () => fetchSystemDetail(uid),
+            staleTime: 60 * 1000,
+        })
+        .catch(() => {
+            // errors surface via the active consumer's useQuery state
+        })
+}
+
 export const useSystemDetail = (leafUid: string | null) => {
     const { data, error, isLoading, refetch } = useGraphQL(systemHierarchyDetailQuery, {
         variables: {
@@ -33,6 +85,7 @@ export const useSystemDetail = (leafUid: string | null) => {
         refetchOnWindowFocus: false,
         retry: false,
         staleTime: 60 * 1000, // 60 seconds
+        placeholderData: keepPreviousData,
     })
 
     useEffect(() => {

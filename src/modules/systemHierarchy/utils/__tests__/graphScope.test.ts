@@ -12,7 +12,7 @@ describe('graphScope utils', () => {
     it('calculates hidden links total from relationship stats', () => {
         const hiddenTotal = getHiddenLinksTotal({
             HAS_SUBSYSTEM: { total: 10, returned: 8, hasMore: true },
-            IS_POWERED_BY: { total: 3, returned: 3, hasMore: false },
+            IS_POWERED_FROM: { total: 3, returned: 3, hasMore: false },
         })
 
         expect(hiddenTotal).toBe(2)
@@ -37,7 +37,7 @@ describe('graphScope utils', () => {
 
     it('applies page update and keeps hidden total in sync', () => {
         const next = applyPageToScope(undefined, {
-            type: 'IS_COOLED_BY',
+            type: 'IS_COOLED_FROM',
             offset: 20,
             limit: 10,
             returned: 10,
@@ -45,7 +45,7 @@ describe('graphScope utils', () => {
             hasMore: true,
         })
 
-        expect(next.relationshipStats.IS_COOLED_BY.returned).toBe(30)
+        expect(next.relationshipStats.IS_COOLED_FROM.returned).toBe(30)
         expect(next.hiddenLinksTotal).toBe(10)
     })
 

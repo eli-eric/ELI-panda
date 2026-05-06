@@ -22,8 +22,14 @@ import { useLeavesColumns } from './useLeavesColumns'
 
 export const LeavesPanelContainer: FC = () => {
     const { formatMessage: fm } = useIntl()
-    const { selectedParentUid, selectedLeafUid, selectLeaf, activeView, setActiveView } =
-        useHierarchyNavigation()
+    const {
+        selectedParentUid,
+        selectedLeafUid,
+        selectLeaf,
+        selectParent,
+        activeView,
+        setActiveView,
+    } = useHierarchyNavigation()
     const { system: parentSystem, isLoading: isParentLoading } = useSystemDetail(selectedParentUid)
     const { leaves, totalCount, isLoading } = useSystemLeaves(selectedParentUid)
 
@@ -44,7 +50,19 @@ export const LeavesPanelContainer: FC = () => {
 
     // Sync URL filter params → store on mount (enables persistence across refresh/new tab)
     const [filterQuery] = useQueryState('filter')
-    const { setColumnFilter, setSearch, setSearchValue } = useTableStateStore()
+    const [pageQuery] = useQueryState('page')
+    const { setColumnFilter, setSearch, setSearchValue, setPaginationState } = useTableStateStore()
+
+    // Pagination reset has two halves: selectParent clears ?page when the parent
+    // changes; this effect clears zustand paginationState (which useQueryManager
+    // prioritises over the URL) whenever the URL has no explicit ?page. That covers
+    // both same-mount parent changes and fresh mounts where a previous visit's
+    // store entry would otherwise leak. Deep-link reloads with ?page=N keep their page.
+    useEffect(() => {
+        if (!pageQuery) {
+            setPaginationState(LEAVES_TABLE_ID, undefined)
+        }
+    }, [pageQuery, selectedParentUid, setPaginationState])
 
     useEffect(() => {
         if (filterQuery) {
@@ -93,9 +111,11 @@ export const LeavesPanelContainer: FC = () => {
             parentName={parentSystem?.name ?? null}
             parentSystemCode={parentSystem?.systemCode ?? null}
             parentSystemType={parentSystem?.systemType?.name ?? null}
+            parentPath={parentSystem?.parentPath ?? null}
             totalCount={totalCount}
             isLoading={isParentLoading}
             onViewParentDetail={handleViewParentDetail}
+            onSelectAncestor={selectParent}
             activeView={activeView}
             onViewChange={setActiveView}
         />

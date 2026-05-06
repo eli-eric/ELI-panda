@@ -1,8 +1,21 @@
 import { useCallback, useMemo, useState } from 'react'
 
+import {
+    getDefaultDetailGraphRelationshipTypes,
+    useDetailGraphStore,
+} from '../store/useDetailGraphStore'
 import { DEFAULT_GRAPH_FILTERS, type GraphFilterState } from '../utils/graphFilters'
 
-export const useGraphFilters = () => {
+export interface GraphFiltersApi {
+    filters: GraphFilterState
+    setSearch: (value: string) => void
+    toggleSystemLevel: (level: string) => void
+    setSystemType: (value: string | null) => void
+    toggleRelationshipType: (type: string) => void
+    resetFilters: () => void
+}
+
+export const useGraphFilters = (): GraphFiltersApi => {
     const [filters, setFilters] = useState<GraphFilterState>(DEFAULT_GRAPH_FILTERS)
 
     const setSearch = useCallback((search: string) => {
@@ -34,6 +47,88 @@ export const useGraphFilters = () => {
     const resetFilters = useCallback(() => {
         setFilters(DEFAULT_GRAPH_FILTERS)
     }, [])
+
+    return useMemo(
+        () => ({
+            filters,
+            setSearch,
+            toggleSystemLevel,
+            setSystemType,
+            toggleRelationshipType,
+            resetFilters,
+        }),
+        [
+            filters,
+            setSearch,
+            toggleSystemLevel,
+            setSystemType,
+            toggleRelationshipType,
+            resetFilters,
+        ],
+    )
+}
+
+export const useDetailGraphFilters = (): GraphFiltersApi => {
+    const storedRelationshipTypes = useDetailGraphStore(state => state.relationshipTypes)
+    const setStoredRelationshipTypes = useDetailGraphStore(state => state.setRelationshipTypes)
+
+    const [search, setSearchState] = useState<string>('')
+    const [systemLevels, setSystemLevels] = useState<string[]>([])
+    const [systemType, setSystemTypeState] = useState<string | null>(null)
+
+    const effectiveRelationshipTypes = useMemo(
+        () => storedRelationshipTypes ?? getDefaultDetailGraphRelationshipTypes(),
+        [storedRelationshipTypes],
+    )
+
+    const filters: GraphFilterState = useMemo(
+        () => ({
+            search,
+            systemLevels,
+            systemType,
+            relationshipTypes: effectiveRelationshipTypes,
+        }),
+        [search, systemLevels, systemType, effectiveRelationshipTypes],
+    )
+
+    const setSearch = useCallback((value: string) => {
+        setSearchState(value)
+    }, [])
+
+    const toggleSystemLevel = useCallback((level: string) => {
+        setSystemLevels(prev =>
+            prev.includes(level) ? prev.filter(l => l !== level) : [...prev, level],
+        )
+    }, [])
+
+    const setSystemType = useCallback((value: string | null) => {
+        setSystemTypeState(value)
+    }, [])
+
+    const toggleRelationshipType = useCallback(
+        (type: string) => {
+            const stored = useDetailGraphStore.getState().relationshipTypes
+            const current = stored ?? getDefaultDetailGraphRelationshipTypes()
+            const next = current.includes(type)
+                ? current.filter(t => t !== type)
+                : [...current, type]
+            // Normalize to null when:
+            // - empty (would invert filterEdges to "show all" incl. HAS_SUBSYSTEM), or
+            // - equals default (so future registry additions auto-flow in).
+            const defaults = getDefaultDetailGraphRelationshipTypes()
+            const matchesDefault =
+                next.length === defaults.length && next.every(t => defaults.includes(t))
+            setStoredRelationshipTypes(next.length === 0 || matchesDefault ? null : next)
+        },
+        [setStoredRelationshipTypes],
+    )
+
+    const resetFilters = useCallback(() => {
+        setSearchState('')
+        setSystemLevels([])
+        setSystemTypeState(null)
+        setStoredRelationshipTypes(null)
+    }, [setStoredRelationshipTypes])
 
     return useMemo(
         () => ({

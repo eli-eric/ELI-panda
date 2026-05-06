@@ -32,8 +32,8 @@ const nodes: RelationshipGraphNode[] = [
 ]
 
 const edges: RelationshipGraphEdge[] = [
-    { uid: 'e1', source: 'n1', target: 'n2', relationship: 'IS_POWERED_BY' },
-    { uid: 'e2', source: 'n2', target: 'n3', relationship: 'IS_COOLED_BY' },
+    { uid: 'e1', source: 'n1', target: 'n2', relationship: 'IS_POWERED_FROM' },
+    { uid: 'e2', source: 'n2', target: 'n3', relationship: 'IS_COOLED_FROM' },
     { uid: 'e3', source: 'n1', target: 'n3', relationship: 'UNKNOWN_TYPE' },
 ]
 
@@ -141,7 +141,7 @@ describe('filterEdges', () => {
     it('filters by relationship types (multi-select)', () => {
         const result = filterEdges(edges, allVisible, {
             ...baseFilters,
-            relationshipTypes: ['IS_POWERED_BY'],
+            relationshipTypes: ['IS_POWERED_FROM'],
         })
         expect(result).toHaveLength(1)
         expect(result[0].uid).toBe('e1')
@@ -150,7 +150,7 @@ describe('filterEdges', () => {
     it('filters by multiple relationship types', () => {
         const result = filterEdges(edges, allVisible, {
             ...baseFilters,
-            relationshipTypes: ['IS_POWERED_BY', 'IS_COOLED_BY'],
+            relationshipTypes: ['IS_POWERED_FROM', 'IS_COOLED_FROM'],
         })
         expect(result).toHaveLength(2)
     })
@@ -160,7 +160,7 @@ describe('filterConnectedNodes', () => {
     it('keeps only nodes connected by visible filtered edges', () => {
         const filteredEdges = filterEdges(edges, new Set(['n1', 'n2', 'n3']), {
             ...baseFilters,
-            relationshipTypes: ['IS_POWERED_BY'],
+            relationshipTypes: ['IS_POWERED_FROM'],
         })
         const connectedNodeUids = getConnectedNodeUids(filteredEdges)
 
@@ -183,7 +183,7 @@ describe('filterConnectedNodes', () => {
 
     it('does not prune nodes when relationship filter is not active', () => {
         const connectedNodeUids = getConnectedNodeUids([
-            { uid: 'e1', source: 'n1', target: 'n2', relationship: 'IS_POWERED_BY' },
+            { uid: 'e1', source: 'n1', target: 'n2', relationship: 'IS_POWERED_FROM' },
         ])
 
         const result = filterConnectedNodes(nodes, connectedNodeUids, false)

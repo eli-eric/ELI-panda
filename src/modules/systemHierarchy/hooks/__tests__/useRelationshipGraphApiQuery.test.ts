@@ -9,7 +9,7 @@ describe('useRelationshipGraphApiQuery', () => {
                 search: '  pump  ',
                 systemLevels: ['TECHNOLOGY_UNIT', 'KEY_SYSTEMS'],
                 systemType: 'Motor',
-                relationshipTypes: ['IS_POWERED_BY', 'HAS_SUBSYSTEM'],
+                relationshipTypes: ['IS_POWERED_FROM', 'HAS_SUBSYSTEM'],
             }),
         )
 
@@ -17,7 +17,7 @@ describe('useRelationshipGraphApiQuery', () => {
             search: 'pump',
             systemLevels: 'KEY_SYSTEMS,TECHNOLOGY_UNIT',
             systemType: 'Motor',
-            relationshipTypes: 'HAS_SUBSYSTEM,IS_POWERED_BY',
+            relationshipTypes: 'HAS_SUBSYSTEM,IS_POWERED_FROM',
         })
     })
 

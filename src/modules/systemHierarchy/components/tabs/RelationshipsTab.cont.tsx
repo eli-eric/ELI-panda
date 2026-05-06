@@ -4,46 +4,28 @@ import { useIntl } from 'react-intl'
 
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
+import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import { IconCell } from '@/modules/systems/components/table/cells/IconCell'
 import type { ITEM_USAGE } from '@/modules/systems/types/constants'
+import { ROLE } from '@/types/constants/roles'
 
 import { useRelationshipItemUsage } from '../../hooks/queries/useRelationshipItemUsage'
 import type { RelationshipRow } from '../../hooks/queries/useSystemRelationships'
 import { useSystemRelationships } from '../../hooks/queries/useSystemRelationships'
 import { useHierarchyNavigation } from '../../hooks/useHierarchyNavigation'
 import type { SystemLeaf } from '../../types'
-import { RELATIONSHIP_TYPES } from '../../types/graph'
-import { RELATIONSHIP_COLORS } from '../../utils/graphColors'
+import { getRelationshipDirectionLabel, RELATIONSHIP_COLORS } from '../../types/graph'
+import { DeleteRelationshipButton } from '../relationships/DeleteRelationshipButton.comp'
 
 interface RelationshipsTabProps {
     system: SystemLeaf
     compact?: boolean
 }
 
-const DIRECTION_LABELS: Record<string, { inbound: string; outbound: string }> = {
-    [RELATIONSHIP_TYPES.IS_COOLED_BY]: {
-        inbound: message.systemHierarchy.relationships.cools,
-        outbound: message.systemHierarchy.relationships.cooledBy,
-    },
-    [RELATIONSHIP_TYPES.IS_POWERED_BY]: {
-        inbound: message.systemHierarchy.relationships.powers,
-        outbound: message.systemHierarchy.relationships.poweredBy,
-    },
-    [RELATIONSHIP_TYPES.IS_CONTROLLED_BY]: {
-        inbound: message.systemHierarchy.relationships.controls,
-        outbound: message.systemHierarchy.relationships.controlledBy,
-    },
-    [RELATIONSHIP_TYPES.IS_SPARE_FOR]: {
-        inbound: message.systemHierarchy.relationships.hasSpare,
-        outbound: message.systemHierarchy.relationships.spareFor,
-    },
-}
-
-const getRelationshipLabel = (relationship: string, direction: 'inbound' | 'outbound'): string => {
-    return DIRECTION_LABELS[relationship]?.[direction] ?? relationship
-}
+const getRelationshipLabel = (relationship: string, direction: 'inbound' | 'outbound'): string =>
+    getRelationshipDirectionLabel(relationship, direction) ?? relationship
 
 const getRelationshipColor = (relationship: string): string =>
     RELATIONSHIP_COLORS[relationship as keyof typeof RELATIONSHIP_COLORS] ?? '#94a3b8'
@@ -53,7 +35,9 @@ const RelationshipRowItem: FC<{
     itemUsage?: ITEM_USAGE
     onNavigate: (uid: string) => void
     compact?: boolean
-}> = ({ row, itemUsage, onNavigate, compact }) => {
+    canEdit?: boolean
+    currentSystemUid: string
+}> = ({ row, itemUsage, onNavigate, compact, canEdit, currentSystemUid }) => {
     const { formatMessage: fm } = useIntl()
     const color = getRelationshipColor(row.edge.relationship)
     const labelId = getRelationshipLabel(row.edge.relationship, row.direction)
@@ -88,6 +72,16 @@ const RelationshipRowItem: FC<{
                     </span>
                 )}
             </button>
+            {canEdit && (
+                <div className="ml-auto shrink-0">
+                    <DeleteRelationshipButton
+                        currentSystemUid={currentSystemUid}
+                        relatedSystemUid={row.node.uid}
+                        relationshipType={row.edge.relationship}
+                        direction={row.direction}
+                    />
+                </div>
+            )}
         </div>
     )
 }
@@ -95,6 +89,7 @@ const RelationshipRowItem: FC<{
 export const RelationshipsTabContainer: FC<RelationshipsTabProps> = ({ system, compact }) => {
     const { formatMessage: fm } = useIntl()
     const { selectLeaf } = useHierarchyNavigation()
+    const canEdit = !!usePermission([ROLE.SYSTEM_EDIT])
     const { inbound, outbound, relatedUids, hasRelationships, isLoading, isError, refetch } =
         useSystemRelationships(system.uid)
     const { itemUsageMap } = useRelationshipItemUsage(relatedUids)
@@ -151,6 +146,8 @@ export const RelationshipsTabContainer: FC<RelationshipsTabProps> = ({ system, c
                                 itemUsage={itemUsageMap[row.node.uid]}
                                 onNavigate={selectLeaf}
                                 compact={compact}
+                                canEdit={canEdit}
+                                currentSystemUid={system.uid}
                             />
                         ))}
                     </div>
@@ -172,6 +169,8 @@ export const RelationshipsTabContainer: FC<RelationshipsTabProps> = ({ system, c
                                 itemUsage={itemUsageMap[row.node.uid]}
                                 onNavigate={selectLeaf}
                                 compact={compact}
+                                canEdit={canEdit}
+                                currentSystemUid={system.uid}
                             />
                         ))}
                     </div>
