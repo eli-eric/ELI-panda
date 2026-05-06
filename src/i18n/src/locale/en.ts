@@ -1432,6 +1432,7 @@ export const messages = {
             relationships: 'Relationships',
             attachments: 'Attachments',
             history: 'History',
+            graph: 'Graph',
         },
         sidebar: {
             title: 'Quick Info',

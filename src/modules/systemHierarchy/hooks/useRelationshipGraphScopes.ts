@@ -10,7 +10,7 @@ import {
 } from '../utils/graphScope'
 
 interface UseRelationshipGraphScopesParams {
-    selectedParentUid: string | null
+    graphUid: string | null
     filterQueryKey: string
     graphScopeKey: string
     apiMeta?: RelationshipGraphMeta
@@ -31,7 +31,7 @@ interface UseRelationshipGraphScopesResult {
 }
 
 export const useRelationshipGraphScopes = ({
-    selectedParentUid,
+    graphUid,
     filterQueryKey,
     graphScopeKey,
     apiMeta,
@@ -42,18 +42,18 @@ export const useRelationshipGraphScopes = ({
     const [loadMoreLoading, setLoadMoreLoading] = useState<Record<string, boolean>>({})
     const [expandedScopeUids, setExpandedScopeUids] = useState<string[]>([])
 
-    const prevParentRef = useRef(selectedParentUid)
+    const prevGraphUidRef = useRef(graphUid)
     const previousFilterQueryKeyRef = useRef(filterQueryKey)
 
     useEffect(() => {
-        if (prevParentRef.current !== selectedParentUid) {
-            prevParentRef.current = selectedParentUid
+        if (prevGraphUidRef.current !== graphUid) {
+            prevGraphUidRef.current = graphUid
             resetGraphExpanded()
             setExpandedScopeUids([])
             setScopeStates({})
             setLoadMoreLoading({})
         }
-    }, [selectedParentUid, resetGraphExpanded])
+    }, [graphUid, resetGraphExpanded])
 
     useEffect(() => {
         if (previousFilterQueryKeyRef.current === filterQueryKey) return
