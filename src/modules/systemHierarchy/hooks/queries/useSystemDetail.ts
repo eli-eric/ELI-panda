@@ -1,5 +1,6 @@
 import type { QueryClient } from '@tanstack/react-query'
 import { keepPreviousData } from '@tanstack/react-query'
+import { request } from 'graphql-request'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
 
@@ -13,6 +14,19 @@ import {
 
 import { SYSTEM_DETAIL_QUERY_KEY } from '../../types/constants'
 
+const systemHierarchyDetailQuery = gql(`
+  query SystemHierarchyDetail($where: SystemWhere) {
+    systems(where: $where) {
+      ...SystemDetail
+    }
+  }
+`)
+
+const fetchSystemDetail = (uid: string) =>
+    request('/api/graphql', systemHierarchyDetailQuery, {
+        where: { deleted: false, uid },
+    })
+
 export interface OptimisticSystemHint {
     name: string
     systemCode?: string | null
@@ -20,9 +34,10 @@ export interface OptimisticSystemHint {
 }
 
 // Seeds a partial SystemDetailFragment so the breadcrumb renders before the network
-// resolves. Only sets fields the breadcrumb reads (name, systemCode, parentPath).
-// useSystemDetail's mapping defends missing fields with ?? null. Skips when an entry
-// already exists — relies on staleTime (60s) to refresh stale paths via background refetch.
+// resolves, then kicks off a background fetch to replace the seed with the full fragment.
+// Background fetch is required because useSystemDetail uses refetchOnMount: false — a
+// seed alone would otherwise stick and the consumer would never see physicalItem,
+// operators, etc. Skips when an entry already exists (live cache or in-flight fetch).
 export const primeSystemDetailCache = (
     queryClient: QueryClient,
     uid: string,
@@ -45,15 +60,16 @@ export const primeSystemDetailCache = (
             },
         ],
     })
+    queryClient
+        .fetchQuery({
+            queryKey: [SYSTEM_DETAIL_QUERY_KEY, uid],
+            queryFn: () => fetchSystemDetail(uid),
+            staleTime: 60 * 1000,
+        })
+        .catch(() => {
+            // errors surface via the active consumer's useQuery state
+        })
 }
-
-const systemHierarchyDetailQuery = gql(`
-  query SystemHierarchyDetail($where: SystemWhere) {
-    systems(where: $where) {
-      ...SystemDetail
-    }
-  }
-`)
 
 export const useSystemDetail = (leafUid: string | null) => {
     const { data, error, isLoading, refetch } = useGraphQL(systemHierarchyDetailQuery, {

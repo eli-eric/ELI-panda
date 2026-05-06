@@ -40,10 +40,26 @@ describe('primeSystemDetailCache', () => {
         const qc = new QueryClient()
         const existing = { systems: [{ uid: 'sys-3', name: 'Existing' }] }
         qc.setQueryData([SYSTEM_DETAIL_QUERY_KEY, 'sys-3'], existing)
+        const fetchSpy = jest.spyOn(qc, 'fetchQuery')
 
         primeSystemDetailCache(qc, 'sys-3', { name: 'Replacement' })
 
         const data = qc.getQueryData<any>([SYSTEM_DETAIL_QUERY_KEY, 'sys-3'])
         expect(data.systems[0].name).toBe('Existing')
+        expect(fetchSpy).not.toHaveBeenCalled()
+    })
+
+    it('dispatches a background fetchQuery to refine the seed', () => {
+        const qc = new QueryClient()
+        const fetchSpy = jest.spyOn(qc, 'fetchQuery').mockImplementation(() => Promise.resolve({}))
+
+        primeSystemDetailCache(qc, 'sys-4', { name: 'Optimistic' })
+
+        expect(fetchSpy).toHaveBeenCalledWith(
+            expect.objectContaining({
+                queryKey: [SYSTEM_DETAIL_QUERY_KEY, 'sys-4'],
+                queryFn: expect.any(Function),
+            }),
+        )
     })
 })

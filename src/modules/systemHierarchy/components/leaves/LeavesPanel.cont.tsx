@@ -1,6 +1,6 @@
 import { useQueryState } from 'next-usequerystate'
 import type { FC } from 'react'
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useIntl } from 'react-intl'
 
 import { Button } from '@/components/ui/button'
@@ -50,19 +50,19 @@ export const LeavesPanelContainer: FC = () => {
 
     // Sync URL filter params → store on mount (enables persistence across refresh/new tab)
     const [filterQuery] = useQueryState('filter')
+    const [pageQuery] = useQueryState('page')
     const { setColumnFilter, setSearch, setSearchValue, setPaginationState } = useTableStateStore()
 
-    // Pagination reset on parent change has two halves: selectParent clears the ?page
-    // URL param; this effect clears the zustand paginationState (which useQueryManager
-    // reads with higher priority than the URL). Mount guard via prevParentRef preserves
-    // ?page on initial deep-link reload.
-    const prevParentRef = useRef<string | null>(null)
+    // Pagination reset has two halves: selectParent clears ?page when the parent
+    // changes; this effect clears zustand paginationState (which useQueryManager
+    // prioritises over the URL) whenever the URL has no explicit ?page. That covers
+    // both same-mount parent changes and fresh mounts where a previous visit's
+    // store entry would otherwise leak. Deep-link reloads with ?page=N keep their page.
     useEffect(() => {
-        if (prevParentRef.current && prevParentRef.current !== selectedParentUid) {
+        if (!pageQuery) {
             setPaginationState(LEAVES_TABLE_ID, undefined)
         }
-        prevParentRef.current = selectedParentUid
-    }, [selectedParentUid, setPaginationState])
+    }, [pageQuery, selectedParentUid, setPaginationState])
 
     useEffect(() => {
         if (filterQuery) {
