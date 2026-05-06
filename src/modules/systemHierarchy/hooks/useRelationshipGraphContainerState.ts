@@ -3,10 +3,10 @@ import { useCallback, useMemo, useState } from 'react'
 import { useSystemEditSheet } from '@/modules/shared/system/system-edit/useSystemEditSheet'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 
-import { useHierarchyStore } from '../store/useHierarchyStore'
+import type { GraphLayoutMode, RelationshipGraphEdge, RelationshipGraphNode } from '../types/graph'
 import { isNodeScopeKey, toGraphScopeKey } from '../utils/graphScope'
 import { useRelationshipGraph } from './queries/useRelationshipGraph'
-import { useGraphFilters } from './useGraphFilters'
+import type { useDetailGraphFilters, useGraphFilters } from './useGraphFilters'
 import { useHierarchyNavigation } from './useHierarchyNavigation'
 import { useRelationshipGraphApiQuery } from './useRelationshipGraphApiQuery'
 import { useRelationshipGraphExpansionActions } from './useRelationshipGraphExpansionActions'
@@ -16,17 +16,34 @@ import { useRelationshipGraphScopes } from './useRelationshipGraphScopes'
 import { useRelationshipGraphViewModel } from './useRelationshipGraphViewModel'
 import { useSystemCopyPaste } from './useSystemCopyPaste'
 
-export const useRelationshipGraphContainerState = () => {
-    const { selectedParentUid, selectLeaf } = useHierarchyNavigation()
-    const {
-        graphLayoutMode,
-        setGraphLayoutMode,
-        graphExpandedNodes,
-        graphExpandedEdges,
-        addGraphExpanded,
-        setGraphExpanded,
-        resetGraphExpanded,
-    } = useHierarchyStore()
+type FiltersHookResult =
+    | ReturnType<typeof useGraphFilters>
+    | ReturnType<typeof useDetailGraphFilters>
+
+interface UseRelationshipGraphContainerStateParams {
+    rootUid: string | null
+    layoutMode: GraphLayoutMode
+    setLayoutMode: (mode: GraphLayoutMode) => void
+    expandedNodes: RelationshipGraphNode[]
+    expandedEdges: RelationshipGraphEdge[]
+    addExpanded: (nodes: RelationshipGraphNode[], edges: RelationshipGraphEdge[]) => void
+    setExpanded: (nodes: RelationshipGraphNode[], edges: RelationshipGraphEdge[]) => void
+    resetExpanded: () => void
+    filtersHook: FiltersHookResult
+}
+
+export const useRelationshipGraphContainerState = ({
+    rootUid,
+    layoutMode: storedLayoutMode,
+    setLayoutMode: setStoredLayoutMode,
+    expandedNodes,
+    expandedEdges,
+    addExpanded,
+    setExpanded,
+    resetExpanded,
+    filtersHook,
+}: UseRelationshipGraphContainerStateParams) => {
+    const { selectLeaf } = useHierarchyNavigation()
     const { openModal } = useDynamicModalStore()
     const openSystemEdit = useSystemEditSheet()
     const [fitViewVersion, setFitViewVersion] = useState(0)
@@ -34,7 +51,7 @@ export const useRelationshipGraphContainerState = () => {
         setFitViewVersion(version => version + 1)
     }, [])
 
-    const graphUid = selectedParentUid
+    const graphUid = rootUid
     const graphScopeKey = useMemo(() => toGraphScopeKey(graphUid), [graphUid])
 
     const {
@@ -44,7 +61,7 @@ export const useRelationshipGraphContainerState = () => {
         setSystemType,
         toggleRelationshipType,
         resetFilters,
-    } = useGraphFilters()
+    } = filtersHook
     const { apiFilterQuery, filterQueryKey, initialScopeQuery } =
         useRelationshipGraphApiQuery(filters)
 
@@ -72,11 +89,11 @@ export const useRelationshipGraphContainerState = () => {
         applyPageToScopeState,
         setLoadMoreTypeLoading,
     } = useRelationshipGraphScopes({
-        selectedParentUid,
+        graphUid,
         filterQueryKey,
         graphScopeKey,
         apiMeta,
-        resetGraphExpanded,
+        resetGraphExpanded: resetExpanded,
     })
 
     const {
@@ -93,8 +110,8 @@ export const useRelationshipGraphContainerState = () => {
     } = useRelationshipGraphViewModel({
         apiNodes,
         apiEdges,
-        graphExpandedNodes,
-        graphExpandedEdges,
+        graphExpandedNodes: expandedNodes,
+        graphExpandedEdges: expandedEdges,
         graphUid,
         expandedScopeUids,
         filters,
@@ -122,8 +139,8 @@ export const useRelationshipGraphContainerState = () => {
             activeScopeKey,
             scopeStates,
             relationshipTypeFilters: filters.relationshipTypes,
-            addGraphExpanded,
-            setGraphExpanded,
+            addGraphExpanded: addExpanded,
+            setGraphExpanded: setExpanded,
             registerExpandedScopeUid,
             setNodeScopeMeta,
             setNodeScopesMeta,
@@ -142,8 +159,8 @@ export const useRelationshipGraphContainerState = () => {
             visibleNodes,
             filteredEdges,
             hiddenRelationshipsByNodeUid,
-            graphLayoutMode,
-            setGraphLayoutMode,
+            graphLayoutMode: storedLayoutMode,
+            setGraphLayoutMode: setStoredLayoutMode,
             onExpand: handleExpand,
             onNodeLoadMore: handleNodeLoadMore,
             onViewDetail: handleViewDetail,
