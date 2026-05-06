@@ -1,6 +1,6 @@
 import { FoldVertical, Search } from 'lucide-react'
 import type { FC } from 'react'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useIntl } from 'react-intl'
 
 import { Button } from '@/components/ui/button'
@@ -12,6 +12,7 @@ import { useSystemHierarchy } from '../../hooks/queries/useSystemHierarchy'
 import { useHierarchyNavigation } from '../../hooks/useHierarchyNavigation'
 import { useSystemCopyPaste } from '../../hooks/useSystemCopyPaste'
 import { useHierarchyStore } from '../../store/useHierarchyStore'
+import { findHierarchyPath } from '../../utils/treePath'
 import { collectAllNodeUids, filterTree } from '../../utils/treeSearch'
 import { SystemTreeComponent } from './SystemTree.comp'
 import { TreeNodeSkeleton } from './TreeNodeSkeleton.comp'
@@ -36,6 +37,23 @@ export const SystemTreeContainer: FC = () => {
     }, [searchInput])
 
     const filteredNodes = useMemo(() => filterTree(nodes, search), [nodes, search])
+
+    const handleSelect = useCallback(
+        (uid: string) => {
+            const path = findHierarchyPath(nodes, uid)
+            if (path.length === 0) {
+                selectParent(uid)
+                return
+            }
+            const target = path[path.length - 1]
+            selectParent(uid, {
+                name: target.name,
+                systemCode: target.systemCode,
+                parentPath: path.slice(0, -1).map(n => ({ uid: n.uid, name: n.name })),
+            })
+        },
+        [nodes, selectParent],
+    )
 
     useEffect(() => {
         if (search && filteredNodes.length > 0) {
@@ -100,7 +118,7 @@ export const SystemTreeContainer: FC = () => {
                         expandedNodes={expandedNodes}
                         selectedParentUid={selectedParentUid}
                         onToggle={toggleNode}
-                        onSelect={selectParent}
+                        onSelect={handleSelect}
                         search={search}
                         copiedSystemUid={copiedSystemUid}
                         onCopySystem={canEdit ? handleCopySystem : undefined}

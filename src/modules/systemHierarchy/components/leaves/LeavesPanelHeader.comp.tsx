@@ -8,14 +8,21 @@ import { message } from '@/i18n/src/messages'
 
 import type { HierarchyView } from '../../types/constants'
 import { ViewSwitcher } from '../graph/ViewSwitcher.comp'
+import type {
+    ParentPathItem,
+    SelectAncestorHandler,
+} from '../shared/SystemBreadcrumbs.comp'
+import { SystemBreadcrumbs } from '../shared/SystemBreadcrumbs.comp'
 
 interface LeavesPanelHeaderProps {
     parentName: string | null
     parentSystemCode: string | null
     parentSystemType: string | null
+    parentPath: ParentPathItem[] | null
     totalCount: number
     isLoading: boolean
     onViewParentDetail: () => void
+    onSelectAncestor: SelectAncestorHandler
     activeView: HierarchyView
     onViewChange: (view: HierarchyView) => void
 }
@@ -24,9 +31,11 @@ export const LeavesPanelHeader: FC<LeavesPanelHeaderProps> = ({
     parentName,
     parentSystemCode,
     parentSystemType,
+    parentPath,
     totalCount,
     isLoading,
     onViewParentDetail,
+    onSelectAncestor,
     activeView,
     onViewChange,
 }) => {
@@ -50,14 +59,14 @@ export const LeavesPanelHeader: FC<LeavesPanelHeaderProps> = ({
 
     return (
         <div id="page-head" className="border-b border-border px-4 py-2">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 min-w-0">
                 <Folder className="size-4 text-muted-foreground shrink-0" />
-                <h2 className="text-sm font-semibold truncate">{parentName}</h2>
-                {parentSystemCode && (
-                    <code className="text-[10px] text-muted-foreground shrink-0 rounded bg-muted px-1.5 py-0.5">
-                        {parentSystemCode}
-                    </code>
-                )}
+                <SystemBreadcrumbs
+                    parentPath={parentPath}
+                    currentName={parentName ?? ''}
+                    currentCode={parentSystemCode}
+                    onSelectAncestor={onSelectAncestor}
+                />
             </div>
             <div className="flex items-center justify-between mt-1">
                 <span className="text-xs text-muted-foreground truncate">
