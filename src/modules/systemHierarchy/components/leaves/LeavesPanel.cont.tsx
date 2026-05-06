@@ -1,6 +1,6 @@
 import { useQueryState } from 'next-usequerystate'
 import type { FC } from 'react'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { useIntl } from 'react-intl'
 
 import { Button } from '@/components/ui/button'
@@ -22,8 +22,14 @@ import { useLeavesColumns } from './useLeavesColumns'
 
 export const LeavesPanelContainer: FC = () => {
     const { formatMessage: fm } = useIntl()
-    const { selectedParentUid, selectedLeafUid, selectLeaf, activeView, setActiveView } =
-        useHierarchyNavigation()
+    const {
+        selectedParentUid,
+        selectedLeafUid,
+        selectLeaf,
+        selectParent,
+        activeView,
+        setActiveView,
+    } = useHierarchyNavigation()
     const { system: parentSystem, isLoading: isParentLoading } = useSystemDetail(selectedParentUid)
     const { leaves, totalCount, isLoading } = useSystemLeaves(selectedParentUid)
 
@@ -44,7 +50,15 @@ export const LeavesPanelContainer: FC = () => {
 
     // Sync URL filter params → store on mount (enables persistence across refresh/new tab)
     const [filterQuery] = useQueryState('filter')
-    const { setColumnFilter, setSearch, setSearchValue } = useTableStateStore()
+    const { setColumnFilter, setSearch, setSearchValue, setPaginationState } = useTableStateStore()
+
+    const prevParentRef = useRef<string | null>(null)
+    useEffect(() => {
+        if (prevParentRef.current && prevParentRef.current !== selectedParentUid) {
+            setPaginationState(LEAVES_TABLE_ID, undefined)
+        }
+        prevParentRef.current = selectedParentUid
+    }, [selectedParentUid, setPaginationState])
 
     useEffect(() => {
         if (filterQuery) {
@@ -93,9 +107,11 @@ export const LeavesPanelContainer: FC = () => {
             parentName={parentSystem?.name ?? null}
             parentSystemCode={parentSystem?.systemCode ?? null}
             parentSystemType={parentSystem?.systemType?.name ?? null}
+            parentPath={parentSystem?.parentPath ?? null}
             totalCount={totalCount}
             isLoading={isParentLoading}
             onViewParentDetail={handleViewParentDetail}
+            onSelectAncestor={selectParent}
             activeView={activeView}
             onViewChange={setActiveView}
         />

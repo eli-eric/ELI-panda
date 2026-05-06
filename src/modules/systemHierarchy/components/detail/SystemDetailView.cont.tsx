@@ -8,7 +8,7 @@ import { SystemDetailHeader } from './SystemDetailHeader.comp'
 import { SystemDetailTabsContainer } from './SystemDetailTabs.cont'
 
 export const SystemDetailViewContainer: FC = () => {
-    const { selectedLeafUid, goBackToLeaves } = useHierarchyNavigation()
+    const { selectedLeafUid, goBackToLeaves, selectParent } = useHierarchyNavigation()
     const { system, isLoading } = useSystemDetail(selectedLeafUid)
 
     if (isLoading || !system) {
@@ -28,7 +28,11 @@ export const SystemDetailViewContainer: FC = () => {
 
     return (
         <div className="flex flex-col h-full overflow-hidden">
-            <SystemDetailHeader system={system} onBack={goBackToLeaves} />
+            <SystemDetailHeader
+                system={system}
+                onBack={goBackToLeaves}
+                onSelectAncestor={selectParent}
+            />
             <div className="flex-1 min-h-0">
                 <SystemDetailTabsContainer system={system} />
             </div>

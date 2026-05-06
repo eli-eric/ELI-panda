@@ -1,11 +1,15 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import { useCallback, useMemo } from 'react'
 
 import type { HierarchyTab, HierarchyView } from '../types/constants'
 import { HIERARCHY_TABS, HIERARCHY_VIEWS } from '../types/constants'
+import type { OptimisticSystemHint } from './queries/useSystemDetail'
+import { primeSystemDetailCache } from './queries/useSystemDetail'
 
 export const useHierarchyNavigation = () => {
     const router = useRouter()
+    const queryClient = useQueryClient()
 
     const selectedParentUid = (router.query.parent as string) ?? null
     const selectedLeafUid = (router.query.leaf as string) ?? null
@@ -30,19 +34,27 @@ export const useHierarchyNavigation = () => {
     )
 
     const selectParent = useCallback(
-        (uid: string) => {
+        (uid: string, optimistic?: OptimisticSystemHint) => {
+            if (optimistic) primeSystemDetailCache(queryClient, uid, optimistic)
             const inDetail = !!(router.query.leaf as string | undefined)
-            updateQuery(inDetail ? { parent: uid, leaf: uid } : { parent: uid })
+            const parentChanged = (router.query.parent as string | undefined) !== uid
+            const pageReset = parentChanged ? { page: undefined } : {}
+            updateQuery(
+                inDetail
+                    ? { parent: uid, leaf: uid, ...pageReset }
+                    : { parent: uid, ...pageReset },
+            )
         },
-        [router, updateQuery],
+        [queryClient, router, updateQuery],
     )
 
     const selectLeaf = useCallback(
-        (uid: string) => {
+        (uid: string, optimistic?: OptimisticSystemHint) => {
+            if (optimistic) primeSystemDetailCache(queryClient, uid, optimistic)
             const inDetail = !!(router.query.leaf as string | undefined)
             updateQuery(inDetail ? { leaf: uid } : { leaf: uid, tab: HIERARCHY_TABS.DETAIL })
         },
-        [router, updateQuery],
+        [queryClient, router, updateQuery],
     )
 
     const setActiveTab = useCallback(

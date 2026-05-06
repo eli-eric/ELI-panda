@@ -1,3 +1,5 @@
+import type { QueryClient } from '@tanstack/react-query'
+import { keepPreviousData } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
 
@@ -10,6 +12,36 @@ import {
 } from '@/utils/graphql/fragments'
 
 import { SYSTEM_DETAIL_QUERY_KEY } from '../../types/constants'
+
+export interface OptimisticSystemHint {
+    name: string
+    systemCode?: string | null
+    parentPath?: { uid: string; name: string }[]
+}
+
+export const primeSystemDetailCache = (
+    queryClient: QueryClient,
+    uid: string,
+    hint: OptimisticSystemHint,
+) => {
+    if (queryClient.getQueryData([SYSTEM_DETAIL_QUERY_KEY, uid])) return
+    queryClient.setQueryData([SYSTEM_DETAIL_QUERY_KEY, uid], {
+        systems: [
+            {
+                __typename: 'System',
+                uid,
+                name: hint.name,
+                systemCode: hint.systemCode ?? null,
+                parentPath: (hint.parentPath ?? []).map(p => ({
+                    __typename: 'System',
+                    uid: p.uid,
+                    name: p.name,
+                    systemLevel: null,
+                })),
+            },
+        ],
+    })
+}
 
 const systemHierarchyDetailQuery = gql(`
   query SystemHierarchyDetail($where: SystemWhere) {
@@ -33,6 +65,7 @@ export const useSystemDetail = (leafUid: string | null) => {
         refetchOnWindowFocus: false,
         retry: false,
         staleTime: 60 * 1000, // 60 seconds
+        placeholderData: keepPreviousData,
     })
 
     useEffect(() => {

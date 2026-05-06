@@ -6,14 +6,23 @@ import { Button } from '@/components/ui/button'
 import { message } from '@/i18n/src/messages'
 
 import type { SystemLeaf } from '../../types'
+import { SystemBreadcrumbs } from '../shared/SystemBreadcrumbs.comp'
 import { ActionsDropdown } from './ActionsDropdown.comp'
 
 interface SystemDetailHeaderProps {
     system: SystemLeaf
     onBack: () => void
+    onSelectAncestor: (
+        uid: string,
+        hint: { name: string; parentPath: { uid: string; name: string }[] },
+    ) => void
 }
 
-export const SystemDetailHeader: FC<SystemDetailHeaderProps> = ({ system, onBack }) => {
+export const SystemDetailHeader: FC<SystemDetailHeaderProps> = ({
+    system,
+    onBack,
+    onSelectAncestor,
+}) => {
     const { formatMessage: fm } = useIntl()
 
     return (
@@ -32,14 +41,12 @@ export const SystemDetailHeader: FC<SystemDetailHeaderProps> = ({ system, onBack
                 {fm({ id: message.systemHierarchy.detail.backToLeaves })}
             </Button>
             <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                    <h2 className="text-sm font-semibold truncate">{system.name}</h2>
-                    {system.systemCode && (
-                        <code className="text-[10px] text-muted-foreground shrink-0 rounded bg-muted px-1.5 py-0.5">
-                            {system.systemCode}
-                        </code>
-                    )}
-                </div>
+                <SystemBreadcrumbs
+                    parentPath={system.parentPath ?? null}
+                    currentName={system.name}
+                    currentCode={system.systemCode}
+                    onSelectAncestor={onSelectAncestor}
+                />
             </div>
             <ActionsDropdown system={system} />
         </div>
