@@ -112,8 +112,13 @@ export const useDetailGraphFilters = (): GraphFiltersApi => {
             const next = current.includes(type)
                 ? current.filter(t => t !== type)
                 : [...current, type]
-            // Empty list would invert filterEdges to "show all" (incl. HAS_SUBSYSTEM); fall back to default.
-            setStoredRelationshipTypes(next.length === 0 ? null : next)
+            // Normalize to null when:
+            // - empty (would invert filterEdges to "show all" incl. HAS_SUBSYSTEM), or
+            // - equals default (so future registry additions auto-flow in).
+            const defaults = getDefaultDetailGraphRelationshipTypes()
+            const matchesDefault =
+                next.length === defaults.length && next.every(t => defaults.includes(t))
+            setStoredRelationshipTypes(next.length === 0 || matchesDefault ? null : next)
         },
         [setStoredRelationshipTypes],
     )

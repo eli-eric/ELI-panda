@@ -9,7 +9,7 @@ import {
 const STORAGE_KEY = 'systemHierarchy-detail-graph'
 
 const resetStore = () => {
-    localStorage.clear()
+    localStorage.removeItem(STORAGE_KEY)
     useDetailGraphStore.setState({
         relationshipTypes: null,
         layoutMode: GRAPH_LAYOUT_MODES.VERTICAL,

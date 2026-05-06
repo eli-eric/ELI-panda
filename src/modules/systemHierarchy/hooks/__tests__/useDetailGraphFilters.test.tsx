@@ -10,7 +10,7 @@ import { useDetailGraphFilters } from '../useGraphFilters'
 const STORAGE_KEY = 'systemHierarchy-detail-graph'
 
 const resetStore = () => {
-    localStorage.clear()
+    localStorage.removeItem(STORAGE_KEY)
     useDetailGraphStore.setState({
         relationshipTypes: null,
         layoutMode: GRAPH_LAYOUT_MODES.VERTICAL,
@@ -42,14 +42,16 @@ describe('useDetailGraphFilters', () => {
         expect(persisted.relationshipTypes).toContain('HAS_SUBSYSTEM')
     })
 
-    it('toggleRelationshipType twice removes the type back to 8-item list', () => {
+    it('toggleRelationshipType twice normalizes back to null sentinel (matches default)', () => {
         const { result } = renderHook(() => useDetailGraphFilters())
         act(() => {
             result.current.toggleRelationshipType('HAS_SUBSYSTEM')
             result.current.toggleRelationshipType('HAS_SUBSYSTEM')
         })
         expect(result.current.filters.relationshipTypes).not.toContain('HAS_SUBSYSTEM')
-        expect(useDetailGraphStore.getState().relationshipTypes).toEqual(
+        // Normalization: explicit list equal to default collapses to null sentinel for forward-compat.
+        expect(useDetailGraphStore.getState().relationshipTypes).toBeNull()
+        expect(result.current.filters.relationshipTypes).toEqual(
             getDefaultDetailGraphRelationshipTypes(),
         )
     })
