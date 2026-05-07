@@ -1,0 +1,53 @@
+name: Sync docs to GitHub Wiki
+
+on:
+    push:
+        branches:
+            - dev
+        paths:
+            - 'docs/**'
+            - 'scripts/sync-wiki.mjs'
+            - '.github/workflows/sync-wiki.yml'
+    workflow_dispatch:
+
+jobs:
+    sync:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout main repo
+              uses: actions/checkout@v4
+              with:
+                  path: main
+
+            - name: Checkout wiki repo
+              uses: actions/checkout@v4
+              with:
+                  repository: ${{ github.repository }}.wiki
+                  path: wiki
+                  # Wiki push requires a PAT with `repo` scope; GITHUB_TOKEN does not work.
+                  # Add a repo secret named WIKI_PUSH_TOKEN.
+                  token: ${{ secrets.WIKI_PUSH_TOKEN }}
+
+            - name: Setup Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '20'
+
+            - name: Run sync script
+              working-directory: main
+              env:
+                  WIKI_OUT: ${{ github.workspace }}/wiki
+              run: node scripts/sync-wiki.mjs
+
+            - name: Commit and push wiki
+              working-directory: wiki
+              run: |
+                  git config user.name 'github-actions[bot]'
+                  git config user.email 'github-actions[bot]@users.noreply.github.com'
+                  git add -A
+                  if git diff --staged --quiet; then
+                      echo "No changes to push"
+                  else
+                      git commit -m "Sync docs from ${GITHUB_SHA::7}"
+                      git push
+                  fi
