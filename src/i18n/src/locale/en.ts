@@ -1474,6 +1474,18 @@ export const messages = {
             copying: 'Copying system...',
             copied: 'System copied successfully',
             failedToCopy: 'Failed to copy system',
+            scopeTitle: 'What this copy includes',
+            includedHeader: 'Copied',
+            includedNameLevel: 'System name and level',
+            includedSystemType: 'System type (link shared with the original)',
+            includedHierarchy: 'Subsystem hierarchy (when recursive is enabled, up to 50 levels)',
+            excludedHeader: 'NOT copied — must be set up manually on copies',
+            excludedAttributes:
+                'Other attributes (description, system code, manufacturer, EUN, dates, criticality, …)',
+            excludedItems: 'Physical items, location, zone',
+            excludedRelationships:
+                'Spare parts and technical relationships (powering, cooling, control, interlock, data, beam, vacuum)',
+            excludedMedia: 'Photos, attachments, history / audit trail',
         },
         toast: {
             saving: 'Saving...',

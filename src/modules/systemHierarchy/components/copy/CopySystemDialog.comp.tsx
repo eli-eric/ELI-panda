@@ -1,9 +1,10 @@
-import { ChevronRight, Copy, Loader2 } from 'lucide-react'
+import { Check, ChevronRight, Copy, Info, Loader2, X } from 'lucide-react'
 import type { FC } from 'react'
 import { useState } from 'react'
 import { useIntl } from 'react-intl'
 import { toast } from 'sonner'
 
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { CheckboxWithLabel } from '@/components/ui/checkbox'
@@ -138,6 +139,50 @@ export const CopySystemDialog: FC<CopySystemDialogProps> = ({
             />
 
             <Separator />
+
+            <Alert>
+                <Info />
+                <AlertTitle>{fm({ id: message.systemHierarchy.copy.scopeTitle })}</AlertTitle>
+                <AlertDescription>
+                    <div className="mt-1 space-y-2">
+                        <div>
+                            <p className="text-xs font-semibold uppercase tracking-wide text-foreground">
+                                {fm({ id: message.systemHierarchy.copy.includedHeader })}
+                            </p>
+                            <ul className="mt-1 space-y-0.5">
+                                {[
+                                    message.systemHierarchy.copy.includedNameLevel,
+                                    message.systemHierarchy.copy.includedSystemType,
+                                    message.systemHierarchy.copy.includedHierarchy,
+                                ].map(id => (
+                                    <li key={id} className="flex items-start gap-1.5">
+                                        <Check className="size-3.5 shrink-0 mt-0.5 text-emerald-600" />
+                                        <span>{fm({ id })}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                        <div>
+                            <p className="text-xs font-semibold uppercase tracking-wide text-foreground">
+                                {fm({ id: message.systemHierarchy.copy.excludedHeader })}
+                            </p>
+                            <ul className="mt-1 space-y-0.5">
+                                {[
+                                    message.systemHierarchy.copy.excludedAttributes,
+                                    message.systemHierarchy.copy.excludedItems,
+                                    message.systemHierarchy.copy.excludedRelationships,
+                                    message.systemHierarchy.copy.excludedMedia,
+                                ].map(id => (
+                                    <li key={id} className="flex items-start gap-1.5">
+                                        <X className="size-3.5 shrink-0 mt-0.5 text-rose-600" />
+                                        <span>{fm({ id })}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                </AlertDescription>
+            </Alert>
 
             <div className="space-y-3">
                 <CheckboxWithLabel
