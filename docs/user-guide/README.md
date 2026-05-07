@@ -2,6 +2,10 @@
 
 This is the entry point for end-user documentation of the ELI PANDA maintenance management system. Each feature module has its own folder with a README and per-workflow pages.
 
+## Start here
+
+- [Getting around the app](./getting-around.md) — login, sidebar, keyboard shortcuts, dark mode, logout. Read this once before diving into specific modules.
+
 ## Modules
 
 | Module | Status | Documentation |
