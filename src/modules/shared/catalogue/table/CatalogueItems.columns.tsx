@@ -100,13 +100,13 @@ export const useCatalogueItemsColumns = ({
             },
             {
                 header: intl.formatMessage({ id: messages.supplier }),
-                accessorFn: row => row.supplier?.name,
+                accessorFn: row => row.supplier?.name ?? '',
                 id: 'supplier',
                 size: 200,
             },
             {
                 header: intl.formatMessage({ id: messages.supplierUrl }),
-                accessorFn: row => row.manufacturerUrl,
+                accessorFn: row => row.manufacturerUrl ?? '',
                 id: 'manufacturerUrl',
                 size: 250,
                 cell: ManufacturerUrl,
