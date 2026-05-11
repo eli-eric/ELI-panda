@@ -167,7 +167,7 @@ export const useCatalogueTableSelectColumns = ({
                             </Tooltip>
                         )
                     },
-                    id: detail.property.name.replace(/\s/g, ''),
+                    id: detail.property.uid,
                     size: 150,
                     accessorFn: row =>
                         row.details?.find(
