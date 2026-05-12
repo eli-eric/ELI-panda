@@ -11,6 +11,7 @@ End-user documentation: how to use the application, per-feature workflows, scree
 Currently documented modules:
 
 - [System Hierarchy](User-Guide-System-Hierarchy)
+- [Catalogue](User-Guide-Catalogue)
 
 More modules will follow — see the [User Guide](User-Guide) index for the full status table.
 
