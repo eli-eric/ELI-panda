@@ -10,7 +10,7 @@ Content is being authored module by module. The list below tracks what is publis
 - [**Authentication**](./authentication.md) — Microsoft Entra ID app registration, NextAuth, JWT/session shape, middleware role gates.
 - [**Permissions model**](./permissions-model.md) — `systems-view`, `systems-edit`, `admin`, per-module roles, `@authorization` rules, audit trail.
 - [**Deployment & runbook**](./deployment-runbook.md) — Azure Container Apps + Czechia compose, GitHub Actions, env vars, rollback, common failures.
-- **Local development & conventions** — prereqs, common commands, coding style. _Planned._
+- [**Local development & conventions**](./local-development.md) — prereqs, common commands, lint/format/test setup, canonical patterns, troubleshooting.
 
 ## Modules
 
