@@ -18,6 +18,7 @@ Currently documented modules:
 - [System Type Edit](User-Guide-System-Type-Edit)
 - [Catalogue](User-Guide-Catalogue)
 - [Orders](User-Guide-Orders)
+- [Services](User-Guide-Services)
 
 More modules will follow — see the [User Guide](User-Guide) index for the full status table.
 

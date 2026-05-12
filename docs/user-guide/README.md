@@ -19,6 +19,7 @@ This is the entry point for end-user documentation of the ELI PANDA maintenance 
 | Catalogue | 📝 Documented | [catalogue/](./catalogue/README.md) |
 | Items | 🚧 Planned | — |
 | Orders | 📝 Documented | [orders/](./orders/README.md) |
+| Services | 📝 Documented | [services/](./services/README.md) |
 | Room Cards | 🚧 Planned | — |
 | User Settings | 🚧 Planned | — |
 
