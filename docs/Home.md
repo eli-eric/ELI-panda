@@ -17,6 +17,7 @@ Currently documented modules:
 - [Systems Multi-Move](User-Guide-Systems-Multi-Move)
 - [System Type Edit](User-Guide-System-Type-Edit)
 - [Catalogue](User-Guide-Catalogue)
+- [Orders](User-Guide-Orders)
 
 More modules will follow — see the [User Guide](User-Guide) index for the full status table.
 

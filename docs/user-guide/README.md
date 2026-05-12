@@ -18,7 +18,7 @@ This is the entry point for end-user documentation of the ELI PANDA maintenance 
 | System Type Edit | 📝 Documented | [systemTypeEdit/](./systemTypeEdit/README.md) |
 | Catalogue | 📝 Documented | [catalogue/](./catalogue/README.md) |
 | Items | 🚧 Planned | — |
-| Orders | 🚧 Planned | — |
+| Orders | 📝 Documented | [orders/](./orders/README.md) |
 | Room Cards | 🚧 Planned | — |
 | User Settings | 🚧 Planned | — |
 
