@@ -25,6 +25,7 @@ This is the entry point for end-user documentation of the ELI PANDA maintenance 
 | Control Systems | 📝 Documented | [controlSystems/](./controlSystems/README.md) |
 | Zones | 📝 Documented | [zones/](./zones/README.md) |
 | Publications, Researchers & Grants | 📝 Documented | [publications/](./publications/README.md) |
+| Administration — Users & Roles | 📝 Documented | [administration/](./administration/README.md) |
 | User Settings | 🚧 Planned | — |
 
 **Status legend:**

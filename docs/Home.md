@@ -24,6 +24,7 @@ Currently documented modules:
 - [Control Systems](User-Guide-Control-Systems)
 - [Zones](User-Guide-Zones)
 - [Publications, Researchers & Grants](User-Guide-Publications)
+- [Administration — Users & Roles](User-Guide-Administration)
 
 More modules will follow — see the [User Guide](User-Guide) index for the full status table.
 
