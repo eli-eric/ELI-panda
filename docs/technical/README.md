@@ -21,7 +21,7 @@ Content is being authored module by module. The list below tracks what is publis
 - [**Room Cards**](./room-cards.md) — `RoomCard` model, hall/dept contacts, operational-state audit, field-level edit gate.
 - [**Codebooks**](./codebooks.md) — generic codebook surface, `CODEBOOK` enum, REST-vs-schema duality, `/codebooks` admin UI, cross-module gotchas.
 - [**Control Systems**](./control-systems.md) — bulk system-code factory, Zod-first schemas, preview→create flow, REST endpoints.
-- **Zones.** _Planned._
+- [**Zones**](./zones.md) — `Zone` graph + `HAS_SUBZONE` self-reference, REST surface, CSV import, cross-module consumers.
 - **Publications.** _Planned._
 - **Administration (Users & Roles).** _Planned._
 
