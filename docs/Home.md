@@ -14,6 +14,7 @@ Currently documented modules:
 - [Systems Overview](User-Guide-Systems)
 - [Systems Relations](User-Guide-Systems-Relations)
 - [Systems Moving](User-Guide-Systems-Moving)
+- [Systems Multi-Move](User-Guide-Systems-Multi-Move)
 - [Catalogue](User-Guide-Catalogue)
 
 More modules will follow — see the [User Guide](User-Guide) index for the full status table.
