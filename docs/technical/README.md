@@ -19,7 +19,7 @@ Content is being authored module by module. The list below tracks what is publis
 - [**Orders & Order Items**](./orders-and-order-items.md) — order/line/service-line model, delivery flow, optimistic concurrency, form architecture.
 - [**Services**](./services.md) — `ServiceType` catalogue (REST) vs. graph-side `ServiceItem`, property-bag reuse, integration with orders.
 - [**Room Cards**](./room-cards.md) — `RoomCard` model, hall/dept contacts, operational-state audit, field-level edit gate.
-- **Codebooks.** _Planned._
+- [**Codebooks**](./codebooks.md) — generic codebook surface, `CODEBOOK` enum, REST-vs-schema duality, `/codebooks` admin UI, cross-module gotchas.
 - **Control Systems.** _Planned._
 - **Zones.** _Planned._
 - **Publications.** _Planned._
