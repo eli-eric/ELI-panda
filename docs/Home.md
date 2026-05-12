@@ -37,6 +37,7 @@ Currently documented:
 - [App architecture](Technical-App-Architecture) — stack, module layout, request lifecycle, codegen pipeline.
 - [Authentication](Technical-Authentication) — NextAuth + Entra ID, JWT/session shape, middleware role gates.
 - [Permissions model](Technical-Permissions-Model) — role inventory, schema `@authorization`, UI gates, audit trail.
+- [Deployment & runbook](Technical-Deployment-Runbook) — environments, pipelines, env vars, rollback, common failure modes.
 
 More pages are being authored — see the [Technical Documentation](Technical-Documentation) index for the full list.
 
