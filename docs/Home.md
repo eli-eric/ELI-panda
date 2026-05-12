@@ -35,6 +35,7 @@ Engineering-facing documentation: architecture, deployment, data model, ops proc
 Currently documented:
 
 - [App architecture](Technical-App-Architecture) — stack, module layout, request lifecycle, codegen pipeline.
+- [Authentication](Technical-Authentication) — NextAuth + Entra ID, JWT/session shape, middleware role gates.
 
 More pages are being authored — see the [Technical Documentation](Technical-Documentation) index for the full list.
 
