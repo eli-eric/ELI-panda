@@ -31,6 +31,12 @@ const SKIP_FOLDERS = new Set(['workflows'])
 const DISPLAY_NAMES = {
     'user-guide': 'User-Guide',
     systemHierarchy: 'System-Hierarchy',
+    systemsRelations: 'Systems-Relations',
+    systemsMoving: 'Systems-Moving',
+    systemsMultiMove: 'Systems-Multi-Move',
+    systemTypeEdit: 'System-Type-Edit',
+    roomCards: 'Room-Cards',
+    controlSystems: 'Control-Systems',
     technical: 'Technical-Documentation',
 }
 
