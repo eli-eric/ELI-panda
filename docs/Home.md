@@ -11,6 +11,20 @@ End-user documentation: how to use the application, per-feature workflows, scree
 Currently documented modules:
 
 - [System Hierarchy](User-Guide-System-Hierarchy)
+- [Systems Overview](User-Guide-Systems)
+- [Systems Relations](User-Guide-Systems-Relations)
+- [Systems Moving](User-Guide-Systems-Moving)
+- [Systems Multi-Move](User-Guide-Systems-Multi-Move)
+- [System Type Edit](User-Guide-System-Type-Edit)
+- [Catalogue](User-Guide-Catalogue)
+- [Orders](User-Guide-Orders)
+- [Services](User-Guide-Services)
+- [Room Cards](User-Guide-Room-Cards)
+- [Codebooks](User-Guide-Codebooks)
+- [Control Systems](User-Guide-Control-Systems)
+- [Zones](User-Guide-Zones)
+- [Publications, Researchers & Grants](User-Guide-Publications)
+- [Administration — Users & Roles](User-Guide-Administration)
 
 More modules will follow — see the [User Guide](User-Guide) index for the full status table.
 

@@ -11,12 +11,21 @@ This is the entry point for end-user documentation of the ELI PANDA maintenance 
 | Module | Status | Documentation |
 |---|---|---|
 | System Hierarchy | 📝 Documented | [systemHierarchy/](./systemHierarchy/README.md) |
-| Systems Relations | 🚧 Planned | — |
-| Systems Moving | 🚧 Planned | — |
-| Catalogue | 🚧 Planned | — |
+| Systems Overview | 📝 Documented | [systems/](./systems/README.md) |
+| Systems Relations | 📝 Documented | [systemsRelations/](./systemsRelations/README.md) |
+| Systems Moving | 📝 Documented | [systemsMoving/](./systemsMoving/README.md) |
+| Systems Multi-Move | 📝 Documented | [systemsMultiMove/](./systemsMultiMove/README.md) |
+| System Type Edit | 📝 Documented | [systemTypeEdit/](./systemTypeEdit/README.md) |
+| Catalogue | 📝 Documented | [catalogue/](./catalogue/README.md) |
 | Items | 🚧 Planned | — |
-| Orders | 🚧 Planned | — |
-| Room Cards | 🚧 Planned | — |
+| Orders | 📝 Documented | [orders/](./orders/README.md) |
+| Services | 📝 Documented | [services/](./services/README.md) |
+| Room Cards | 📝 Documented | [roomCards/](./roomCards/README.md) |
+| Codebooks | 📝 Documented | [codebooks/](./codebooks/README.md) |
+| Control Systems | 📝 Documented | [controlSystems/](./controlSystems/README.md) |
+| Zones | 📝 Documented | [zones/](./zones/README.md) |
+| Publications, Researchers & Grants | 📝 Documented | [publications/](./publications/README.md) |
+| Administration — Users & Roles | 📝 Documented | [administration/](./administration/README.md) |
 | User Settings | 🚧 Planned | — |
 
 **Status legend:**
