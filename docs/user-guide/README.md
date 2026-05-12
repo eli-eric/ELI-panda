@@ -21,6 +21,7 @@ This is the entry point for end-user documentation of the ELI PANDA maintenance 
 | Orders | 📝 Documented | [orders/](./orders/README.md) |
 | Services | 📝 Documented | [services/](./services/README.md) |
 | Room Cards | 📝 Documented | [roomCards/](./roomCards/README.md) |
+| Codebooks | 📝 Documented | [codebooks/](./codebooks/README.md) |
 | User Settings | 🚧 Planned | — |
 
 **Status legend:**

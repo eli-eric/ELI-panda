@@ -20,6 +20,7 @@ Currently documented modules:
 - [Orders](User-Guide-Orders)
 - [Services](User-Guide-Services)
 - [Room Cards](User-Guide-Room-Cards)
+- [Codebooks](User-Guide-Codebooks)
 
 More modules will follow — see the [User Guide](User-Guide) index for the full status table.
 
