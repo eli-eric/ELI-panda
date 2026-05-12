@@ -12,6 +12,7 @@ Currently documented modules:
 
 - [System Hierarchy](User-Guide-System-Hierarchy)
 - [Systems Overview](User-Guide-Systems)
+- [Systems Relations](User-Guide-Systems-Relations)
 - [Catalogue](User-Guide-Catalogue)
 
 More modules will follow — see the [User Guide](User-Guide) index for the full status table.
