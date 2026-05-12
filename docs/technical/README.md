@@ -2,18 +2,33 @@
 
 Engineering-facing reference material for developers and operators of ELI PANDA.
 
-> 🚧 **Empty for now** — content is being authored. This page exists as a placeholder so the documentation hub has a complete top-level structure.
+Content is being authored module by module. The list below tracks what is published vs. still planned.
 
-## Planned sections
+## Cross-cutting
 
-- **Architecture overview** — Next.js frontend, Neo4j backend, GraphQL layer, module organization.
-- **GraphQL schema reference** — entities, relationships, authorization rules.
-- **Permissions & roles** — `systems-view`, `systems-edit`, `admin`, planned phases of permission tightening.
-- **Deployment & runbook** — Azure environments, Docker images, release procedure.
+- [**App architecture**](./app-architecture.md) — Next.js frontend, Neo4j backend, GraphQL layer, module organization, request lifecycle.
+- **Authentication** — Microsoft Entra ID app registration, NextAuth, JWT/session shape. _Planned._
+- **Permissions model** — `systems-view`, `systems-edit`, `admin`, per-module roles, `@authorization` rules. _Planned._
+- **Deployment & runbook** — Azure environments, Docker images, GitHub Actions workflows. _Planned._
+- **Local development & conventions** — prereqs, common commands, coding style. _Planned._
+
+## Modules
+
+- **Systems family** — `systemHierarchy`, `systems`, `systemItem`, `systemsRelations`, moving flows. _Planned._
+- **Catalogue & Items.** _Planned._
+- **Orders & Order Items.** _Planned._
+- **Services.** _Planned._
+- **Room Cards.** _Planned._
+- **Codebooks.** _Planned._
+- **Control Systems.** _Planned._
+- **Zones.** _Planned._
+- **Publications.** _Planned._
+- **Administration (Users & Roles).** _Planned._
+
+## Other planned sections
+
 - **Data model & migrations** — Neo4j schema migrations, codebooks, seeding.
-- **Authentication setup** — Microsoft Entra ID app registration, token flow.
 - **Observability & monitoring** — logs, metrics, alerts, dashboards.
-- **Local development** — getting started, common commands, conventions.
 
 ## In the meantime
 

@@ -32,7 +32,11 @@ More modules will follow — see the [User Guide](User-Guide) index for the full
 
 Engineering-facing documentation: architecture, deployment, data model, ops procedures.
 
-🚧 **Empty for now** — content is being authored.
+Currently documented:
+
+- [App architecture](Technical-App-Architecture) — stack, module layout, request lifecycle, codegen pipeline.
+
+More pages are being authored — see the [Technical Documentation](Technical-Documentation) index for the full list.
 
 ---
 
