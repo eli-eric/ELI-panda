@@ -75,5 +75,5 @@ The service line creation is a **shorter wizard than the order-line wizard** —
 - [Adding order lines from the catalogue](./adding-order-lines.md)
 - [Marking lines delivered](./marking-delivered.md)
 - [Creating and editing an order](./creating-and-editing-orders.md)
-- Service codebook → see the [Services](../../services/README.md) module (planned).
+- Service codebook → see the [Services](../../services/README.md) module.
 - Catalogue items the service relates to → see the [Catalogue](../../catalogue/README.md) module.

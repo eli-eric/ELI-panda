@@ -102,4 +102,4 @@ See [Access & Responsibilities](../README.md#access--responsibilities) for what 
 - [Managing contacts and teams](./managing-contacts.md)
 - [Managing linked locations](./managing-locations.md)
 - [Browsing room cards](./browsing.md)
-- Locations codebook → see the [user guide index](../../README.md).
+- Locations codebook → see [Codebooks](../../codebooks/README.md).

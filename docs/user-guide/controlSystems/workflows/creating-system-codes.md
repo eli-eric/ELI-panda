@@ -91,4 +91,4 @@ The Create page is a **two-pane workbench**. The left pane is a small form; the 
 - [Editing or deleting an existing system code](./editing-and-deleting.md)
 - Per-system code generation → see *Editing system details* in the [System Hierarchy](../../systemHierarchy/README.md) module.
 - Mask reference → see [Understanding the code mask](../../systemTypeEdit/workflows/code-mask.md) in the [System Type Edit](../../systemTypeEdit/README.md) module.
-- Zones codebook → see the [Zones](../../zones/README.md) module (planned).
+- Zones codebook → see the [Zones](../../zones/README.md) module.

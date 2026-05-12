@@ -64,4 +64,4 @@ There are four navigation surfaces — the **category tree** on the left, the **
 - [Creating and editing a catalogue item](./creating-and-editing-items.md)
 - [Managing categories and properties](./managing-categories.md)
 - Physical instances of an item → see the [System Hierarchy](../../systemHierarchy/README.md) module.
-- Procurement → see the [user guide index](../../README.md) for the Orders module.
+- Procurement → see the [Orders](../../orders/README.md) module.

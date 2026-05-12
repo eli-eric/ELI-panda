@@ -102,4 +102,4 @@ A *team* is a separate codebook from employees. Assigning a team to a room card 
 - [Creating and editing a room card](./creating-and-editing.md)
 - [Managing operational state](./managing-operational-state.md)
 - [Managing linked locations](./managing-locations.md)
-- Employees and teams admin → see the [user guide index](../../README.md).
+- Employees and teams admin → see [Codebooks](../../codebooks/README.md) and [Administration](../../administration/README.md).

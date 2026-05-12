@@ -17,7 +17,7 @@ See [Access & Responsibilities](../README.md#access--responsibilities) for what 
 ## Prerequisites
 
 - The room card already exists and has been saved at least once. In create mode the *Add Location* button is inactive with the tooltip *Save the Room Card first to add locations*.
-- The locations you intend to link already exist in the location codebook. (Managed in [Codebooks](../../codebooks/README.md) or the location admin — see the [user guide index](../../README.md).)
+- The locations you intend to link already exist in the location codebook. Managed in [Codebooks](../../codebooks/README.md).
 - See [Key concepts](../README.md#key-concepts) for terminology.
 
 ## Steps
@@ -81,5 +81,5 @@ See [Access & Responsibilities](../README.md#access--responsibilities) for what 
 - [Managing operational state](./managing-operational-state.md)
 - [Managing contacts and teams](./managing-contacts.md)
 - [Browsing room cards](./browsing.md)
-- Location codebook → see the [user guide index](../../README.md).
-- Zones overview → see the [Zones](../../zones/README.md) module (planned).
+- Location codebook → see [Codebooks](../../codebooks/README.md).
+- Zones overview → see the [Zones](../../zones/README.md) module.

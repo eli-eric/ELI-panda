@@ -99,4 +99,4 @@ See [Access & Responsibilities](../README.md#access--responsibilities) for what 
 
 - [Browsing and searching the catalogue](./browsing-and-searching.md)
 - [Creating and editing a catalogue item](./creating-and-editing-items.md)
-- Codebook-managed values like *Supplier* → see the [user guide index](../../README.md) for the Codebooks module.
+- Codebook-managed values like *Supplier* → see the [Codebooks](../../codebooks/README.md) module.
