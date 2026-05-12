@@ -23,6 +23,7 @@ Currently documented modules:
 - [Codebooks](User-Guide-Codebooks)
 - [Control Systems](User-Guide-Control-Systems)
 - [Zones](User-Guide-Zones)
+- [Publications, Researchers & Grants](User-Guide-Publications)
 
 More modules will follow — see the [User Guide](User-Guide) index for the full status table.
 
