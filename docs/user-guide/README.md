@@ -23,6 +23,7 @@ This is the entry point for end-user documentation of the ELI PANDA maintenance 
 | Room Cards | 📝 Documented | [roomCards/](./roomCards/README.md) |
 | Codebooks | 📝 Documented | [codebooks/](./codebooks/README.md) |
 | Control Systems | 📝 Documented | [controlSystems/](./controlSystems/README.md) |
+| Zones | 📝 Documented | [zones/](./zones/README.md) |
 | User Settings | 🚧 Planned | — |
 
 **Status legend:**
