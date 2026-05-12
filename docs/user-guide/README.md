@@ -20,7 +20,7 @@ This is the entry point for end-user documentation of the ELI PANDA maintenance 
 | Items | 🚧 Planned | — |
 | Orders | 📝 Documented | [orders/](./orders/README.md) |
 | Services | 📝 Documented | [services/](./services/README.md) |
-| Room Cards | 🚧 Planned | — |
+| Room Cards | 📝 Documented | [roomCards/](./roomCards/README.md) |
 | User Settings | 🚧 Planned | — |
 
 **Status legend:**
