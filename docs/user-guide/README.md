@@ -15,6 +15,7 @@ This is the entry point for end-user documentation of the ELI PANDA maintenance 
 | Systems Relations | 📝 Documented | [systemsRelations/](./systemsRelations/README.md) |
 | Systems Moving | 📝 Documented | [systemsMoving/](./systemsMoving/README.md) |
 | Systems Multi-Move | 📝 Documented | [systemsMultiMove/](./systemsMultiMove/README.md) |
+| System Type Edit | 📝 Documented | [systemTypeEdit/](./systemTypeEdit/README.md) |
 | Catalogue | 📝 Documented | [catalogue/](./catalogue/README.md) |
 | Items | 🚧 Planned | — |
 | Orders | 🚧 Planned | — |
