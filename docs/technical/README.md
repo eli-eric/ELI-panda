@@ -23,7 +23,7 @@ Content is being authored module by module. The list below tracks what is publis
 - [**Control Systems**](./control-systems.md) — bulk system-code factory, Zod-first schemas, preview→create flow, REST endpoints.
 - [**Zones**](./zones.md) — `Zone` graph + `HAS_SUBZONE` self-reference, REST surface, CSV import, cross-module consumers.
 - [**Publications**](./publications.md) — `Publication` / `Researcher` / `Grant` (REST-only), media-type variants, RIV export, deprecation cluster.
-- **Administration (Users & Roles).** _Planned._
+- [**Administration (Users & Roles)**](./administration.md) — `User` row-level `@authorization`, role assignment, profile pages, password handling.
 
 ## Other planned sections
 
