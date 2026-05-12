@@ -18,7 +18,7 @@ Content is being authored module by module. The list below tracks what is publis
 - [**Catalogue & Items**](./catalogue-and-items.md) — category hierarchy, three-layer property model, item form architecture, image manager v2, cross-module integration.
 - [**Orders & Order Items**](./orders-and-order-items.md) — order/line/service-line model, delivery flow, optimistic concurrency, form architecture.
 - [**Services**](./services.md) — `ServiceType` catalogue (REST) vs. graph-side `ServiceItem`, property-bag reuse, integration with orders.
-- **Room Cards.** _Planned._
+- [**Room Cards**](./room-cards.md) — `RoomCard` model, hall/dept contacts, operational-state audit, field-level edit gate.
 - **Codebooks.** _Planned._
 - **Control Systems.** _Planned._
 - **Zones.** _Planned._
