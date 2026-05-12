@@ -8,7 +8,7 @@ Content is being authored module by module. The list below tracks what is publis
 
 - [**App architecture**](./app-architecture.md) — Next.js frontend, Neo4j backend, GraphQL layer, module organization, request lifecycle.
 - [**Authentication**](./authentication.md) — Microsoft Entra ID app registration, NextAuth, JWT/session shape, middleware role gates.
-- **Permissions model** — `systems-view`, `systems-edit`, `admin`, per-module roles, `@authorization` rules. _Planned._
+- [**Permissions model**](./permissions-model.md) — `systems-view`, `systems-edit`, `admin`, per-module roles, `@authorization` rules, audit trail.
 - **Deployment & runbook** — Azure environments, Docker images, GitHub Actions workflows. _Planned._
 - **Local development & conventions** — prereqs, common commands, coding style. _Planned._
 
