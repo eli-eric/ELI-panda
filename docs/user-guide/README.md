@@ -22,6 +22,7 @@ This is the entry point for end-user documentation of the ELI PANDA maintenance 
 | Services | 📝 Documented | [services/](./services/README.md) |
 | Room Cards | 📝 Documented | [roomCards/](./roomCards/README.md) |
 | Codebooks | 📝 Documented | [codebooks/](./codebooks/README.md) |
+| Control Systems | 📝 Documented | [controlSystems/](./controlSystems/README.md) |
 | User Settings | 🚧 Planned | — |
 
 **Status legend:**

@@ -21,6 +21,7 @@ Currently documented modules:
 - [Services](User-Guide-Services)
 - [Room Cards](User-Guide-Room-Cards)
 - [Codebooks](User-Guide-Codebooks)
+- [Control Systems](User-Guide-Control-Systems)
 
 More modules will follow — see the [User Guide](User-Guide) index for the full status table.
 
