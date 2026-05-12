@@ -11,6 +11,7 @@ This is the entry point for end-user documentation of the ELI PANDA maintenance 
 | Module | Status | Documentation |
 |---|---|---|
 | System Hierarchy | 📝 Documented | [systemHierarchy/](./systemHierarchy/README.md) |
+| Systems Overview | 📝 Documented | [systems/](./systems/README.md) |
 | Systems Relations | 🚧 Planned | — |
 | Systems Moving | 🚧 Planned | — |
 | Catalogue | 📝 Documented | [catalogue/](./catalogue/README.md) |
