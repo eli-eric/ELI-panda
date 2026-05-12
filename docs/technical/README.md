@@ -15,7 +15,7 @@ Content is being authored module by module. The list below tracks what is publis
 ## Modules
 
 - [**Systems family**](./systems-family/README.md) — `systemHierarchy`, `systems`, `systemItem`, `systemsRelations`, moving flows, `system-type-edit`.
-- **Catalogue & Items.** _Planned._
+- [**Catalogue & Items**](./catalogue-and-items.md) — category hierarchy, three-layer property model, item form architecture, image manager v2, cross-module integration.
 - **Orders & Order Items.** _Planned._
 - **Services.** _Planned._
 - **Room Cards.** _Planned._
