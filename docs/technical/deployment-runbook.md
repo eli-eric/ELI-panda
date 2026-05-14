@@ -18,7 +18,7 @@ All pushes additionally run unit tests (`yarn test`) and Playwright E2E tests (v
 
 | Layer | Choice |
 |---|---|
-| Runtime image | `node:20-alpine` multi-stage build → Next.js `output: 'standalone'` |
+| Runtime image | `node:22-alpine` multi-stage build → Next.js `output: 'standalone'` |
 | Build | Yarn 1.x `--frozen-lockfile` (enforced by `scripts/enforce-package-manager.cjs`) |
 | Deploy A | Azure Container Apps + Azure Container Registry (ACR) |
 | Deploy B | Self-hosted Docker on the `czechia-server` runner via `docker compose` |
@@ -68,7 +68,7 @@ All app Dockerfiles share the same three-stage pattern (`deps` → `builder` →
 
 Build invariants:
 
-- **Image base**: `node:20-alpine` for app images; `node:20-bookworm` only for `Dockerfile.e2e` (Playwright system deps need glibc).
+- **Image base**: `node:22-alpine` for app images; `node:22-bookworm` only for `Dockerfile.e2e` (Playwright system deps need glibc).
 - **Final command**: `CMD ["node", "server.js"]` — Next.js standalone entry, no `yarn start`.
 - **Port**: `5001` (`EXPOSE 5001`, `ENV PORT=5001`).
 - **`sharp`** is reinstalled in the runner stage with platform-correct binaries (`yarn add sharp --ignore-scripts --prefer-offline`).
@@ -328,7 +328,7 @@ Schema migrations are out of scope for this repo (`SchemaMigration` exists in th
 
 1. **Add `/api/health`.** A no-op `pages/api/health.ts` returning `{ status: 'ok', version: process.env.GIT_SHA }` lets monitoring poll a real endpoint and provides a non-auth path to verify the process is alive. Wire `GIT_SHA` from the build env.
 2. **Promote test and prod to Azure Container Apps.** Today only dev uses ACR + Container Apps. Bringing test and prod onto the same surface eliminates the Czechia host SPOF and gives revision-based rollback for free.
-3. **Pin `node:20-alpine` to a specific digest.** All Dockerfiles use the floating tag. Pin to `node:20.<minor>-alpine@sha256:…` to make builds reproducible.
+3. **Pin `node:22-alpine` to a specific digest.** All Dockerfiles use the floating tag. Pin to `node:22.<minor>-alpine@sha256:…` to make builds reproducible.
 4. **Single Dockerfile + build-args.** `Dockerfile`, `Dockerfile.devenv`, `Dockerfile.testenv`, `Dockerfile.azure-dev` are nearly identical. Consolidate into one file with environment-driven build args (the `Dockerfile.azure-dev` already shows the pattern).
 5. **Externalise per-env URLs.** API gateway, MinIO endpoint, Neo4j URI are baked into Dockerfile `ENV` lines. Moving them to compose / Container App env vars allows the same image to deploy to any env.
 6. **Centralise secret rotation playbook.** Add a `docs/technical/runbook-rotations.md` covering `NEXTAUTH_SECRET`, `AZURE_AD_BEAMLINES_CLIENT_SECRET` (730-day expiry), Neo4j password, MinIO keys. Today it's tribal knowledge.

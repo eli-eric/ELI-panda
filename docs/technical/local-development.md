@@ -6,7 +6,7 @@ Everything you need to get the app running locally, plus the conventions every c
 
 | Tool | Version | Notes |
 |---|---|---|
-| Node.js | 20.x | `node:20-alpine` is the production base — match locally. |
+| Node.js | 22.x | `node:22-alpine` is the production base — match locally. Pinned in `.nvmrc` and `engines.node` in `package.json`. |
 | Yarn | 1.x (classic) | Enforced — `npm` / `pnpm` are rejected by `scripts/enforce-package-manager.cjs`. |
 | Docker + Compose v2 | recent | Only needed for local MinIO or running compose images. |
 | Neo4j 5.x | running | Either local install, or SSH-tunnel to a shared instance (see `env-example`). |
