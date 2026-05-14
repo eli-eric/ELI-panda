@@ -40,17 +40,7 @@ function createCallbackUrl(pathname: string, search: string): string {
     return fullPath.startsWith('/') ? fullPath : '/'
 }
 
-/**
- * Middleware function for authentication and authorization
- *
- * Flow:
- * 1. Check if path is protected
- * 2. Verify user authentication
- * 3. Check user roles against path requirements
- * 4. Redirect authenticated users from root to dashboard
- * 5. Add security headers to response
- */
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
     const { pathname } = request.nextUrl
     const matchesProtectedPath = isProtectedPath(pathname)
     const isE2EAuthBypass = shouldBypassAuthForE2E()
@@ -134,8 +124,6 @@ export async function middleware(request: NextRequest) {
     return response
 }
 
-// Configure middleware matcher for performance
-// Exclude static files, images, and Next.js internal routes
 export const config = {
     matcher: [
         /*
