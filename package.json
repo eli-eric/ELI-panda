@@ -160,9 +160,7 @@
     "resolutions": {
         "@apollo/federation-internals": "^2.9.6",
         "@tootallnate/once": "^3.0.1",
-        "protobufjs": "^7.5.6",
         "fast-xml-parser": "^5.7.0",
-        "file-type": "^21.3.1",
         "flatted": "^3.4.2",
         "follow-redirects": "^1.16.0",
         "graphql-ws": "5.12.1",
