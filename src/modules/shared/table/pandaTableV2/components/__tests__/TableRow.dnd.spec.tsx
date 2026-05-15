@@ -12,6 +12,25 @@ jest.mock('../RowCell.comp', () => ({
     ),
 }))
 
+// TableRowDND uses display:flex layout with <tr><div><td>…</td></div></tr> which
+// browsers tolerate but jsdom flags. Silence those specific validations for this
+// suite only.
+const originalError = console.error
+const NESTING_NOISE = [
+    'cannot be a child of',
+    'cannot contain a nested',
+    'See this log for the ancestor stack trace',
+]
+beforeAll(() => {
+    console.error = (...args: any[]) => {
+        if (typeof args[0] === 'string' && NESTING_NOISE.some(p => args[0].includes(p))) return
+        originalError(...args)
+    }
+})
+afterAll(() => {
+    console.error = originalError
+})
+
 const wrap = (children: React.ReactNode) => (
     <table>
         <tbody>{children}</tbody>

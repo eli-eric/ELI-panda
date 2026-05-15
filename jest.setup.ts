@@ -1,16 +1,36 @@
 /// <reference types="jest" />
 import '@testing-library/jest-dom'
 
-// Suppress React Query "undefined data" warnings in tests
-// This happens when testing disabled queries - it's expected behavior
+// Suppress known-noisy errors in tests. These are not bugs:
+// - "Query data cannot be undefined": expected when disabled queries return undefined.
+// - "Not implemented: navigation": jsdom limitation for anchor click navigation.
+// - "@formatjs/intl Error MISSING_TRANSLATION": intentional fallback in tests using
+//   raw message IDs as placeholder text.
+const SUPPRESSED_ERROR_PATTERNS = [
+    'Query data cannot be undefined',
+    'Not implemented: navigation',
+    '[@formatjs/intl Error MISSING_TRANSLATION]',
+]
+
+const isSuppressed = (msg: unknown): boolean => {
+    if (typeof msg === 'string') {
+        return SUPPRESSED_ERROR_PATTERNS.some(p => msg.includes(p))
+    }
+    // Duck-typed Error check: jsdom emits errors from a different realm,
+    // so `instanceof Error` returns false. Match on `.message` instead.
+    if (msg && typeof msg === 'object' && typeof (msg as { message?: unknown }).message === 'string') {
+        const m = (msg as { message: string }).message
+        return SUPPRESSED_ERROR_PATTERNS.some(p => m.includes(p))
+    }
+    return false
+}
+
 // eslint-disable-next-line no-console
 const originalError = console.error
 beforeAll(() => {
     // eslint-disable-next-line no-console
     console.error = (...args: any[]) => {
-        if (typeof args[0] === 'string' && args[0].includes('Query data cannot be undefined')) {
-            return
-        }
+        if (isSuppressed(args[0])) return
         originalError.call(console, ...args)
     }
 })

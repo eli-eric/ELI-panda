@@ -1,4 +1,4 @@
-import { fireEvent, screen } from '@testing-library/react'
+import { act, fireEvent, screen } from '@testing-library/react'
 
 import {
     getEnvironmentColor,
@@ -63,9 +63,9 @@ describe('EnvironmentWarning', () => {
         jest.useFakeTimers()
         mockShouldShow.mockReturnValue(true)
         renderWithProviders(<EnvironmentWarning />)
-        jest.advanceTimersByTime(150)
-        // dialog renders synchronously on next render — but jest.advanceTimers
-        // may not trigger React state update without flushing
+        act(() => {
+            jest.advanceTimersByTime(150)
+        })
         jest.useRealTimers()
     })
 

@@ -1,4 +1,4 @@
-import { renderHook } from '@testing-library/react'
+import { act, renderHook } from '@testing-library/react'
 
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 
@@ -29,7 +29,7 @@ describe('useSystemCreateSheet', () => {
         mockUseDynamicModalStore.mockReturnValue({ openModal })
 
         const { result } = renderHook(() => useSystemCreateSheet())
-        result.current()
+        act(() => result.current())
         const callArgs = openModal.mock.calls[0] as unknown as [string, any]
         expect(callArgs[0]).toBe('sheet')
         const config = callArgs[1]
@@ -44,7 +44,7 @@ describe('useSystemCreateSheet', () => {
         mockUseDynamicModalStore.mockReturnValue({ openModal })
 
         const { result } = renderHook(() => useSystemCreateSheet())
-        result.current('parent-1')
+        act(() => result.current('parent-1'))
         const callArgs = openModal.mock.calls[0] as unknown as [string, any]
         const config = callArgs[1]
         expect(config.props.title).toBe('Create Subsystem')
@@ -59,7 +59,7 @@ describe('useSystemCreateSheet', () => {
         mockUseDynamicModalStore.mockReturnValue({ openModal })
 
         const { result } = renderHook(() => useSystemCreateSheet())
-        result.current()
+        act(() => result.current())
         // No parent passed -> store cleared
         expect(useSystemCreateParentStore.getState().parentUid).toBeNull()
     })

@@ -29,7 +29,7 @@ export const SaveFilterModalContent = ({ onSubmit, onClose }: SaveFilterModalCon
                 placeholder="Type filter name"
                 name="filterName"
                 rounded="rounded-md"
-                customLabel="Filter Name"
+                label="Filter Name"
             />
             <div className="flex justify-end gap-2 pt-4">
                 <Button variant="secondary" onClick={onClose}>

@@ -24,7 +24,7 @@ jest.mock('@/components/ui/detail-parameter', () => ({
 const baseGroup = {
     key: 'g1',
     name: 'General',
-    properties: [{ name: 'A', value: '1' }],
+    properties: [{ uid: 'p1', name: 'A', value: '1' }],
 }
 
 describe('ItemPropertiesSection', () => {

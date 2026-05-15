@@ -1,4 +1,4 @@
-import { screen, waitFor } from '@testing-library/react'
+import { act, screen, waitFor } from '@testing-library/react'
 
 import { renderWithProviders } from '@/testutils/wrappers/renderWithProviders'
 
@@ -74,10 +74,15 @@ describe('CodebookDetail', () => {
         )
         // Invoke the wrapped update via the prop
         const tableUpdate = lastTableProps.onUpdate as (d: any) => Promise<void>
-        const promise = tableUpdate({ uid: 'u1', name: 'N' })
+        let promise!: Promise<void>
+        await act(async () => {
+            promise = tableUpdate({ uid: 'u1', name: 'N' })
+        })
         await waitFor(() => expect(lastTableProps.updatingUid).toBe('u1'))
-        resolveUpdate!()
-        await promise
+        await act(async () => {
+            resolveUpdate!()
+            await promise
+        })
         await waitFor(() => expect(lastTableProps.updatingUid).toBeUndefined())
         expect(onUpdate).toHaveBeenCalledWith({ uid: 'u1', name: 'N' })
     })
@@ -95,7 +100,9 @@ describe('CodebookDetail', () => {
             />,
         )
         const tableUpdate = lastTableProps.onUpdate as (d: any) => Promise<void>
-        await expect(tableUpdate({ uid: 'u', name: 'X' })).rejects.toThrow('boom')
+        await act(async () => {
+            await expect(tableUpdate({ uid: 'u', name: 'X' })).rejects.toThrow('boom')
+        })
         await waitFor(() => expect(lastTableProps.updatingUid).toBeUndefined())
     })
 })
