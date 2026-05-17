@@ -23,7 +23,7 @@ const CheckBox = ({ name, disabled, className, hidden, label, ...restProps }: In
                 <CheckboxWithLabel
                     id={htmlFor}
                     label={label}
-                    checked={field.value}
+                    checked={field.value ?? false}
                     onChange={field.onChange}
                     disabled={disabled}
                     className={className}

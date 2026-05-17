@@ -42,10 +42,8 @@ jest.mock('../LeavesFilterFooter.comp', () => ({
 }))
 
 jest.mock('@/components/form/Form', () => ({
-    Form: ({ children, ...props }: any) => (
-        <form data-testid="filter-form" {...props}>
-            {children}
-        </form>
+    Form: ({ children }: { children: React.ReactNode }) => (
+        <form data-testid="filter-form">{children}</form>
     ),
 }))
 
