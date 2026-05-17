@@ -117,21 +117,15 @@ describe('useImageUpload', () => {
             type: 'image/jpeg',
         })
 
-        // Delay the API response to test optimistic update
+        // Block the API response on an explicit resolver — using a timeout
+        // races with coverage instrumentation overhead and can resolve before
+        // the optimistic-update assertion runs.
+        let resolveFetch!: (value: ImageUploadResponse) => void
         mockFetchRequest.mockImplementation(
             () =>
-                new Promise(resolve =>
-                    setTimeout(
-                        () =>
-                            resolve({
-                                id: 'final-id',
-                                name: 'optimistic.jpg',
-                                url: '/api/catalogue/123/image/final-id',
-                                type: 'image/jpeg',
-                            }),
-                        100,
-                    ),
-                ),
+                new Promise<ImageUploadResponse>(resolve => {
+                    resolveFetch = resolve
+                }),
         )
 
         // Pre-populate cache with existing images
@@ -177,7 +171,13 @@ describe('useImageUpload', () => {
         expect(cacheData?.[0].name).toBe('optimistic.jpg')
         expect(cacheData?.[1].id).toBe('existing-1') // Existing image still there
 
-        // Wait for success
+        // Now release the fetch and wait for success
+        resolveFetch({
+            id: 'final-id',
+            name: 'optimistic.jpg',
+            url: '/api/catalogue/123/image/final-id',
+            type: 'image/jpeg',
+        })
         await waitFor(() => expect(result.current.isSuccess).toBe(true))
 
         // After success, temp should be replaced with real image
