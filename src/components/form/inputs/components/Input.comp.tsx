@@ -59,8 +59,11 @@ export const Input = ({
     isFilter,
     step = '0.001',
     required,
+    customLabel: _customLabel,
+    rounded: _rounded,
+    codebookResponse: _codebookResponse,
     ...rest
-}: InputProps) => {
+}: InputProps & { customLabel?: string; rounded?: string; codebookResponse?: unknown }) => {
     const { control } = useFormContext()
 
     const [showPassword, setShowPassword] = useState(false)

@@ -12,8 +12,9 @@ import { message } from '@/i18n/src/messages'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 
 import { FileActions } from './FileActions'
+import { useFileUpdate } from './hooks/useFileUpdate'
 import { useLinkUpdate } from './hooks/useLinks'
-import type { FileItemExtended } from './types'
+import type { FILE_TYPE, FileItemExtended } from './types'
 
 const buttons = message.common.buttons
 const filesMsg = message.common.files
@@ -83,21 +84,20 @@ function openTagModal({
 
 interface FileColumnsProps {
     hasEditRole?: boolean
-    handlePut: (id: string, data: { name?: string; tags?: string[] }) => void
-    itemType: string
+    itemType: FILE_TYPE
     uid?: string
     onFileDeleted?: () => void
 }
 
 export const useFileColumns = ({
     hasEditRole,
-    handlePut,
     itemType,
     uid,
     onFileDeleted,
 }: FileColumnsProps) => {
     const { formatMessage: fm } = useIntl()
     const { mutate: updateLink } = useLinkUpdate({ parentUid: uid })
+    const { mutate: updateFile } = useFileUpdate({ itemType, uid })
 
     const handleAddTag = useCallback(
         (file: FileItemExtended | null, tag: string) => {
@@ -111,13 +111,16 @@ export const useFileColumns = ({
                     uid: file.id,
                 })
             } else {
-                handlePut(file.id, {
-                    name: file.name,
-                    tags: [...(file.tags || []), tag],
+                updateFile({
+                    id: file.id,
+                    body: {
+                        name: file.name,
+                        tags: [...(file.tags || []), tag],
+                    },
                 })
             }
         },
-        [updateLink, handlePut],
+        [updateLink, updateFile],
     )
 
     const handleRemoveTag = useCallback(
@@ -129,13 +132,16 @@ export const useFileColumns = ({
                     uid: file.id,
                 })
             } else {
-                handlePut(file.id, {
-                    name: file.name,
-                    tags: (file.tags || []).filter(tag => tag !== tagToRemove),
+                updateFile({
+                    id: file.id,
+                    body: {
+                        name: file.name,
+                        tags: (file.tags || []).filter(tag => tag !== tagToRemove),
+                    },
                 })
             }
         },
-        [updateLink, handlePut],
+        [updateLink, updateFile],
     )
 
     const columns = useMemo<ColumnDef<FileItemExtended>[]>(() => {
@@ -246,7 +252,7 @@ export const useFileColumns = ({
                         hasEditRole={hasEditRole}
                         itemType={itemType}
                         uid={uid}
-                        handlePut={handlePut}
+                        onUpdate={updateFile}
                         onFileDeleted={onFileDeleted}
                     />
                 ),
@@ -254,7 +260,7 @@ export const useFileColumns = ({
         ]
         return cols
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [hasEditRole, itemType, uid, handleRemoveTag, handlePut])
+    }, [hasEditRole, itemType, uid, handleRemoveTag, updateFile])
 
     return {
         columns,

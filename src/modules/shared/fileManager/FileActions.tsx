@@ -1,3 +1,4 @@
+import type { UseMutateFunction } from '@tanstack/react-query'
 import { useQueryClient } from '@tanstack/react-query'
 import { Edit, MoreVertical, Trash2 } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
@@ -18,8 +19,11 @@ import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 import { createMessageValues } from '@/utils/formatters'
 
+import type { UpdateVars } from './hooks/useFileUpdate'
 import { useLinkDelete, useLinkUpdate } from './hooks/useLinks'
-import type { FileItem, FileItemExtended } from './types'
+import type { FILE_TYPE, FileItem, FileItemExtended } from './types'
+
+type UpdateFileFn = UseMutateFunction<FileItem, Error, UpdateVars>
 
 const messages = message.common.fileManager
 const buttons = message.common.buttons
@@ -27,9 +31,9 @@ const buttons = message.common.buttons
 interface FileActionsProps {
     file: FileItemExtended
     hasEditRole?: boolean
-    itemType: string
+    itemType: FILE_TYPE
     uid?: string
-    handlePut: (id: string, data: { name?: string; tags?: string[] }) => void
+    onUpdate: UpdateFileFn
     onFileDeleted?: () => void
 }
 
@@ -38,7 +42,7 @@ export const FileActions = ({
     hasEditRole,
     itemType,
     uid,
-    handlePut,
+    onUpdate,
     onFileDeleted,
 }: FileActionsProps) => {
     const intl = useIntl()
@@ -98,10 +102,10 @@ export const FileActions = ({
             if (file.type === 'LINK') {
                 updateLink({ ...file, name: newName, uid: file.id })
             } else {
-                handlePut(file.id, { name: newName, tags: file.tags })
+                onUpdate({ id: file.id, body: { name: newName, tags: file.tags } })
             }
         },
-        [updateLink, handlePut],
+        [updateLink, onUpdate],
     )
 
     if (!hasEditRole) return null

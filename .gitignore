@@ -45,3 +45,7 @@ cypress.env.json
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local tool state
+.claude/*.local.md
+.claude/*.local.json

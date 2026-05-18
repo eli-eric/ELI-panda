@@ -8,7 +8,7 @@ This repository contains the main frontend web application built with [Next.js](
 
 ## Prerequisites
 
-- Node.js 20+
+- Node.js 22+ (see `.nvmrc`)
 - Yarn (npm/pnpm are blocked by the `preinstall` check)
 
 ## Getting Started
