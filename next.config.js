@@ -2,6 +2,9 @@
 const nextConfig = {
     reactStrictMode: true,
     output: 'standalone',
+    experimental: {
+        proxyClientMaxBodySize: '150mb',
+    },
     images: {
         remotePatterns: [
             {

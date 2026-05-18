@@ -144,7 +144,7 @@ export const messages = {
             uploadAnImage: 'Upload an image',
             delete: 'Delete',
             noImagesAvailable: 'No images available',
-            pngJpgInfo: 'PNG, JPG up to 10MB',
+            pngJpgInfo: 'PNG, JPG up to 100MB',
             confirmDelete: 'Are you sure you want to delete',
             saveItemToUploadImages: 'Please save the item first to upload images',
             loading: 'Loading...',
@@ -171,6 +171,15 @@ export const messages = {
             fileSizeMb: '{value} MB',
             fileSizeKb: '{value} KB',
             actions: 'Actions',
+            uploading: 'Uploading {done}/{total, plural, one {# file} other {# files}}',
+            uploadSuccess:
+                '{count, plural, one {# file uploaded} other {# files uploaded}}',
+            uploadError:
+                '{count, plural, one {# file failed} other {# files failed}}: {names}',
+            fileTooLarge: '{name} exceeds 100MB limit',
+            retry: 'Retry',
+            updateSuccess: '{name} updated',
+            updateError: 'Failed to update file: {error}',
         },
         fileManager: {
             deleteModal: {
