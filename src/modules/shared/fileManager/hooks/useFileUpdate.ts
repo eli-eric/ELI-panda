@@ -1,10 +1,13 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useIntl } from 'react-intl'
 import { toast } from 'sonner'
+
+import { message } from '@/i18n/src/messages'
 
 import type { FILE_TYPE, FileItem } from '../types'
 
 type Params = { itemType: FILE_TYPE; uid: string }
-type UpdateVars = { id: string; body: { name?: string; tags?: string[] } }
+export type UpdateVars = { id: string; body: { name?: string; tags?: string[] } }
 
 const parseError = async (res: Response): Promise<string> => {
     try {
@@ -17,6 +20,7 @@ const parseError = async (res: Response): Promise<string> => {
 }
 
 export const useFileUpdate = ({ itemType, uid }: Params) => {
+    const intl = useIntl()
     const queryClient = useQueryClient()
     const endpoint = `/api/${itemType}/${uid}/files`
 
@@ -39,10 +43,20 @@ export const useFileUpdate = ({ itemType, uid }: Params) => {
                         : file,
                 )
             })
-            toast.success(`${updated.name} updated`)
+            toast.success(
+                intl.formatMessage(
+                    { id: message.common.files.updateSuccess },
+                    { name: updated.name },
+                ),
+            )
         },
         onError: error => {
-            toast.error(`Failed to update file: ${error.message}`)
+            toast.error(
+                intl.formatMessage(
+                    { id: message.common.files.updateError },
+                    { error: error.message },
+                ),
+            )
         },
     })
 }

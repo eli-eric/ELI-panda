@@ -1,3 +1,4 @@
+import type { UseMutateFunction } from '@tanstack/react-query'
 import { useQueryClient } from '@tanstack/react-query'
 import { Edit, MoreVertical, Trash2 } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
@@ -18,10 +19,11 @@ import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 import { createMessageValues } from '@/utils/formatters'
 
+import type { UpdateVars } from './hooks/useFileUpdate'
 import { useLinkDelete, useLinkUpdate } from './hooks/useLinks'
 import type { FileItem, FileItemExtended } from './types'
 
-type UpdateFileFn = (vars: { id: string; body: { name?: string; tags?: string[] } }) => void
+type UpdateFileFn = UseMutateFunction<FileItem, Error, UpdateVars>
 
 const messages = message.common.fileManager
 const buttons = message.common.buttons

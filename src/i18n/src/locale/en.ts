@@ -178,6 +178,8 @@ export const messages = {
                 '{count, plural, one {# file failed} other {# files failed}}: {names}',
             fileTooLarge: '{name} exceeds 100MB limit',
             retry: 'Retry',
+            updateSuccess: '{name} updated',
+            updateError: 'Failed to update file: {error}',
         },
         fileManager: {
             deleteModal: {

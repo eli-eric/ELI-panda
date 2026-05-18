@@ -72,7 +72,7 @@ describe('useFileUpdate', () => {
         })
     })
 
-    it('calls toast.success after a successful update', async () => {
+    it('calls toast.success with intl-formatted message after a successful update', async () => {
         mockFetch.mockResolvedValueOnce({
             ok: true,
             status: 200,
@@ -96,10 +96,12 @@ describe('useFileUpdate', () => {
         })
 
         await waitFor(() => expect(mockToast.success).toHaveBeenCalled())
-        expect(mockToast.success.mock.calls[0][0]).toContain('renamed.txt')
+        const successMsg = mockToast.success.mock.calls[0][0] as string
+        expect(successMsg).toContain('renamed.txt')
+        expect(successMsg).toContain('updated')
     })
 
-    it('calls toast.error on non-2xx response with server error message', async () => {
+    it('calls toast.error with intl-formatted server error', async () => {
         mockFetch.mockResolvedValueOnce({
             ok: false,
             status: 500,
@@ -117,5 +119,7 @@ describe('useFileUpdate', () => {
         })
 
         await waitFor(() => expect(mockToast.error).toHaveBeenCalled())
+        const errorMsg = mockToast.error.mock.calls[0][0] as string
+        expect(errorMsg).toContain('rename forbidden')
     })
 })

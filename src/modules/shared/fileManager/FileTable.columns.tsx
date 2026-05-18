@@ -16,8 +16,6 @@ import { useFileUpdate } from './hooks/useFileUpdate'
 import { useLinkUpdate } from './hooks/useLinks'
 import type { FILE_TYPE, FileItemExtended } from './types'
 
-type UpdateFileFn = (vars: { id: string; body: { name?: string; tags?: string[] } }) => void
-
 const buttons = message.common.buttons
 const filesMsg = message.common.files
 
@@ -101,8 +99,6 @@ export const useFileColumns = ({
     const { mutate: updateLink } = useLinkUpdate({ parentUid: uid })
     const { mutate: updateFile } = useFileUpdate({ itemType, uid: uid ?? '' })
 
-    const onUpdateFile: UpdateFileFn = updateFile
-
     const handleAddTag = useCallback(
         (file: FileItemExtended | null, tag: string) => {
             if (!file) return
@@ -115,7 +111,7 @@ export const useFileColumns = ({
                     uid: file.id,
                 })
             } else {
-                onUpdateFile({
+                updateFile({
                     id: file.id,
                     body: {
                         name: file.name,
@@ -124,7 +120,7 @@ export const useFileColumns = ({
                 })
             }
         },
-        [updateLink, onUpdateFile],
+        [updateLink, updateFile],
     )
 
     const handleRemoveTag = useCallback(
@@ -136,7 +132,7 @@ export const useFileColumns = ({
                     uid: file.id,
                 })
             } else {
-                onUpdateFile({
+                updateFile({
                     id: file.id,
                     body: {
                         name: file.name,
@@ -145,7 +141,7 @@ export const useFileColumns = ({
                 })
             }
         },
-        [updateLink, onUpdateFile],
+        [updateLink, updateFile],
     )
 
     const columns = useMemo<ColumnDef<FileItemExtended>[]>(() => {
@@ -256,7 +252,7 @@ export const useFileColumns = ({
                         hasEditRole={hasEditRole}
                         itemType={itemType}
                         uid={uid}
-                        onUpdate={onUpdateFile}
+                        onUpdate={updateFile}
                         onFileDeleted={onFileDeleted}
                     />
                 ),
@@ -264,7 +260,7 @@ export const useFileColumns = ({
         ]
         return cols
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [hasEditRole, itemType, uid, handleRemoveTag, onUpdateFile])
+    }, [hasEditRole, itemType, uid, handleRemoveTag, updateFile])
 
     return {
         columns,

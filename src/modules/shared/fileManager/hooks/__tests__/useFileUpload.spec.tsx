@@ -1,8 +1,11 @@
+import { QueryClient } from '@tanstack/react-query'
 import { act, renderHook, waitFor } from '@testing-library/react'
+import type { ReactNode } from 'react'
 import { toast } from 'sonner'
 
 import { AllProvidersWrapper } from '@/testutils/wrappers/AllProvidersWrapper'
 
+import type { FileItem } from '../../types'
 import { FILE_TYPE } from '../../types'
 import { useFileUpload } from '../useFileUpload'
 
@@ -284,9 +287,19 @@ describe('useFileUpload', () => {
             mockFetchOk(fileItemResponse('a.txt', 'id-a')),
         )
 
+        // Use a client with gcTime > 0 so setQueryData persists without observers
+        const queryClient = new QueryClient({
+            defaultOptions: { queries: { retry: false, gcTime: Infinity } },
+        })
+        const wrapper = ({ children }: { children: ReactNode }) => (
+            <AllProvidersWrapper queryClient={queryClient}>
+                {children}
+            </AllProvidersWrapper>
+        )
+
         const { result } = renderHook(
             () => useFileUpload({ itemType: FILE_TYPE.SYSTEM, uid: 'u1' }),
-            { wrapper: AllProvidersWrapper },
+            { wrapper },
         )
 
         await act(async () => {
@@ -294,5 +307,14 @@ describe('useFileUpload', () => {
         })
 
         await waitFor(() => expect(mockToast.success).toHaveBeenCalled())
+
+        const cached = queryClient.getQueryData<FileItem[]>([
+            'files',
+            FILE_TYPE.SYSTEM,
+            'u1',
+        ])
+        expect(cached).toEqual([
+            expect.objectContaining({ id: 'id-a', name: 'a.txt' }),
+        ])
     })
 })
