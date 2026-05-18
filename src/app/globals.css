@@ -2,8 +2,6 @@
 
 @import '../styles/eli-busy.css';
 @import '../styles/loader.css';
-@import 'react-datepicker/dist/react-datepicker.css';
-@import 'tippy.js/dist/tippy.css';
 @import 'react-range-slider-input/dist/style.css';
 @plugin 'tailwindcss-animate';
 

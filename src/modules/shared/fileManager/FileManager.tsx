@@ -4,15 +4,14 @@ import { useDropzone } from 'react-dropzone'
 import { useIntl } from 'react-intl'
 
 import { Heading } from '@/components/layout/Heading'
-import ProgressBarComponent from '@/components/progress-bar.comp'
 import { Button } from '@/components/ui/button'
 import { Table } from '@/components/ui/table/table'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 
 import { useFileColumns } from './FileTable.columns'
-import { useFileRequests } from './hooks/useFileRequests'
 import { useFiles } from './hooks/useFiles'
+import { useFileUpload } from './hooks/useFileUpload'
 import { useLinks } from './hooks/useLinks'
 import { openLinkModal } from './LinkModal'
 import type { FILE_TYPE, FileItemExtended } from './types'
@@ -51,29 +50,30 @@ const FileManager = ({
         ] as FileItemExtended[]
     }, [filesData, linksData])
 
-    const { onDrop, handlePut, loading, resetDropzone } = useFileRequests({
-        itemType,
-        uid,
-    })
-    // Enhance resetDropzone to also clear the file input value
-    const handleResetDropzone = useCallback(() => {
-        resetDropzone()
-        // Reset the file input value to allow re-uploading the same file
+    const { upload } = useFileUpload({ itemType, uid })
+
+    const fileInputRef = useRef<HTMLInputElement | null>(null)
+
+    const handleFileInputReset = useCallback(() => {
         if (fileInputRef.current) {
             fileInputRef.current.value = ''
         }
-    }, [resetDropzone])
+    }, [])
 
-    // Define columns for Table
     const { columns, modals } = useFileColumns({
         hasEditRole,
         itemType,
         uid,
-        handlePut,
-        onFileDeleted: handleResetDropzone,
+        onFileDeleted: handleFileInputReset,
     })
 
-    const fileInputRef = useRef<HTMLInputElement | null>(null)
+    const onDrop = useCallback(
+        (files: File[]) => {
+            upload(files)
+        },
+        [upload],
+    )
+
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
     })
@@ -82,7 +82,7 @@ const FileManager = ({
         fileInputRef.current?.click()
     }, [])
 
-    const canUpload = hasEditRole && (allowMultiple || files.length === 0)
+    const canUpload = !!uid && hasEditRole && (allowMultiple || files.length === 0)
 
     return (
         <div className="">
@@ -114,8 +114,6 @@ const FileManager = ({
                     </div>
                 )}
             </Heading>
-
-            {loading.some(value => value) && <ProgressBarComponent />}
 
             {files.length > 0 && (
                 <div className="mt-4">

@@ -1,4 +1,4 @@
-import { fireEvent, screen, waitFor } from '@testing-library/react'
+import { act, fireEvent, screen, waitFor } from '@testing-library/react'
 
 import { mockDynamicModalStore, mockUsePermission, renderWithProviders } from '@/testutils'
 
@@ -90,9 +90,10 @@ describe('CategoryEditForm', () => {
         )
         const saveBtn = screen.getAllByRole('button').find(b => /save/i.test(b.textContent ?? ''))
         if (!saveBtn) throw new Error('save button not found')
-        fireEvent.click(saveBtn)
-        // yup validation blocks submit
-        await new Promise(r => setTimeout(r, 50))
+        await act(async () => {
+            fireEvent.click(saveBtn)
+            await new Promise(r => setTimeout(r, 50))
+        })
         expect(onSubmit).not.toHaveBeenCalled()
     })
 })

@@ -12,8 +12,8 @@ const useMutateListStore = create<MutateState>(set => ({
     instances: {},
     setMutate: (id, mutateUrl) =>
         set(state => {
-            const currentInstance = state.instances[id]?.mutateUrl ?? {}
-            const newInstance = { ...currentInstance, mutateUrl: mutateUrl }
+            const currentInstance = state.instances[id] ?? {}
+            const newInstance = { ...currentInstance, mutateUrl }
             return { instances: { ...state.instances, [id]: newInstance } }
         }),
 
