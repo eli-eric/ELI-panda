@@ -10,7 +10,7 @@ import type { FILE_TYPE, FileItem } from '../types'
 const MAX_FILE_BYTES = 100 * 1024 * 1024
 const CONCURRENCY = 3
 
-type Params = { itemType: FILE_TYPE; uid: string }
+type Params = { itemType: FILE_TYPE; uid: string | undefined }
 
 const readAsDataURL = (file: File): Promise<string> =>
     new Promise((resolve, reject) => {
@@ -43,7 +43,7 @@ export const useFileUpload = ({ itemType, uid }: Params) => {
 
     const upload = useCallback(
         (files: File[]) => {
-            if (files.length === 0) return
+            if (!uid || files.length === 0) return
 
             const oversized = files.filter(f => f.size > MAX_FILE_BYTES)
             const valid = files.filter(f => f.size <= MAX_FILE_BYTES)

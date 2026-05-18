@@ -97,7 +97,7 @@ export const useFileColumns = ({
 }: FileColumnsProps) => {
     const { formatMessage: fm } = useIntl()
     const { mutate: updateLink } = useLinkUpdate({ parentUid: uid })
-    const { mutate: updateFile } = useFileUpdate({ itemType, uid: uid ?? '' })
+    const { mutate: updateFile } = useFileUpdate({ itemType, uid })
 
     const handleAddTag = useCallback(
         (file: FileItemExtended | null, tag: string) => {

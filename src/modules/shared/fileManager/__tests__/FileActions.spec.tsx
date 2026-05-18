@@ -4,6 +4,7 @@ import { renderWithProviders } from '@/testutils/wrappers/renderWithProviders'
 
 import { FileActions, RenameModalContent } from '../FileActions'
 import type { FileItemExtended } from '../types'
+import { FILE_TYPE } from '../types'
 
 jest.mock('sonner', () => ({
     toast: { success: jest.fn(), error: jest.fn() },
@@ -43,7 +44,7 @@ describe('FileActions', () => {
             <FileActions
                 file={fileItem}
                 hasEditRole={false}
-                itemType="system"
+                itemType={FILE_TYPE.SYSTEM}
                 uid="u1"
                 onUpdate={jest.fn()}
             />,
@@ -56,7 +57,7 @@ describe('FileActions', () => {
             <FileActions
                 file={fileItem}
                 hasEditRole={true}
-                itemType="system"
+                itemType={FILE_TYPE.SYSTEM}
                 uid="u1"
                 onUpdate={jest.fn()}
             />,
@@ -69,7 +70,7 @@ describe('FileActions', () => {
             <FileActions
                 file={fileItem}
                 hasEditRole={true}
-                itemType="system"
+                itemType={FILE_TYPE.SYSTEM}
                 uid="u1"
                 onUpdate={jest.fn()}
             />,
@@ -84,7 +85,7 @@ describe('FileActions', () => {
             <FileActions
                 file={linkItem}
                 hasEditRole={true}
-                itemType="system"
+                itemType={FILE_TYPE.SYSTEM}
                 uid="u1"
                 onUpdate={jest.fn()}
             />,

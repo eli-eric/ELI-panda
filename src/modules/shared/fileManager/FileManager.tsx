@@ -50,7 +50,7 @@ const FileManager = ({
         ] as FileItemExtended[]
     }, [filesData, linksData])
 
-    const { upload } = useFileUpload({ itemType, uid: uid ?? '' })
+    const { upload } = useFileUpload({ itemType, uid })
 
     const fileInputRef = useRef<HTMLInputElement | null>(null)
 
@@ -82,7 +82,7 @@ const FileManager = ({
         fileInputRef.current?.click()
     }, [])
 
-    const canUpload = hasEditRole && (allowMultiple || files.length === 0)
+    const canUpload = !!uid && hasEditRole && (allowMultiple || files.length === 0)
 
     return (
         <div className="">

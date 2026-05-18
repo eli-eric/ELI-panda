@@ -21,7 +21,7 @@ import { createMessageValues } from '@/utils/formatters'
 
 import type { UpdateVars } from './hooks/useFileUpdate'
 import { useLinkDelete, useLinkUpdate } from './hooks/useLinks'
-import type { FileItem, FileItemExtended } from './types'
+import type { FILE_TYPE, FileItem, FileItemExtended } from './types'
 
 type UpdateFileFn = UseMutateFunction<FileItem, Error, UpdateVars>
 
@@ -31,7 +31,7 @@ const buttons = message.common.buttons
 interface FileActionsProps {
     file: FileItemExtended
     hasEditRole?: boolean
-    itemType: string
+    itemType: FILE_TYPE
     uid?: string
     onUpdate: UpdateFileFn
     onFileDeleted?: () => void

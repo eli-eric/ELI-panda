@@ -6,7 +6,7 @@ import { message } from '@/i18n/src/messages'
 
 import type { FILE_TYPE, FileItem } from '../types'
 
-type Params = { itemType: FILE_TYPE; uid: string }
+type Params = { itemType: FILE_TYPE; uid: string | undefined }
 export type UpdateVars = { id: string; body: { name?: string; tags?: string[] } }
 
 const parseError = async (res: Response): Promise<string> => {
@@ -26,6 +26,7 @@ export const useFileUpdate = ({ itemType, uid }: Params) => {
 
     return useMutation<FileItem, Error, UpdateVars>({
         mutationFn: async ({ id, body }) => {
+            if (!uid) throw new Error('Cannot update file: missing uid')
             const res = await fetch(`${endpoint}/${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
@@ -36,7 +37,7 @@ export const useFileUpdate = ({ itemType, uid }: Params) => {
         },
         onSuccess: updated => {
             queryClient.setQueryData<FileItem[]>(['files', itemType, uid], old => {
-                if (!old) return []
+                if (!old) return old
                 return old.map(file =>
                     file.id === updated.id
                         ? { ...file, name: updated.name, tags: updated.tags }
