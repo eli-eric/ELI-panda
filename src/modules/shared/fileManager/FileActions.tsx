@@ -21,6 +21,8 @@ import { createMessageValues } from '@/utils/formatters'
 import { useLinkDelete, useLinkUpdate } from './hooks/useLinks'
 import type { FileItem, FileItemExtended } from './types'
 
+type UpdateFileFn = (vars: { id: string; body: { name?: string; tags?: string[] } }) => void
+
 const messages = message.common.fileManager
 const buttons = message.common.buttons
 
@@ -29,7 +31,7 @@ interface FileActionsProps {
     hasEditRole?: boolean
     itemType: string
     uid?: string
-    handlePut: (id: string, data: { name?: string; tags?: string[] }) => void
+    onUpdate: UpdateFileFn
     onFileDeleted?: () => void
 }
 
@@ -38,7 +40,7 @@ export const FileActions = ({
     hasEditRole,
     itemType,
     uid,
-    handlePut,
+    onUpdate,
     onFileDeleted,
 }: FileActionsProps) => {
     const intl = useIntl()
@@ -98,10 +100,10 @@ export const FileActions = ({
             if (file.type === 'LINK') {
                 updateLink({ ...file, name: newName, uid: file.id })
             } else {
-                handlePut(file.id, { name: newName, tags: file.tags })
+                onUpdate({ id: file.id, body: { name: newName, tags: file.tags } })
             }
         },
-        [updateLink, handlePut],
+        [updateLink, onUpdate],
     )
 
     if (!hasEditRole) return null
