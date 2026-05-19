@@ -28,6 +28,7 @@ const baseNode: HierarchyNode = {
 const messages = {
     'systemHierarchy.copy.copySystem': 'Copy System',
     'systemHierarchy.copy.pasteSystem': 'Paste System',
+    'systemHierarchy.create.menuItem': 'Create System',
 }
 
 const renderTreeNode = (props: Partial<React.ComponentProps<typeof TreeNode>> = {}) =>
@@ -157,6 +158,64 @@ describe('TreeNode', () => {
 
             fireEvent.contextMenu(screen.getByTestId('tree-node-node-1').firstChild!)
             expect(screen.queryByText('Copy System')).not.toBeInTheDocument()
+        })
+
+        it('enables Create System when canEdit and parent level allows children, calls handler on click', () => {
+            const onCreateSubsystem = jest.fn()
+            renderTreeNode({ onCreateSubsystem, canEdit: true })
+
+            fireEvent.contextMenu(screen.getByTestId('tree-node-node-1').firstChild!)
+            const createItem = screen.getByTestId('context-create-system')
+            expect(createItem).not.toHaveAttribute('data-disabled')
+
+            fireEvent.click(createItem)
+            expect(onCreateSubsystem).toHaveBeenCalledWith(
+                'node-1',
+                'Node 1',
+                SystemLevel.KeySystems,
+            )
+        })
+
+        it('disables Create System under Trash node and does not fire handler', () => {
+            const onCreateSubsystem = jest.fn()
+            renderTreeNode({
+                node: { ...baseNode, systemLevel: SystemLevel.Trash },
+                onCreateSubsystem,
+                canEdit: true,
+            })
+
+            fireEvent.contextMenu(screen.getByTestId('tree-node-node-1').firstChild!)
+            const createItem = screen.getByTestId('context-create-system')
+            expect(createItem).toHaveAttribute('data-disabled')
+
+            fireEvent.click(createItem)
+            expect(onCreateSubsystem).not.toHaveBeenCalled()
+        })
+
+        it('disables all three actions when canEdit is false', () => {
+            const onCopySystem = jest.fn()
+            const onPasteSystem = jest.fn()
+            const onCreateSubsystem = jest.fn()
+            renderTreeNode({
+                onCopySystem,
+                onPasteSystem,
+                onCreateSubsystem,
+                copiedSystemUid: 'other',
+                canEdit: false,
+            })
+
+            fireEvent.contextMenu(screen.getByTestId('tree-node-node-1').firstChild!)
+
+            expect(screen.getByTestId('context-copy-system')).toHaveAttribute('data-disabled')
+            expect(screen.getByTestId('context-paste-system')).toHaveAttribute('data-disabled')
+            expect(screen.getByTestId('context-create-system')).toHaveAttribute('data-disabled')
+
+            fireEvent.click(screen.getByTestId('context-copy-system'))
+            fireEvent.click(screen.getByTestId('context-paste-system'))
+            fireEvent.click(screen.getByTestId('context-create-system'))
+            expect(onCopySystem).not.toHaveBeenCalled()
+            expect(onPasteSystem).not.toHaveBeenCalled()
+            expect(onCreateSubsystem).not.toHaveBeenCalled()
         })
     })
 })
