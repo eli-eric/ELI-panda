@@ -230,7 +230,7 @@ describe('CreateSubsystemDialog', () => {
             })
         })
         await waitFor(() => {
-            expect(selectLeaf).toHaveBeenCalledWith('new-uid', { name: 'Child' })
+            expect(selectLeaf).toHaveBeenCalledWith('new-uid')
         })
         await waitFor(() => {
             expect(onClose).toHaveBeenCalled()

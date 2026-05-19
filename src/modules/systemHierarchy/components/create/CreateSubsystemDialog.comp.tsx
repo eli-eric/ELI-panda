@@ -97,7 +97,9 @@ export const CreateSubsystemDialog: FC<CreateSubsystemDialogProps> = ({
         toast.promise(promise, {
             loading: fm({ id: message.systemHierarchy.create.creating }),
             success: result => {
-                selectLeaf(result.uid, { name: data.name })
+                // No optimistic hint: the mutation hook already seeded the
+                // system-detail cache with the full SystemDetail fragment.
+                selectLeaf(result.uid)
                 onClose?.()
                 return fm({ id: message.systemHierarchy.create.created })
             },

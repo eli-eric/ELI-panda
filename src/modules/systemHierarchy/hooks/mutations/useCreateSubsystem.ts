@@ -12,6 +12,7 @@ import {
     LEAVES_COUNT_QUERY_KEY,
     LEAVES_QUERY_KEY,
     RELATIONSHIP_GRAPH_QUERY_KEY,
+    SYSTEM_DETAIL_QUERY_KEY,
 } from '../../types/constants'
 import {
     buildCreateSubsystemPayload,
@@ -69,14 +70,22 @@ export const useCreateSubsystem = () => {
                 inherit: input.inherit,
             })
             const response = await mutateAsync({ input: [payload] })
-            const created = unmaskFragment(SystemDetailFragment, response.createSystems.systems[0])
+            const rawSystem = response.createSystems.systems[0]
+            const created = unmaskFragment(SystemDetailFragment, rawSystem)
+            // Seed the system-detail cache with the full SystemDetail returned by the
+            // mutation so the redirect target has every field on first render. Without
+            // this the consumer falls back to a minimal optimistic seed and shows blank
+            // fields until a manual refresh triggers a real fetch.
+            queryClient.setQueryData([SYSTEM_DETAIL_QUERY_KEY, created.uid], {
+                systems: [rawSystem],
+            })
             return {
                 uid: created.uid,
                 name: created.name,
                 systemLevel: created.systemLevel,
             }
         },
-        [mutateAsync, session?.user?.uid, session?.user?.facilityCode],
+        [mutateAsync, queryClient, session?.user?.uid, session?.user?.facilityCode],
     )
 
     return { createSubsystem, isPending }
