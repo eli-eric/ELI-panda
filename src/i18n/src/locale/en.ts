@@ -1484,6 +1484,20 @@ export const messages = {
             copied: 'System copied successfully',
             failedToCopy: 'Failed to copy system',
         },
+        create: {
+            menuItem: 'Create System',
+            dialogTitle: 'Create new system',
+            dialogDescription: 'Create a new subsystem under "{parentName}".',
+            inheritedFrom: 'Inherited from {parentName}',
+            submit: 'Create',
+            cancel: 'Cancel',
+            creating: 'Creating system...',
+            created: 'System created successfully',
+            saveFailed: 'Failed to create system',
+            validation: {
+                nameRequired: 'Name is required',
+            },
+        },
         toast: {
             saving: 'Saving...',
             saved: 'Saved successfully',
