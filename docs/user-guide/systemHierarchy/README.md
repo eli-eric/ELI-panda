@@ -15,7 +15,7 @@ The System Hierarchy module is the central place to browse, organize, and inspec
 | Persona | Role(s) | Can do |
 |---|---|---|
 | 👁️ **Viewer** | `systems-view` | Browse the tree, view details, view relationships, search and filter, view change history |
-| ✏️ **Editor / Admin** | `systems-edit` or `admin` | Everything in Viewer + edit fields, manage persons, manage relationships, view spare parts, copy systems, assign and move physical items |
+| ✏️ **Editor / Admin** | `systems-edit` or `admin` | Everything in Viewer + edit fields, manage persons, manage relationships, view spare parts, **create subsystems**, copy systems, assign and move physical items |
 
 > 🔮 **Coming soon — Phase 1: split between Editor and Admin**
 > - **Admin** will have exclusive edit on systems at `SYSTEM_DOMAIN` and `TECHNOLOGY_UNIT` levels (the strategic top of the tree).
@@ -63,6 +63,7 @@ When a system is selected for full detail view, a tabbed area replaces the leave
 - [Managing relationships](./workflows/managing-relationships.md) — the 9 engineering relationship types, viewing them in the list and the graph, creating and deleting edges.
 - [Managing spare parts](./workflows/managing-spare-parts.md) — read-only *Spare Parts* tab, how the spare-swap flow works conceptually, where assignments are made.
 - [Viewing change history](./workflows/viewing-change-history.md) — the *History* tab timeline and its filters.
+- [Creating systems](./workflows/creating-systems.md) — right-click a parent in the tree to create a new subsystem. Two-field dialog (name + level), inherits responsible/location/zone from the parent.
 - [Copying systems](./workflows/copying-systems.md) — copy/paste a system (and optionally its subtree) under a different parent.
 - [Managing physical items](./workflows/managing-physical-items.md) — assigning and moving the physical item attached to a system.
 
@@ -72,7 +73,6 @@ For moving a system to a different parent, see the **Systems Moving** module —
 
 - 🔮 **Permission Phase 1** — split `admin` (top-level system edits at `SYSTEM_DOMAIN`, `TECHNOLOGY_UNIT`) from `systems-edit` (lower levels at `KEY_SYSTEMS`, `SUBSYSTEMS_AND_PARTS`, `TRASH`). All derived actions scoped accordingly.
 - 🔮 **Permission Phase 2** — team-based edit enforcement (responsible-team membership required to edit subtree). DB structure pending.
-- 🔮 **System creation in Hierarchy** — entry point to create new systems will be added directly in this module.
 - 🔮 **Use Spare action in Hierarchy** — the spare-swap wizard (currently in a deprecated shared flow, feature-flagged off in production) will be brought into this module.
 - 🔮 **Drag-and-drop move at hierarchy level** — currently move lives in the separate Systems Moving module.
 
