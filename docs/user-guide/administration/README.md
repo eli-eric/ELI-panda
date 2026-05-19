@@ -80,7 +80,7 @@ For the facility-level role reference, see each module's *Access & Responsibilit
 
 ## Data model reference
 
-> 🔧 *This section is for engineers reading the docs in the repo. The Confluence generator strips it.*
+> 🔧 *This section is for engineers reading the docs in the repo. The wiki generator strips it.*
 >
 > All operations are GraphQL. Queries: `UsersQuery` (paginated list, `UserWhere` filter — `username_CONTAINS`), `UserQuery` (detail by uid), `GetRoles`, `GetFacilities`. Mutations: `CreateUsers(input: [UserCreateInput!]!)`, `UpdateUsers(where, update)`, `DeleteUsers(where)`. Password hashing uses `bcryptjs` at 12 salt rounds; `passwordToChange` is set to true on create and after a password reset. Session shape (`src/types/next-auth.d.ts`) carries `uid`, `email`, `fullName`, `facility`, `facilityCode`, `roles[]`, `apiAccessToken`. The complete role enum lives in `src/types/constants/roles.ts`.
 

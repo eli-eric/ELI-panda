@@ -63,7 +63,7 @@ For working *inside* a system (editing details, managing physical items, relatio
 
 ## Data model reference
 
-> 🔧 *This section is for engineers reading the docs in the repo. The Confluence generator strips it.*
+> 🔧 *This section is for engineers reading the docs in the repo. The wiki generator strips it.*
 >
 > The overview reads from the same `System` entity as the System Hierarchy. The flat list is served by the `/systems` endpoint and the CSV stream by `/systems/export-to-csv`. Filter inputs map to fields on `SystemFilter`. See `src/server/apollo/schema.graphql` for the full field shapes.
 

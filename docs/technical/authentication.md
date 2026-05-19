@@ -303,6 +303,6 @@ Local-env reading of `getServerSession` (`pages/api/graphql.ts:30`) leans on the
 
 ## Data model reference
 
-> 🔧 *This section is for engineers reading the docs in the repo. The Confluence/Wiki generator strips it.*
+> 🔧 *This section is for engineers reading the docs in the repo. The wiki generator strips it.*
 >
 > Authoritative entity definitions live in `src/server/apollo/schema.graphql`. Auth-relevant types: `User`, `Role`, `Employee`, `Facility`, and the `JWT @jwt` declaration at the top of the file. Session/JWT TypeScript augmentation lives in `src/types/next-auth.d.ts`.

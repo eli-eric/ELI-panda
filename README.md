@@ -67,3 +67,25 @@ The UI accesses data through the ELI PANDA API.
 
 More information is in the API repository README:
 [https://github.com/eli-eric/eli-panda-api/tree/main](https://github.com/eli-eric/eli-panda-api/tree/main)
+
+## Documentation
+
+Documentation lives in [`docs/`](./docs/) and is published to the GitHub Pages wiki on merge to `dev`.
+
+- [`docs/Home.md`](./docs/Home.md) — wiki landing page (entry point).
+- [`docs/user-guide/`](./docs/user-guide/README.md) — end-user documentation, one folder per module with a `README.md` overview and per-workflow pages under `workflows/`. See [`docs/user-guide/_template/`](./docs/user-guide/_template/) for the templates.
+- [`docs/technical/`](./docs/technical/README.md) — engineering reference: [`app-architecture.md`](./docs/technical/app-architecture.md), [`authentication.md`](./docs/technical/authentication.md), [`permissions-model.md`](./docs/technical/permissions-model.md), [`deployment-runbook.md`](./docs/technical/deployment-runbook.md), [`local-development.md`](./docs/technical/local-development.md), plus per-feature pages (e.g. [`systems-family/`](./docs/technical/systems-family/README.md), [`catalogue-and-items.md`](./docs/technical/catalogue-and-items.md), [`orders-and-order-items.md`](./docs/technical/orders-and-order-items.md)).
+- [`docs/CONTEXT.md`](./docs/CONTEXT.md) — cross-cutting domain glossary. Authoritative names; per-feature pages own long definitions.
+- [`docs/adr/`](./docs/adr/) — Architecture Decision Records. Append-only; copy [`0000-template.md`](./docs/adr/0000-template.md) to create one.
+- [`docs/implementation-plans/`](./docs/implementation-plans/) — historical implementation plans for larger features.
+
+### Updating docs when you ship a feature
+
+Two repo skills automate the recurring patterns. Trigger them from Claude Code (the agent will read the SKILL.md and apply the procedure):
+
+| When you ship… | Run this skill | What it does |
+|---|---|---|
+| A user-visible change (new workflow, dialog, button, validation, permission shift, or a "Coming soon" item is now real) | [`/update-user-guide`](./.agents/skills/update-user-guide/SKILL.md) | Adds or updates the right page under `docs/user-guide/<module>/`, refreshes the persona table and *Common workflows* links, drops fulfilled "Coming soon" bullets. |
+| A code-visible change (new public hook/store/mutation, module layout shift, resolved Open question, decision worth recording) | [`/update-technical-docs`](./.agents/skills/update-technical-docs/SKILL.md) | Updates the matching `docs/technical/<area>.md` (query/mutation tables, module map, flow sections), keeps `docs/CONTEXT.md` aligned, and prompts for an ADR when the decision is load-bearing. |
+
+Most features ship both surfaces — run both skills in the same PR so user and engineering docs land together. See each skill's SKILL.md for the full checklist and authoring conventions.

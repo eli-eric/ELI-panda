@@ -72,7 +72,7 @@ For where service types are *consumed* — adding a service line to an order —
 
 ## Data model reference
 
-> 🔧 *This section is for engineers reading the docs in the repo. The Confluence generator strips it.*
+> 🔧 *This section is for engineers reading the docs in the repo. The wiki generator strips it.*
 >
 > Endpoints: `GET /serviceTypeList` (list, key `serviceTypeList`), `GET /serviceType/<uid>` (detail, key `serviceType`), `POST /serviceType` (create), `PUT /serviceType/<uid>` (update), `DELETE /serviceType/<uid>` (delete). Property checkboxes are sourced from the linked catalogue category via the same hook the [Catalogue item](../catalogue/README.md) form uses (`useGroupDetails`). The list of selected property names is stored as `properties: string[]` on the service-type record.
 

@@ -75,7 +75,7 @@ For the read-only view of relationships on a single system (in either direction)
 
 ## Data model reference
 
-> 🔧 *This section is for engineers reading the docs in the repo. The Confluence generator strips it.*
+> 🔧 *This section is for engineers reading the docs in the repo. The wiki generator strips it.*
 >
 > Bulk-create is served by `POST /system/relationships/batch` (`systemRelationshipsBatch`). It accepts `sourceUids[]`, `targetUids[]`, and `relationshipType`, and returns `{ created, skipped, skippedDetails[] }`. Per-pair deletion uses the GraphQL `DeleteSystemRelationship` mutation with `SystemDisconnectInput`. Relationship definitions live in `src/modules/systemHierarchy/types/graph.ts` (`RELATIONSHIP_DEFINITIONS`). Spare-parts modals query `SystemsSpareParts` / `SystemSparePartsFor`.
 

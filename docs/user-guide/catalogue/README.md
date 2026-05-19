@@ -70,7 +70,7 @@ For the physical instances of a catalogue item see the [System Hierarchy](../sys
 
 ## Data model reference
 
-> 🔧 *This section is for engineers reading the docs in the repo. The Confluence generator strips it.*
+> 🔧 *This section is for engineers reading the docs in the repo. The wiki generator strips it.*
 >
 > Authoritative entity definitions live in `src/server/apollo/schema.graphql`. Look up `CatalogueItem`, `CatalogueCategory`, `CataloguePropertyGroup`, `CatalogueProperty`, `CatalogueItemDetailProperty`, and `Supplier` for full field shapes; the *related items* link is bi-directional (`relatedCatalogueItems` + `relatedCatalogueItemsFor`). The repo is open-source on GitHub.
 

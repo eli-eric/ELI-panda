@@ -80,7 +80,7 @@ The module surfaces **four pages** under the *Publications* sidebar group.
 
 ## Data model reference
 
-> 🔧 *This section is for engineers reading the docs in the repo. The Confluence generator strips it.*
+> 🔧 *This section is for engineers reading the docs in the repo. The wiki generator strips it.*
 >
 > Endpoints — Publications: `GET /publications` (list, key `publications`), `GET /publication?uid=<uid>` (detail), `POST /publication` / `PUT /publication?uid=<uid>` (create/update), `DELETE /publication?uid=<uid>`, `GET /generateUUID` (used for new-doc UID prep). RIV: `GET /publications/validate/riv` (validation, key `rivValidate`), `GET /publications/export/riv?year=<>&provider=<>&deliveryRef=<>` (XML stream). Researchers: `GET /researchers` (list), `GET /researcher?uid=<uid>` (detail), `POST /researcher` / `PUT /researcher?uid=<uid>` (create/update), `DELETE /researcher?uid=<uid>`. Grants: same shape with `/grant` and `/grants`. Linking is denormalised — `eliResearchers[]` and `grants[]` live directly inside the Publication payload. Form Zod schemas live in `src/modules/publication/form/` (`publicationPeerReviewedSchema`, `publicationOtherSchema`) and switch based on Media Type.
 

@@ -77,7 +77,7 @@ For where the delivered physical items end up — see *Managing physical items* 
 
 ## Data model reference
 
-> 🔧 *This section is for engineers reading the docs in the repo. The Confluence generator strips it.*
+> 🔧 *This section is for engineers reading the docs in the repo. The wiki generator strips it.*
 >
 > Endpoints: `GET /orders` (list, `orders` key), `GET /order/<uid>` (detail, `order` key), `POST/PUT /order` (create/update), `DELETE /order/<uid>`, `PUT /order/<uid>/orderline/<itemUid>/delivery` (per-line deliver with `{ isDelivered, serialNumber?, eun? }`), `PUT /order/<uid>/orderlines/delivery` (bulk deliver), and mirror endpoints for `serviceline(s)`. Status enums in `src/modules/orders/types/types.ts` (`ORDER_STATUS`, `DELIVERY_STATUS`). File attachments use `FILE_TYPE.ORDER` against the order's UID.
 

@@ -84,7 +84,7 @@ For per-system code generation (one system at a time, on-the-fly from a system's
 
 ## Data model reference
 
-> 🔧 *This section is for engineers reading the docs in the repo. The Confluence generator strips it.*
+> 🔧 *This section is for engineers reading the docs in the repo. The wiki generator strips it.*
 >
 > Endpoints: `GET /systems/system-codes` (overview, key `systemCodes`), `GET /systems/system-codes/preview` (preview, key `systemCodesPreview`, query params `zoneUid`, `systemTypeUid`, `batch`), `POST /systems/system-codes` (commit, key `systemCodesCreate`). UI batch cap is 25 (enforced in `types/constants.ts` as `BATCH_LIMIT`); Zod schema allows up to 100. Code-string composition uses the System Type's mask — see `src/modules/systemHierarchy/components/SystemCodeActions.comp.tsx` for the per-system generation path. Root-zone filter constant: `ONLY_ROOT_ZONES`.
 

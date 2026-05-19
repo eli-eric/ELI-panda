@@ -354,6 +354,6 @@ See the sequence diagram in [Data layer](#data-layer). The notable points: `getS
 
 ## Data model reference
 
-> 🔧 *This section is for engineers reading the docs in the repo. The Confluence/Wiki generator strips it.*
+> 🔧 *This section is for engineers reading the docs in the repo. The wiki generator strips it.*
 >
 > Authoritative entity definitions live in `src/server/apollo/schema.graphql`. JWT shape is the `JWT @jwt` type at the top of that file; per-entity authorization directives are inlined on each type. Generated TS types are in `src/types/gql/graphql.ts`.

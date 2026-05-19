@@ -80,7 +80,7 @@ For moving a system to a different parent, see the **Systems Moving** module —
 
 ## Data model reference
 
-> 🔧 *This section is for engineers reading the docs in the repo. The Confluence generator strips it.*
+> 🔧 *This section is for engineers reading the docs in the repo. The wiki generator strips it.*
 >
 > Authoritative entity definitions live in `src/server/apollo/schema.graphql`. Look up `System`, `Item`, `CatalogueItem`, `Order`, `Employee`, `Team`, and `Link` types for full field shapes and relationship directions. The repo is open-source on GitHub.
 

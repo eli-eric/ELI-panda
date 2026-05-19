@@ -62,7 +62,7 @@ For where these types are *consumed* — picking a type when editing a system, v
 
 ## Data model reference
 
-> 🔧 *This section is for engineers reading the docs in the repo. The Confluence generator strips it.*
+> 🔧 *This section is for engineers reading the docs in the repo. The wiki generator strips it.*
 >
 > The module is REST-backed. Groups: `GET /system/system-type-groups`, `POST /system/system-type-group`, `PUT /system/system-type-group/{uid}`. Types: `GET /system/system-type-group/{uid}/system-types`, `POST /system/system-type-group/{uid}/system-type`, `PUT /system/system-type-group/{groupUid}/system-type/{typeUid}`, `DELETE /system/system-type/{uid}`. Entity definitions live in `src/server/apollo/schema.graphql` (`SystemType`, `SystemTypeGroup`). Code generation uses the mask at `/system/systemCode` (called from the System Hierarchy detail page).
 

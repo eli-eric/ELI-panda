@@ -68,7 +68,7 @@ For where zones are *consumed* — see *Editing system details* in the [System H
 
 ## Data model reference
 
-> 🔧 *This section is for engineers reading the docs in the repo. The Confluence generator strips it.*
+> 🔧 *This section is for engineers reading the docs in the repo. The wiki generator strips it.*
 >
 > Endpoints: `GET /zones` (list, key `zones`), `GET /zone?uid=<uid>` (detail, key `zone`), `POST /zone` (create), `PUT /zone?uid=<uid>` (update), `DELETE /zone?uid=<uid>`, `POST /zones/import` (multipart CSV). GraphQL type: `Zone { uid, name, code, notes, parentZone, hasSubzoneZones[], zonesHasSubzone[] }` with `HAS_SUBZONE` relationship in both directions. Parent-zone picker on the form filters to root zones only (`parentZone == null`). Import result: `{ created: number, skipped: number, errors: string[] }`.
 
