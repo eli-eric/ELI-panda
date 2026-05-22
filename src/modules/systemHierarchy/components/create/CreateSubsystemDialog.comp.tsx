@@ -225,6 +225,7 @@ export const CreateSubsystemDialog: FC<CreateSubsystemDialogProps> = ({
                                 <SelectTrigger
                                     id="create-subsystem-level"
                                     data-testid="create-subsystem-level"
+                                    className="w-full"
                                 >
                                     <SelectValue>
                                         {field.value &&
