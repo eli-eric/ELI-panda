@@ -16,6 +16,7 @@ export const useCreateSubsystemAction = () => {
 
     const handleCreateSubsystem = useCallback(
         (parentUid: string, parentName: string, parentLevel: SystemLevel) => {
+            if (!canEdit) return
             const modalId = `create-subsystem-${parentUid}`
             openModal('dialog', {
                 id: modalId,
@@ -34,8 +35,8 @@ export const useCreateSubsystemAction = () => {
                 },
             })
         },
-        [openModal, closeModal, fm],
+        [canEdit, openModal, closeModal, fm],
     )
 
-    return { canEdit, handleCreateSubsystem }
+    return { handleCreateSubsystem }
 }
