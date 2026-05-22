@@ -92,7 +92,7 @@ After creation, the right sidebar opens the new system's *Detail* tab — finish
 
 - **Pick the parent carefully.** The system level options are derived from the parent's level — picking the wrong parent restricts what you can create. If the picker doesn't show the level you want, you probably need a different parent.
 - **The *Create System* item is disabled under `TRASH` nodes.** Trash is a holding area; new systems can't be born there.
-- **The action is hidden in read-only mode.** Without `systems-edit`, the item is rendered but disabled — same treatment as Copy / Paste.
+- **The action is disabled in read-only mode.** Without `systems-edit`, the item is rendered but disabled — same treatment as Copy / Paste.
 - **Inheritance is a one-shot copy at creation.** Later changes to the parent's responsible/location/zone do *not* propagate to children — you'd need to update them individually.
 - **Right-click anywhere on a node's row.** The whole row is the context-menu trigger, not just the icon.
 
