@@ -1491,12 +1491,21 @@ export const messages = {
             inheritedFrom: 'Inherited from {parentName}',
             submit: 'Create',
             cancel: 'Cancel',
+            close: 'Close',
             creating: 'Creating system...',
             created: 'System created successfully',
             saveFailed: 'Failed to create system',
+            noAllowedLevels: 'No system levels can be created under this parent.',
             validation: {
                 nameRequired: 'Name is required',
             },
+        },
+        systemLevels: {
+            SYSTEM_DOMAIN: 'System domain',
+            TECHNOLOGY_UNIT: 'Technology unit',
+            KEY_SYSTEMS: 'Key systems',
+            SUBSYSTEMS_AND_PARTS: 'Subsystems and parts',
+            TRASH: 'Trash',
         },
         toast: {
             saving: 'Saving...',

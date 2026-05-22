@@ -146,7 +146,12 @@ export const CreateSubsystemDialog: FC<CreateSubsystemDialogProps> = ({
                                 id="create-subsystem-level"
                                 data-testid="create-subsystem-level"
                             >
-                                <SelectValue />
+                                <SelectValue>
+                                    {field.value &&
+                                        fm({
+                                            id: message.systemHierarchy.systemLevels[field.value],
+                                        })}
+                                </SelectValue>
                             </SelectTrigger>
                             <SelectContent>
                                 {allowedLevels.map(level => (
@@ -155,7 +160,7 @@ export const CreateSubsystemDialog: FC<CreateSubsystemDialogProps> = ({
                                         value={level}
                                         data-testid={`create-subsystem-level-option-${level}`}
                                     >
-                                        {level}
+                                        {fm({ id: message.systemHierarchy.systemLevels[level] })}
                                     </SelectItem>
                                 ))}
                             </SelectContent>

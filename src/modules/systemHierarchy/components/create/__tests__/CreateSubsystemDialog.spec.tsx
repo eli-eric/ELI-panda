@@ -48,6 +48,13 @@ const messages: Record<string, string> = {
     'systemHierarchy.create.saveFailed': 'Failed',
     'systemHierarchy.create.inheritedFrom': 'Inherited from {parentName}',
     'systemHierarchy.create.validation.nameRequired': 'Name is required',
+    'systemHierarchy.create.noAllowedLevels': 'No system levels can be created under this parent.',
+    'systemHierarchy.create.close': 'Close',
+    'systemHierarchy.systemLevels.SYSTEM_DOMAIN': 'System domain',
+    'systemHierarchy.systemLevels.TECHNOLOGY_UNIT': 'Technology unit',
+    'systemHierarchy.systemLevels.KEY_SYSTEMS': 'Key systems',
+    'systemHierarchy.systemLevels.SUBSYSTEMS_AND_PARTS': 'Subsystems and parts',
+    'systemHierarchy.systemLevels.TRASH': 'Trash',
 }
 
 const parentSystem = {
@@ -128,9 +135,7 @@ describe('CreateSubsystemDialog', () => {
     it('preselects the first allowed level on the Select trigger', () => {
         // KeySystems allows: KeySystems, SubsystemsAndParts, Trash — first is KeySystems
         renderDialog()
-        expect(screen.getByTestId('create-subsystem-level')).toHaveTextContent(
-            SystemLevel.KeySystems,
-        )
+        expect(screen.getByTestId('create-subsystem-level')).toHaveTextContent('Key systems')
     })
 
     it('renders Select as disabled with single preselected level under SystemDomain', () => {
@@ -138,7 +143,7 @@ describe('CreateSubsystemDialog', () => {
 
         const trigger = screen.getByTestId('create-subsystem-level')
         expect(trigger).toBeDisabled()
-        expect(trigger).toHaveTextContent(SystemLevel.TechnologyUnit)
+        expect(trigger).toHaveTextContent('Technology unit')
     })
 
     it('disables submit while parent detail is loading', () => {
