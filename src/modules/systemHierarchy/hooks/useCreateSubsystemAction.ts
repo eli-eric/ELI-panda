@@ -18,6 +18,9 @@ export const useCreateSubsystemAction = () => {
         (parentUid: string, parentName: string, parentLevel: SystemLevel) => {
             if (!canEdit) return
             const modalId = `create-subsystem-${parentUid}`
+            const parentLevelLabel = fm({
+                id: message.systemHierarchy.systemLevels[parentLevel],
+            })
             openModal('dialog', {
                 id: modalId,
                 component: CreateSubsystemDialog,
@@ -25,7 +28,7 @@ export const useCreateSubsystemAction = () => {
                     title: fm({ id: message.systemHierarchy.create.dialogTitle }),
                     description: fm(
                         { id: message.systemHierarchy.create.dialogDescription },
-                        { parentName },
+                        { parentName, parentLevelLabel },
                     ),
                     size: 'm',
                     parentUid,

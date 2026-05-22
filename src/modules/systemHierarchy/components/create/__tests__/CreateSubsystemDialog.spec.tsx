@@ -46,7 +46,13 @@ const messages: Record<string, string> = {
     'systemHierarchy.create.creating': 'Creating...',
     'systemHierarchy.create.created': 'Created',
     'systemHierarchy.create.saveFailed': 'Failed',
-    'systemHierarchy.create.inheritedFrom': 'Inherited from {parentName}',
+    'systemHierarchy.create.inheritedTitle': 'Inherited at creation',
+    'systemHierarchy.create.inheritedHelp':
+        'Copied from "{parentName}". You can change these later.',
+    'systemHierarchy.create.inheritedNotSet': 'Not set on parent',
+    'systemHierarchy.create.namePlaceholder': 'e.g. Cooling pump',
+    'systemHierarchy.create.onlyOneLevelHint':
+        'Only "{levelLabel}" can be created under {parentLevelLabel}.',
     'systemHierarchy.create.validation.nameRequired': 'Name is required',
     'systemHierarchy.create.noAllowedLevels': 'No system levels can be created under this parent.',
     'systemHierarchy.create.close': 'Close',
@@ -138,12 +144,13 @@ describe('CreateSubsystemDialog', () => {
         expect(screen.getByTestId('create-subsystem-level')).toHaveTextContent('Key systems')
     })
 
-    it('renders Select as disabled with single preselected level under SystemDomain', () => {
+    it('renders a read-only level badge (no Select) when only one level is allowed', () => {
         renderDialog({ parentLevel: SystemLevel.SystemDomain })
 
-        const trigger = screen.getByTestId('create-subsystem-level')
-        expect(trigger).toBeDisabled()
-        expect(trigger).toHaveTextContent('Technology unit')
+        expect(screen.queryByTestId('create-subsystem-level')).not.toBeInTheDocument()
+        expect(screen.getByTestId('create-subsystem-level-badge')).toHaveTextContent(
+            'Technology unit',
+        )
     })
 
     it('disables submit while parent detail is loading', () => {
@@ -160,8 +167,8 @@ describe('CreateSubsystemDialog', () => {
         expect(screen.getByTestId('create-subsystem-submit')).toBeDisabled()
     })
 
-    it('renders the inherited section when parent has responsible/location/zone, omits when all null', () => {
-        // First render: parent with inherited fields
+    it('always renders all three inherited rows; shows values when set and "Not set on parent" when null', () => {
+        // First render: parent with all inherited fields populated
         mockUseSystemDetail.mockReturnValue({
             system: {
                 ...parentSystem,
@@ -176,12 +183,16 @@ describe('CreateSubsystemDialog', () => {
         } as any)
 
         const { unmount } = renderDialog()
-        expect(screen.getByTestId('create-subsystem-inherited')).toHaveTextContent('Alice')
-        expect(screen.getByTestId('create-subsystem-inherited')).toHaveTextContent('Hall A')
-        expect(screen.getByTestId('create-subsystem-inherited')).toHaveTextContent('Zone 1')
+        expect(screen.getByTestId('create-subsystem-inherited-responsible')).toHaveTextContent(
+            'Alice',
+        )
+        expect(screen.getByTestId('create-subsystem-inherited-location')).toHaveTextContent(
+            'Hall A',
+        )
+        expect(screen.getByTestId('create-subsystem-inherited-zone')).toHaveTextContent('Zone 1')
         unmount()
 
-        // Second render: parent without inherited fields
+        // Second render: parent with no inherited fields — rows still render with "Not set on parent"
         mockUseSystemDetail.mockReturnValue({
             system: parentSystem,
             isLoading: false,
@@ -191,7 +202,16 @@ describe('CreateSubsystemDialog', () => {
         } as any)
 
         renderDialog()
-        expect(screen.queryByTestId('create-subsystem-inherited')).not.toBeInTheDocument()
+        expect(screen.getByTestId('create-subsystem-inherited')).toBeInTheDocument()
+        expect(screen.getByTestId('create-subsystem-inherited-responsible')).toHaveTextContent(
+            'Not set on parent',
+        )
+        expect(screen.getByTestId('create-subsystem-inherited-location')).toHaveTextContent(
+            'Not set on parent',
+        )
+        expect(screen.getByTestId('create-subsystem-inherited-zone')).toHaveTextContent(
+            'Not set on parent',
+        )
     })
 
     it('on successful submit calls createSubsystem with inherited uids and navigates via selectLeaf', async () => {
