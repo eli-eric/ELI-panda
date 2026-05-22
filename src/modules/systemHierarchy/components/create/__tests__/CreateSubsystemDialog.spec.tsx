@@ -242,6 +242,17 @@ describe('CreateSubsystemDialog', () => {
         })
     })
 
+    it('renders the empty state when parent has no allowed child levels (Trash)', () => {
+        const onClose = jest.fn()
+        renderDialog({ parentLevel: SystemLevel.Trash, onClose })
+
+        expect(screen.getByTestId('create-subsystem-empty')).toHaveTextContent(
+            'No system levels can be created under this parent.',
+        )
+        expect(screen.queryByTestId('create-subsystem-dialog')).not.toBeInTheDocument()
+        expect(createSubsystem).not.toHaveBeenCalled()
+    })
+
     it('on mutation rejection does not navigate and does not close the modal', async () => {
         createSubsystem.mockRejectedValue(new Error('boom'))
         const onClose = jest.fn()

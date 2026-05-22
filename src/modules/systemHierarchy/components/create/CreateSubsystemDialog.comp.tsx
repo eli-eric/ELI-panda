@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
 import { message } from '@/i18n/src/messages'
-import type { SystemLevel } from '@/types/gql/graphql'
+import { SystemLevel } from '@/types/gql/graphql'
 
 import { useCreateSubsystem } from '../../hooks/mutations/useCreateSubsystem'
 import { useSystemDetail } from '../../hooks/queries/useSystemDetail'
@@ -57,9 +57,16 @@ export const CreateSubsystemDialog: FC<CreateSubsystemDialogProps> = ({
 
     const allowedLevels = useMemo(() => getAllowedChildSystemLevels(parentLevel), [parentLevel])
     const onlyOneLevel = allowedLevels.length === 1
+    const hasNoAllowedLevels = allowedLevels.length === 0
     const schema = useMemo(
-        () => buildSchema(allowedLevels, fm({ id: message.systemHierarchy.create.validation.nameRequired })),
-        [allowedLevels, fm],
+        () =>
+            hasNoAllowedLevels
+                ? z.object({ name: z.string(), systemLevel: z.nativeEnum(SystemLevel) })
+                : buildSchema(
+                      allowedLevels,
+                      fm({ id: message.systemHierarchy.create.validation.nameRequired }),
+                  ),
+        [allowedLevels, fm, hasNoAllowedLevels],
     )
 
     const {
@@ -108,6 +115,21 @@ export const CreateSubsystemDialog: FC<CreateSubsystemDialogProps> = ({
 
         return promise.catch(() => undefined)
     })
+
+    if (hasNoAllowedLevels) {
+        return (
+            <div className="space-y-4" data-testid="create-subsystem-empty">
+                <p className="text-sm text-muted-foreground">
+                    {fm({ id: message.systemHierarchy.create.noAllowedLevels })}
+                </p>
+                <div className="flex justify-end pt-2">
+                    <Button type="button" variant="outline" onClick={onClose}>
+                        {fm({ id: message.systemHierarchy.create.close })}
+                    </Button>
+                </div>
+            </div>
+        )
+    }
 
     return (
         <form onSubmit={onSubmit} className="space-y-4" data-testid="create-subsystem-dialog">
