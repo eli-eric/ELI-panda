@@ -70,7 +70,10 @@ export const useCreateSubsystem = () => {
                 inherit: input.inherit,
             })
             const response = await mutateAsync({ input: [payload] })
-            const rawSystem = response.createSystems.systems[0]
+            const rawSystem = response.createSystems?.systems?.[0]
+            if (!rawSystem) {
+                throw new Error('Create system response did not return a created system')
+            }
             const created = unmaskFragment(SystemDetailFragment, rawSystem)
             // Seed the system-detail cache with the full SystemDetail returned by the
             // mutation so the redirect target has every field on first render. Without

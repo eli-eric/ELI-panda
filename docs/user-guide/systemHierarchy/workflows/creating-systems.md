@@ -50,12 +50,12 @@ The dialog enforces this — the *System level* picker only shows allowed values
 
 4. **Pick the system level.** Only levels valid for the parent appear in the picker (see [Allowed parent → child levels](#allowed-parent--child-levels)). When only one is allowed, this field is preselected and disabled.
 
-5. **Review the *Inherited from \<parent>* section** (if present). It shows the values the new system will automatically inherit from the parent:
+5. **Review the *Inherited at creation* section.** Always visible, it lists the three fields the new system inherits from the parent:
    - **Responsible** — the parent's responsible person.
    - **Location** — the parent's location.
    - **Zone** — the parent's zone.
 
-   These rows are informational, not editable in the dialog. If the parent has none of the three, the section is hidden entirely. You can change inherited values later on the new system's *Detail* tab.
+   Each row shows the parent's value if set, or *Not set on parent* otherwise. The rows are informational, not editable in the dialog — you can change inherited values later on the new system's *Detail* tab.
 
 6. **Click *Create*.**
    A toast appears: *Creating system…* → *System created successfully* (or an error toast on failure).
