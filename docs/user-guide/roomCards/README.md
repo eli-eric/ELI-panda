@@ -85,7 +85,7 @@ A single long form composed of six stacked cards:
 
 ## Data model reference
 
-> 🔧 *This section is for engineers reading the docs in the repo. The Confluence generator strips it.*
+> 🔧 *This section is for engineers reading the docs in the repo. The wiki generator strips it.*
 >
 > Queries: `RoomCardsQuery` (list), `RoomCardQuery` (detail by uid), `RoomCardContactsHallQuery` / `RoomCardContactsDeptQuery` / `RoomCardTeamsQuery` / `RoomCardLocationsQuery` (per-section subqueries). Mutations: `CreateRoomCards`, `UpdateRoomCards`, `UpdateOperationalStateMutation` (separate so the audit log captures previous/new state), Connect/Disconnect mutations for contacts, teams, and locations. Enums (in the schema): `RoomCardStatus`, `OperationalState`, `PurityClass`, `PrescribedClothing`, `CleaningScheduleDay`. See `src/server/apollo/schema.graphql`.
 

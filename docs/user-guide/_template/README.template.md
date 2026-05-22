@@ -5,7 +5,7 @@ Template for a per-module README — the parent page in the user guide for one f
 
 Audience: hybrid engineering/business. The README sets the stage and links out to per-workflow pages. Keep it scannable.
 
-This file maps to one Confluence page (the module's parent). Each workflow under `workflows/` is a separate child page.
+This file maps to one wiki page (the module's parent). Each workflow under `workflows/` is a separate child page.
 -->
 
 ## Overview
@@ -74,7 +74,7 @@ Cross-module workflow references go to the [user guide index](../README.md).
 
 ## Data model reference
 
-> 🔧 *This section is for engineers reading the docs in the repo. The Confluence generator strips it.*
+> 🔧 *This section is for engineers reading the docs in the repo. The wiki generator strips it.*
 >
 > Authoritative entity definitions live in `src/server/apollo/schema.graphql`. Look up the relevant types for full field shapes and relationship directions. The repo is open-source on GitHub.
 

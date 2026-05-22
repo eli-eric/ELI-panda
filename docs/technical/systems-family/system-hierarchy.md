@@ -20,6 +20,7 @@ src/modules/systemHierarchy/
 │   ├── history/                         — change-history timeline
 │   ├── graph/                           — React Flow relationship graph
 │   ├── copy/                            — Copy / Paste dialog
+│   ├── create/                          — Create Subsystem dialog (right-click → Create System)
 │   ├── relationships/                   — relationships tab visualisation
 │   └── shared/                          — small reusables
 ├── hooks/
@@ -92,6 +93,7 @@ The leaves panel toggles between **Tree View** (the default `LeavesTable`) and *
 | `useSystemFieldUpdate` | PATCH a single field on a `System` — used by inline edit. Calls `updatedByResolver` for audit. |
 | `useItemFieldUpdate` | PATCH a single field on the attached `Item` |
 | `useSystemCopy` | Calls REST endpoint `system/<uid>/copy` — server orchestrates the recursive copy |
+| `useCreateSubsystem` | `mutation CreateSystems` via `useGraphQLMutation`. Payload assembled by the pure `utils/buildCreateSubsystemPayload`, including `parentSystem.connect`, parent-inherited `responsible/location/zone`, and the required `updatedBy.connect[edge.action=Insert]` so `updatedByResolver` writes a history edge. On success seeds `[SYSTEM_DETAIL_QUERY_KEY, newUid]` with the full SystemDetail fragment returned by the server, then invalidates `HIERARCHY`, `LEAVES`, `LEAVES_COUNT`, and `RELATIONSHIP_GRAPH` keys. |
 | `useSystemCodeGenerate` | Generate a code based on type + level + ancestry |
 | `useSystemCodeClear` | Clear a previously generated code |
 | `useDeleteRelationship` | Remove one of the 8 engineering edges |
@@ -154,6 +156,30 @@ The tabbed detail surface lives under `components/tabs/`:
 | History | `HistoryTab.cont.tsx` | `WAS_UPDATED_BY` timeline + filters |
 | Graph | `GraphTab.cont.tsx` | React Flow detail graph for this system |
 
+## Create Subsystem
+
+User-facing companion: [Creating systems](../../user-guide/systemHierarchy/workflows/creating-systems.md).
+
+The right-click context menu on a tree node offers **Create System** alongside Copy / Paste. The orchestrator is `hooks/useCreateSubsystemAction.ts` — it mirrors `useSystemCopyPaste`: gated by `usePermission([ROLE.SYSTEM_EDIT])`, opens `CreateSubsystemDialog` through `useDynamicModalStore` with a stable id `create-subsystem-${parentUid}`.
+
+Parent → allowed-child rules are a pure lookup table in `utils/systemLevelRules.ts`:
+
+| Parent level | Allowed child levels |
+|---|---|
+| `SystemDomain` | `[TechnologyUnit]` |
+| `TechnologyUnit` | `[TechnologyUnit, KeySystems, Trash]` |
+| `KeySystems` | `[KeySystems, SubsystemsAndParts, Trash]` |
+| `SubsystemsAndParts` | `[SubsystemsAndParts, Trash]` |
+| `Trash` | `[]` — `canCreateUnder(Trash) === false` |
+
+`TreeNode` calls `canCreateUnder(node.systemLevel)` to disable the menu item, and the dialog's *System level* `Select` is filtered by `getAllowedChildSystemLevels(parentLevel)` (preselected + read-only when only one option remains).
+
+The dialog reads the parent via `useSystemDetail(parentUid)` to surface the inherited `responsible`/`location`/`zone` values as a read-only block, then passes their uids into `useCreateSubsystem` so the mutation payload includes them. Submit is disabled while the parent fetch is in flight.
+
+After the mutation resolves, the dialog calls `selectLeaf(newUid)` **without** an optimistic hint — the mutation hook has already written the full `SystemDetail` fragment into the system-detail query cache, so the detail page renders every field on first navigation (a minimal hint would otherwise stick because `primeSystemDetailCache`'s background `fetchQuery` is a no-op under the 60 s `staleTime`).
+
+`TreeNode` also takes a `canEdit` prop and a `onCreateSubsystem(parentUid, parentName, parentLevel)` callback. Permission gating is now uniform — Copy, Paste, and Create System are **always rendered** and `disabled` based on `canEdit` (plus their per-action rule: `!canPaste` for paste, `!canCreateUnder(level)` for create). The previous "hide handlers when no edit permission" behaviour in `SystemTree.cont` was dropped in favour of always-render-disabled for better discoverability.
+
 ## Copy / Paste
 
 The copy-paste flow lives in `components/copy/`. Buffer: `useHierarchyStore.copiedSystemUid`. The right-click context menu on a tree node or graph node offers **Copy System** (sets the buffer) and **Paste System** (opens the dialog).
@@ -193,10 +219,10 @@ The leaves filter sheet (`components/filters/`) is a multi-field RHF form persis
 Unit coverage under `__tests__/` is heaviest in:
 
 - `types/__tests__/` — schema parsing.
-- `utils/__tests__/` — tree search, graph layout, filter predicates, change-builder.
+- `utils/__tests__/` — tree search, graph layout, filter predicates, change-builder, **parent→child level rules** (`systemLevelRules.spec.ts`), **create-subsystem payload builder** (`buildCreateSubsystemPayload.spec.ts` — locks the `updatedBy[Insert]` audit edge).
 - `hooks/queries/__tests__/` — `primeSystemDetailCache.test.ts` (the contract above), `useSystemLeaves.test.ts`, `useSystemLeavesCount.test.ts`.
 - `hooks/mutations/__tests__/` — `useSystemFieldUpdate.spec.ts`.
-- `components/{tree,leaves,filters,graph,detail,copy,shared,tabs}/__tests__/`.
+- `components/{tree,leaves,filters,graph,detail,copy,create,shared,tabs}/__tests__/`.
 
 ## Deprecated / legacy
 

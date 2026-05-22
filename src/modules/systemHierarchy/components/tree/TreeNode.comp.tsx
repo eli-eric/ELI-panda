@@ -11,11 +11,13 @@ import {
 } from '@/components/ui/context-menu'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
+import type { SystemLevel } from '@/types/gql/graphql'
 import { highlightText } from '@/utils'
 import { getFontBySystemLevel } from '@/utils/systemLevel'
 
 import { useSystemLeavesCount } from '../../hooks/queries/useSystemLeavesCount'
 import type { HierarchyNode } from '../../types'
+import { canCreateUnder } from '../../utils/systemLevelRules'
 
 interface TreeNodeProps {
     node: HierarchyNode
@@ -27,8 +29,10 @@ interface TreeNodeProps {
     children?: React.ReactNode
     search?: string
     copiedSystemUid?: string | null
+    canEdit?: boolean
     onCopySystem?: (uid: string) => void
     onPasteSystem?: (uid: string) => void
+    onCreateSubsystem?: (parentUid: string, parentName: string, parentLevel: SystemLevel) => void
 }
 
 export const TreeNode: FC<TreeNodeProps> = ({
@@ -41,8 +45,10 @@ export const TreeNode: FC<TreeNodeProps> = ({
     children,
     search,
     copiedSystemUid,
+    canEdit = true,
     onCopySystem,
     onPasteSystem,
+    onCreateSubsystem,
 }) => {
     const { formatMessage: fm } = useIntl()
     const hasChildren = node.children.length > 0
@@ -63,7 +69,8 @@ export const TreeNode: FC<TreeNodeProps> = ({
     }, [node.uid, onSelect])
 
     const canPaste = !!copiedSystemUid && copiedSystemUid !== node.uid
-    const hasContextMenu = !!onCopySystem || !!onPasteSystem
+    const canCreate = canCreateUnder(node.systemLevel)
+    const hasContextMenu = !!onCopySystem || !!onPasteSystem || !!onCreateSubsystem
 
     const nodeContent = (
         <div
@@ -102,9 +109,21 @@ export const TreeNode: FC<TreeNodeProps> = ({
                 <ContextMenu>
                     <ContextMenuTrigger asChild>{nodeContent}</ContextMenuTrigger>
                     <ContextMenuContent>
+                        {onCreateSubsystem && (
+                            <ContextMenuItem
+                                onSelect={() =>
+                                    onCreateSubsystem(node.uid, node.name, node.systemLevel)
+                                }
+                                disabled={!canEdit || !canCreate}
+                                data-testid="context-create-system"
+                            >
+                                {fm({ id: message.systemHierarchy.create.menuItem })}
+                            </ContextMenuItem>
+                        )}
                         {onCopySystem && (
                             <ContextMenuItem
                                 onSelect={() => onCopySystem(node.uid)}
+                                disabled={!canEdit}
                                 data-testid="context-copy-system"
                             >
                                 {fm({ id: message.systemHierarchy.copy.copySystem })}
@@ -113,7 +132,7 @@ export const TreeNode: FC<TreeNodeProps> = ({
                         {onPasteSystem && (
                             <ContextMenuItem
                                 onSelect={() => onPasteSystem(node.uid)}
-                                disabled={!canPaste}
+                                disabled={!canEdit || !canPaste}
                                 data-testid="context-paste-system"
                             >
                                 {fm({ id: message.systemHierarchy.copy.pasteSystem })}

@@ -51,7 +51,7 @@ Workflow pages are designed to stand on their own — you can land on one direct
 - **Audience:** engineers and technicians who actually work with the systems being documented. Engineering-precise language is fine where it helps; access and responsibility sections stay user-friendly.
 - **Personas:** every workflow declares which personas (👁️ Viewer / ✏️ Editor / Admin) can perform it. See each module's *Access & Responsibilities* section for what those personas are.
 - **UI labels** in step instructions match the English UI.
-- **Screenshots and videos** are recorded during the Confluence publishing stage. Placeholder boxes in the Markdown describe what the missing media should show.
+- **Screenshots and videos** are recorded during the wiki publishing stage. Placeholder boxes in the Markdown describe what the missing media should show.
 
 ## Templates
 

@@ -422,6 +422,6 @@ The schema work is blocked on the data structure for "team membership" — both 
 
 ## Data model reference
 
-> 🔧 *This section is for engineers reading the docs in the repo. The Confluence/Wiki generator strips it.*
+> 🔧 *This section is for engineers reading the docs in the repo. The wiki generator strips it.*
 >
 > Authoritative entity definitions live in `src/server/apollo/schema.graphql`. Permission-relevant types: `JWT @jwt`, `User`, `Role`, `Team`, `Employee`, `Facility`, and the `System`/`User` `@authorization` blocks (`schema.graphql:296-305` and `schema.graphql:496-505`). The role enum lives in `src/types/constants/roles.ts`; route/role mapping in `src/lib/navigation/config.ts`.

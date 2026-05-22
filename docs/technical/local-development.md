@@ -376,6 +376,6 @@ For JetBrains IDEs, enable the *Prettier* and *ESLint* integrations and point th
 
 ## Data model reference
 
-> 🔧 *This section is for engineers reading the docs in the repo. The Confluence/Wiki generator strips it.*
+> 🔧 *This section is for engineers reading the docs in the repo. The wiki generator strips it.*
 >
 > The schema lives at `src/server/apollo/schema.graphql`; generated TypeScript at `src/types/gql/`. Convention skill prompts live under `.claude/skills/`. Repo-level conventions live in the root `CLAUDE.md`.

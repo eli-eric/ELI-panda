@@ -262,6 +262,6 @@ Two `persist`ed stores mean expansion state and graph layout survive navigation 
 
 ## Data model reference
 
-> 🔧 *This section is for engineers reading the docs in the repo. The Confluence/Wiki generator strips it.*
+> 🔧 *This section is for engineers reading the docs in the repo. The wiki generator strips it.*
 >
 > Authoritative entity definitions live in `src/server/apollo/schema.graphql`. Systems-family types: `System`, `SystemInterface`, `ParentPathItem`, `SystemLevel`, `SystemType`, `SystemTypeGroup`, `SystemAttribute`, `SystemImportance`, `SystemCriticality`, `Link`, `Item`, `IsSpareFor`, `wasUpdatedBy`, `Actions`. Generated TS types in `src/types/gql/graphql.ts`. The relationship-type registry is in `src/modules/systemHierarchy/types/graph.ts` (`RELATIONSHIP_DEFINITIONS`).

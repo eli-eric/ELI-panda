@@ -65,7 +65,7 @@ For renaming, changing the level, the type, or other system attributes — see *
 
 ## Data model reference
 
-> 🔧 *This section is for engineers reading the docs in the repo. The Confluence generator strips it.*
+> 🔧 *This section is for engineers reading the docs in the repo. The wiki generator strips it.*
 >
 > The move is implemented by a custom Neo4j resolver (`MoveSystemMutation`) that, in one transaction: disconnects any existing `HAS_SUBSYSTEM` edge into the source, creates a new `HAS_SUBSYSTEM` from the destination, and adds a `WAS_MOVED_FROM` edge to the prior parent carrying `timestamp` and `userUid`. Edits to other fields go through `UpdateSystemMovingMutation` and are committed *before* the move (the dialog runs both mutations sequentially). See `src/server/apollo/resolvers/moveSystemResolver.ts`.
 

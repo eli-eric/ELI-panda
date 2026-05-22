@@ -96,7 +96,7 @@ For codebooks managed by their own module (System Type Edit, Catalogue Categorie
 
 ## Data model reference
 
-> 🔧 *This section is for engineers reading the docs in the repo. The Confluence generator strips it.*
+> 🔧 *This section is for engineers reading the docs in the repo. The wiki generator strips it.*
 >
 > Endpoints: `GET /codebooks?editable=true` (sidebar list, key `codebooks`), `GET /codebook/<TYPE>` (values, key `codebook`), `POST /codebook/<TYPE>` (create, body `{ name }`), `PUT /codebook/<TYPE>/<uid>` (update, body `{ uid, name, code? }`), `DELETE /codebook/<TYPE>/<uid>`. Enum of types in `src/types/constants/codebook.ts`. Value shape (`CodebookType`): `{ uid, name, code?, additionalData?, systemLevel? }`. Edit role is read from `metadata.roleEdit` on the codebook response and overrides the page-level `admin` gate where present.
 
