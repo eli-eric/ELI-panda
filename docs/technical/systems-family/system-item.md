@@ -99,7 +99,7 @@ Both stores are local-only — they reset on navigation.
 Each lives in its own subfolder:
 
 - `components/subsystems/` — flat list of children for the current system, with quick navigation.
-- `components/spare-parts/` — read-only list of systems flagged as spares *for* this system, with coverage badges.
+- `components/spare-parts/` — list of systems flagged as spares *for* this system, with coverage badges and per-row **Use** + **Remove** actions (the original home of the `useSpareDialog` + `SparePartsActionsCell` pattern that systemHierarchy now mirrors). The Use button is feature-flag-gated by `enableSparePartsAssignment`.
 - `components/spare-for/` — the inverse: where this system is a spare.
 
 All three reuse `PandaTableV2` and the shared cell renderers from `src/modules/shared/system/`.
@@ -135,7 +135,6 @@ Cross-module ownership: the *graph* visualisation lives here, but the *editing* 
 ## 🔮 Planned
 
 - A unified system-edit surface that supersedes both the right-sidebar form in Hierarchy and the page form here. See family-level [Maintenance recommendations](./README.md#maintenance-recommendations).
-- Use Spare action UI (currently dormant in a deprecated shared flow) will land somewhere in this module or in Hierarchy.
 
 ## Open questions
 

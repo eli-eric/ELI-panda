@@ -108,7 +108,7 @@ Only the *which system holds this item* assignment changes.
 - **Service history travels with the item**, not with the system. If you move an item, the destination system's *History* timeline picks up the move event; the item's full service log stays attached to the item itself in the Items module.
 - **Filter by EUN or serial number** in the leaves panel ([Searching and filtering](./searching-and-filtering.md)) when you're trying to track down which system currently holds a specific piece of hardware.
 - **An item-usage change** (in use → in storage, etc.) is done in the Catalogue / Items module, not here. After a move you may also want to update usage there.
-- **Use the *Use Spare* flow when the move is a spare-part swap** — that path moves both items at once and routes the old one toward the nearest TRASH ancestor automatically. See [Managing spare parts](./managing-spare-parts.md) (today the Use Spare action lives in a deprecated shared flow; coming to System Hierarchy).
+- **Use the *Use Spare* flow when the move is a spare-part swap** — that path moves both items at once and routes the old one toward the nearest TRASH ancestor automatically. See [Managing spare parts](./managing-spare-parts.md). The action lives on the *Spare Parts* tab; in production it stays disabled until the `enableSparePartsAssignment` feature flag is enabled.
 
 ## Related
 

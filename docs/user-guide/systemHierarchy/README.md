@@ -15,7 +15,7 @@ The System Hierarchy module is the central place to browse, organize, and inspec
 | Persona | Role(s) | Can do |
 |---|---|---|
 | 👁️ **Viewer** | `systems-view` | Browse the tree, view details, view relationships, search and filter, view change history |
-| ✏️ **Editor / Admin** | `systems-edit` or `admin` | Everything in Viewer + edit fields, manage persons, manage relationships, view spare parts, **create subsystems**, copy systems, assign and move physical items |
+| ✏️ **Editor / Admin** | `systems-edit` or `admin` | Everything in Viewer + edit fields, manage persons, manage relationships, **use and remove spare parts** (feature-flag gated in production), **create subsystems**, copy systems, assign and move physical items |
 
 > 🔮 **Coming soon — Phase 1: split between Editor and Admin**
 > - **Admin** will have exclusive edit on systems at `SYSTEM_DOMAIN` and `TECHNOLOGY_UNIT` levels (the strategic top of the tree).
@@ -61,7 +61,7 @@ When a system is selected for full detail view, a tabbed area replaces the leave
 - [Editing system details](./workflows/editing-system-details.md) — inline edit of name, code, level, type, location, zone, description on the *Detail* tab. Includes system code generation and the special meaning of the `TRASH` level.
 - [Managing system people](./workflows/managing-system-people.md) — responsible person, owner, responsible team, and the operators / maintained-by tables on the *Persons* tab.
 - [Managing relationships](./workflows/managing-relationships.md) — the 9 engineering relationship types, viewing them in the list and the graph, creating and deleting edges.
-- [Managing spare parts](./workflows/managing-spare-parts.md) — read-only *Spare Parts* tab, how the spare-swap flow works conceptually, where assignments are made.
+- [Managing spare parts](./workflows/managing-spare-parts.md) — *Spare Parts* tab with per-row **Use** + **Remove** actions, *Spare For* tab listing parent systems, the spare-swap wizard, where assignments are made.
 - [Viewing change history](./workflows/viewing-change-history.md) — the *History* tab timeline and its filters.
 - [Creating systems](./workflows/creating-systems.md) — right-click a parent in the tree to create a new subsystem. Two-field dialog (name + level), inherits responsible/location/zone from the parent.
 - [Copying systems](./workflows/copying-systems.md) — copy/paste a system (and optionally its subtree) under a different parent.
@@ -73,7 +73,7 @@ For moving a system to a different parent, see the **Systems Moving** module —
 
 - 🔮 **Permission Phase 1** — split `admin` (top-level system edits at `SYSTEM_DOMAIN`, `TECHNOLOGY_UNIT`) from `systems-edit` (lower levels at `KEY_SYSTEMS`, `SUBSYSTEMS_AND_PARTS`, `TRASH`). All derived actions scoped accordingly.
 - 🔮 **Permission Phase 2** — team-based edit enforcement (responsible-team membership required to edit subtree). DB structure pending.
-- 🔮 **Use Spare action in Hierarchy** — the spare-swap wizard (currently in a deprecated shared flow, feature-flagged off in production) will be brought into this module.
+- 🔮 **Use Spare in production** — the spare-swap wizard is live in System Hierarchy in non-production environments. The `enableSparePartsAssignment` feature flag still hides it in production; once enabled the button becomes active everywhere.
 - 🔮 **Drag-and-drop move at hierarchy level** — currently move lives in the separate Systems Moving module.
 
 `[VIDEO PLACEHOLDER: 60s end-to-end walkthrough — open the module, expand the tree to a key system, browse its subsystems in table view, switch to graph view, open the detail tabs, finish on the History tab]`
