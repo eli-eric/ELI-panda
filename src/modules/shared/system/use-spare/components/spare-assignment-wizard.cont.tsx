@@ -71,7 +71,7 @@ export const SpareAssignmentWizardContainer = ({
         [],
     )
 
-    const [recalculate] = useRecalculate({
+    const [recalculate, isRecalculating] = useRecalculate({
         onSuccess: () => {
             toast.success(fm({ id: message.common.spareAssignment.success.assigned }))
             if (onSuccess) {
@@ -138,7 +138,7 @@ export const SpareAssignmentWizardContainer = ({
         }
     }
 
-    if (isPending) {
+    if (isPending || isRecalculating) {
         return (
             <div className="flex items-center justify-center p-8">
                 <div className="text-center">
