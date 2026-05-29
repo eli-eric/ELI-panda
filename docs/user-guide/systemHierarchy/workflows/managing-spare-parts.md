@@ -24,36 +24,32 @@ See which systems have been designated as spare parts for the currently-selected
 
 ## The Spare Parts tab
 
-Lists all systems flagged as a spare *for* the currently-selected system, plus the aggregate coverage at the top.
+Lists all systems flagged as a spare *for* the currently-selected system, plus the aggregate coverage at the top. Same row-card layout as the *Spare For* tab.
 
-`[SCREENSHOT PLACEHOLDER: Spare Parts tab with header reading "Available 3 out of 5 required" and a table below with columns Icon, Name, Location, Coverage, Part Number, EUN, Actions — coverage values in red and green, Use + trash icon in the Actions column]`
+`[SCREENSHOT PLACEHOLDER: Spare Parts tab with header "Spare Parts" on the left and a color-coded "Available 3 out of 5 required" on the right; below it a list of spare rows, each showing an icon, the spare's name, a coverage badge, an EUN badge, then a Use button and a trash icon]`
 
-**Header:** *Available {available} out of {required} required* — sum of available spare units against the configured minimum on the parent system.
-
-**Columns:**
-
-| Column | What it shows |
-|---|---|
-| (Icon) | Item-usage icon for the spare's physical item (in use, in storage, …). Sticky and not hideable. |
-| **Name** | Spare-part system name. Hovering shows the full ancestor path. |
-| **Location** | Location name and code (e.g. *Lab A — LC-001*). |
-| **Coverage** | Numeric coverage value, two decimals, color-coded — see *Coverage colors* below. |
-| **Part Number** | Catalogue number of the spare's physical item. |
-| **EUN** | Equipment Unique Number of the spare's physical item. |
-| **Actions** | *Use* button + *Remove* trash icon. |
-
-**Coverage colors:**
+**Header:** *Available {available} out of {required} required* on the right side — sum of available spare units against the configured minimum on the parent system. Color-coded:
 
 - 🟢 **Green** — coverage **meets or exceeds** the configured minimum on the parent.
 - 🔴 **Red** — coverage is **below** the configured minimum (insufficient spares).
 - ⚪ **Gray** — no minimum threshold is configured on the parent.
 
+**Each row shows:**
+
+| Element | What it shows |
+|---|---|
+| (Icon) | Item-usage icon for the spare's physical item (in use, in storage, …). |
+| **Name** | Spare-part system name. |
+| **Coverage badge** | Numeric coverage value for this individual spare, two decimals. |
+| **EUN badge** | Equipment Unique Number of the spare's physical item (only when the spare has an item assigned). |
+| **Use** | Opens the spare-swap wizard. |
+| **Remove** (trash) | Disconnects the *Has spare* relationship after confirmation. The spare system itself is not deleted. |
+
 **Interactions:**
 
-- **Click a row** (outside the action buttons) to navigate to the spare system's detail.
-- **Sort and reorder columns** like any other table; column visibility is configurable, except the icon column.
+- **Click a row** (outside the action buttons) to navigate to the spare system's detail — where you can see its location, catalogue number, parent path, etc.
 - **Use button** — opens the spare-swap wizard (see *Using a spare* below).
-- **Remove (trash icon)** — disconnects the *Has spare* relationship after confirmation. The spare system itself is not deleted.
+- **Remove (trash icon)** — disconnects the *Has spare* relationship after confirmation.
 
 ### Why the Use button may be disabled
 

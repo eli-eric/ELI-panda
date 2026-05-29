@@ -1,4 +1,3 @@
-import type { CellContext } from '@tanstack/react-table'
 import type { FC } from 'react'
 import { useIntl } from 'react-intl'
 
@@ -11,17 +10,17 @@ import { useSpareDialog } from '@/modules/shared/system/use-spare/useSpareDialog
 
 import type { SparePartEdge } from './SparePartsTab.types'
 
-interface Props extends CellContext<SparePartEdge, unknown> {
+interface Props {
+    node: SparePartEdge['node']
     currentSystemUid: string
     canEdit: boolean
 }
 
 const messages = message.common.spareAssignment
 
-export const SparePartsTabActionsCell: FC<Props> = ({ row, currentSystemUid, canEdit }) => {
+export const SparePartActions: FC<Props> = ({ node, currentSystemUid, canEdit }) => {
     const { formatMessage: fm } = useIntl()
     const openUseSpare = useSpareDialog()
-    const { node } = row.original
     const physicalItemUid = node.physicalItem?.uid ?? null
 
     const featureOff = !isFeatureEnabled('enableSparePartsAssignment')
@@ -41,7 +40,7 @@ export const SparePartsTabActionsCell: FC<Props> = ({ row, currentSystemUid, can
 
     return (
         <div
-            className="flex items-center justify-end gap-1"
+            className="flex items-center gap-1 shrink-0"
             onClick={e => e.stopPropagation()}
             onKeyDown={e => e.stopPropagation()}
             role="presentation"
