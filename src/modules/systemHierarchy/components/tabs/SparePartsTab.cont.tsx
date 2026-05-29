@@ -4,11 +4,13 @@ import { useIntl } from 'react-intl'
 
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
+import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import type { PandaTableSettings } from '@/modules/shared/table/pandaTable/PandaTable'
 import { PandaTableV2 } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
+import { ROLE } from '@/types/constants/roles'
 import { getFontBySystemLevel } from '@/utils/systemLevel'
 
 import { useSystemDetail } from '../../hooks/queries/useSystemDetail'
@@ -40,7 +42,8 @@ interface SparePartsTabProps {
 export const SparePartsTabContainer: FC<SparePartsTabProps> = ({ system }) => {
     const { formatMessage: fm } = useIntl()
     const { selectLeaf } = useHierarchyNavigation()
-    const columns = useSparePartsTabColumns()
+    const canEdit = !!usePermission([ROLE.SYSTEM_EDIT])
+    const columns = useSparePartsTabColumns(system.uid, canEdit)
 
     const {
         sparePartsEdges,

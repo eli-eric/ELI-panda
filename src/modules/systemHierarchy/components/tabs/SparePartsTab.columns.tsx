@@ -8,8 +8,9 @@ import { IconCell } from '@/modules/systems/components/table/cells/IconCell'
 import type { ITEM_USAGE } from '@/modules/systems/types/constants'
 
 import type { SparePartEdge } from './SparePartsTab.types'
+import { SparePartsTabActionsCell } from './SparePartsTabActionsCell'
 
-export const useSparePartsTabColumns = () => {
+export const useSparePartsTabColumns = (currentSystemUid: string, canEdit: boolean) => {
     const { formatMessage: fm } = useIntl()
 
     return useMemo<ColumnDef<SparePartEdge>[]>(
@@ -74,7 +75,22 @@ export const useSparePartsTabColumns = () => {
                 size: 120,
                 accessorFn: row => row.node.physicalItem?.eun ?? '',
             },
+            {
+                id: 'actions',
+                header: '',
+                size: 120,
+                enableHiding: false,
+                enableSorting: false,
+                meta: { className: 'text-right' },
+                cell: props => (
+                    <SparePartsTabActionsCell
+                        {...props}
+                        currentSystemUid={currentSystemUid}
+                        canEdit={canEdit}
+                    />
+                ),
+            },
         ],
-        [fm],
+        [fm, currentSystemUid, canEdit],
     )
 }

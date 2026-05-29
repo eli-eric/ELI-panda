@@ -147,12 +147,14 @@ export const useSystemDetail = (leafUid: string | null) => {
         : null
 
     const sparePartsEdges = systemDetail?.sparePartsConnection?.edges ?? []
+    const sparePartsForSystems = systemDetail?.sparePartsFor ?? []
 
     return {
         system,
         physicalItem,
         catalogueItem,
         sparePartsEdges,
+        sparePartsForSystems,
         sparePartsCoverageSum: systemDetail?.sparePartsCoverageSum ?? null,
         minimalSpareParstCount: systemDetail?.minimalSpareParstCount ?? null,
         refetch,

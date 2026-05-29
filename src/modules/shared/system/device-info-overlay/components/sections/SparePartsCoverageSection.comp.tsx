@@ -135,7 +135,7 @@ export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
                                                     !isFeatureEnabled('enableSparePartsAssignment')
                                                 }
                                             >
-                                                {fm({ id: message.common.systemOverlay.useSpare })}
+                                                {fm({ id: message.common.spareAssignment.useSpare })}
                                             </Button>
                                         </Tooltip>
                                     </div>

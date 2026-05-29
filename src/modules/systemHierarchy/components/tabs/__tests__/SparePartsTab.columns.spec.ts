@@ -5,8 +5,8 @@ import { AllProvidersWrapper } from '@/testutils/wrappers/AllProvidersWrapper'
 import { useSparePartsTabColumns } from '../SparePartsTab.columns'
 
 describe('useSparePartsTabColumns', () => {
-    it('produces 6 columns with expected ids', () => {
-        const { result } = renderHook(() => useSparePartsTabColumns(), {
+    it('produces 7 columns with expected ids', () => {
+        const { result } = renderHook(() => useSparePartsTabColumns('sys-uid', true), {
             wrapper: AllProvidersWrapper,
         })
         expect(result.current.map(c => c.id)).toEqual([
@@ -16,11 +16,12 @@ describe('useSparePartsTabColumns', () => {
             'coverage',
             'partNumber',
             'eun',
+            'actions',
         ])
     })
 
     it('icon column has enableHiding=false + width 32', () => {
-        const { result } = renderHook(() => useSparePartsTabColumns(), {
+        const { result } = renderHook(() => useSparePartsTabColumns('sys-uid', true), {
             wrapper: AllProvidersWrapper,
         })
         const icon = result.current[0] as any
@@ -29,7 +30,7 @@ describe('useSparePartsTabColumns', () => {
     })
 
     it('coverage column meta.className text-right + sorts numerically', () => {
-        const { result } = renderHook(() => useSparePartsTabColumns(), {
+        const { result } = renderHook(() => useSparePartsTabColumns('sys-uid', true), {
             wrapper: AllProvidersWrapper,
         })
         const coverage = result.current[3] as any
@@ -38,7 +39,7 @@ describe('useSparePartsTabColumns', () => {
     })
 
     it('location accessorFn formats "name - code" or just name', () => {
-        const { result } = renderHook(() => useSparePartsTabColumns(), {
+        const { result } = renderHook(() => useSparePartsTabColumns('sys-uid', true), {
             wrapper: AllProvidersWrapper,
         })
         const location = result.current[2] as any
@@ -50,7 +51,7 @@ describe('useSparePartsTabColumns', () => {
     })
 
     it('partNumber + eun accessors return empty strings on missing path', () => {
-        const { result } = renderHook(() => useSparePartsTabColumns(), {
+        const { result } = renderHook(() => useSparePartsTabColumns('sys-uid', true), {
             wrapper: AllProvidersWrapper,
         })
         const partNumber = result.current[4] as any
@@ -60,7 +61,7 @@ describe('useSparePartsTabColumns', () => {
     })
 
     it('coverage cell renders fixed-2 number', () => {
-        const { result } = renderHook(() => useSparePartsTabColumns(), {
+        const { result } = renderHook(() => useSparePartsTabColumns('sys-uid', true), {
             wrapper: AllProvidersWrapper,
         })
         const coverage = result.current[3] as any
