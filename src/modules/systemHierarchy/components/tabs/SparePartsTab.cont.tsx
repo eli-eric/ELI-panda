@@ -1,4 +1,4 @@
-import type { FC, KeyboardEvent } from 'react'
+import type { FC } from 'react'
 import { useIntl } from 'react-intl'
 
 import { Badge } from '@/components/ui/badge'
@@ -106,7 +106,6 @@ export const SparePartsTabContainer: FC<SparePartsTabProps> = ({ system }) => {
             <div className="space-y-1">
                 {sparePartsEdges.map(edge => {
                     const { node, coverage } = edge
-                    const handleNavigate = () => selectLeaf(node.uid)
                     return (
                         <div
                             key={node.uid}
@@ -117,13 +116,7 @@ export const SparePartsTabContainer: FC<SparePartsTabProps> = ({ system }) => {
                         >
                             <button
                                 type="button"
-                                onClick={handleNavigate}
-                                onKeyDown={(e: KeyboardEvent<HTMLButtonElement>) => {
-                                    if (e.key === 'Enter' || e.key === ' ') {
-                                        e.preventDefault()
-                                        handleNavigate()
-                                    }
-                                }}
+                                onClick={() => selectLeaf(node.uid)}
                                 className={cn(
                                     'flex items-center gap-2 flex-1 min-w-0 text-left',
                                     'cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded',

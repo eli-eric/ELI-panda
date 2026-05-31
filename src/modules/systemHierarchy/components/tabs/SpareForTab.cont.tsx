@@ -1,5 +1,5 @@
 import { ArrowRight } from 'lucide-react'
-import type { FC, KeyboardEvent } from 'react'
+import type { FC } from 'react'
 import { useIntl } from 'react-intl'
 
 import { Badge } from '@/components/ui/badge'
@@ -20,15 +20,6 @@ import { hasSpareFor } from '../../utils/predicates'
 
 interface SpareForTabProps {
     system: SystemLeaf
-}
-
-interface ParentSystemRow {
-    uid: string
-    name: string | null
-    physicalItem: {
-        eun: string | null
-        itemUsage: { uid: string } | null
-    } | null
 }
 
 export const SpareForTabContainer: FC<SpareForTabProps> = ({ system }) => {
@@ -70,9 +61,7 @@ export const SpareForTabContainer: FC<SpareForTabProps> = ({ system }) => {
         )
     }
 
-    const rows = sparePartsForSystems as unknown as ParentSystemRow[]
-
-    if (rows.length === 0) {
+    if (sparePartsForSystems.length === 0) {
         return (
             <div className="p-4 text-sm text-muted-foreground">
                 {fm({ id: message.systemHierarchy.spareFor.noSpareFor })}
@@ -86,9 +75,7 @@ export const SpareForTabContainer: FC<SpareForTabProps> = ({ system }) => {
                 {fm({ id: message.systemHierarchy.spareFor.title })}
             </h3>
             <div className="space-y-1">
-                {rows.map(row => {
-                    const handleNavigate = () => selectLeaf(row.uid)
-                    return (
+                {sparePartsForSystems.map(row => (
                         <div
                             key={row.uid}
                             className={cn(
@@ -98,13 +85,7 @@ export const SpareForTabContainer: FC<SpareForTabProps> = ({ system }) => {
                         >
                             <button
                                 type="button"
-                                onClick={handleNavigate}
-                                onKeyDown={(e: KeyboardEvent<HTMLButtonElement>) => {
-                                    if (e.key === 'Enter' || e.key === ' ') {
-                                        e.preventDefault()
-                                        handleNavigate()
-                                    }
-                                }}
+                                onClick={() => selectLeaf(row.uid)}
                                 className={cn(
                                     'flex items-center gap-2 flex-1 min-w-0 text-left',
                                     'cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded',
@@ -134,8 +115,7 @@ export const SpareForTabContainer: FC<SpareForTabProps> = ({ system }) => {
                                 />
                             </div>
                         </div>
-                    )
-                })}
+                    ))}
             </div>
         </div>
     )

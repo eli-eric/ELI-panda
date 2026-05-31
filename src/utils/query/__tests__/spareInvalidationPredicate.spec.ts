@@ -53,6 +53,23 @@ describe('matchesSpareAffectedQuery', () => {
         expect(predicate(asQuery(['some-key', 'not-an-object']))).toBe(false)
     })
 
+    it('does not collide on substring match (uid as part of an unrelated string)', () => {
+        // Old JSON.stringify(...).includes(uid) would have matched these.
+        const key1 = [
+            'SystemDetail',
+            { where: { catalogueNumber: `CAT-${SYS_A}-PUMP` } },
+            {},
+        ]
+        const key2 = ['SystemDetail', { where: { search: `notes about ${SPARE} here` } }, {}]
+        expect(predicate(asQuery(key1))).toBe(false)
+        expect(predicate(asQuery(key2))).toBe(false)
+    })
+
+    it('matches uid inside arrays of strings', () => {
+        const key = ['SystemDetail', { where: { uid_IN: ['x', SYS_A, 'y'] } }, {}]
+        expect(predicate(asQuery(key))).toBe(true)
+    })
+
     it('returns a fresh predicate per uid list', () => {
         const matchA = matchesSpareAffectedQuery([SYS_A])
         const matchB = matchesSpareAffectedQuery([SYS_B])

@@ -5,11 +5,14 @@ import { useEffect } from 'react'
 import { toast } from 'sonner'
 
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
-import { gql, useFragment } from '@/types/gql'
+// `useFragment` is a pure runtime cast (see src/types/gql/fragment-masking.ts) — the
+// `use` prefix trips rules-of-hooks when called inside .map(). Alias to make intent clear.
+import { gql, useFragment as unmaskFragment,useFragment } from '@/types/gql'
 import {
     CatalogueItemFragment,
     PhysicalItemFragment,
     SystemDetailFragment,
+    SystemFieldsFragment,
 } from '@/utils/graphql/fragments'
 
 import { SYSTEM_DETAIL_QUERY_KEY } from '../../types/constants'
@@ -26,6 +29,16 @@ const fetchSystemDetail = (uid: string) =>
     request('/api/graphql', systemHierarchyDetailQuery, {
         where: { deleted: false, uid },
     })
+
+export interface SparePartsForSystem {
+    uid: string
+    name: string | null
+    physicalItem: {
+        uid: string | null
+        eun: string | null
+        itemUsage: { uid: string } | null
+    } | null
+}
 
 export interface OptimisticSystemHint {
     name: string
@@ -147,7 +160,24 @@ export const useSystemDetail = (leafUid: string | null) => {
         : null
 
     const sparePartsEdges = systemDetail?.sparePartsConnection?.edges ?? []
-    const sparePartsForSystems = systemDetail?.sparePartsFor ?? []
+    const sparePartsForSystems: SparePartsForSystem[] =
+        systemDetail?.sparePartsFor?.map(s => {
+            const fields = unmaskFragment(SystemFieldsFragment, s)
+            const item = unmaskFragment(PhysicalItemFragment, s.physicalItem)
+            return {
+                uid: fields.uid,
+                name: fields.name ?? null,
+                physicalItem: item
+                    ? {
+                          uid: item.uid ?? null,
+                          eun: item.eun ?? null,
+                          itemUsage: item.itemUsage?.uid
+                              ? { uid: item.itemUsage.uid }
+                              : null,
+                      }
+                    : null,
+            }
+        }) ?? []
 
     return {
         system,

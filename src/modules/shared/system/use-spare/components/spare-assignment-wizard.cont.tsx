@@ -116,7 +116,10 @@ export const SpareAssignmentWizardContainer = ({
                 await queryClient.invalidateQueries({
                     predicate: matchesSpareAffectedQuery([systemUid, spareItemUid]),
                 })
-                recalculate(null) // tree-structure recalc — fire and forget
+                // Tree-structure recalc — intentionally fire-and-forget. Awaiting it would
+                // let a recalc failure flip this toast to "Failed to assign" even though the
+                // assignment itself succeeded; recalc surfaces its own toast via useRecalculate.
+                recalculate(null)
                 onSuccess?.()
             })(),
             {

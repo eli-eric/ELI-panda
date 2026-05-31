@@ -18,20 +18,27 @@ interface Props {
 
 const messages = message.common.spareAssignment
 
+// Returns the tooltip id for the Use button. `null` second slot means the button
+// is enabled (last branch = enabled-state tooltip).
+const pickUseTooltipId = (
+    canEdit: boolean,
+    featureEnabled: boolean,
+    physicalItemUid: string | null,
+): string => {
+    if (!canEdit) return messages.noPermissionTooltip
+    if (!featureEnabled) return messages.useSpareDisabledTooltip
+    if (!physicalItemUid) return messages.noPhysicalItemTooltip
+    return messages.useSpareTooltip
+}
+
 export const SparePartActions: FC<Props> = ({ node, currentSystemUid, canEdit }) => {
     const { formatMessage: fm } = useIntl()
     const openUseSpare = useSpareDialog()
     const physicalItemUid = node.physicalItem?.uid ?? null
+    const featureEnabled = isFeatureEnabled('enableSparePartsAssignment')
 
-    const featureOff = !isFeatureEnabled('enableSparePartsAssignment')
-    const useDisabledTooltipId = !canEdit
-        ? messages.noPermissionTooltip
-        : featureOff
-          ? messages.useSpareDisabledTooltip
-          : !physicalItemUid
-            ? messages.noPhysicalItemTooltip
-            : messages.useSpareTooltip
-    const useDisabled = !canEdit || featureOff || !physicalItemUid
+    const useDisabled = !canEdit || !featureEnabled || !physicalItemUid
+    const useTooltipId = pickUseTooltipId(canEdit, featureEnabled, physicalItemUid)
 
     const handleUseSpare = () => {
         if (useDisabled || !physicalItemUid) return
@@ -45,7 +52,7 @@ export const SparePartActions: FC<Props> = ({ node, currentSystemUid, canEdit })
             onKeyDown={e => e.stopPropagation()}
             role="presentation"
         >
-            <Tooltip content={fm({ id: useDisabledTooltipId })}>
+            <Tooltip content={fm({ id: useTooltipId })}>
                 <Button
                     type="button"
                     size="sm"
