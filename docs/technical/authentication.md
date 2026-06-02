@@ -137,7 +137,7 @@ Two surfaces:
 - **Sidebar `LogoutButton`** (`src/components/navigation/logout-button.tsx`) — `signOut({ redirect: false })` then `router.push(PATH.ROOT)`. Used in normal flow.
 - **`/signout` page** (`src/pages/signout.tsx`) — checks `useSession().status`; if authenticated, calls `signOut({ redirect: false })`; if already unauthenticated, redirects to `/`. Useful as a guard URL.
 
-Client-side, the `SessionSync` bridge clears `fetchClient`'s cached token when `useSession().status` becomes `unauthenticated`, so no stale token can be attached to a request after sign-out. Neither flow tells the API gateway to invalidate the previously-issued `apiAccessToken`, however — that token remains valid until its `exp` regardless of the cookie being cleared. See *Open questions*.
+Client-side, the `SessionSync` bridge writes a `null` token into `fetchClient`'s cache when `useSession().status` becomes `unauthenticated`, so post-sign-out requests carry no token without re-fetching the session. Neither flow tells the API gateway to invalidate the previously-issued `apiAccessToken`, however — that token remains valid until its `exp` regardless of the cookie being cleared. See *Open questions*.
 
 ## Authorization layers
 

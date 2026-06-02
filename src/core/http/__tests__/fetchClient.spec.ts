@@ -200,7 +200,7 @@ describe('auth token caching', () => {
         expect(headers.authorization).toBe('Bearer BRIDGE')
     })
 
-    it('does not repopulate the cache after logout while a session resolves in-flight', async () => {
+    it('caches null on logout (setAuthToken) and serves it without re-resolving', async () => {
         let resolveSession!: (v: unknown) => void
         mockGetSession.mockReturnValueOnce(
             new Promise(r => {
@@ -209,14 +209,16 @@ describe('auth token caching', () => {
         )
         ;(global.fetch as jest.Mock).mockResolvedValue(buildResponse({ body: { ok: true } }))
 
-        const pending = fetchRequestDetailed('/a')
-        clearAuthToken() // logout while getSession is pending
-        resolveSession({ user: { apiAccessToken: 'STALE' } })
+        const pending = fetchRequestDetailed('/a') // cold start → getSession in-flight
+        setAuthToken(null) // logout caches the null token mid-flight
+        resolveSession({ user: { apiAccessToken: 'STALE' } }) // stale session resolves, must not win
         await pending
 
-        mockGetSession.mockResolvedValue(null) // empty cache → re-resolve, no token
+        mockGetSession.mockClear()
         ;(global.fetch as jest.Mock).mockClear()
         await fetchRequestDetailed('/b')
+
+        expect(mockGetSession).not.toHaveBeenCalled() // null is a resolved cache hit
         const headers = (global.fetch as jest.Mock).mock.calls[0][1].headers
         expect(headers.authorization).toBeUndefined()
     })

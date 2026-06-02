@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react'
 import { useSession } from 'next-auth/react'
 
-import { clearAuthToken, setAuthToken } from '@/core/http/fetchClient'
+import { setAuthToken } from '@/core/http/fetchClient'
 
 import { SessionSync } from '../SessionSync'
 
@@ -11,7 +11,6 @@ jest.mock('next-auth/react', () => ({
 
 jest.mock('@/core/http/fetchClient', () => ({
     setAuthToken: jest.fn(),
-    clearAuthToken: jest.fn(),
 }))
 
 const mockUseSession = useSession as unknown as jest.Mock
@@ -28,14 +27,12 @@ describe('SessionSync', () => {
         })
         render(<SessionSync />)
         expect(setAuthToken).toHaveBeenCalledWith('TOK')
-        expect(clearAuthToken).not.toHaveBeenCalled()
     })
 
-    it('clears the cache when unauthenticated (logout)', () => {
+    it('caches null when unauthenticated (logout)', () => {
         mockUseSession.mockReturnValue({ status: 'unauthenticated', data: null })
         render(<SessionSync />)
-        expect(clearAuthToken).toHaveBeenCalledTimes(1)
-        expect(setAuthToken).not.toHaveBeenCalled()
+        expect(setAuthToken).toHaveBeenCalledWith(null)
     })
 
     it('replaces the token on user-switch (token change)', () => {
@@ -58,6 +55,5 @@ describe('SessionSync', () => {
         mockUseSession.mockReturnValue({ status: 'loading', data: null })
         render(<SessionSync />)
         expect(setAuthToken).not.toHaveBeenCalled()
-        expect(clearAuthToken).not.toHaveBeenCalled()
     })
 })

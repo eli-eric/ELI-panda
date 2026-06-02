@@ -66,10 +66,10 @@ const resetTokenCache = (): void => {
     tokenResolved = false
 }
 
-/** @internal Only SessionSync should call this — drop the cached token on logout. */
+/** @internal Invalidate the cache to an unresolved state (forces a fresh getSession on the next request) and re-arm the 401 breaker. */
 export const clearAuthToken = (): void => {
     resetTokenCache()
-    reauthAfter401Attempted = false // an explicit clear (logout) re-arms 401 handling
+    reauthAfter401Attempted = false
 }
 
 const handleUnauthorized = (): void => {
