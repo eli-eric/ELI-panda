@@ -34,23 +34,50 @@ const DEFAULT_TIMEOUT = 15000
 // covers the cold-start window before the bridge has run, and non-React callers.
 const isBrowser = typeof window !== 'undefined'
 let cachedAuthToken: string | null = null
+// Distinguishes "resolved to no token" from "not yet resolved", so a token-less
+// (but authenticated) session is cached too instead of re-fetching getSession()
+// on every request.
+let tokenResolved = false
 let inFlightToken: Promise<string | null> | null = null
 // Bumped on every set/clear so an in-flight getSession() that started before a
 // logout / user-switch can't resolve later and clobber the cache (stale write).
 let authEpoch = 0
+// Circuit breaker: on a 401 we clear and re-resolve the session once; if the
+// fresh session still 401s, we stop re-resolving so a persistently-rejected
+// token can't storm getSession() on every request. Re-armed by a fresh token
+// (setAuthToken) or any successful response. The proper fix is a centralized
+// 401 -> signOut() (see docs/technical/authentication.md, "Centralise the 401
+// response").
+let reauthAfter401Attempted = false
 
-/** Set by the SessionSync bridge whenever the session changes. */
+/** @internal Only SessionSync should call this — set the cached token on session change. */
 export const setAuthToken = (token: string | null | undefined): void => {
     authEpoch++
     inFlightToken = null
     cachedAuthToken = token ?? null
+    tokenResolved = true
+    reauthAfter401Attempted = false
 }
 
-/** Clear the cached token — on logout, or after a 401. */
-export const clearAuthToken = (): void => {
+const resetTokenCache = (): void => {
     authEpoch++
     inFlightToken = null
     cachedAuthToken = null
+    tokenResolved = false
+}
+
+/** @internal Only SessionSync should call this — drop the cached token on logout. */
+export const clearAuthToken = (): void => {
+    resetTokenCache()
+    reauthAfter401Attempted = false // an explicit clear (logout) re-arms 401 handling
+}
+
+const handleUnauthorized = (): void => {
+    // Already retried with a fresh session and still got 401: the token is
+    // genuinely rejected, so stop re-resolving to avoid a getSession() storm.
+    if (reauthAfter401Attempted) return
+    reauthAfter401Attempted = true
+    resetTokenCache()
 }
 
 const resolveAuthToken = async (): Promise<string | null> => {
@@ -60,14 +87,17 @@ const resolveAuthToken = async (): Promise<string | null> => {
         const session = await getSession()
         return session?.user?.apiAccessToken ?? null
     }
-    if (cachedAuthToken) return cachedAuthToken
+    if (tokenResolved) return cachedAuthToken
     if (!inFlightToken) {
         const epoch = authEpoch
         inFlightToken = getSession()
             .then(session => {
                 const token = session?.user?.apiAccessToken ?? null
                 // Only adopt the result if no set/clear happened while in-flight.
-                if (epoch === authEpoch) cachedAuthToken = token
+                if (epoch === authEpoch) {
+                    cachedAuthToken = token
+                    tokenResolved = true
+                }
                 return token
             })
             .finally(() => {
@@ -171,10 +201,10 @@ export async function fetchRequestDetailed<T = unknown>(
     clear()
 
     if (!response.ok) {
-        // A stale/expired session yields a 401; drop the cached token so the
-        // next request re-resolves a fresh session (self-healing).
+        // A stale/expired session yields a 401: clear + re-resolve once, then
+        // stop (handleUnauthorized) so a rejected token can't storm getSession().
         if (response.status === 401) {
-            clearAuthToken()
+            handleUnauthorized()
         }
         let details: any
         try {
@@ -194,6 +224,9 @@ export async function fetchRequestDetailed<T = unknown>(
         error.details = details
         throw error
     }
+
+    // Successful response: the current token works — re-arm 401 handling.
+    reauthAfter401Attempted = false
 
     const data = await parseResponseBody<T>(response, options.responseType)
 

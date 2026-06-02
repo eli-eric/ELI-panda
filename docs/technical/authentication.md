@@ -34,7 +34,7 @@ On first sign-in the JWT callback upserts a `User` node in Neo4j with default re
 | `src/modules/auth/auth-form.comp.tsx` | The single sign-in button — `signIn('azure-ad-beamlines')`. |
 | `src/pages/signout.tsx` | Programmatic sign-out page that redirects to `/` afterwards. |
 | `src/components/navigation/logout-button.tsx` | Sidebar dropdown menu entry that calls `signOut({ redirect: false })`. |
-| `src/core/http/fetchClient.ts` | REST client. Attaches `Authorization: Bearer ${apiAccessToken}` to every outgoing request, reading the token from an in-memory cache (resolved once via `getSession()`, then reused) rather than calling `getSession()` per request. Clears the cache on a 401. |
+| `src/core/http/fetchClient.ts` | REST client. Attaches `Authorization: Bearer ${apiAccessToken}` to every outgoing request, reading the token from an in-memory cache (resolved once via `getSession()`, then reused) rather than calling `getSession()` per request. On a 401 it re-resolves the session once, then stops (circuit breaker). |
 | `src/components/auth/SessionSync.tsx` | Bridge mounted under `SessionProvider`. Mirrors the `useSession()` token into `fetchClient`'s cache on login / logout / user-switch so requests never need a per-call `getSession()`. |
 | `src/pages/api/graphql.ts` | Server-side GraphQL handler. Re-validates with `getServerSession` and threads `token.apiAccessToken` onto the Apollo context. |
 | `panda_entraid_app_registration.txt` | Repo-root checklist for registering the Entra ID app (no secrets). |
@@ -233,13 +233,13 @@ const token = await resolveAuthToken()
 if (token) headers['authorization'] = `Bearer ${token}`
 ```
 
-`resolveAuthToken` returns the cached token synchronously when present; on a cold start it falls back to a **single-flight** `getSession()` (concurrent first calls share one promise). The `SessionSync` bridge keeps the cache in lockstep with the live session, so in steady state there are **zero** `/api/auth/session` requests. This is safe because `apiAccessToken` is a stable, long-lived JWT that does not rotate mid-session (see [Sign-in](#sign-in-azure-ad)).
+`resolveAuthToken` returns the cached token synchronously once resolved (a `tokenResolved` flag means even a token-less authenticated session is cached, not re-fetched per call); on a cold start it falls back to a **single-flight** `getSession()` (concurrent first calls share one promise). The `SessionSync` bridge keeps the cache in lockstep with the live session, so in steady state there are **zero** `/api/auth/session` requests. This is safe because `apiAccessToken` is a stable, long-lived JWT that does not rotate mid-session (see [Sign-in](#sign-in-azure-ad)).
 
 An `authEpoch` counter guards against a stale write: a `getSession()` that started before a logout / user-switch cannot resolve afterward and re-populate the cache. On the **server** the cache is bypassed entirely (resolved fresh per call) so a module-level token is never shared across users.
 
 `queryFetcher` and `queryMutate` (`src/utils/fetcher.ts`) ultimately call `fetchRequest` / `fetchRequestDetailed`, so every TanStack Query and mutation inherits this header automatically.
 
-The 15 s `DEFAULT_TIMEOUT` and abort-signal plumbing live in the same module. On a **401**, `fetchClient` clears the cached token (so the next request re-resolves a fresh session) but does no automatic re-auth or sign-out — failed requests still bubble up as `NormalizedHttpError` with `status: 401`.
+The 15 s `DEFAULT_TIMEOUT` and abort-signal plumbing live in the same module. On a **401**, `fetchClient` clears the cached token and re-resolves the session **once**; if the fresh session still 401s it stops re-resolving (a circuit breaker), so a persistently-rejected token can't storm `getSession()` on every request. The breaker re-arms on any successful response or a fresh token from `SessionSync`. There is still no automatic re-auth or sign-out — failed requests bubble up as `NormalizedHttpError` with `status: 401` (a centralized 401 → `signOut()` is the proper follow-up; see [Maintenance recommendations](#maintenance-recommendations)).
 
 ## Entra ID app registration
 
@@ -284,7 +284,7 @@ Local-env reading of `getServerSession` (`pages/api/graphql.ts:30`) leans on the
 1. **Convert `[...nextauth].js` to TypeScript.** The session/JWT shape is already declared in `src/types/next-auth.d.ts`; converting unlocks compile-time checks on the callbacks and the Cypher upsert wrapper.
 2. **Fix the `exp` unit bug.** `Date.now() + 1000*60*60*24*365` produces milliseconds; JWT `exp` is seconds. Either divide by 1000 here or document explicitly that the gateway treats this value as ms.
 3. **Decide whether `apiAccessToken` should rotate on sign-out.** Today the cookie is cleared but the API gateway still accepts the previously-minted token until `exp`. Either shorten `exp` and refresh on demand, or maintain a revocation list on the gateway. Note: `fetchClient` now caches the token in memory on the assumption that it is stable for the session (see [Token usage on outgoing REST](#token-usage-on-outgoing-rest)); if rotation is introduced, the cache would need to refresh on rotation (e.g. via `SessionProvider` re-fetch driving `SessionSync`), not just on login/logout.
-4. **Centralise the 401 response.** `fetchClient` clears its cached token on a 401 but does not otherwise react — adding a single interceptor that triggers `signIn()` (or `signOut()`) on 401 would prevent the "silently stuck on stale token" failure mode.
+4. **Centralise the 401 response.** `fetchClient` clears its cached token on a 401 and re-resolves once (then a circuit breaker stops further re-resolution), but does not sign the user out — adding a single interceptor that triggers `signIn()` (or `signOut()`) on a persistent 401 would prevent the "silently stuck on stale token" failure mode entirely.
 5. **Document the facility-code seam.** The hardcoded `"B"` in `neo4GetOrCreateUser` is the only piece of multi-tenant code in auth; either turn it into an env var or codify the rule that one deployment = one facility.
 6. **Reconcile `panda_entraid_app_registration.txt` with the real provider id.** The checklist shows `/api/auth/callback/azure-ad` but the provider is `azure-ad-beamlines`. Bring the doc and the registered redirect URIs in sync.
 7. **Add per-callback structured logging.** `[Security]` warnings in middleware are good; adding parallel structured logs for `jwt` and `session` callbacks would make audit trails much cheaper to reconstruct.
