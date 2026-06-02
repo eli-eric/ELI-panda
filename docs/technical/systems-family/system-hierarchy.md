@@ -96,7 +96,7 @@ The leaves panel toggles between **Tree View** (the default `LeavesTable`) and *
 | `useCreateSubsystem` | `mutation CreateSystems` via `useGraphQLMutation`. Payload assembled by the pure `utils/buildCreateSubsystemPayload`, including `parentSystem.connect`, parent-inherited `responsible/location/zone`, and the required `updatedBy.connect[edge.action=Insert]` so `updatedByResolver` writes a history edge. On success seeds `[SYSTEM_DETAIL_QUERY_KEY, newUid]` with the full SystemDetail fragment returned by the server, then invalidates `HIERARCHY`, `LEAVES`, `LEAVES_COUNT`, and `RELATIONSHIP_GRAPH` keys. |
 | `useSystemCodeGenerate` | Generate a code based on type + level + ancestry |
 | `useSystemCodeClear` | Clear a previously generated code |
-| `useDeleteRelationship` | Remove one of the 8 engineering edges |
+| `useDeleteRelationship` | Remove one of the 8 engineering edges. Always invalidates `RELATIONSHIP_GRAPH_QUERY_KEY`; on `IS_SPARE_FOR` disconnect additionally invalidates via `matchesSpareAffectedQuery([currentSystemUid, relatedSystemUid])` — see [Cache invalidation for spare flows](#cache-invalidation-for-spare-flows). |
 
 `useSystemFieldUpdate` is the canonical hook for "inline-edit a system field" and is consumed by detail tabs, sidebar, and the Quick-Info panel.
 
@@ -149,8 +149,8 @@ The tabbed detail surface lives under `components/tabs/`:
 | Detail | `DetailTab.cont.tsx` | Inline-edit name / level / code / location / zone / description |
 | Persons | `PersonsTab.cont.tsx` | Responsible person + team + operators + maintained by |
 | Physical Item | `PhysicalItemTab.cont.tsx` | View/edit the `Item` attached via `CONTAINS_ITEM` |
-| Spare Parts | `SparePartsTab.cont.tsx` (+ `.columns`, `.types`) | Read-only table of systems flagged spare *for* this system |
-| Spare For | `SpareForTab.cont.tsx` | The inverse: where this system is registered as a spare |
+| Spare Parts | `SparePartsTab.cont.tsx` (+ `.types`, `SparePartActions.comp.tsx`) | List of systems flagged spare *for* this system, in the same row-card pattern as `SpareForTab` (icon + name + coverage badge + EUN badge). Each row carries **Use** (opens shared `useSpareDialog` wizard) + **Remove** (shared `SpareRelationshipDeleteButton`) inside `SparePartActions`. Use button has a 4-level priority tooltip chain — `!canEdit` → feature-flag off → `!physicalItem` → enabled. Header keeps the color-coded coverage indicator (`available`/`required`). Click + keydown propagation isolated by the actions wrapper so row-click `selectLeaf` still works. |
+| Spare For | `SpareForTab.cont.tsx` | The inverse: lists `sparePartsForSystems` (exposed by `useSystemDetail`) with icon + name + EUN badge + outbound `SpareRelationshipDeleteButton`. |
 | Relationships | `RelationshipsTab.cont.tsx` | List of all 9 relationship types, edit/delete |
 | Attachments | `AttachmentsTab.cont.tsx` | File manager (MinIO-backed) |
 | History | `HistoryTab.cont.tsx` | `WAS_UPDATED_BY` timeline + filters |
@@ -207,6 +207,40 @@ Two surfaces use React Flow:
 Both share node/edge types from `types/graph.ts` and colour helpers from `utils/graphColors.ts`. Layout helpers in `utils/graphLayout.ts` compute force-directed and orthogonal positions.
 
 `useRelationshipGraphApiQuery` is the gate between React Flow node selection and TanStack Query — expanding a node fires a `useRelationshipGraph` query for that uid and merges the result into the persisted store via `addExpanded`.
+
+## Cache invalidation for spare flows
+
+The shared **`matchesSpareAffectedQuery`** predicate at `src/utils/query/spareInvalidationPredicate.ts` is the single mechanism that keeps all spare-aware views fresh after an assign/remove. It exists because callers of `useSpareDialog` and `useDeleteRelationship` span three modules with different query-key shapes, and no whitelist of constants can cover them all.
+
+```ts
+matchesSpareAffectedQuery([systemUid, spareItemUid])(query)
+// matches if:
+//   key[0] === RELATIONSHIP_GRAPH_QUERY_KEY  → true (anything in the graph)
+//   key[0] === SYSTEM_DETAIL_QUERY_KEY       → true iff key contains one of the uids
+//   key[1] is an object (useGraphQL default [opName, variables, document])
+//                                            → JSON-scan variables for either uid
+```
+
+Covered call sites:
+
+| Caller | Query-key shape | Match path |
+|---|---|---|
+| `systemHierarchy/hooks/queries/useSystemDetail.ts` | `[SYSTEM_DETAIL_QUERY_KEY, uid]` | constant branch |
+| `systemHierarchy` graph hooks | `[RELATIONSHIP_GRAPH_QUERY_KEY, …]` | constant branch |
+| `systemItem/hooks/useSystemDetail.ts` | `useGraphQL` default: `[opName, { where: { uid, … } }, document]` | variables-scan branch |
+| `device-info-overlay/hooks/useSuspenseSystemDetail.ts` | same as above | variables-scan branch |
+| `system-edit/...` form load | same as above | variables-scan branch |
+
+Used by:
+
+- `useSpareDialog` / `spare-assignment-wizard` — replaces three earlier invalidations (one was a hyphenated `'system-detail'` string that matched nothing).
+- `useDeleteRelationship` (only when `isSpareDisconnect(field)`) — replaces a PascalCase `'SystemDetail'` string literal that didn't match the camelCase `SYSTEM_DETAIL_QUERY_KEY` constant.
+
+Query-key constants `SYSTEM_DETAIL_QUERY_KEY` and `RELATIONSHIP_GRAPH_QUERY_KEY` live in `src/utils/query/queryKeys.ts` and are re-exported from `src/modules/systemHierarchy/types/constants.ts` for back-compat with existing imports.
+
+### `SpareRelationshipDeleteButton`
+
+Lives in the shared spare module: `src/modules/shared/system/use-spare/components/spare-relationship-delete-button.comp.tsx`. Thin wrapper around `useDeleteRelationship` that owns spare-specific copy (`common.spareAssignment.remove.*` for inbound, `common.spareAssignment.spareFor.remove.*` for outbound) and a `canEdit` gate. Kept separate from the generic `DeleteRelationshipButton` in `components/relationships/` to avoid generic-component prop sprawl.
 
 ## Filters
 

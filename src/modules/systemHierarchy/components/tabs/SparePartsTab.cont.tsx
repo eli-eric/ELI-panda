@@ -1,30 +1,21 @@
-import type { FC, KeyboardEvent } from 'react'
-import { useEffect } from 'react'
+import type { FC } from 'react'
 import { useIntl } from 'react-intl'
 
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
+import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
-import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
-import type { PandaTableSettings } from '@/modules/shared/table/pandaTable/PandaTable'
-import { PandaTableV2 } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
-import { getFontBySystemLevel } from '@/utils/systemLevel'
+import { IconCell } from '@/modules/systems/components/table/cells/IconCell'
+import type { ITEM_USAGE } from '@/modules/systems/types/constants'
+import { ROLE } from '@/types/constants/roles'
 
 import { useSystemDetail } from '../../hooks/queries/useSystemDetail'
 import { useHierarchyNavigation } from '../../hooks/useHierarchyNavigation'
 import type { SystemLeaf } from '../../types'
 import { hasSpareParts } from '../../utils/predicates'
-import { useSparePartsTabColumns } from './SparePartsTab.columns'
-import type { SparePartEdge } from './SparePartsTab.types'
-
-const SPARE_PARTS_TAB_TABLE_ID = 'systemHierarchySpareParts'
-
-const TABLE_SETTINGS: PandaTableSettings<SparePartEdge> = {
-    enableSorting: true,
-    enableColumnHiding: true,
-    enableColumnReordering: true,
-}
+import { SparePartActions } from './SparePartActions.comp'
 
 const getCoverageColorClass = (sum: number | null, min: number | null): string => {
     if (!min) return 'text-gray-500 dark:text-gray-300'
@@ -40,7 +31,7 @@ interface SparePartsTabProps {
 export const SparePartsTabContainer: FC<SparePartsTabProps> = ({ system }) => {
     const { formatMessage: fm } = useIntl()
     const { selectLeaf } = useHierarchyNavigation()
-    const columns = useSparePartsTabColumns()
+    const canEdit = !!usePermission([ROLE.SYSTEM_EDIT])
 
     const {
         sparePartsEdges,
@@ -50,25 +41,6 @@ export const SparePartsTabContainer: FC<SparePartsTabProps> = ({ system }) => {
         error,
         refetch,
     } = useSystemDetail(hasSpareParts(system) ? system.uid : null)
-
-    const edges: SparePartEdge[] = sparePartsEdges
-
-    const table = usePandaTable<SparePartEdge>({
-        tableId: SPARE_PARTS_TAB_TABLE_ID,
-        columns,
-        data: edges,
-        settings: TABLE_SETTINGS,
-    })
-
-    // Seed DnD reordering baseline on first mount only; don't overwrite persisted order.
-    // Re-seed if column count drifts (columns added/removed between versions).
-    useEffect(() => {
-        const allIds = table.getAllLeafColumns().map(column => column.id)
-        const current = table.getState().columnOrder
-        if (current.length !== allIds.length) {
-            table.setColumnOrder(allIds)
-        }
-    }, [table])
 
     if (!hasSpareParts(system)) {
         return (
@@ -102,7 +74,7 @@ export const SparePartsTabContainer: FC<SparePartsTabProps> = ({ system }) => {
         )
     }
 
-    if (edges.length === 0) {
+    if (sparePartsEdges.length === 0) {
         return (
             <div className="p-4 text-sm text-muted-foreground">
                 {fm({ id: message.systemHierarchy.spareParts.noSpareParts })}
@@ -111,8 +83,8 @@ export const SparePartsTabContainer: FC<SparePartsTabProps> = ({ system }) => {
     }
 
     return (
-        <div className="flex flex-col h-full overflow-hidden">
-            <div className="flex items-center justify-between shrink-0 px-4 pt-4 pb-2">
+        <div className="p-4 space-y-1">
+            <div className="flex items-center justify-between mb-3">
                 <h3 className="text-sm font-semibold">
                     {fm({ id: message.systemHierarchy.tabs.spareParts })}
                 </h3>
@@ -131,31 +103,46 @@ export const SparePartsTabContainer: FC<SparePartsTabProps> = ({ system }) => {
                     )}
                 </h3>
             </div>
-            <div className="flex-1 min-h-0 flex flex-col">
-                <PandaTableV2<SparePartEdge>
-                    data={edges}
-                    table={table}
-                    tableId={SPARE_PARTS_TAB_TABLE_ID}
-                    settings={TABLE_SETTINGS}
-                    getRowProps={({ original }) => ({
-                        onClick: () => selectLeaf(original.node.uid),
-                        onKeyDown: (e: KeyboardEvent<HTMLTableRowElement>) => {
-                            if (e.key === 'Enter' || e.key === ' ') {
-                                e.preventDefault()
-                                selectLeaf(original.node.uid)
-                            }
-                        },
-                        role: 'button',
-                        tabIndex: 0,
-                        className: cn(
-                            'cursor-pointer hover:text-primary hover:bg-primary/10',
-                            'focus:outline-none focus-visible:ring-2 focus-visible:ring-primary',
-                            original.node.physicalItem && 'font-bold',
-                            getFontBySystemLevel(original.node.systemLevel ?? undefined),
-                        ),
-                    })}
-                    className="flex-1 min-h-0"
-                />
+            <div className="space-y-1">
+                {sparePartsEdges.map(edge => {
+                    const { node, coverage } = edge
+                    return (
+                        <div
+                            key={node.uid}
+                            className={cn(
+                                'flex items-center gap-2 rounded-md px-2 py-1.5',
+                                'hover:bg-accent transition-colors',
+                            )}
+                        >
+                            <button
+                                type="button"
+                                onClick={() => selectLeaf(node.uid)}
+                                className={cn(
+                                    'flex items-center gap-2 flex-1 min-w-0 text-left',
+                                    'cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded',
+                                )}
+                            >
+                                <IconCell
+                                    itemUsageUid={node.physicalItem?.itemUsage?.uid as ITEM_USAGE}
+                                />
+                                <span className="font-medium truncate">{node.name}</span>
+                                <Badge variant="secondary" className="text-[10px] shrink-0">
+                                    {Number(coverage ?? 0).toFixed(2)}
+                                </Badge>
+                                {node.physicalItem?.eun && (
+                                    <Badge variant="outline" className="text-[10px] shrink-0">
+                                        {node.physicalItem.eun}
+                                    </Badge>
+                                )}
+                            </button>
+                            <SparePartActions
+                                node={node}
+                                currentSystemUid={system.uid}
+                                canEdit={canEdit}
+                            />
+                        </div>
+                    )
+                })}
             </div>
         </div>
     )

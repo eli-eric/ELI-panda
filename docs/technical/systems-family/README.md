@@ -249,7 +249,7 @@ Two `persist`ed stores mean expansion state and graph layout survive navigation 
 - **Permissions Phase 2** — team-scoped writes via `responsibleTeam`. Blocked on the absent `User`/`Employee` → `Team` membership edge.
 - **System creation in Hierarchy** — today creation lives in `systemItem`; the user guide flags moving it into the Hierarchy module.
 - **Drag-and-drop move at hierarchy level** — would obviate the dedicated `systemsMoving` module.
-- **Use Spare action in Hierarchy** — bring the spare-swap wizard (currently in a deprecated shared flow, feature-flagged off) back into Hierarchy.
+- **Use Spare in production** — the spare-swap wizard is wired into Hierarchy's Spare Parts tab (and the existing systemItem + overlay callers) on top of the shared `useSpareDialog`. Cache invalidation across all callers goes through `matchesSpareAffectedQuery` ([System Hierarchy → Cache invalidation for spare flows](./system-hierarchy.md#cache-invalidation-for-spare-flows)). The `enableSparePartsAssignment` feature flag still disables the button in production.
 
 ## Open questions
 

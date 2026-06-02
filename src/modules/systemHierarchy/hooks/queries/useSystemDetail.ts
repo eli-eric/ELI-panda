@@ -5,11 +5,15 @@ import { useEffect } from 'react'
 import { toast } from 'sonner'
 
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
-import { gql, useFragment } from '@/types/gql'
+// `useFragment` is a pure runtime cast (see src/types/gql/fragment-masking.ts), not a React
+// hook — the `use` prefix would otherwise trip rules-of-hooks when called inside .map().
+// Alias to `unmaskFragment` everywhere to make that intent explicit.
+import { gql, useFragment as unmaskFragment } from '@/types/gql'
 import {
     CatalogueItemFragment,
     PhysicalItemFragment,
     SystemDetailFragment,
+    SystemFieldsFragment,
 } from '@/utils/graphql/fragments'
 
 import { SYSTEM_DETAIL_QUERY_KEY } from '../../types/constants'
@@ -26,6 +30,16 @@ const fetchSystemDetail = (uid: string) =>
     request('/api/graphql', systemHierarchyDetailQuery, {
         where: { deleted: false, uid },
     })
+
+export interface SparePartsForSystem {
+    uid: string
+    name: string | null
+    physicalItem: {
+        uid: string | null
+        eun: string | null
+        itemUsage: { uid: string } | null
+    } | null
+}
 
 export interface OptimisticSystemHint {
     name: string
@@ -95,9 +109,9 @@ export const useSystemDetail = (leafUid: string | null) => {
         }
     }, [error])
 
-    const systemDetail = useFragment(SystemDetailFragment, data?.systems?.[0])
-    const physicalItem = useFragment(PhysicalItemFragment, systemDetail?.physicalItem)
-    const catalogueItem = useFragment(CatalogueItemFragment, physicalItem?.catalogueItem)
+    const systemDetail = unmaskFragment(SystemDetailFragment, data?.systems?.[0])
+    const physicalItem = unmaskFragment(PhysicalItemFragment, systemDetail?.physicalItem)
+    const catalogueItem = unmaskFragment(CatalogueItemFragment, physicalItem?.catalogueItem)
 
     // Map GraphQL response to SystemLeaf-like structure for compatibility
     const system = systemDetail
@@ -147,12 +161,31 @@ export const useSystemDetail = (leafUid: string | null) => {
         : null
 
     const sparePartsEdges = systemDetail?.sparePartsConnection?.edges ?? []
+    const sparePartsForSystems: SparePartsForSystem[] =
+        systemDetail?.sparePartsFor?.map(s => {
+            const fields = unmaskFragment(SystemFieldsFragment, s)
+            const item = unmaskFragment(PhysicalItemFragment, s.physicalItem)
+            return {
+                uid: fields.uid,
+                name: fields.name ?? null,
+                physicalItem: item
+                    ? {
+                          uid: item.uid ?? null,
+                          eun: item.eun ?? null,
+                          itemUsage: item.itemUsage?.uid
+                              ? { uid: item.itemUsage.uid }
+                              : null,
+                      }
+                    : null,
+            }
+        }) ?? []
 
     return {
         system,
         physicalItem,
         catalogueItem,
         sparePartsEdges,
+        sparePartsForSystems,
         sparePartsCoverageSum: systemDetail?.sparePartsCoverageSum ?? null,
         minimalSpareParstCount: systemDetail?.minimalSpareParstCount ?? null,
         refetch,

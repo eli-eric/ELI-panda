@@ -3,8 +3,9 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
 import { gql } from '@/types/gql'
 import type { SystemDisconnectInput } from '@/types/gql/graphql'
+import { RELATIONSHIP_GRAPH_QUERY_KEY } from '@/utils/query/queryKeys'
+import { matchesSpareAffectedQuery } from '@/utils/query/spareInvalidationPredicate'
 
-import { RELATIONSHIP_GRAPH_QUERY_KEY } from '../../types/constants'
 import { getDisconnectField, isSpareDisconnect } from '../../types/relationshipDisconnect'
 
 const DELETE_RELATIONSHIP = gql(`
@@ -51,7 +52,7 @@ export const useDeleteRelationship = () => {
         queryClient.invalidateQueries({ queryKey: [RELATIONSHIP_GRAPH_QUERY_KEY] })
         if (isSpareDisconnect(field)) {
             queryClient.invalidateQueries({
-                predicate: q => q.queryKey?.[0] === 'SystemDetail',
+                predicate: matchesSpareAffectedQuery([currentSystemUid, relatedSystemUid]),
             })
         }
 

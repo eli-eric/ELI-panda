@@ -206,7 +206,6 @@ export const messages = {
             hierarchyArrow: '→',
             failedToLoad: 'Failed to load system information',
             viewServiceDetails: 'View Service Details',
-            useSpare: 'Use',
             designatedSparePart: 'Designated spare part for:',
             originalCatalogParameter: '*Original catalog parameter modified by Service',
             jobPosition: ' ({position})',
@@ -220,6 +219,24 @@ export const messages = {
             location: 'Location:',
         },
         spareAssignment: {
+            useSpare: 'Use',
+            useSpareTooltip: 'Use this spare part',
+            useSpareDisabledTooltip: 'Spare parts assignment is disabled',
+            noPhysicalItemTooltip: 'This spare has no physical item assigned',
+            noPermissionTooltip: 'Requires SYSTEM_EDIT role',
+            remove: {
+                confirm: 'Remove this spare part?',
+                loading: 'Removing spare…',
+                success: 'Spare removed',
+                error: 'Failed to remove spare',
+                notFound: 'Spare relationship was not found',
+            },
+            spareFor: {
+                remove: {
+                    confirm: 'Remove this designated spare relationship?',
+                    success: 'Designated spare removed',
+                },
+            },
             wizard: {
                 steps: {
                     step1: {
