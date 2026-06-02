@@ -34,7 +34,7 @@ const DEFAULT_TIMEOUT = 15000
 // covers the cold-start window before the bridge has run, and non-React callers.
 const isBrowser = typeof window !== 'undefined'
 let cachedAuthToken: string | null = null
-let inFlightSession: Promise<string | null> | null = null
+let inFlightToken: Promise<string | null> | null = null
 
 /** Set by the SessionSync bridge whenever the session changes. */
 export const setAuthToken = (token: string | null | undefined): void => {
@@ -44,7 +44,7 @@ export const setAuthToken = (token: string | null | undefined): void => {
 /** Clear the cached token — on logout, or after a 401. */
 export const clearAuthToken = (): void => {
     cachedAuthToken = null
-    inFlightSession = null
+    inFlightToken = null
 }
 
 const resolveAuthToken = async (): Promise<string | null> => {
@@ -54,17 +54,17 @@ const resolveAuthToken = async (): Promise<string | null> => {
         const session = await getSession()
         return session?.user?.apiAccessToken ?? null
     }
-    if (!inFlightSession) {
-        inFlightSession = getSession()
+    if (!inFlightToken) {
+        inFlightToken = getSession()
             .then(session => {
                 cachedAuthToken = session?.user?.apiAccessToken ?? null
                 return cachedAuthToken
             })
             .finally(() => {
-                inFlightSession = null
+                inFlightToken = null
             })
     }
-    return inFlightSession
+    return inFlightToken
 }
 
 const withTimeout = (signal: AbortSignal | undefined, ms: number) => {

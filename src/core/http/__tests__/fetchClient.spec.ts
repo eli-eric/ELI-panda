@@ -191,6 +191,40 @@ describe('auth token caching', () => {
     })
 })
 
+describe('auth token caching (server path)', () => {
+    // On the server, a module-level cache would leak one user's token to another.
+    // The !isBrowser branch must resolve the session fresh every time.
+    const originalWindow = global.window
+
+    afterEach(() => {
+        global.window = originalWindow
+        jest.resetModules()
+    })
+
+    it('never caches the token across requests when window is undefined', async () => {
+        jest.resetModules()
+        // @ts-expect-error simulate a server environment (no window)
+        delete global.window
+
+        const serverGetSession = jest
+            .fn()
+            .mockResolvedValue({ user: { apiAccessToken: 'TOK' } })
+        jest.doMock('next-auth/react', () => ({ getSession: serverGetSession }))
+        jest.doMock('@/config/featureFlags', () => ({ isFeatureEnabled: () => false }))
+
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const { fetchRequestDetailed: serverFetch } = require('../fetchClient')
+        global.fetch = jest
+            .fn()
+            .mockResolvedValue(buildResponse({ body: { ok: true } })) as any
+
+        await serverFetch('/a')
+        await serverFetch('/b')
+
+        expect(serverGetSession).toHaveBeenCalledTimes(2)
+    })
+})
+
 describe('fetchRequest (data-only)', () => {
     it('unwraps data from fetchRequestDetailed', async () => {
         ;(global.fetch as jest.Mock).mockResolvedValueOnce(
