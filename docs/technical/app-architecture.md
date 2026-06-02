@@ -300,8 +300,9 @@ flowchart LR
 
 1. `pages/_app.tsx` initializes `QueryClient` and the provider tree above.
 2. `SessionProvider` calls `/api/auth/session` to hydrate the JWT-backed session.
-3. `NewLayout` decides shell vs. naked render based on `useSession()` status — unauthenticated users see the page directly (login screen lives at `pages/index.tsx`).
-4. `AppSidebar` reads `NAV_ITEMS` / `OTHERS_NAV_ITEMS` and filters them through `useFilteredNavigation` against `session.user.roles`.
+3. `SessionSync` (mounted under `SessionProvider`) mirrors the session's `apiAccessToken` into `fetchClient`'s in-memory cache, so REST calls don't each re-fetch the session.
+4. `NewLayout` decides shell vs. naked render based on `useSession()` status — unauthenticated users see the page directly (login screen lives at `pages/index.tsx`).
+5. `AppSidebar` reads `NAV_ITEMS` / `OTHERS_NAV_ITEMS` and filters them through `useFilteredNavigation` against `session.user.roles`.
 
 ### Authenticated GraphQL request
 
@@ -309,7 +310,7 @@ See the sequence diagram in [Data layer](#data-layer). The notable points: `getS
 
 ### REST fetch lifecycle
 
-`useQuery(['endpointKey', params], queryFetcher('endpointKey'))` → `extractParams` lifts `params` off the query key → `resolveEndpoint` calls `getEndpoints(params)` to produce a relative URL → `buildUrl` prepends `BASE_URL` → `fetchRequest` performs the HTTP call with a 15 s default timeout, optional abort signal, optional `signOut` on a refresh-token failure (see `fetchClient`).
+`useQuery(['endpointKey', params], queryFetcher('endpointKey'))` → `extractParams` lifts `params` off the query key → `resolveEndpoint` calls `getEndpoints(params)` to produce a relative URL → `buildUrl` prepends `BASE_URL` → `fetchRequest` performs the HTTP call with a 15 s default timeout and optional abort signal, attaching the cached `apiAccessToken` (clearing that cache on a 401) — see `fetchClient`.
 
 ## Integration points
 
