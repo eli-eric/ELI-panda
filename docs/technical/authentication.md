@@ -34,7 +34,8 @@ On first sign-in the JWT callback upserts a `User` node in Neo4j with default re
 | `src/modules/auth/auth-form.comp.tsx` | The single sign-in button — `signIn('azure-ad-beamlines')`. |
 | `src/pages/signout.tsx` | Programmatic sign-out page that redirects to `/` afterwards. |
 | `src/components/navigation/logout-button.tsx` | Sidebar dropdown menu entry that calls `signOut({ redirect: false })`. |
-| `src/core/http/fetchClient.ts` | REST client. Calls `getSession()` and attaches `Authorization: Bearer ${apiAccessToken}` on every outgoing request. |
+| `src/core/http/fetchClient.ts` | REST client. Attaches `Authorization: Bearer ${apiAccessToken}` to every outgoing request, reading the token from an in-memory cache (resolved once via `getSession()`, then reused) rather than calling `getSession()` per request. A 401 on an unvalidated token re-resolves the session once then stops (circuit breaker); a 401 on a token that already succeeded is treated as authorization and ignored. |
+| `src/components/auth/SessionSync.tsx` | Bridge mounted under `SessionProvider`. Mirrors the `useSession()` token into `fetchClient`'s cache on login / logout / user-switch so requests never need a per-call `getSession()`. |
 | `src/pages/api/graphql.ts` | Server-side GraphQL handler. Re-validates with `getServerSession` and threads `token.apiAccessToken` onto the Apollo context. |
 | `panda_entraid_app_registration.txt` | Repo-root checklist for registering the Entra ID app (no secrets). |
 
@@ -136,7 +137,7 @@ Two surfaces:
 - **Sidebar `LogoutButton`** (`src/components/navigation/logout-button.tsx`) — `signOut({ redirect: false })` then `router.push(PATH.ROOT)`. Used in normal flow.
 - **`/signout` page** (`src/pages/signout.tsx`) — checks `useSession().status`; if authenticated, calls `signOut({ redirect: false })`; if already unauthenticated, redirects to `/`. Useful as a guard URL.
 
-Neither flow tells the API gateway to invalidate the previously-issued `apiAccessToken` — that token remains valid until its `exp` regardless of the cookie being cleared. See *Open questions*.
+Client-side, the `SessionSync` bridge writes a `null` token into `fetchClient`'s cache when `useSession().status` becomes `unauthenticated`, so post-sign-out requests carry no token without re-fetching the session. Neither flow tells the API gateway to invalidate the previously-issued `apiAccessToken`, however — that token remains valid until its `exp` regardless of the cookie being cleared. See *Open questions*.
 
 ## Authorization layers
 
@@ -225,18 +226,20 @@ The middleware role map (`PATH_ROLES_CONFIG`, `src/lib/navigation/config.ts:160`
 
 ## Token usage on outgoing REST
 
-`src/core/http/fetchClient.ts:85-89` is the single attachment point:
+`src/core/http/fetchClient.ts` is the single attachment point. It does **not** call `getSession()` per request — that previously meant a ~270ms `/api/auth/session` round-trip on every call, and a request storm (one session fetch per concurrent query) that saturated the Next server. Instead the token lives in a module-level cache:
 
 ```ts
-const session = await getSession()
-if (session?.user?.apiAccessToken) {
-    headers['authorization'] = `Bearer ${session.user.apiAccessToken}`
-}
+const token = await resolveAuthToken()
+if (token) headers['authorization'] = `Bearer ${token}`
 ```
 
-`queryFetcher` and `queryMutate` (`src/utils/fetcher.ts`) ultimately call `fetchRequest` / `fetchRequestDetailed`, so every TanStack Query and mutation in the app inherits this header automatically.
+`resolveAuthToken` returns the cached token synchronously once resolved (a `tokenResolved` flag means even a token-less authenticated session is cached, not re-fetched per call); on a cold start it falls back to a **single-flight** `getSession()` (concurrent first calls share one promise). The `SessionSync` bridge keeps the cache in lockstep with the live session, so in steady state there are **zero** `/api/auth/session` requests. This is safe because `apiAccessToken` is a stable, long-lived JWT that does not rotate mid-session (see [Sign-in](#sign-in-azure-ad)).
 
-The 15 s `DEFAULT_TIMEOUT` and abort-signal plumbing live in the same module; auth has no special handling for 401s today — failed requests bubble up as `NormalizedHttpError` with `status: 401` and no automatic re-auth or sign-out.
+An `authEpoch` counter guards against a stale write: a `getSession()` that started before a logout / user-switch cannot resolve afterward and re-populate the cache, and the request that triggered it re-checks the epoch after awaiting — so it sends the current token (or none) rather than the superseded one, never a previous user's token. On the **server** the cache is bypassed entirely (resolved fresh per call) so a module-level token is never shared across users.
+
+`queryFetcher` and `queryMutate` (`src/utils/fetcher.ts`) ultimately call `fetchRequest` / `fetchRequestDetailed`, so every TanStack Query and mutation inherits this header automatically.
+
+The 15 s `DEFAULT_TIMEOUT` and abort-signal plumbing live in the same module. A successful response marks the cached token **validated**. A **401** is then handled by whether the token has ever succeeded: a 401 on a *validated* token is treated as authorization (resource-level) and left alone — the cache is not touched; a 401 on an *unvalidated* token (e.g. a bad/expired cold-start token) clears the cache and re-resolves the session **once**, then a circuit breaker stops further re-resolution until the token actually changes. This matters because the gateway returns 401 for authorization (role) failures as well as expired tokens (see *Open questions*), so a permission-denied request must not invalidate an otherwise-valid session. There is still no automatic re-auth or sign-out — failed requests bubble up as `NormalizedHttpError` with `status: 401` (a centralized 401 → `signOut()` is the proper follow-up; see [Maintenance recommendations](#maintenance-recommendations)).
 
 ## Entra ID app registration
 
@@ -280,8 +283,8 @@ Local-env reading of `getServerSession` (`pages/api/graphql.ts:30`) leans on the
 
 1. **Convert `[...nextauth].js` to TypeScript.** The session/JWT shape is already declared in `src/types/next-auth.d.ts`; converting unlocks compile-time checks on the callbacks and the Cypher upsert wrapper.
 2. **Fix the `exp` unit bug.** `Date.now() + 1000*60*60*24*365` produces milliseconds; JWT `exp` is seconds. Either divide by 1000 here or document explicitly that the gateway treats this value as ms.
-3. **Decide whether `apiAccessToken` should rotate on sign-out.** Today the cookie is cleared but the API gateway still accepts the previously-minted token until `exp`. Either shorten `exp` and refresh on demand, or maintain a revocation list on the gateway.
-4. **Centralise the 401 response.** `fetchClient` doesn't react to 401s — adding a single interceptor that triggers `signIn()` (or `signOut()`) on 401 prevents the "silently stuck on stale token" failure mode.
+3. **Decide whether `apiAccessToken` should rotate on sign-out.** Today the cookie is cleared but the API gateway still accepts the previously-minted token until `exp`. Either shorten `exp` and refresh on demand, or maintain a revocation list on the gateway. Note: `fetchClient` now caches the token in memory on the assumption that it is stable for the session (see [Token usage on outgoing REST](#token-usage-on-outgoing-rest)); if rotation is introduced, the cache would need to refresh on rotation (e.g. via `SessionProvider` re-fetch driving `SessionSync`), not just on login/logout.
+4. **Centralise the 401 response.** `fetchClient` clears its cached token on a 401 and re-resolves once (then a circuit breaker stops further re-resolution), but does not sign the user out — adding a single interceptor that triggers `signIn()` (or `signOut()`) on a persistent 401 would prevent the "silently stuck on stale token" failure mode entirely.
 5. **Document the facility-code seam.** The hardcoded `"B"` in `neo4GetOrCreateUser` is the only piece of multi-tenant code in auth; either turn it into an env var or codify the rule that one deployment = one facility.
 6. **Reconcile `panda_entraid_app_registration.txt` with the real provider id.** The checklist shows `/api/auth/callback/azure-ad` but the provider is `azure-ad-beamlines`. Bring the doc and the registered redirect URIs in sync.
 7. **Add per-callback structured logging.** `[Security]` warnings in middleware are good; adding parallel structured logs for `jwt` and `session` callbacks would make audit trails much cheaper to reconstruct.
@@ -294,6 +297,7 @@ Local-env reading of `getServerSession` (`pages/api/graphql.ts:30`) leans on the
 ## Open questions
 
 - Is the gateway's JWT validator tolerant of `exp` being in milliseconds, or is the token effectively non-expiring in production? (`src/pages/api/auth/[...nextauth].js:106`)
+- The external REST gateway (eli-panda-api, Go/Echo) returns **401 for both authentication and authorization** — its role check (`middlewares/auth.go` `Authorization()`) returns `echo.ErrUnauthorized` when the user lacks a required role, same as a bad/expired token (`middlewares/jwt.go`). This is why `fetchClient` only clears + re-resolves on a 401 against an *unvalidated* token and ignores 401s on a token that already succeeded (a role denial must not invalidate a valid session). A planned centralized 401 → `signOut()` would need a distinguishing signal (e.g. a body code) to avoid signing users out on mere permission denials.
 - Should sign-out invalidate `apiAccessToken` server-side, or is a long-lived gateway token acceptable for the audience?
 - The `CredentialsProvider` is wired but has no UI surface. Is it still used by any test runner / SDK, or can it be removed?
 - `pages/api/graphqlNative.ts` exists alongside `pages/api/graphql.ts` — does it share auth behaviour? (Already flagged in [App architecture](./app-architecture.md).)

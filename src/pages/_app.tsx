@@ -10,6 +10,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import { IntlProvider } from 'react-intl'
 import { messages } from 'src/i18n/src'
 
+import { SessionSync } from '@/components/auth/SessionSync'
 import { EnvironmentWarning } from '@/components/environment/EnvironmentWarning'
 import { NewLayout } from '@/components/layout/NewLayout'
 import { Toaster as SonnerToaster } from '@/components/ui/sonner'
@@ -57,6 +58,7 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
         <QueryClientProvider client={queryClient}>
             <HydrationBoundary state={componentProps.dehydratedState}>
                 <SessionProvider session={session} refetchOnWindowFocus={false}>
+                    <SessionSync />
                     <IntlProvider locale={'en'} messages={messages.en}>
                         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
                             <EnvironmentWarning />
