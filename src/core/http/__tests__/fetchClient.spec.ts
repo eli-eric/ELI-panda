@@ -1,6 +1,6 @@
 import { getSession } from 'next-auth/react'
 
-import { clearAuthToken, fetchRequest, fetchRequestDetailed } from '../fetchClient'
+import { clearAuthToken, fetchRequest, fetchRequestDetailed, setAuthToken } from '../fetchClient'
 
 jest.mock('next-auth/react', () => ({
     getSession: jest.fn(),
@@ -178,6 +178,47 @@ describe('auth token caching', () => {
         await fetchRequestDetailed('/y')
 
         expect(mockGetSession).toHaveBeenCalledTimes(2)
+    })
+
+    it('does not let an in-flight getSession overwrite a token set by the bridge', async () => {
+        let resolveSession!: (v: unknown) => void
+        mockGetSession.mockReturnValueOnce(
+            new Promise(r => {
+                resolveSession = r
+            }),
+        )
+        ;(global.fetch as jest.Mock).mockResolvedValue(buildResponse({ body: { ok: true } }))
+
+        const pending = fetchRequestDetailed('/a') // cold start → getSession in-flight
+        setAuthToken('BRIDGE') // bridge writes a fresh token mid-flight
+        resolveSession({ user: { apiAccessToken: 'STALE' } }) // stale session resolves
+        await pending
+
+        ;(global.fetch as jest.Mock).mockClear()
+        await fetchRequestDetailed('/b')
+        const headers = (global.fetch as jest.Mock).mock.calls[0][1].headers
+        expect(headers.authorization).toBe('Bearer BRIDGE')
+    })
+
+    it('does not repopulate the cache after logout while a session resolves in-flight', async () => {
+        let resolveSession!: (v: unknown) => void
+        mockGetSession.mockReturnValueOnce(
+            new Promise(r => {
+                resolveSession = r
+            }),
+        )
+        ;(global.fetch as jest.Mock).mockResolvedValue(buildResponse({ body: { ok: true } }))
+
+        const pending = fetchRequestDetailed('/a')
+        clearAuthToken() // logout while getSession is pending
+        resolveSession({ user: { apiAccessToken: 'STALE' } })
+        await pending
+
+        mockGetSession.mockResolvedValue(null) // empty cache → re-resolve, no token
+        ;(global.fetch as jest.Mock).mockClear()
+        await fetchRequestDetailed('/b')
+        const headers = (global.fetch as jest.Mock).mock.calls[0][1].headers
+        expect(headers.authorization).toBeUndefined()
     })
 
     it('omits the Authorization header when there is no token', async () => {

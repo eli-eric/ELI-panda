@@ -35,33 +35,44 @@ const DEFAULT_TIMEOUT = 15000
 const isBrowser = typeof window !== 'undefined'
 let cachedAuthToken: string | null = null
 let inFlightToken: Promise<string | null> | null = null
+// Bumped on every set/clear so an in-flight getSession() that started before a
+// logout / user-switch can't resolve later and clobber the cache (stale write).
+let authEpoch = 0
 
 /** Set by the SessionSync bridge whenever the session changes. */
 export const setAuthToken = (token: string | null | undefined): void => {
+    authEpoch++
+    inFlightToken = null
     cachedAuthToken = token ?? null
 }
 
 /** Clear the cached token — on logout, or after a 401. */
 export const clearAuthToken = (): void => {
-    cachedAuthToken = null
+    authEpoch++
     inFlightToken = null
+    cachedAuthToken = null
 }
 
 const resolveAuthToken = async (): Promise<string | null> => {
-    if (cachedAuthToken) return cachedAuthToken
-    // Never share a module-level token across users on the server.
+    // Never share a module-level token across users on the server: resolve fresh,
+    // before any cache read, so the invariant holds structurally.
     if (!isBrowser) {
         const session = await getSession()
         return session?.user?.apiAccessToken ?? null
     }
+    if (cachedAuthToken) return cachedAuthToken
     if (!inFlightToken) {
+        const epoch = authEpoch
         inFlightToken = getSession()
             .then(session => {
-                cachedAuthToken = session?.user?.apiAccessToken ?? null
-                return cachedAuthToken
+                const token = session?.user?.apiAccessToken ?? null
+                // Only adopt the result if no set/clear happened while in-flight.
+                if (epoch === authEpoch) cachedAuthToken = token
+                return token
             })
             .finally(() => {
-                inFlightToken = null
+                // Don't null a newer in-flight created after a set/clear.
+                if (epoch === authEpoch) inFlightToken = null
             })
     }
     return inFlightToken
