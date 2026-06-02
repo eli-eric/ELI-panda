@@ -235,7 +235,7 @@ if (token) headers['authorization'] = `Bearer ${token}`
 
 `resolveAuthToken` returns the cached token synchronously once resolved (a `tokenResolved` flag means even a token-less authenticated session is cached, not re-fetched per call); on a cold start it falls back to a **single-flight** `getSession()` (concurrent first calls share one promise). The `SessionSync` bridge keeps the cache in lockstep with the live session, so in steady state there are **zero** `/api/auth/session` requests. This is safe because `apiAccessToken` is a stable, long-lived JWT that does not rotate mid-session (see [Sign-in](#sign-in-azure-ad)).
 
-An `authEpoch` counter guards against a stale write: a `getSession()` that started before a logout / user-switch cannot resolve afterward and re-populate the cache. On the **server** the cache is bypassed entirely (resolved fresh per call) so a module-level token is never shared across users.
+An `authEpoch` counter guards against a stale write: a `getSession()` that started before a logout / user-switch cannot resolve afterward and re-populate the cache, and the request that triggered it re-checks the epoch after awaiting — so it sends the current token (or none) rather than the superseded one, never a previous user's token. On the **server** the cache is bypassed entirely (resolved fresh per call) so a module-level token is never shared across users.
 
 `queryFetcher` and `queryMutate` (`src/utils/fetcher.ts`) ultimately call `fetchRequest` / `fetchRequestDetailed`, so every TanStack Query and mutation inherits this header automatically.
 

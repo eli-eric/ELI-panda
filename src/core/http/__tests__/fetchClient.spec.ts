@@ -194,6 +194,10 @@ describe('auth token caching', () => {
         resolveSession({ user: { apiAccessToken: 'STALE' } }) // stale session resolves
         await pending
 
+        // even the originating request must use BRIDGE, never the superseded STALE
+        const originating = (global.fetch as jest.Mock).mock.calls[0][1].headers
+        expect(originating.authorization).toBe('Bearer BRIDGE')
+
         ;(global.fetch as jest.Mock).mockClear()
         await fetchRequestDetailed('/b')
         const headers = (global.fetch as jest.Mock).mock.calls[0][1].headers
@@ -213,6 +217,10 @@ describe('auth token caching', () => {
         setAuthToken(null) // logout caches the null token mid-flight
         resolveSession({ user: { apiAccessToken: 'STALE' } }) // stale session resolves, must not win
         await pending
+
+        // the originating request must not carry the superseded STALE token either
+        const originating = (global.fetch as jest.Mock).mock.calls[0][1].headers
+        expect(originating.authorization).toBeUndefined()
 
         mockGetSession.mockClear()
         ;(global.fetch as jest.Mock).mockClear()

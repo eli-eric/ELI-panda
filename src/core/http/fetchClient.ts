@@ -101,14 +101,12 @@ const resolveAuthToken = async (): Promise<string | null> => {
         return session?.user?.apiAccessToken ?? null
     }
     if (tokenResolved) return cachedAuthToken
+    const epoch = authEpoch
     if (!inFlightToken) {
-        const epoch = authEpoch
         inFlightToken = getSession()
             .then(session => {
                 const token = session?.user?.apiAccessToken ?? null
                 // Only adopt the result if no set/clear happened while in-flight.
-                // (The originating request still receives `token`; a logout that
-                // raced it sends one stale-but-still-valid request — acceptable.)
                 if (epoch === authEpoch) {
                     cachedAuthToken = token
                     tokenResolved = true
@@ -120,7 +118,14 @@ const resolveAuthToken = async (): Promise<string | null> => {
                 if (epoch === authEpoch) inFlightToken = null
             })
     }
-    return inFlightToken
+    const token = await inFlightToken
+    // If a set/clear (login / logout / user-switch) landed while we awaited, use
+    // the now-current state instead of this in-flight's value, so a superseded
+    // (e.g. previous user's) token is never sent on this request.
+    if (epoch !== authEpoch) {
+        return tokenResolved ? cachedAuthToken : null
+    }
+    return token
 }
 
 const withTimeout = (signal: AbortSignal | undefined, ms: number) => {
