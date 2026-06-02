@@ -102,18 +102,12 @@ export const SpareForTabContainer: FC<SpareForTabProps> = ({ system }) => {
                                 )}
                                 <ArrowRight className="h-3 w-3 text-muted-foreground shrink-0 ml-auto" />
                             </button>
-                            <div
-                                onClick={e => e.stopPropagation()}
-                                onKeyDown={e => e.stopPropagation()}
-                                role="presentation"
-                            >
-                                <SpareRelationshipDeleteButton
-                                    currentSystemUid={system.uid}
-                                    relatedSystemUid={row.uid}
-                                    direction="outbound"
-                                    canEdit={canEdit}
-                                />
-                            </div>
+                            <SpareRelationshipDeleteButton
+                                currentSystemUid={system.uid}
+                                relatedSystemUid={row.uid}
+                                direction="outbound"
+                                canEdit={canEdit}
+                            />
                         </div>
                     ))}
             </div>

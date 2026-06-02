@@ -23,6 +23,7 @@ import { SpareParentSystemSelectTable } from './spare-parent-system-select.table
 interface SpareAssignmentWizardProps {
     systemUid: string
     spareItemUid: string
+    spareSystemUid?: string
     onSuccess?: () => void
 }
 
@@ -57,6 +58,7 @@ const AutoAssignCheckbox = () => {
 export const SpareAssignmentWizardContainer = ({
     systemUid,
     spareItemUid,
+    spareSystemUid,
     onSuccess,
 }: SpareAssignmentWizardProps) => {
     const { formatMessage: fm } = useIntl()
@@ -106,6 +108,13 @@ export const SpareAssignmentWizardContainer = ({
             ...(newParentSystemUid && { newParentSystemUid }),
         }
 
+        // Every system whose cached detail/overlay could be stale after the swap:
+        // the source system, the moved physical item, the spare's own system (it loses
+        // its item), and the chosen destination for the old item (if not auto-assigned).
+        const affectedUids = [systemUid, spareItemUid, spareSystemUid, newParentSystemUid].filter(
+            (uid): uid is string => Boolean(uid),
+        )
+
         // Close immediately — pipeline feedback lives in the toast
         closeModal('spare-assignment-wizard')
         reset()
@@ -114,7 +123,7 @@ export const SpareAssignmentWizardContainer = ({
             (async () => {
                 await mutateAsync(payload)
                 await queryClient.invalidateQueries({
-                    predicate: matchesSpareAffectedQuery([systemUid, spareItemUid]),
+                    predicate: matchesSpareAffectedQuery(affectedUids),
                 })
                 // Tree-structure recalc — intentionally fire-and-forget. Awaiting it would
                 // let a recalc failure flip this toast to "Failed to assign" even though the

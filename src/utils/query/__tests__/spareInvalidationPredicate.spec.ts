@@ -77,4 +77,13 @@ describe('matchesSpareAffectedQuery', () => {
         expect(matchA(asQuery(key))).toBe(true)
         expect(matchB(asQuery(key))).toBe(false)
     })
+
+    it('invalidates the spare system side of a swap (multi-uid list)', () => {
+        // The wizard passes [sourceSystem, physicalItem, spareSystem, destination].
+        // A query keyed by the spare system's own uid must match so its detail/overlay refetch.
+        const SPARE_SYSTEM = 'spare-system-uid-dddd-4444'
+        const swapPredicate = matchesSpareAffectedQuery([SYS_A, SPARE, SPARE_SYSTEM])
+        const spareDetailKey = ['SystemDetail', { where: { uid: SPARE_SYSTEM } }, {}]
+        expect(swapPredicate(asQuery(spareDetailKey))).toBe(true)
+    })
 })

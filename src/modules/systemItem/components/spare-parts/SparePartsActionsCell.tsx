@@ -59,6 +59,7 @@ export const SparePartsActionsCell = ({
             openUseSpare({
                 systemUid,
                 spareItemUid,
+                spareSystemUid: node.uid,
             })
         }
     }

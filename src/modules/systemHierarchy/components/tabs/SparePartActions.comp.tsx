@@ -42,16 +42,15 @@ export const SparePartActions: FC<Props> = ({ node, currentSystemUid, canEdit })
 
     const handleUseSpare = () => {
         if (useDisabled || !physicalItemUid) return
-        openUseSpare({ systemUid: currentSystemUid, spareItemUid: physicalItemUid })
+        openUseSpare({
+            systemUid: currentSystemUid,
+            spareItemUid: physicalItemUid,
+            spareSystemUid: node.uid,
+        })
     }
 
     return (
-        <div
-            className="flex items-center gap-1 shrink-0"
-            onClick={e => e.stopPropagation()}
-            onKeyDown={e => e.stopPropagation()}
-            role="presentation"
-        >
+        <div className="flex items-center gap-1 shrink-0">
             <Tooltip content={fm({ id: useTooltipId })}>
                 <Button
                     type="button"

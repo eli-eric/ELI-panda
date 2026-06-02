@@ -38,9 +38,9 @@ export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
         }
     }
 
-    const handleUseSpare = (spareItemUid: string, systemUid: string) => {
+    const handleUseSpare = (spareItemUid: string, systemUid: string, spareSystemUid: string) => {
         return () => {
-            openUseSpare({ systemUid, spareItemUid, onSuccess: onSpareAssigned })
+            openUseSpare({ systemUid, spareItemUid, spareSystemUid, onSuccess: onSpareAssigned })
         }
     }
 
@@ -128,6 +128,7 @@ export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
                                                 onClick={handleUseSpare(
                                                     physicalItem?.uid || '',
                                                     systemDetail.uid,
+                                                    spareSystemUid,
                                                 )}
                                                 className="text-[9px] px-1.5 py-0.5 h-5"
                                                 size="sm"

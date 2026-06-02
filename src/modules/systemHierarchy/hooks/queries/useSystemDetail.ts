@@ -5,9 +5,10 @@ import { useEffect } from 'react'
 import { toast } from 'sonner'
 
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
-// `useFragment` is a pure runtime cast (see src/types/gql/fragment-masking.ts) — the
-// `use` prefix trips rules-of-hooks when called inside .map(). Alias to make intent clear.
-import { gql, useFragment as unmaskFragment,useFragment } from '@/types/gql'
+// `useFragment` is a pure runtime cast (see src/types/gql/fragment-masking.ts), not a React
+// hook — the `use` prefix would otherwise trip rules-of-hooks when called inside .map().
+// Alias to `unmaskFragment` everywhere to make that intent explicit.
+import { gql, useFragment as unmaskFragment } from '@/types/gql'
 import {
     CatalogueItemFragment,
     PhysicalItemFragment,
@@ -108,9 +109,9 @@ export const useSystemDetail = (leafUid: string | null) => {
         }
     }, [error])
 
-    const systemDetail = useFragment(SystemDetailFragment, data?.systems?.[0])
-    const physicalItem = useFragment(PhysicalItemFragment, systemDetail?.physicalItem)
-    const catalogueItem = useFragment(CatalogueItemFragment, physicalItem?.catalogueItem)
+    const systemDetail = unmaskFragment(SystemDetailFragment, data?.systems?.[0])
+    const physicalItem = unmaskFragment(PhysicalItemFragment, systemDetail?.physicalItem)
+    const catalogueItem = unmaskFragment(CatalogueItemFragment, physicalItem?.catalogueItem)
 
     // Map GraphQL response to SystemLeaf-like structure for compatibility
     const system = systemDetail
