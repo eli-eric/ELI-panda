@@ -26,6 +26,47 @@ export interface FetchRequestResult<T = unknown> {
 
 const DEFAULT_TIMEOUT = 15000
 
+// apiAccessToken is a stable, per-session JWT (no mid-session rotation), so we
+// resolve it once and reuse it instead of hitting /api/auth/session on every
+// request — which previously added a ~270ms round-trip per call and stormed the
+// Next server. The SessionSync bridge keeps this in lockstep with the live
+// session (login / logout / user-switch); a single-flight getSession() fallback
+// covers the cold-start window before the bridge has run, and non-React callers.
+const isBrowser = typeof window !== 'undefined'
+let cachedAuthToken: string | null = null
+let inFlightSession: Promise<string | null> | null = null
+
+/** Set by the SessionSync bridge whenever the session changes. */
+export const setAuthToken = (token: string | null | undefined): void => {
+    cachedAuthToken = token ?? null
+}
+
+/** Clear the cached token — on logout, or after a 401. */
+export const clearAuthToken = (): void => {
+    cachedAuthToken = null
+    inFlightSession = null
+}
+
+const resolveAuthToken = async (): Promise<string | null> => {
+    if (cachedAuthToken) return cachedAuthToken
+    // Never share a module-level token across users on the server.
+    if (!isBrowser) {
+        const session = await getSession()
+        return session?.user?.apiAccessToken ?? null
+    }
+    if (!inFlightSession) {
+        inFlightSession = getSession()
+            .then(session => {
+                cachedAuthToken = session?.user?.apiAccessToken ?? null
+                return cachedAuthToken
+            })
+            .finally(() => {
+                inFlightSession = null
+            })
+    }
+    return inFlightSession
+}
+
 const withTimeout = (signal: AbortSignal | undefined, ms: number) => {
     const controller = new AbortController()
     const timer = setTimeout(() => controller.abort(), ms)
@@ -82,11 +123,11 @@ export async function fetchRequestDetailed<T = unknown>(
     url: string,
     options: FetchRequestOptions = {},
 ): Promise<FetchRequestResult<T>> {
-    const session = await getSession()
+    const token = await resolveAuthToken()
     const headers: Record<string, string> = { ...(options.headers || {}) }
 
-    if (session?.user?.apiAccessToken) {
-        headers['authorization'] = `Bearer ${session.user.apiAccessToken}`
+    if (token) {
+        headers['authorization'] = `Bearer ${token}`
     }
 
     let body = options.body
@@ -119,6 +160,11 @@ export async function fetchRequestDetailed<T = unknown>(
     clear()
 
     if (!response.ok) {
+        // A stale/expired session yields a 401; drop the cached token so the
+        // next request re-resolves a fresh session (self-healing).
+        if (response.status === 401) {
+            clearAuthToken()
+        }
         let details: any
         try {
             details = await response.clone().json()

@@ -1,6 +1,6 @@
 import { getSession } from 'next-auth/react'
 
-import { fetchRequest, fetchRequestDetailed } from '../fetchClient'
+import { clearAuthToken, fetchRequest, fetchRequestDetailed } from '../fetchClient'
 
 jest.mock('next-auth/react', () => ({
     getSession: jest.fn(),
@@ -54,6 +54,7 @@ const buildResponse = ({
 
 beforeEach(() => {
     jest.clearAllMocks()
+    clearAuthToken() // reset module-level token cache between tests
     mockGetSession.mockResolvedValue(null)
     global.fetch = jest.fn() as any
 })
@@ -138,6 +139,55 @@ describe('fetchRequestDetailed', () => {
         const abortErr = Object.assign(new Error('abort'), { name: 'AbortError' })
         ;(global.fetch as jest.Mock).mockRejectedValueOnce(abortErr)
         await expect(fetchRequestDetailed('/x')).rejects.toBe(abortErr)
+    })
+})
+
+describe('auth token caching', () => {
+    it('resolves the session once and reuses the token across requests', async () => {
+        mockGetSession.mockResolvedValue({ user: { apiAccessToken: 'TOK' } })
+        ;(global.fetch as jest.Mock).mockResolvedValue(buildResponse({ body: { ok: true } }))
+
+        await fetchRequestDetailed('/a')
+        await fetchRequestDetailed('/b')
+
+        expect(mockGetSession).toHaveBeenCalledTimes(1)
+        const second = (global.fetch as jest.Mock).mock.calls[1][1].headers
+        expect(second.authorization).toBe('Bearer TOK')
+    })
+
+    it('single-flights concurrent cold-start requests into one getSession call', async () => {
+        mockGetSession.mockResolvedValue({ user: { apiAccessToken: 'TOK' } })
+        ;(global.fetch as jest.Mock).mockResolvedValue(buildResponse({ body: { ok: true } }))
+
+        await Promise.all([
+            fetchRequestDetailed('/a'),
+            fetchRequestDetailed('/b'),
+            fetchRequestDetailed('/c'),
+        ])
+
+        expect(mockGetSession).toHaveBeenCalledTimes(1)
+    })
+
+    it('clears the cached token on 401 so the next request re-resolves the session', async () => {
+        mockGetSession.mockResolvedValue({ user: { apiAccessToken: 'TOK' } })
+        ;(global.fetch as jest.Mock)
+            .mockResolvedValueOnce(buildResponse({ status: 401, statusText: 'Unauthorized' }))
+            .mockResolvedValueOnce(buildResponse({ body: { ok: true } }))
+
+        await expect(fetchRequestDetailed('/x')).rejects.toMatchObject({ status: 401 })
+        await fetchRequestDetailed('/y')
+
+        expect(mockGetSession).toHaveBeenCalledTimes(2)
+    })
+
+    it('omits the Authorization header when there is no token', async () => {
+        mockGetSession.mockResolvedValue(null)
+        ;(global.fetch as jest.Mock).mockResolvedValueOnce(buildResponse({ body: { ok: true } }))
+
+        await fetchRequestDetailed('/x')
+
+        const headers = (global.fetch as jest.Mock).mock.calls[0][1].headers
+        expect(headers.authorization).toBeUndefined()
     })
 })
 
