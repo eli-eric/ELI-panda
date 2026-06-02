@@ -38,25 +38,35 @@ let cachedAuthToken: string | null = null
 // (but authenticated) session is cached too instead of re-fetching getSession()
 // on every request.
 let tokenResolved = false
+// True once the current cached token has received a non-401 response, i.e. it
+// genuinely authenticates. A 401 against a validated token is authorization
+// (resource-level), not authentication, so it must NOT churn the cache.
+let tokenValidated = false
 let inFlightToken: Promise<string | null> | null = null
 // Bumped on every set/clear so an in-flight getSession() that started before a
 // logout / user-switch can't resolve later and clobber the cache (stale write).
 let authEpoch = 0
-// Circuit breaker: on a 401 we clear and re-resolve the session once; if the
-// fresh session still 401s, we stop re-resolving so a persistently-rejected
-// token can't storm getSession() on every request. Re-armed by a fresh token
-// (setAuthToken) or any successful response. The proper fix is a centralized
-// 401 -> signOut() (see docs/technical/authentication.md, "Centralise the 401
-// response").
+// Circuit breaker for an as-yet-unvalidated token: on a 401 we clear + re-resolve
+// the session once; if the fresh session still 401s we stop, so a bad/expired
+// cold-start token can't storm getSession() on every request. Re-armed only when
+// the token actually changes. The proper fix is a centralized 401 -> signOut()
+// (see docs/technical/authentication.md, "Centralise the 401 response").
 let reauthAfter401Attempted = false
 
 /** @internal Only SessionSync should call this — set the cached token on session change. */
 export const setAuthToken = (token: string | null | undefined): void => {
+    const next = token ?? null
+    const changed = next !== cachedAuthToken
     authEpoch++
     inFlightToken = null
-    cachedAuthToken = token ?? null
+    cachedAuthToken = next
     tokenResolved = true
-    reauthAfter401Attempted = false
+    // Only a genuinely new token re-opens validation / the 401 breaker; a
+    // SessionProvider refetch of the same token leaves that state untouched.
+    if (changed) {
+        tokenValidated = false
+        reauthAfter401Attempted = false
+    }
 }
 
 const resetTokenCache = (): void => {
@@ -64,6 +74,7 @@ const resetTokenCache = (): void => {
     inFlightToken = null
     cachedAuthToken = null
     tokenResolved = false
+    tokenValidated = false
 }
 
 /** @internal Invalidate the cache to an unresolved state (forces a fresh getSession on the next request) and re-arm the 401 breaker. */
@@ -73,8 +84,10 @@ export const clearAuthToken = (): void => {
 }
 
 const handleUnauthorized = (): void => {
-    // Already retried with a fresh session and still got 401: the token is
-    // genuinely rejected, so stop re-resolving to avoid a getSession() storm.
+    // A 401 on a token that already succeeded is authorization, not
+    // authentication — the token is valid, so leave the cache alone.
+    if (tokenValidated) return
+    // Unvalidated token: clear + re-resolve once; if it still 401s, stop.
     if (reauthAfter401Attempted) return
     reauthAfter401Attempted = true
     resetTokenCache()
@@ -94,6 +107,8 @@ const resolveAuthToken = async (): Promise<string | null> => {
             .then(session => {
                 const token = session?.user?.apiAccessToken ?? null
                 // Only adopt the result if no set/clear happened while in-flight.
+                // (The originating request still receives `token`; a logout that
+                // raced it sends one stale-but-still-valid request — acceptable.)
                 if (epoch === authEpoch) {
                     cachedAuthToken = token
                     tokenResolved = true
@@ -225,8 +240,9 @@ export async function fetchRequestDetailed<T = unknown>(
         throw error
     }
 
-    // Successful response: the current token works — re-arm 401 handling.
-    reauthAfter401Attempted = false
+    // Successful response: the current token genuinely authenticates, so a later
+    // 401 against it is authorization (not expiry) and must not churn the cache.
+    tokenValidated = true
 
     const data = await parseResponseBody<T>(response, options.responseType)
 

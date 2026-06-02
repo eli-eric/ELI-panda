@@ -34,7 +34,7 @@ On first sign-in the JWT callback upserts a `User` node in Neo4j with default re
 | `src/modules/auth/auth-form.comp.tsx` | The single sign-in button — `signIn('azure-ad-beamlines')`. |
 | `src/pages/signout.tsx` | Programmatic sign-out page that redirects to `/` afterwards. |
 | `src/components/navigation/logout-button.tsx` | Sidebar dropdown menu entry that calls `signOut({ redirect: false })`. |
-| `src/core/http/fetchClient.ts` | REST client. Attaches `Authorization: Bearer ${apiAccessToken}` to every outgoing request, reading the token from an in-memory cache (resolved once via `getSession()`, then reused) rather than calling `getSession()` per request. On a 401 it re-resolves the session once, then stops (circuit breaker). |
+| `src/core/http/fetchClient.ts` | REST client. Attaches `Authorization: Bearer ${apiAccessToken}` to every outgoing request, reading the token from an in-memory cache (resolved once via `getSession()`, then reused) rather than calling `getSession()` per request. A 401 on an unvalidated token re-resolves the session once then stops (circuit breaker); a 401 on a token that already succeeded is treated as authorization and ignored. |
 | `src/components/auth/SessionSync.tsx` | Bridge mounted under `SessionProvider`. Mirrors the `useSession()` token into `fetchClient`'s cache on login / logout / user-switch so requests never need a per-call `getSession()`. |
 | `src/pages/api/graphql.ts` | Server-side GraphQL handler. Re-validates with `getServerSession` and threads `token.apiAccessToken` onto the Apollo context. |
 | `panda_entraid_app_registration.txt` | Repo-root checklist for registering the Entra ID app (no secrets). |
@@ -239,7 +239,7 @@ An `authEpoch` counter guards against a stale write: a `getSession()` that start
 
 `queryFetcher` and `queryMutate` (`src/utils/fetcher.ts`) ultimately call `fetchRequest` / `fetchRequestDetailed`, so every TanStack Query and mutation inherits this header automatically.
 
-The 15 s `DEFAULT_TIMEOUT` and abort-signal plumbing live in the same module. On a **401**, `fetchClient` clears the cached token and re-resolves the session **once**; if the fresh session still 401s it stops re-resolving (a circuit breaker), so a persistently-rejected token can't storm `getSession()` on every request. The breaker re-arms on any successful response or a fresh token from `SessionSync`. There is still no automatic re-auth or sign-out — failed requests bubble up as `NormalizedHttpError` with `status: 401` (a centralized 401 → `signOut()` is the proper follow-up; see [Maintenance recommendations](#maintenance-recommendations)).
+The 15 s `DEFAULT_TIMEOUT` and abort-signal plumbing live in the same module. A successful response marks the cached token **validated**. A **401** is then handled by whether the token has ever succeeded: a 401 on a *validated* token is treated as authorization (resource-level) and left alone — the cache is not touched; a 401 on an *unvalidated* token (e.g. a bad/expired cold-start token) clears the cache and re-resolves the session **once**, then a circuit breaker stops further re-resolution until the token actually changes. This matters because the gateway returns 401 for authorization (role) failures as well as expired tokens (see *Open questions*), so a permission-denied request must not invalidate an otherwise-valid session. There is still no automatic re-auth or sign-out — failed requests bubble up as `NormalizedHttpError` with `status: 401` (a centralized 401 → `signOut()` is the proper follow-up; see [Maintenance recommendations](#maintenance-recommendations)).
 
 ## Entra ID app registration
 
@@ -297,6 +297,7 @@ Local-env reading of `getServerSession` (`pages/api/graphql.ts:30`) leans on the
 ## Open questions
 
 - Is the gateway's JWT validator tolerant of `exp` being in milliseconds, or is the token effectively non-expiring in production? (`src/pages/api/auth/[...nextauth].js:106`)
+- The external REST gateway (eli-panda-api, Go/Echo) returns **401 for both authentication and authorization** — its role check (`middlewares/auth.go` `Authorization()`) returns `echo.ErrUnauthorized` when the user lacks a required role, same as a bad/expired token (`middlewares/jwt.go`). This is why `fetchClient` only clears + re-resolves on a 401 against an *unvalidated* token and ignores 401s on a token that already succeeded (a role denial must not invalidate a valid session). A planned centralized 401 → `signOut()` would need a distinguishing signal (e.g. a body code) to avoid signing users out on mere permission denials.
 - Should sign-out invalidate `apiAccessToken` server-side, or is a long-lived gateway token acceptable for the audience?
 - The `CredentialsProvider` is wired but has no UI surface. Is it still used by any test runner / SDK, or can it be removed?
 - `pages/api/graphqlNative.ts` exists alongside `pages/api/graphql.ts` — does it share auth behaviour? (Already flagged in [App architecture](./app-architecture.md).)

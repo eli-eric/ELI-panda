@@ -249,18 +249,36 @@ describe('auth token caching', () => {
         expect(mockGetSession).toHaveBeenCalledTimes(2)
     })
 
-    it('re-arms 401 handling after a successful response', async () => {
+    it('ignores a 401 once the token has succeeded (authorization, not auth)', async () => {
         mockGetSession.mockResolvedValue({ user: { apiAccessToken: 'TOK' } })
         ;(global.fetch as jest.Mock)
-            .mockResolvedValueOnce(buildResponse({ status: 401, statusText: 'Unauthorized' }))
-            .mockResolvedValueOnce(buildResponse({ body: { ok: true } }))
-            .mockResolvedValueOnce(buildResponse({ status: 401, statusText: 'Unauthorized' }))
-            .mockResolvedValue(buildResponse({ body: { ok: true } }))
+            .mockResolvedValueOnce(buildResponse({ body: { ok: true } })) // /a → validates token
+            .mockResolvedValueOnce(buildResponse({ status: 401, statusText: 'Unauthorized' })) // /b authz 401
+            .mockResolvedValue(buildResponse({ body: { ok: true } })) // /c
 
-        await expect(fetchRequestDetailed('/a')).rejects.toMatchObject({ status: 401 }) // resolve #1, clear
-        await fetchRequestDetailed('/b') // resolve #2, 200 → re-arm
-        await expect(fetchRequestDetailed('/c')).rejects.toMatchObject({ status: 401 }) // breaker re-armed → clear
-        await fetchRequestDetailed('/d') // resolve #3
+        await fetchRequestDetailed('/a') // resolve #1, 200 → validated
+        await expect(fetchRequestDetailed('/b')).rejects.toMatchObject({ status: 401 })
+        await fetchRequestDetailed('/c')
+
+        // a 401 on a validated token must not clear the cache or re-resolve
+        expect(mockGetSession).toHaveBeenCalledTimes(1)
+        const headers = (global.fetch as jest.Mock).mock.calls[2][1].headers
+        expect(headers.authorization).toBe('Bearer TOK')
+    })
+
+    it('re-arms the breaker when the token changes (setAuthToken)', async () => {
+        mockGetSession.mockResolvedValue({ user: { apiAccessToken: 'BAD' } })
+        ;(global.fetch as jest.Mock).mockResolvedValue(
+            buildResponse({ status: 401, statusText: 'Unauthorized' }),
+        )
+
+        await expect(fetchRequestDetailed('/a')).rejects.toMatchObject({ status: 401 }) // resolve #1, trip
+        await expect(fetchRequestDetailed('/b')).rejects.toMatchObject({ status: 401 }) // resolve #2, breaker holds
+        expect(mockGetSession).toHaveBeenCalledTimes(2)
+
+        setAuthToken('GOOD') // new token re-arms validation + breaker
+        await expect(fetchRequestDetailed('/c')).rejects.toMatchObject({ status: 401 }) // cached GOOD → trip again
+        await expect(fetchRequestDetailed('/d')).rejects.toMatchObject({ status: 401 }) // resolve #3
 
         expect(mockGetSession).toHaveBeenCalledTimes(3)
     })
