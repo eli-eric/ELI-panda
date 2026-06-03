@@ -197,9 +197,10 @@ export const useSystemsColumns = ({
             {
                 header: 'SP Coverage',
                 accessorFn: row =>
-                    row.statistics?.sp_coverage &&
-                    (parseFloat(Number(row.statistics?.sp_coverage).toFixed(2)) * 100).toString() +
-                        '%',
+                    row.statistics?.sp_coverage != null
+                        ? (parseFloat(Number(row.statistics.sp_coverage).toFixed(2)) * 100).toString() +
+                          '%'
+                        : undefined,
                 id: 'statistics.sp_coverage',
                 size: 200,
             },

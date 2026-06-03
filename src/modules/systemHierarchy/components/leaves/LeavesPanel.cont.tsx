@@ -31,7 +31,7 @@ export const LeavesPanelContainer: FC = () => {
         setActiveView,
     } = useHierarchyNavigation()
     const { system: parentSystem, isLoading: isParentLoading } = useSystemDetail(selectedParentUid)
-    const { leaves, totalCount, isLoading } = useSystemLeaves(selectedParentUid)
+    const { leaves, totalCount, isLoading, isInitialLoad } = useSystemLeaves(selectedParentUid)
 
     const { columns } = useLeavesColumns()
 
@@ -168,6 +168,7 @@ export const LeavesPanelContainer: FC = () => {
                     data={leaves}
                     totalCount={totalCount}
                     isLoading={isLoading}
+                    isInitialLoad={isInitialLoad}
                     onRowClick={selectLeaf}
                     table={table}
                     toolbar={toolbar}

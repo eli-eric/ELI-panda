@@ -38,6 +38,12 @@ export const useSystemLeaves = (parentUid: string | null) => {
         leaves: data?.data ?? [],
         totalCount: data?.totalCount ?? 0,
         isLoading: isFetching,
+        // True only while the first batch is actively loading: no data yet AND a
+        // fetch is in flight. Drives the skeleton on first load while keepPreviousData
+        // handles dim/pulse on refetch. The isFetching guard ensures a failed first
+        // request (data stays undefined, fetch stops) falls through to the empty/error
+        // state instead of showing the skeleton forever.
+        isInitialLoad: data === undefined && isFetching,
         error,
         queryKey,
     }
