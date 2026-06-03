@@ -1442,7 +1442,7 @@ export const messages = {
             sparesIn: 'Spares In',
             sparesOut: 'Spares Out',
             description: 'Description',
-            subsystemsCount: 'Sub Systems Count',
+            subsystemsCount: 'Subsystems Count',
             spRequirement: 'SP Requirement',
             spCoverage: 'SP Coverage',
             price: 'Price',

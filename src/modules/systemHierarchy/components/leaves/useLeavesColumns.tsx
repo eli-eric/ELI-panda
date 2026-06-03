@@ -251,20 +251,20 @@ export const useLeavesColumns = () => {
                 accessorFn: row => row.physicalItem?.catalogueItem?.name,
                 id: 'physicalItem.catalogueItem.name',
                 size: 300,
-                cell: ({ getValue, row: { original } }) => (
-                    <Tooltip content={getValue()}>
-                        <div>
-                            <NewTabLink
-                                href={
-                                    PATH.CATALOGUE_ITEM +
-                                    '/' +
-                                    original.physicalItem?.catalogueItem?.uid
-                                }
-                                value={truncateString(getValue(), 30)}
-                            />
-                        </div>
-                    </Tooltip>
-                ),
+                cell: ({ getValue, row: { original } }) => {
+                    const catalogueUid = original.physicalItem?.catalogueItem?.uid
+                    if (!getValue() || !catalogueUid) return null
+                    return (
+                        <Tooltip content={getValue()}>
+                            <div>
+                                <NewTabLink
+                                    href={PATH.CATALOGUE_ITEM + '/' + catalogueUid}
+                                    value={truncateString(getValue(), 30)}
+                                />
+                            </div>
+                        </Tooltip>
+                    )
+                },
             },
             {
                 header: fm({ id: message.systemHierarchy.columns.partNumber }),

@@ -21,12 +21,12 @@ beforeEach(() => {
 })
 
 describe('useSystemLeaves', () => {
-    it('disabled with no parent: empty + isInitialLoad true', () => {
+    it('disabled with no parent: empty + not in initial-load (query idle)', () => {
         mockQueryFetcher.mockReturnValue(jest.fn())
         const { result } = renderHook(() => useSystemLeaves(null), {
             wrapper: QueryClientWrapper,
         })
-        expect(result.current.isInitialLoad).toBe(true)
+        expect(result.current.isInitialLoad).toBe(false)
         expect(result.current.leaves).toEqual([])
     })
 
@@ -53,5 +53,17 @@ describe('useSystemLeaves', () => {
         await waitFor(() => expect(result.current.isInitialLoad).toBe(false))
         expect(result.current.leaves).toHaveLength(1)
         expect(result.current.totalCount).toBe(1)
+    })
+
+    it('isInitialLoad false after a failed first fetch (no perpetual skeleton)', async () => {
+        mockQueryFetcher.mockReturnValue(jest.fn().mockRejectedValue(new Error('boom')))
+        const { result } = renderHook(() => useSystemLeaves('sys-1'), {
+            wrapper: QueryClientWrapper,
+        })
+        // data stays undefined, but once the fetch stops the table must fall
+        // through to the empty/error state rather than show the skeleton forever.
+        await waitFor(() => expect(result.current.error).toBeTruthy())
+        expect(result.current.isInitialLoad).toBe(false)
+        expect(result.current.leaves).toEqual([])
     })
 })
