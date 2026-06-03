@@ -38,6 +38,9 @@ export const useSystemLeaves = (parentUid: string | null) => {
         leaves: data?.data ?? [],
         totalCount: data?.totalCount ?? 0,
         isLoading: isFetching,
+        // True only before the first response arrives. Lets the table show a
+        // skeleton on first load while keepPreviousData drives dim/pulse on refetch.
+        isInitialLoad: data === undefined,
         error,
         queryKey,
     }

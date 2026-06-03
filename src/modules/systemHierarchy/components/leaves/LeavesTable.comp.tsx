@@ -15,6 +15,7 @@ interface LeavesTableProps {
     data: SystemLeaf[]
     totalCount: number
     isLoading: boolean
+    isInitialLoad: boolean
     onRowClick: (uid: string) => void
     table: Table<SystemLeaf>
     toolbar?: ReactNode
@@ -25,6 +26,7 @@ export const LeavesTableComponent: FC<LeavesTableProps> = ({
     data,
     totalCount,
     isLoading,
+    isInitialLoad,
     onRowClick,
     table,
     toolbar,
@@ -41,7 +43,7 @@ export const LeavesTableComponent: FC<LeavesTableProps> = ({
             <div className="flex-1 min-h-0 flex flex-col">
                 <PandaTableV2
                     ref={tableRef}
-                    data={data}
+                    data={isInitialLoad ? undefined : data}
                     table={table}
                     loading={isLoading}
                     tableId={LEAVES_TABLE_ID}
