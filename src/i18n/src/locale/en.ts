@@ -1454,6 +1454,7 @@ export const messages = {
             catalogueCategory: 'Catalogue Category',
             supplier: 'Supplier',
             orderNumber: 'Order Number',
+            orderLink: 'Order ->',
         },
         detail: {
             backToLeaves: 'Back to list',

@@ -31,7 +31,7 @@ export const useLeavesColumns = () => {
                 meta: { sticky: true },
                 accessorFn: row => row.miniImageUrl?.[0],
                 cell: ({ getValue, row: { original } }) => (
-                    <Avatar className="w-7 h-7 min-w-8">
+                    <Avatar className="w-7 h-7 min-w-7">
                         <AvatarImage src={getValue() || FALLBACK_IMAGE.url} alt={original.name} />
                         <AvatarFallback>{original.name?.[0] || '?'}</AvatarFallback>
                     </Avatar>
@@ -214,9 +214,10 @@ export const useLeavesColumns = () => {
             {
                 header: fm({ id: message.systemHierarchy.columns.spCoverage }),
                 accessorFn: row =>
-                    row.statistics?.sp_coverage &&
-                    (parseFloat(Number(row.statistics?.sp_coverage).toFixed(2)) * 100).toString() +
-                        '%',
+                    row.statistics?.sp_coverage != null
+                        ? (parseFloat(Number(row.statistics.sp_coverage).toFixed(2)) * 100).toString() +
+                          '%'
+                        : undefined,
                 id: 'statistics.sp_coverage',
                 size: 200,
             },
@@ -318,7 +319,10 @@ export const useLeavesColumns = () => {
                     return (
                         <NewTabLink
                             href={PATH.ORDER + '/' + getValue()}
-                            value={original.physicalItem?.orderNumber || 'Order ->'}
+                            value={
+                                original.physicalItem?.orderNumber ||
+                                fm({ id: message.systemHierarchy.columns.orderLink })
+                            }
                         />
                     )
                 },
