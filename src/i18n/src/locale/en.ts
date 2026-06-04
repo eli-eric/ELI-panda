@@ -1571,6 +1571,9 @@ export const messages = {
         physicalItem: {
             title: 'Physical Item',
             noItem: 'No physical item assigned',
+            properties: {
+                was: 'was {value}',
+            },
         },
         spareParts: {
             title: 'Spare Parts',

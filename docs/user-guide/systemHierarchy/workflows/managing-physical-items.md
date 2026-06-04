@@ -31,7 +31,23 @@ Before doing the action, here is where physical items come from. The catalogue /
 
 > 💡 **Cardinality.** A system has **at most one** physical item. The relationship is *1 system : 0..1 item* — assigning an item to a system that already has one requires moving the existing item out first (or using the *exchange* path of the Move Item wizard).
 
-> Editing the item's own attributes (condition, notes, service entries) happens in the Catalogue / Items module, not here. System Hierarchy only handles which system an item is on.
+> The **Physical Item** tab lets you inline-edit the item's key fields — *Serial Number*, *Item Usage*, *Condition Status*, and *Item notes* — and review its catalogue properties read-only. These edits are recorded in the system's change history. Deeper attributes and the full service log are managed in the Catalogue / Items module. System Hierarchy still handles which system an item is on.
+
+## Viewing item details and catalogue properties
+
+The **Physical Item** tab is the read/edit surface for the hardware attached to the selected system.
+
+1. **Open the system in detail view and select the *Physical Item* tab.** The top block shows the item's fields:
+   - *Eun* and *Part Number* — read-only identifiers.
+   - *Serial Number*, *Item Usage*, *Condition Status*, *Item notes* — editable inline; click a field to change it. A toast confirms each save, and the change appears in the system's *History* tab.
+
+2. **Below the fields, the *Catalogue Properties* block** lists the technical parameters the item inherits from its catalogue item — grouped by category (for example *Other*, *TMP parameters*, *Flanges*). These are read-only.
+
+   `[SCREENSHOT PLACEHOLDER: Physical Item tab showing the editable fields at top and a "Catalogue Properties" section below with grouped property rows, one row marked as modified with a strikethrough original value]`
+
+3. **Properties changed by a service are flagged.** When a service has rewritten a catalogue value, the row shows the **current** value with the original struck-through next to it (e.g. *240V ⚠ was 220V*), and the section header carries a **Modified** badge. Parameters a service added that the catalogue never had are listed as normal rows.
+
+> The **Quick Info** sidebar shows the same properties in a compact form — every property, with `(was …)` next to any value a service modified. Use the tab for the full grouped view, the sidebar for an at-a-glance summary.
 
 ## Assigning an item
 
@@ -107,12 +123,12 @@ Only the *which system holds this item* assignment changes.
 - **The 1:0..1 cardinality is enforced** — you cannot stack two items onto one system. The Move Item wizard's exchange path is the supported way to swap items between systems.
 - **Service history travels with the item**, not with the system. If you move an item, the destination system's *History* timeline picks up the move event; the item's full service log stays attached to the item itself in the Items module.
 - **Filter by EUN or serial number** in the leaves panel ([Searching and filtering](./searching-and-filtering.md)) when you're trying to track down which system currently holds a specific piece of hardware.
-- **An item-usage change** (in use → in storage, etc.) is done in the Catalogue / Items module, not here. After a move you may also want to update usage there.
+- **Item Usage and Condition Status are editable** directly on the *Physical Item* tab. After a move you may want to update them to reflect the item's new placement.
 - **Use the *Use Spare* flow when the move is a spare-part swap** — that path moves both items at once and routes the old one toward the nearest TRASH ancestor automatically. See [Managing spare parts](./managing-spare-parts.md). The action lives on the *Spare Parts* tab; in production it stays disabled until the `enableSparePartsAssignment` feature flag is enabled.
 
 ## Related
 
 - [Managing spare parts](./managing-spare-parts.md) — for the structured swap flow that handles items + relationships in one step.
 - [Editing system details](./editing-system-details.md) — for system-level fields that influence item placement.
-- [Viewing change history](./viewing-change-history.md) — item assignment and move events appear under *Item Changes* and *Item Moves*.
+- [Viewing change history](./viewing-change-history.md) — item assignment and move events appear under *Item Changes* and *Item Moves*; inline edits to the item's fields (serial number, usage, condition, notes) appear in the system's history too.
 - Catalogue, Orders, and Items modules → see [user guide index](../../README.md).

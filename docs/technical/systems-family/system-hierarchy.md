@@ -16,6 +16,7 @@ src/modules/systemHierarchy/
 │   ├── filters/                         — leaves filter sheet
 │   ├── sidebar/                         — right Quick-Info / Detail sidebar
 │   ├── tabs/                            — Detail tabs (Detail, Persons, Physical Item, …)
+│   ├── physical-item/                   — catalogue-property renderer shared by Physical Item tab + sidebar
 │   ├── detail/                          — sub-views consumed by tabs
 │   ├── history/                         — change-history timeline
 │   ├── graph/                           — React Flow relationship graph
@@ -91,7 +92,7 @@ The leaves panel toggles between **Tree View** (the default `LeavesTable`) and *
 | Hook | Operation |
 |---|---|
 | `useSystemFieldUpdate` | PATCH a single field on a `System` — used by inline edit. Calls `updatedByResolver` for audit. |
-| `useItemFieldUpdate` | PATCH a single field on the attached `Item` |
+| `useItemFieldUpdate` | PATCH a single field on the attached `Item` (serial, usage, condition, notes). Takes `(systemUid, currentItem)`. Records the `WAS_UPDATED_BY` edge on the **owning System node** (not the Item) — same as `systemItem` — so item edits surface in the system's History tab. Builds change entries via `utils/fieldChangeBuilder` and passes them as `updatedByResolver(changes)`; on success invalidates `SYSTEM_DETAIL_QUERY_KEY` + `['history']`. |
 | `useSystemCopy` | Calls REST endpoint `system/<uid>/copy` — server orchestrates the recursive copy |
 | `useCreateSubsystem` | `mutation CreateSystems` via `useGraphQLMutation`. Payload assembled by the pure `utils/buildCreateSubsystemPayload`, including `parentSystem.connect`, parent-inherited `responsible/location/zone`, and the required `updatedBy.connect[edge.action=Insert]` so `updatedByResolver` writes a history edge. On success seeds `[SYSTEM_DETAIL_QUERY_KEY, newUid]` with the full SystemDetail fragment returned by the server, then invalidates `HIERARCHY`, `LEAVES`, `LEAVES_COUNT`, and `RELATIONSHIP_GRAPH` keys. |
 | `useSystemCodeGenerate` | Generate a code based on type + level + ancestry |
@@ -148,13 +149,29 @@ The tabbed detail surface lives under `components/tabs/`:
 |---|---|---|
 | Detail | `DetailTab.cont.tsx` | Inline-edit name / level / code / location / zone / description |
 | Persons | `PersonsTab.cont.tsx` | Responsible person + team + operators + maintained by |
-| Physical Item | `PhysicalItemTab.cont.tsx` | View/edit the `Item` attached via `CONTAINS_ITEM` |
+| Physical Item | `PhysicalItemTab.cont.tsx` | View/edit the `Item` attached via `CONTAINS_ITEM`. Below the editable fields, renders read-only **catalogue properties** grouped by property group via the shared `components/physical-item/` renderer — see [Catalogue properties & service overrides](#catalogue-properties--service-overrides). |
 | Spare Parts | `SparePartsTab.cont.tsx` (+ `.types`, `SparePartActions.comp.tsx`) | List of systems flagged spare *for* this system, in the same row-card pattern as `SpareForTab` (icon + name + coverage badge + EUN badge). Each row carries **Use** (opens shared `useSpareDialog` wizard) + **Remove** (shared `SpareRelationshipDeleteButton`) inside `SparePartActions`. Use button has a 4-level priority tooltip chain — `!canEdit` → feature-flag off → `!physicalItem` → enabled. Header keeps the color-coded coverage indicator (`available`/`required`). Click + keydown propagation isolated by the actions wrapper so row-click `selectLeaf` still works. |
 | Spare For | `SpareForTab.cont.tsx` | The inverse: lists `sparePartsForSystems` (exposed by `useSystemDetail`) with icon + name + EUN badge + outbound `SpareRelationshipDeleteButton`. |
 | Relationships | `RelationshipsTab.cont.tsx` | List of all 9 relationship types, edit/delete |
 | Attachments | `AttachmentsTab.cont.tsx` | File manager (MinIO-backed) |
 | History | `HistoryTab.cont.tsx` | `WAS_UPDATED_BY` timeline + filters |
 | Graph | `GraphTab.cont.tsx` | React Flow detail graph for this system |
+
+## Catalogue properties & service overrides
+
+User-facing companion: [Physical item details](../../user-guide/systemHierarchy/README.md).
+
+`components/physical-item/` renders an item's catalogue properties on two surfaces — the **Physical Item tab** (full list under the editable fields) and the **Quick-Info sidebar** (same list, compact). Both read the already-cached `useSystemDetail(system.uid)` query (a cache hit — the parent already loaded it) for the `catalogueItem`/`serviceItem` fragments that the `SystemLeaf` projection drops, then feed the shared cross-module `useItemPropertiesData` engine (`src/hooks/useItemPropertiesData.ts`).
+
+| File | Role |
+|---|---|
+| `PropertyRow.comp.tsx` | Row primitive: name → effective value + unit, optional `was X` override marker. `variant` `tab` (⚠ + strikethrough) / `sidebar` (compact `(was X)`). |
+| `PhysicalItemProperties.comp.tsx` | Grouped renderer (group heading + `PropertyRow`s); skips the `General` bucket heading. Used by both surfaces via a `variant` prop. |
+| `PhysicalItemPropertiesSidebar.comp.tsx` | Data-fetching wrapper for the sidebar: calls `useSystemDetail` + `useItemPropertiesData`, renders `PhysicalItemProperties` with `variant="sidebar"`. Returns `null` when the item has no catalogue properties. |
+
+Override semantics come entirely from `useItemPropertiesData`: service items are sorted newest-first, the latest value per property wins, and `isOverridden = catalogueValue !== serviceValue`. A property's effective value is `serviceValue || catalogueValue` — safe because the engine formats every value to a non-empty string (`'N/A'` fallback), so a real service value never falsy-falls-through.
+
+> Implicit dependency: this display relies on `SystemDetailFragment` continuing to carry `physicalItem.catalogueItem.propertiesConnection` + `serviceItemsConnection`. They're fetched but not part of the `SystemLeaf` type, so trimming them from the fragment would blank the properties **without** a type error.
 
 ## Create Subsystem
 
@@ -255,8 +272,8 @@ Unit coverage under `__tests__/` is heaviest in:
 - `types/__tests__/` — schema parsing.
 - `utils/__tests__/` — tree search, graph layout, filter predicates, change-builder, **parent→child level rules** (`systemLevelRules.spec.ts`), **create-subsystem payload builder** (`buildCreateSubsystemPayload.spec.ts` — locks the `updatedBy[Insert]` audit edge).
 - `hooks/queries/__tests__/` — `primeSystemDetailCache.test.ts` (the contract above), `useSystemLeaves.test.ts`, `useSystemLeavesCount.test.ts`.
-- `hooks/mutations/__tests__/` — `useSystemFieldUpdate.spec.ts`.
-- `components/{tree,leaves,filters,graph,detail,copy,create,shared,tabs}/__tests__/`.
+- `hooks/mutations/__tests__/` — `useSystemFieldUpdate.spec.ts`, `useItemFieldUpdate.spec.ts` (locks the System-node `WAS_UPDATED_BY` edge + change entries for item edits).
+- `components/{tree,leaves,filters,graph,detail,copy,create,shared,tabs,physical-item}/__tests__/` — `physical-item/` covers the grouped renderer and sidebar wrapper (grouping, override marker, service-only additions, empty → hidden).
 
 ## Deprecated / legacy
 

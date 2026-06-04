@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 
 import { renderWithProviders } from '@/testutils/wrappers/renderWithProviders'
 
@@ -13,6 +13,10 @@ jest.mock('../MetadataSection.comp', () => ({
 
 jest.mock('@/components/ui/separator', () => ({
     Separator: () => <hr />,
+}))
+
+jest.mock('../../physical-item/PhysicalItemPropertiesSidebar.comp', () => ({
+    PhysicalItemPropertiesSidebar: () => null,
 }))
 
 jest.mock('../../../utils/predicates', () => ({

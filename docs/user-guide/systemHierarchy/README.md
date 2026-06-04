@@ -39,6 +39,8 @@ The System Hierarchy module is the central place to browse, organize, and inspec
 - **Maintained by** — employees responsible for maintenance of the system.
 - **Physical item** — the concrete piece of hardware currently installed in a system. A system holds at most one physical item.
 - **Catalogue item** — the abstract product spec a physical item is based on.
+- **Catalogue property** — a technical parameter (e.g. voltage, flange size) the physical item inherits from its catalogue item. Shown grouped on the *Physical Item* tab and compactly in the Quick Info sidebar.
+- **Modified by service** — a catalogue property whose value was rewritten by a service. The current value is shown with the original catalogue value struck-through, and the property section is badged **Modified**.
 - **Relationship** — a directed engineering link between two systems (9 types — see [Managing relationships](./workflows/managing-relationships.md)).
 - **Spare part** — a system designated as a spare for another system.
 - **Coverage** — the spare-parts metric: how many of the required spares are currently available, color-coded against the configured minimum.
@@ -49,7 +51,7 @@ The module is a three-panel explorer:
 
 - **Left — System tree.** Resizable. Top of the tree has a search box (300 ms debounced) and a *Collapse All* button. Each tree node shows the system name, a folder icon colored by system level, and a subsystem-count badge. Selecting a node auto-expands its ancestors. On mobile the tree collapses behind a toggle.
 - **Middle — Leaves panel.** Shows the children of the selected tree node, either as a table (default) or as a relationship graph. Has a toolbar with *Filters*, *Search*, and *Column visibility* controls, and a view switcher between *Tree View* (table) and *Graph View*.
-- **Right — Quick Info sidebar.** On large screens a sticky 320 px panel with statistics (subsystem count, spare-part count, spare coverage) and metadata. On smaller screens accessible via a floating *Info* button.
+- **Right — Quick Info sidebar.** On large screens a sticky 320 px panel with statistics (subsystem count, spare-part count, spare coverage), metadata, and — when the system has a physical item — its catalogue properties (with any service-modified values flagged). On smaller screens accessible via a floating *Info* button.
 - **Top — Breadcrumb.** Shows the ancestor path of the currently selected system. Clicking any ancestor navigates to it. Long paths collapse with an ellipsis (first ancestor + last two).
 
 When a system is selected for full detail view, a tabbed area replaces the leaves panel with: **Detail**, **Persons**, **Physical Item**, **Spare Parts**, **Spare For**, **Relationships**, **Attachments**, **History**, and (depending on context) **Graph**.
@@ -65,7 +67,7 @@ When a system is selected for full detail view, a tabbed area replaces the leave
 - [Viewing change history](./workflows/viewing-change-history.md) — the *History* tab timeline and its filters.
 - [Creating systems](./workflows/creating-systems.md) — right-click a parent in the tree to create a new subsystem. Two-field dialog (name + level), inherits responsible/location/zone from the parent.
 - [Copying systems](./workflows/copying-systems.md) — copy/paste a system (and optionally its subtree) under a different parent.
-- [Managing physical items](./workflows/managing-physical-items.md) — assigning and moving the physical item attached to a system.
+- [Managing physical items](./workflows/managing-physical-items.md) — viewing the item's fields and catalogue properties (with service-modified values flagged), and assigning or moving the physical item attached to a system.
 
 For moving a system to a different parent, see the **Systems Moving** module — drag-and-drop rearrangement of the hierarchy lives there. See the [user guide index](../README.md).
 
