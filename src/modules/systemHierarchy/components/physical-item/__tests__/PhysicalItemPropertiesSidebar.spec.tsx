@@ -5,7 +5,7 @@ import { useItemPropertiesData } from '@/hooks/useItemPropertiesData'
 import { renderWithProviders } from '@/testutils/wrappers/renderWithProviders'
 
 import { useSystemDetail } from '../../../hooks/queries/useSystemDetail'
-import { OverriddenPropertiesSummary } from '../OverriddenPropertiesSummary.comp'
+import { PhysicalItemPropertiesSidebar } from '../PhysicalItemPropertiesSidebar.comp'
 
 jest.mock('../../../hooks/queries/useSystemDetail', () => ({
     useSystemDetail: jest.fn(),
@@ -22,7 +22,7 @@ const setGroups = (groups: PropertyGroup[]) => {
     mockUseItemPropertiesData.mockReturnValue({
         groupedProperties: groups,
         hasOverriddenProperties: groups.some(g => g.properties.some(p => p.isOverridden)),
-        hasProperties: groups.length > 0,
+        hasProperties: groups.some(g => g.properties.length > 0),
     })
 }
 
@@ -31,14 +31,13 @@ beforeEach(() => {
     mockUseSystemDetail.mockReturnValue({ physicalItem: { catalogueItem: {} } })
 })
 
-describe('OverriddenPropertiesSummary', () => {
-    it('lists true overrides and service-only additions, excludes unchanged/catalogue-only', () => {
+describe('PhysicalItemPropertiesSidebar', () => {
+    it('lists ALL properties (overridden, service-only, unchanged, catalogue-only)', () => {
         setGroups([
             {
                 key: 'g',
                 name: 'General',
                 properties: [
-                    // true override -> shown with "was"
                     {
                         uid: 'voltage',
                         name: 'Voltage',
@@ -47,7 +46,6 @@ describe('OverriddenPropertiesSummary', () => {
                         isOverridden: true,
                         type: 'Number',
                     },
-                    // service-only addition -> shown without "was"
                     {
                         uid: 'flow',
                         name: 'FlowRate',
@@ -56,40 +54,43 @@ describe('OverriddenPropertiesSummary', () => {
                         isOverridden: false,
                         type: 'Text',
                     },
-                    // service re-affirmed same value -> excluded
-                    {
-                        uid: 'current',
-                        name: 'Current',
-                        value: '5',
-                        serviceValue: '5',
-                        isOverridden: false,
-                        type: 'Number',
-                    },
-                    // catalogue-only -> excluded
                     { uid: 'power', name: 'Power', value: '1.2kW', type: 'Text' },
                 ],
             },
         ])
 
-        renderWithProviders(<OverriddenPropertiesSummary systemUid="sys-1" />)
+        renderWithProviders(<PhysicalItemPropertiesSidebar systemUid="sys-1" />)
 
+        // every property is present, not just the modified ones
         expect(screen.getByText('Voltage')).toBeInTheDocument()
-        expect(screen.getByText(/was 220/)).toBeInTheDocument()
         expect(screen.getByText('FlowRate')).toBeInTheDocument()
-        expect(screen.queryByText('Current')).not.toBeInTheDocument()
-        expect(screen.queryByText('Power')).not.toBeInTheDocument()
+        expect(screen.getByText('Power')).toBeInTheDocument()
+        // override marker still shown for the changed one
+        expect(screen.getByText(/was 220/)).toBeInTheDocument()
     })
 
-    it('renders nothing when no property was modified by a service', () => {
+    it('renders group headings (skips the General bucket)', () => {
         setGroups([
             {
-                key: 'g',
+                key: 'flanges',
+                name: 'Flanges',
+                properties: [{ uid: 'outlet', name: 'Outlet flange size', value: 'DN 40', type: 'Text' }],
+            },
+            {
+                key: 'no-group',
                 name: 'General',
                 properties: [{ uid: 'power', name: 'Power', value: '1.2kW', type: 'Text' }],
             },
         ])
 
-        renderWithProviders(<OverriddenPropertiesSummary systemUid="sys-1" />)
-        expect(screen.queryByTestId('overridden-properties-summary')).not.toBeInTheDocument()
+        renderWithProviders(<PhysicalItemPropertiesSidebar systemUid="sys-1" />)
+        expect(screen.getByText('Flanges')).toBeInTheDocument()
+        expect(screen.queryByText('General')).not.toBeInTheDocument()
+    })
+
+    it('renders nothing when the item has no catalogue properties', () => {
+        setGroups([])
+        renderWithProviders(<PhysicalItemPropertiesSidebar systemUid="sys-1" />)
+        expect(screen.queryByTestId('physical-item-properties')).not.toBeInTheDocument()
     })
 })

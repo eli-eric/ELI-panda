@@ -11,11 +11,13 @@ import { PropertyRow } from './PropertyRow.comp'
 interface PhysicalItemPropertiesProps {
     groupedProperties: PropertyGroup[]
     hasOverriddenProperties: boolean
+    variant?: 'tab' | 'sidebar'
 }
 
 export const PhysicalItemProperties: FC<PhysicalItemPropertiesProps> = ({
     groupedProperties,
     hasOverriddenProperties,
+    variant = 'tab',
 }) => {
     const { formatMessage: fm } = useIntl()
 
@@ -47,7 +49,7 @@ export const PhysicalItemProperties: FC<PhysicalItemPropertiesProps> = ({
                             value={property.serviceValue || property.value}
                             unit={property.unit}
                             original={property.isOverridden ? property.value : null}
-                            variant="tab"
+                            variant={variant}
                         />
                     ))}
                 </div>

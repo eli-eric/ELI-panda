@@ -15,8 +15,8 @@ jest.mock('@/components/ui/separator', () => ({
     Separator: () => <hr />,
 }))
 
-jest.mock('../../physical-item/OverriddenPropertiesSummary.comp', () => ({
-    OverriddenPropertiesSummary: () => null,
+jest.mock('../../physical-item/PhysicalItemPropertiesSidebar.comp', () => ({
+    PhysicalItemPropertiesSidebar: () => null,
 }))
 
 jest.mock('../../../utils/predicates', () => ({

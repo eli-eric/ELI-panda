@@ -6,7 +6,7 @@ import { message } from '@/i18n/src/messages'
 
 import type { SystemLeaf } from '../../types'
 import { hasPhysicalItem } from '../../utils/predicates'
-import { OverriddenPropertiesSummary } from '../physical-item/OverriddenPropertiesSummary.comp'
+import { PhysicalItemPropertiesSidebar } from '../physical-item/PhysicalItemPropertiesSidebar.comp'
 import { MetadataSection } from './MetadataSection.comp'
 
 interface QuickInfoSidebarProps {
@@ -118,7 +118,7 @@ export const QuickInfoSidebar: FC<QuickInfoSidebarProps> = ({ system }) => {
                             title={fm({ id: message.systemHierarchy.physicalItem.title })}
                             items={physicalItemItems}
                         />
-                        <OverriddenPropertiesSummary systemUid={system.uid} />
+                        <PhysicalItemPropertiesSidebar systemUid={system.uid} />
                     </>
                 )}
             </div>
