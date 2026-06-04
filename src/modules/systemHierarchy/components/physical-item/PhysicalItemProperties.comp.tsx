@@ -46,6 +46,10 @@ export const PhysicalItemProperties: FC<PhysicalItemPropertiesProps> = ({
                         <PropertyRow
                             key={property.uid}
                             name={property.name}
+                            // Effective value = service value when present, else catalogue value.
+                            // `||` is safe because useItemPropertiesData formats every value to a
+                            // non-empty string ('N/A' fallback), so a real serviceValue never
+                            // falsy-falls-through to the catalogue value.
                             value={property.serviceValue || property.value}
                             unit={property.unit}
                             original={property.isOverridden ? property.value : null}
