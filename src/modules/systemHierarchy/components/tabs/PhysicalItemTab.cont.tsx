@@ -1,25 +1,25 @@
 'use client'
 
-import { ArrowRight, Plus } from 'lucide-react'
 import type { FC } from 'react'
 import { useCallback } from 'react'
 import { useIntl } from 'react-intl'
 
 import {
-    InlineFieldAction,
     InlineFieldCombobox,
     InlineFieldInput,
     InlineFieldRow,
     InlineFieldTextArea,
     InlineFieldValue,
 } from '@/components/ui/inline-field'
+import { Separator } from '@/components/ui/separator'
+import { useItemPropertiesData } from '@/hooks/useItemPropertiesData'
 import { message } from '@/i18n/src/messages'
-import { openItemAssignModal } from '@/modules/shared/form/itemAssign/item-assign.modal'
-import { openItemMoveModal } from '@/modules/shared/form/itemMoving/item-move.modal'
 import { CODEBOOK } from '@/types/constants/codebook'
 
 import { useItemFieldUpdate } from '../../hooks/mutations/useItemFieldUpdate'
+import { useSystemDetail } from '../../hooks/queries/useSystemDetail'
 import type { SystemLeaf } from '../../types'
+import { PhysicalItemProperties } from '../physical-item/PhysicalItemProperties.comp'
 
 interface PhysicalItemTabProps {
     system: SystemLeaf
@@ -32,6 +32,14 @@ export const PhysicalItemTabContainer: FC<PhysicalItemTabProps> = ({ system }) =
     const { updateField, isPending } = useItemFieldUpdate({
         itemUsage: physicalItem?.itemUsage,
         conditionStatus: physicalItem?.conditionStatus,
+    })
+
+    // Re-reads the already-cached detail query to access the catalogue/service-item
+    // fragments (stripped from SystemLeaf), then derives override-aware properties.
+    const { physicalItem: itemDetail } = useSystemDetail(system.uid)
+    const { groupedProperties, hasOverriddenProperties, hasProperties } = useItemPropertiesData({
+        catalogueItem: itemDetail?.catalogueItem,
+        serviceItems: itemDetail?.serviceItemsConnection?.edges,
     })
 
     const handleSaveField = useCallback(
@@ -106,21 +114,15 @@ export const PhysicalItemTabContainer: FC<PhysicalItemTabProps> = ({ system }) =
                 isPending={isPending}
             />
 
-            <div className="pt-4 border-t mt-4">
-                <InlineFieldAction
-                    label={fm({ id: message.systemHierarchy.detail.moveItem })}
-                    buttonLabel={fm({ id: message.systemHierarchy.detail.moveItem })}
-                    onClick={openItemMoveModal}
-                    icon={ArrowRight}
-                />
-
-                <InlineFieldAction
-                    label={fm({ id: message.systemHierarchy.detail.assignItem })}
-                    buttonLabel={fm({ id: message.systemHierarchy.detail.assignItem })}
-                    onClick={openItemAssignModal}
-                    icon={Plus}
-                />
-            </div>
+            {hasProperties && (
+                <>
+                    <Separator className="my-2" />
+                    <PhysicalItemProperties
+                        groupedProperties={groupedProperties}
+                        hasOverriddenProperties={hasOverriddenProperties}
+                    />
+                </>
+            )}
         </div>
     )
 }
