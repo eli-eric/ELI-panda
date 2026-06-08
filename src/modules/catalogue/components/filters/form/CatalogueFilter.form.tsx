@@ -29,7 +29,7 @@ export const CatalogueFilterForm = ({
     const { toggleDeleteCustom } = useFormControlStore()
     const { setValue } = useFormContext()
 
-    // Sync category form state from URL on mount so the field reflects an active filter.
+    // Keep the category field in sync with the URL param (mount + back/forward nav).
     // category is a user-editable URL param, so guard against malformed JSON.
     useEffect(() => {
         let parsed = null
@@ -39,8 +39,7 @@ export const CatalogueFilterForm = ({
             parsed = null
         }
         setValue('category', parsed)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [categoryQuery, setValue])
 
     return (
         <div className={cn('md:grid md:grid-cols-2 md:gap-4 md:min-w-[500px]')}>

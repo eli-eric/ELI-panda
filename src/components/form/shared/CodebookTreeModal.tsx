@@ -98,10 +98,11 @@ export function CodebookTreeModalContent(
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [search])
 
-    const handleClose = () => {
-        reset(tableId)
-        onClose?.()
-    }
+    // Reset table store on unmount so search state can't leak into the next open,
+    // regardless of how the dialog is dismissed (button, ESC, overlay click).
+    useEffect(() => {
+        return () => reset(tableId)
+    }, [reset, tableId])
 
     return (
         <div className="flex flex-col gap-3">
@@ -130,7 +131,7 @@ export function CodebookTreeModalContent(
                 />
             </div>
             <div className="flex justify-end gap-2 flex-shrink-0">
-                <Button type="button" variant="outline" onClick={handleClose}>
+                <Button type="button" variant="outline" onClick={onClose}>
                     <FormattedMessage id={message.common.buttons.close} />
                 </Button>
                 <Button
@@ -138,8 +139,6 @@ export function CodebookTreeModalContent(
                     disabled={!item}
                     onClick={() => {
                         onSelect?.(item)
-                        setItem(undefined)
-                        reset(tableId)
                         onClose?.()
                     }}
                 >
