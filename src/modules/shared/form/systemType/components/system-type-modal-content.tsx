@@ -62,10 +62,11 @@ export const SystemTypeModalContent: FC<SystemTypeModalContentProps> = ({ onSele
     }, [search, toggleAllRowsExpanded])
 
     // Handle row click - only children are selectable
-    // Note: Groups are expanded via ExpandableNameCell, not row click
+    // Groups aren't selectable, so clicking the row toggles expansion
+    // (the chevron does the same); leaf rows auto-confirm the selection.
     const handleRowClick = (row: Row<SystemTypeTreeRow>) => {
-        // Groups are not selectable - expansion handled by ExpandableNameCell
         if (row.original.isGroup) {
+            row.toggleExpanded()
             return
         }
 

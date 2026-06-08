@@ -1,6 +1,8 @@
 import { useQueryState } from 'next-usequerystate'
+import { useEffect } from 'react'
+import { useFormContext } from 'react-hook-form'
 
-import { ComboboxTreeControlled } from '@/components/form/ComboBoxControlled'
+import { ComboboxTree } from '@/components/form/ComboboxTree'
 import { Input } from '@/components/form/inputs'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import { cn } from '@/lib/utils'
@@ -25,6 +27,13 @@ export const CatalogueFilterForm = ({
 
     const { setFilter } = useFormFilterState({ tableId, enableQueryUrl: true })
     const { toggleDeleteCustom } = useFormControlStore()
+    const { setValue } = useFormContext()
+
+    // Sync category form state from URL on mount so the field reflects an active filter
+    useEffect(() => {
+        setValue('category', categoryQuery ? JSON.parse(categoryQuery) : null)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
         <div className={cn('md:grid md:grid-cols-2 md:gap-4 md:min-w-[500px]')}>
@@ -57,13 +66,12 @@ export const CatalogueFilterForm = ({
                 />
             </div>
 
-            <ComboboxTreeControlled
+            <ComboboxTree
                 {...fields.category}
                 disabled={false}
-                value={categoryQuery ? JSON.parse(categoryQuery) : null}
                 customLabel="Category"
                 className="col-span-2"
-                onChange={v => {
+                onSelect={v => {
                     setCategoryQuery(v ? JSON.stringify(v) : null)
                     if (!v) {
                         toggleDeleteCustom()
