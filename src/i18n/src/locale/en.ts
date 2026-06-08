@@ -54,6 +54,8 @@ export const messages = {
             clickToAdd: 'Click to add',
             clearSelection: 'Clear selection',
             closePanel: 'Close panel',
+            expand: 'Expand',
+            collapse: 'Collapse',
             selectOption: 'Select option...',
             noItemsFound: 'No items found.',
             noDataAvailable: 'No data available',

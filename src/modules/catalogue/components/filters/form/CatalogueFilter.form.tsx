@@ -29,9 +29,16 @@ export const CatalogueFilterForm = ({
     const { toggleDeleteCustom } = useFormControlStore()
     const { setValue } = useFormContext()
 
-    // Sync category form state from URL on mount so the field reflects an active filter
+    // Sync category form state from URL on mount so the field reflects an active filter.
+    // category is a user-editable URL param, so guard against malformed JSON.
     useEffect(() => {
-        setValue('category', categoryQuery ? JSON.parse(categoryQuery) : null)
+        let parsed = null
+        try {
+            parsed = categoryQuery ? JSON.parse(categoryQuery) : null
+        } catch {
+            parsed = null
+        }
+        setValue('category', parsed)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 

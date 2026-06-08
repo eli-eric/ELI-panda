@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
+import type { Codebooktree } from '@/components/form/shared/codebookTree.types'
 import { TABLE_IDS } from '@/types/constants/tableIds'
 
 import { updateLocationWithSublocation } from '../utils'

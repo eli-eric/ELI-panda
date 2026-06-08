@@ -1,7 +1,9 @@
 import type { Row } from '@tanstack/react-table'
 import { ChevronDown, ChevronRight } from 'lucide-react'
 import type { MouseEvent } from 'react'
+import { useIntl } from 'react-intl'
 
+import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import { highlightText } from '@/utils'
 
@@ -20,6 +22,7 @@ export const ExpandableNameCell = <T extends ExpandableRow>({
     fetchChildren,
     getValue,
 }: ExpandableNameCellProps<T>) => {
+    const { formatMessage: fm } = useIntl()
     const isExpandable = row.original.isExpandable || row.getCanExpand()
 
     // Expansion is triggered only by the chevron; clicking the name/row bubbles
@@ -42,7 +45,11 @@ export const ExpandableNameCell = <T extends ExpandableRow>({
                     <button
                         type="button"
                         onClick={handleToggle}
-                        aria-label={row.getIsExpanded() ? 'Collapse' : 'Expand'}
+                        aria-label={fm({
+                            id: row.getIsExpanded()
+                                ? message.common.ui.collapse
+                                : message.common.ui.expand,
+                        })}
                         className="cursor-pointer rounded-sm p-0.5 hover:bg-accent hover:text-gray-400"
                     >
                         {row.getIsExpanded() ? (
