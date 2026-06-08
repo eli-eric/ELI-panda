@@ -9,6 +9,7 @@ import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import { PandaTableV2 } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
+import { skeletonData } from '@/modules/shared/table/pandaTableV2/skeletonData'
 import { SearchBar } from '@/modules/shared/table/SearchBar'
 import useTableStateStore from '@/store/useTableStateStore'
 import { TABLE_IDS } from '@/types/constants/tableIds'
@@ -107,7 +108,7 @@ export function LocationModalContent(
             <div className="h-[300px] overflow-hidden border rounded-md">
                 <PandaTableV2<Codebooktree>
                     tableId={tableId}
-                    data={loading && codebooktree.length === 0 ? undefined : codebooktree}
+                    data={skeletonData(codebooktree, loading)}
                     table={table}
                     loading={loading}
                     settings={{

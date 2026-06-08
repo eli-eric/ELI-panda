@@ -8,6 +8,7 @@ import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import { PandaTableV2 } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
+import { skeletonData } from '@/modules/shared/table/pandaTableV2/skeletonData'
 import { SearchBar } from '@/modules/shared/table/SearchBar'
 import useTableStateStore from '@/store/useTableStateStore'
 import type { CodebookType } from '@/types/responses/codebook'
@@ -96,7 +97,7 @@ export const SystemTypeModalContent: FC<SystemTypeModalContentProps> = ({ onSele
                 <PandaTableV2<SystemTypeTreeRow>
                     tableId={TABLE_ID}
                     table={table}
-                    data={isLoading && treeData.length === 0 ? undefined : treeData}
+                    data={skeletonData(treeData, isLoading)}
                     loading={isLoading}
                     settings={{
                         enableRowSelection: false,
