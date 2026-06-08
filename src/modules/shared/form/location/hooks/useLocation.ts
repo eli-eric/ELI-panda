@@ -3,6 +3,7 @@ import { useMemo } from 'react'
 
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
 import useTableStateStore from '@/store/useTableStateStore'
+import { TABLE_IDS } from '@/types/constants/tableIds'
 import { gql } from '@/types/gql'
 
 const GET_LOCATIONS = gql(`
@@ -36,7 +37,7 @@ export const useLocation = () => {
     const { instances } = useTableStateStore()
     const { data: session } = useSession()
 
-    const search = instances['location-tree']?.search || ''
+    const search = instances[TABLE_IDS.LOCATION_TREE]?.search || ''
 
     const { data, isLoading, error } = useGraphQL(GET_LOCATIONS, {
         variables: {

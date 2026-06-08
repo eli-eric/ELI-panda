@@ -10,6 +10,7 @@ import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaT
 import { PandaTableV2 } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
 import { SearchBar } from '@/modules/shared/table/SearchBar'
 import useTableStateStore from '@/store/useTableStateStore'
+import { TABLE_IDS } from '@/types/constants/tableIds'
 import type { CodebookType } from '@/types/responses/codebook'
 import { highlightText } from '@/utils'
 
@@ -42,7 +43,7 @@ export function CodebookTreeModalGraphqlContent(
     },
 ) {
     const {
-        tableId = 'location-tree',
+        tableId = TABLE_IDS.LOCATION_TREE,
         onSelect,
         onClose,
         fetchChildren: propFetchChildren,

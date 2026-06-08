@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
 
 import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
+import { TABLE_IDS } from '@/types/constants/tableIds'
 
 import { updateLocationWithSublocation } from '../utils'
 import { useLocation, useSubLocations } from './useLocation'
 
 export const useLocationModal = () => {
-    const tableId = 'location-tree'
+    const tableId = TABLE_IDS.LOCATION_TREE
     const [codebooktree, setCodebooktree] = useState<Codebooktree[]>([])
     const { locations, loading: locationsLoading, error: locationsError } = useLocation()
     const [uid, setUid] = useState<string>('')
