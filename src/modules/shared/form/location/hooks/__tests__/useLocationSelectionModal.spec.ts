@@ -17,7 +17,7 @@ const mockUseDynamicModalStore = useDynamicModalStore as unknown as jest.Mock
 beforeEach(() => jest.clearAllMocks())
 
 describe('useLocationSelectionModal', () => {
-    it('opens dialog with location-select id and "l" size + filtering flags', () => {
+    it('opens dialog with location-select id and "l" size', () => {
         const openModal = jest.fn(() => 'modal-1')
         mockUseDynamicModalStore.mockReturnValue({ openModal })
 
@@ -31,9 +31,6 @@ describe('useLocationSelectionModal', () => {
         const config = callArgs[1]
         expect(config.id).toBe('location-select')
         expect(config.props.size).toBe('l')
-        expect(config.props.enableFiltering).toBe(true)
-        expect(config.props.manualFiltering).toBe(true)
-        expect(config.props.selectParent).toBe(true)
         expect(config.props.onSelect).toBe(onSelect)
     })
 

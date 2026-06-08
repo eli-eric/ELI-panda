@@ -18,9 +18,6 @@ export const useLocationSelectionModal = () => {
             props: {
                 title: 'Select Location',
                 size: 'l' as const,
-                enableFiltering: true,
-                manualFiltering: true,
-                selectParent: true,
                 onSelect: onSelect || (() => {}),
             },
         })

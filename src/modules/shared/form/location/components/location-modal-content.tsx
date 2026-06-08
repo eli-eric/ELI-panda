@@ -19,10 +19,7 @@ import { useLocationModal } from '../hooks/useLocationModal'
 
 interface CodebookTreeModalProps {
     loading?: boolean
-    enableFiltering?: boolean
     tableId?: string
-    selectParent?: boolean
-    manualFiltering?: boolean
     onSelect: (item: CodebookType | null) => void
     // Data props
     codebooktree?: Codebooktree[]

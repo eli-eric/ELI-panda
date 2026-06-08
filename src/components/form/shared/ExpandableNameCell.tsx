@@ -45,6 +45,7 @@ export const ExpandableNameCell = <T extends ExpandableRow>({
                     <button
                         type="button"
                         onClick={handleToggle}
+                        aria-expanded={row.getIsExpanded()}
                         aria-label={fm({
                             id: row.getIsExpanded()
                                 ? message.common.ui.collapse
