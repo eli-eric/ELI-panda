@@ -7,7 +7,8 @@ import { Button } from '@/components/ui/button'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
-import { PandaTableControlled } from '@/modules/shared/table/pandaTable/PandaTableCotrolled'
+import { PandaTableV2 } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
+import { SearchBar } from '@/modules/shared/table/SearchBar'
 import useTableStateStore from '@/store/useTableStateStore'
 import type { CodebookType } from '@/types/responses/codebook'
 import { highlightText } from '@/utils'
@@ -57,10 +58,7 @@ export function CodebookTreeModalGraphqlContent(
 
     const [item, setItem] = useState<Codebooktree | null>(null)
     const { instances } = useTableStateStore()
-    const filter = useMemo(() => instances[tableId]?.columnFilter, [instances, tableId])
-    const filterName = filter?.find(item => item.id === 'name')?.value as string
-
-    const filterCode = filter?.find(item => item.id === 'code')?.value as string
+    const search = useMemo(() => instances[tableId]?.search || '', [instances, tableId])
 
     const columns = useMemo((): ColumnDef<Codebooktree, any>[] => {
         const columns: ColumnDef<Codebooktree, string>[] = [
@@ -68,34 +66,30 @@ export function CodebookTreeModalGraphqlContent(
                 header: 'Name',
                 accessorKey: 'name',
                 id: 'name',
-                filterFn: 'fuzzy',
                 size: 300,
-                meta: { filter: { type: 'string', enableColumnFilter: true } },
                 cell: ({ row, getValue }) => (
-                    <ExpandableNameCell {...{ row, getValue, fetchChildren, filterName }} />
+                    <ExpandableNameCell {...{ row, getValue, fetchChildren, filterName: search }} />
                 ),
             },
             {
                 header: 'Code',
                 accessorKey: 'code',
                 id: 'code',
-                cell: ({ getValue }) =>
-                    highlightText(getValue() || '', (filterCode as string) || ''),
-                meta: { filter: { type: 'string', enableColumnFilter: true } },
+                cell: ({ getValue }) => highlightText(getValue() || '', search),
             },
         ]
 
         return columns
-    }, [fetchChildren, filterName, filterCode])
+    }, [fetchChildren, search])
 
     const table = usePandaTable<Codebooktree>({
         tableId,
         columns,
         data: codebooktree,
         settings: {
-            enableRowSelection: true,
-            enableFiltering: true,
-            manualFiltering: true,
+            enableRowSelection: false,
+            enableFiltering: false,
+            manualFiltering: false,
         },
         getSubRows: row => row?.children || [],
     })
@@ -103,35 +97,28 @@ export function CodebookTreeModalGraphqlContent(
     const { toggleAllRowsExpanded } = table
 
     useEffect(() => {
-        if (filter && filter?.length > 0) {
-            toggleAllRowsExpanded(true)
-        }
-        if (!filter || filter.length === 0) {
-            toggleAllRowsExpanded(false)
-        }
+        toggleAllRowsExpanded(!!search)
         return () => {
             setItem(null)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [filter])
+    }, [search])
 
     // Instead of ModalButtons, use a simple footer with actions
     return (
-        <div>
-            <div className={cn('max-h-[300px]', loading && ' opacity-70')}>
-                <PandaTableControlled
+        <div className="flex flex-col gap-3">
+            <SearchBar tableId={tableId} useQuery={false} />
+            <div className="h-[300px] overflow-hidden border rounded-md">
+                <PandaTableV2<Codebooktree>
                     tableId={tableId}
-                    data={codebooktree}
+                    data={loading && codebooktree.length === 0 ? undefined : codebooktree}
                     table={table}
                     loading={loading}
                     settings={{
-                        enableRowSelection: true,
-                        enableFiltering: true,
-                        manualFiltering: true,
+                        enableRowSelection: false,
+                        enableFiltering: false,
+                        manualFiltering: false,
                     }}
-                    className={
-                        'relative overflow-y-auto h-[300px] border-l border-b border-gray-400'
-                    }
                     getRowProps={row => ({
                         onClick: () => {
                             setItem({

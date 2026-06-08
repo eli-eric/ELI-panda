@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
-import { PandaTableControlled } from '@/modules/shared/table/pandaTable/PandaTableCotrolled'
+import { PandaTableV2 } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
 import { SearchBar } from '@/modules/shared/table/SearchBar'
 import type { CodebookType } from '@/types/responses/codebook'
 
@@ -84,18 +84,17 @@ export const SystemTypeModalContent: FC<SystemTypeModalContentProps> = ({ onSele
             <SearchBar tableId={TABLE_ID} useQuery={false} />
 
             {/* System types tree table */}
-            <div className={cn('h-[300px]', isLoading && 'opacity-70')}>
-                <PandaTableControlled
+            <div className="h-[300px] overflow-hidden border rounded-md">
+                <PandaTableV2<SystemTypeTreeRow>
                     tableId={TABLE_ID}
-                    data={treeData}
                     table={table}
+                    data={isLoading && treeData.length === 0 ? undefined : treeData}
                     loading={isLoading}
                     settings={{
                         enableRowSelection: false,
                         enableFiltering: false,
                         manualFiltering: false,
                     }}
-                    className="relative overflow-y-auto h-[300px] border-l border-b border-gray-400"
                     getRowProps={row => ({
                         onClick: () => handleRowClick(row),
                         className: cn(

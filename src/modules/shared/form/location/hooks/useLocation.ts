@@ -36,17 +36,13 @@ export const useLocation = () => {
     const { instances } = useTableStateStore()
     const { data: session } = useSession()
 
-    const filter = instances['location-tree']?.columnFilter
-
-    const nameFilter = filter?.find(f => f.id === 'name')?.value as string | undefined
-    const codeFilter = filter?.find(f => f.id === 'code')?.value as string | undefined
+    const search = instances['location-tree']?.search || ''
 
     const { data, isLoading, error } = useGraphQL(GET_LOCATIONS, {
         variables: {
-            where: filter
+            where: search
                 ? {
-                      name_CONTAINS: nameFilter,
-                      code_CONTAINS: codeFilter,
+                      OR: [{ name_CONTAINS: search }, { code_CONTAINS: search }],
                       facility: {
                           code: session?.user?.facilityCode,
                       },

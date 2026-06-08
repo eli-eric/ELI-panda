@@ -8,9 +8,10 @@ import { useLocation, useSubLocations } from './useLocation'
 export const useLocationModal = () => {
     const tableId = 'location-tree'
     const [codebooktree, setCodebooktree] = useState<Codebooktree[]>([])
-    const { locations, error: locationsError } = useLocation()
+    const { locations, loading: locationsLoading, error: locationsError } = useLocation()
     const [uid, setUid] = useState<string>('')
-    const { subLocations, loading, error: subLocationError } = useSubLocations(uid)
+    const { subLocations, loading: subLoading, error: subLocationError } = useSubLocations(uid)
+    const loading = locationsLoading || subLoading
 
     useEffect(() => {
         if (locations) {
