@@ -9,7 +9,7 @@ jest.mock('@/store/useDynamicModalStore', () => ({
 }))
 
 jest.mock('../../components/location-modal-content', () => ({
-    CodebookTreeModalGraphqlContent: () => null,
+    LocationModalContent: () => null,
 }))
 
 const mockUseDynamicModalStore = useDynamicModalStore as unknown as jest.Mock

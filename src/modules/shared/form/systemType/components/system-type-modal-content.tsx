@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import { PandaTableV2 } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
 import { SearchBar } from '@/modules/shared/table/SearchBar'
+import useTableStateStore from '@/store/useTableStateStore'
 import type { CodebookType } from '@/types/responses/codebook'
 
 import { useSystemTypesForSelect } from '../hooks/useSystemTypesForSelect'
@@ -51,6 +52,7 @@ export const SystemTypeModalContent: FC<SystemTypeModalContentProps> = ({ onSele
     })
 
     const { toggleAllRowsExpanded } = table
+    const { reset } = useTableStateStore()
 
     // Auto-expand/collapse tree based on search
     useEffect(() => {
@@ -60,6 +62,11 @@ export const SystemTypeModalContent: FC<SystemTypeModalContentProps> = ({ onSele
             toggleAllRowsExpanded(false)
         }
     }, [search, toggleAllRowsExpanded])
+
+    // Reset table store on unmount so search state can't leak into the next open
+    useEffect(() => {
+        return () => reset(TABLE_ID)
+    }, [reset])
 
     // Handle row click - only children are selectable
     // Groups aren't selectable, so clicking the row toggles expansion
