@@ -7,8 +7,10 @@ import { Button } from '@/components/ui/button'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
-import { PandaTableControlled } from '@/modules/shared/table/pandaTable/PandaTableCotrolled'
+import { PandaTableV2 } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
+import { skeletonData } from '@/modules/shared/table/pandaTableV2/skeletonData'
 import { SearchBar } from '@/modules/shared/table/SearchBar'
+import useTableStateStore from '@/store/useTableStateStore'
 import type { CodebookType } from '@/types/responses/codebook'
 
 import { useSystemTypesForSelect } from '../hooks/useSystemTypesForSelect'
@@ -51,6 +53,7 @@ export const SystemTypeModalContent: FC<SystemTypeModalContentProps> = ({ onSele
     })
 
     const { toggleAllRowsExpanded } = table
+    const { reset } = useTableStateStore()
 
     // Auto-expand/collapse tree based on search
     useEffect(() => {
@@ -61,11 +64,17 @@ export const SystemTypeModalContent: FC<SystemTypeModalContentProps> = ({ onSele
         }
     }, [search, toggleAllRowsExpanded])
 
+    // Reset table store on unmount so search state can't leak into the next open
+    useEffect(() => {
+        return () => reset(TABLE_ID)
+    }, [reset])
+
     // Handle row click - only children are selectable
-    // Note: Groups are expanded via ExpandableNameCell, not row click
+    // Groups aren't selectable, so clicking the row toggles expansion
+    // (the chevron does the same); leaf rows auto-confirm the selection.
     const handleRowClick = (row: Row<SystemTypeTreeRow>) => {
-        // Groups are not selectable - expansion handled by ExpandableNameCell
         if (row.original.isGroup) {
+            row.toggleExpanded()
             return
         }
 
@@ -84,18 +93,17 @@ export const SystemTypeModalContent: FC<SystemTypeModalContentProps> = ({ onSele
             <SearchBar tableId={TABLE_ID} useQuery={false} />
 
             {/* System types tree table */}
-            <div className={cn('h-[300px]', isLoading && 'opacity-70')}>
-                <PandaTableControlled
+            <div className="h-[300px] overflow-hidden border rounded-md">
+                <PandaTableV2<SystemTypeTreeRow>
                     tableId={TABLE_ID}
-                    data={treeData}
                     table={table}
+                    data={skeletonData(treeData, isLoading)}
                     loading={isLoading}
                     settings={{
                         enableRowSelection: false,
                         enableFiltering: false,
                         manualFiltering: false,
                     }}
-                    className="relative overflow-y-auto h-[300px] border-l border-b border-gray-400"
                     getRowProps={row => ({
                         onClick: () => handleRowClick(row),
                         className: cn(

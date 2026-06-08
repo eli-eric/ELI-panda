@@ -1,7 +1,7 @@
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import type { CodebookType } from '@/types/responses/codebook'
 
-import { CodebookTreeModalGraphqlContent } from '../components/location-modal-content'
+import { LocationModalContent } from '../components/location-modal-content'
 
 /**
  * Opens location selection modal using new dynamic modal system
@@ -14,13 +14,10 @@ export const useLocationSelectionModal = () => {
         // Use custom ID for consistent modal management
         const modalId = openModal('dialog', {
             id: 'location-select',
-            component: CodebookTreeModalGraphqlContent,
+            component: LocationModalContent,
             props: {
                 title: 'Select Location',
                 size: 'l' as const,
-                enableFiltering: true,
-                manualFiltering: true,
-                selectParent: true,
                 onSelect: onSelect || (() => {}),
             },
         })

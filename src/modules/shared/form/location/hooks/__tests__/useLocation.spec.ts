@@ -31,28 +31,29 @@ beforeEach(() => {
 })
 
 describe('useLocation', () => {
-    it('queries root locations (parentLocationAggregate count=0) when no column filter', () => {
+    it('queries root locations (parentLocationAggregate count=0) when no search', () => {
         renderHook(() => useLocation())
         const opts = mockUseGraphQL.mock.calls[0][1]
         expect(opts.variables.where.parentLocationAggregate).toEqual({ count: 0 })
         expect(opts.variables.where.facility.code).toBe('FAC1')
     })
 
-    it('uses CONTAINS filters when columnFilter is set', () => {
+    it('searches name OR code when search term is set', () => {
         mockUseTableStateStore.mockReturnValue({
             instances: {
                 'location-tree': {
-                    columnFilter: [
-                        { id: 'name', value: 'foo' },
-                        { id: 'code', value: 'C01' },
-                    ],
+                    search: 'foo',
                 },
             },
         })
         renderHook(() => useLocation())
         const opts = mockUseGraphQL.mock.calls[0][1]
-        expect(opts.variables.where.name_CONTAINS).toBe('foo')
-        expect(opts.variables.where.code_CONTAINS).toBe('C01')
+        expect(opts.variables.where.OR).toEqual([
+            { name_CONTAINS: 'foo' },
+            { code_CONTAINS: 'foo' },
+        ])
+        expect(opts.variables.where.facility.code).toBe('FAC1')
+        expect(opts.variables.where.parentLocationAggregate).toBeUndefined()
     })
 
     it('disables query without facilityCode', () => {

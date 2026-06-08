@@ -58,6 +58,15 @@ describe('useDebouncedSearchInput', () => {
         expect(result.current.defaultValue).toBe('from-store')
     })
 
+    it('ignores querySearch when enableQueryURL is false (modal-local search)', () => {
+        querySearch = 'page-search'
+        storeSearch = undefined
+        const { result } = renderHook(() =>
+            useDebouncedSearchInput({ tableId: 't1', enableQueryURL: false }),
+        )
+        expect(result.current.defaultValue).toBe('')
+    })
+
     it('defaultValue is empty when nothing set', () => {
         querySearch = null
         storeSearch = undefined
