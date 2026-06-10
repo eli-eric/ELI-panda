@@ -166,17 +166,14 @@ const parseResponseBody = async <T>(
         })
     }
 
+    if (rawText === '') return undefined as T
+
     try {
         return JSON.parse(rawText) as T
-    } catch (error) {
-        if (isFeatureEnabled('enableHttpLogging')) {
-            //eslint-disable-next-line
-            console.error('[fetchClient] JSON parse error:', {
-                error,
-                rawText: rawText.substring(0, 500),
-            })
-        }
-        throw error
+    } catch {
+        // Endpoint returned a non-JSON body (e.g. a plain string like "DM04-001").
+        // Fall back to the raw text instead of failing the whole request.
+        return rawText as T
     }
 }
 
