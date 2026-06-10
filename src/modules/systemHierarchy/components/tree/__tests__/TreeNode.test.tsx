@@ -29,6 +29,7 @@ const messages = {
     'systemHierarchy.copy.copySystem': 'Copy System',
     'systemHierarchy.copy.pasteSystem': 'Paste System',
     'systemHierarchy.create.menuItem': 'Create System',
+    'systemHierarchy.delete.menuItem': 'Delete System',
 }
 
 const renderTreeNode = (props: Partial<React.ComponentProps<typeof TreeNode>> = {}) =>
@@ -158,6 +159,30 @@ describe('TreeNode', () => {
 
             fireEvent.contextMenu(screen.getByTestId('tree-node-node-1').firstChild!)
             expect(screen.queryByText('Copy System')).not.toBeInTheDocument()
+        })
+
+        it('shows Delete System and calls handler with uid and name', () => {
+            const onDeleteSystem = jest.fn()
+            renderTreeNode({ onDeleteSystem, canEdit: true })
+
+            fireEvent.contextMenu(screen.getByTestId('tree-node-node-1').firstChild!)
+            const deleteItem = screen.getByTestId('context-delete-system')
+            expect(deleteItem).not.toHaveAttribute('data-disabled')
+
+            fireEvent.click(deleteItem)
+            expect(onDeleteSystem).toHaveBeenCalledWith('node-1', 'Node 1')
+        })
+
+        it('disables Delete System and does not fire handler when canEdit is false', () => {
+            const onDeleteSystem = jest.fn()
+            renderTreeNode({ onDeleteSystem, canEdit: false })
+
+            fireEvent.contextMenu(screen.getByTestId('tree-node-node-1').firstChild!)
+            const deleteItem = screen.getByTestId('context-delete-system')
+            expect(deleteItem).toHaveAttribute('data-disabled')
+
+            fireEvent.click(deleteItem)
+            expect(onDeleteSystem).not.toHaveBeenCalled()
         })
 
         it('enables Create System when canEdit and parent level allows children, calls handler on click', () => {

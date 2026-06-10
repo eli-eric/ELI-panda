@@ -68,6 +68,10 @@ export const useHierarchyNavigation = () => {
         updateQuery({ leaf: undefined, tab: undefined })
     }, [updateQuery])
 
+    const clearSelection = useCallback(() => {
+        updateQuery({ parent: undefined, leaf: undefined, tab: undefined })
+    }, [updateQuery])
+
     const setActiveView = useCallback(
         (view: HierarchyView) => {
             updateQuery({ view: view === HIERARCHY_VIEWS.TREE ? undefined : view })
@@ -86,6 +90,7 @@ export const useHierarchyNavigation = () => {
             setActiveTab,
             setActiveView,
             goBackToLeaves,
+            clearSelection,
         }),
         [
             selectedParentUid,
@@ -97,6 +102,7 @@ export const useHierarchyNavigation = () => {
             setActiveTab,
             setActiveView,
             goBackToLeaves,
+            clearSelection,
         ],
     )
 }

@@ -7,6 +7,7 @@ import {
     ContextMenu,
     ContextMenuContent,
     ContextMenuItem,
+    ContextMenuSeparator,
     ContextMenuTrigger,
 } from '@/components/ui/context-menu'
 import { message } from '@/i18n/src/messages'
@@ -33,6 +34,7 @@ interface TreeNodeProps {
     onCopySystem?: (uid: string) => void
     onPasteSystem?: (uid: string) => void
     onCreateSubsystem?: (parentUid: string, parentName: string, parentLevel: SystemLevel) => void
+    onDeleteSystem?: (uid: string, name: string) => void
 }
 
 export const TreeNode: FC<TreeNodeProps> = ({
@@ -49,6 +51,7 @@ export const TreeNode: FC<TreeNodeProps> = ({
     onCopySystem,
     onPasteSystem,
     onCreateSubsystem,
+    onDeleteSystem,
 }) => {
     const { formatMessage: fm } = useIntl()
     const hasChildren = node.children.length > 0
@@ -70,7 +73,8 @@ export const TreeNode: FC<TreeNodeProps> = ({
 
     const canPaste = !!copiedSystemUid && copiedSystemUid !== node.uid
     const canCreate = canCreateUnder(node.systemLevel)
-    const hasContextMenu = !!onCopySystem || !!onPasteSystem || !!onCreateSubsystem
+    const hasContextMenu =
+        !!onCopySystem || !!onPasteSystem || !!onCreateSubsystem || !!onDeleteSystem
 
     const nodeContent = (
         <div
@@ -137,6 +141,19 @@ export const TreeNode: FC<TreeNodeProps> = ({
                             >
                                 {fm({ id: message.systemHierarchy.copy.pasteSystem })}
                             </ContextMenuItem>
+                        )}
+                        {onDeleteSystem && (
+                            <>
+                                <ContextMenuSeparator />
+                                <ContextMenuItem
+                                    onSelect={() => onDeleteSystem(node.uid, node.name)}
+                                    disabled={!canEdit}
+                                    className="text-destructive focus:text-destructive"
+                                    data-testid="context-delete-system"
+                                >
+                                    {fm({ id: message.systemHierarchy.delete.menuItem })}
+                                </ContextMenuItem>
+                            </>
                         )}
                     </ContextMenuContent>
                 </ContextMenu>
