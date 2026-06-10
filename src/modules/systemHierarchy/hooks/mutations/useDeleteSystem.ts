@@ -32,6 +32,9 @@ export const useDeleteSystem = () => {
             // Immediate refresh so the deleted node disappears promptly.
             invalidateHierarchy()
             // Deleting a system can shift spare-parts coverage of related systems.
+            // Run unconditionally: a recursive delete may remove subsystems with
+            // spare relations we can't cheaply detect client-side, and a stale
+            // coverage number is worse than one extra request (matches legacy delete).
             // Recompute in the background, then refresh again so coverage stats
             // catch up. A recalc failure must not mask the successful delete.
             void queryMutate('recalculateSpareParts', 'post')(undefined)

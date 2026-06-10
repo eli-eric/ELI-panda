@@ -19,6 +19,12 @@ const messages = message.systemHierarchy.delete
 
 const MAX_LISTED_ITEMS = 3
 
+// 409 body contract: the backend returns a BARE array of these at
+// `err.response.data` (echo `c.JSON(409, itemsInfo)` where `itemsInfo` is
+// `[]models.SystemPhysicalItemInfo` — eli-panda-api
+// services/systems-service/systems-handlers.go DeleteSystemRecursive +
+// models/model_system.go SystemPhysicalItemInfo). If that shape ever changes,
+// buildConflictMessage falls back to the generic message instead of listing items.
 type PhysicalItemConflict = {
     systemUid: string
     systemName: string
