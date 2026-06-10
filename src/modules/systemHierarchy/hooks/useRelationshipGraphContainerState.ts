@@ -6,6 +6,7 @@ import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import type { GraphLayoutMode, RelationshipGraphEdge, RelationshipGraphNode } from '../types/graph'
 import { isNodeScopeKey, toGraphScopeKey } from '../utils/graphScope'
 import { useRelationshipGraph } from './queries/useRelationshipGraph'
+import { useDeleteSystemAction } from './useDeleteSystemAction'
 import type { GraphFiltersApi } from './useGraphFilters'
 import { useHierarchyNavigation } from './useHierarchyNavigation'
 import { useRelationshipGraphApiQuery } from './useRelationshipGraphApiQuery'
@@ -149,6 +150,7 @@ export const useRelationshipGraphContainerState = ({
     const { copiedSystemUid, canEdit, handleCopySystem, handlePasteSystem } = useSystemCopyPaste({
         onExpandNode: handleExpand,
     })
+    const { handleDeleteSystem } = useDeleteSystemAction()
 
     const { layoutMode, systemLevels, rfNodes, rfEdges, handleLayoutChange } =
         useRelationshipGraphFlow({
@@ -163,6 +165,7 @@ export const useRelationshipGraphContainerState = ({
             onContextMenuChange: handleContextMenuChange,
             onCopySystem: canEdit ? handleCopySystem : undefined,
             onPasteSystem: canEdit ? handlePasteSystem : undefined,
+            onDeleteSystem: canEdit ? handleDeleteSystem : undefined,
             copiedSystemUid,
             onGraphChanged,
         })

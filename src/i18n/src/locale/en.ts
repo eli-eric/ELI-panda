@@ -1537,6 +1537,15 @@ export const messages = {
                 nameRequired: 'Name is required',
             },
         },
+        delete: {
+            menuItem: 'Delete System',
+            confirm: 'Are you sure you want to delete "{name}" and all its sub-systems?',
+            deleting: 'Deleting system...',
+            success: 'System "{name}" deleted',
+            conflict: 'Cannot delete "{name}": it still has attached physical items ({items}).',
+            conflictGeneric: 'Cannot delete "{name}" — it still has attached physical items.',
+            error: 'Failed to delete system "{name}".',
+        },
         systemLevels: {
             SYSTEM_DOMAIN: 'System domain',
             TECHNOLOGY_UNIT: 'Technology unit',

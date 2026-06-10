@@ -18,6 +18,7 @@ interface SystemTreeComponentProps {
     onCopySystem?: (uid: string) => void
     onPasteSystem?: (uid: string) => void
     onCreateSubsystem?: (parentUid: string, parentName: string, parentLevel: SystemLevel) => void
+    onDeleteSystem?: (uid: string, name: string) => void
 }
 
 export const SystemTreeComponent: FC<SystemTreeComponentProps> = ({
@@ -32,6 +33,7 @@ export const SystemTreeComponent: FC<SystemTreeComponentProps> = ({
     onCopySystem,
     onPasteSystem,
     onCreateSubsystem,
+    onDeleteSystem,
 }) => {
     const renderNode = useCallback(
         (node: HierarchyNode, depth: number) => {
@@ -53,6 +55,7 @@ export const SystemTreeComponent: FC<SystemTreeComponentProps> = ({
                     onCopySystem={onCopySystem}
                     onPasteSystem={onPasteSystem}
                     onCreateSubsystem={onCreateSubsystem}
+                    onDeleteSystem={onDeleteSystem}
                 >
                     {isExpanded && node.children.map(child => renderNode(child, depth + 1))}
                 </TreeNode>
@@ -69,6 +72,7 @@ export const SystemTreeComponent: FC<SystemTreeComponentProps> = ({
             onCopySystem,
             onPasteSystem,
             onCreateSubsystem,
+            onDeleteSystem,
         ],
     )
 

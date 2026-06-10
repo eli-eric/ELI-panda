@@ -25,6 +25,7 @@ interface ToReactFlowNodesOptions {
     onContextMenuChange?: (open: boolean) => void
     onCopySystem?: (uid: string) => void
     onPasteSystem?: (uid: string) => void
+    onDeleteSystem?: (uid: string, name: string) => void
     copiedSystemUid?: string | null
     hiddenRelationshipsByNodeUid?: Record<string, number>
 }
@@ -53,6 +54,7 @@ export const toReactFlowNodes = (
             onContextMenuChange: options?.onContextMenuChange,
             onCopySystem: options?.onCopySystem,
             onPasteSystem: options?.onPasteSystem,
+            onDeleteSystem: options?.onDeleteSystem,
             copiedSystemUid: options?.copiedSystemUid,
             hiddenRelationshipsCount: options?.hiddenRelationshipsByNodeUid?.[node.uid] ?? 0,
         },

@@ -11,6 +11,7 @@ import useTableStateStore from '@/store/useTableStateStore'
 
 import { useSystemDetail } from '../../hooks/queries/useSystemDetail'
 import { useSystemLeaves } from '../../hooks/queries/useSystemLeaves'
+import { useDeleteSystemAction } from '../../hooks/useDeleteSystemAction'
 import { useHierarchyNavigation } from '../../hooks/useHierarchyNavigation'
 import { HIERARCHY_VIEWS, LEAVES_TABLE_ID } from '../../types/constants'
 import { SystemDetailViewContainer } from '../detail/SystemDetailView.cont'
@@ -34,6 +35,7 @@ export const LeavesPanelContainer: FC = () => {
     const { leaves, totalCount, isLoading, isInitialLoad } = useSystemLeaves(selectedParentUid)
 
     const { columns } = useLeavesColumns()
+    const { canEdit, handleDeleteSystem } = useDeleteSystemAction()
 
     const table = usePandaTable({
         tableId: LEAVES_TABLE_ID,
@@ -173,6 +175,8 @@ export const LeavesPanelContainer: FC = () => {
                     table={table}
                     toolbar={toolbar}
                     emptyState={emptyState}
+                    canEdit={canEdit}
+                    onDeleteSystem={handleDeleteSystem}
                 />
             </div>
         </div>

@@ -15,7 +15,7 @@ The System Hierarchy module is the central place to browse, organize, and inspec
 | Persona | Role(s) | Can do |
 |---|---|---|
 | 👁️ **Viewer** | `systems-view` | Browse the tree, view details, view relationships, search and filter, view change history |
-| ✏️ **Editor / Admin** | `systems-edit` or `admin` | Everything in Viewer + edit fields, manage persons, manage relationships, **use and remove spare parts** (feature-flag gated in production), **create subsystems**, copy systems, assign and move physical items |
+| ✏️ **Editor / Admin** | `systems-edit` or `admin` | Everything in Viewer + edit fields, manage persons, manage relationships, **use and remove spare parts** (feature-flag gated in production), **create subsystems**, copy systems, **delete systems**, assign and move physical items |
 
 > 🔮 **Coming soon — Phase 1: split between Editor and Admin**
 > - **Admin** will have exclusive edit on systems at `SYSTEM_DOMAIN` and `TECHNOLOGY_UNIT` levels (the strategic top of the tree).
@@ -67,6 +67,7 @@ When a system is selected for full detail view, a tabbed area replaces the leave
 - [Viewing change history](./workflows/viewing-change-history.md) — the *History* tab timeline and its filters.
 - [Creating systems](./workflows/creating-systems.md) — right-click a parent in the tree to create a new subsystem. Two-field dialog (name + level), inherits responsible/location/zone from the parent.
 - [Copying systems](./workflows/copying-systems.md) — copy/paste a system (and optionally its subtree) under a different parent.
+- [Deleting systems](./workflows/deleting-systems.md) — right-click → Delete System in the tree, table, or graph. Recursive (removes the whole subtree), confirmed, blocked when physical items are attached.
 - [Managing physical items](./workflows/managing-physical-items.md) — viewing the item's fields and catalogue properties (with service-modified values flagged), and assigning or moving the physical item attached to a system.
 
 For moving a system to a different parent, see the **Systems Moving** module — drag-and-drop rearrangement of the hierarchy lives there. See the [user guide index](../README.md).

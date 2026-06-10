@@ -19,6 +19,7 @@ interface UseRelationshipGraphFlowParams {
     onContextMenuChange: (open: boolean) => void
     onCopySystem?: (uid: string) => void
     onPasteSystem?: (uid: string) => void
+    onDeleteSystem?: (uid: string, name: string) => void
     copiedSystemUid?: string | null
     onGraphChanged: () => void
 }
@@ -43,6 +44,7 @@ export const useRelationshipGraphFlow = ({
     onContextMenuChange,
     onCopySystem,
     onPasteSystem,
+    onDeleteSystem,
     copiedSystemUid,
     onGraphChanged,
 }: UseRelationshipGraphFlowParams): UseRelationshipGraphFlowResult => {
@@ -60,6 +62,7 @@ export const useRelationshipGraphFlow = ({
                 onContextMenuChange,
                 onCopySystem,
                 onPasteSystem,
+                onDeleteSystem,
                 copiedSystemUid,
                 hiddenRelationshipsByNodeUid,
             }),
@@ -72,6 +75,7 @@ export const useRelationshipGraphFlow = ({
             onContextMenuChange,
             onCopySystem,
             onPasteSystem,
+            onDeleteSystem,
             copiedSystemUid,
             hiddenRelationshipsByNodeUid,
         ],
