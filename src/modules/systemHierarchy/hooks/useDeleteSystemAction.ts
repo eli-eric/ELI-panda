@@ -51,7 +51,8 @@ export const useDeleteSystemAction = () => {
             }
             const shown = itemNames.slice(0, MAX_LISTED_ITEMS).join(', ')
             const remaining = itemNames.length - MAX_LISTED_ITEMS
-            const items = remaining > 0 ? `${shown} +${remaining} more` : shown
+            // Locale-neutral overflow suffix — avoids embedding an untranslated word.
+            const items = remaining > 0 ? `${shown} (+${remaining})` : shown
             return fm({ id: messages.conflict }, createMessageValues({ name, items }))
         },
         [fm],

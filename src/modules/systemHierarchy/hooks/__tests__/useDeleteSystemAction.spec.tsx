@@ -151,6 +151,25 @@ describe('useDeleteSystemAction', () => {
         expect(message).toBe('systemHierarchy.delete.conflict|Pump A|Item A, Item B')
     })
 
+    it('caps the listed items and appends a locale-neutral overflow count', () => {
+        const { result } = renderHook(() => useDeleteSystemAction())
+
+        act(() => result.current.handleDeleteSystem('sys-1', 'Pump A'))
+        const message = getToastHandlers().error({
+            response: {
+                status: 409,
+                data: [
+                    { itemName: 'Item A' },
+                    { itemName: 'Item B' },
+                    { itemName: 'Item C' },
+                    { itemName: 'Item D' },
+                ],
+            },
+        })
+
+        expect(message).toBe('systemHierarchy.delete.conflict|Pump A|Item A, Item B, Item C (+1)')
+    })
+
     it('uses the generic conflict message when the 409 body is empty', () => {
         const { result } = renderHook(() => useDeleteSystemAction())
 

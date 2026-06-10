@@ -52,70 +52,74 @@ export const LeavesTableComponent: FC<LeavesTableProps> = ({
         tableRef.current?.scrollToTop()
     }, [])
 
+    const tableContent = (
+        <div
+            className="flex flex-col h-full"
+            data-testid="system-hierarchy-leaves-table"
+            onContextMenuCapture={onDeleteSystem ? () => setContextSystem(null) : undefined}
+        >
+            <div className="flex-1 min-h-0 flex flex-col">
+                <PandaTableV2
+                    ref={tableRef}
+                    data={isInitialLoad ? undefined : data}
+                    table={table}
+                    loading={isLoading}
+                    tableId={LEAVES_TABLE_ID}
+                    skeletonRowCount={25}
+                    getRowProps={({ original }) => ({
+                        onClick: () => onRowClick(original.uid),
+                        onContextMenu: onDeleteSystem
+                            ? () => setContextSystem(original)
+                            : undefined,
+                        className: 'cursor-pointer hover:text-primary hover:bg-primary/10',
+                    })}
+                    settings={{
+                        enableSorting: true,
+                        enableColumnHiding: true,
+                        enableColumnReordering: false,
+                    }}
+                    toolbar={toolbar}
+                    emptyState={emptyState}
+                    className="flex-1 min-h-0"
+                />
+            </div>
+            <div className="shrink-0">
+                <Pagination
+                    tableId={LEAVES_TABLE_ID}
+                    settings={{
+                        enableQueryURL: true,
+                        pageSizeDefault: 25,
+                        total: totalCount,
+                    }}
+                    onPageChange={handlePageChange}
+                />
+            </div>
+        </div>
+    )
+
+    // Only wrap in a context menu when there's an action — otherwise the trigger
+    // would suppress the native right-click menu without offering anything.
+    if (!onDeleteSystem) return tableContent
+
     return (
         <ContextMenu
             onOpenChange={open => {
                 if (!open) setContextSystem(null)
             }}
         >
-            <ContextMenuTrigger asChild>
-                <div
-                    className="flex flex-col h-full"
-                    data-testid="system-hierarchy-leaves-table"
-                    onContextMenuCapture={() => setContextSystem(null)}
+            <ContextMenuTrigger asChild>{tableContent}</ContextMenuTrigger>
+            <ContextMenuContent>
+                <ContextMenuItem
+                    disabled={!canEdit || !contextSystem}
+                    className="text-destructive focus:text-destructive"
+                    data-testid="context-delete-system"
+                    onSelect={() =>
+                        contextSystem && onDeleteSystem(contextSystem.uid, contextSystem.name)
+                    }
                 >
-                    <div className="flex-1 min-h-0 flex flex-col">
-                        <PandaTableV2
-                            ref={tableRef}
-                            data={isInitialLoad ? undefined : data}
-                            table={table}
-                            loading={isLoading}
-                            tableId={LEAVES_TABLE_ID}
-                            skeletonRowCount={25}
-                            getRowProps={({ original }) => ({
-                                onClick: () => onRowClick(original.uid),
-                                onContextMenu: () => setContextSystem(original),
-                                className:
-                                    'cursor-pointer hover:text-primary hover:bg-primary/10',
-                            })}
-                            settings={{
-                                enableSorting: true,
-                                enableColumnHiding: true,
-                                enableColumnReordering: false,
-                            }}
-                            toolbar={toolbar}
-                            emptyState={emptyState}
-                            className="flex-1 min-h-0"
-                        />
-                    </div>
-                    <div className="shrink-0">
-                        <Pagination
-                            tableId={LEAVES_TABLE_ID}
-                            settings={{
-                                enableQueryURL: true,
-                                pageSizeDefault: 25,
-                                total: totalCount,
-                            }}
-                            onPageChange={handlePageChange}
-                        />
-                    </div>
-                </div>
-            </ContextMenuTrigger>
-            {onDeleteSystem && (
-                <ContextMenuContent>
-                    <ContextMenuItem
-                        disabled={!canEdit || !contextSystem}
-                        className="text-destructive focus:text-destructive"
-                        data-testid="context-delete-system"
-                        onSelect={() =>
-                            contextSystem &&
-                            onDeleteSystem(contextSystem.uid, contextSystem.name)
-                        }
-                    >
-                        {fm({ id: message.systemHierarchy.delete.menuItem })}
-                    </ContextMenuItem>
-                </ContextMenuContent>
-            )}
+                    {fm({ id: message.systemHierarchy.delete.menuItem })}
+                </ContextMenuItem>
+            </ContextMenuContent>
         </ContextMenu>
     )
 }
