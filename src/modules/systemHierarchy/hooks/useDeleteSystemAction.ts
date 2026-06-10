@@ -59,7 +59,7 @@ export const useDeleteSystemAction = () => {
 
     const handleDeleteSystem = useCallback(
         (uid: string, name: string) => {
-            if (!canEdit) return
+            if (!canEdit || isPending) return
 
             const runDelete = () => {
                 toast.promise(mutateAsync({ uid }), {
@@ -80,7 +80,16 @@ export const useDeleteSystemAction = () => {
             const confirm = fm({ id: messages.confirm }, createMessageValues({ name }))
             withWarningModal(runDelete, confirm)()
         },
-        [canEdit, withWarningModal, fm, mutateAsync, isOpenOrAncestor, clearSelection, buildConflictMessage],
+        [
+            canEdit,
+            isPending,
+            withWarningModal,
+            fm,
+            mutateAsync,
+            isOpenOrAncestor,
+            clearSelection,
+            buildConflictMessage,
+        ],
     )
 
     return { canEdit, handleDeleteSystem, isPending }

@@ -82,6 +82,16 @@ describe('useDeleteSystemAction', () => {
         expect(mutateAsync).not.toHaveBeenCalled()
     })
 
+    it('ignores re-entry while a delete is already in flight', () => {
+        mockUseDeleteSystem.mockReturnValue({ mutateAsync, isPending: true })
+        const { result } = renderHook(() => useDeleteSystemAction())
+
+        act(() => result.current.handleDeleteSystem('sys-1', 'Pump A'))
+
+        expect(mockToastPromise).not.toHaveBeenCalled()
+        expect(mutateAsync).not.toHaveBeenCalled()
+    })
+
     it('confirms with recursive wording then deletes via the mutation', () => {
         const { result } = renderHook(() => useDeleteSystemAction())
 
