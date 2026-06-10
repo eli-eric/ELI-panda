@@ -36,7 +36,7 @@ describe('useDeleteSystem', () => {
         )
     })
 
-    it('deletes, recalculates spare parts, then invalidates all hierarchy keys', async () => {
+    it('refreshes immediately on delete, then recalculates and refreshes again', async () => {
         const { result } = renderHook(() => useDeleteSystem(), { wrapper: createWrapper() })
 
         await result.current.mutateAsync({ uid: 'sys-1' })
@@ -46,15 +46,14 @@ describe('useDeleteSystem', () => {
         expect(mockQueryMutate).toHaveBeenCalledWith('recalculateSpareParts', 'post')
         expect(recalcFn).toHaveBeenCalled()
 
-        await waitFor(() => {
-            expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['systemsHierarchy'] })
-        })
+        expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['systemsHierarchy'] })
         expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['systemLeaves'] })
         expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['systemLeavesCount'] })
-        expect(invalidateSpy).toHaveBeenCalledTimes(4)
+        // Two refresh rounds: immediate (on delete) + after the background recalc.
+        await waitFor(() => expect(invalidateSpy).toHaveBeenCalledTimes(8))
     })
 
-    it('still invalidates when the recalc call fails', async () => {
+    it('keeps the immediate refresh and skips the second round when recalc fails', async () => {
         recalcFn.mockRejectedValue(new Error('recalc boom'))
         const { result } = renderHook(() => useDeleteSystem(), { wrapper: createWrapper() })
 
@@ -63,6 +62,7 @@ describe('useDeleteSystem', () => {
         await waitFor(() => {
             expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['systemsHierarchy'] })
         })
+        // Only the immediate round; the failed recalc must not trigger a second one.
         expect(invalidateSpy).toHaveBeenCalledTimes(4)
     })
 })

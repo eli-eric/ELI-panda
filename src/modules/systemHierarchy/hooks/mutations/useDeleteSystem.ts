@@ -15,21 +15,30 @@ type DeleteSystemVariables = { uid: string }
 export const useDeleteSystem = () => {
     const queryClient = useQueryClient()
 
+    // Refresh the hierarchy/leaves/graph views. Fire-and-forget on purpose —
+    // TanStack handles the refetch; we never need to await it here.
+    const invalidateHierarchy = () => {
+        queryClient.invalidateQueries({ queryKey: [HIERARCHY_QUERY_KEY] })
+        queryClient.invalidateQueries({ queryKey: [LEAVES_QUERY_KEY] })
+        queryClient.invalidateQueries({ queryKey: [LEAVES_COUNT_QUERY_KEY] })
+        queryClient.invalidateQueries({ queryKey: [RELATIONSHIP_GRAPH_QUERY_KEY] })
+    }
+
     return useMutation<unknown, AxiosError, DeleteSystemVariables>({
         mutationFn: ({ uid }) => queryMutate('system', 'delete', { uid })(undefined),
-        onSuccess: async () => {
+        // Keep onSuccess synchronous so the delete (and its toast) resolves as soon
+        // as the system is gone — without waiting on the slower recalc.
+        onSuccess: () => {
+            // Immediate refresh so the deleted node disappears promptly.
+            invalidateHierarchy()
             // Deleting a system can shift spare-parts coverage of related systems.
-            // Mirror the legacy delete by recomputing before refetching; a recalc
-            // failure must not mask the successful delete.
-            try {
-                await queryMutate('recalculateSpareParts', 'post')(null)
-            } catch {
-                // ignore — invalidation below still refreshes from source of truth
-            }
-            queryClient.invalidateQueries({ queryKey: [HIERARCHY_QUERY_KEY] })
-            queryClient.invalidateQueries({ queryKey: [LEAVES_QUERY_KEY] })
-            queryClient.invalidateQueries({ queryKey: [LEAVES_COUNT_QUERY_KEY] })
-            queryClient.invalidateQueries({ queryKey: [RELATIONSHIP_GRAPH_QUERY_KEY] })
+            // Recompute in the background, then refresh again so coverage stats
+            // catch up. A recalc failure must not mask the successful delete.
+            void queryMutate('recalculateSpareParts', 'post')(undefined)
+                .then(() => invalidateHierarchy())
+                .catch(() => {
+                    // ignore — the immediate refresh above already reflects the delete
+                })
         },
     })
 }
