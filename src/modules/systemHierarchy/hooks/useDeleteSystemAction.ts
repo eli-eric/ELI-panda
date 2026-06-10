@@ -11,6 +11,7 @@ import { createMessageValues } from '@/utils/formatters'
 
 import { findHierarchyPath } from '../utils/treePath'
 import { useDeleteSystem } from './mutations/useDeleteSystem'
+import { useSystemDetail } from './queries/useSystemDetail'
 import { useSystemHierarchy } from './queries/useSystemHierarchy'
 import { useHierarchyNavigation } from './useHierarchyNavigation'
 
@@ -31,15 +32,23 @@ export const useDeleteSystemAction = () => {
     const withWarningModal = useWarningModal()
     const { nodes } = useSystemHierarchy()
     const { selectedParentUid, selectedLeafUid, clearSelection } = useHierarchyNavigation()
+    const { system: openLeaf } = useSystemDetail(selectedLeafUid)
     const { mutateAsync, isPending } = useDeleteSystem()
 
     const isOpenOrAncestor = useCallback(
         (uid: string) => {
+            // The open node itself — detail leaf or selected tree parent.
             if (uid === selectedLeafUid || uid === selectedParentUid) return true
-            if (!selectedParentUid) return false
-            return findHierarchyPath(nodes, selectedParentUid).some(node => node.uid === uid)
+            // An ancestor of the open detail leaf (its breadcrumb path). The leaf may
+            // be opened via selectLeaf with a stale `parent`, so check it directly.
+            if (openLeaf?.parentPath?.some(ancestor => ancestor.uid === uid)) return true
+            // An ancestor of the selected tree parent.
+            return (
+                !!selectedParentUid &&
+                findHierarchyPath(nodes, selectedParentUid).some(node => node.uid === uid)
+            )
         },
-        [nodes, selectedParentUid, selectedLeafUid],
+        [nodes, selectedParentUid, selectedLeafUid, openLeaf],
     )
 
     const buildConflictMessage = useCallback(

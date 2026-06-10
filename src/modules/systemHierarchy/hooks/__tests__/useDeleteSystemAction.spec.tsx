@@ -5,6 +5,7 @@ import { usePermission } from '@/hooks/usePermission'
 import useWarningModal from '@/hooks/useWarningModal'
 
 import { useDeleteSystem } from '../mutations/useDeleteSystem'
+import { useSystemDetail } from '../queries/useSystemDetail'
 import { useSystemHierarchy } from '../queries/useSystemHierarchy'
 import { useDeleteSystemAction } from '../useDeleteSystemAction'
 import { useHierarchyNavigation } from '../useHierarchyNavigation'
@@ -12,6 +13,7 @@ import { useHierarchyNavigation } from '../useHierarchyNavigation'
 jest.mock('@/hooks/usePermission', () => ({ usePermission: jest.fn() }))
 jest.mock('@/hooks/useWarningModal', () => ({ __esModule: true, default: jest.fn() }))
 jest.mock('../mutations/useDeleteSystem', () => ({ useDeleteSystem: jest.fn() }))
+jest.mock('../queries/useSystemDetail', () => ({ useSystemDetail: jest.fn() }))
 jest.mock('../queries/useSystemHierarchy', () => ({ useSystemHierarchy: jest.fn() }))
 jest.mock('../useHierarchyNavigation', () => ({ useHierarchyNavigation: jest.fn() }))
 jest.mock('sonner', () => ({ toast: { promise: jest.fn() } }))
@@ -25,6 +27,7 @@ jest.mock('react-intl', () => ({
 const mockUsePermission = usePermission as jest.Mock
 const mockUseWarningModal = useWarningModal as unknown as jest.Mock
 const mockUseDeleteSystem = useDeleteSystem as jest.Mock
+const mockUseSystemDetail = useSystemDetail as jest.Mock
 const mockUseSystemHierarchy = useSystemHierarchy as jest.Mock
 const mockUseHierarchyNavigation = useHierarchyNavigation as jest.Mock
 const mockToastPromise = toast.promise as jest.Mock
@@ -58,6 +61,7 @@ beforeEach(() => {
             },
     )
     mockUseDeleteSystem.mockReturnValue({ mutateAsync, isPending: false })
+    mockUseSystemDetail.mockReturnValue({ system: null })
     mockUseSystemHierarchy.mockReturnValue({ nodes: [] })
     setNavigation()
 })
@@ -122,6 +126,21 @@ describe('useDeleteSystemAction', () => {
         const { result } = renderHook(() => useDeleteSystemAction())
 
         act(() => result.current.handleDeleteSystem('root', 'Root'))
+        getToastHandlers().success()
+
+        expect(clearSelection).toHaveBeenCalledTimes(1)
+    })
+
+    it('resets selection when the deleted system is an ancestor of the open detail leaf', () => {
+        // Leaf opened via selectLeaf — parent stays on an unrelated root.
+        mockUseSystemDetail.mockReturnValue({
+            system: { parentPath: [{ uid: 'root' }, { uid: 'mid' }] },
+        })
+        mockUseSystemHierarchy.mockReturnValue({ nodes: [] })
+        setNavigation({ selectedLeafUid: 'leaf-x', selectedParentUid: 'unrelated-root' })
+        const { result } = renderHook(() => useDeleteSystemAction())
+
+        act(() => result.current.handleDeleteSystem('mid', 'Mid'))
         getToastHandlers().success()
 
         expect(clearSelection).toHaveBeenCalledTimes(1)
