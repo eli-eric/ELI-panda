@@ -44,6 +44,10 @@ before deleting this module:
 - `pages/system/alias/[alias].tsx` — alias → uid resolution, then redirects to hierarchy
 - `pages/system/item/[itemUid].tsx` — physical item → system resolution (QR codes), then redirects to hierarchy
 
+Known quirk: `hooks/useSystemDetail` does `router.push(PATH.NOT_FOUND)` itself on an
+empty result, which races the alias/item pages' own not-found UI. Pre-existing;
+fix when the alias/item resolution gets its own query.
+
 ## Removal criteria
 
 1. Extract the "allowed until extracted" utils/hooks/types to

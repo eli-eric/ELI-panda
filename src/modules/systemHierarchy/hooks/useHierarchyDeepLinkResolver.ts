@@ -25,10 +25,9 @@ export const useHierarchyDeepLinkResolver = (): void => {
 
     // useSystemDetail rebuilds `system` every render — depend on stable scalars
     const systemUid = system?.uid ?? null
-    const ancestorKey = (system?.parentPath ?? [])
-        .map(p => p.uid)
-        .filter(Boolean)
-        .join(',')
+    const ancestorKey = JSON.stringify(
+        (system?.parentPath ?? []).map(p => p.uid).filter(Boolean),
+    )
 
     useEffect(() => {
         if (!router.isReady) return
@@ -41,7 +40,7 @@ export const useHierarchyDeepLinkResolver = (): void => {
         if (resolvedLeafRef.current === selectedLeafUid) return
         resolvedLeafRef.current = selectedLeafUid
 
-        const ancestorUids = ancestorKey ? ancestorKey.split(',') : []
+        const ancestorUids = JSON.parse(ancestorKey) as string[]
         expandNodes(ancestorUids.length > 0 ? ancestorUids : [systemUid])
         resolveParentForLeaf(
             ancestorUids.length > 0 ? ancestorUids[ancestorUids.length - 1] : systemUid,
