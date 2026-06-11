@@ -8,6 +8,7 @@ import type { SystemLeaf } from '../../types'
 import { hasPhysicalItem } from '../../utils/predicates'
 import { PhysicalItemPropertiesSidebar } from '../physical-item/PhysicalItemPropertiesSidebar.comp'
 import { MetadataSection } from './MetadataSection.comp'
+import { SystemImagePanel } from './SystemImagePanel.comp'
 
 interface QuickInfoSidebarProps {
     system: SystemLeaf | null
@@ -102,6 +103,7 @@ export const QuickInfoSidebar: FC<QuickInfoSidebarProps> = ({ system }) => {
                 </h2>
             </div>
             <div className="p-3 space-y-4">
+                <SystemImagePanel systemUid={system.uid} systemName={system.name} />
                 <MetadataSection
                     title={fm({ id: message.systemHierarchy.sidebar.metadata })}
                     items={infoItems}

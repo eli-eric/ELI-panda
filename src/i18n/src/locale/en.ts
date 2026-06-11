@@ -152,6 +152,10 @@ export const messages = {
             loading: 'Loading...',
             uploading: 'Uploading...',
             deleting: 'Deleting...',
+            uploaded: 'Image uploaded',
+            deleted: 'Image deleted',
+            uploadError: 'Failed to upload image',
+            deleteError: 'Failed to delete image',
         },
         files: {
             title: 'Files',
