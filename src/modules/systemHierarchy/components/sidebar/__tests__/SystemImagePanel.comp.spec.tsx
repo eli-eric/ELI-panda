@@ -49,6 +49,14 @@ describe('SystemImagePanel', () => {
         expect(screen.getByText('1/3')).toBeInTheDocument()
     })
 
+    it('focuses an image when its thumbnail is clicked', () => {
+        mockState.images = [img('1'), img('2'), img('3')]
+        renderWithProviders(<SystemImagePanel systemUid="s1" />)
+        expect(screen.getByText('1/3')).toBeInTheDocument()
+        fireEvent.click(screen.getByRole('button', { name: 'img-2' }))
+        expect(screen.getByText('2/3')).toBeInTheDocument()
+    })
+
     it('hides upload/delete controls without edit role', () => {
         mockHasPermission.mockReturnValue(false)
         mockState.images = [img('1')]

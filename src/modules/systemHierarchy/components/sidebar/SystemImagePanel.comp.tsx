@@ -1,7 +1,7 @@
 import { ImageIcon, Loader2, Trash2, Upload } from 'lucide-react'
 import Image from 'next/image'
 import type { FC } from 'react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { useIntl } from 'react-intl'
 
@@ -24,7 +24,9 @@ export const SystemImagePanel: FC<SystemImagePanelProps> = ({ systemUid, systemN
     const { formatMessage: fm } = useIntl()
     const hasEditRole = !!usePermission([ROLE.SYSTEM_EDIT])
     const withWarnModal = useWarningModal()
-    const [selectedIndex, setSelectedIndex] = useState(0)
+    // track the selected image by id so reconcile reordering / deletes don't shift focus;
+    // null falls back to index 0 (the newest, since uploads prepend)
+    const [selectedId, setSelectedId] = useState<string | null>(null)
 
     const { images, isLoading, isMutating, uploadImages, deleteImage } = useImageAutoSave({
         itemCategory: FILE_TYPE.SYSTEM,
@@ -37,18 +39,15 @@ export const SystemImagePanel: FC<SystemImagePanelProps> = ({ systemUid, systemN
         noClick: true,
         onDrop: files => {
             // new uploads prepend → focus the first one
-            setSelectedIndex(0)
+            setSelectedId(null)
             uploadImages(files)
         },
     })
 
-    // keep selection in range as the list changes (delete / refetch)
-    useEffect(() => {
-        setSelectedIndex(index => Math.min(index, Math.max(0, images.length - 1)))
-    }, [images.length])
-
     if (isLoading) return <ImagePlaceHolder />
 
+    const foundIndex = images.findIndex(image => image.id === selectedId)
+    const selectedIndex = foundIndex >= 0 ? foundIndex : 0
     const currentImage = images[selectedIndex]
     const hasImages = images.length > 0
     const hasMany = images.length > 1
@@ -134,7 +133,7 @@ export const SystemImagePanel: FC<SystemImagePanelProps> = ({ systemUid, systemN
                                 <button
                                     key={image.id}
                                     type="button"
-                                    onClick={() => setSelectedIndex(index)}
+                                    onClick={() => setSelectedId(image.id)}
                                     className={cn(
                                         'relative size-6 rounded-sm overflow-hidden border transition-all',
                                         selectedIndex === index

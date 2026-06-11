@@ -40,7 +40,6 @@ export const useImageAutoSave = ({ itemCategory, itemId, fileCategory = 'image' 
     const { data: images = [], isLoading } = useQuery<FileItem[]>({
         queryKey,
         queryFn: async () => uniFetcher(endpoint),
-        refetchOnMount: true,
     })
 
     const { mutateAsync: uploadAsync, isPending: isUploading } = useMutation({
