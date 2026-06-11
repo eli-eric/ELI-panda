@@ -11,16 +11,16 @@ import { getSystemHierarchyDetailPath } from '@/modules/systemHierarchy/utils/hi
 // The systemItem detail page is deprecated — old /system/<uid> links (bookmarks,
 // QR codes) land here and are forwarded to the hierarchy explorer detail view.
 const SystemDetailRedirectPage: NextPage = () => {
-    const router = useRouter()
+    const { isReady, query, replace } = useRouter()
     const intl = useIntl()
 
     useEffect(() => {
-        if (!router.isReady) return
-        const uid = router.query.uid as string | undefined
+        if (!isReady) return
+        const uid = query.uid as string | undefined
         if (uid) {
-            router.replace(getSystemHierarchyDetailPath(uid))
+            replace(getSystemHierarchyDetailPath(uid))
         }
-    }, [router])
+    }, [isReady, query.uid, replace])
 
     return (
         <Fragment>
