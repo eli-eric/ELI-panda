@@ -98,6 +98,23 @@ describe('useImageAutoSave', () => {
         await waitFor(() => expect(qc.getQueryData<FileItem[]>(KEY)).toEqual(initial))
     })
 
+    it('uploadImages attempts every file and reconciles on a partial failure', async () => {
+        mockedAxios.post.mockResolvedValueOnce({ data: null }).mockRejectedValueOnce(new Error('x'))
+        const initial = [item('existing')]
+        const { qc, result } = await mountWith(initial)
+
+        await act(async () => {
+            await result.current.uploadImages([file('a.png'), file('b.png')])
+            await new Promise(r => setTimeout(r, 0))
+        })
+
+        // both uploads attempted (allSettled, not short-circuited)
+        expect(mockedAxios.post).toHaveBeenCalledTimes(2)
+        // a partial batch still rejects → optimistic temps rolled back, cache reconciled
+        await waitFor(() => expect(qc.getQueryData<FileItem[]>(KEY)).toEqual(initial))
+        await waitFor(() => expect(qc.invalidateQueries).toHaveBeenCalledWith({ queryKey: KEY }))
+    })
+
     it('deleteImage optimistically removes the item and DELETEs', async () => {
         mockedAxios.delete.mockResolvedValue({ data: null })
         const target = item('real-1', 'a.png')

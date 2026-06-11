@@ -64,22 +64,24 @@ export const SystemImagePanel: FC<SystemImagePanelProps> = ({ systemUid, systemN
         >
             {hasImages ? (
                 <div>
-                    {/* Action bar */}
-                    {hasEditRole && (
+                    {/* Action bar — edit controls are role-gated, the counter shows for everyone */}
+                    {(hasEditRole || hasMany) && (
                         <div className="flex items-center justify-between px-2 py-1 bg-background/95 border-b">
                             <div className="flex items-center gap-1">
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={open}
-                                    disabled={isMutating}
-                                    className="h-6 text-xs px-2"
-                                >
-                                    <Upload className="h-3 w-3 mr-1" />
-                                    {fm({ id: message.common.imageGallery.upload })}
-                                </Button>
-                                {currentImage && (
+                                {hasEditRole && (
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={open}
+                                        disabled={isMutating}
+                                        className="h-6 text-xs px-2"
+                                    >
+                                        <Upload className="h-3 w-3 mr-1" />
+                                        {fm({ id: message.common.imageGallery.upload })}
+                                    </Button>
+                                )}
+                                {hasEditRole && currentImage && (
                                     <Button
                                         type="button"
                                         variant="ghost"
@@ -156,6 +158,8 @@ export const SystemImagePanel: FC<SystemImagePanelProps> = ({ systemUid, systemN
             ) : (
                 /* Empty state */
                 <div
+                    role={hasEditRole ? 'button' : undefined}
+                    tabIndex={hasEditRole ? 0 : undefined}
                     className={cn(
                         'flex flex-col items-center justify-center py-4 px-3 text-center border-2 border-dashed rounded-sm transition-colors',
                         hasEditRole
@@ -164,6 +168,16 @@ export const SystemImagePanel: FC<SystemImagePanelProps> = ({ systemUid, systemN
                         isDragActive && 'border-primary bg-primary/5',
                     )}
                     onClick={hasEditRole ? open : undefined}
+                    onKeyDown={
+                        hasEditRole
+                            ? event => {
+                                  if (event.key === 'Enter' || event.key === ' ') {
+                                      event.preventDefault()
+                                      open()
+                                  }
+                              }
+                            : undefined
+                    }
                 >
                     <ImageIcon className="h-5 w-5 text-muted-foreground mb-1" />
                     <div className="space-y-0.5">

@@ -44,8 +44,15 @@ export const useImageAutoSave = ({ itemCategory, itemId, fileCategory = 'image' 
     })
 
     const { mutateAsync: uploadAsync, isPending: isUploading } = useMutation({
-        mutationFn: (files: ProcessedFile[]) =>
-            Promise.all(files.map(file => axiosInstance.post(endpoint, file))),
+        // settle every upload so a partial failure still commits the successful files
+        // (reconciled by onSettled invalidate); the thrown count drives an honest toast.
+        mutationFn: async (files: ProcessedFile[]) => {
+            const results = await Promise.allSettled(
+                files.map(file => axiosInstance.post(endpoint, file)),
+            )
+            const failed = results.filter(result => result.status === 'rejected').length
+            if (failed) throw Object.assign(new Error('upload-failed'), { failed })
+        },
         onMutate: async (files: ProcessedFile[]) => {
             await queryClient.cancelQueries({ queryKey })
             const prev = queryClient.getQueryData<FileItem[]>(queryKey)
@@ -100,7 +107,12 @@ export const useImageAutoSave = ({ itemCategory, itemId, fileCategory = 'image' 
             toast.promise(promise, {
                 loading: fm({ id: message.common.imageGallery.uploading }),
                 success: fm({ id: message.common.imageGallery.uploaded }, { count }),
-                error: fm({ id: message.common.imageGallery.uploadError }, { count }),
+                // report the actual number that failed (a partial batch still throws)
+                error: (err: unknown) =>
+                    fm(
+                        { id: message.common.imageGallery.uploadError },
+                        { count: (err as { failed?: number })?.failed ?? count },
+                    ),
             })
             return promise.catch(() => {})
         },
