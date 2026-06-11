@@ -81,9 +81,10 @@ export const useImageAutoSave = ({ itemCategory, itemId, fileCategory = 'image' 
         },
     })
 
-    // toast.promise handles the mutation's rejection (rollback runs in onError); we don't
-    // await it so an upload/delete failure never surfaces as an unhandled rejection in the
-    // un-awaited dropzone/warning-modal callers.
+    // Each returns a promise that resolves when the mutation settles (and to `undefined` on
+    // failure — rollback runs in the mutation's onError). The returned `.catch(noop)` means
+    // fire-and-forget callers (dropzone / warning-modal) never raise an unhandled rejection,
+    // while callers that want sequencing can still `await` it.
     const uploadImages = useCallback(
         async (files: File[]) => {
             if (!files.length) return
@@ -94,22 +95,26 @@ export const useImageAutoSave = ({ itemCategory, itemId, fileCategory = 'image' 
                 toast.error(fm({ id: message.common.imageGallery.uploadError }))
                 return
             }
-            toast.promise(uploadAsync(processed), {
+            const promise = uploadAsync(processed)
+            toast.promise(promise, {
                 loading: fm({ id: message.common.imageGallery.uploading }),
                 success: fm({ id: message.common.imageGallery.uploaded }),
                 error: fm({ id: message.common.imageGallery.uploadError }),
             })
+            return promise.catch(() => {})
         },
         [fm, uploadAsync],
     )
 
     const deleteImage = useCallback(
         (file: FileItem) => {
-            toast.promise(deleteAsync(file), {
+            const promise = deleteAsync(file)
+            toast.promise(promise, {
                 loading: fm({ id: message.common.imageGallery.deleting }),
                 success: fm({ id: message.common.imageGallery.deleted }),
                 error: fm({ id: message.common.imageGallery.deleteError }),
             })
+            return promise.catch(() => {})
         },
         [fm, deleteAsync],
     )
