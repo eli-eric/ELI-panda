@@ -1,9 +1,9 @@
 import type { FC } from 'react'
 import { useIntl } from 'react-intl'
-import { message } from 'src/i18n/src/messages'
 
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
+import { message } from '@/i18n/src/messages'
 
 import { useSystemDetail } from '../../hooks/queries/useSystemDetail'
 import { useHierarchyNavigation } from '../../hooks/useHierarchyNavigation'

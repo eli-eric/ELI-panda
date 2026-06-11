@@ -16,7 +16,7 @@ const SystemDetailRedirectPage: NextPage = () => {
 
     useEffect(() => {
         if (!isReady) return
-        const uid = query.uid as string | undefined
+        const uid = Array.isArray(query.uid) ? query.uid[0] : query.uid
         if (uid) {
             replace(getSystemHierarchyDetailPath(uid))
         }
