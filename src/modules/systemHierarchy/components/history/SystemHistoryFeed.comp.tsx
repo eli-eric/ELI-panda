@@ -234,6 +234,7 @@ const SystemLink: FC<SystemLinkProps> = ({ detail }) => {
         <Link
             href={getSystemHierarchyDetailPath(detail.systemUid)}
             target="_blank"
+            rel="noopener noreferrer"
             className="font-medium text-primary underline-offset-2 hover:underline"
         >
             {detail.systemName}

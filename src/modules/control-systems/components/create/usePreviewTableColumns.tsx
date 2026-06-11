@@ -46,7 +46,11 @@ export const usePreviewTableColumns = () => {
                     if (uid) {
                         return (
                             <Button variant="link" className="h-auto p-0" asChild>
-                                <Link href={getSystemHierarchyDetailPath(uid)} target="_blank">
+                                <Link
+                                    href={getSystemHierarchyDetailPath(uid)}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
                                     {codeElement}
                                 </Link>
                             </Button>

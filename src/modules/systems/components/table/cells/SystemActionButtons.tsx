@@ -144,6 +144,7 @@ export const SystemActionButtons = ({
                         <Link
                             href={getSystemHierarchyDetailPath(original.uid)}
                             target="_blank"
+                            rel="noopener noreferrer"
                             className="flex items-center cursor-pointer"
                         >
                             <Edit className="h-4 w-4 mr-2" />
