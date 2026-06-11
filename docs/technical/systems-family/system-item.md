@@ -1,6 +1,8 @@
-# System item (detail)
+# System item (detail) — DEPRECATED
 
-The `/system/[uid]` route — the canonical *detail page* for a single system. Hosts the edit form, sub-systems table, spare-parts widgets, and relationships. Also surfaces as `/system/alias/[alias]` (alias→uid lookup) and `/system/item/[itemUid]` (open from a physical item).
+> ⚠️ **Deprecated (2026-06).** System detail now lives in [System Hierarchy](./system-hierarchy.md) — `/systems/hierarchy?leaf=<uid>` (built via `getSystemHierarchyDetailPath`). `/system/[uid]` is a thin client redirect to that deep link; `/system/alias/[alias]` and `/system/item/[itemUid]` still resolve alias/item → uid (via this module's `useSystemDetail`) and then redirect to the hierarchy. The module is **not deleted**: several utils/hooks are still consumed by active modules. See `src/modules/systemItem/DEPRECATED.md` for the allowed-imports list and removal criteria.
+
+The former `/system/[uid]` route — the *detail page* for a single system. Hosted the edit form, sub-systems table, spare-parts widgets, and relationships. Also surfaced as `/system/alias/[alias]` (alias→uid lookup) and `/system/item/[itemUid]` (open from a physical item, e.g. QR codes).
 
 ## Module location
 
@@ -120,6 +122,7 @@ Cross-module ownership: the *graph* visualisation lives here, but the *editing* 
 
 ## Deprecated / legacy
 
+- **The whole module is deprecated** — see the banner above. `SystemItemContainer` and the page-level detail hooks carry `@deprecated` JSDoc and must not gain new consumers. History/field-change types moved to `systemHierarchy/types/history.ts` (re-exported here for back-compat).
 - `// TODO: split to update and create form` (`components/form/SystemForm.cont.tsx:49`) — single form for both modes is fragile.
 - `// TODO: add itemConditionStatus` (`components/form/SystemForm.fields.ts:98`) — the physical-item edit on this form omits a field the catalogue surface includes.
 - `useSubsystems` duplicates the `systems` module's hook of the same name with a different shape. Consolidate.

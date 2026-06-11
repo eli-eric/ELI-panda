@@ -41,6 +41,7 @@ Entry point (`SystemHierarchyExplorer.cont.tsx`):
 const SystemHierarchyExplorerContainer: FC = () => {
     const { selectedLeafUid } = useHierarchyNavigation()
     const { system } = useSystemDetail(selectedLeafUid)
+    useHierarchyDeepLinkResolver()
 
     return (
         <HierarchyLayoutContainer
@@ -213,6 +214,22 @@ Gating convention matches Copy/Paste/Create: tree + table **render the item `dis
 
 `LeavesTable` wraps its content in a Radix `ContextMenu` **only when `onDeleteSystem` is provided** (otherwise the trigger would suppress the native right-click menu with nothing to show). The right-clicked row is captured by a capture-phase reset on the wrapper (clears the target) plus a bubble-phase `onContextMenu` per row (re-sets it) — so right-clicking empty table area leaves the item disabled.
 
+## Deep links & URL contract
+
+The explorer's URL is its source of truth (`useHierarchyNavigation`): `?parent=<uid>` (tree selection), `?leaf=<uid>` (detail view), `?tab=` (defaults to `detail`), `?view=` (`tree`/`graph`), plus table `page`/`filter`. All in-page updates are shallow `router.push`; `updateQuery` accepts `{ replace: true }` for history-neutral updates.
+
+**`getSystemHierarchyDetailPath(uid)`** (`utils/hierarchyLinks.ts`) is the canonical builder for cross-module links into the explorer: `/systems/hierarchy?leaf=<uid>`. It deliberately omits `parent` — **`useHierarchyDeepLinkResolver`** (`hooks/useHierarchyDeepLinkResolver.ts`, mounted once in `SystemHierarchyExplorer.cont.tsx`) fills it in client-side:
+
+- When `leaf` is set and `parent` is missing, it reads `useSystemDetail(leaf).parentPath`, expands the ancestor nodes (`useHierarchyStore.expandNodes`, merge-only), and `router.replace`s `parent=<immediate parent>` (no history entry — back leaves the page in one step).
+- Root systems (empty `parentPath`) resolve to `parent === leaf`, an already-legitimate state (`selectParent` produces it in detail mode).
+- Guards: `system.uid === leaf` (rejects `keepPreviousData` leftovers), a per-leaf ref (replace is async; prevents double-fire), reset once `parent` is present so a later leaf-only link to the same uid re-resolves.
+
+Consumers: global search (`getRedirectPath`), systems overview action buttons, order lines, control-systems code tables, move wizard, the `/system/[uid]` / `/system/alias/[alias]` / `/system/item/[itemUid]` redirect pages (see [System item](./system-item.md) — that module is deprecated), and `SystemHistoryFeed`'s system links.
+
+An unknown/deleted `leaf` renders a **not-found state** in `SystemDetailView.cont.tsx` (message + *Back to hierarchy* via `clearSelection`) instead of an endless skeleton.
+
+History/field-change types (`HISTORY_TYPE`, `FieldChangeEntry`, `HistoryResponse`, …) live in `types/history.ts` — moved here from `systemItem`, which re-exports them for back-compat. The module no longer imports anything from `systemItem`.
+
 ## Copy / Paste
 
 The copy-paste flow lives in `components/copy/`. Buffer: `useHierarchyStore.copiedSystemUid`. The right-click context menu on a tree node or graph node offers **Copy System** (sets the buffer) and **Paste System** (opens the dialog).
@@ -289,6 +306,7 @@ Unit coverage under `__tests__/` is heaviest in:
 - `utils/__tests__/` — tree search, graph layout, filter predicates, change-builder, **parent→child level rules** (`systemLevelRules.spec.ts`), **create-subsystem payload builder** (`buildCreateSubsystemPayload.spec.ts` — locks the `updatedBy[Insert]` audit edge).
 - `hooks/queries/__tests__/` — `primeSystemDetailCache.test.ts` (the contract above), `useSystemLeaves.test.ts`, `useSystemLeavesCount.test.ts`.
 - `hooks/mutations/__tests__/` — `useSystemFieldUpdate.spec.ts`, `useItemFieldUpdate.spec.ts` (locks the System-node `WAS_UPDATED_BY` edge + change entries for item edits), `useDeleteSystem.spec.ts` (immediate invalidate + background recalc → second invalidate; recalc failure keeps only the immediate round).
+- `hooks/__tests__/useHierarchyDeepLinkResolver.spec.tsx` — parent resolution from `parentPath`, root parent==leaf case, stale-uid guard, single-replace idempotency, re-resolution after the URL settles; `utils/__tests__/hierarchyLinks.spec.ts` — deep-link shape + encoding; `components/detail/__tests__/SystemDetailView.spec.tsx` — skeleton / not-found / loaded states.
 - `hooks/__tests__/useDeleteSystemAction.spec.tsx` — permission gate, in-flight re-entry guard, recursive confirm, 409 item-list + `(+N)` overflow + generic fallback, and selection reset for both open-leaf-ancestor and selected-parent-ancestor.
 - `components/{tree,leaves,filters,graph,detail,copy,create,shared,tabs,physical-item}/__tests__/` — `physical-item/` covers the grouped renderer and sidebar wrapper (grouping, override marker, service-only additions, empty → hidden); the Delete context item is covered in `tree/TreeNode.test.tsx`, `graph/SystemNode.test.tsx`, and `leaves/LeavesTable.test.tsx` (the last stubs the virtualized `PandaTableV2` to exercise the capture/bubble row capture, disabled-on-empty-area, and no-handler short-circuit).
 
@@ -309,7 +327,6 @@ Unit coverage under `__tests__/` is heaviest in:
 
 - Should the Copy / Paste buffer survive a hard reload? Today it does (persisted) — but the user has no UI indicator that something is buffered.
 - The Graph tab's force-layout iteration count is hardcoded in `utils/graphLayout.ts`. Configurable per-system?
-- The right sidebar (`HierarchyDetailSidebar`) and the `SystemForm.cont` (in `systemItem`) both edit the same `System` shape but with different UI affordances. Are both needed long-term, or is the sidebar the modern surface?
 
 ---
 

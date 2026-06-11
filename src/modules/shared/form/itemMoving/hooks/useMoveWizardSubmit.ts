@@ -3,10 +3,10 @@ import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { toast } from 'sonner'
 
+import { getSystemHierarchyDetailPath } from '@/modules/systemHierarchy/utils/hierarchyLinks'
 import { useSystemDetail } from '@/modules/systemItem/hooks/useSystemDetail'
 import { useSystemsReload } from '@/modules/systemItem/hooks/useSystemsReload'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
-import { PATH } from '@/types/constants/paths'
 import type { AxiosError } from '@/types/http'
 import type { CodebookType } from '@/types/responses/codebook'
 import { queryMutate } from '@/utils/fetcher'
@@ -40,8 +40,8 @@ export const useMoveWizardSubmit = () => {
         setSelectedSystem(null)
         if (moveType === MOVE_TYPE.ASSIGN) {
             router.reload()
-        } else {
-            router.push(PATH.SYSTEM + '/' + redirectUid)
+        } else if (redirectUid) {
+            router.push(getSystemHierarchyDetailPath(redirectUid))
         }
     }
 

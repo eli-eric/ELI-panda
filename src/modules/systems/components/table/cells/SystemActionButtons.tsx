@@ -15,6 +15,7 @@ import {
 import { message } from '@/i18n/src/messages'
 import { openGraphModal } from '@/modules/shared/system/GraphModal'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
+import { getSystemHierarchyDetailPath } from '@/modules/systemHierarchy/utils/hierarchyLinks'
 import { useSystemDelete } from '@/modules/systems/hooks/useSystemDelete'
 import { useSparePartsColumns } from '@/modules/systemsRelations/components/SpareParts.columns'
 import {
@@ -22,7 +23,6 @@ import {
     useGetSparePartsFor,
 } from '@/modules/systemsRelations/hooks/useGetSpareParts'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
-import { PATH } from '@/types/constants/paths'
 import type { SystemDetail } from '@/types/responses/systems'
 import type { EndpointProps } from '@/utils/getEndpoints'
 
@@ -142,7 +142,7 @@ export const SystemActionButtons = ({
                 <DropdownMenuContent align="end" sideOffset={4}>
                     <DropdownMenuItem asChild>
                         <Link
-                            href={PATH.SYSTEM + '/' + original.uid}
+                            href={getSystemHierarchyDetailPath(original.uid)}
                             target="_blank"
                             className="flex items-center cursor-pointer"
                         >

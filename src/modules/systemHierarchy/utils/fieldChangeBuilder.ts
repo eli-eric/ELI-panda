@@ -1,10 +1,11 @@
 import { message } from '@/i18n/src/messages'
+
 import type {
     ChangeValue,
     CodebookSnapshot,
     FieldChangeEntry,
     FieldChangeType,
-} from '@/modules/systemItem/types/responses'
+} from '../types/history'
 
 // GraphQL field names that represent codebook relationships
 const CODEBOOK_FIELDS: ReadonlySet<string> = new Set([

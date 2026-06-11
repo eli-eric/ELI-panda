@@ -1,49 +1,36 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { Fragment } from 'react'
+import { useRouter } from 'next/router'
+import { Fragment, useEffect } from 'react'
 import { useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 
-import ErrorPage from '@/components/error/ErrorPage'
 import LoaderComponent from '@/components/loader.comp'
-import { useSystemDetail } from '@/modules/systemItem/hooks/useSystemDetail'
-import { SystemItemContainer } from '@/modules/systemItem/SystemItem.cont'
+import { getSystemHierarchyDetailPath } from '@/modules/systemHierarchy/utils/hierarchyLinks'
 
-const messages = message.systemItem
-
-interface Props {
-    key?: string
-    uid?: string
-}
-
-const SystemDetailPage: NextPage = ({ uid }: Props) => {
+// The systemItem detail page is deprecated — old /system/<uid> links (bookmarks,
+// QR codes) land here and are forwarded to the hierarchy explorer detail view.
+const SystemDetailRedirectPage: NextPage = () => {
+    const router = useRouter()
     const intl = useIntl()
-    const { systemDetail, loading, error } = useSystemDetail()
 
-    if (loading) {
-        return <LoaderComponent />
-    }
-
-    if (error) {
-        return <ErrorPage />
-    }
+    useEffect(() => {
+        if (!router.isReady) return
+        const uid = router.query.uid as string | undefined
+        if (uid) {
+            router.replace(getSystemHierarchyDetailPath(uid))
+        }
+    }, [router])
 
     return (
         <Fragment>
             <Head>
-                <title>{intl.formatMessage({ id: messages.head })}</title>
+                <title>{intl.formatMessage({ id: message.systemItem.head })}</title>
                 <meta name="description" content="...." />
             </Head>
-            <div className="min-h-screen bg-background">
-                {systemDetail && <SystemItemContainer uid={uid} />}
-            </div>
+            <LoaderComponent />
         </Fragment>
     )
 }
 
-SystemDetailPage.getInitialProps = ({ query }) => ({
-    key: query.uid,
-    uid: query.uid,
-})
-
-export default SystemDetailPage
+export default SystemDetailRedirectPage

@@ -49,7 +49,7 @@ The columns shown by default are: **Name**, **System Code**, **System Type**, **
 - [Exporting systems to CSV](./workflows/exporting-csv.md) — export the currently filtered table to a CSV file.
 - [Opening a system from the overview](./workflows/opening-a-system.md) — row click navigation, expanding subsystems inline, jumping back to the [System Hierarchy](../systemHierarchy/README.md) tree for context.
 
-For working *inside* a system (editing details, managing physical items, relationships, history) — see the [System Hierarchy](../systemHierarchy/README.md) module; both the overview and the tree open the same detail page.
+For working *inside* a system (editing details, managing physical items, relationships, history) — see the [System Hierarchy](../systemHierarchy/README.md) module; both the overview and the tree open the same detail view inside the hierarchy explorer.
 
 ## Coming soon
 

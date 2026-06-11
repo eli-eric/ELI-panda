@@ -22,6 +22,11 @@ type SearchPatterns = {
     uid?: string
 }
 
+/**
+ * @deprecated The systemItem module is deprecated — system detail lives in
+ * src/modules/systemHierarchy (/systems/hierarchy?leaf=<uid>). See
+ * src/modules/systemItem/DEPRECATED.md.
+ */
 export const useSuspenseSystemDetail = ({ code, uid }: SearchPatterns) => {
     const { data, error, isLoading, refetch, status } = useSuspenseGraphQL(systemDetailQuery, {
         variables: {

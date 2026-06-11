@@ -31,7 +31,7 @@ When you sharpen a term during a design conversation, update both this file and 
 
 - **System** — facility item with hierarchy and relations. See [`systems-family/systems-overview.md`](./technical/systems-family/systems-overview.md).
 - **System hierarchy** — parent/child tree of systems. See [`systems-family/system-hierarchy.md`](./technical/systems-family/system-hierarchy.md).
-- **System item** — leaf attached to a system. See [`systems-family/system-item.md`](./technical/systems-family/system-item.md).
+- **System item** — leaf attached to a system. The `systemItem` module / `/system/<uid>` page is **deprecated** — detail now lives in the hierarchy explorer (`/systems/hierarchy?leaf=<uid>`). See [`systems-family/system-item.md`](./technical/systems-family/system-item.md).
 - **System type** — schema/template that drives a system's editable fields. See [`systems-family/system-type-edit.md`](./technical/systems-family/system-type-edit.md).
 - **Moving flow / Multi-move** — bulk re-parenting of systems. See [`systems-family/moving.md`](./technical/systems-family/moving.md).
 - **Relations / Spares** — non-hierarchical links between systems. See [`systems-family/relations-and-spares.md`](./technical/systems-family/relations-and-spares.md).

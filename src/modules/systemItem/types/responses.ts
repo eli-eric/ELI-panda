@@ -1,6 +1,14 @@
 import type { SystemDetail } from '@/types/responses/systems'
 
-import type { HISTORY_TYPE } from './constants'
+// History/field-change types moved to the systemHierarchy module (the active
+// system detail UI); re-exported here for back-compat with systemItem internals.
+export type {
+    ChangeValue,
+    CodebookSnapshot,
+    FieldChangeEntry,
+    FieldChangeType,
+    HistoryResponse,
+} from '@/modules/systemHierarchy/types/history'
 
 export type SystemsForRelResponse = {
     data: SystemDetail[]
@@ -12,35 +20,4 @@ export type SystemRelationshipResponse = {
     relationTypeCode: string
     foreignSystemName: string
     relationUid: string
-}
-
-export type FieldChangeType = 'string' | 'number' | 'boolean' | 'date' | 'codebook'
-
-export type CodebookSnapshot = {
-    uid: string
-    name: string
-    code?: string
-}
-
-export type ChangeValue = string | number | boolean | CodebookSnapshot
-
-export type FieldChangeEntry = {
-    field: string
-    type: FieldChangeType
-    oldValue: ChangeValue | null
-    newValue: ChangeValue | null
-}
-
-export type HistoryResponse = {
-    uid: string
-    changedAt: string
-    changedBy: string
-    historyType: HISTORY_TYPE
-    action: string
-    detail: {
-        systemUid: string
-        systemName: string
-        direction: 'IN' | 'OUT'
-    }
-    changes?: FieldChangeEntry[]
 }

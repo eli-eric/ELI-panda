@@ -59,8 +59,8 @@ flowchart LR
     EP --> GW["PANDA API gateway"]
     GW --> H
     H --> Table["PandaTableV2"]
-    Table -->|row click| Nav["router.push(/system/<uid>)"]
-    Nav --> Item["systemItem module"]
+    Table -->|action button| Nav["getSystemHierarchyDetailPath(uid)\n/systems/hierarchy?leaf=<uid>"]
+    Nav --> Item["systemHierarchy detail view"]
 ```
 
 The list comes from REST (`getEndpoints.systemsList`), **not** GraphQL. Filter, sort, and pagination are query-string round-trippable when `enableQueryURL={true}` — the URL is the source of truth.
