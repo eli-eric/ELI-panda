@@ -152,9 +152,10 @@ export const messages = {
             loading: 'Loading...',
             uploading: 'Uploading...',
             deleting: 'Deleting...',
-            uploaded: 'Image uploaded',
+            uploaded: '{count, plural, one {Image uploaded} other {# images uploaded}}',
             deleted: 'Image deleted',
-            uploadError: 'Failed to upload image',
+            uploadError:
+                '{count, plural, one {Failed to upload image} other {Failed to upload # images}}',
             deleteError: 'Failed to delete image',
         },
         files: {

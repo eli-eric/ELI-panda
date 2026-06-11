@@ -88,18 +88,19 @@ export const useImageAutoSave = ({ itemCategory, itemId, fileCategory = 'image' 
     const uploadImages = useCallback(
         async (files: File[]) => {
             if (!files.length) return
+            const count = files.length
             let processed: ProcessedFile[]
             try {
                 processed = await readFilesAsProcessed(files)
             } catch {
-                toast.error(fm({ id: message.common.imageGallery.uploadError }))
+                toast.error(fm({ id: message.common.imageGallery.uploadError }, { count }))
                 return
             }
             const promise = uploadAsync(processed)
             toast.promise(promise, {
                 loading: fm({ id: message.common.imageGallery.uploading }),
-                success: fm({ id: message.common.imageGallery.uploaded }),
-                error: fm({ id: message.common.imageGallery.uploadError }),
+                success: fm({ id: message.common.imageGallery.uploaded }, { count }),
+                error: fm({ id: message.common.imageGallery.uploadError }, { count }),
             })
             return promise.catch(() => {})
         },
