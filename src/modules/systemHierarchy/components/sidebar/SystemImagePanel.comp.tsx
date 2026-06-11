@@ -180,7 +180,12 @@ export const SystemImagePanel: FC<SystemImagePanelProps> = ({ systemUid, systemN
                     </div>
                 </div>
             )}
-            <input {...getInputProps()} aria-label={systemName ?? undefined} />
+            <input
+                {...getInputProps()}
+                aria-label={`${fm({ id: message.common.imageGallery.uploadAnImage })}${
+                    systemName ? ` – ${systemName}` : ''
+                }`}
+            />
         </div>
     )
 }

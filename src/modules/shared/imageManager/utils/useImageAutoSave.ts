@@ -8,7 +8,7 @@ import { message } from '@/i18n/src/messages'
 import { uniFetcher } from '@/utils/fetcher'
 
 import type { FileItem, ProcessedFile } from '../../fileManager/types'
-import { getEndpoint } from '.'
+import { getEndpoint, readFilesAsProcessed } from '.'
 
 type Params = {
     itemCategory: string
@@ -17,19 +17,6 @@ type Params = {
 }
 
 const QUERY_KEY = 'fileItem'
-
-const readFilesAsProcessed = (files: File[]): Promise<ProcessedFile[]> =>
-    Promise.all(
-        files.map(
-            file =>
-                new Promise<ProcessedFile>((resolve, reject) => {
-                    const reader = new FileReader()
-                    reader.onload = () => resolve({ name: file.name, payload: String(reader.result) })
-                    reader.onerror = reject
-                    reader.readAsDataURL(file)
-                }),
-        ),
-    )
 
 const toTempItems = (files: ProcessedFile[]): FileItem[] =>
     files.map(file => ({
@@ -94,11 +81,20 @@ export const useImageAutoSave = ({ itemCategory, itemId, fileCategory = 'image' 
         },
     })
 
+    // toast.promise handles the mutation's rejection (rollback runs in onError); we don't
+    // await it so an upload/delete failure never surfaces as an unhandled rejection in the
+    // un-awaited dropzone/warning-modal callers.
     const uploadImages = useCallback(
         async (files: File[]) => {
             if (!files.length) return
-            const processed = await readFilesAsProcessed(files)
-            await toast.promise(uploadAsync(processed), {
+            let processed: ProcessedFile[]
+            try {
+                processed = await readFilesAsProcessed(files)
+            } catch {
+                toast.error(fm({ id: message.common.imageGallery.uploadError }))
+                return
+            }
+            toast.promise(uploadAsync(processed), {
                 loading: fm({ id: message.common.imageGallery.uploading }),
                 success: fm({ id: message.common.imageGallery.uploaded }),
                 error: fm({ id: message.common.imageGallery.uploadError }),
@@ -108,8 +104,8 @@ export const useImageAutoSave = ({ itemCategory, itemId, fileCategory = 'image' 
     )
 
     const deleteImage = useCallback(
-        async (file: FileItem) => {
-            await toast.promise(deleteAsync(file), {
+        (file: FileItem) => {
+            toast.promise(deleteAsync(file), {
                 loading: fm({ id: message.common.imageGallery.deleting }),
                 success: fm({ id: message.common.imageGallery.deleted }),
                 error: fm({ id: message.common.imageGallery.deleteError }),
