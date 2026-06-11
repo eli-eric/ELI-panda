@@ -14,11 +14,11 @@ export const SystemDetailViewContainer: FC = () => {
     const { formatMessage: fm } = useIntl()
     const { selectedLeafUid, goBackToLeaves, selectParent, clearSelection } =
         useHierarchyNavigation()
-    const { system, isLoading } = useSystemDetail(selectedLeafUid)
+    const { system, isLoading, error, refetch } = useSystemDetail(selectedLeafUid)
 
     if (isLoading) {
         return (
-            <div className="flex flex-col h-full">
+            <div className="flex flex-col h-full" data-testid="system-detail-skeleton">
                 <div className="flex items-center gap-3 border-b border-border px-4 py-2">
                     <Skeleton className="h-8 w-24" />
                     <Skeleton className="h-5 flex-1" />
@@ -27,6 +27,26 @@ export const SystemDetailViewContainer: FC = () => {
                     <Skeleton className="h-9 w-64" />
                     <Skeleton className="h-40 w-full" />
                 </div>
+            </div>
+        )
+    }
+
+    // fetch failed (retry: false) — transient errors are not a missing system
+    if (error && !system) {
+        return (
+            <div
+                className="flex flex-col items-center justify-center h-full gap-2 p-4 text-center"
+                data-testid="system-detail-error"
+            >
+                <p className="text-lg font-semibold">
+                    {fm({ id: message.systemHierarchy.detail.loadErrorTitle })}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                    {fm({ id: message.systemHierarchy.detail.loadErrorDescription })}
+                </p>
+                <Button variant="outline" className="mt-2" onClick={() => refetch()}>
+                    {fm({ id: message.common.buttons.retry })}
+                </Button>
             </div>
         )
     }

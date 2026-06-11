@@ -17,9 +17,16 @@ jest.mock('../../../hooks/useHierarchyNavigation', () => ({
 
 let mockSystem: { uid: string; name: string } | null = null
 let mockIsLoading = false
+let mockError: Error | null = null
+const mockRefetch = jest.fn()
 
 jest.mock('../../../hooks/queries/useSystemDetail', () => ({
-    useSystemDetail: () => ({ system: mockSystem, isLoading: mockIsLoading }),
+    useSystemDetail: () => ({
+        system: mockSystem,
+        isLoading: mockIsLoading,
+        error: mockError,
+        refetch: mockRefetch,
+    }),
 }))
 
 jest.mock('../SystemDetailHeader.comp', () => ({
@@ -34,6 +41,10 @@ const messages: Record<string, string> = {
     'systemHierarchy.detail.notFoundDescription':
         'The system may have been deleted or the link is no longer valid.',
     'systemHierarchy.detail.notFoundBack': 'Back to hierarchy',
+    'systemHierarchy.detail.loadErrorTitle': 'Failed to load system',
+    'systemHierarchy.detail.loadErrorDescription':
+        'Something went wrong while loading the system detail.',
+    'common.buttons.retry': 'Retry',
 }
 
 const renderView = () =>
@@ -47,14 +58,26 @@ describe('SystemDetailViewContainer', () => {
     beforeEach(() => {
         mockSystem = null
         mockIsLoading = false
+        mockError = null
         mockClearSelection.mockClear()
+        mockRefetch.mockClear()
     })
 
     it('renders skeleton while loading', () => {
         mockIsLoading = true
         renderView()
+        expect(screen.getByTestId('system-detail-skeleton')).toBeInTheDocument()
         expect(screen.queryByTestId('system-detail-not-found')).not.toBeInTheDocument()
         expect(screen.queryByTestId('detail-tabs-stub')).not.toBeInTheDocument()
+    })
+
+    it('renders error state with retry when the fetch failed', () => {
+        mockError = new Error('network down')
+        renderView()
+        expect(screen.getByTestId('system-detail-error')).toBeInTheDocument()
+        expect(screen.queryByTestId('system-detail-not-found')).not.toBeInTheDocument()
+        fireEvent.click(screen.getByText('Retry'))
+        expect(mockRefetch).toHaveBeenCalled()
     })
 
     it('renders not-found state when query settles without a match', () => {

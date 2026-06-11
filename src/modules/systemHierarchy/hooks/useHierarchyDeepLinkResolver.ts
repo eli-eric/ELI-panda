@@ -23,6 +23,13 @@ export const useHierarchyDeepLinkResolver = (): void => {
     // until the parent param lands in the URL
     const resolvedLeafRef = useRef<string | null>(null)
 
+    // useSystemDetail rebuilds `system` every render — depend on stable scalars
+    const systemUid = system?.uid ?? null
+    const ancestorKey = (system?.parentPath ?? [])
+        .map(p => p.uid)
+        .filter(Boolean)
+        .join(',')
+
     useEffect(() => {
         if (!router.isReady) return
         if (!needsResolution) {
@@ -30,20 +37,21 @@ export const useHierarchyDeepLinkResolver = (): void => {
             return
         }
         // keepPreviousData can momentarily serve the previous leaf's detail
-        if (!system || system.uid !== selectedLeafUid) return
+        if (!systemUid || systemUid !== selectedLeafUid) return
         if (resolvedLeafRef.current === selectedLeafUid) return
         resolvedLeafRef.current = selectedLeafUid
 
-        const ancestorUids = (system.parentPath ?? []).map(p => p.uid).filter(Boolean)
-        expandNodes(ancestorUids.length > 0 ? ancestorUids : [system.uid])
+        const ancestorUids = ancestorKey ? ancestorKey.split(',') : []
+        expandNodes(ancestorUids.length > 0 ? ancestorUids : [systemUid])
         resolveParentForLeaf(
-            ancestorUids.length > 0 ? ancestorUids[ancestorUids.length - 1] : system.uid,
+            ancestorUids.length > 0 ? ancestorUids[ancestorUids.length - 1] : systemUid,
         )
     }, [
         router.isReady,
         needsResolution,
         selectedLeafUid,
-        system,
+        systemUid,
+        ancestorKey,
         expandNodes,
         resolveParentForLeaf,
     ])

@@ -206,7 +206,7 @@ const useOrderLinesColumns = () => {
                             value={getValue()?.split(' - ')[0]}
                         />
                     ) : (
-                        <span>{getValue()?.split(' - ')[0]}</span>
+                        <div className="break-words">{getValue()?.split(' - ')[0]}</div>
                     ),
             },
             {
@@ -228,7 +228,7 @@ const useOrderLinesColumns = () => {
                             value={getValue()?.split('-')[0]}
                         />
                     ) : (
-                        <span>{getValue()?.split('-')[0]}</span>
+                        <div className="break-words">{getValue()?.split('-')[0]}</div>
                     ),
             },
             {
