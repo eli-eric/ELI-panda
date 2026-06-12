@@ -10,7 +10,7 @@ The systems family covers every module that reads or writes the `System` graph �
 |---|---|---|
 | [System Hierarchy](./system-hierarchy.md) | `src/modules/systemHierarchy/` | `/systems/hierarchy` — tree explorer, leaves panel, tabbed detail, relationship graph |
 | [Systems overview](./systems-overview.md) | `src/modules/systems/` | `/systems/overview` — flat table |
-| [System item (detail)](./system-item.md) | `src/modules/systemItem/` | `/system/[uid]` — detail page, sub-systems, spares, relations |
+| [System item (detail)](./system-item.md) — **deprecated** | `src/modules/systemItem/` | `/system/[uid]` — now a thin redirect to `/systems/hierarchy?leaf=<uid>`; module kept for shared utils until extracted |
 | [Relations & spares](./relations-and-spares.md) | `src/modules/systemsRelations/` | `/systems/relations` — engineering relations + spare-for tables |
 | [Moving systems](./moving.md) | `src/modules/systemsMoving/`, `src/modules/systems-multi-move/` | `/systems/moving`, `/systems/multi-move` |
 | [System type editor](./system-type-edit.md) | `src/modules/system-type-edit/` | `/system/type-edit` |
@@ -127,7 +127,7 @@ flowchart LR
     subgraph Pages["src/pages/"]
         P1["/systems/hierarchy"]
         P2["/systems/overview"]
-        P3["/system/[uid]"]
+        P3["/system/[uid] — redirect"]
         P4["/systems/relations"]
         P5["/systems/moving"]
         P6["/systems/multi-move"]
@@ -167,7 +167,7 @@ flowchart LR
     M3 --> R3
 ```
 
-`src/pages/system/alias/[alias].tsx` resolves a human-readable alias to a `uid` and reuses the `systemItem` module; `src/pages/system/item/[itemUid].tsx` opens a system from a physical-item reference.
+`src/pages/system/[uid].tsx` is a thin redirect to `/systems/hierarchy?leaf=<uid>` (see [System Hierarchy → Deep links](./system-hierarchy.md#deep-links--url-contract)). `src/pages/system/alias/[alias].tsx` resolves a human-readable alias to a `uid`, `src/pages/system/item/[itemUid].tsx` resolves a physical-item reference to a `uid` (QR codes) — both still use `systemItem`'s `useSystemDetail` for the lookup, then redirect to the hierarchy deep link.
 
 ## Cross-module flows
 
@@ -186,9 +186,9 @@ sequenceDiagram
     Hier->>GQL: systemsHierarchy + systemLeaves
     GQL-->>Hier: tree + leaves
     U->>Hier: click leaf
-    Hier->>Item: navigate /system/[uid]
-    Item->>GQL: systems(where:{uid}) — SystemDetail fragment
-    Item->>Rel: open Relations tab
+    Hier->>Hier: ?leaf=<uid> — in-page detail view (tabs)
+    Hier->>GQL: systems(where:{uid}) — SystemDetail fragment
+    Hier->>Rel: open Relations tab
     Rel->>GQL: read all 9 engineering edges
     U->>Mov: open /systems/moving
     Mov->>GQL: mutation moveSystem(systemUid, newParentUid, oldParentUid)

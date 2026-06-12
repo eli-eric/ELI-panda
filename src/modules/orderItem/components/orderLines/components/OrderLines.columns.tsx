@@ -13,6 +13,7 @@ import { message } from '@/i18n/src/messages'
 import { useOrderLineContext } from '@/modules/orderItem/context'
 import useOrderDetail from '@/modules/orderItem/hooks/useOrderDetail'
 import type { OrderLineFormType } from '@/modules/orderItem/types/form'
+import { getSystemHierarchyDetailPath } from '@/modules/systemHierarchy/utils/hierarchyLinks'
 import { PATH } from '@/types/constants/paths'
 import { createMessageValues } from '@/utils/formatters'
 
@@ -122,8 +123,11 @@ const useOrderLinesColumns = () => {
                         original: { system },
                     },
                 }) =>
-                    system ? (
-                        <NewTabLink href={PATH.SYSTEM + '/' + system?.uid} value={getValue()} />
+                    system?.uid ? (
+                        <NewTabLink
+                            href={getSystemHierarchyDetailPath(system.uid)}
+                            value={getValue()}
+                        />
                     ) : (
                         <div className="break-words">{getValue()}</div>
                     ),
@@ -195,12 +199,15 @@ const useOrderLinesColumns = () => {
                 accessorFn: row => row.parentSystem?.name,
                 size: 240,
                 enablePinning: false,
-                cell: ({ getValue, row: { original } }) => (
-                    <NewTabLink
-                        href={PATH.SYSTEM + '/' + original.parentSystem?.uid}
-                        value={getValue()?.split(' - ')[0]}
-                    />
-                ),
+                cell: ({ getValue, row: { original } }) =>
+                    original.parentSystem?.uid ? (
+                        <NewTabLink
+                            href={getSystemHierarchyDetailPath(original.parentSystem.uid)}
+                            value={getValue()?.split(' - ')[0]}
+                        />
+                    ) : (
+                        <div className="break-words">{getValue()?.split(' - ')[0]}</div>
+                    ),
             },
             {
                 header: formatMessage({ id: messages.location }),
@@ -214,12 +221,15 @@ const useOrderLinesColumns = () => {
                 accessorFn: row => row.serviceItemName,
                 enablePinning: false,
                 size: 240,
-                cell: ({ getValue, row: { original } }) => (
-                    <NewTabLink
-                        href={PATH.SYSTEM + '/' + original.parentSystem?.uid}
-                        value={getValue()?.split('-')[0]}
-                    />
-                ),
+                cell: ({ getValue, row: { original } }) =>
+                    original.parentSystem?.uid ? (
+                        <NewTabLink
+                            href={getSystemHierarchyDetailPath(original.parentSystem.uid)}
+                            value={getValue()?.split('-')[0]}
+                        />
+                    ) : (
+                        <div className="break-words">{getValue()?.split('-')[0]}</div>
+                    ),
             },
             {
                 id: 'actions',

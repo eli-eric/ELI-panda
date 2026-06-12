@@ -17,7 +17,7 @@ export const useHierarchyNavigation = () => {
     const activeView = ((router.query.view as string) ?? HIERARCHY_VIEWS.TREE) as HierarchyView
 
     const updateQuery = useCallback(
-        (updates: Record<string, string | undefined>) => {
+        (updates: Record<string, string | undefined>, options?: { replace?: boolean }) => {
             const current = { ...router.query }
             for (const [key, value] of Object.entries(updates)) {
                 if (value === undefined) {
@@ -26,7 +26,8 @@ export const useHierarchyNavigation = () => {
                     current[key] = value
                 }
             }
-            router.push({ pathname: router.pathname, query: current }, undefined, {
+            const navigate = options?.replace ? router.replace : router.push
+            navigate({ pathname: router.pathname, query: current }, undefined, {
                 shallow: true,
             })
         },
@@ -55,6 +56,14 @@ export const useHierarchyNavigation = () => {
             updateQuery(inDetail ? { leaf: uid } : { leaf: uid, tab: HIERARCHY_TABS.DETAIL })
         },
         [queryClient, router, updateQuery],
+    )
+
+    // replace (not push) so deep-link resolution does not add a history entry
+    const resolveParentForLeaf = useCallback(
+        (parentUid: string) => {
+            updateQuery({ parent: parentUid }, { replace: true })
+        },
+        [updateQuery],
     )
 
     const setActiveTab = useCallback(
@@ -87,6 +96,7 @@ export const useHierarchyNavigation = () => {
             activeView,
             selectParent,
             selectLeaf,
+            resolveParentForLeaf,
             setActiveTab,
             setActiveView,
             goBackToLeaves,
@@ -99,6 +109,7 @@ export const useHierarchyNavigation = () => {
             activeView,
             selectParent,
             selectLeaf,
+            resolveParentForLeaf,
             setActiveTab,
             setActiveView,
             goBackToLeaves,

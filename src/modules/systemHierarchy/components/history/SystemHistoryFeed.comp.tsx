@@ -6,16 +6,12 @@ import { useIntl } from 'react-intl'
 import { Badge } from '@/components/ui/badge'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
-import { HISTORY_TYPE } from '@/modules/systemItem/types/constants'
-import type {
-    ChangeValue,
-    FieldChangeEntry,
-    HistoryResponse,
-} from '@/modules/systemItem/types/responses'
-import { PATH } from '@/types/constants/paths'
 import { formatDate } from '@/utils/formatters'
 
+import type { ChangeValue, FieldChangeEntry, HistoryResponse } from '../../types/history'
+import { HISTORY_TYPE } from '../../types/history'
 import { getFieldLabelKey } from '../../utils/fieldChangeBuilder'
+import { getSystemHierarchyDetailPath } from '../../utils/hierarchyLinks'
 import { getHistoryTypeVisual } from './historyFeed.visuals'
 
 interface SystemHistoryFeedProps {
@@ -236,8 +232,9 @@ interface SystemLinkProps {
 const SystemLink: FC<SystemLinkProps> = ({ detail }) => {
     return (
         <Link
-            href={`${PATH.SYSTEM}/${detail.systemUid}`}
+            href={getSystemHierarchyDetailPath(detail.systemUid)}
             target="_blank"
+            rel="noopener noreferrer"
             className="font-medium text-primary underline-offset-2 hover:underline"
         >
             {detail.systemName}

@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 
-import type { FieldChangeEntry, HistoryResponse } from '@/modules/systemItem/types/responses'
 import { queryFetcher } from '@/utils/fetcher'
+
+import type { FieldChangeEntry, HistoryResponse } from '../../types/history'
 
 // Tolerant parser: BE may send `changes` as structured array or as JSON string.
 const normalizeChanges = (raw: unknown): FieldChangeEntry[] | undefined => {

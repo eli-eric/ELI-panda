@@ -2,6 +2,7 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { useSession } from 'next-auth/react'
 import { Fragment } from 'react'
 import { FormattedMessage } from 'react-intl'
 
@@ -10,6 +11,7 @@ import EliLogoComponent from '@/components/eli-logo.comp'
 import ErrorPage from '@/components/error/ErrorPage'
 import LoaderComponent from '@/components/loader.comp'
 import { messages } from '@/i18n/src/locale/en'
+import { getSystemHierarchyDetailPath } from '@/modules/systemHierarchy/utils/hierarchyLinks'
 import { useSystemDetail } from '@/modules/systemItem/hooks/useSystemDetail'
 import { PATH } from '@/types/constants/paths'
 
@@ -20,11 +22,12 @@ interface Props {
 
 const SystemItemRedirectPage: NextPage = ({ itemUid }: Props) => {
     const router = useRouter()
+    const { status } = useSession()
 
     const { loading, error, systemDetail } = useSystemDetail({ itemUid }, data => {
         const uid = data?.systems[0]?.uid
         if (uid) {
-            router.push(PATH.SYSTEM + '/' + uid)
+            router.replace(getSystemHierarchyDetailPath(uid))
         }
     })
 

@@ -1464,6 +1464,12 @@ export const messages = {
             moveItem: 'Move Item',
             assignSpares: 'Assign Spares',
             assignItem: 'Assign Item',
+            notFoundTitle: 'System not found',
+            notFoundDescription:
+                'The system may have been deleted or the link is no longer valid.',
+            notFoundBack: 'Back to hierarchy',
+            loadErrorTitle: 'Failed to load system',
+            loadErrorDescription: 'Something went wrong while loading the system detail.',
         },
         tabs: {
             detail: 'Detail',

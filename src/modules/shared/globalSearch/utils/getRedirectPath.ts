@@ -1,3 +1,4 @@
+import { getSystemHierarchyDetailPath } from '@/modules/systemHierarchy/utils/hierarchyLinks'
 import { PATH } from '@/types/constants/paths'
 
 import type { NodeType } from '../types'
@@ -7,7 +8,7 @@ import type { NodeType } from '../types'
  */
 export const getRedirectPath = (nodeType: NodeType, uid: string): string => {
     const pathMap: Record<NodeType, string> = {
-        System: `${PATH.SYSTEM}/${uid}`,
+        System: getSystemHierarchyDetailPath(uid),
         Order: `${PATH.ORDER}/${uid}`,
         CatalogueItem: `${PATH.CATALOGUE_ITEM}/${uid}`,
     }
