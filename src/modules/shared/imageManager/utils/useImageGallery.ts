@@ -28,22 +28,24 @@ export const useImageGallery = ({ itemCategory, itemId, fileCategory }) => {
     }
 
     const onDrop = (files: File[]) => {
-        readFilesAsProcessed(files).then(files => {
-            dueUploadRef.current = [...dueUploadRef.current, ...files]
-            const tempFiles = files.map(file => {
-                const id = `temp-${crypto.randomUUID()}`
-                const url = file.payload
-                return {
-                    ...file,
-                    id,
-                    url,
-                    size: 0, // Add the missing 'size' property with a default value
-                }
+        readFilesAsProcessed(files)
+            .then(files => {
+                dueUploadRef.current = [...dueUploadRef.current, ...files]
+                const tempFiles = files.map(file => {
+                    const id = `temp-${crypto.randomUUID()}`
+                    const url = file.payload
+                    return {
+                        ...file,
+                        id,
+                        url,
+                        size: 0, // Add the missing 'size' property with a default value
+                    }
+                })
+                queryClient.setQueryData<FileItem[]>(['fileItem', endpoint], data =>
+                    data ? [...tempFiles, ...(data ?? [])] : tempFiles,
+                )
             })
-            queryClient.setQueryData<FileItem[]>(['fileItem', endpoint], data =>
-                data ? [...tempFiles, ...(data ?? [])] : tempFiles,
-            )
-        })
+            .catch(() => toast.error('Failed to read selected files'))
     }
 
     const submit = useCallback(

@@ -35,7 +35,8 @@ export const SystemImagePanel: FC<SystemImagePanelProps> = ({ systemUid, systemN
 
     const { open, getRootProps, getInputProps, isDragActive } = useDropzone({
         accept: { 'image/*': [] },
-        disabled: !hasEditRole,
+        // block new drops while a mutation is in flight to avoid overlapping optimistic writes
+        disabled: !hasEditRole || isMutating,
         noClick: true,
         onDrop: files => {
             // new uploads prepend → focus the first one
@@ -51,6 +52,8 @@ export const SystemImagePanel: FC<SystemImagePanelProps> = ({ systemUid, systemN
     const currentImage = images[selectedIndex]
     const hasImages = images.length > 0
     const hasMany = images.length > 1
+    // optimistic entries have a temp id the backend won't recognize — can't delete yet
+    const isTempImage = !!currentImage?.id.startsWith('temp-')
 
     return (
         <div
@@ -91,7 +94,7 @@ export const SystemImagePanel: FC<SystemImagePanelProps> = ({ systemUid, systemN
                                                 `${fm({ id: message.common.imageGallery.confirmDelete })} ${currentImage.name}?`,
                                             )(currentImage)
                                         }
-                                        disabled={isMutating}
+                                        disabled={isMutating || isTempImage}
                                         className="h-6 text-xs px-2 text-destructive hover:text-destructive hover:bg-destructive/20"
                                     >
                                         <Trash2 className="h-3 w-3 mr-1" />

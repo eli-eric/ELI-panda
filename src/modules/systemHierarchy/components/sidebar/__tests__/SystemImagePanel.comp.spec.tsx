@@ -44,8 +44,8 @@ describe('SystemImagePanel', () => {
     it('renders the thumbnail strip when there are multiple images', () => {
         mockState.images = [img('1'), img('2'), img('3')]
         renderWithProviders(<SystemImagePanel systemUid="s1" />)
-        // 3 thumbnails + the large image
-        expect(screen.getAllByRole('img').length).toBeGreaterThanOrEqual(3)
+        // 1 large image + 3 thumbnails
+        expect(screen.getAllByRole('img')).toHaveLength(4)
         expect(screen.getByText('1/3')).toBeInTheDocument()
     })
 
@@ -70,6 +70,12 @@ describe('SystemImagePanel', () => {
         renderWithProviders(<SystemImagePanel systemUid="s1" />)
         expect(screen.getByRole('button', { name: /upload/i })).toBeInTheDocument()
         expect(screen.getByRole('button', { name: /delete/i })).toBeInTheDocument()
+    })
+
+    it('disables delete while the selected image is an optimistic temp entry', () => {
+        mockState.images = [{ id: 'temp-abc', name: 'pending', url: 'x', size: 0 }]
+        renderWithProviders(<SystemImagePanel systemUid="s1" />)
+        expect(screen.getByRole('button', { name: /delete/i })).toBeDisabled()
     })
 
     it('deletes the current image after confirm', () => {
