@@ -3,6 +3,7 @@ import { memo, useEffect, useMemo, useState } from 'react'
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { useForm } from 'react-hook-form'
+import type { z } from 'zod'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { Form } from '@/components/form/Form'
@@ -60,7 +61,7 @@ const CatalogueItemContainer = ({ uid, catalogueCategoryUid }: CatalogueItemCont
         )
     }, [item])
 
-    const formMethods = useForm<CatalogueItemFormData>({
+    const formMethods = useForm<z.input<typeof catalogueItemSchema>, unknown, CatalogueItemFormData>({
         resolver: zodResolver(catalogueItemSchema),
         defaultValues: {
             ...item,

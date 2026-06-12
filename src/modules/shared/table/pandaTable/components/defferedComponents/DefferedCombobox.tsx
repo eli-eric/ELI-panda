@@ -49,7 +49,8 @@ export const DefferedCombobox = ({
         <HUICombobox
             as="div"
             value={value}
-            onChange={(v: CodebookType) => {
+            onChange={(v: CodebookType | null) => {
+                if (!v) return
                 setValue(v)
                 onChange(v)
             }}

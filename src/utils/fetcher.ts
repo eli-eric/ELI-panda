@@ -1,11 +1,11 @@
-import type { MutateFunction, QueryFunction, QueryKey } from '@tanstack/react-query'
+import type { QueryFunction, QueryKey } from '@tanstack/react-query'
 import { z } from 'zod'
 
 // axiosInstance is gradually being replaced by fetchRequest – kept temporarily for compatibility
 // import axiosInstance from '@/core/axios/axiosInstance'
 import { fetchRequest, fetchRequestDetailed } from '@/core/http/fetchClient'
 import { BASE_URL } from '@/types/constants/common'
-import type { AxiosError, AxiosResponse } from '@/types/http'
+import type { AxiosResponse } from '@/types/http'
 import { isAxiosError, toAxiosError } from '@/types/http'
 
 import type { EndpointProps } from './getEndpoints'
@@ -137,11 +137,9 @@ export const queryMutate = <TResponse, TVariables>(
     options?: QueryMutateOptions,
 ) => {
     const { uid, isDefaultUrl, endpointVariables, responseType, query } = options ?? {}
-    const mutateFn: MutateFunction<
-        AxiosResponse<TResponse>,
-        AxiosError,
-        TVariables
-    > = async variables => {
+    // plain 1-arg signature: assignable to TanStack's MutationFunction (which
+    // passes an extra context arg) and still directly callable with one argument
+    const mutateFn = async (variables: TVariables): Promise<AxiosResponse<TResponse>> => {
         const ep = resolveEndpoint(endpointType as EndpointKey, {
             uid,
             query,
