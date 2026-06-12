@@ -2,7 +2,7 @@ import { render } from '@testing-library/react'
 import React from 'react'
 import { IntlProvider } from 'react-intl'
 
-import SystemDetailRedirectPage from '../[uid]'
+import SystemDetailRedirectPage from '@/pages/system/[uid]'
 
 const mockReplace = jest.fn()
 let mockQuery: Record<string, string | string[] | undefined> = {}
