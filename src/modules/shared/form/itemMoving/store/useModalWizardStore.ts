@@ -1,38 +1,15 @@
 import { create } from 'zustand'
 
+import type { SystemLeaf } from '@/modules/systemHierarchy/types'
 import type { SystemDetail } from '@/types/responses/systems'
 
 import { MOVE_TYPE } from '../types/constants'
-
-type CodebookRef = {
-    uid: string
-    name: string
-}
 
 // System the wizard was opened from (move source / assign destination).
 // Deliberately a plain data snapshot, not a uid to refetch — the opener
 // (hierarchy detail, leaves table, ...) already has everything the wizard
 // needs, so the wizard must not depend on any route param or async fetch.
-// Structurally compatible with SystemLeaf (systemHierarchy).
-export type WizardContextSystem = {
-    uid: string
-    name: string
-    location?: CodebookRef | null
-    physicalItem?: {
-        uid?: string | null
-        name?: string | null
-        eun?: string | null
-        serialNumber?: string | null
-        catalogueNumber?: string | null
-        itemUsage?: CodebookRef | null
-        conditionStatus?: CodebookRef | null
-        catalogueItem?: {
-            uid?: string | null
-            name?: string | null
-            catalogueNumber?: string | null
-        } | null
-    } | null
-}
+export type WizardContextSystem = Pick<SystemLeaf, 'uid' | 'name' | 'location' | 'physicalItem'>
 
 type ModalWizard = {
     open: boolean

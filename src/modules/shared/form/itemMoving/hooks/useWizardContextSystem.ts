@@ -15,9 +15,8 @@ export const useWizardContextSystem = () => {
     const { contextSystem } = useModalWizardStore()
     const router = useRouter()
 
-    const fallbackUid = contextSystem
-        ? null
-        : ((router.query.uid as string | undefined) || null)
+    const routeUid = Array.isArray(router.query.uid) ? router.query.uid[0] : router.query.uid
+    const fallbackUid = contextSystem ? null : routeUid || null
     const fetched = useSystemDetail(fallbackUid)
 
     if (contextSystem) {
@@ -26,7 +25,10 @@ export const useWizardContextSystem = () => {
             systemDetail: contextSystem,
             physicalItem,
             // Catalogue info lives flat on physicalItem (detail panel shape) or
-            // nested under catalogueItem (leaves list shape) — normalize both
+            // nested under catalogueItem (leaves list shape) — normalize both.
+            // The physical item name doubles as the catalogue name in the detail
+            // panel shape: it is mapped from the same PhysicalItemFragment the
+            // wizard's step-3 heading ("Item: <name>") rendered before this change.
             catalogueItem: physicalItem
                 ? {
                       name: physicalItem.catalogueItem?.name ?? physicalItem.name ?? null,
