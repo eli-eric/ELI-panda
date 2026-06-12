@@ -19,6 +19,10 @@ jest.mock('../../physical-item/PhysicalItemPropertiesSidebar.comp', () => ({
     PhysicalItemPropertiesSidebar: () => null,
 }))
 
+jest.mock('../SystemImagePanel.comp', () => ({
+    SystemImagePanel: () => null,
+}))
+
 jest.mock('../../../utils/predicates', () => ({
     hasPhysicalItem: jest.fn(),
 }))
