@@ -45,7 +45,10 @@ export const ActionsDropdown: FC<ActionsDropdownProps> = ({ system }) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" data-testid={`actions-${system.uid}`}>
                 {hasPhysicalItem && (
-                    <DropdownMenuItem className="cursor-pointer" onClick={openItemMoveModal}>
+                    <DropdownMenuItem
+                        className="cursor-pointer"
+                        onClick={() => openItemMoveModal(system)}
+                    >
                         <Move className="h-4 w-4 mr-2" />
                         {fm({ id: message.systemHierarchy.detail.moveItem })}
                     </DropdownMenuItem>
@@ -55,7 +58,10 @@ export const ActionsDropdown: FC<ActionsDropdownProps> = ({ system }) => {
                     {fm({ id: message.systemHierarchy.detail.assignSpares })}
                 </DropdownMenuItem>
                 {!hasPhysicalItem && (
-                    <DropdownMenuItem className="cursor-pointer" onClick={openItemAssignModal}>
+                    <DropdownMenuItem
+                        className="cursor-pointer"
+                        onClick={() => openItemAssignModal(system)}
+                    >
                         <Package className="h-4 w-4 mr-2" />
                         {fm({ id: message.systemHierarchy.detail.assignItem })}
                     </DropdownMenuItem>
