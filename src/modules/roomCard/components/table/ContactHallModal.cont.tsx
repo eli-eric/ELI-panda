@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { FormattedMessage } from 'react-intl'
+import type { z } from 'zod'
 
 import Combobox from '@/components/form/Combobox'
 import { Button } from '@/components/ui/button'
@@ -38,7 +39,7 @@ export const ContactHallModalContainer = ({ onSubmit, onClose }: ContactHallModa
     const { employee, isLoading: employeeLoading } = useEmployee(employeeUid)
     const { data } = useGraphQL(GET_CONTACT_PERSON_ROLES)
 
-    const formMethods = useForm<ContactHallFormData>({
+    const formMethods = useForm<z.input<typeof contactHallSchema>, unknown, ContactHallFormData>({
         resolver: zodResolver(contactHallSchema),
         defaultValues: {
             role: null,

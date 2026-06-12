@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { FormattedMessage } from 'react-intl'
+import type { z } from 'zod'
 
 import Combobox from '@/components/form/Combobox'
 import { Button } from '@/components/ui/button'
@@ -26,7 +27,7 @@ export const ContactDeptModalContainer = ({ onSubmit, onClose }: ContactDeptModa
     const [loadedEmployee, setLoadedEmployee] = useState<any>(null)
     const { employee, isLoading: employeeLoading } = useEmployee(employeeUid)
 
-    const formMethods = useForm<ContactDeptFormData>({
+    const formMethods = useForm<z.input<typeof contactDeptSchema>, unknown, ContactDeptFormData>({
         resolver: zodResolver(contactDeptSchema),
         defaultValues: {
             employee: null,
