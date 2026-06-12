@@ -123,4 +123,18 @@ describe('SystemDetailViewContainer', () => {
         )
         expect(mockRefetch).toHaveBeenCalledTimes(1)
     })
+
+    it('does not refetch on leaf change when the query is already fetching (no-seed path)', () => {
+        mockSystem = { uid: 'sys-1', name: 'Test System' }
+        mockIsFetching = true
+        const { rerender } = renderView()
+
+        mockSelectedLeafUid = 'sys-2'
+        rerender(
+            <IntlProvider locale="en" messages={messages}>
+                <SystemDetailViewContainer />
+            </IntlProvider>,
+        )
+        expect(mockRefetch).not.toHaveBeenCalled()
+    })
 })
