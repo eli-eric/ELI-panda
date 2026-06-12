@@ -5,10 +5,11 @@ import { IntlProvider } from 'react-intl'
 import { SystemDetailViewContainer } from '../SystemDetailView.cont'
 
 const mockClearSelection = jest.fn()
+let mockSelectedLeafUid: string | null = 'sys-1'
 
 jest.mock('../../../hooks/useHierarchyNavigation', () => ({
     useHierarchyNavigation: () => ({
-        selectedLeafUid: 'sys-1',
+        selectedLeafUid: mockSelectedLeafUid,
         goBackToLeaves: jest.fn(),
         selectParent: jest.fn(),
         clearSelection: mockClearSelection,
@@ -17,6 +18,7 @@ jest.mock('../../../hooks/useHierarchyNavigation', () => ({
 
 let mockSystem: { uid: string; name: string } | null = null
 let mockIsLoading = false
+let mockIsFetching = false
 let mockError: Error | null = null
 const mockRefetch = jest.fn()
 
@@ -24,6 +26,7 @@ jest.mock('../../../hooks/queries/useSystemDetail', () => ({
     useSystemDetail: () => ({
         system: mockSystem,
         isLoading: mockIsLoading,
+        isFetching: mockIsFetching,
         error: mockError,
         refetch: mockRefetch,
     }),
@@ -58,7 +61,9 @@ describe('SystemDetailViewContainer', () => {
     beforeEach(() => {
         mockSystem = null
         mockIsLoading = false
+        mockIsFetching = false
         mockError = null
+        mockSelectedLeafUid = 'sys-1'
         mockClearSelection.mockClear()
         mockRefetch.mockClear()
     })
@@ -97,5 +102,39 @@ describe('SystemDetailViewContainer', () => {
         renderView()
         expect(screen.getByTestId('detail-header-stub')).toBeInTheDocument()
         expect(screen.getByTestId('detail-tabs-stub')).toBeInTheDocument()
+    })
+
+    it('does not refetch on initial mount', () => {
+        mockSystem = { uid: 'sys-1', name: 'Test System' }
+        renderView()
+        expect(mockRefetch).not.toHaveBeenCalled()
+    })
+
+    it('refetches the full detail when the selected leaf changes', () => {
+        mockSystem = { uid: 'sys-1', name: 'Test System' }
+        const { rerender } = renderView()
+        expect(mockRefetch).not.toHaveBeenCalled()
+
+        mockSelectedLeafUid = 'sys-2'
+        rerender(
+            <IntlProvider locale="en" messages={messages}>
+                <SystemDetailViewContainer />
+            </IntlProvider>,
+        )
+        expect(mockRefetch).toHaveBeenCalledTimes(1)
+    })
+
+    it('does not refetch on leaf change when the query is already fetching (no-seed path)', () => {
+        mockSystem = { uid: 'sys-1', name: 'Test System' }
+        mockIsFetching = true
+        const { rerender } = renderView()
+
+        mockSelectedLeafUid = 'sys-2'
+        rerender(
+            <IntlProvider locale="en" messages={messages}>
+                <SystemDetailViewContainer />
+            </IntlProvider>,
+        )
+        expect(mockRefetch).not.toHaveBeenCalled()
     })
 })

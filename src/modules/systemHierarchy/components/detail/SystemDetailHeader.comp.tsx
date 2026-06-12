@@ -1,4 +1,4 @@
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, Loader2 } from 'lucide-react'
 import type { FC } from 'react'
 import { useIntl } from 'react-intl'
 
@@ -14,12 +14,14 @@ interface SystemDetailHeaderProps {
     system: SystemLeaf
     onBack: () => void
     onSelectAncestor: SelectAncestorHandler
+    isRefreshing?: boolean
 }
 
 export const SystemDetailHeader: FC<SystemDetailHeaderProps> = ({
     system,
     onBack,
     onSelectAncestor,
+    isRefreshing = false,
 }) => {
     const { formatMessage: fm } = useIntl()
 
@@ -46,6 +48,14 @@ export const SystemDetailHeader: FC<SystemDetailHeaderProps> = ({
                     onSelectAncestor={onSelectAncestor}
                 />
             </div>
+            {isRefreshing && (
+                <Loader2
+                    className="size-4 shrink-0 animate-spin text-muted-foreground"
+                    role="status"
+                    aria-label={fm({ id: message.systemHierarchy.detail.updating })}
+                    data-testid="system-hierarchy-detail-refreshing"
+                />
+            )}
             <ActionsDropdown system={system} />
         </div>
     )

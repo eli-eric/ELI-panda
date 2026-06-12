@@ -1,6 +1,5 @@
 import type { QueryClient } from '@tanstack/react-query'
 import { keepPreviousData } from '@tanstack/react-query'
-import { request } from 'graphql-request'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
 
@@ -26,11 +25,6 @@ const systemHierarchyDetailQuery = gql(`
   }
 `)
 
-const fetchSystemDetail = (uid: string) =>
-    request('/api/graphql', systemHierarchyDetailQuery, {
-        where: { deleted: false, uid },
-    })
-
 export interface SparePartsForSystem {
     uid: string
     name: string | null
@@ -47,11 +41,11 @@ export interface OptimisticSystemHint {
     parentPath?: { uid: string; name: string }[]
 }
 
-// Seeds a partial SystemDetailFragment so the breadcrumb renders before the network
-// resolves, then kicks off a background fetch to replace the seed with the full fragment.
-// Background fetch is required because useSystemDetail uses refetchOnMount: false — a
-// seed alone would otherwise stick and the consumer would never see physicalItem,
-// operators, etc. Skips when an entry already exists (live cache or in-flight fetch).
+// Seeds a partial SystemDetailFragment so the breadcrumb (name/code/path) renders
+// instantly when a node is clicked, before the network resolves. The full fragment is
+// pulled in by the active SystemDetailView consumer, which refetches on every leaf
+// change (see SystemDetailView.cont.tsx) — so this only needs to plant the breadcrumb.
+// Skips when an entry already exists to avoid clobbering fuller data with a partial seed.
 export const primeSystemDetailCache = (
     queryClient: QueryClient,
     uid: string,
@@ -74,19 +68,10 @@ export const primeSystemDetailCache = (
             },
         ],
     })
-    queryClient
-        .fetchQuery({
-            queryKey: [SYSTEM_DETAIL_QUERY_KEY, uid],
-            queryFn: () => fetchSystemDetail(uid),
-            staleTime: 60 * 1000,
-        })
-        .catch(() => {
-            // errors surface via the active consumer's useQuery state
-        })
 }
 
 export const useSystemDetail = (leafUid: string | null) => {
-    const { data, error, isLoading, refetch } = useGraphQL(systemHierarchyDetailQuery, {
+    const { data, error, isLoading, isFetching, refetch } = useGraphQL(systemHierarchyDetailQuery, {
         variables: {
             where: {
                 deleted: false,
@@ -190,6 +175,7 @@ export const useSystemDetail = (leafUid: string | null) => {
         minimalSpareParstCount: systemDetail?.minimalSpareParstCount ?? null,
         refetch,
         isLoading,
+        isFetching,
         error,
     }
 }

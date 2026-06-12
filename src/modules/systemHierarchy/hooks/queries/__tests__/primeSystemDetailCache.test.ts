@@ -49,17 +49,12 @@ describe('primeSystemDetailCache', () => {
         expect(fetchSpy).not.toHaveBeenCalled()
     })
 
-    it('dispatches a background fetchQuery to refine the seed', () => {
+    it('only plants the breadcrumb seed and does not fetch — the active consumer owns refetch', () => {
         const qc = new QueryClient()
-        const fetchSpy = jest.spyOn(qc, 'fetchQuery').mockImplementation(() => Promise.resolve({}))
+        const fetchSpy = jest.spyOn(qc, 'fetchQuery')
 
         primeSystemDetailCache(qc, 'sys-4', { name: 'Optimistic' })
 
-        expect(fetchSpy).toHaveBeenCalledWith(
-            expect.objectContaining({
-                queryKey: [SYSTEM_DETAIL_QUERY_KEY, 'sys-4'],
-                queryFn: expect.any(Function),
-            }),
-        )
+        expect(fetchSpy).not.toHaveBeenCalled()
     })
 })

@@ -1,4 +1,5 @@
 import type { FC } from 'react'
+import { useEffect, useRef } from 'react'
 import { useIntl } from 'react-intl'
 
 import { Button } from '@/components/ui/button'
@@ -14,7 +15,25 @@ export const SystemDetailViewContainer: FC = () => {
     const { formatMessage: fm } = useIntl()
     const { selectedLeafUid, goBackToLeaves, selectParent, clearSelection } =
         useHierarchyNavigation()
-    const { system, isLoading, error, refetch } = useSystemDetail(selectedLeafUid)
+    const { system, isLoading, isFetching, error, refetch } = useSystemDetail(selectedLeafUid)
+
+    // Selecting a node in the tree only changes the URL/leaf; the detail query keeps
+    // refetchOnMount:false (so secondary consumers like PhysicalItemTab stay cache reads).
+    // Force a fresh fetch here on every actual leaf change so all fields refill — guard
+    // the initial mount, which useSystemDetail's own initial fetch already covers.
+    //
+    // The !isFetching guard scopes this to the bug we're fixing: a seeded cache (tree /
+    // breadcrumb nav) renders with data + refetchOnMount:false, so it is NOT fetching and
+    // we kick the refetch. Navigation without a seed (e.g. selectLeaf from spares/graph)
+    // has no cached data, so React Query is already fetching the new key — refetching here
+    // would only cancel that in-flight request (cancelRefetch defaults true) and restart it.
+    const prevLeafUid = useRef(selectedLeafUid)
+    useEffect(() => {
+        if (selectedLeafUid && selectedLeafUid !== prevLeafUid.current && !isFetching) {
+            refetch()
+        }
+        prevLeafUid.current = selectedLeafUid
+    }, [selectedLeafUid, isFetching, refetch])
 
     if (isLoading) {
         return (
@@ -77,6 +96,7 @@ export const SystemDetailViewContainer: FC = () => {
                 system={system}
                 onBack={goBackToLeaves}
                 onSelectAncestor={selectParent}
+                isRefreshing={isFetching && !isLoading}
             />
             <div className="flex-1 min-h-0">
                 <SystemDetailTabsContainer system={system} />

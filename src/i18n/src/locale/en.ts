@@ -1475,6 +1475,7 @@ export const messages = {
             notFoundBack: 'Back to hierarchy',
             loadErrorTitle: 'Failed to load system',
             loadErrorDescription: 'Something went wrong while loading the system detail.',
+            updating: 'Updating…',
         },
         tabs: {
             detail: 'Detail',
