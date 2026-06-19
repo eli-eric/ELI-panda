@@ -87,11 +87,10 @@ For mutations with dynamic paths (e.g., update by ID):
 ```typescript
 const updateMutation = useMutation({
     mutationFn: ({ uid, ...data }: { uid: string } & UpdateRequest) => {
-        const mutateFn = queryMutate<ResponseType, UpdateRequest>(
-            'endpoint',
-            'put',
-            { isDefaultUrl: false, endpointVariables: { path: `resource/${uid}` } },
-        )
+        const mutateFn = queryMutate<ResponseType, UpdateRequest>('endpoint', 'put', {
+            isDefaultUrl: false,
+            endpointVariables: { path: `resource/${uid}` },
+        })
         return mutateFn(data)
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['resources'] }),
@@ -113,11 +112,10 @@ const update = async (uid: string, data: UpdateRequest) => {
 ```typescript
 const deleteMutation = useMutation({
     mutationFn: (uid: string) => {
-        const mutateFn = queryMutate<void, void>(
-            'endpoint',
-            'delete',
-            { isDefaultUrl: false, endpointVariables: { path: `resource/${uid}` } },
-        )
+        const mutateFn = queryMutate<void, void>('endpoint', 'delete', {
+            isDefaultUrl: false,
+            endpointVariables: { path: `resource/${uid}` },
+        })
         return mutateFn()
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['resources'] }),

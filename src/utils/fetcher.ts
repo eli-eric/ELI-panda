@@ -133,7 +133,7 @@ interface QueryMutateOptions {
 
 export const queryMutate = <TResponse, TVariables>(
     endpointType: keyof ReturnType<typeof getEndpoints>,
-    mutationType: 'post' | 'put' | 'delete' | 'get',
+    mutationType: 'post' | 'put' | 'patch' | 'delete' | 'get',
     options?: QueryMutateOptions,
 ) => {
     const { uid, isDefaultUrl, endpointVariables, responseType, query } = options ?? {}

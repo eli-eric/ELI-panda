@@ -25,9 +25,9 @@ const GET_RELATED_ITEMS = gql(`
   }
 `)
 
-export const useRelatedItems = () => {
+export const useRelatedItems = (itemUid?: string) => {
     const router = useRouter()
-    const uid = router.query.uid as string
+    const uid = itemUid ?? (router.query.uid as string | undefined)
     const { data, isLoading, refetch } = useGraphQL(GET_RELATED_ITEMS, {
         variables: {
             where: {
@@ -38,7 +38,7 @@ export const useRelatedItems = () => {
     })
 
     return {
-        data: data?.catalogueItems[0].relatedCatalogueItems,
+        data: data?.catalogueItems[0]?.relatedCatalogueItems,
         loading: isLoading,
         refetch,
     }

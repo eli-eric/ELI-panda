@@ -20,6 +20,7 @@ interface Props {
     tableId: string
     onChange?: (value: string) => void
     isGlobalSearch?: boolean
+    hideSidebarTrigger?: boolean
 }
 
 export const SearchBar = ({
@@ -30,6 +31,7 @@ export const SearchBar = ({
     tableId,
     onChange,
     isGlobalSearch = false,
+    hideSidebarTrigger = false,
 }: Props) => {
     const { inputRef, defaultValue, handleChange } = useDebouncedSearchInput({
         tableId,
@@ -40,7 +42,7 @@ export const SearchBar = ({
     return (
         <SearchBarWrapper>
             <div className="flex items-center gap-4">
-                <SidebarTrigger />
+                {!hideSidebarTrigger && <SidebarTrigger />}
                 {left && <div className="flex items-center gap-2 flex-shrink-0">{left}</div>}
 
                 {isGlobalSearch ? (

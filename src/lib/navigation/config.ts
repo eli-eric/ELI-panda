@@ -69,6 +69,10 @@ export const NAV_ITEMS: NavigationItem[] = [
         url: PATH.CATALOGUE,
         role: ROLE.CATALOGUE_VIEW,
         icon: Layers,
+        items: [
+            { title: 'Overview', url: PATH.CATALOGUE, role: ROLE.CATALOGUE_VIEW },
+            { title: 'Explorer', url: PATH.CATALOGUE_EXPLORER, role: ROLE.CATALOGUE_VIEW },
+        ],
     },
     {
         title: 'Orders',
@@ -131,6 +135,7 @@ export const OTHERS_NAV_ITEMS: NavigationItem[] = [
 export const PROTECTED_PATHS = [
     PATH.DASHBOARD,
     PATH.CATALOGUE,
+    PATH.CATALOGUE_EXPLORER,
     PATH.SYSTEMS,
     PATH.SYSTEM,
     PATH.REPORTS,
@@ -160,6 +165,11 @@ export const PROTECTED_PATHS = [
 export const PATH_ROLES_CONFIG: Record<PATH, ROLE[]> = {
     [PATH.CATALOGUE]: [ROLE.CATALOGUE_CATEGORY_EDIT, ROLE.CATALOGUE_EDIT, ROLE.CATALOGUE_VIEW],
     [PATH.CATALOGUE_ITEM]: [ROLE.CATALOGUE_CATEGORY_EDIT, ROLE.CATALOGUE_EDIT, ROLE.CATALOGUE_VIEW],
+    [PATH.CATALOGUE_EXPLORER]: [
+        ROLE.CATALOGUE_CATEGORY_EDIT,
+        ROLE.CATALOGUE_EDIT,
+        ROLE.CATALOGUE_VIEW,
+    ],
     [PATH.DASHBOARD]: [ROLE.BASICS],
     [PATH.REPORTS]: [ROLE.REPORTS_VIEW],
     [PATH.SYSTEMS]: [ROLE.SYSTEM_EDIT, ROLE.SYSTEMS_VIEW],

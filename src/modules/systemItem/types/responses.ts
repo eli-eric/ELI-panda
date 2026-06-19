@@ -3,6 +3,7 @@ import type { SystemDetail } from '@/types/responses/systems'
 // History/field-change types moved to the systemHierarchy module (the active
 // system detail UI); re-exported here for back-compat with systemItem internals.
 export type {
+    ChangeEntryEntity,
     ChangeValue,
     CodebookSnapshot,
     FieldChangeEntry,

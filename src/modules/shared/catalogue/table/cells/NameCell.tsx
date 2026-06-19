@@ -32,6 +32,7 @@ const modalMessage = message.ordersPage.deleteModal
 interface NameProps extends CellContext<CatalogueItem, any> {
     hideButtons?: boolean
     tableId?: string
+    onSelectItem?: (uid: string) => void
 }
 
 //TODO: permissions
@@ -42,26 +43,50 @@ export const NameCell = ({
     },
     hideButtons,
     tableId,
+    onSelectItem,
 }: NameProps) => {
+    const isExplorer = tableId === 'catalogueItemsExplorer' && !!onSelectItem
+
     return (
         <div className="flex items-center justify-between w-full flex-row-reverse">
             {!hideButtons && <CellActionDropdown tableId={tableId} uid={uid} value={getValue()} />}
             <div className="flex-1 min-w-0 flex items-center justify-start">
-                <Button variant={'link'} className="cursor-pointer py-0" asChild>
-                    <Link
-                        href={{ pathname: PATH.CATALOGUE_ITEM + '/' + uid }}
-                        target={
-                            tableId === 'catalogueItemsModal' ||
-                            tableId === TABLE_IDS.CATALOGUE_ITEM_SELECT
-                                ? '_blank'
-                                : undefined
-                        }
-                        onClick={e => e.stopPropagation()}
-                    >
-                        <Tooltip content={getValue()}>
-                            <p>{truncateString(getValue(), 50)}</p>
-                        </Tooltip>
-                    </Link>
+                <Button variant={'link'} className="cursor-pointer py-0" asChild={!isExplorer}>
+                    {isExplorer ? (
+                        <span
+                            onClick={e => {
+                                e.stopPropagation()
+                                onSelectItem(uid)
+                            }}
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={e => {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                    e.preventDefault()
+                                    onSelectItem(uid)
+                                }
+                            }}
+                        >
+                            <Tooltip content={getValue()}>
+                                <p>{truncateString(getValue(), 50)}</p>
+                            </Tooltip>
+                        </span>
+                    ) : (
+                        <Link
+                            href={{ pathname: PATH.CATALOGUE_ITEM + '/' + uid }}
+                            target={
+                                tableId === 'catalogueItemsModal' ||
+                                tableId === TABLE_IDS.CATALOGUE_ITEM_SELECT
+                                    ? '_blank'
+                                    : undefined
+                            }
+                            onClick={e => e.stopPropagation()}
+                        >
+                            <Tooltip content={getValue()}>
+                                <p>{truncateString(getValue(), 50)}</p>
+                            </Tooltip>
+                        </Link>
+                    )}
                 </Button>
             </div>
         </div>
