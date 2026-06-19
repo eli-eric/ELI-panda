@@ -23,6 +23,9 @@ import { RelationshipsTabContainer } from '../tabs/RelationshipsTab.cont'
 import { SpareForTabContainer } from '../tabs/SpareForTab.cont'
 import { SparePartsTabContainer } from '../tabs/SparePartsTab.cont'
 
+// Always-present tabs (Detail, Persons, Attachments, History, Graph) get
+// distinct tokens. Conditional tabs reuse a token from an always-present
+// sibling — collisions only show when the conditional tab is active.
 const HIERARCHY_TAB_META: Record<HierarchyTab, { icon: LucideIcon; color: string }> = {
     [HIERARCHY_TABS.DETAIL]: { icon: Info, color: 'var(--chart-3)' },
     [HIERARCHY_TABS.PERSONS]: { icon: Users, color: 'var(--chart-2)' },
@@ -30,9 +33,9 @@ const HIERARCHY_TAB_META: Record<HierarchyTab, { icon: LucideIcon; color: string
     [HIERARCHY_TABS.SPARE_PARTS]: { icon: Wrench, color: 'var(--chart-5)' },
     [HIERARCHY_TABS.SPARE_FOR]: { icon: Replace, color: 'var(--chart-4)' },
     [HIERARCHY_TABS.RELATIONSHIPS]: { icon: Share2, color: 'var(--chart-3)' },
-    [HIERARCHY_TABS.ATTACHMENTS]: { icon: Paperclip, color: 'var(--chart-4)' },
+    [HIERARCHY_TABS.ATTACHMENTS]: { icon: Paperclip, color: 'var(--chart-1)' },
     [HIERARCHY_TABS.HISTORY]: { icon: History, color: 'var(--muted-foreground)' },
-    [HIERARCHY_TABS.GRAPH]: { icon: Workflow, color: 'var(--chart-2)' },
+    [HIERARCHY_TABS.GRAPH]: { icon: Workflow, color: 'var(--chart-4)' },
 }
 
 interface HierarchyTabTriggerProps {
@@ -42,13 +45,22 @@ interface HierarchyTabTriggerProps {
 
 const HierarchyTabTrigger: FC<HierarchyTabTriggerProps> = ({ value, label }) => {
     const { icon: Icon, color } = HIERARCHY_TAB_META[value]
+    // --tab-text mixes the identity color with --foreground so active text
+    // hits AA contrast on the tinted pill (chart-4 yellow / chart-5 gold
+    // were too light otherwise). Theme-aware: darkens in light, lightens
+    // in dark.
     return (
         <TabsTrigger
             value={value}
             data-testid={`system-hierarchy-tab-${value}`}
             title={label}
-            style={{ '--tab-color': color } as CSSProperties}
-            className="group data-[state=active]:bg-[var(--tab-color)]/10 data-[state=active]:text-[var(--tab-color)] dark:data-[state=active]:bg-[var(--tab-color)]/15 dark:data-[state=active]:text-[var(--tab-color)]"
+            style={
+                {
+                    '--tab-color': color,
+                    '--tab-text': `color-mix(in oklab, ${color}, var(--foreground) 45%)`,
+                } as CSSProperties
+            }
+            className="group data-[state=active]:bg-[var(--tab-color)]/10 data-[state=active]:text-[var(--tab-text)] dark:data-[state=active]:bg-[var(--tab-color)]/15 dark:data-[state=active]:text-[var(--tab-text)]"
         >
             <Icon className="size-4 text-[var(--tab-color)] opacity-60 group-data-[state=active]:opacity-100" />
             <span className="hidden md:inline">{label}</span>
