@@ -10,12 +10,6 @@ jest.mock('@/components/ui/skeleton', () => ({
     ),
 }))
 
-jest.mock('../../graph/ViewSwitcher.comp', () => ({
-    ViewSwitcher: ({ activeView }: { activeView: string }) => (
-        <div data-testid="view-switcher" data-active={activeView} />
-    ),
-}))
-
 jest.mock('../../shared/SystemBreadcrumbs.comp', () => ({
     SystemBreadcrumbs: ({
         parentPath,
@@ -44,8 +38,6 @@ const baseProps = {
     isLoading: false,
     onViewParentDetail: jest.fn(),
     onSelectAncestor: jest.fn(),
-    activeView: 'leaves' as any,
-    onViewChange: jest.fn(),
 }
 
 beforeEach(() => {
@@ -59,12 +51,11 @@ describe('LeavesPanelHeader', () => {
         expect(screen.queryByTestId('breadcrumbs')).toBeNull()
     })
 
-    it('renders breadcrumbs + view switcher when not loading', () => {
+    it('renders breadcrumbs when not loading', () => {
         renderWithProviders(<LeavesPanelHeader {...baseProps} />)
         const bc = screen.getByTestId('breadcrumbs')
         expect(bc.dataset.name).toBe('Lab')
         expect(bc.dataset.code).toBe('L-1')
-        expect(screen.getByTestId('view-switcher')).toBeInTheDocument()
     })
 
     it('shows totalCount in parentheses when totalCount > 0', () => {
@@ -96,7 +87,6 @@ describe('LeavesPanelHeader', () => {
             <LeavesPanelHeader {...baseProps} onViewParentDetail={onViewParentDetail} />,
         )
         const buttons = screen.getAllByRole('button')
-        // The only real button after mocks (ViewSwitcher is a div) is the view-parent button
         fireEvent.click(buttons[0])
         expect(onViewParentDetail).toHaveBeenCalled()
     })

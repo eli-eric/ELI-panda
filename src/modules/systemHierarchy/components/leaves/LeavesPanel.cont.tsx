@@ -13,9 +13,8 @@ import { useSystemDetail } from '../../hooks/queries/useSystemDetail'
 import { useSystemLeaves } from '../../hooks/queries/useSystemLeaves'
 import { useDeleteSystemAction } from '../../hooks/useDeleteSystemAction'
 import { useHierarchyNavigation } from '../../hooks/useHierarchyNavigation'
-import { HIERARCHY_VIEWS, LEAVES_TABLE_ID } from '../../types/constants'
+import { LEAVES_TABLE_ID } from '../../types/constants'
 import { SystemDetailViewContainer } from '../detail/SystemDetailView.cont'
-import { RelationshipGraphContainer } from '../graph/RelationshipGraph.cont'
 import { LeavesPanelHeader } from './LeavesPanelHeader.comp'
 import { LeavesTableComponent } from './LeavesTable.comp'
 import { LeavesToolbar } from './LeavesToolbar.comp'
@@ -28,8 +27,6 @@ export const LeavesPanelContainer: FC = () => {
         selectedLeafUid,
         selectLeaf,
         selectParent,
-        activeView,
-        setActiveView,
     } = useHierarchyNavigation()
     const { system: parentSystem, isLoading: isParentLoading } = useSystemDetail(selectedParentUid)
     const { leaves, totalCount, isLoading, isInitialLoad } = useSystemLeaves(selectedParentUid)
@@ -118,24 +115,8 @@ export const LeavesPanelContainer: FC = () => {
             isLoading={isParentLoading}
             onViewParentDetail={handleViewParentDetail}
             onSelectAncestor={selectParent}
-            activeView={activeView}
-            onViewChange={setActiveView}
         />
     )
-
-    if (activeView === HIERARCHY_VIEWS.GRAPH) {
-        return (
-            <div
-                className="flex flex-col h-full overflow-hidden"
-                data-testid="system-hierarchy-leaves-panel"
-            >
-                {header}
-                <div className="flex-1 min-h-0 overflow-hidden">
-                    <RelationshipGraphContainer />
-                </div>
-            </div>
-        )
-    }
 
     const toolbar = <LeavesToolbar tableId={LEAVES_TABLE_ID} table={table} enableQueryURL={true} />
 

@@ -61,23 +61,6 @@ describe('useHierarchyNavigation', () => {
         expect(lastPushedQuery()).toEqual({ parent: 'A' })
     })
 
-    it('setActiveView(GRAPH) then selectParent keeps view=graph', () => {
-        mockQuery = { parent: 'A' }
-        const { result, rerender } = renderHook(() => useHierarchyNavigation(), { wrapper })
-        act(() => result.current.setActiveView('graph'))
-        mockQuery = { parent: 'A', view: 'graph' }
-        rerender()
-        act(() => result.current.selectParent('B'))
-        expect(lastPushedQuery()).toEqual({ parent: 'B', view: 'graph' })
-    })
-
-    it('selectLeaf from graph view keeps view=graph', () => {
-        mockQuery = { parent: 'A', view: 'graph' }
-        const { result } = renderHook(() => useHierarchyNavigation(), { wrapper })
-        act(() => result.current.selectLeaf('X'))
-        expect(lastPushedQuery()).toEqual({ parent: 'A', view: 'graph', leaf: 'X', tab: 'detail' })
-    })
-
     it('selectParent to a different parent clears stale page query', () => {
         mockQuery = { parent: 'A', page: '9' }
         const { result } = renderHook(() => useHierarchyNavigation(), { wrapper })
