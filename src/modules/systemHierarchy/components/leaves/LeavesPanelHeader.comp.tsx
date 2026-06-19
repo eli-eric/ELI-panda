@@ -6,8 +6,6 @@ import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { message } from '@/i18n/src/messages'
 
-import type { HierarchyView } from '../../types/constants'
-import { ViewSwitcher } from '../graph/ViewSwitcher.comp'
 import type {
     ParentPathItem,
     SelectAncestorHandler,
@@ -23,8 +21,6 @@ interface LeavesPanelHeaderProps {
     isLoading: boolean
     onViewParentDetail: () => void
     onSelectAncestor: SelectAncestorHandler
-    activeView: HierarchyView
-    onViewChange: (view: HierarchyView) => void
 }
 
 export const LeavesPanelHeader: FC<LeavesPanelHeaderProps> = ({
@@ -36,8 +32,6 @@ export const LeavesPanelHeader: FC<LeavesPanelHeaderProps> = ({
     isLoading,
     onViewParentDetail,
     onSelectAncestor,
-    activeView,
-    onViewChange,
 }) => {
     const { formatMessage: fm } = useIntl()
 
@@ -73,7 +67,6 @@ export const LeavesPanelHeader: FC<LeavesPanelHeaderProps> = ({
                     {parentSystemType ?? fm({ id: message.systemHierarchy.leaves.title })}
                 </span>
                 <div className="flex items-center gap-2">
-                    <ViewSwitcher activeView={activeView} onViewChange={onViewChange} />
                     <Button
                         variant="ghost"
                         size="sm"

@@ -1662,8 +1662,6 @@ export const messages = {
         },
         graph: {
             title: 'Relationship Graph',
-            viewTree: 'Tree View',
-            viewGraph: 'Graph View',
             noNodes: 'No systems to display',
             noConnectedNodes: 'No connected systems for selected relationship filters',
             noEdges: 'No relationships found',

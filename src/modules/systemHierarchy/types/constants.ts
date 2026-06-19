@@ -7,13 +7,6 @@ export const LEAVES_TABLE_ID = 'systemLeaves'
 export const RELATIONSHIP_GRAPH_INITIAL_LIMIT = 20
 export const RELATIONSHIP_GRAPH_LOAD_MORE_LIMIT = 10
 
-export const HIERARCHY_VIEWS = {
-    TREE: 'tree',
-    GRAPH: 'graph',
-} as const
-
-export type HierarchyView = (typeof HIERARCHY_VIEWS)[keyof typeof HIERARCHY_VIEWS]
-
 export const HIERARCHY_TABS = {
     DETAIL: 'detail',
     PERSONS: 'persons',

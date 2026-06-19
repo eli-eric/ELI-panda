@@ -119,10 +119,8 @@ describe('CreateSubsystemDialog', () => {
             selectedParentUid: null,
             selectedLeafUid: null,
             activeTab: 'detail',
-            activeView: 'tree',
             selectParent: jest.fn(),
             setActiveTab: jest.fn(),
-            setActiveView: jest.fn(),
             goBackToLeaves: jest.fn(),
         } as any)
     })
