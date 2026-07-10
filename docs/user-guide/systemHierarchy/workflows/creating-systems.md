@@ -8,7 +8,7 @@ The dialog is intentionally minimal — only **Name** and **System level** are a
 
 ## Who can do this
 
-✏️ **Editor / Admin** — requires the `systems-edit` role.
+✏️ **Editor / Admin** — requires the `systems-edit` role **and** that you are responsible for the **parent** system (directly, via its responsible team, or via an ancestor). If you aren't, the attempt is blocked with a message naming who to contact. See [Understanding edit permissions](./edit-permissions.md).
 
 > 🔮 *Coming soon — Phase 1:* creation will be scoped by system level. Editors will be able to create systems at `KEY_SYSTEMS`, `SUBSYSTEMS_AND_PARTS`, and `TRASH` levels only; creating systems at `SYSTEM_DOMAIN` or `TECHNOLOGY_UNIT` will be admin-only.
 

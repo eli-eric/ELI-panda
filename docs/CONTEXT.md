@@ -25,6 +25,7 @@ When you sharpen a term during a design conversation, update both this file and 
 - **Form Wizard V3** — multi-step RHF wizard in `src/modules/shared/form/wizardV3`. See the `wizard` skill.
 - **`@authorization` directive** — per-entity JWT-gated rule in the GraphQL schema. See [`permissions-model.md`](./technical/permissions-model.md).
 - **JWT role** — string entry in `session.user.roles` (e.g. `systems-view`, `systems-edit`, `admin`). See [`permissions-model.md`](./technical/permissions-model.md).
+- **Per-system edit responsibility** — beyond the `systems-edit` role, may-edit-*this*-system check (direct responsible / `responsibleTeam` / ancestor). Backend `GET /system/{uid}/can-edit`; frontend `useSystemEditPermission`. See [`permissions-model.md`](./technical/permissions-model.md#per-system-edit-responsibility).
 - **Codebook** — generic admin-managed reference list (`CODEBOOK` enum). See [`codebooks.md`](./technical/codebooks.md).
 
 ### Systems family
@@ -78,7 +79,7 @@ When you sharpen a term during a design conversation, update both this file and 
 
 - **User** — `User` node with row-level `@authorization`. See [`administration.md`](./technical/administration.md).
 - **Role** — see *JWT role* above.
-- **Responsible team** — policy-only today; not yet enforced in code.
+- **Responsible team** — a `System`'s `responsibleTeam`. Now enforced for system edits (backend REST 403 + frontend guard) via [*Per-system edit responsibility*](#per-system-edit-responsibility); still policy-only at the GraphQL schema layer.
 
 ## See also
 

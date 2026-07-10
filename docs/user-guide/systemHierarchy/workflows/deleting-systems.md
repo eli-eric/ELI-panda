@@ -8,7 +8,7 @@ Deletion is a soft removal: the systems are flagged as deleted and disappear fro
 
 ## Who can do this
 
-✏️ **Editor / Admin** — requires the `systems-edit` role.
+✏️ **Editor / Admin** — requires the `systems-edit` role **and** that you are responsible for the system being deleted (directly, via its responsible team, or via an ancestor). If you aren't, the delete is blocked with a message naming who to contact. See [Understanding edit permissions](./edit-permissions.md).
 
 > 🔮 *Coming soon — Phase 1:* the delete action will be scoped by system level. Editors will be able to delete systems at `KEY_SYSTEMS`, `SUBSYSTEMS_AND_PARTS`, and `TRASH` levels only; deleting systems at `SYSTEM_DOMAIN` or `TECHNOLOGY_UNIT` will be admin-only.
 
