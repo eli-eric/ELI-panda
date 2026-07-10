@@ -10,6 +10,7 @@ import { gql } from '@/types/gql'
 import { SYSTEM_DETAIL_QUERY_KEY } from '../../types/constants'
 import type { ChangeValue, CodebookSnapshot, FieldChangeEntry } from '../../types/history'
 import { buildChangeEntry, buildCodebookSnapshot } from '../../utils/fieldChangeBuilder'
+import { guardSystemEdit } from '../../utils/guardSystemEdit'
 
 // Lightweight mutation for single item field updates. The WAS_UPDATED_BY edge is recorded
 // against the owning System node (not the Item) so the change surfaces in the system history
@@ -120,6 +121,10 @@ export const useItemFieldUpdate = (systemUid: string, currentItem?: ItemFieldCac
 
     const updateField = useCallback(
         async (uid: string, fieldName: string, value: unknown, options?: UpdateFieldOptions) => {
+            // Hard guard: physical-item edits are permission-checked against the
+            // owning system. Block the GraphQL patch when the user isn't allowed.
+            if (!(await guardSystemEdit(queryClient, systemUid, fm))) return
+
             const displayName = options?.displayName
             let update: Record<string, unknown>
             let changeEntry: FieldChangeEntry | null = null
@@ -187,7 +192,7 @@ export const useItemFieldUpdate = (systemUid: string, currentItem?: ItemFieldCac
 
             return promise
         },
-        [fm, mutateAsync, systemUid],
+        [fm, mutateAsync, systemUid, queryClient],
     )
 
     return {

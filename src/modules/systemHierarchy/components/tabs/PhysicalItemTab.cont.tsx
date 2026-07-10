@@ -18,6 +18,7 @@ import { CODEBOOK } from '@/types/constants/codebook'
 
 import { useItemFieldUpdate } from '../../hooks/mutations/useItemFieldUpdate'
 import { useSystemDetail } from '../../hooks/queries/useSystemDetail'
+import { useSystemEditPermission } from '../../hooks/useSystemEditPermission'
 import type { SystemLeaf } from '../../types'
 import { PhysicalItemProperties } from '../physical-item/PhysicalItemProperties.comp'
 
@@ -28,6 +29,8 @@ interface PhysicalItemTabProps {
 export const PhysicalItemTabContainer: FC<PhysicalItemTabProps> = ({ system }) => {
     const { formatMessage: fm } = useIntl()
     const physicalItem = system.physicalItem
+
+    const { canEdit } = useSystemEditPermission(system.uid)
 
     const { updateField, isPending } = useItemFieldUpdate(system.uid, {
         itemUsage: physicalItem?.itemUsage,
@@ -48,10 +51,10 @@ export const PhysicalItemTabContainer: FC<PhysicalItemTabProps> = ({ system }) =
             value: unknown,
             options?: { displayName?: string | null; previousValue?: unknown },
         ) => {
-            if (!physicalItem?.uid) return
+            if (!canEdit || !physicalItem?.uid) return
             await updateField(physicalItem.uid, fieldName, value, options)
         },
-        [physicalItem?.uid, updateField],
+        [canEdit, physicalItem?.uid, updateField],
     )
 
     if (!physicalItem) {
@@ -91,6 +94,7 @@ export const PhysicalItemTabContainer: FC<PhysicalItemTabProps> = ({ system }) =
                     })
                 }
                 isPending={isPending}
+                disabled={!canEdit}
             />
 
             <InlineFieldCombobox
@@ -104,6 +108,7 @@ export const PhysicalItemTabContainer: FC<PhysicalItemTabProps> = ({ system }) =
                     handleSaveField('itemUsageUid', uid, { displayName })
                 }
                 isPending={isPending}
+                disabled={!canEdit}
             />
 
             <InlineFieldCombobox
@@ -117,6 +122,7 @@ export const PhysicalItemTabContainer: FC<PhysicalItemTabProps> = ({ system }) =
                     handleSaveField('conditionStatusUid', uid, { displayName })
                 }
                 isPending={isPending}
+                disabled={!canEdit}
             />
 
             <InlineFieldTextArea
@@ -126,6 +132,7 @@ export const PhysicalItemTabContainer: FC<PhysicalItemTabProps> = ({ system }) =
                     handleSaveField('notes', value, { previousValue: physicalItem.notes })
                 }
                 isPending={isPending}
+                disabled={!canEdit}
             />
 
             {hasProperties && (

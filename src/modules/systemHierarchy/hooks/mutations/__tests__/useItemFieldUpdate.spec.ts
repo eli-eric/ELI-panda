@@ -3,9 +3,13 @@ import { act, renderHook, waitFor } from '@testing-library/react'
 import { request } from 'graphql-request'
 import React from 'react'
 
+import { guardSystemEdit } from '../../../utils/guardSystemEdit'
+
 jest.mock('graphql-request', () => ({
     request: jest.fn(),
 }))
+
+jest.mock('../../../utils/guardSystemEdit', () => ({ guardSystemEdit: jest.fn() }))
 
 jest.mock('sonner', () => ({ toast: { promise: jest.fn() } }))
 
@@ -16,6 +20,7 @@ jest.mock('react-intl', () => ({
 }))
 
 const mockRequest = request as jest.Mock
+const mockGuardSystemEdit = guardSystemEdit as jest.Mock
 
 const mockSuccessResponse = {
     updateItems: {
@@ -51,6 +56,7 @@ describe('useItemFieldUpdate', () => {
     beforeEach(() => {
         jest.clearAllMocks()
         mockRequest.mockResolvedValue(mockSuccessResponse)
+        mockGuardSystemEdit.mockResolvedValue(true)
     })
 
     it('records WAS_UPDATED_BY against the System node for a scalar item field', async () => {
@@ -143,5 +149,26 @@ describe('useItemFieldUpdate', () => {
         })
 
         invalidateSpy.mockRestore()
+    })
+
+    it('never patches the item when the owning system is not editable', async () => {
+        mockGuardSystemEdit.mockResolvedValue(false)
+        const { useItemFieldUpdate } = await import('../useItemFieldUpdate')
+
+        const { result } = renderHook(() => useItemFieldUpdate('sys-1'), {
+            wrapper: createWrapper(),
+        })
+
+        await act(async () => {
+            await result.current.updateField('item-1', 'notes', 'hello')
+        })
+
+        // Permission is checked against the owning system, not the item.
+        expect(mockGuardSystemEdit).toHaveBeenCalledWith(
+            expect.anything(),
+            'sys-1',
+            expect.any(Function),
+        )
+        expect(mockRequest).not.toHaveBeenCalled()
     })
 })

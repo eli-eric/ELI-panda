@@ -8,14 +8,17 @@ import { message } from '@/i18n/src/messages'
 
 import { useSystemDetail } from '../../hooks/queries/useSystemDetail'
 import { useHierarchyNavigation } from '../../hooks/useHierarchyNavigation'
+import { useSystemEditPermission } from '../../hooks/useSystemEditPermission'
 import { SystemDetailHeader } from './SystemDetailHeader.comp'
 import { SystemDetailTabsContainer } from './SystemDetailTabs.cont'
+import { SystemEditRestrictionBanner } from './SystemEditRestrictionBanner.comp'
 
 export const SystemDetailViewContainer: FC = () => {
     const { formatMessage: fm } = useIntl()
     const { selectedLeafUid, goBackToLeaves, selectParent, clearSelection } =
         useHierarchyNavigation()
     const { system, isLoading, isFetching, error, refetch } = useSystemDetail(selectedLeafUid)
+    const editPermission = useSystemEditPermission(selectedLeafUid)
 
     // Selecting a node in the tree only changes the URL/leaf; the detail query keeps
     // refetchOnMount:false (so secondary consumers like PhysicalItemTab stay cache reads).
@@ -97,6 +100,11 @@ export const SystemDetailViewContainer: FC = () => {
                 onBack={goBackToLeaves}
                 onSelectAncestor={selectParent}
                 isRefreshing={isFetching && !isLoading}
+            />
+            <SystemEditRestrictionBanner
+                status={editPermission.status}
+                responsibles={editPermission.responsibles}
+                refetch={editPermission.refetch}
             />
             <div className="flex-1 min-h-0">
                 <SystemDetailTabsContainer system={system} />

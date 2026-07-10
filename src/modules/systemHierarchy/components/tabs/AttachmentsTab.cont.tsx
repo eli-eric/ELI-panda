@@ -3,6 +3,7 @@ import type { FC } from 'react'
 import FileManager from '@/modules/shared/fileManager/FileManager'
 import { FILE_TYPE } from '@/modules/shared/fileManager/types'
 
+import { useSystemEditPermission } from '../../hooks/useSystemEditPermission'
 import type { SystemLeaf } from '../../types'
 
 interface AttachmentsTabProps {
@@ -10,9 +11,11 @@ interface AttachmentsTabProps {
 }
 
 export const AttachmentsTabContainer: FC<AttachmentsTabProps> = ({ system }) => {
+    const { canEdit } = useSystemEditPermission(system.uid)
+
     return (
         <div className="p-4" data-testid={`attachments-${system.uid}`}>
-            <FileManager itemType={FILE_TYPE.SYSTEM} uid={system.uid} hasEditRole />
+            <FileManager itemType={FILE_TYPE.SYSTEM} uid={system.uid} hasEditRole={canEdit} />
         </div>
     )
 }

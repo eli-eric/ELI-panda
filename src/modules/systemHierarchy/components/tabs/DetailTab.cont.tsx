@@ -18,6 +18,7 @@ import { CODEBOOK } from '@/types/constants/codebook'
 import { SystemLevel } from '@/types/gql/graphql'
 
 import { useSystemFieldUpdate } from '../../hooks/mutations/useSystemFieldUpdate'
+import { useSystemEditPermission } from '../../hooks/useSystemEditPermission'
 import type { SystemLeaf } from '../../types'
 import { SystemCodeActions } from './SystemCodeActions.comp'
 
@@ -43,6 +44,7 @@ export const DetailTabContainer: FC<DetailTabProps> = ({ system }) => {
     })
     const { openLocationModal } = useLocationSelectionModal()
     const { openSystemTypeModal } = useSystemTypeSelectionModal()
+    const { canEdit } = useSystemEditPermission(system.uid)
 
     const handleSaveField = useCallback(
         async (
@@ -50,9 +52,10 @@ export const DetailTabContainer: FC<DetailTabProps> = ({ system }) => {
             value: unknown,
             options?: { displayName?: string | null; previousValue?: unknown },
         ) => {
+            if (!canEdit) return
             await updateField(system.uid, fieldName, value, options)
         },
-        [system.uid, updateField],
+        [canEdit, system.uid, updateField],
     )
 
     return (
@@ -62,6 +65,7 @@ export const DetailTabContainer: FC<DetailTabProps> = ({ system }) => {
                 value={system.name}
                 onSave={value => handleSaveField('name', value, { previousValue: system.name })}
                 isPending={isPending}
+                disabled={!canEdit}
             />
 
             <InlineFieldInput
@@ -71,7 +75,10 @@ export const DetailTabContainer: FC<DetailTabProps> = ({ system }) => {
                     handleSaveField('systemCode', value, { previousValue: system.systemCode })
                 }
                 isPending={isPending}
-                rightAction={<SystemCodeActions system={system} disabled={isPending} />}
+                disabled={!canEdit}
+                rightAction={
+                    <SystemCodeActions system={system} disabled={isPending || !canEdit} />
+                }
             />
 
             <InlineFieldSelect
@@ -82,6 +89,7 @@ export const DetailTabContainer: FC<DetailTabProps> = ({ system }) => {
                     handleSaveField('systemLevel', value, { previousValue: system.systemLevel })
                 }
                 isPending={isPending}
+                disabled={!canEdit}
             />
 
             <InlineFieldModalSelect
@@ -93,6 +101,7 @@ export const DetailTabContainer: FC<DetailTabProps> = ({ system }) => {
                     handleSaveField('systemTypeUid', uid, { displayName })
                 }
                 isPending={isPending}
+                disabled={!canEdit}
             />
 
             <InlineFieldModalSelect
@@ -102,6 +111,7 @@ export const DetailTabContainer: FC<DetailTabProps> = ({ system }) => {
                 onOpenModal={onSelect => openLocationModal(onSelect)}
                 onSave={(uid, displayName) => handleSaveField('locationUid', uid, { displayName })}
                 isPending={isPending}
+                disabled={!canEdit}
             />
 
             <InlineFieldCombobox
@@ -111,6 +121,7 @@ export const DetailTabContainer: FC<DetailTabProps> = ({ system }) => {
                 codebook={CODEBOOK.ZONE}
                 onSave={(uid, displayName) => handleSaveField('zoneUid', uid, { displayName })}
                 isPending={isPending}
+                disabled={!canEdit}
             />
 
             <InlineFieldTextArea
@@ -120,6 +131,7 @@ export const DetailTabContainer: FC<DetailTabProps> = ({ system }) => {
                     handleSaveField('description', value, { previousValue: system.description })
                 }
                 isPending={isPending}
+                disabled={!canEdit}
             />
         </div>
     )

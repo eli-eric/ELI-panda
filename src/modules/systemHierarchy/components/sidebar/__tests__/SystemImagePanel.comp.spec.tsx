@@ -22,6 +22,16 @@ jest.mock('@/hooks/usePermission', () => ({
     default: () => mockHasPermission(),
 }))
 
+const mockCanEditSystem = jest.fn()
+jest.mock('../../../hooks/useSystemEditPermission', () => ({
+    useSystemEditPermission: () => ({
+        canEdit: mockCanEditSystem(),
+        responsibles: [],
+        status: 'allowed',
+        refetch: jest.fn(),
+    }),
+}))
+
 // run the warning-modal callback immediately so we can assert deleteImage is called
 jest.mock('@/hooks/useWarningModal', () => ({
     __esModule: true,
@@ -38,6 +48,7 @@ beforeEach(() => {
     jest.clearAllMocks()
     mockState = { images: [], isLoading: false, isMutating: false }
     mockHasPermission.mockReturnValue(true)
+    mockCanEditSystem.mockReturnValue(true)
 })
 
 describe('SystemImagePanel', () => {
@@ -70,6 +81,14 @@ describe('SystemImagePanel', () => {
         renderWithProviders(<SystemImagePanel systemUid="s1" />)
         expect(screen.getByRole('button', { name: /upload/i })).toBeInTheDocument()
         expect(screen.getByRole('button', { name: /delete/i })).toBeInTheDocument()
+    })
+
+    it('hides upload/delete controls when not responsible for the system', () => {
+        mockCanEditSystem.mockReturnValue(false)
+        mockState.images = [img('1')]
+        renderWithProviders(<SystemImagePanel systemUid="s1" />)
+        expect(screen.queryByRole('button', { name: /upload/i })).not.toBeInTheDocument()
+        expect(screen.queryByRole('button', { name: /delete/i })).not.toBeInTheDocument()
     })
 
     it('disables delete while the selected image is an optimistic temp entry', () => {
