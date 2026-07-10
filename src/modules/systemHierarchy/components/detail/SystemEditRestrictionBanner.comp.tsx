@@ -56,7 +56,15 @@ export const SystemEditRestrictionBanner: FC<Props> = ({ status, responsibles, r
                 {fm({ id: message.systemHierarchy.permission.deniedTitle })}
                 {hasResponsibles && (
                     <Tooltip content={buildResponsiblesTooltip(responsibles)}>
-                        <Info className="size-4 shrink-0 text-muted-foreground" />
+                        <button
+                            type="button"
+                            aria-label={fm({
+                                id: message.systemHierarchy.permission.deniedResponsiblesTooltip,
+                            })}
+                            className="inline-flex shrink-0 cursor-help text-muted-foreground"
+                        >
+                            <Info className="size-4" />
+                        </button>
                     </Tooltip>
                 )}
             </AlertTitle>

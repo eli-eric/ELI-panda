@@ -20,13 +20,16 @@ export interface SystemEditPermission {
 export const useSystemEditPermission = (uid?: string | null): SystemEditPermission => {
     const { data, isLoading, isError, refetch } = useSystemCanEdit(uid)
 
-    const status: SystemEditPermissionStatus = isLoading
-        ? 'loading'
-        : isError
-          ? 'error'
-          : data?.result
-            ? 'allowed'
-            : 'denied'
+    // No uid → the query is disabled (never loads), so treat it as a non-denied
+    // "nothing to decide yet" state rather than letting the ternary fall to 'denied'.
+    const status: SystemEditPermissionStatus =
+        !uid || isLoading
+            ? 'loading'
+            : isError
+              ? 'error'
+              : data?.result
+                ? 'allowed'
+                : 'denied'
 
     return {
         canEdit: status === 'allowed',

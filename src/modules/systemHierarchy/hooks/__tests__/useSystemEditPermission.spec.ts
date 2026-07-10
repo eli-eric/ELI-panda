@@ -34,6 +34,14 @@ describe('useSystemEditPermission', () => {
         expect(result.current.canEdit).toBe(false)
     })
 
+    it('is not denied when no uid is provided (disabled query)', () => {
+        // A disabled query never loads: data undefined, isLoading false, isError false.
+        setQuery({ isLoading: false })
+        const { result } = renderHook(() => useSystemEditPermission(null))
+        expect(result.current.status).toBe('loading')
+        expect(result.current.canEdit).toBe(false)
+    })
+
     it('is fail-closed on fetch error', () => {
         setQuery({ isError: true })
         const { result } = renderHook(() => useSystemEditPermission('s1'))
