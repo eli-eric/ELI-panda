@@ -250,7 +250,9 @@ Consumers call `useSystemEditPermission(system.uid)` directly rather than sharin
 
 ### Out of scope (phase 1)
 
-Spare-parts / spare-for / relationships tabs stay on the coarse `SYSTEM_EDIT` role gate — spare-assign is a REST endpoint the backend already 403-guards, and functional relationships (everything except `HAS_SUBSYSTEM` creation, which routes through Create Subsystem) are on the backend's *not-guarded* list. System **move** relies on its existing backend 403.
+The **Spare Parts / Spare For / Relationships tabs** stay on the coarse `SYSTEM_EDIT` role gate — spare-assign is a REST endpoint the backend already 403-guards, and functional relationships (everything except `HAS_SUBSYSTEM` creation, which routes through Create Subsystem) are on the backend's *not-guarded* list. System **move** relies on its existing backend 403.
+
+Note this is about the *tabs*. The detail-header **`ActionsDropdown`** (which includes an *Assign Spares* entry that merely navigates to the spare-assignment view) is a detail action and *is* per-system gated — a deliberate, safe over-restriction: the backend 403s the actual assign anyway, and an admin gets `result: true`, so no legitimate action is lost.
 
 ## Deep links & URL contract
 

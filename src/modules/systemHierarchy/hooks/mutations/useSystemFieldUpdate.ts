@@ -239,9 +239,13 @@ export const useSystemFieldUpdate = (currentSystem?: SystemFieldCache) => {
             // A responsible/team change may have revoked the user's own access —
             // re-derive can-edit once the save lands.
             if (RESPONSIBILITY_FIELDS.includes(fieldName)) {
-                void promise.then(() =>
-                    queryClient.invalidateQueries({ queryKey: [SYSTEM_CAN_EDIT_QUERY_KEY] }),
-                )
+                void promise
+                    .then(() =>
+                        queryClient.invalidateQueries({ queryKey: [SYSTEM_CAN_EDIT_QUERY_KEY] }),
+                    )
+                    // The failure itself is surfaced by the toast.promise below; this
+                    // side-chain only needs to avoid an unhandled rejection.
+                    .catch(() => {})
             }
 
             // Custom toast messages for systemCode

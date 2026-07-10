@@ -1,11 +1,15 @@
 import { renderHook } from '@testing-library/react'
 
-import { useSystemCanEdit } from '../queries/useSystemCanEdit'
+import {
+    normalizeCanEditResponse,
+    useSystemCanEdit,
+} from '../queries/useSystemCanEdit'
 import { formatResponsibleName, useSystemEditPermission } from '../useSystemEditPermission'
 
-jest.mock('../queries/useSystemCanEdit', () => ({
-    useSystemCanEdit: jest.fn(),
-}))
+jest.mock('../queries/useSystemCanEdit', () => {
+    const actual = jest.requireActual('../queries/useSystemCanEdit')
+    return { ...actual, useSystemCanEdit: jest.fn() }
+})
 
 const mockUseSystemCanEdit = useSystemCanEdit as jest.Mock
 
@@ -63,6 +67,37 @@ describe('useSystemEditPermission', () => {
         expect(result.current.status).toBe('denied')
         expect(result.current.canEdit).toBe(false)
         expect(result.current.responsibles).toEqual([responsible])
+    })
+})
+
+describe('normalizeCanEditResponse', () => {
+    it('reads the documented camelCase shape', () => {
+        expect(
+            normalizeCanEditResponse({ result: true, responsibles: [responsible] }),
+        ).toEqual({ result: true, responsibles: [responsible] })
+    })
+
+    it('tolerates PascalCase field names (gateway serializer drift)', () => {
+        const normalized = normalizeCanEditResponse({
+            Result: true,
+            Responsibles: [
+                {
+                    Uid: 'u1',
+                    FirstName: 'Ann',
+                    LastName: 'Lee',
+                    Username: 'alee',
+                    Email: 'ann.lee@eli.eu',
+                },
+            ],
+        })
+        expect(normalized.result).toBe(true)
+        expect(normalized.responsibles[0]).toEqual(responsible)
+    })
+
+    it('fails closed on a missing/garbage result value', () => {
+        expect(normalizeCanEditResponse({ responsibles: [] }).result).toBe(false)
+        expect(normalizeCanEditResponse({ result: 'true' }).result).toBe(false)
+        expect(normalizeCanEditResponse(null)).toEqual({ result: false, responsibles: [] })
     })
 })
 
