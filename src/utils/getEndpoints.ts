@@ -48,6 +48,7 @@ export const getEndpoints = ({
         systemImage: `/system/${uid}/image`,
         catalogueCategoryCopy: `/catalogue/category/${uid}/copy`,
         systemDetail: `/system/${uid}`,
+        systemCanEdit: uid ? `/system/${uid}/can-edit` : null,
         systemItemAdd: `/system/${uid}/item`,
         systemsDetails: `/systems${uidPart}`,
         systemRelationships: `/system/${uid}/relationships`,

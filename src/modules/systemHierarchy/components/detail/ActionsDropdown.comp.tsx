@@ -15,6 +15,7 @@ import { openItemMoveModal } from '@/modules/shared/form/itemMoving/item-move.mo
 import { useAssignSparesNavigation } from '@/modules/shared/hooks/useAssignSparesNavigation'
 import type { SystemLevel } from '@/types/gql/graphql'
 
+import { useSystemEditPermission } from '../../hooks/useSystemEditPermission'
 import type { SystemLeaf } from '../../types'
 
 interface ActionsDropdownProps {
@@ -23,6 +24,7 @@ interface ActionsDropdownProps {
 
 export const ActionsDropdown: FC<ActionsDropdownProps> = ({ system }) => {
     const { formatMessage: fm } = useIntl()
+    const { canEdit } = useSystemEditPermission(system.uid)
     const hasPhysicalItem = !!system.physicalItem
 
     const handleAssignSpares = useAssignSparesNavigation({
@@ -47,19 +49,25 @@ export const ActionsDropdown: FC<ActionsDropdownProps> = ({ system }) => {
                 {hasPhysicalItem && (
                     <DropdownMenuItem
                         className="cursor-pointer"
+                        disabled={!canEdit}
                         onClick={() => openItemMoveModal(system)}
                     >
                         <Move className="h-4 w-4 mr-2" />
                         {fm({ id: message.systemHierarchy.detail.moveItem })}
                     </DropdownMenuItem>
                 )}
-                <DropdownMenuItem className="cursor-pointer" onClick={handleAssignSpares}>
+                <DropdownMenuItem
+                    className="cursor-pointer"
+                    disabled={!canEdit}
+                    onClick={handleAssignSpares}
+                >
                     <Wrench className="h-4 w-4 mr-2" />
                     {fm({ id: message.systemHierarchy.detail.assignSpares })}
                 </DropdownMenuItem>
                 {!hasPhysicalItem && (
                     <DropdownMenuItem
                         className="cursor-pointer"
+                        disabled={!canEdit}
                         onClick={() => openItemAssignModal(system)}
                     >
                         <Package className="h-4 w-4 mr-2" />

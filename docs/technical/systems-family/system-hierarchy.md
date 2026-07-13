@@ -92,8 +92,8 @@ The leaves panel toggles between **Tree View** (the default `LeavesTable`) and *
 
 | Hook | Operation |
 |---|---|
-| `useSystemFieldUpdate` | PATCH a single field on a `System` — used by inline edit. Calls `updatedByResolver` for audit. |
-| `useItemFieldUpdate` | PATCH a single field on the attached `Item` (serial, usage, condition, notes). Takes `(systemUid, currentItem)`. Records the `WAS_UPDATED_BY` edge on the **owning System node** (not the Item) — same as `systemItem` — so item edits surface in the system's History tab. Builds change entries via `utils/fieldChangeBuilder` and passes them as `updatedByResolver(changes)`; on success invalidates `SYSTEM_DETAIL_QUERY_KEY` + `['history']`. |
+| `useSystemFieldUpdate` | PATCH a single field on a `System` — used by inline edit. Calls `updatedByResolver` for audit. Hard-guards on `guardSystemEdit` before mutating and invalidates `['systemCanEdit']` after a responsible/team change — see [Per-system edit permission](#per-system-edit-permission). |
+| `useItemFieldUpdate` | PATCH a single field on the attached `Item` (serial, usage, condition, notes). Takes `(systemUid, currentItem)`. Records the `WAS_UPDATED_BY` edge on the **owning System node** (not the Item) — same as `systemItem` — so item edits surface in the system's History tab. Builds change entries via `utils/fieldChangeBuilder` and passes them as `updatedByResolver(changes)`; on success invalidates `SYSTEM_DETAIL_QUERY_KEY` + `['history']`. Hard-guards on `guardSystemEdit` (against the owning system) before mutating. |
 | `useSystemCopy` | Calls REST endpoint `system/<uid>/copy` — server orchestrates the recursive copy |
 | `useCreateSubsystem` | `mutation CreateSystems` via `useGraphQLMutation`. Payload assembled by the pure `utils/buildCreateSubsystemPayload`, including `parentSystem.connect`, parent-inherited `responsible/location/zone`, and the required `updatedBy.connect[edge.action=Insert]` so `updatedByResolver` writes a history edge. On success seeds `[SYSTEM_DETAIL_QUERY_KEY, newUid]` with the full SystemDetail fragment returned by the server, then invalidates `HIERARCHY`, `LEAVES`, `LEAVES_COUNT`, and `RELATIONSHIP_GRAPH` keys. |
 | `useDeleteSystem` | `queryMutate('system', 'delete', { uid })` — REST `DELETE /system/{uid}` (soft + recursive: `deleted=true` on the system and every subsystem). `onSuccess` stays **synchronous** so the delete resolves immediately: fires an instant invalidate of `HIERARCHY`, `LEAVES`, `LEAVES_COUNT`, `RELATIONSHIP_GRAPH`, then a background `recalculateSpareParts` POST that triggers a **second** invalidate on success (`.catch` swallows recalc failure so it can't mask the delete). UX orchestration (confirm, toast, 409, selection reset) lives in `useDeleteSystemAction` — see [Delete System](#delete-system). |
@@ -179,7 +179,7 @@ Override semantics come entirely from `useItemPropertiesData`: service items are
 
 User-facing companion: [Creating systems](../../user-guide/systemHierarchy/workflows/creating-systems.md).
 
-The right-click context menu on a tree node offers **Create System** alongside Copy / Paste. The orchestrator is `hooks/useCreateSubsystemAction.ts` — it mirrors `useSystemCopyPaste`: gated by `usePermission([ROLE.SYSTEM_EDIT])`, opens `CreateSubsystemDialog` through `useDynamicModalStore` with a stable id `create-subsystem-${parentUid}`.
+The right-click context menu on a tree node offers **Create System** alongside Copy / Paste. The orchestrator is `hooks/useCreateSubsystemAction.ts` — it mirrors `useSystemCopyPaste`: gated by `usePermission([ROLE.SYSTEM_EDIT])` (first-line filter) plus a per-system `guardSystemEdit` check-on-click against the **parent** uid ([Per-system edit permission](#per-system-edit-permission)), then opens `CreateSubsystemDialog` through `useDynamicModalStore` with a stable id `create-subsystem-${parentUid}`.
 
 Parent → allowed-child rules are a pure lookup table in `utils/systemLevelRules.ts`:
 
@@ -205,7 +205,7 @@ User-facing companion: [Deleting systems](../../user-guide/systemHierarchy/workf
 
 Right-click **Delete System** is available on all three system surfaces — tree node (`TreeNode`), leaves table row (`LeavesTable`), and graph node (`SystemNode`). All three call a single orchestrator, `hooks/useDeleteSystemAction.ts`, layered on the `useDeleteSystem` mutation. It returns `{ canEdit, handleDeleteSystem, isPending }`:
 
-- **Permission** — `usePermission([ROLE.SYSTEM_EDIT])`. `handleDeleteSystem` also re-checks `!canEdit || isPending` so an in-flight delete can't be re-fired. The guard is per hook-instance — only one context menu is open at a time, so that's the only reachable double-fire path.
+- **Permission** — `usePermission([ROLE.SYSTEM_EDIT])`. `handleDeleteSystem` also re-checks `!canEdit || isPending` so an in-flight delete can't be re-fired, then runs a per-system `guardSystemEdit` check-on-click against the target uid before the confirm ([Per-system edit permission](#per-system-edit-permission)) — belt-and-suspenders with the backend's own 403 on `DELETE /system/{uid}`. The guard is per hook-instance — only one context menu is open at a time, so that's the only reachable double-fire path.
 - **Confirm** — wraps the mutation in `useWarningModal` with recursive wording (`systemHierarchy.delete.confirm` — "…and all its sub-systems"). The backend delete is recursive + soft, so the wording holds even for childless rows.
 - **Feedback** — `toast.promise` (loading / success / error). On HTTP **409** the backend returns the blocking physical items as a bare `SystemPhysicalItemInfo[]` (read from `err.response.data`); the toast lists up to `MAX_LISTED_ITEMS = 3` item names with a locale-neutral `(+N)` overflow, and falls back to a generic message when the body is empty/unparseable.
 - **Selection reset** — on success, `isOpenOrAncestor(uid)` decides whether to call `clearSelection()` (new `useHierarchyNavigation` action that drops `parent`/`leaf`/`tab` from the URL). It returns true when the deleted uid is the open leaf or selected parent, an **ancestor of the open leaf** (via `useSystemDetail(selectedLeafUid).parentPath` — the leaf can be opened with a stale `parent`), or an **ancestor of the selected parent** (via `findHierarchyPath(nodes, selectedParentUid)`). This stops the detail panel pointing at a node the recursive delete just removed.
@@ -213,6 +213,46 @@ Right-click **Delete System** is available on all three system surfaces — tree
 Gating convention matches Copy/Paste/Create: tree + table **render the item `disabled`** when `!canEdit`; the graph **omits** it (`useRelationshipGraphContainerState` passes `onDeleteSystem` only when `canEdit`). The graph callback is threaded node-ward through `useRelationshipGraphFlow` → `utils/graphTransformers`, the same path as `onCopySystem`.
 
 `LeavesTable` wraps its content in a Radix `ContextMenu` **only when `onDeleteSystem` is provided** (otherwise the trigger would suppress the native right-click menu with nothing to show). The right-clicked row is captured by a capture-phase reset on the wrapper (clears the target) plus a bubble-phase `onContextMenu` per row (re-sets it) — so right-clicking empty table area leaves the item disabled.
+
+## Per-system edit permission
+
+User-facing companion: [Understanding edit permissions](../../user-guide/systemHierarchy/workflows/edit-permissions.md). Cross-cutting model: [Permissions model → per-system edit](../permissions-model.md#per-system-edit-responsibility).
+
+`ROLE.SYSTEM_EDIT` (the coarse gate above) answers "may this user edit *systems at all*". A second, finer check answers "may they edit *this* system" — a user may edit only if they are responsible for it directly, via its `responsibleTeam`, or via any ancestor up the `HAS_SUBSYSTEM` chain. The backend owns that decision and exposes it as a REST read:
+
+```
+GET /system/{uid}/can-edit → { result: boolean, responsibles: User[] }
+```
+
+`result` already folds in the role check (a non-`systems-edit` user gets `false`); `responsibles` is always returned (deduped across the system + ancestors) so the UI can point a blocked user at someone.
+
+Why the frontend enforces it at all: the backend guards its **REST** mutating endpoints with a 403, but this module mutates via **GraphQL** (`updateSystems`, `updateItems`, `createSystems`), which `System.@authorization` gates by role only — not per-system. So until those mutations migrate to guarded REST PATCH endpoints, the client must block the GraphQL patch path itself.
+
+### Surface
+
+| File | Role |
+|---|---|
+| `hooks/queries/useSystemCanEdit.ts` | `useSystemCanEdit(uid)` — `queryFetcher('systemCanEdit')` (REST), key `['systemCanEdit', { uid }]`, `staleTime: 0`. Also exports `ensureSystemCanEdit(qc, uid)` (imperative, shared cache) and `SYSTEM_CAN_EDIT_QUERY_KEY`. |
+| `hooks/useSystemEditPermission.ts` | The single decision point. Wraps `useSystemCanEdit` and derives `{ canEdit, responsibles, status, refetch }`. **Fail-closed**: `canEdit` is `true` only when `status === 'allowed'` — `false` while `loading` and on `error`, so an un-verifiable state never leaves editing open. Also exports `formatResponsibleName`. |
+| `utils/guardSystemEdit.ts` | `guardSystemEdit(qc, uid, fm)` — imperative gate for mutation hooks and check-on-click actions. Reads `ensureSystemCanEdit`, and on denial (or verification failure — fail-closed) toasts the responsibles and returns `false`. |
+| `components/detail/SystemEditRestrictionBanner.comp.tsx` | Banner under `SystemDetailHeader`. `denied` → lists responsibles (name + email, Info-tooltip); `error` → a **distinct** "couldn't verify — Retry" state (never the not-responsible copy, which would misattribute a network fault); `loading`/`allowed` → renders nothing. |
+
+Consumers call `useSystemEditPermission(system.uid)` directly rather than sharing a React context — React Query dedups by uid, and the same `system.uid` is read from both the detail-view tree and the separate sidebar tree (`SystemImagePanel`), which a single provider couldn't cover.
+
+### Enforcement (defense-in-depth)
+
+- **UI disable** — every editable detail surface takes `disabled={!canEdit}`: all `DetailTab` fields (incl. the system-code row + `SystemCodeActions`), `PersonsTab` responsible/team + both `EmployeeAssignmentTable`s, `PhysicalItemTab` fields, `AttachmentsTab` (`FileManager hasEditRole={canEdit}`), `SystemImagePanel` (`usePermission([SYSTEM_EDIT]) && canEdit`), and the `ActionsDropdown` items.
+- **Hard guard in the mutation hooks** — `useSystemFieldUpdate` and `useItemFieldUpdate` `await guardSystemEdit(...)` before `mutateAsync` and abort if denied, so an unpermitted GraphQL patch can't fire even if the UI is bypassed. `useItemFieldUpdate` checks the **owning system** uid, not the item.
+- **Self-lockout** — after a `responsibleUid`/`responsibleTeamUid` save, `useSystemFieldUpdate` invalidates `['systemCanEdit']`; if the user reassigned responsibility away from themselves, the controls re-disable without a reload (mirrors what the backend will enforce).
+- **Check-on-click for imperative actions** — `useCreateSubsystemAction` (against the **parent** uid) and `useDeleteSystemAction` (against the **target** uid) keep the coarse role check as a cheap first-line filter, then `await guardSystemEdit(...)` before opening the dialog / confirm; on denial they toast the responsibles and return. This avoids an N-node prefetch across the tree.
+
+`EmployeeAssignmentTable` (shared, `src/modules/shared/system/employee-assignment/`) gained an optional `canEdit?: boolean` prop that ANDs with its internal `SYSTEM_EDIT` role check (defaults to `true`, so other callers are unaffected).
+
+### Out of scope (phase 1)
+
+The **Spare Parts / Spare For / Relationships tabs** stay on the coarse `SYSTEM_EDIT` role gate — spare-assign is a REST endpoint the backend already 403-guards, and functional relationships (everything except `HAS_SUBSYSTEM` creation, which routes through Create Subsystem) are on the backend's *not-guarded* list. System **move** relies on its existing backend 403.
+
+Note this is about the *tabs*. The detail-header **`ActionsDropdown`** (which includes an *Assign Spares* entry that merely navigates to the spare-assignment view) is a detail action and *is* per-system gated — a deliberate, safe over-restriction: the backend 403s the actual assign anyway, and an admin gets `result: true`, so no legitimate action is lost.
 
 ## Deep links & URL contract
 
@@ -305,9 +345,10 @@ Unit coverage under `__tests__/` is heaviest in:
 - `types/__tests__/` — schema parsing.
 - `utils/__tests__/` — tree search, graph layout, filter predicates, change-builder, **parent→child level rules** (`systemLevelRules.spec.ts`), **create-subsystem payload builder** (`buildCreateSubsystemPayload.spec.ts` — locks the `updatedBy[Insert]` audit edge).
 - `hooks/queries/__tests__/` — `primeSystemDetailCache.test.ts` (the contract above), `useSystemLeaves.test.ts`, `useSystemLeavesCount.test.ts`.
-- `hooks/mutations/__tests__/` — `useSystemFieldUpdate.spec.ts`, `useItemFieldUpdate.spec.ts` (locks the System-node `WAS_UPDATED_BY` edge + change entries for item edits), `useDeleteSystem.spec.ts` (immediate invalidate + background recalc → second invalidate; recalc failure keeps only the immediate round).
+- `hooks/mutations/__tests__/` — `useSystemFieldUpdate.spec.ts` (also: guard blocks the patch when denied, `['systemCanEdit']` invalidated after a responsible change), `useItemFieldUpdate.spec.ts` (locks the System-node `WAS_UPDATED_BY` edge + change entries for item edits; guard checks the owning system), `useDeleteSystem.spec.ts` (immediate invalidate + background recalc → second invalidate; recalc failure keeps only the immediate round).
+- **Per-system permission** — `hooks/__tests__/useSystemEditPermission.spec.ts` (fail-closed derivation for loading/error/allowed/denied + `formatResponsibleName`), `utils/__tests__/guardSystemEdit.spec.ts` (allow / deny-with-toast / no-responsibles / fail-closed-on-throw), `components/detail/__tests__/SystemEditRestrictionBanner.spec.tsx` (denied lists responsibles, distinct verify-error + retry, nothing while loading/allowed).
 - `hooks/__tests__/useHierarchyDeepLinkResolver.spec.tsx` — parent resolution from `parentPath`, root parent==leaf case, stale-uid guard, single-replace idempotency, re-resolution after the URL settles; `utils/__tests__/hierarchyLinks.spec.ts` — deep-link shape + encoding; `components/detail/__tests__/SystemDetailView.spec.tsx` — skeleton / not-found / loaded states.
-- `hooks/__tests__/useDeleteSystemAction.spec.tsx` — permission gate, in-flight re-entry guard, recursive confirm, 409 item-list + `(+N)` overflow + generic fallback, and selection reset for both open-leaf-ancestor and selected-parent-ancestor.
+- `hooks/__tests__/useDeleteSystemAction.spec.tsx` — permission gate, in-flight re-entry guard, per-system check-on-click block, recursive confirm, 409 item-list + `(+N)` overflow + generic fallback, and selection reset for both open-leaf-ancestor and selected-parent-ancestor; `hooks/__tests__/useCreateSubsystemAction.spec.tsx` — role gate + per-parent check-on-click.
 - `components/{tree,leaves,filters,graph,detail,copy,create,shared,tabs,physical-item}/__tests__/` — `physical-item/` covers the grouped renderer and sidebar wrapper (grouping, override marker, service-only additions, empty → hidden); the Delete context item is covered in `tree/TreeNode.test.tsx`, `graph/SystemNode.test.tsx`, and `leaves/LeavesTable.test.tsx` (the last stubs the virtualized `PandaTableV2` to exercise the capture/bubble row capture, disabled-on-empty-area, and no-handler short-circuit).
 
 ## Deprecated / legacy
@@ -334,4 +375,4 @@ Unit coverage under `__tests__/` is heaviest in:
 
 > 🔧 *Engineer-only; stripped from the wiki.*
 >
-> Relevant schema: `System`, `SystemInterface`, `ParentPathItem` (`src/server/apollo/schema.graphql:266-369`). Relationship registry: `src/modules/systemHierarchy/types/graph.ts` (`RELATIONSHIP_DEFINITIONS`). Endpoint keys consumed: `systemsHierarchy`, `systemSubsystems`, `systemDetail`, `systemRelationships`, `system/<uid>/copy`, `system` (`DELETE /system/{uid}`, soft+recursive, 409 → `SystemPhysicalItemInfo[]`), `recalculateSpareParts`.
+> Relevant schema: `System`, `SystemInterface`, `ParentPathItem` (`src/server/apollo/schema.graphql:266-369`). Relationship registry: `src/modules/systemHierarchy/types/graph.ts` (`RELATIONSHIP_DEFINITIONS`). Endpoint keys consumed: `systemsHierarchy`, `systemSubsystems`, `systemDetail`, `systemCanEdit` (`GET /system/{uid}/can-edit` → `{ result, responsibles }`; `/v1` prefix is already in `BASE_URL`), `systemRelationships`, `system/<uid>/copy`, `system` (`DELETE /system/{uid}`, soft+recursive, 409 → `SystemPhysicalItemInfo[]`), `recalculateSpareParts`.

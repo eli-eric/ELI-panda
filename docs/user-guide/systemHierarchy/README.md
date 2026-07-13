@@ -8,22 +8,24 @@ The System Hierarchy module is the central place to browse, organize, and inspec
 
 **Today's reality:**
 - `systems-view` — read-only.
-- `systems-edit` and `admin` — both grant full edit on every system (functionally equivalent right now).
+- `systems-edit` — edit systems you are **responsible** for (directly, via a responsible team, or via an ancestor); see [Understanding edit permissions](./workflows/edit-permissions.md).
+- `admin` — edit any system.
 
 **Personas (today):**
 
 | Persona | Role(s) | Can do |
 |---|---|---|
 | 👁️ **Viewer** | `systems-view` | Browse the tree, view details, view relationships, search and filter, view change history |
-| ✏️ **Editor / Admin** | `systems-edit` or `admin` | Everything in Viewer + edit fields, manage persons, manage relationships, **use and remove spare parts** (feature-flag gated in production), **create subsystems**, copy systems, **delete systems**, assign and move physical items |
+| ✏️ **Editor** | `systems-edit` | Everything in Viewer + on systems you are **responsible for**: edit fields, manage persons, manage relationships, **use and remove spare parts** (feature-flag gated in production), **create subsystems**, copy systems, **delete systems**, assign and move physical items |
+| 🛠️ **Admin** | `admin` | The Editor capabilities on **any** system, regardless of responsibility |
 
 > 🔮 **Coming soon — Phase 1: split between Editor and Admin**
 > - **Admin** will have exclusive edit on systems at `SYSTEM_DOMAIN` and `TECHNOLOGY_UNIT` levels (the strategic top of the tree).
 > - **Editor** (`systems-edit`) will be restricted to `KEY_SYSTEMS`, `SUBSYSTEMS_AND_PARTS`, and `TRASH` levels.
 > - All derived actions (relationships, persons, items, copy/paste) inherit the same level scope.
 
-> 🔮 **Coming soon — Phase 2: team-based scoping (policy today, enforced later)**
-> Each system has a *responsible person* and a *responsible team*. Only members of the responsible team should edit that system and its subtree. **Today this is policy only — please follow it manually**; technical enforcement is planned but the data structure for it is not yet in place.
+> ✅ **Now enforced — responsibility-based editing**
+> Each system has a *responsible person* and a *responsible team*. You may edit a system only if you are responsible for it (directly, via its responsible team, or via an ancestor), or if it is unowned, or if you are an admin. This is now enforced — not just policy. See [Understanding edit permissions](./workflows/edit-permissions.md).
 
 ## Key concepts
 
@@ -33,7 +35,7 @@ The System Hierarchy module is the central place to browse, organize, and inspec
 - **System type** — codebook classification of *what kind* of system this is. Used for code generation and filtering.
 - **System code** — short identifier for the system, generated based on type, level, and ancestry.
 - **Responsible person** — the employee accountable for a system.
-- **Responsible team** — the team accountable for a system. Governs edit policy (Phase 2).
+- **Responsible team** — the team accountable for a system. Members may edit the system and its subtree — see [Understanding edit permissions](./workflows/edit-permissions.md).
 - **Owner** — computed read-only ownership marker.
 - **Operators** — employees authorized to operate the system day-to-day.
 - **Maintained by** — employees responsible for maintenance of the system.
@@ -58,6 +60,7 @@ When a system is selected for full detail view, a tabbed area replaces the leave
 
 ## Common workflows
 
+- [Understanding edit permissions](./workflows/edit-permissions.md) — who can edit a given system, what a blocked user sees, and how to find the responsible person to contact.
 - [Navigating the tree](./workflows/navigating-the-tree.md) — expanding the tree, breadcrumb navigation, switching between table and graph views in the leaves panel.
 - [Searching and filtering](./workflows/searching-and-filtering.md) — search box and the multi-field filter sheet for the leaves panel.
 - [Editing system details](./workflows/editing-system-details.md) — inline edit of name, code, level, type, location, zone, description on the *Detail* tab. Includes system code generation and the special meaning of the `TRASH` level.
@@ -75,7 +78,7 @@ For moving a system to a different parent, see the **Systems Moving** module —
 ## Coming soon
 
 - 🔮 **Permission Phase 1** — split `admin` (top-level system edits at `SYSTEM_DOMAIN`, `TECHNOLOGY_UNIT`) from `systems-edit` (lower levels at `KEY_SYSTEMS`, `SUBSYSTEMS_AND_PARTS`, `TRASH`). All derived actions scoped accordingly.
-- 🔮 **Permission Phase 2** — team-based edit enforcement (responsible-team membership required to edit subtree). DB structure pending.
+- 🔮 **Permission Phase 2 (remaining)** — responsibility-based editing is now enforced in System Hierarchy; the remaining work is applying the same rule at the raw-data (GraphQL schema) layer so it holds everywhere, not only in this module.
 - 🔮 **Use Spare in production** — the spare-swap wizard is live in System Hierarchy in non-production environments. The `enableSparePartsAssignment` feature flag still hides it in production; once enabled the button becomes active everywhere.
 - 🔮 **Drag-and-drop move at hierarchy level** — currently move lives in the separate Systems Moving module.
 

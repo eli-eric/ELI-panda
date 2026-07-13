@@ -10,7 +10,7 @@ This workflow covers two actions exposed from the system detail's **Actions** me
 
 ✏️ **Editor / Admin** — both Assign Item and Move Item require the `systems-edit` role.
 
-> 🔮 *Coming soon — Phase 1 / Phase 2 permissions:* the same level- and team-based scoping described in [Access & Responsibilities](../README.md#access--responsibilities) will apply to item operations.
+> ✅ Editing a physical item's fields requires that you are **responsible** for its system (now enforced) — see [Understanding edit permissions](./edit-permissions.md). Level-based scoping (Phase 1) is still upcoming.
 
 See [Access & Responsibilities](../README.md#access--responsibilities) for what these personas mean.
 

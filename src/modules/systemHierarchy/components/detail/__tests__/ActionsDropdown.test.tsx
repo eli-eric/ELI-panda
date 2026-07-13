@@ -20,6 +20,16 @@ jest.mock('@/modules/shared/hooks/useAssignSparesNavigation', () => ({
     useAssignSparesNavigation: () => mockAssignSpares,
 }))
 
+const mockCanEditSystem = jest.fn()
+jest.mock('../../../hooks/useSystemEditPermission', () => ({
+    useSystemEditPermission: () => ({
+        canEdit: mockCanEditSystem(),
+        responsibles: [],
+        status: 'allowed',
+        refetch: jest.fn(),
+    }),
+}))
+
 // Mock Radix dropdown to render content directly (avoids portal/pointer issues)
 jest.mock('@/components/ui/dropdown-menu', () => ({
     DropdownMenu: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
@@ -75,6 +85,7 @@ const renderDropdown = (system: SystemLeaf) =>
 describe('ActionsDropdown', () => {
     beforeEach(() => {
         jest.clearAllMocks()
+        mockCanEditSystem.mockReturnValue(true)
     })
 
     it('renders Move Item when system has physicalItem', () => {
@@ -118,5 +129,12 @@ describe('ActionsDropdown', () => {
         renderDropdown(baseSystem)
         fireEvent.click(screen.getByText('Assign Spares'))
         expect(mockAssignSpares).toHaveBeenCalled()
+    })
+
+    it('disables the actions when the user cannot edit the system', () => {
+        mockCanEditSystem.mockReturnValue(false)
+        renderDropdown(systemWithPhysicalItem)
+        expect(screen.getByText('Move Item').closest('button')).toBeDisabled()
+        expect(screen.getByText('Assign Spares').closest('button')).toBeDisabled()
     })
 })

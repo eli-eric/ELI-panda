@@ -4,14 +4,17 @@ import { toast } from 'sonner'
 import { usePermission } from '@/hooks/usePermission'
 import useWarningModal from '@/hooks/useWarningModal'
 
+import { guardSystemEdit } from '../../utils/guardSystemEdit'
 import { useDeleteSystem } from '../mutations/useDeleteSystem'
 import { useSystemDetail } from '../queries/useSystemDetail'
 import { useSystemHierarchy } from '../queries/useSystemHierarchy'
 import { useDeleteSystemAction } from '../useDeleteSystemAction'
 import { useHierarchyNavigation } from '../useHierarchyNavigation'
 
+jest.mock('@tanstack/react-query', () => ({ useQueryClient: () => ({}) }))
 jest.mock('@/hooks/usePermission', () => ({ usePermission: jest.fn() }))
 jest.mock('@/hooks/useWarningModal', () => ({ __esModule: true, default: jest.fn() }))
+jest.mock('../../utils/guardSystemEdit', () => ({ guardSystemEdit: jest.fn() }))
 jest.mock('../mutations/useDeleteSystem', () => ({ useDeleteSystem: jest.fn() }))
 jest.mock('../queries/useSystemDetail', () => ({ useSystemDetail: jest.fn() }))
 jest.mock('../queries/useSystemHierarchy', () => ({ useSystemHierarchy: jest.fn() }))
@@ -25,6 +28,7 @@ jest.mock('react-intl', () => ({
 }))
 
 const mockUsePermission = usePermission as jest.Mock
+const mockGuardSystemEdit = guardSystemEdit as jest.Mock
 const mockUseWarningModal = useWarningModal as unknown as jest.Mock
 const mockUseDeleteSystem = useDeleteSystem as jest.Mock
 const mockUseSystemDetail = useSystemDetail as jest.Mock
@@ -52,6 +56,8 @@ beforeEach(() => {
     lastConfirmMessage = undefined
 
     mockUsePermission.mockReturnValue(true)
+    // Per-system check passes by default; overridden per test.
+    mockGuardSystemEdit.mockResolvedValue(true)
     // withWarningModal(cb, msg) → trigger that runs cb immediately (simulating confirm)
     mockUseWarningModal.mockReturnValue(
         (cb: (...args: unknown[]) => void, msg?: string) =>
@@ -76,41 +82,41 @@ const getToastHandlers = () => {
 }
 
 describe('useDeleteSystemAction', () => {
-    it('does nothing when the user lacks edit permission', () => {
+    it('does nothing when the user lacks edit permission', async () => {
         mockUsePermission.mockReturnValue(false)
         const { result } = renderHook(() => useDeleteSystemAction())
 
-        act(() => result.current.handleDeleteSystem('sys-1', 'Pump A'))
+        await act(async () => result.current.handleDeleteSystem('sys-1', 'Pump A'))
 
         expect(mockToastPromise).not.toHaveBeenCalled()
         expect(mutateAsync).not.toHaveBeenCalled()
     })
 
-    it('ignores re-entry while a delete is already in flight', () => {
+    it('ignores re-entry while a delete is already in flight', async () => {
         mockUseDeleteSystem.mockReturnValue({ mutateAsync, isPending: true })
         const { result } = renderHook(() => useDeleteSystemAction())
 
-        act(() => result.current.handleDeleteSystem('sys-1', 'Pump A'))
+        await act(async () => result.current.handleDeleteSystem('sys-1', 'Pump A'))
 
         expect(mockToastPromise).not.toHaveBeenCalled()
         expect(mutateAsync).not.toHaveBeenCalled()
     })
 
-    it('confirms with recursive wording then deletes via the mutation', () => {
+    it('confirms with recursive wording then deletes via the mutation', async () => {
         const { result } = renderHook(() => useDeleteSystemAction())
 
-        act(() => result.current.handleDeleteSystem('sys-1', 'Pump A'))
+        await act(async () => result.current.handleDeleteSystem('sys-1', 'Pump A'))
 
         expect(lastConfirmMessage).toBe('systemHierarchy.delete.confirm|Pump A')
         expect(mutateAsync).toHaveBeenCalledWith({ uid: 'sys-1' })
         expect(mockToastPromise).toHaveBeenCalledTimes(1)
     })
 
-    it('resets selection on success when the deleted system is currently open', () => {
+    it('resets selection on success when the deleted system is currently open', async () => {
         setNavigation({ selectedLeafUid: 'sys-1' })
         const { result } = renderHook(() => useDeleteSystemAction())
 
-        act(() => result.current.handleDeleteSystem('sys-1', 'Pump A'))
+        await act(async () => result.current.handleDeleteSystem('sys-1', 'Pump A'))
         const { success } = getToastHandlers()
         const successMessage = success()
 
@@ -118,20 +124,20 @@ describe('useDeleteSystemAction', () => {
         expect(successMessage).toBe('systemHierarchy.delete.success|Pump A')
     })
 
-    it('resets selection when the deleted system is an ancestor of the open node', () => {
+    it('resets selection when the deleted system is an ancestor of the open node', async () => {
         mockUseSystemHierarchy.mockReturnValue({
             nodes: [{ uid: 'root', children: [{ uid: 'child', children: [] }] }],
         })
         setNavigation({ selectedParentUid: 'child' })
         const { result } = renderHook(() => useDeleteSystemAction())
 
-        act(() => result.current.handleDeleteSystem('root', 'Root'))
+        await act(async () => result.current.handleDeleteSystem('root', 'Root'))
         getToastHandlers().success()
 
         expect(clearSelection).toHaveBeenCalledTimes(1)
     })
 
-    it('resets selection when the deleted system is an ancestor of the open detail leaf', () => {
+    it('resets selection when the deleted system is an ancestor of the open detail leaf', async () => {
         // Leaf opened via selectLeaf — parent stays on an unrelated root.
         mockUseSystemDetail.mockReturnValue({
             system: { parentPath: [{ uid: 'root' }, { uid: 'mid' }] },
@@ -140,26 +146,26 @@ describe('useDeleteSystemAction', () => {
         setNavigation({ selectedLeafUid: 'leaf-x', selectedParentUid: 'unrelated-root' })
         const { result } = renderHook(() => useDeleteSystemAction())
 
-        act(() => result.current.handleDeleteSystem('mid', 'Mid'))
+        await act(async () => result.current.handleDeleteSystem('mid', 'Mid'))
         getToastHandlers().success()
 
         expect(clearSelection).toHaveBeenCalledTimes(1)
     })
 
-    it('does not reset selection when an unrelated system is deleted', () => {
+    it('does not reset selection when an unrelated system is deleted', async () => {
         setNavigation({ selectedParentUid: 'other', selectedLeafUid: 'other' })
         const { result } = renderHook(() => useDeleteSystemAction())
 
-        act(() => result.current.handleDeleteSystem('sys-1', 'Pump A'))
+        await act(async () => result.current.handleDeleteSystem('sys-1', 'Pump A'))
         getToastHandlers().success()
 
         expect(clearSelection).not.toHaveBeenCalled()
     })
 
-    it('lists the blocking physical items on a 409 conflict', () => {
+    it('lists the blocking physical items on a 409 conflict', async () => {
         const { result } = renderHook(() => useDeleteSystemAction())
 
-        act(() => result.current.handleDeleteSystem('sys-1', 'Pump A'))
+        await act(async () => result.current.handleDeleteSystem('sys-1', 'Pump A'))
         const message = getToastHandlers().error({
             response: {
                 status: 409,
@@ -170,10 +176,10 @@ describe('useDeleteSystemAction', () => {
         expect(message).toBe('systemHierarchy.delete.conflict|Pump A|Item A, Item B')
     })
 
-    it('caps the listed items and appends a locale-neutral overflow count', () => {
+    it('caps the listed items and appends a locale-neutral overflow count', async () => {
         const { result } = renderHook(() => useDeleteSystemAction())
 
-        act(() => result.current.handleDeleteSystem('sys-1', 'Pump A'))
+        await act(async () => result.current.handleDeleteSystem('sys-1', 'Pump A'))
         const message = getToastHandlers().error({
             response: {
                 status: 409,
@@ -189,21 +195,36 @@ describe('useDeleteSystemAction', () => {
         expect(message).toBe('systemHierarchy.delete.conflict|Pump A|Item A, Item B, Item C (+1)')
     })
 
-    it('uses the generic conflict message when the 409 body is empty', () => {
+    it('uses the generic conflict message when the 409 body is empty', async () => {
         const { result } = renderHook(() => useDeleteSystemAction())
 
-        act(() => result.current.handleDeleteSystem('sys-1', 'Pump A'))
+        await act(async () => result.current.handleDeleteSystem('sys-1', 'Pump A'))
         const message = getToastHandlers().error({ response: { status: 409, data: [] } })
 
         expect(message).toBe('systemHierarchy.delete.conflictGeneric|Pump A')
     })
 
-    it('uses the generic error message for non-409 failures', () => {
+    it('uses the generic error message for non-409 failures', async () => {
         const { result } = renderHook(() => useDeleteSystemAction())
 
-        act(() => result.current.handleDeleteSystem('sys-1', 'Pump A'))
+        await act(async () => result.current.handleDeleteSystem('sys-1', 'Pump A'))
         const message = getToastHandlers().error({ response: { status: 500 } })
 
         expect(message).toBe('systemHierarchy.delete.error|Pump A')
+    })
+
+    it('checks per-system permission for the target and blocks when not responsible', async () => {
+        mockGuardSystemEdit.mockResolvedValue(false)
+        const { result } = renderHook(() => useDeleteSystemAction())
+
+        await act(async () => result.current.handleDeleteSystem('sys-1', 'Pump A'))
+
+        expect(mockGuardSystemEdit).toHaveBeenCalledWith(
+            expect.anything(),
+            'sys-1',
+            expect.any(Function),
+        )
+        expect(mockToastPromise).not.toHaveBeenCalled()
+        expect(mutateAsync).not.toHaveBeenCalled()
     })
 })

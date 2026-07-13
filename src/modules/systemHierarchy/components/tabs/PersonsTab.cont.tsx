@@ -16,6 +16,7 @@ import { CODEBOOK } from '@/types/constants/codebook'
 import { SystemLevel } from '@/types/gql/graphql'
 
 import { useSystemFieldUpdate } from '../../hooks/mutations/useSystemFieldUpdate'
+import { useSystemEditPermission } from '../../hooks/useSystemEditPermission'
 import type { SystemLeaf } from '../../types'
 import { SYSTEM_DETAIL_QUERY_KEY } from '../../types/constants'
 
@@ -26,6 +27,7 @@ interface PersonsTabProps {
 export const PersonsTabContainer: FC<PersonsTabProps> = ({ system }) => {
     const { formatMessage: fm } = useIntl()
     const queryClient = useQueryClient()
+    const { canEdit } = useSystemEditPermission(system.uid)
 
     const refreshSystemDetail = useCallback(() => {
         void queryClient.invalidateQueries({ queryKey: [SYSTEM_DETAIL_QUERY_KEY] })
@@ -65,9 +67,10 @@ export const PersonsTabContainer: FC<PersonsTabProps> = ({ system }) => {
             value: unknown,
             options?: { displayName?: string | null; previousValue?: unknown },
         ) => {
+            if (!canEdit) return
             await updateField(system.uid, fieldName, value, options)
         },
-        [system.uid, updateField],
+        [canEdit, system.uid, updateField],
     )
 
     const operators = system.operators ?? []
@@ -87,6 +90,7 @@ export const PersonsTabContainer: FC<PersonsTabProps> = ({ system }) => {
                     handleSaveField('responsibleUid', uid, { displayName })
                 }
                 isPending={isPending}
+                disabled={!canEdit}
             />
 
             <InlineFieldCombobox
@@ -108,6 +112,7 @@ export const PersonsTabContainer: FC<PersonsTabProps> = ({ system }) => {
                     handleSaveField('responsibleTeamUid', uid, { displayName })
                 }
                 isPending={isPending}
+                disabled={!canEdit}
             />
 
             {showEmployeeTables && (
@@ -119,6 +124,7 @@ export const PersonsTabContainer: FC<PersonsTabProps> = ({ system }) => {
                         onAdd={async employee => addOperator(employee.uid)}
                         onRemove={removeOperator}
                         isLoading={isEmployeeMutationPending}
+                        canEdit={canEdit}
                     />
 
                     <EmployeeAssignmentTable
@@ -128,6 +134,7 @@ export const PersonsTabContainer: FC<PersonsTabProps> = ({ system }) => {
                         onAdd={async employee => addMaintainedBy(employee.uid)}
                         onRemove={removeMaintainedBy}
                         isLoading={isEmployeeMutationPending}
+                        canEdit={canEdit}
                     />
                 </div>
             )}

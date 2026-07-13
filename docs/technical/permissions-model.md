@@ -4,7 +4,7 @@ How ELI PANDA expresses, stores, and enforces user permissions today, and the pl
 
 ## Overview
 
-Permissions are **flat, role-based, and JWT-carried**. A user has a set of role codes; each route, GraphQL operation, and UI control checks "does the user hold *any* of these roles?". There is no inheritance, no per-resource ACL, and (today) no team-scoped enforcement — the latter is policy-only and tracked under [🔮 Planned](#-planned).
+Permissions are **flat, role-based, and JWT-carried**. A user has a set of role codes; each route, GraphQL operation, and UI control checks "does the user hold *any* of these roles?". There is no inheritance and no per-resource ACL in the GraphQL schema. The one exception now live is **[per-system edit responsibility](#per-system-edit-responsibility)** — a per-resource + team-scoped check the backend enforces on its REST endpoints and the `systemHierarchy` module enforces on the client; broader team-scoped enforcement remains policy-only and is tracked under [🔮 Planned](#-planned).
 
 Authorization is enforced in **four** independent layers:
 
@@ -310,6 +310,20 @@ The hook is wrapped in `useMemo`, so the returned value is stable across renders
 
 Sidebar visibility and the middleware route gate are **not** kept in sync automatically. If a `NAV_ITEMS` entry's role differs from the corresponding `PATH_ROLES_CONFIG` entry, a user can see the sidebar item and click it only to bounce to `/404`. See [Maintenance recommendations](#maintenance-recommendations).
 
+## Per-system edit responsibility
+
+A first step beyond the flat role model — and toward [Phase 2](#phase-2--team-based-scoping) — is now live for **systems**. `systems-edit` still answers "may edit systems at all"; a second, per-resource check answers "may edit *this* system": the user must be responsible for it directly, via its `responsibleTeam`, or via any ancestor up the `HAS_SUBSYSTEM` chain.
+
+The backend owns the decision and exposes it as a REST read, and enforces it (403) on its mutating REST endpoints:
+
+```
+GET /system/{uid}/can-edit → { result: boolean, responsibles: User[] }
+```
+
+`result` folds in the role check (a non-`systems-edit` user gets `false`); `responsibles` is deduped across the system + ancestors so the UI can name who to contact.
+
+**Enforcement gap this closes.** `System.@authorization` (Layer 2) gates GraphQL by role only — it has no per-resource predicate — and the `systemHierarchy` module mutates via GraphQL (`updateSystems`, `updateItems`, `createSystems`), which the backend's REST 403 does **not** cover. So the frontend enforces per-system responsibility on the client for that module: it fetches `can-edit`, disables every editable surface when denied, and **hard-guards** the mutation hooks (`guardSystemEdit` before `mutateAsync`) so an unpermitted GraphQL patch cannot fire. This is client-side enforcement standing in until those mutations migrate to guarded REST PATCH endpoints — it is not a substitute for schema-level authorization. Engineering detail: [System Hierarchy → Per-system edit permission](./systems-family/system-hierarchy.md#per-system-edit-permission).
+
 ## Audit trail
 
 Every entity that needs change history points at `User` via the `WAS_UPDATED_BY` relationship:
@@ -395,9 +409,9 @@ Implementation sketch: add a `where: { node: { systemLevel_IN: [...] } }` clause
 
 ### Phase 2 — team-based scoping
 
-> Today this is policy only — please follow it manually.
+> Partially live: the backend now enforces per-system edit responsibility (direct responsible, `responsibleTeam`, or an ancestor's) on its **REST** endpoints, and the `systemHierarchy` module enforces it client-side for its GraphQL mutations — see [Per-system edit responsibility](#per-system-edit-responsibility). What remains below is folding the same rule into `@neo4j/graphql` `@authorization` so raw GraphQL is gated too.
 
-Each system already carries `responsibleTeam: Team @relationship(type: "HAS_RESPONSIBLE_TEAM")`. Phase 2 enforcement needs:
+Each system already carries `responsibleTeam: Team @relationship(type: "HAS_RESPONSIBLE_TEAM")`. Phase 2 schema-level enforcement needs:
 
 - A `User`→`Team` (or `Employee`→`Team`) relationship — the schema does **not** have one today. `Employee.user` exists but no `Team` membership edge does.
 - The JWT carrying the user's team UIDs alongside `roles`.

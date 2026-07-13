@@ -3,9 +3,13 @@ import { act, renderHook, waitFor } from '@testing-library/react'
 import { request } from 'graphql-request'
 import React from 'react'
 
+import { guardSystemEdit } from '../../../utils/guardSystemEdit'
+
 jest.mock('graphql-request', () => ({
     request: jest.fn(),
 }))
+
+jest.mock('../../../utils/guardSystemEdit', () => ({ guardSystemEdit: jest.fn() }))
 
 jest.mock('sonner', () => ({ toast: { promise: jest.fn() } }))
 
@@ -16,6 +20,7 @@ jest.mock('react-intl', () => ({
 }))
 
 const mockRequest = request as jest.Mock
+const mockGuardSystemEdit = guardSystemEdit as jest.Mock
 
 const mockSuccessResponse = {
     updateSystems: {
@@ -56,6 +61,8 @@ describe('useSystemFieldUpdate', () => {
     beforeEach(() => {
         jest.clearAllMocks()
         mockRequest.mockResolvedValue(mockSuccessResponse)
+        // Permission check passes by default; overridden in guard-specific tests.
+        mockGuardSystemEdit.mockResolvedValue(true)
     })
 
     it('sends updatedByResolver params for scalar field update', async () => {
@@ -196,5 +203,49 @@ describe('useSystemFieldUpdate', () => {
         })
 
         await waitFor(() => expect(result.current.isPending).toBe(false))
+    })
+
+    it('never sends the GraphQL patch when the permission guard denies', async () => {
+        mockGuardSystemEdit.mockResolvedValue(false)
+        const { useSystemFieldUpdate } = await import('../useSystemFieldUpdate')
+
+        const { result } = renderHook(() => useSystemFieldUpdate(), {
+            wrapper: createWrapper(),
+        })
+
+        await act(async () => {
+            await result.current.updateField('sys-1', 'name', 'New Name')
+        })
+
+        expect(mockGuardSystemEdit).toHaveBeenCalledWith(
+            expect.anything(),
+            'sys-1',
+            expect.any(Function),
+        )
+        expect(mockRequest).not.toHaveBeenCalled()
+    })
+
+    it('invalidates the can-edit cache after a responsible change', async () => {
+        const { useSystemFieldUpdate } = await import('../useSystemFieldUpdate')
+
+        const { result } = renderHook(() => useSystemFieldUpdate(), {
+            wrapper: createWrapper(),
+        })
+
+        const invalidateSpy = jest.spyOn(queryClient, 'invalidateQueries')
+
+        await act(async () => {
+            await result.current.updateField('sys-1', 'responsibleUid', 'emp-2', {
+                displayName: 'Jane',
+            })
+        })
+
+        await waitFor(() => {
+            expect(invalidateSpy).toHaveBeenCalledWith(
+                expect.objectContaining({ queryKey: ['systemCanEdit'] }),
+            )
+        })
+
+        invalidateSpy.mockRestore()
     })
 })

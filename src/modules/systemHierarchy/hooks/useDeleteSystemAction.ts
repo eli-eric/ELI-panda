@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { useCallback } from 'react'
 import { useIntl } from 'react-intl'
 import { toast } from 'sonner'
@@ -9,6 +10,7 @@ import { ROLE } from '@/types/constants/roles'
 import type { AxiosError } from '@/types/http'
 import { createMessageValues } from '@/utils/formatters'
 
+import { guardSystemEdit } from '../utils/guardSystemEdit'
 import { findHierarchyPath } from '../utils/treePath'
 import { useDeleteSystem } from './mutations/useDeleteSystem'
 import { useSystemDetail } from './queries/useSystemDetail'
@@ -34,6 +36,7 @@ type PhysicalItemConflict = {
 
 export const useDeleteSystemAction = () => {
     const { formatMessage: fm } = useIntl()
+    const queryClient = useQueryClient()
     const canEdit = usePermission([ROLE.SYSTEM_EDIT])
     const withWarningModal = useWarningModal()
     const { nodes } = useSystemHierarchy()
@@ -74,8 +77,11 @@ export const useDeleteSystemAction = () => {
     )
 
     const handleDeleteSystem = useCallback(
-        (uid: string, name: string) => {
+        async (uid: string, name: string) => {
             if (!canEdit || isPending) return
+            // Per-system check-on-click: role-holders who aren't responsible for
+            // this node are blocked with a toast before the confirm dialog.
+            if (!(await guardSystemEdit(queryClient, uid, fm))) return
 
             const runDelete = () => {
                 toast.promise(mutateAsync({ uid }), {
@@ -98,6 +104,7 @@ export const useDeleteSystemAction = () => {
         },
         [
             canEdit,
+            queryClient,
             isPending,
             withWarningModal,
             fm,

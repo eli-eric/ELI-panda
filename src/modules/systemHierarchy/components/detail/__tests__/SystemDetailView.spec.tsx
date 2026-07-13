@@ -38,6 +38,17 @@ jest.mock('../SystemDetailHeader.comp', () => ({
 jest.mock('../SystemDetailTabs.cont', () => ({
     SystemDetailTabsContainer: () => <div data-testid="detail-tabs-stub" />,
 }))
+jest.mock('../SystemEditRestrictionBanner.comp', () => ({
+    SystemEditRestrictionBanner: () => <div data-testid="edit-restriction-banner-stub" />,
+}))
+jest.mock('../../../hooks/useSystemEditPermission', () => ({
+    useSystemEditPermission: () => ({
+        canEdit: true,
+        responsibles: [],
+        status: 'allowed',
+        refetch: jest.fn(),
+    }),
+}))
 
 const messages: Record<string, string> = {
     'systemHierarchy.detail.notFoundTitle': 'System not found',

@@ -15,6 +15,8 @@ import { ImagePlaceHolder } from '@/modules/shared/imageManager/components/Image
 import { useImageAutoSave } from '@/modules/shared/imageManager/utils/useImageAutoSave'
 import { ROLE } from '@/types/constants/roles'
 
+import { useSystemEditPermission } from '../../hooks/useSystemEditPermission'
+
 interface SystemImagePanelProps {
     systemUid: string
     systemName?: string | null
@@ -22,7 +24,8 @@ interface SystemImagePanelProps {
 
 export const SystemImagePanel: FC<SystemImagePanelProps> = ({ systemUid, systemName }) => {
     const { formatMessage: fm } = useIntl()
-    const hasEditRole = !!usePermission([ROLE.SYSTEM_EDIT])
+    const { canEdit } = useSystemEditPermission(systemUid)
+    const hasEditRole = !!usePermission([ROLE.SYSTEM_EDIT]) && canEdit
     const withWarnModal = useWarningModal()
     // track the selected image by id so reconcile reordering / deletes don't shift focus;
     // null falls back to index 0 (the newest, since uploads prepend)
