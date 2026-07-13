@@ -61,6 +61,9 @@ export const normalizeCanEditResponse = (raw: unknown): SystemCanEditResponse =>
             ? responsibles
                   .filter((r): r is Record<string, unknown> => !!r && typeof r === 'object')
                   .map(normalizeResponsible)
+                  // Drop identity-less entries: they'd collide on the React key and
+                  // render blank in the tooltip.
+                  .filter(r => r.uid)
             : [],
     }
 }

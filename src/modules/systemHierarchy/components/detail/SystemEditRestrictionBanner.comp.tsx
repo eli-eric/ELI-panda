@@ -18,7 +18,9 @@ const buildResponsiblesTooltip = (responsibles: Props['responsibles']): string =
     responsibles
         .map(r => {
             const name = formatResponsibleName(r)
-            return r.email ? `${name} (${r.email})` : name
+            // Skip the "(email)" suffix when the name already is the email
+            // (formatResponsibleName falls back to email when nothing else exists).
+            return r.email && r.email !== name ? `${name} (${r.email})` : name
         })
         .filter(Boolean)
         .join('\n')

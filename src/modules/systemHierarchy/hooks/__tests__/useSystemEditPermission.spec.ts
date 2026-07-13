@@ -99,6 +99,14 @@ describe('normalizeCanEditResponse', () => {
         expect(normalizeCanEditResponse({ result: 'true' }).result).toBe(false)
         expect(normalizeCanEditResponse(null)).toEqual({ result: false, responsibles: [] })
     })
+
+    it('drops responsibles with no uid (avoids blank/duplicate-key entries)', () => {
+        const normalized = normalizeCanEditResponse({
+            result: false,
+            responsibles: [responsible, { firstName: 'Ghost', email: 'ghost@eli.eu' }],
+        })
+        expect(normalized.responsibles).toEqual([responsible])
+    })
 })
 
 describe('formatResponsibleName', () => {
