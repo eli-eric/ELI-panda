@@ -34,57 +34,57 @@ export const SystemEditRestrictionBanner: FC<Props> = ({ status, responsibles, r
 
     if (status === 'error') {
         return (
-            <Alert variant="destructive" className="mx-4 mt-2" data-testid="system-edit-verify-error">
-                <Lock />
-                <AlertTitle>{fm({ id: message.systemHierarchy.permission.errorTitle })}</AlertTitle>
-                <AlertDescription>
-                    <p>{fm({ id: message.systemHierarchy.permission.errorDescription })}</p>
-                    <Button variant="outline" size="sm" className="mt-1" onClick={refetch}>
-                        {fm({ id: message.systemHierarchy.permission.retry })}
-                    </Button>
-                </AlertDescription>
-            </Alert>
+            // px wrapper instead of mx on the Alert: the Alert is w-full, so a
+            // horizontal margin would push it past the container and under the
+            // Quick Info sidebar.
+            <div className="px-4 pt-2">
+                <Alert variant="destructive" data-testid="system-edit-verify-error">
+                    <Lock />
+                    <AlertTitle>
+                        {fm({ id: message.systemHierarchy.permission.errorTitle })}
+                    </AlertTitle>
+                    <AlertDescription>
+                        <p>{fm({ id: message.systemHierarchy.permission.errorDescription })}</p>
+                        <Button variant="outline" size="sm" className="mt-1" onClick={refetch}>
+                            {fm({ id: message.systemHierarchy.permission.retry })}
+                        </Button>
+                    </AlertDescription>
+                </Alert>
+            </div>
         )
     }
 
-    // status === 'denied'
+    // status === 'denied' — keep it compact: the responsibles live in the info
+    // tooltip so the banner stays a single line. Only fall back to inline text
+    // when there is no one to list.
     const hasResponsibles = responsibles.length > 0
     return (
-        <Alert className="mx-4 mt-2" data-testid="system-edit-denied">
-            <Lock />
-            <AlertTitle className="flex items-center gap-1.5">
-                {fm({ id: message.systemHierarchy.permission.deniedTitle })}
-                {hasResponsibles && (
-                    <Tooltip content={buildResponsiblesTooltip(responsibles)}>
-                        <button
-                            type="button"
-                            aria-label={fm({
-                                id: message.systemHierarchy.permission.deniedResponsiblesTooltip,
-                            })}
-                            className="inline-flex shrink-0 cursor-help text-muted-foreground"
-                        >
-                            <Info className="size-4" />
-                        </button>
-                    </Tooltip>
+        <div className="px-4 pt-2">
+            <Alert data-testid="system-edit-denied">
+                <Lock />
+                <AlertTitle className="flex items-center gap-1.5">
+                    {fm({ id: message.systemHierarchy.permission.deniedTitle })}
+                    {hasResponsibles && (
+                        <Tooltip content={buildResponsiblesTooltip(responsibles)}>
+                            <button
+                                type="button"
+                                aria-label={fm({
+                                    id: message.systemHierarchy.permission
+                                        .deniedResponsiblesTooltip,
+                                })}
+                                className="inline-flex shrink-0 cursor-help text-muted-foreground"
+                            >
+                                <Info className="size-4" />
+                            </button>
+                        </Tooltip>
+                    )}
+                </AlertTitle>
+                {!hasResponsibles && (
+                    <AlertDescription>
+                        <p>{fm({ id: message.systemHierarchy.permission.deniedNoResponsibles })}</p>
+                    </AlertDescription>
                 )}
-            </AlertTitle>
-            <AlertDescription>
-                <p>
-                    {hasResponsibles
-                        ? fm({ id: message.systemHierarchy.permission.deniedResponsiblesLabel })
-                        : fm({ id: message.systemHierarchy.permission.deniedNoResponsibles })}
-                </p>
-                {hasResponsibles && (
-                    <ul className="list-none">
-                        {responsibles.map(r => (
-                            <li key={r.uid}>
-                                {formatResponsibleName(r)}
-                                {r.email ? ` (${r.email})` : ''}
-                            </li>
-                        ))}
-                    </ul>
-                )}
-            </AlertDescription>
-        </Alert>
+            </Alert>
+        </div>
     )
 }

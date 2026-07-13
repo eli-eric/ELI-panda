@@ -1480,7 +1480,6 @@ export const messages = {
         permission: {
             deniedTitle: "You don't have permission to edit this system.",
             deniedResponsiblesTooltip: 'Show who is responsible for this system',
-            deniedResponsiblesLabel: 'Responsible people you can contact:',
             deniedNoResponsibles: 'Please contact an administrator to request access.',
             errorTitle: 'Could not verify your edit permissions.',
             errorDescription: 'Editing is disabled until we can confirm your access.',

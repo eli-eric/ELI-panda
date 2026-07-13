@@ -5,7 +5,8 @@ import { SystemEditRestrictionBanner } from '../SystemEditRestrictionBanner.comp
 
 const messages: Record<string, string> = {
     'systemHierarchy.permission.deniedTitle': "You don't have permission to edit this system.",
-    'systemHierarchy.permission.deniedResponsiblesLabel': 'Responsible people you can contact:',
+    'systemHierarchy.permission.deniedResponsiblesTooltip':
+        'Show who is responsible for this system',
     'systemHierarchy.permission.deniedNoResponsibles':
         'Please contact an administrator to request access.',
     'systemHierarchy.permission.errorTitle': 'Could not verify your edit permissions.',
@@ -48,11 +49,14 @@ describe('SystemEditRestrictionBanner', () => {
         expect(container).toBeEmptyDOMElement()
     })
 
-    it('lists responsibles when denied', () => {
+    it('shows a compact denied banner with a responsibles info trigger (not an inline list)', () => {
         renderBanner({ status: 'denied', responsibles: [responsible], refetch: jest.fn() })
         expect(screen.getByTestId('system-edit-denied')).toBeInTheDocument()
-        expect(screen.getByText(/Ann Lee/)).toBeInTheDocument()
-        expect(screen.getByText(/ann\.lee@eli\.eu/)).toBeInTheDocument()
+        // Responsibles live in the tooltip, not rendered inline — keeps the banner one line.
+        expect(
+            screen.getByRole('button', { name: 'Show who is responsible for this system' }),
+        ).toBeInTheDocument()
+        expect(screen.queryByText(/ann\.lee@eli\.eu/)).not.toBeInTheDocument()
     })
 
     it('shows the admin fallback when denied with no responsibles', () => {
