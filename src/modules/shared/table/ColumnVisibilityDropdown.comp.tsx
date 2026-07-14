@@ -34,9 +34,13 @@ export const ColumnVisibilityDropdown: FC<ColumnVisibilityDropdownProps> = ({
     const isColumnVisible = (column: Column<any>) =>
         columnVisibility ? columnVisibility[column.id] !== false : column.getIsVisible()
 
-    const areAllColumnsVisible = columnVisibility
-        ? table.getAllLeafColumns().every(isColumnVisible)
-        : table.getIsAllColumnsVisible()
+    const areAllColumnsVisible = columns.every(isColumnVisible)
+
+    const setAllListedColumnsVisibility = (visible: boolean) =>
+        table.setColumnVisibility(previousVisibility => ({
+            ...previousVisibility,
+            ...Object.fromEntries(columns.map(column => [column.id, visible])),
+        }))
 
     return (
         <DropdownMenu>
@@ -50,9 +54,7 @@ export const ColumnVisibilityDropdown: FC<ColumnVisibilityDropdownProps> = ({
                 <DropdownMenuSeparator />
                 <DropdownMenuCheckboxItem
                     checked={areAllColumnsVisible}
-                    onCheckedChange={checked =>
-                        table.getToggleAllColumnsVisibilityHandler()({ target: { checked } })
-                    }
+                    onCheckedChange={checked => setAllListedColumnsVisibility(!!checked)}
                 >
                     Toggle All
                 </DropdownMenuCheckboxItem>

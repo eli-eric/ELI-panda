@@ -104,4 +104,15 @@ describe('ColumnVisibilityDropdown rendered outside the table-owning component',
             JSON.parse(window.localStorage.getItem(`columnVisibility-${TABLE_ID}`) ?? '{}'),
         ).toEqual({ prop: false })
     })
+
+    it('Toggle All hides and restores all listed columns in one update', () => {
+        render(<Container />)
+        fireEvent.click(screen.getByTestId('dd-Toggle All'))
+        expect(screen.getByTestId('visible-columns').textContent).toBe('')
+        expect(screen.getByTestId('dd-Toggle All').getAttribute('data-checked')).toBe('false')
+
+        fireEvent.click(screen.getByTestId('dd-Toggle All'))
+        expect(screen.getByTestId('visible-columns').textContent).toBe('name,prop')
+        expect(screen.getByTestId('dd-Toggle All').getAttribute('data-checked')).toBe('true')
+    })
 })

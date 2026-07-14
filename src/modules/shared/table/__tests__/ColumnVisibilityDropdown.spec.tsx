@@ -41,11 +41,10 @@ const makeColumn = (
     columnDef: { header, meta: title ? { title } : undefined },
 })
 
-const makeTable = (columns: any[], allVisible = true, toggleAll = jest.fn()) =>
+const makeTable = (columns: any[]) =>
     ({
         getAllLeafColumns: () => columns,
-        getIsAllColumnsVisible: () => allVisible,
-        getToggleAllColumnsVisibilityHandler: () => toggleAll,
+        setColumnVisibility: jest.fn(),
     }) as any
 
 describe('ColumnVisibilityDropdown', () => {
@@ -74,12 +73,27 @@ describe('ColumnVisibilityDropdown', () => {
         expect(screen.queryByTestId('dd-Fixed')).toBeNull()
     })
 
-    it('Toggle All forwards event in expected shape', () => {
-        const toggleAll = jest.fn()
-        const table = makeTable([], false, toggleAll)
-        render(<ColumnVisibilityDropdown table={table} />)
+    it('Toggle All updates only the columns listed in the dropdown', () => {
+        const table = makeTable([
+            makeColumn('a', true, 'Col A'),
+            makeColumn('excluded', true, 'Excluded'),
+            makeColumn('fixed', true, 'Fixed', false),
+        ])
+        render(<ColumnVisibilityDropdown table={table} excludeColumns={['excluded']} />)
         fireEvent.click(screen.getByTestId('dd-Toggle All'))
-        expect(toggleAll).toHaveBeenCalledWith({ target: { checked: true } })
+        expect(table.setColumnVisibility).toHaveBeenCalledTimes(1)
+        const updater = table.setColumnVisibility.mock.calls[0][0]
+        // excluded + non-hideable columns keep their previous state untouched
+        expect(updater({ excluded: false })).toEqual({ excluded: false, a: false })
+    })
+
+    it('Toggle All checkmark reflects only the listed columns', () => {
+        const table = makeTable([
+            makeColumn('a', true, 'Col A'),
+            makeColumn('hidden-excluded', false, 'Hidden'),
+        ])
+        render(<ColumnVisibilityDropdown table={table} excludeColumns={['hidden-excluded']} />)
+        expect(screen.getByTestId('dd-Toggle All').getAttribute('data-checked')).toBe('true')
     })
 
     it('per-column click flips visibility', () => {
@@ -107,7 +121,7 @@ describe('ColumnVisibilityDropdown', () => {
 
     it('derives checked state from the columnVisibility prop over the table instance', () => {
         // the table instance still reports the column as visible…
-        const table = makeTable([makeColumn('a', true, 'Col A')], true)
+        const table = makeTable([makeColumn('a', true, 'Col A')])
         // …but the caller's live visibility state says it is hidden
         render(<ColumnVisibilityDropdown table={table} columnVisibility={{ a: false }} />)
         expect(screen.getByTestId('dd-Col A').getAttribute('data-checked')).toBe('false')
