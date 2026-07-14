@@ -5,13 +5,15 @@ import { useIntl } from 'react-intl'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { message } from '@/i18n/src/messages'
+import {
+    SystemEditRestrictionBanner,
+    useSystemEditPermission,
+} from '@/modules/shared/system/edit-permission'
 
 import { useSystemDetail } from '../../hooks/queries/useSystemDetail'
 import { useHierarchyNavigation } from '../../hooks/useHierarchyNavigation'
-import { useSystemEditPermission } from '../../hooks/useSystemEditPermission'
 import { SystemDetailHeader } from './SystemDetailHeader.comp'
 import { SystemDetailTabsContainer } from './SystemDetailTabs.cont'
-import { SystemEditRestrictionBanner } from './SystemEditRestrictionBanner.comp'
 
 export const SystemDetailViewContainer: FC = () => {
     const { formatMessage: fm } = useIntl()

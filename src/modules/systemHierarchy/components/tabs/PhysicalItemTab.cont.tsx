@@ -14,11 +14,11 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { useItemPropertiesData } from '@/hooks/useItemPropertiesData'
 import { message } from '@/i18n/src/messages'
+import { useSystemEditPermission } from '@/modules/shared/system/edit-permission'
 import { CODEBOOK } from '@/types/constants/codebook'
 
 import { useItemFieldUpdate } from '../../hooks/mutations/useItemFieldUpdate'
 import { useSystemDetail } from '../../hooks/queries/useSystemDetail'
-import { useSystemEditPermission } from '../../hooks/useSystemEditPermission'
 import type { SystemLeaf } from '../../types'
 import { PhysicalItemProperties } from '../physical-item/PhysicalItemProperties.comp'
 

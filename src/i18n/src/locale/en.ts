@@ -1418,6 +1418,17 @@ export const messages = {
             description: 'No system codes match your current filters.',
         },
     },
+    systemPermission: {
+        deniedTitle: "You don't have permission to edit this system.",
+        deniedResponsiblesTooltip: 'Show who is responsible for this system',
+        deniedNoResponsibles: 'Please contact an administrator to request access.',
+        errorTitle: 'Could not verify your edit permissions.',
+        errorDescription: 'Editing is disabled until we can confirm your access.',
+        retry: 'Retry',
+        blockedToast: "You're not responsible for this system. Contact: {names}",
+        blockedToastNoResponsibles:
+            "You're not responsible for this system. Contact an administrator to request access.",
+    },
     systemHierarchy: {
         pages: {
             hierarchy: 'System Hierarchy',
@@ -1476,17 +1487,6 @@ export const messages = {
             loadErrorTitle: 'Failed to load system',
             loadErrorDescription: 'Something went wrong while loading the system detail.',
             updating: 'Updating…',
-        },
-        permission: {
-            deniedTitle: "You don't have permission to edit this system.",
-            deniedResponsiblesTooltip: 'Show who is responsible for this system',
-            deniedNoResponsibles: 'Please contact an administrator to request access.',
-            errorTitle: 'Could not verify your edit permissions.',
-            errorDescription: 'Editing is disabled until we can confirm your access.',
-            retry: 'Retry',
-            blockedToast: "You're not responsible for this system. Contact: {names}",
-            blockedToastNoResponsibles:
-                "You're not responsible for this system. Contact an administrator to request access.",
         },
         tabs: {
             detail: 'Detail',

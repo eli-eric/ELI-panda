@@ -4,7 +4,7 @@ import { toast } from 'sonner'
 
 import { message } from '@/i18n/src/messages'
 
-import { ensureSystemCanEdit } from '../hooks/queries/useSystemCanEdit'
+import { ensureSystemCanEdit } from '../hooks/useSystemCanEdit'
 import { formatResponsibleName } from '../hooks/useSystemEditPermission'
 
 /**
@@ -28,13 +28,13 @@ export const guardSystemEdit = async (
         const names = responsibles.map(formatResponsibleName).filter(Boolean).join(', ')
         toast.error(
             names
-                ? fm({ id: message.systemHierarchy.permission.blockedToast }, { names })
-                : fm({ id: message.systemHierarchy.permission.blockedToastNoResponsibles }),
+                ? fm({ id: message.systemPermission.blockedToast }, { names })
+                : fm({ id: message.systemPermission.blockedToastNoResponsibles }),
         )
         return false
     } catch {
         // Fail closed: if we can't verify permission, don't let the mutation through.
-        toast.error(fm({ id: message.systemHierarchy.permission.errorTitle }))
+        toast.error(fm({ id: message.systemPermission.errorTitle }))
         return false
     }
 }

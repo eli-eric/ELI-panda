@@ -5,12 +5,12 @@ import { toast } from 'sonner'
 
 import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
 import { message } from '@/i18n/src/messages'
+import { guardSystemEdit } from '@/modules/shared/system/edit-permission'
 import { gql } from '@/types/gql'
 
 import { SYSTEM_DETAIL_QUERY_KEY } from '../../types/constants'
 import type { ChangeValue, CodebookSnapshot, FieldChangeEntry } from '../../types/history'
 import { buildChangeEntry, buildCodebookSnapshot } from '../../utils/fieldChangeBuilder'
-import { guardSystemEdit } from '../../utils/guardSystemEdit'
 
 // Lightweight mutation for single item field updates. The WAS_UPDATED_BY edge is recorded
 // against the owning System node (not the Item) so the change surfaces in the system history

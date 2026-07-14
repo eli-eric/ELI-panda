@@ -1,10 +1,10 @@
 import type { QueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
-import { ensureSystemCanEdit } from '../../hooks/queries/useSystemCanEdit'
+import { ensureSystemCanEdit } from '../../hooks/useSystemCanEdit'
 import { guardSystemEdit } from '../guardSystemEdit'
 
-jest.mock('../../hooks/queries/useSystemCanEdit', () => ({
+jest.mock('../../hooks/useSystemCanEdit', () => ({
     ensureSystemCanEdit: jest.fn(),
 }))
 jest.mock('sonner', () => ({ toast: { error: jest.fn() } }))
@@ -36,7 +36,7 @@ describe('guardSystemEdit', () => {
         })
         await expect(guardSystemEdit(qc, 's1', fm)).resolves.toBe(false)
         expect(mockToastError).toHaveBeenCalledWith(
-            'systemHierarchy.permission.blockedToast|Ann Lee',
+            'systemPermission.blockedToast|Ann Lee',
         )
     })
 
@@ -44,13 +44,13 @@ describe('guardSystemEdit', () => {
         mockEnsure.mockResolvedValue({ result: false, responsibles: [] })
         await expect(guardSystemEdit(qc, 's1', fm)).resolves.toBe(false)
         expect(mockToastError).toHaveBeenCalledWith(
-            'systemHierarchy.permission.blockedToastNoResponsibles',
+            'systemPermission.blockedToastNoResponsibles',
         )
     })
 
     it('fails closed (returns false) when the permission check throws', async () => {
         mockEnsure.mockRejectedValue(new Error('network'))
         await expect(guardSystemEdit(qc, 's1', fm)).resolves.toBe(false)
-        expect(mockToastError).toHaveBeenCalledWith('systemHierarchy.permission.errorTitle')
+        expect(mockToastError).toHaveBeenCalledWith('systemPermission.errorTitle')
     })
 })

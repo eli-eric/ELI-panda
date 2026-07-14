@@ -9,8 +9,8 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { message } from '@/i18n/src/messages'
 
-import type { SystemEditPermission } from '../../hooks/useSystemEditPermission'
-import { formatResponsibleName } from '../../hooks/useSystemEditPermission'
+import type { SystemEditPermission } from '../hooks/useSystemEditPermission'
+import { formatResponsibleName } from '../hooks/useSystemEditPermission'
 
 type Props = Pick<SystemEditPermission, 'status' | 'responsibles' | 'refetch'>
 
@@ -43,12 +43,12 @@ export const SystemEditRestrictionBanner: FC<Props> = ({ status, responsibles, r
                 <Alert variant="destructive" data-testid="system-edit-verify-error">
                     <Lock />
                     <AlertTitle>
-                        {fm({ id: message.systemHierarchy.permission.errorTitle })}
+                        {fm({ id: message.systemPermission.errorTitle })}
                     </AlertTitle>
                     <AlertDescription>
-                        <p>{fm({ id: message.systemHierarchy.permission.errorDescription })}</p>
+                        <p>{fm({ id: message.systemPermission.errorDescription })}</p>
                         <Button variant="outline" size="sm" className="mt-1" onClick={refetch}>
-                            {fm({ id: message.systemHierarchy.permission.retry })}
+                            {fm({ id: message.systemPermission.retry })}
                         </Button>
                     </AlertDescription>
                 </Alert>
@@ -65,14 +65,13 @@ export const SystemEditRestrictionBanner: FC<Props> = ({ status, responsibles, r
             <Alert data-testid="system-edit-denied">
                 <Lock />
                 <AlertTitle className="flex items-center gap-1.5">
-                    {fm({ id: message.systemHierarchy.permission.deniedTitle })}
+                    {fm({ id: message.systemPermission.deniedTitle })}
                     {hasResponsibles && (
                         <Tooltip content={buildResponsiblesTooltip(responsibles)}>
                             <button
                                 type="button"
                                 aria-label={fm({
-                                    id: message.systemHierarchy.permission
-                                        .deniedResponsiblesTooltip,
+                                    id: message.systemPermission.deniedResponsiblesTooltip,
                                 })}
                                 className="inline-flex shrink-0 cursor-help text-muted-foreground"
                             >
@@ -83,7 +82,7 @@ export const SystemEditRestrictionBanner: FC<Props> = ({ status, responsibles, r
                 </AlertTitle>
                 {!hasResponsibles && (
                     <AlertDescription>
-                        <p>{fm({ id: message.systemHierarchy.permission.deniedNoResponsibles })}</p>
+                        <p>{fm({ id: message.systemPermission.deniedNoResponsibles })}</p>
                     </AlertDescription>
                 )}
             </Alert>

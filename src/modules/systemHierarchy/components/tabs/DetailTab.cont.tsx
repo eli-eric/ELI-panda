@@ -14,11 +14,11 @@ import {
 import { message } from '@/i18n/src/messages'
 import { useLocationSelectionModal } from '@/modules/shared/form/location/hooks/useLocationSelectionModal'
 import { useSystemTypeSelectionModal } from '@/modules/shared/form/systemType/hooks/useSystemTypeSelectionModal'
+import { useSystemEditPermission } from '@/modules/shared/system/edit-permission'
 import { CODEBOOK } from '@/types/constants/codebook'
 import { SystemLevel } from '@/types/gql/graphql'
 
 import { useSystemFieldUpdate } from '../../hooks/mutations/useSystemFieldUpdate'
-import { useSystemEditPermission } from '../../hooks/useSystemEditPermission'
 import type { SystemLeaf } from '../../types'
 import { SystemCodeActions } from './SystemCodeActions.comp'
 

@@ -1,5 +1,5 @@
-import type { SystemResponsible } from './queries/useSystemCanEdit'
-import { useSystemCanEdit } from './queries/useSystemCanEdit'
+import type { SystemResponsible } from './useSystemCanEdit'
+import { useSystemCanEdit } from './useSystemCanEdit'
 
 export type SystemEditPermissionStatus = 'loading' | 'error' | 'allowed' | 'denied'
 

@@ -13,9 +13,9 @@ import { message } from '@/i18n/src/messages'
 import { openItemAssignModal } from '@/modules/shared/form/itemAssign/item-assign.modal'
 import { openItemMoveModal } from '@/modules/shared/form/itemMoving/item-move.modal'
 import { useAssignSparesNavigation } from '@/modules/shared/hooks/useAssignSparesNavigation'
+import { useSystemEditPermission } from '@/modules/shared/system/edit-permission'
 import type { SystemLevel } from '@/types/gql/graphql'
 
-import { useSystemEditPermission } from '../../hooks/useSystemEditPermission'
 import type { SystemLeaf } from '../../types'
 
 interface ActionsDropdownProps {

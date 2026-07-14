@@ -5,13 +5,15 @@ import { toast } from 'sonner'
 
 import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
 import { message } from '@/i18n/src/messages'
+import {
+    guardSystemEdit,
+    SYSTEM_CAN_EDIT_QUERY_KEY,
+} from '@/modules/shared/system/edit-permission'
 import { gql } from '@/types/gql'
 
 import { SYSTEM_DETAIL_QUERY_KEY } from '../../types/constants'
 import type { ChangeValue, CodebookSnapshot, FieldChangeEntry } from '../../types/history'
 import { buildChangeEntry, buildCodebookSnapshot } from '../../utils/fieldChangeBuilder'
-import { guardSystemEdit } from '../../utils/guardSystemEdit'
-import { SYSTEM_CAN_EDIT_QUERY_KEY } from '../queries/useSystemCanEdit'
 
 // Changing responsibility can revoke the current user's own edit rights, so the
 // cached can-edit result must be re-derived after these saves.
