@@ -34,7 +34,9 @@ export const SheetFormButtons = ({
     canEdit = true,
 }: Props) => {
     const { formatMessage: fm } = useIntl()
-    const disabledEdit = usePermission([editRole])
+    // Coarse role gate: does the user hold the edit role at all? (Named for what it
+    // is — the per-resource `canEdit` prop refines it further, on the Save button.)
+    const hasEditRole = usePermission([editRole])
     const DEBOUNCE_TIME = 1500
     const lastSubmitTimeRef = useRef<number>(0)
 
@@ -72,7 +74,7 @@ export const SheetFormButtons = ({
                         </span>
                     )}
                 </div>
-                {disabledEdit && (
+                {hasEditRole && (
                     <div className="flex gap-2">
                         <Button
                             type="button"
