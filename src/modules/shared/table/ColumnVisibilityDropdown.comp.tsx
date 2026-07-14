@@ -1,4 +1,4 @@
-import type { Table } from '@tanstack/react-table'
+import type { Column, Table, VisibilityState } from '@tanstack/react-table'
 import { SlidersHorizontal } from 'lucide-react'
 import type { FC } from 'react'
 
@@ -15,13 +15,32 @@ import {
 interface ColumnVisibilityDropdownProps {
     table: Table<any>
     excludeColumns?: string[]
+    // Required when the dropdown is rendered outside the component that owns
+    // the table state (e.g. via onTableReady): the table instance updates one
+    // render after this component, so checked state must come from the
+    // caller's own columnVisibility subscription to stay in sync.
+    columnVisibility?: VisibilityState
 }
 
 export const ColumnVisibilityDropdown: FC<ColumnVisibilityDropdownProps> = ({
     table,
     excludeColumns = [],
+    columnVisibility,
 }) => {
-    const columns = table.getAllLeafColumns().filter(column => !excludeColumns.includes(column.id))
+    const columns = table
+        .getAllLeafColumns()
+        .filter(column => column.getCanHide() && !excludeColumns.includes(column.id))
+
+    const isColumnVisible = (column: Column<any>) =>
+        columnVisibility ? columnVisibility[column.id] !== false : column.getIsVisible()
+
+    const areAllColumnsVisible = columns.every(isColumnVisible)
+
+    const setAllListedColumnsVisibility = (visible: boolean) =>
+        table.setColumnVisibility(previousVisibility => ({
+            ...previousVisibility,
+            ...Object.fromEntries(columns.map(column => [column.id, visible])),
+        }))
 
     return (
         <DropdownMenu>
@@ -34,10 +53,8 @@ export const ColumnVisibilityDropdown: FC<ColumnVisibilityDropdownProps> = ({
                 <DropdownMenuLabel>Columns</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuCheckboxItem
-                    checked={table.getIsAllColumnsVisible()}
-                    onCheckedChange={checked =>
-                        table.getToggleAllColumnsVisibilityHandler()({ target: { checked } })
-                    }
+                    checked={areAllColumnsVisible}
+                    onCheckedChange={checked => setAllListedColumnsVisibility(!!checked)}
                 >
                     Toggle All
                 </DropdownMenuCheckboxItem>
@@ -45,12 +62,13 @@ export const ColumnVisibilityDropdown: FC<ColumnVisibilityDropdownProps> = ({
                 {columns.map(column => (
                     <DropdownMenuCheckboxItem
                         key={column.id}
-                        checked={column.getIsVisible()}
+                        checked={isColumnVisible(column)}
                         onCheckedChange={value => column.toggleVisibility(!!value)}
                     >
-                        {typeof column.columnDef.header === 'string'
-                            ? column.columnDef.header || column.id
-                            : column.id}
+                        {column.columnDef.meta?.title ||
+                            (typeof column.columnDef.header === 'string'
+                                ? column.columnDef.header || column.id
+                                : column.id)}
                     </DropdownMenuCheckboxItem>
                 ))}
             </DropdownMenuContent>

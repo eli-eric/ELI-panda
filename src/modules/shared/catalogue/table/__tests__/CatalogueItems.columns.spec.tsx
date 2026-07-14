@@ -94,5 +94,6 @@ describe('useCatalogueItemsColumns', () => {
             'lastUpdateTime',
             'lastUpdateBy',
         ])
+        expect(result.current.find(column => column.id === 'd1')?.meta?.title).toBe('D1')
     })
 })

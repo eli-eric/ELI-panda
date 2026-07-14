@@ -65,9 +65,11 @@ export const CatalogueTable = forwardRef<PandaTableV2Handle, CatalogueTableProps
         })
 
         useEffect(() => {
-            table.setColumnVisibility({
+            // merge, not replace: replacing wiped every column the user had hidden
+            table.setColumnVisibility(previousVisibility => ({
+                ...previousVisibility,
                 categoryName: categoryList?.length !== 0,
-            })
+            }))
             table.setColumnOrder(table.getAllLeafColumns().map(column => column.id))
         }, [categoryList, columns, table])
 

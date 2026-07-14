@@ -17,6 +17,7 @@ declare module '@tanstack/table-core' {
         enableReorder?: boolean
         noHeader?: boolean
         headerElement?: React.ReactNode
+        title?: string
     }
 
     interface ColumnFilter {

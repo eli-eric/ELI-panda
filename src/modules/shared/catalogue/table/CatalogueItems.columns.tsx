@@ -175,6 +175,9 @@ export const useCatalogueItemsColumns = ({
                     },
                     id: detail.property.uid,
                     size: 150,
+                    meta: {
+                        title: detail.property.name,
+                    },
                     accessorFn: row =>
                         row.details?.find(
                             originDetail => originDetail?.property.name === detail?.property.name,
