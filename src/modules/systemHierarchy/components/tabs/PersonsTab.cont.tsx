@@ -7,6 +7,7 @@ import { useIntl } from 'react-intl'
 
 import { InlineFieldCombobox } from '@/components/ui/inline-field'
 import { message } from '@/i18n/src/messages'
+import { useSystemEditPermission } from '@/modules/shared/system/edit-permission'
 import {
     EmployeeAssignmentTable,
     useAddSystemEmployeeAssignment,
@@ -16,7 +17,6 @@ import { CODEBOOK } from '@/types/constants/codebook'
 import { SystemLevel } from '@/types/gql/graphql'
 
 import { useSystemFieldUpdate } from '../../hooks/mutations/useSystemFieldUpdate'
-import { useSystemEditPermission } from '../../hooks/useSystemEditPermission'
 import type { SystemLeaf } from '../../types'
 import { SYSTEM_DETAIL_QUERY_KEY } from '../../types/constants'
 

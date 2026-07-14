@@ -64,7 +64,16 @@ The module owns the *write* surface for everything attached to a system:
 | `useRecalculate` | Trigger server-side recompute of derived fields (e.g. coverage). |
 | `useSystemsReload` | Invalidate the systems list query (used after structural mutations). |
 
-`useSystemSheetUpdate` is the most-used mutation across the family — it is invoked by inline edits on the form, on the Hierarchy sidebar, and on the Relations table.
+`useSystemSheetUpdate` is the most-used mutation across the family — it is invoked by inline edits on the form, on the Hierarchy sidebar, and on the Relations table. (Note there are two: this `systemItem` hook, and a separate one in the shared Edit System sheet — see below.)
+
+## Edit System sheet (shared) — per-system guard
+
+The shared **"Edit System" sheet** (`src/modules/shared/system/system-edit/`, opened by `useSystemEditSheet` from the systems table, the control-systems row-click, and the relationship graph) persists via its own `useSystemSheetUpdate` (GraphQL `updateSystems`/`updateItems`). Like inline edit in Hierarchy, it is role-gated only at the GraphQL layer, so it enforces **per-system edit responsibility** on the client using the shared [`edit-permission`](./system-hierarchy.md#per-system-edit-permission) module — one guard covers all three entry points:
+
+- **Hard guard** — `useSystemSheetUpdate.updateSystemQuery` `await guardSystemEdit(...)` before mutating; the system-code **Release** (`useSystemCodeClear`, a *direct* `updateSystems`) is guarded in `SystemCodeActions.handleClear` too, closing that second patch path.
+- **Field disable** — `useSystemEditFormFields(canEdit)` ORs `!canEdit` into `disabledEdit`, disabling every system field (catalogue fields keep their own `CATALOGUE_EDIT` gate). `useForm({ disabled })` is **not** used — the `InlineEdit*` inputs read their own `disabled` prop, not RHF's `field.disabled`.
+- **Save + banner** — `SheetFormButtons` gained an optional `canEdit` prop (defaults `true`; disables Save, Exit stays enabled); `SystemEditRestrictionBanner` renders below the button bar.
+- Tests: `system-edit/hooks/__tests__/useSystemSheetUpdate.spec.tsx`, `system-edit/components/__tests__/SystemCodeActions.spec.tsx`, `components/__tests__/sheet-form-buttons.spec.tsx`, `systemItem/components/form/__tests__/SystemForm.fields.spec.tsx`.
 
 ## Form
 

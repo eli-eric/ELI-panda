@@ -17,8 +17,15 @@ import { SystemLevel } from '@/types/gql/graphql'
 
 import { SystemCodeActions } from '../SystemCodeActions'
 
-export const SystemDetailSection = () => {
-    const fields = useSystemEditFormFields()
+interface SystemDetailSectionProps {
+    // Optional: absent in the system-create flow (no system yet); present in the
+    // edit sheet, where it feeds the per-system guard on SystemCodeActions.
+    uid?: string
+    canEdit?: boolean
+}
+
+export const SystemDetailSection = ({ uid, canEdit = true }: SystemDetailSectionProps) => {
+    const fields = useSystemEditFormFields(canEdit)
 
     const { control } = useFormContext()
 
@@ -40,7 +47,7 @@ export const SystemDetailSection = () => {
                 <InlineEditSystemType {...fields.systemType} />
                 <InlineEditInputWithActions
                     {...fields.systemCode}
-                    actions={<SystemCodeActions />}
+                    actions={<SystemCodeActions uid={uid} canEdit={canEdit} />}
                 />
                 <InlineEditListbox {...fields.systemLevel} customOptions={systemLevels} />
                 <InlineEditLocation {...fields.location} />

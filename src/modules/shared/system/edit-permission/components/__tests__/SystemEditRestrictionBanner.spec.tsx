@@ -4,15 +4,15 @@ import { IntlProvider } from 'react-intl'
 import { SystemEditRestrictionBanner } from '../SystemEditRestrictionBanner.comp'
 
 const messages: Record<string, string> = {
-    'systemHierarchy.permission.deniedTitle': "You don't have permission to edit this system.",
-    'systemHierarchy.permission.deniedResponsiblesTooltip':
+    'systemPermission.deniedTitle': "You don't have permission to edit this system.",
+    'systemPermission.deniedResponsiblesTooltip':
         'Show who is responsible for this system',
-    'systemHierarchy.permission.deniedNoResponsibles':
+    'systemPermission.deniedNoResponsibles':
         'Please contact an administrator to request access.',
-    'systemHierarchy.permission.errorTitle': 'Could not verify your edit permissions.',
-    'systemHierarchy.permission.errorDescription':
+    'systemPermission.errorTitle': 'Could not verify your edit permissions.',
+    'systemPermission.errorDescription':
         'Editing is disabled until we can confirm your access.',
-    'systemHierarchy.permission.retry': 'Retry',
+    'systemPermission.retry': 'Retry',
 }
 
 const responsible = {

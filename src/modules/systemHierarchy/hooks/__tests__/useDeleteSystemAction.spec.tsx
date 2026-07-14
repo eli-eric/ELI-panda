@@ -3,8 +3,8 @@ import { toast } from 'sonner'
 
 import { usePermission } from '@/hooks/usePermission'
 import useWarningModal from '@/hooks/useWarningModal'
+import { guardSystemEdit } from '@/modules/shared/system/edit-permission/utils/guardSystemEdit'
 
-import { guardSystemEdit } from '../../utils/guardSystemEdit'
 import { useDeleteSystem } from '../mutations/useDeleteSystem'
 import { useSystemDetail } from '../queries/useSystemDetail'
 import { useSystemHierarchy } from '../queries/useSystemHierarchy'
@@ -14,7 +14,7 @@ import { useHierarchyNavigation } from '../useHierarchyNavigation'
 jest.mock('@tanstack/react-query', () => ({ useQueryClient: () => ({}) }))
 jest.mock('@/hooks/usePermission', () => ({ usePermission: jest.fn() }))
 jest.mock('@/hooks/useWarningModal', () => ({ __esModule: true, default: jest.fn() }))
-jest.mock('../../utils/guardSystemEdit', () => ({ guardSystemEdit: jest.fn() }))
+jest.mock('@/modules/shared/system/edit-permission/utils/guardSystemEdit', () => ({ guardSystemEdit: jest.fn() }))
 jest.mock('../mutations/useDeleteSystem', () => ({ useDeleteSystem: jest.fn() }))
 jest.mock('../queries/useSystemDetail', () => ({ useSystemDetail: jest.fn() }))
 jest.mock('../queries/useSystemHierarchy', () => ({ useSystemHierarchy: jest.fn() }))

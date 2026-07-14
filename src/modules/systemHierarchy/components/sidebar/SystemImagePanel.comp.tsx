@@ -13,9 +13,8 @@ import { cn } from '@/lib/utils'
 import { FILE_TYPE } from '@/modules/shared/fileManager/types'
 import { ImagePlaceHolder } from '@/modules/shared/imageManager/components/ImagePlaceHolder'
 import { useImageAutoSave } from '@/modules/shared/imageManager/utils/useImageAutoSave'
+import { useSystemEditPermission } from '@/modules/shared/system/edit-permission'
 import { ROLE } from '@/types/constants/roles'
-
-import { useSystemEditPermission } from '../../hooks/useSystemEditPermission'
 
 interface SystemImagePanelProps {
     systemUid: string

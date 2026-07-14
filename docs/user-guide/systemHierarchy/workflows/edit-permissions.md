@@ -60,6 +60,7 @@ When you are **not** allowed to edit a system:
 - **Changing the responsible person or team can remove your own access.** If you reassign responsibility away from yourself on a system you only controlled directly, the fields lock immediately afterward — that's expected.
 - **"Couldn't verify" is different from "not permitted".** If the banner reads *Could not verify your edit permissions* with a **Retry** button, that's a temporary connection problem, not a permission denial — editing stays disabled until it can be confirmed. Click **Retry**.
 - **System codes follow the same rule here.** Generating or releasing a system code is disabled when you can't edit the system.
+- **The same gate applies wherever you edit a system.** The *Edit System* sheet opened from the [Systems overview](../../systems/README.md), the [Control Systems](../../controlSystems/README.md) code list, or a relationship graph node enforces the identical responsibility check — disabled fields, a greyed-out **Save System** button, and the same restriction banner.
 
 ## Related
 

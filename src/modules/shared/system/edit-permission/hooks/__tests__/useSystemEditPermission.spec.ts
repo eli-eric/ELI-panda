@@ -3,11 +3,11 @@ import { renderHook } from '@testing-library/react'
 import {
     normalizeCanEditResponse,
     useSystemCanEdit,
-} from '../queries/useSystemCanEdit'
+} from '../useSystemCanEdit'
 import { formatResponsibleName, useSystemEditPermission } from '../useSystemEditPermission'
 
-jest.mock('../queries/useSystemCanEdit', () => {
-    const actual = jest.requireActual('../queries/useSystemCanEdit')
+jest.mock('../useSystemCanEdit', () => {
+    const actual = jest.requireActual('../useSystemCanEdit')
     return { ...actual, useSystemCanEdit: jest.fn() }
 })
 

@@ -38,10 +38,10 @@ jest.mock('../SystemDetailHeader.comp', () => ({
 jest.mock('../SystemDetailTabs.cont', () => ({
     SystemDetailTabsContainer: () => <div data-testid="detail-tabs-stub" />,
 }))
-jest.mock('../SystemEditRestrictionBanner.comp', () => ({
+jest.mock('@/modules/shared/system/edit-permission/components/SystemEditRestrictionBanner.comp', () => ({
     SystemEditRestrictionBanner: () => <div data-testid="edit-restriction-banner-stub" />,
 }))
-jest.mock('../../../hooks/useSystemEditPermission', () => ({
+jest.mock('@/modules/shared/system/edit-permission/hooks/useSystemEditPermission', () => ({
     useSystemEditPermission: () => ({
         canEdit: true,
         responsibles: [],

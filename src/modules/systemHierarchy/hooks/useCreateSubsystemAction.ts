@@ -4,12 +4,12 @@ import { useIntl } from 'react-intl'
 
 import { usePermission } from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
+import { guardSystemEdit } from '@/modules/shared/system/edit-permission'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { ROLE } from '@/types/constants/roles'
 import type { SystemLevel } from '@/types/gql/graphql'
 
 import { CreateSubsystemDialog } from '../components/create/CreateSubsystemDialog.comp'
-import { guardSystemEdit } from '../utils/guardSystemEdit'
 
 export const useCreateSubsystemAction = () => {
     const { formatMessage: fm } = useIntl()

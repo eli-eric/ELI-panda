@@ -3,13 +3,13 @@ import { act, renderHook, waitFor } from '@testing-library/react'
 import { request } from 'graphql-request'
 import React from 'react'
 
-import { guardSystemEdit } from '../../../utils/guardSystemEdit'
+import { guardSystemEdit } from '@/modules/shared/system/edit-permission/utils/guardSystemEdit'
 
 jest.mock('graphql-request', () => ({
     request: jest.fn(),
 }))
 
-jest.mock('../../../utils/guardSystemEdit', () => ({ guardSystemEdit: jest.fn() }))
+jest.mock('@/modules/shared/system/edit-permission/utils/guardSystemEdit', () => ({ guardSystemEdit: jest.fn() }))
 
 jest.mock('sonner', () => ({ toast: { promise: jest.fn() } }))
 

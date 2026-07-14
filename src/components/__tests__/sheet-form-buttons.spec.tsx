@@ -73,6 +73,19 @@ describe('SheetFormButtons', () => {
         expect(onExit).toHaveBeenCalled()
     })
 
+    it('disables Save (Exit stays enabled) when canEdit is false', () => {
+        mockUsePermission.mockReturnValue(true)
+        renderWithProviders(<SheetFormButtons editRole={ROLE.ADMIN} canEdit={false} />)
+        expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled()
+        expect(screen.getByRole('button', { name: 'Exit' })).not.toBeDisabled()
+    })
+
+    it('Save is enabled by default (canEdit defaults true)', () => {
+        mockUsePermission.mockReturnValue(true)
+        renderWithProviders(<SheetFormButtons editRole={ROLE.ADMIN} />)
+        expect(screen.getByRole('button', { name: 'Save' })).not.toBeDisabled()
+    })
+
     it('custom saveLabel/exitLabel override defaults', () => {
         mockUsePermission.mockReturnValue(true)
         renderWithProviders(

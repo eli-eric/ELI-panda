@@ -21,7 +21,7 @@ jest.mock('@/modules/shared/hooks/useAssignSparesNavigation', () => ({
 }))
 
 const mockCanEditSystem = jest.fn()
-jest.mock('../../../hooks/useSystemEditPermission', () => ({
+jest.mock('@/modules/shared/system/edit-permission/hooks/useSystemEditPermission', () => ({
     useSystemEditPermission: () => ({
         canEdit: mockCanEditSystem(),
         responsibles: [],

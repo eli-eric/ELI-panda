@@ -1,11 +1,11 @@
 import { act, renderHook } from '@testing-library/react'
 
 import { usePermission } from '@/hooks/usePermission'
+import { guardSystemEdit } from '@/modules/shared/system/edit-permission/utils/guardSystemEdit'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { AllProvidersWrapper } from '@/testutils/wrappers/AllProvidersWrapper'
 import { SystemLevel } from '@/types/gql/graphql'
 
-import { guardSystemEdit } from '../../utils/guardSystemEdit'
 import { useCreateSubsystemAction } from '../useCreateSubsystemAction'
 
 jest.mock('@/hooks/usePermission', () => ({
@@ -20,7 +20,7 @@ jest.mock('../../components/create/CreateSubsystemDialog.comp', () => ({
     CreateSubsystemDialog: () => null,
 }))
 
-jest.mock('../../utils/guardSystemEdit', () => ({
+jest.mock('@/modules/shared/system/edit-permission/utils/guardSystemEdit', () => ({
     guardSystemEdit: jest.fn(),
 }))
 
