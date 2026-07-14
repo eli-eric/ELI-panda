@@ -17,6 +17,9 @@ interface Props {
     saveLabel?: string
     exitLabel?: string
     loadingText?: string
+    // Per-resource gate layered on top of the coarse `editRole`. Defaults true so
+    // existing callers are unaffected; when false, Save is disabled (Exit stays open).
+    canEdit?: boolean
 }
 
 export const SheetFormButtons = ({
@@ -28,6 +31,7 @@ export const SheetFormButtons = ({
     saveLabel = 'Save',
     exitLabel = 'Exit',
     loadingText,
+    canEdit = true,
 }: Props) => {
     const { formatMessage: fm } = useIntl()
     const disabledEdit = usePermission([editRole])
@@ -70,7 +74,12 @@ export const SheetFormButtons = ({
                 </div>
                 {disabledEdit && (
                     <div className="flex gap-2">
-                        <Button type="button" size="sm" onClick={handleSubmit} disabled={loading}>
+                        <Button
+                            type="button"
+                            size="sm"
+                            onClick={handleSubmit}
+                            disabled={loading || !canEdit}
+                        >
                             {loading && <Loader2 className="size-3 animate-spin mr-2" />}
                             {saveLabel}
                         </Button>

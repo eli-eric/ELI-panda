@@ -68,9 +68,11 @@ export const normalizeCanEditResponse = (raw: unknown): SystemCanEditResponse =>
     }
 }
 
-const rawCanEditQueryFn = queryFetcher<unknown>('systemCanEdit')
+// Build the fetcher lazily inside the query fn (not at module load) so importing
+// this module never executes `queryFetcher`. That keeps it safe to pull in via the
+// barrel from wide import chains whose tests mock `@/utils/fetcher`.
 const canEditQueryFn: QueryFunction<SystemCanEditResponse, QueryFetcherKey> = async ctx =>
-    normalizeCanEditResponse(await rawCanEditQueryFn(ctx))
+    normalizeCanEditResponse(await queryFetcher<unknown>('systemCanEdit')(ctx))
 
 /**
  * Per-system edit permission from the backend. Authoritative source (GraphQL has

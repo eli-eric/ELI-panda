@@ -9,6 +9,10 @@ import { useItemPropertiesData } from '@/hooks/useItemPropertiesData'
 import { FILE_TYPE } from '@/modules/shared/fileManager/types'
 import { ImageGallery } from '@/modules/shared/imageManager/ImageGallery'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
+import {
+    SystemEditRestrictionBanner,
+    useSystemEditPermission,
+} from '@/modules/shared/system/edit-permission'
 import { useSystemSheetUpdate } from '@/modules/shared/system/system-edit/hooks/useSystemSheetUpdate'
 import { useSuspenseSystemDetail } from '@/modules/systemItem/hooks/useSuspenseSystemDetail'
 import { useModalFormStateStore } from '@/store/useModalFormStateStore'
@@ -82,6 +86,13 @@ export const SystemEditForm = ({ uid, onClose }: { uid: string; onClose?: () => 
         physicalItemUid: physicalItem?.uid,
     })
 
+    const {
+        canEdit,
+        status: editStatus,
+        responsibles,
+        refetch: refetchPermission,
+    } = useSystemEditPermission(uid)
+
     const { withDirtyProtection } = useFormDirtyProtection(formMethods)
     const { setIsDirty, reset } = useModalFormStateStore()
 
@@ -95,12 +106,18 @@ export const SystemEditForm = ({ uid, onClose }: { uid: string; onClose?: () => 
         <Form formMethods={formMethods} className="space-y-4">
             <SheetFormButtons
                 editRole={ROLE.SYSTEM_EDIT}
+                canEdit={canEdit}
                 loading={loading}
                 onSubmit={formMethods.handleSubmit(updateSystem)}
                 onExit={onClose}
                 isFormDirty={formMethods.formState.isDirty}
                 saveLabel="Save System"
                 loadingText="Saving system..."
+            />
+            <SystemEditRestrictionBanner
+                status={editStatus}
+                responsibles={responsibles}
+                refetch={refetchPermission}
             />
             <MemoizedImageGallery
                 ref={systemImageRef}
@@ -127,9 +144,13 @@ export const SystemEditForm = ({ uid, onClose }: { uid: string; onClose?: () => 
                     withDirtyProtection={withDirtyProtection}
                 />
             )}
-            <SystemDetailSection />
+            <SystemDetailSection uid={uid} canEdit={canEdit} />
             {physicalItem && (
-                <PhysicalItemSection physicalItem={physicalItem} catalogueItem={catalogueItem} />
+                <PhysicalItemSection
+                    physicalItem={physicalItem}
+                    catalogueItem={catalogueItem}
+                    canEdit={canEdit}
+                />
             )}
             {catalogueItem && physicalItem && hasProperties && (
                 <ItemPropertiesSection

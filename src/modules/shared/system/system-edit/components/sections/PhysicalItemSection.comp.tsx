@@ -12,13 +12,15 @@ import { encodeURIWithStringify } from '@/utils'
 interface PhysicalItemSheetSectionProps {
     physicalItem: any
     catalogueItem: any
+    canEdit?: boolean
 }
 
 export const PhysicalItemSection: FC<PhysicalItemSheetSectionProps> = ({
     physicalItem,
     catalogueItem,
+    canEdit = true,
 }) => {
-    const fields = useSystemEditFormFields()
+    const fields = useSystemEditFormFields(canEdit)
     if (!physicalItem) return null
 
     return (
