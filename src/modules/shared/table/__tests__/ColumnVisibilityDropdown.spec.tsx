@@ -27,11 +27,18 @@ jest.mock('@/components/ui/dropdown-menu', () => ({
     ),
 }))
 
-const makeColumn = (id: string, visible = true, header: string | unknown = id) => ({
+const makeColumn = (
+    id: string,
+    visible = true,
+    header: string | unknown = id,
+    canHide = true,
+    title?: string,
+) => ({
     id,
+    getCanHide: () => canHide,
     getIsVisible: () => visible,
     toggleVisibility: jest.fn(),
-    columnDef: { header },
+    columnDef: { header, meta: title ? { title } : undefined },
 })
 
 const makeTable = (columns: any[], allVisible = true, toggleAll = jest.fn()) =>
@@ -57,6 +64,16 @@ describe('ColumnVisibilityDropdown', () => {
         expect(screen.queryByTestId('dd-Col B')).toBeNull()
     })
 
+    it('skips columns that cannot be hidden', () => {
+        const table = makeTable([
+            makeColumn('hideable', true, 'Hideable'),
+            makeColumn('fixed', true, 'Fixed', false),
+        ])
+        render(<ColumnVisibilityDropdown table={table} />)
+        expect(screen.getByTestId('dd-Hideable')).toBeInTheDocument()
+        expect(screen.queryByTestId('dd-Fixed')).toBeNull()
+    })
+
     it('Toggle All forwards event in expected shape', () => {
         const toggleAll = jest.fn()
         const table = makeTable([], false, toggleAll)
@@ -77,5 +94,23 @@ describe('ColumnVisibilityDropdown', () => {
         const table = makeTable([makeColumn('only-id', true, () => 'Node')])
         render(<ColumnVisibilityDropdown table={table} />)
         expect(screen.getByTestId('dd-only-id')).toBeInTheDocument()
+    })
+
+    it('uses the metadata title when header is not a string', () => {
+        const table = makeTable([
+            makeColumn('property-uid', true, () => 'Node', true, 'Property name'),
+        ])
+        render(<ColumnVisibilityDropdown table={table} />)
+        expect(screen.getByTestId('dd-Property name')).toBeInTheDocument()
+        expect(screen.queryByTestId('dd-property-uid')).toBeNull()
+    })
+
+    it('derives checked state from the columnVisibility prop over the table instance', () => {
+        // the table instance still reports the column as visible…
+        const table = makeTable([makeColumn('a', true, 'Col A')], true)
+        // …but the caller's live visibility state says it is hidden
+        render(<ColumnVisibilityDropdown table={table} columnVisibility={{ a: false }} />)
+        expect(screen.getByTestId('dd-Col A').getAttribute('data-checked')).toBe('false')
+        expect(screen.getByTestId('dd-Toggle All').getAttribute('data-checked')).toBe('false')
     })
 })

@@ -14,6 +14,7 @@ import { CatalogueTable } from '@/modules/shared/catalogue/table/CatalogueItems.
 import { FilterBadges } from '@/modules/shared/form/FilterBadges'
 import { ColumnVisibilityDropdown } from '@/modules/shared/table/ColumnVisibilityDropdown.comp'
 import { PaginationV2 } from '@/modules/shared/table/PaginationV2'
+import { useVisibility } from '@/modules/shared/table/pandaTable/hooks/useVisibility'
 import type { PandaTableV2Handle } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
 import { SearchBar } from '@/modules/shared/table/SearchBar'
 
@@ -29,6 +30,7 @@ export const CatalogueItemsPanelContainer: FC = () => {
     const { category } = useCatalogueCategoryDetail(selectedCategoryUid)
     const tableRef = useRef<PandaTableV2Handle>(null)
     const [table, setTable] = useState<Table<any> | null>(null)
+    const [columnVisibility] = useVisibility(CATALOGUE_ITEMS_TABLE_ID)
 
     const defFilterValues = useMemo<CatalogueItemForm>(
         () => ({
@@ -76,7 +78,14 @@ export const CatalogueItemsPanelContainer: FC = () => {
                         tableId={CATALOGUE_ITEMS_TABLE_ID}
                     />
                 }
-                right={table ? <ColumnVisibilityDropdown table={table} /> : undefined}
+                right={
+                    table ? (
+                        <ColumnVisibilityDropdown
+                            table={table}
+                            columnVisibility={columnVisibility}
+                        />
+                    ) : undefined
+                }
                 secondRow={
                     <FilterBadges
                         tableId={CATALOGUE_ITEMS_TABLE_ID}
