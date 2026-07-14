@@ -162,6 +162,10 @@ export const SystemEditForm = ({ uid, onClose }: { uid: string; onClose?: () => 
             {physicalItem && (
                 <OrderInformationSection physicalItem={physicalItem} serviceItems={serviceItems} />
             )}
+            {/* Spare assignment is intentionally NOT gated by canEdit — it is a
+                distinct workflow (own feature flag `enableSparePartsAssignment`, and
+                the assign write is REST, backend-403-guarded), allowed regardless of
+                per-system edit responsibility. */}
             {systemDetail &&
                 (systemDetail?.sparePartsFor?.length > 0 ||
                     systemDetail?.sparePartsConnection?.edges?.length > 0) && (
