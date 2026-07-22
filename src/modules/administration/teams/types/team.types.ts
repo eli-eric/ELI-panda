@@ -1,9 +1,10 @@
-// Team list row (GET /teams)
+// Team list row (GET /teams).
+// `code`/`description` are nullable: optional on create and cleared via PATCH null.
 export interface TeamListItem {
     uid: string
     name: string
-    code: string
-    description: string
+    code: string | null
+    description: string | null
     memberCount: number
 }
 
@@ -11,8 +12,8 @@ export interface TeamListItem {
 export interface Team {
     uid: string
     name: string
-    code: string
-    description: string
+    code: string | null
+    description: string | null
 }
 
 // Team member — includes deactivated users (isEnabled === false)
@@ -29,8 +30,8 @@ export interface TeamMember {
 export interface TeamDetail {
     uid: string
     name: string
-    code: string
-    description: string
+    code: string | null
+    description: string | null
     members: TeamMember[]
 }
 

@@ -9,7 +9,7 @@ export const formatRelatedNodes = (data: unknown): string => {
     const nodes = (data as TeamDeleteConflict)?.relatedNodes
     if (!Array.isArray(nodes)) return ''
     return nodes
-        .filter(n => n && n.label && typeof n.count === 'number')
+        .filter(n => n && typeof n.label === 'string' && typeof n.count === 'number')
         .map(n => `${n.label} (${n.count})`)
         .join(', ')
 }
