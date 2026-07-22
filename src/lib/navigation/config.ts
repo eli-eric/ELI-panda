@@ -129,6 +129,10 @@ export const OTHERS_NAV_ITEMS: NavigationItem[] = [
         url: PATH.ADMIN_USERS,
         role: ROLE.ADMIN,
         icon: Users,
+        items: [
+            { title: 'Users', url: PATH.ADMIN_USERS, role: ROLE.ADMIN },
+            { title: 'Teams', url: PATH.ADMIN_TEAMS, role: ROLE.ADMIN },
+        ],
     },
 ]
 
@@ -144,6 +148,7 @@ export const PROTECTED_PATHS = [
     PATH.ROOM_CARDS,
     PATH.ADMIN_USERS,
     PATH.ADMIN_USER,
+    PATH.ADMIN_TEAMS,
     PATH.ADMIN,
     PATH.PROFILE_GENERAL,
     PATH.PROFILE_SECURITY,
@@ -183,6 +188,7 @@ export const PATH_ROLES_CONFIG: Record<PATH, ROLE[]> = {
     [PATH.ROOM_CARDS]: [ROLE.ROOM_CARD_VIEW, ROLE.ROOM_CARD_EDIT],
     [PATH.ADMIN_USERS]: [ROLE.ADMIN],
     [PATH.ADMIN_USER]: [ROLE.ADMIN],
+    [PATH.ADMIN_TEAMS]: [ROLE.ADMIN],
     [PATH.ADMIN]: [ROLE.ADMIN],
     [PATH.PROFILE_GENERAL]: [ROLE.BASICS],
     [PATH.PROFILE_SECURITY]: [ROLE.BASICS],
