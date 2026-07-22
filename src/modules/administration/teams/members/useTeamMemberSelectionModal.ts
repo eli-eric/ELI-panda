@@ -2,6 +2,7 @@ import { useIntl } from 'react-intl'
 
 import { message } from '@/i18n/src/messages'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
+import { TABLE_IDS } from '@/types/constants/tableIds'
 
 import type { TeamMember } from '../types/team.types'
 import { TeamMemberModalContent } from './team-member-modal-content'
@@ -17,7 +18,7 @@ export const useTeamMemberSelectionModal = () => {
 
     const openMemberModal = ({ initialSelected, onSelect }: OpenMemberModalArgs) => {
         openModal('dialog', {
-            id: 'team-member-select',
+            id: TABLE_IDS.TEAM_MEMBER_SELECT_MODAL,
             component: TeamMemberModalContent,
             props: {
                 title: fm({ id: message.teamsPage.members.modalTitle }),
