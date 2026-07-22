@@ -20,6 +20,7 @@ export enum PATH {
     ROOM_CARD = '/room-card',
     ADMIN_USERS = '/administration/users',
     ADMIN_USER = '/administration/user',
+    ADMIN_TEAMS = '/administration/teams',
     ADMIN = '/administration',
     PROFILE_GENERAL = '/profile/general',
     PROFILE_SECURITY = '/profile/security',
