@@ -24,6 +24,8 @@ const labels = message.teamsPage.members
 
 const tableSettings: PandaTableSettings<TeamMember> = {
     enableSorting: true,
+    // Data is a static array; sort client-side (usePandaTable defaults to manual).
+    manualSorting: false,
     enableQueryURL: false,
     enableColumnReordering: false,
     enableColumnHiding: false,

@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2, Plus } from 'lucide-react'
 import type { FC } from 'react'
+import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 import { toast } from 'sonner'
@@ -13,7 +14,7 @@ import { message } from '@/i18n/src/messages'
 
 import { useTeamCreate } from '../hooks/useTeamCreate'
 import type { Team } from '../types/team.types'
-import { type TeamCreateData, teamCreateSchema } from './team-create.schema'
+import { buildTeamCreateSchema, type TeamCreateData } from './team-create.schema'
 
 interface TeamCreateDialogProps {
     onClose?: () => void
@@ -29,12 +30,14 @@ export const TeamCreateDialog: FC<TeamCreateDialogProps> = ({ onClose, onCreated
         onSuccess: (team: Team) => onCreated?.(team.uid),
     })
 
+    const schema = useMemo(() => buildTeamCreateSchema(fm({ id: fields.nameRequired })), [fm])
+
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm<TeamCreateData>({
-        resolver: zodResolver(teamCreateSchema),
+        resolver: zodResolver(schema),
         defaultValues: { name: '', code: '', description: '' },
         mode: 'onSubmit',
     })

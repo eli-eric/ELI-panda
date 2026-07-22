@@ -21,12 +21,15 @@ export const useTeamMembers = (uid: string) => {
         mutationKey: [TEAM_QUERY_KEY, uid, 'members'],
         mutationFn: queryMutate<TeamDetail, SetMembersVariables>('teamMembers', 'put', { uid }),
         onSuccess: async response => {
-            // Prime the detail cache from the response when the API echoes the
-            // updated team, but always invalidate as a safety net in case it
-            // answers 204/empty (setQueryData(undefined) would otherwise leave
-            // stale members behind a success toast).
+            // Merge the response into the cached detail (never overwrite): a
+            // partial payload would otherwise drop name/code/description until
+            // the refetch lands. Always invalidate as the source of truth,
+            // which also covers a 204/empty body.
             if (response.data) {
-                queryClient.setQueryData([TEAM_QUERY_KEY, { uid }], response.data)
+                queryClient.setQueryData<TeamDetail | undefined>(
+                    [TEAM_QUERY_KEY, { uid }],
+                    prev => (prev ? { ...prev, ...response.data } : response.data),
+                )
             }
             await Promise.all([
                 queryClient.invalidateQueries({ queryKey: [TEAM_QUERY_KEY, { uid }] }),

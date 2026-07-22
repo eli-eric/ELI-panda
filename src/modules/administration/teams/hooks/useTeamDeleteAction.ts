@@ -52,6 +52,8 @@ export const useTeamDeleteAction = () => {
                     loading: fm({ id: actions.deleting }),
                     success: () => {
                         queryClient.invalidateQueries({ queryKey: [TEAMS_QUERY_KEY] })
+                        // Teams are also served to CODEBOOK.TEAM dropdowns elsewhere.
+                        queryClient.invalidateQueries({ queryKey: ['codebook'] })
                         clearSelection()
                         return fm({ id: actions.deleted })
                     },

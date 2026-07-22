@@ -5,6 +5,7 @@ import { useIntl } from 'react-intl'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { SidebarTrigger } from '@/components/ui/sidebar'
 import { Skeleton } from '@/components/ui/skeleton'
 import { message } from '@/i18n/src/messages'
 
@@ -33,6 +34,7 @@ export const TeamsListPanel: FC = () => {
     return (
         <div className="flex h-full flex-col">
             <div className="flex items-center gap-2 border-b border-border p-2">
+                <SidebarTrigger className="shrink-0" />
                 <div className="relative flex-1">
                     <Search className="pointer-events-none absolute left-2 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                     <Input

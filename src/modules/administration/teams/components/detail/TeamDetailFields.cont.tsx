@@ -26,6 +26,10 @@ export const TeamDetailFields: FC<TeamDetailFieldsProps> = ({ team }) => {
         }
         // Clearing an optional field sends null; name is always non-empty here.
         const payload = field === 'name' ? value.trim() : value.trim() || null
+        // Skip a no-op PATCH (e.g. opening an already-empty Code and pressing
+        // Enter would otherwise fire {code: null} + a "Saved" toast).
+        const current = field === 'name' ? team.name : team[field] || null
+        if (payload === current) return
         await updateField(team.uid, field, payload)
     }
 

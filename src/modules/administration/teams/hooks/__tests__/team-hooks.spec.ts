@@ -102,10 +102,15 @@ describe('useTeamMembers', () => {
 
         const opts = mockUseMutation.mock.calls[0][0]
         opts.onSuccess({ data: { uid: 't-1', members: [] } })
-        expect(setQueryData).toHaveBeenCalledWith(['team', { uid: 't-1' }], {
-            uid: 't-1',
-            members: [],
-        })
+
+        // Merges the response into the cached team rather than overwriting it.
+        expect(setQueryData).toHaveBeenCalledWith(['team', { uid: 't-1' }], expect.any(Function))
+        const updater = setQueryData.mock.calls[0][1]
+        expect(
+            updater({ uid: 't-1', name: 'Alpha', code: 'A', description: 'd', members: [{}] }),
+        ).toEqual({ uid: 't-1', name: 'Alpha', code: 'A', description: 'd', members: [] })
+        expect(updater(undefined)).toEqual({ uid: 't-1', members: [] })
+
         expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['team', { uid: 't-1' }] })
         expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['teams'] })
     })

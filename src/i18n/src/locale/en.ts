@@ -179,8 +179,10 @@ export const messages = {
             fileSizeKb: '{value} KB',
             actions: 'Actions',
             uploading: 'Uploading {done}/{total, plural, one {# file} other {# files}}',
-            uploadSuccess: '{count, plural, one {# file uploaded} other {# files uploaded}}',
-            uploadError: '{count, plural, one {# file failed} other {# files failed}}: {names}',
+            uploadSuccess:
+                '{count, plural, one {# file uploaded} other {# files uploaded}}',
+            uploadError:
+                '{count, plural, one {# file failed} other {# files failed}}: {names}',
             fileTooLarge: '{name} exceeds 100MB limit',
             retry: 'Retry',
             updateSuccess: '{name} updated',
@@ -1536,7 +1538,8 @@ export const messages = {
             assignSpares: 'Assign Spares',
             assignItem: 'Assign Item',
             notFoundTitle: 'System not found',
-            notFoundDescription: 'The system may have been deleted or the link is no longer valid.',
+            notFoundDescription:
+                'The system may have been deleted or the link is no longer valid.',
             notFoundBack: 'Back to hierarchy',
             loadErrorTitle: 'Failed to load system',
             loadErrorDescription: 'Something went wrong while loading the system detail.',

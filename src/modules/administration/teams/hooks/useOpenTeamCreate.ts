@@ -11,7 +11,7 @@ interface UseOpenTeamCreateOptions {
 
 export const useOpenTeamCreate = ({ onCreated }: UseOpenTeamCreateOptions = {}) => {
     const { formatMessage: fm } = useIntl()
-    const { openModal, closeModal } = useDynamicModalStore()
+    const { openModal } = useDynamicModalStore()
 
     const openTeamCreate = () => {
         openModal('dialog', {
@@ -19,10 +19,9 @@ export const useOpenTeamCreate = ({ onCreated }: UseOpenTeamCreateOptions = {}) 
             component: TeamCreateDialog,
             props: {
                 title: fm({ id: message.teamsPage.create.title }),
-                onCreated: (uid: string) => {
-                    closeModal('team-create')
-                    onCreated?.(uid)
-                },
+                // The dialog closes itself via onClose on success; only forward
+                // selection here to avoid a double closeModal warning.
+                onCreated,
             },
         })
     }

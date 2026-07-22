@@ -111,7 +111,7 @@ export const getEndpoints = ({
         zonesImport: '/zones/import',
         teams: `/teams${query}`,
         teamDetail: `/teams${uidPart}`,
-        teamMembers: `/teams/${uid}/members`,
+        teamMembers: uid ? `/teams/${uid}/members` : null,
         teamAssignableUsers: `/teams/assignable-users${query}`,
     }
     return endpoints
