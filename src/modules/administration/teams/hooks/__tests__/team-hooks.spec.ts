@@ -76,6 +76,17 @@ describe('useTeamCreate', () => {
             description: undefined,
         })
     })
+
+    it('does not forward selection when the API returns no body', async () => {
+        mockQueryMutate.mockReturnValue(jest.fn())
+        const onSuccess = jest.fn()
+
+        renderHook(() => useTeamCreate({ onSuccess }))
+        const opts = mockUseMutation.mock.calls[0][0]
+        await opts.onSuccess({ data: undefined })
+
+        expect(onSuccess).not.toHaveBeenCalled()
+    })
 })
 
 describe('useTeamMembers', () => {
@@ -91,11 +102,26 @@ describe('useTeamMembers', () => {
 
         const opts = mockUseMutation.mock.calls[0][0]
         opts.onSuccess({ data: { uid: 't-1', members: [] } })
-        expect(setQueryData).toHaveBeenCalledWith(
-            ['team', { uid: 't-1' }],
-            { uid: 't-1', members: [] },
-        )
+        expect(setQueryData).toHaveBeenCalledWith(['team', { uid: 't-1' }], {
+            uid: 't-1',
+            members: [],
+        })
+        expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['team', { uid: 't-1' }] })
         expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['teams'] })
+    })
+
+    it('skips setQueryData but still invalidates on an empty (204) response', () => {
+        mockQueryMutate.mockReturnValue(jest.fn())
+        const setQueryData = jest.fn()
+        const invalidateQueries = jest.fn().mockResolvedValue(undefined)
+        mockUseQueryClient.mockReturnValue({ setQueryData, invalidateQueries })
+
+        renderHook(() => useTeamMembers('t-1'))
+        const opts = mockUseMutation.mock.calls[0][0]
+        opts.onSuccess({ data: undefined })
+
+        expect(setQueryData).not.toHaveBeenCalled()
+        expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['team', { uid: 't-1' }] })
     })
 })
 

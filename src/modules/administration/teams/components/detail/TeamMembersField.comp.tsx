@@ -5,6 +5,7 @@ import { toast } from 'sonner'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 
@@ -22,16 +23,30 @@ export const TeamMembersField: FC<TeamMembersFieldProps> = ({ team }) => {
     const { formatMessage: fm } = useIntl()
     const { mutateAsync } = useTeamMembers(team.uid)
     const { openMemberModal } = useTeamMemberSelectionModal()
+    const withWarningModal = useWarningModal()
+
+    const saveMembers = (userUids: string[]) => {
+        toast.promise(mutateAsync({ userUids }), {
+            loading: fm({ id: labels.saving }),
+            success: fm({ id: labels.saved }),
+            error: fm({ id: labels.saveFailed }),
+        })
+    }
 
     const handleManage = () => {
         openMemberModal({
             initialSelected: team.members,
             onSelect: userUids => {
-                toast.promise(mutateAsync({ userUids }), {
-                    loading: fm({ id: labels.saving }),
-                    success: fm({ id: labels.saved }),
-                    error: fm({ id: labels.saveFailed }),
-                })
+                // Clearing every member is a destructive full-replace — confirm
+                // before wiping a non-empty team.
+                if (userUids.length === 0 && team.members.length > 0) {
+                    withWarningModal(
+                        () => saveMembers(userUids),
+                        fm({ id: labels.clearAllWarning }),
+                    )()
+                    return
+                }
+                saveMembers(userUids)
             },
         })
     }
@@ -64,7 +79,9 @@ export const TeamMembersField: FC<TeamMembersFieldProps> = ({ team }) => {
                         >
                             {member.lastName}, {member.firstName}
                             {!member.isEnabled && (
-                                <span className="ml-1 text-xs">({fm({ id: labels.disabled })})</span>
+                                <span className="ml-1 text-xs">
+                                    ({fm({ id: labels.disabled })})
+                                </span>
                             )}
                         </Badge>
                     ))}

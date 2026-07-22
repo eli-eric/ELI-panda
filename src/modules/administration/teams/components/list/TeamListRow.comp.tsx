@@ -15,7 +15,7 @@ export const TeamListRow: FC<TeamListRowProps> = ({ team, isActive, onSelect }) 
     <button
         type="button"
         onClick={() => onSelect(team.uid)}
-        aria-current={isActive}
+        aria-current={isActive ? 'true' : undefined}
         data-testid={`team-row-${team.uid}`}
         className={cn(
             'flex w-full items-center justify-between gap-2 rounded-md px-3 py-2 text-left text-sm',

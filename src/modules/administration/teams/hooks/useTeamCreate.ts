@@ -29,7 +29,11 @@ export const useTeamCreate = ({ onSuccess }: UseTeamCreateOptions = {}) => {
         },
         onSuccess: async response => {
             await queryClient.invalidateQueries({ queryKey: [TEAMS_QUERY_KEY] })
-            onSuccess?.(response.data)
+            // A 201-with-no-body must not throw here (the team was created); only
+            // forward selection when the API echoes the new team.
+            if (response.data?.uid) {
+                onSuccess?.(response.data)
+            }
         },
     })
 }

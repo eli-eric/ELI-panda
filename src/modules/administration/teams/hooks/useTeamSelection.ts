@@ -8,7 +8,8 @@ import { useCallback, useMemo } from 'react'
 export const useTeamSelection = () => {
     const router = useRouter()
 
-    const selectedUid = (router.query.team as string) ?? null
+    const teamParam = router.query.team
+    const selectedUid = (Array.isArray(teamParam) ? teamParam[0] : teamParam) ?? null
 
     const updateQuery = useCallback(
         (team: string | undefined) => {

@@ -18,4 +18,12 @@ describe('formatRelatedNodes', () => {
         expect(formatRelatedNodes({})).toBe('')
         expect(formatRelatedNodes({ relatedNodes: 'nope' })).toBe('')
     })
+
+    it('skips nodes missing a numeric count', () => {
+        expect(
+            formatRelatedNodes({
+                relatedNodes: [{ label: 'System' }, { label: 'RoomCard', count: 2 }],
+            } as any),
+        ).toBe('RoomCard (2)')
+    })
 })

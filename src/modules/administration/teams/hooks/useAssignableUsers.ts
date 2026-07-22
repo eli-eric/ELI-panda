@@ -11,10 +11,14 @@ import type { TeamMember } from '../types/team.types'
  * useQueryManager (server-side search), like useResearchersForSelect.
  */
 export const useAssignableUsers = (tableId: string) => {
-    const query = useQueryManager(tableId)
+    const { query } = useQueryManager(tableId)
+
+    // The endpoint only understands `?search=`; don't leak the rest of the
+    // table-state bag (pagination/columnFilter/sorting) into the URL.
+    const search = query.search || ''
 
     return useQuery({
-        queryKey: ['team-assignable-users', { query: query.query }],
+        queryKey: ['team-assignable-users', { query: { search } }],
         queryFn: queryFetcher<TeamMember[]>('teamAssignableUsers'),
         placeholderData: keepPreviousData,
     })

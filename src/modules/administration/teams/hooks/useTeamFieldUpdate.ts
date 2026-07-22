@@ -40,10 +40,16 @@ export const useTeamFieldUpdate = () => {
             toast.promise(promise, {
                 loading: fm({ id: labels.saving }),
                 success: fm({ id: labels.saved }),
-                error: (err: AxiosError) =>
-                    err?.response?.status === 400 && field === 'code'
-                        ? fm({ id: labels.codeTaken })
-                        : fm({ id: labels.saveFailed }),
+                error: (err: AxiosError) => {
+                    // Surface the server's own reason on a validation error
+                    // (duplicate code, bad format, …) rather than guessing.
+                    const serverMessage = (err?.response?.data as { errorMessage?: string })
+                        ?.errorMessage
+                    if (err?.response?.status === 400) {
+                        return serverMessage || fm({ id: labels.saveFailed })
+                    }
+                    return fm({ id: labels.saveFailed })
+                },
             })
 
             return promise

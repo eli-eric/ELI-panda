@@ -179,10 +179,8 @@ export const messages = {
             fileSizeKb: '{value} KB',
             actions: 'Actions',
             uploading: 'Uploading {done}/{total, plural, one {# file} other {# files}}',
-            uploadSuccess:
-                '{count, plural, one {# file uploaded} other {# files uploaded}}',
-            uploadError:
-                '{count, plural, one {# file failed} other {# files failed}}: {names}',
+            uploadSuccess: '{count, plural, one {# file uploaded} other {# files uploaded}}',
+            uploadError: '{count, plural, one {# file failed} other {# files failed}}: {names}',
             fileTooLarge: '{name} exceeds 100MB limit',
             retry: 'Retry',
             updateSuccess: '{name} updated',
@@ -1267,10 +1265,8 @@ export const messages = {
         },
     },
     teamsPage: {
-        head: 'Teams',
-        description: 'Manage teams and their members',
+        head: 'ELI Panda - Teams',
         list: {
-            title: 'Teams',
             newTeam: 'New team',
             searchPlaceholder: 'Search teams...',
             empty: 'No teams found',
@@ -1279,8 +1275,6 @@ export const messages = {
         detail: {
             selectPrompt: 'Select a team to view and edit its details',
             notFound: 'Team not found',
-            loadFailed: 'Failed to load team',
-            membersLabel: 'Members',
         },
         fields: {
             name: { label: 'Name', placeholder: 'Enter team name' },
@@ -1290,7 +1284,6 @@ export const messages = {
             saving: 'Saving...',
             saved: 'Saved',
             saveFailed: 'Failed to save team',
-            codeTaken: 'Code already in use',
         },
         members: {
             title: 'Members',
@@ -1300,8 +1293,9 @@ export const messages = {
             saving: 'Updating members...',
             saved: 'Members updated',
             saveFailed: 'Failed to update members',
+            clearAllWarning: 'Remove all members from this team?',
+            removeMember: 'Remove {name}',
             selectedCount: '{count} selected',
-            searchPlaceholder: 'Search users...',
             modalTitle: 'Manage team members',
             confirm: 'Confirm',
             columns: {
@@ -1542,8 +1536,7 @@ export const messages = {
             assignSpares: 'Assign Spares',
             assignItem: 'Assign Item',
             notFoundTitle: 'System not found',
-            notFoundDescription:
-                'The system may have been deleted or the link is no longer valid.',
+            notFoundDescription: 'The system may have been deleted or the link is no longer valid.',
             notFoundBack: 'Back to hierarchy',
             loadErrorTitle: 'Failed to load system',
             loadErrorDescription: 'Something went wrong while loading the system detail.',

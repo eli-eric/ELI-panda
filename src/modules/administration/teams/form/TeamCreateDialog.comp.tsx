@@ -64,9 +64,7 @@ export const TeamCreateDialog: FC<TeamCreateDialogProps> = ({ onClose, onCreated
                     data-testid="team-create-name"
                     {...register('name')}
                 />
-                {errors.name && (
-                    <p className="text-xs text-destructive">{errors.name.message}</p>
-                )}
+                {errors.name && <p className="text-xs text-destructive">{errors.name.message}</p>}
             </div>
 
             <div className="space-y-2">

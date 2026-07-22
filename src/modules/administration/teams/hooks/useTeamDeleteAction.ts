@@ -9,6 +9,7 @@ import type { AxiosError } from '@/types/http'
 import { queryMutate } from '@/utils/fetcher'
 import { createMessageValues } from '@/utils/formatters'
 
+import type { TeamDeleteConflict } from '../types/team.types'
 import { formatRelatedNodes } from '../utils/conflict'
 import { TEAMS_QUERY_KEY } from './useTeams'
 import { useTeamSelection } from './useTeamSelection'
@@ -26,11 +27,16 @@ export const useTeamDeleteAction = () => {
     const { clearSelection } = useTeamSelection()
 
     const buildConflictMessage = useCallback(
-        (name: string, data: unknown) =>
-            fm(
-                { id: actions.conflict },
-                createMessageValues({ name, items: formatRelatedNodes(data) }),
-            ),
+        (name: string, data: unknown) => {
+            const items = formatRelatedNodes(data)
+            // Non-conforming 409 body → prefer the server's own message, else a
+            // generic failure (never render "…blocked by: " with an empty list).
+            if (!items) {
+                const serverMessage = (data as TeamDeleteConflict | undefined)?.errorMessage
+                return serverMessage || fm({ id: actions.deleteFailed })
+            }
+            return fm({ id: actions.conflict }, createMessageValues({ name, items }))
+        },
         [fm],
     )
 

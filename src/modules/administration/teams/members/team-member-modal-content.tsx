@@ -11,6 +11,7 @@ import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaT
 import type { PandaTableSettings } from '@/modules/shared/table/pandaTable/PandaTable'
 import { PandaTableV2 } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
 import { SearchBar } from '@/modules/shared/table/SearchBar'
+import { TABLE_IDS } from '@/types/constants/tableIds'
 
 import { useAssignableUsers } from '../hooks/useAssignableUsers'
 import type { TeamMember } from '../types/team.types'
@@ -18,7 +19,7 @@ import { useTeamMemberSelectColumns } from './team-member-select.columns'
 import type { TeamMemberModalContentProps } from './team-member-select.types'
 import { isMemberSelected } from './team-member-select.types'
 
-const TABLE_ID = 'team-member-select'
+const TABLE_ID = TABLE_IDS.TEAM_MEMBER_SELECT_MODAL
 const labels = message.teamsPage.members
 
 const tableSettings: PandaTableSettings<TeamMember> = {
@@ -52,8 +53,7 @@ export const TeamMemberModalContent: FC<TeamMemberModalContentProps> = ({
                 : [...prev, member],
         )
 
-    const removeFromBadges = (uid: string) =>
-        setSelected(prev => prev.filter(m => m.uid !== uid))
+    const removeFromBadges = (uid: string) => setSelected(prev => prev.filter(m => m.uid !== uid))
 
     const columns = useTeamMemberSelectColumns({ selected, onToggle: toggle })
 
@@ -80,7 +80,10 @@ export const TeamMemberModalContent: FC<TeamMemberModalContentProps> = ({
                         <Badge
                             key={m.uid}
                             variant="secondary"
-                            className={cn('flex items-center gap-1 pr-1', !m.isEnabled && 'opacity-50')}
+                            className={cn(
+                                'flex items-center gap-1 pr-1',
+                                !m.isEnabled && 'opacity-50',
+                            )}
                         >
                             <span className="text-xs">
                                 {m.lastName}, {m.firstName}
@@ -89,7 +92,10 @@ export const TeamMemberModalContent: FC<TeamMemberModalContentProps> = ({
                                 type="button"
                                 onClick={() => removeFromBadges(m.uid)}
                                 className="ml-1 rounded-full p-0.5 hover:bg-muted"
-                                aria-label={`Remove ${m.firstName} ${m.lastName}`}
+                                aria-label={fm(
+                                    { id: labels.removeMember },
+                                    { name: `${m.firstName} ${m.lastName}` },
+                                )}
                             >
                                 <X className="h-3 w-3" />
                             </button>

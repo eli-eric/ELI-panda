@@ -26,9 +26,7 @@ export const TeamsListPanel: FC = () => {
         const term = search.trim().toLowerCase()
         if (!term) return teams ?? []
         return (teams ?? []).filter(
-            t =>
-                t.name.toLowerCase().includes(term) ||
-                (t.code ?? '').toLowerCase().includes(term),
+            t => t.name.toLowerCase().includes(term) || (t.code ?? '').toLowerCase().includes(term),
         )
     }, [teams, search])
 
@@ -45,12 +43,7 @@ export const TeamsListPanel: FC = () => {
                         data-testid="teams-search"
                     />
                 </div>
-                <Button
-                    type="button"
-                    size="sm"
-                    onClick={openTeamCreate}
-                    data-testid="teams-new"
-                >
+                <Button type="button" size="sm" onClick={openTeamCreate} data-testid="teams-new">
                     <Plus className="size-4" />
                     {fm({ id: labels.newTeam })}
                 </Button>

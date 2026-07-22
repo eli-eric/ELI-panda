@@ -21,8 +21,17 @@ export const useTeamMembers = (uid: string) => {
         mutationKey: [TEAM_QUERY_KEY, uid, 'members'],
         mutationFn: queryMutate<TeamDetail, SetMembersVariables>('teamMembers', 'put', { uid }),
         onSuccess: async response => {
-            queryClient.setQueryData([TEAM_QUERY_KEY, { uid }], response.data)
-            await queryClient.invalidateQueries({ queryKey: [TEAMS_QUERY_KEY] })
+            // Prime the detail cache from the response when the API echoes the
+            // updated team, but always invalidate as a safety net in case it
+            // answers 204/empty (setQueryData(undefined) would otherwise leave
+            // stale members behind a success toast).
+            if (response.data) {
+                queryClient.setQueryData([TEAM_QUERY_KEY, { uid }], response.data)
+            }
+            await Promise.all([
+                queryClient.invalidateQueries({ queryKey: [TEAM_QUERY_KEY, { uid }] }),
+                queryClient.invalidateQueries({ queryKey: [TEAMS_QUERY_KEY] }),
+            ])
         },
     })
 }
