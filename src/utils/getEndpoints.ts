@@ -112,6 +112,7 @@ export const getEndpoints = ({
         teams: `/teams${query}`,
         teamDetail: `/teams${uidPart}`,
         teamMembers: uid ? `/teams/${uid}/members` : null,
+        teamMember: uid && itemUid ? `/teams/${uid}/members/${itemUid}` : null,
         teamAssignableUsers: `/teams/assignable-users${query}`,
     }
     return endpoints
