@@ -1,17 +1,20 @@
 import { Users } from 'lucide-react'
 import type { FC } from 'react'
+import { useCallback } from 'react'
 import { useIntl } from 'react-intl'
 import { toast } from 'sonner'
 
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Table } from '@/components/ui/table'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 
+import { useRemoveTeamMember } from '../../hooks/useRemoveTeamMember'
 import { useTeamMembers } from '../../hooks/useTeamMembers'
 import { useTeamMemberSelectionModal } from '../../members/useTeamMemberSelectionModal'
-import type { TeamDetail } from '../../types/team.types'
+import type { TeamDetail, TeamMember } from '../../types/team.types'
+import { useTeamMemberColumns } from './team-members.columns'
 
 interface TeamMembersFieldProps {
     team: TeamDetail
@@ -21,12 +24,13 @@ const labels = message.teamsPage.members
 
 export const TeamMembersField: FC<TeamMembersFieldProps> = ({ team }) => {
     const { formatMessage: fm } = useIntl()
-    const { mutateAsync } = useTeamMembers(team.uid)
+    const { mutateAsync: setMembers } = useTeamMembers(team.uid)
+    const { mutateAsync: removeMember, isPending: isRemoving } = useRemoveTeamMember(team.uid)
     const { openMemberModal } = useTeamMemberSelectionModal()
     const withWarningModal = useWarningModal()
 
     const saveMembers = (userUids: string[]) => {
-        toast.promise(mutateAsync({ userUids }), {
+        toast.promise(setMembers({ userUids }), {
             loading: fm({ id: labels.saving }),
             success: fm({ id: labels.saved }),
             error: fm({ id: labels.saveFailed }),
@@ -51,6 +55,26 @@ export const TeamMembersField: FC<TeamMembersFieldProps> = ({ team }) => {
         })
     }
 
+    const handleDelete = useCallback(
+        (member: TeamMember) => {
+            const name = `${member.firstName} ${member.lastName}`
+            const runRemove = () => {
+                toast.promise(removeMember(member.uid), {
+                    loading: fm({ id: labels.removing }),
+                    success: fm({ id: labels.removed }),
+                    error: fm({ id: labels.removeFailed }),
+                })
+            }
+            withWarningModal(runRemove, fm({ id: labels.removeConfirm }, { name }))()
+        },
+        [fm, withWarningModal, removeMember],
+    )
+
+    // Disable every row's delete while a removal is in flight: serialises
+    // removals so out-of-order DELETE responses can't flash a stale list, and
+    // guards against a double-click firing two DELETEs.
+    const columns = useTeamMemberColumns({ onDelete: handleDelete, disabled: isRemoving })
+
     return (
         <div className="space-y-2 px-4 pb-4">
             <div className="flex items-center justify-between">
@@ -64,29 +88,14 @@ export const TeamMembersField: FC<TeamMembersFieldProps> = ({ team }) => {
                 </Button>
             </div>
 
-            {team.members.length === 0 ? (
-                <p className="rounded-md bg-muted px-3 py-2 text-sm italic text-muted-foreground">
-                    {fm({ id: labels.empty })}
-                </p>
-            ) : (
-                <div className="flex flex-wrap gap-1.5">
-                    {team.members.map(member => (
-                        <Badge
-                            key={member.uid}
-                            variant="secondary"
-                            className={cn(!member.isEnabled && 'opacity-50')}
-                            title={member.isEnabled ? member.email : fm({ id: labels.disabled })}
-                        >
-                            {member.lastName}, {member.firstName}
-                            {!member.isEnabled && (
-                                <span className="ml-1 text-xs">
-                                    ({fm({ id: labels.disabled })})
-                                </span>
-                            )}
-                        </Badge>
-                    ))}
-                </div>
-            )}
+            <Table<TeamMember>
+                columns={columns}
+                data={team.members}
+                emptyMessage={fm({ id: labels.empty })}
+                getRowProps={member => ({
+                    className: cn(!member.isEnabled && 'opacity-60'),
+                })}
+            />
         </div>
     )
 }

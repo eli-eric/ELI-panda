@@ -3,6 +3,7 @@ import { renderHook } from '@testing-library/react'
 
 import { queryMutate } from '@/utils/fetcher'
 
+import { useRemoveTeamMember } from '../useRemoveTeamMember'
 import { useTeam } from '../useTeam'
 import { useTeamCreate } from '../useTeamCreate'
 import { useTeamFieldUpdate } from '../useTeamFieldUpdate'
@@ -127,6 +128,30 @@ describe('useTeamMembers', () => {
 
         expect(setQueryData).not.toHaveBeenCalled()
         expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['team', { uid: 't-1' }] })
+    })
+})
+
+describe('useRemoveTeamMember', () => {
+    it('DELETEs the single member with itemUid and merges the response', () => {
+        const inner = jest.fn().mockResolvedValue({ data: { uid: 't-1', members: [] } })
+        mockQueryMutate.mockReturnValue(inner)
+        const setQueryData = jest.fn()
+        const invalidateQueries = jest.fn().mockResolvedValue(undefined)
+        mockUseQueryClient.mockReturnValue({ setQueryData, invalidateQueries })
+
+        renderHook(() => useRemoveTeamMember('t-1'))
+        const opts = mockUseMutation.mock.calls[0][0]
+
+        opts.mutationFn('u-9')
+        expect(mockQueryMutate).toHaveBeenCalledWith('teamMember', 'delete', {
+            uid: 't-1',
+            endpointVariables: { itemUid: 'u-9' },
+        })
+        expect(inner).toHaveBeenCalledWith(undefined)
+
+        opts.onSuccess({ data: { uid: 't-1', members: [] } })
+        expect(setQueryData).toHaveBeenCalledWith(['team', { uid: 't-1' }], expect.any(Function))
+        expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: ['teams'] })
     })
 })
 
