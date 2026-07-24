@@ -1,5 +1,6 @@
 import { Users } from 'lucide-react'
 import type { FC } from 'react'
+import { useCallback } from 'react'
 import { useIntl } from 'react-intl'
 import { toast } from 'sonner'
 
@@ -7,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Table } from '@/components/ui/table'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
-import { createMessageValues } from '@/utils/formatters'
+import { cn } from '@/lib/utils'
 
 import { useRemoveTeamMember } from '../../hooks/useRemoveTeamMember'
 import { useTeamMembers } from '../../hooks/useTeamMembers'
@@ -24,7 +25,7 @@ const labels = message.teamsPage.members
 export const TeamMembersField: FC<TeamMembersFieldProps> = ({ team }) => {
     const { formatMessage: fm } = useIntl()
     const { mutateAsync: setMembers } = useTeamMembers(team.uid)
-    const { mutateAsync: removeMember } = useRemoveTeamMember(team.uid)
+    const { mutateAsync: removeMember, isPending: isRemoving } = useRemoveTeamMember(team.uid)
     const { openMemberModal } = useTeamMemberSelectionModal()
     const withWarningModal = useWarningModal()
 
@@ -43,7 +44,10 @@ export const TeamMembersField: FC<TeamMembersFieldProps> = ({ team }) => {
                 // Clearing every member is a destructive full-replace — confirm
                 // before wiping a non-empty team.
                 if (userUids.length === 0 && team.members.length > 0) {
-                    withWarningModal(() => saveMembers(userUids), fm({ id: labels.clearAllWarning }))()
+                    withWarningModal(
+                        () => saveMembers(userUids),
+                        fm({ id: labels.clearAllWarning }),
+                    )()
                     return
                 }
                 saveMembers(userUids)
@@ -51,19 +55,22 @@ export const TeamMembersField: FC<TeamMembersFieldProps> = ({ team }) => {
         })
     }
 
-    const handleDelete = (member: TeamMember) => {
-        const name = `${member.firstName} ${member.lastName}`
-        const runRemove = () => {
-            toast.promise(removeMember(member.uid), {
-                loading: fm({ id: labels.removing }),
-                success: fm({ id: labels.removed }),
-                error: fm({ id: labels.removeFailed }),
-            })
-        }
-        withWarningModal(runRemove, fm({ id: labels.removeConfirm }, createMessageValues({ name })))()
-    }
+    const handleDelete = useCallback(
+        (member: TeamMember) => {
+            const name = `${member.firstName} ${member.lastName}`
+            const runRemove = () => {
+                toast.promise(removeMember(member.uid), {
+                    loading: fm({ id: labels.removing }),
+                    success: fm({ id: labels.removed }),
+                    error: fm({ id: labels.removeFailed }),
+                })
+            }
+            withWarningModal(runRemove, fm({ id: labels.removeConfirm }, { name }))()
+        },
+        [fm, withWarningModal, removeMember],
+    )
 
-    const columns = useTeamMemberColumns({ onDelete: handleDelete })
+    const columns = useTeamMemberColumns({ onDelete: handleDelete, disabled: isRemoving })
 
     return (
         <div className="space-y-2 px-4 pb-4">
@@ -83,7 +90,9 @@ export const TeamMembersField: FC<TeamMembersFieldProps> = ({ team }) => {
                 data={team.members}
                 emptyMessage={fm({ id: labels.empty })}
                 className="overflow-x-auto"
-                rowClassName="whitespace-nowrap group/row"
+                getRowProps={member => ({
+                    className: cn(!member.isEnabled && 'opacity-60'),
+                })}
             />
         </div>
     )

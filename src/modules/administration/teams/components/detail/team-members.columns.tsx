@@ -5,7 +5,6 @@ import { useIntl } from 'react-intl'
 import { TableDeleteButton } from '@/components/Buttons'
 import { Badge } from '@/components/ui/badge'
 import { message } from '@/i18n/src/messages'
-import { cn } from '@/lib/utils'
 
 import type { TeamMember } from '../../types/team.types'
 
@@ -14,23 +13,19 @@ const cols = labels.columns
 
 interface UseTeamMemberColumnsProps {
     onDelete: (member: TeamMember) => void
+    disabled?: boolean
 }
 
 /** Columns for the team detail members table (with a per-row delete action). */
-export const useTeamMemberColumns = ({ onDelete }: UseTeamMemberColumnsProps) => {
+export const useTeamMemberColumns = ({ onDelete, disabled }: UseTeamMemberColumnsProps) => {
     const { formatMessage: fm } = useIntl()
 
     return useMemo(
-        (): ColumnDef<TeamMember, any>[] => [
+        (): ColumnDef<TeamMember>[] => [
             {
                 id: 'lastName',
                 header: fm({ id: cols.lastName }),
                 accessorFn: row => row.lastName,
-                cell: ({ row, getValue }) => (
-                    <span className={cn(!row.original.isEnabled && 'text-muted-foreground')}>
-                        {getValue() as string}
-                    </span>
-                ),
                 size: 160,
             },
             {
@@ -67,7 +62,7 @@ export const useTeamMemberColumns = ({ onDelete }: UseTeamMemberColumnsProps) =>
                 id: 'actions',
                 header: () => <span className="sr-only">{fm({ id: labels.actionsLabel })}</span>,
                 enableSorting: false,
-                size: 56,
+                size: 72,
                 meta: { className: 'text-right' },
                 cell: ({ row }) => (
                     <TableDeleteButton
@@ -75,11 +70,12 @@ export const useTeamMemberColumns = ({ onDelete }: UseTeamMemberColumnsProps) =>
                             { id: labels.removeMember },
                             { name: `${row.original.firstName} ${row.original.lastName}` },
                         )}
+                        disabled={disabled}
                         onClick={() => onDelete(row.original)}
                     />
                 ),
             },
         ],
-        [fm, onDelete],
+        [fm, onDelete, disabled],
     )
 }
