@@ -70,6 +70,9 @@ export const TeamMembersField: FC<TeamMembersFieldProps> = ({ team }) => {
         [fm, withWarningModal, removeMember],
     )
 
+    // Disable every row's delete while a removal is in flight: serialises
+    // removals so out-of-order DELETE responses can't flash a stale list, and
+    // guards against a double-click firing two DELETEs.
     const columns = useTeamMemberColumns({ onDelete: handleDelete, disabled: isRemoving })
 
     return (
@@ -89,7 +92,6 @@ export const TeamMembersField: FC<TeamMembersFieldProps> = ({ team }) => {
                 columns={columns}
                 data={team.members}
                 emptyMessage={fm({ id: labels.empty })}
-                className="overflow-x-auto"
                 getRowProps={member => ({
                     className: cn(!member.isEnabled && 'opacity-60'),
                 })}
