@@ -1542,6 +1542,7 @@ export const messages = {
             actions: 'Actions',
             moveItem: 'Move Item',
             assignSpares: 'Assign Spares',
+            setMinimalSpares: 'Set Minimal Spares',
             assignItem: 'Assign Item',
             notFoundTitle: 'System not found',
             notFoundDescription:

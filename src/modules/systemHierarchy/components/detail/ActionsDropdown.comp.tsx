@@ -1,4 +1,4 @@
-import { MoreVertical, Move, Package, Wrench } from 'lucide-react'
+import { MoreVertical, Move, Package, SlidersHorizontal, Wrench } from 'lucide-react'
 import type { FC } from 'react'
 import { useIntl } from 'react-intl'
 
@@ -17,6 +17,7 @@ import { useSystemEditPermission } from '@/modules/shared/system/edit-permission
 import type { SystemLevel } from '@/types/gql/graphql'
 
 import type { SystemLeaf } from '../../types'
+import { openSetMinimalSparesModal } from './set-minimal-spares.modal'
 
 interface ActionsDropdownProps {
     system: SystemLeaf
@@ -63,6 +64,14 @@ export const ActionsDropdown: FC<ActionsDropdownProps> = ({ system }) => {
                 >
                     <Wrench className="h-4 w-4 mr-2" />
                     {fm({ id: message.systemHierarchy.detail.assignSpares })}
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                    className="cursor-pointer"
+                    disabled={!canEdit}
+                    onClick={() => openSetMinimalSparesModal(system)}
+                >
+                    <SlidersHorizontal className="h-4 w-4 mr-2" />
+                    {fm({ id: message.systemHierarchy.detail.setMinimalSpares })}
                 </DropdownMenuItem>
                 {!hasPhysicalItem && (
                     <DropdownMenuItem
