@@ -21,9 +21,13 @@ import { openSetMinimalSparesModal } from './set-minimal-spares.modal'
 
 interface ActionsDropdownProps {
     system: SystemLeaf
+    minimalSpareParstCount?: number | null
 }
 
-export const ActionsDropdown: FC<ActionsDropdownProps> = ({ system }) => {
+export const ActionsDropdown: FC<ActionsDropdownProps> = ({
+    system,
+    minimalSpareParstCount = null,
+}) => {
     const { formatMessage: fm } = useIntl()
     const { canEdit } = useSystemEditPermission(system.uid)
     const hasPhysicalItem = !!system.physicalItem
@@ -68,7 +72,13 @@ export const ActionsDropdown: FC<ActionsDropdownProps> = ({ system }) => {
                 <DropdownMenuItem
                     className="cursor-pointer"
                     disabled={!canEdit}
-                    onClick={() => openSetMinimalSparesModal(system)}
+                    onClick={() =>
+                        openSetMinimalSparesModal({
+                            system,
+                            title: fm({ id: message.systemHierarchy.detail.setMinimalSpares }),
+                            currentValue: minimalSpareParstCount,
+                        })
+                    }
                 >
                     <SlidersHorizontal className="h-4 w-4 mr-2" />
                     {fm({ id: message.systemHierarchy.detail.setMinimalSpares })}

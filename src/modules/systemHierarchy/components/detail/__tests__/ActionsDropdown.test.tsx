@@ -143,10 +143,18 @@ describe('ActionsDropdown', () => {
         expect(screen.getByText('Set Minimal Spares')).toBeInTheDocument()
     })
 
-    it('calls openSetMinimalSparesModal with the system on click', () => {
-        renderDropdown(baseSystem)
+    it('calls openSetMinimalSparesModal with the system and its current minimum', () => {
+        render(
+            <IntlProvider locale="en" messages={messages}>
+                <ActionsDropdown system={baseSystem} minimalSpareParstCount={0.25} />
+            </IntlProvider>,
+        )
         fireEvent.click(screen.getByText('Set Minimal Spares'))
-        expect(openSetMinimalSparesModal).toHaveBeenCalledWith(baseSystem)
+        expect(openSetMinimalSparesModal).toHaveBeenCalledWith({
+            system: baseSystem,
+            title: 'Set Minimal Spares',
+            currentValue: 0.25,
+        })
     })
 
     it('disables the actions when the user cannot edit the system', () => {

@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils'
 import { isUnderCovered } from '@/modules/shared/system/coverage'
 
 import { SystemsTable } from './components/table/Systems.table'
+import { SYSTEMS_TABLE_ID } from './types/constants'
 
 interface Props {
     enableQueryURL?: boolean
@@ -21,7 +22,7 @@ interface Props {
 export const SystemsComponent: FC<Props> = ({
     enableQueryURL = true,
     enableDragAndDrop,
-    tableId = 'systems',
+    tableId = SYSTEMS_TABLE_ID,
     dropsettings,
     className,
     hideButtons = false,

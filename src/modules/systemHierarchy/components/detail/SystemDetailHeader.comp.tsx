@@ -15,6 +15,7 @@ interface SystemDetailHeaderProps {
     onBack: () => void
     onSelectAncestor: SelectAncestorHandler
     isRefreshing?: boolean
+    minimalSpareParstCount?: number | null
 }
 
 export const SystemDetailHeader: FC<SystemDetailHeaderProps> = ({
@@ -22,6 +23,7 @@ export const SystemDetailHeader: FC<SystemDetailHeaderProps> = ({
     onBack,
     onSelectAncestor,
     isRefreshing = false,
+    minimalSpareParstCount = null,
 }) => {
     const { formatMessage: fm } = useIntl()
 
@@ -56,7 +58,10 @@ export const SystemDetailHeader: FC<SystemDetailHeaderProps> = ({
                     data-testid="system-hierarchy-detail-refreshing"
                 />
             )}
-            <ActionsDropdown system={system} />
+            <ActionsDropdown
+                system={system}
+                minimalSpareParstCount={minimalSpareParstCount}
+            />
         </div>
     )
 }

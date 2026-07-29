@@ -5,13 +5,12 @@ import { FormattedMessage } from 'react-intl'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Skeleton } from '@/components/ui/skeleton'
 import { Paragraph } from '@/components/visuals/Paragraph'
 import { message } from '@/i18n/src/messages'
+import { SYSTEMS_TABLE_ID } from '@/modules/systems/types/constants'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 
 import { useSystemFieldUpdate } from '../../hooks/mutations/useSystemFieldUpdate'
-import { useSystemDetail } from '../../hooks/queries/useSystemDetail'
 import type { SystemLeaf } from '../../types'
 import { LEAVES_QUERY_KEY } from '../../types/constants'
 
@@ -19,13 +18,13 @@ const messages = message.systemsPage.systemDetail
 
 const INPUT_ID = 'set-minimal-spares-input'
 
-interface SetMinimalSparesFormProps {
+interface SetMinimalSparesModalContentProps {
     systemUid: string
     modalId: string
     currentValue: number | null
 }
 
-const SetMinimalSparesForm: FC<SetMinimalSparesFormProps> = ({
+const SetMinimalSparesModalContent: FC<SetMinimalSparesModalContentProps> = ({
     systemUid,
     modalId,
     currentValue,
@@ -51,7 +50,7 @@ const SetMinimalSparesForm: FC<SetMinimalSparesFormProps> = ({
             .then(result => {
                 if (!result) return
                 queryClient.invalidateQueries({ queryKey: [LEAVES_QUERY_KEY] })
-                queryClient.invalidateQueries({ queryKey: ['systems'] })
+                queryClient.invalidateQueries({ queryKey: [SYSTEMS_TABLE_ID] })
             })
             .catch(() => {})
         closeModal(modalId)
@@ -70,6 +69,9 @@ const SetMinimalSparesForm: FC<SetMinimalSparesFormProps> = ({
                     id={INPUT_ID}
                     type="number"
                     min={0}
+                    // Coverage can be shared between systems (0.25 = one spare per
+                    // four), so fractional minimums must stay valid.
+                    step="any"
                     value={value}
                     // valueAsNumber is NaN for intermediate states ("", "-"); fall
                     // back to 0 so the controlled input never goes uncontrolled.
@@ -97,39 +99,20 @@ const SetMinimalSparesForm: FC<SetMinimalSparesFormProps> = ({
     )
 }
 
-interface SetMinimalSparesModalContentProps {
-    systemUid: string
-    modalId: string
+interface OpenSetMinimalSparesModalArgs {
+    system: SystemLeaf
+    title: string
+    // Taken from the already-loaded system detail: opening a second observer of
+    // the detail query here would duplicate its error toast.
+    currentValue: number | null
 }
 
-const SetMinimalSparesModalContent: FC<SetMinimalSparesModalContentProps> = ({
-    systemUid,
-    modalId,
-}) => {
-    const { minimalSpareParstCount, isLoading } = useSystemDetail(systemUid)
-
-    // The form seeds its input from the loaded value once; rendering it before
-    // the detail resolves would show 0 and let OK wipe an existing minimum.
-    if (isLoading) {
-        return (
-            <div className="space-y-4">
-                <Skeleton className="h-9 w-full" />
-                <Skeleton className="h-16 w-full" />
-            </div>
-        )
-    }
-
-    return (
-        <SetMinimalSparesForm
-            systemUid={systemUid}
-            modalId={modalId}
-            currentValue={minimalSpareParstCount}
-        />
-    )
-}
-
-export const openSetMinimalSparesModal = (system: SystemLeaf) => {
-    if (typeof window === 'undefined') return
+export const openSetMinimalSparesModal = ({
+    system,
+    title,
+    currentValue,
+}: OpenSetMinimalSparesModalArgs) => {
+    if (typeof window === 'undefined') return // Prevent SSR execution
 
     const { openModal } = useDynamicModalStore.getState()
     const modalId = `set-minimal-spares-${system.uid}`
@@ -137,9 +120,14 @@ export const openSetMinimalSparesModal = (system: SystemLeaf) => {
     return openModal('dialog', {
         id: modalId,
         component: () => (
-            <SetMinimalSparesModalContent systemUid={system.uid} modalId={modalId} />
+            <SetMinimalSparesModalContent
+                systemUid={system.uid}
+                modalId={modalId}
+                currentValue={currentValue}
+            />
         ),
         props: {
+            title,
             size: 'm' as const,
         },
     })
