@@ -6,6 +6,7 @@ import { NewTabLink } from '@/components/decorators'
 import { Tooltip } from '@/components/Tooltip'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import usePermission from '@/hooks/usePermission'
+import { formatCoverage } from '@/modules/shared/system/coverage'
 import { useShowDeviceStore } from '@/modules/shared/system/device-info-overlay/store/useShowDeviceStore'
 import { FALLBACK_IMAGE } from '@/types/constants/common'
 import { PATH } from '@/types/constants/paths'
@@ -196,11 +197,7 @@ export const useSystemsColumns = ({
             },
             {
                 header: 'SP Coverage',
-                accessorFn: row =>
-                    row.statistics?.sp_coverage != null
-                        ? (parseFloat(Number(row.statistics.sp_coverage).toFixed(2)) * 100).toString() +
-                          '%'
-                        : undefined,
+                accessorFn: row => formatCoverage(row.statistics?.sp_coverage) ?? undefined,
                 id: 'statistics.sp_coverage',
                 size: 200,
             },

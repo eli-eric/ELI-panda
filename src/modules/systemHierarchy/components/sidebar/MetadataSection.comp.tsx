@@ -1,8 +1,11 @@
 import type { FC } from 'react'
 
+import { cn } from '@/lib/utils'
+
 interface MetadataItem {
     label: string
     value: string | number | null
+    valueClassName?: string
 }
 
 interface MetadataSectionProps {
@@ -22,7 +25,12 @@ export const MetadataSection: FC<MetadataSectionProps> = ({ title, items }) => {
                 {items.map((item, index) => (
                     <div key={index} className="flex justify-between items-center text-sm py-0.5">
                         <span className="text-muted-foreground text-xs">{item.label}</span>
-                        <span className="text-xs font-medium truncate ml-2 max-w-[60%] text-right">
+                        <span
+                            className={cn(
+                                'text-xs font-medium truncate ml-2 max-w-[60%] text-right',
+                                item.valueClassName,
+                            )}
+                        >
                             {item.value ?? 'N/A'}
                         </span>
                     </div>

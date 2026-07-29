@@ -3,6 +3,7 @@ import { useIntl } from 'react-intl'
 
 import { Separator } from '@/components/ui/separator'
 import { message } from '@/i18n/src/messages'
+import { formatCoverage, isUnderCovered } from '@/modules/shared/system/coverage'
 
 import type { SystemLeaf } from '../../types'
 import { hasPhysicalItem } from '../../utils/predicates'
@@ -62,9 +63,16 @@ export const QuickInfoSidebar: FC<QuickInfoSidebarProps> = ({ system }) => {
             value: system.statistics?.sparePartsCount ?? null,
         },
         {
+            label: fm({ id: message.systemHierarchy.sidebar.spRequirement }),
+            value: system.statistics?.minimalSpareParstCount ?? null,
+        },
+        {
             label: fm({ id: message.systemHierarchy.sidebar.spareCoverage }),
-            value:
-                system.statistics?.sp_coverage != null ? `${system.statistics.sp_coverage}%` : null,
+            value: formatCoverage(system.statistics?.sp_coverage),
+            // Same red flag the systems and leaves tables raise on the row.
+            valueClassName: isUnderCovered(system.statistics)
+                ? 'text-red-500 dark:text-red-500'
+                : undefined,
         },
     ]
 

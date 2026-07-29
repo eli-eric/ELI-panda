@@ -47,6 +47,43 @@ describe('useSystemDetail', () => {
         expect(mockUseGraphQL.mock.calls[0][1].refetchOnMount).toBe(false)
     })
 
+    // The sidebar reads coverage off `statistics`, the shape the leaves REST
+    // payload uses; without this mapping its whole Statistics block reads N/A.
+    it('mirrors the top-level coverage fields into statistics', () => {
+        mockUseGraphQL.mockReturnValue({
+            data: {
+                systems: [
+                    {
+                        uid: 'sys-1',
+                        name: 'Test System',
+                        sp_coverage: 0.5,
+                        sparePartsCoverageSum: 1,
+                        minimalSpareParstCount: 2,
+                        subSystems: [
+                            { uid: 'sub-1', deleted: false },
+                            { uid: 'sub-2', deleted: true },
+                        ],
+                        sparePartsConnection: { edges: [{ node: { uid: 'sp-1' } }] },
+                    },
+                ],
+            },
+            error: undefined,
+            isLoading: false,
+            isFetching: false,
+            refetch: jest.fn(),
+        })
+
+        const { result } = renderHook(() => useSystemDetail('sys-1'))
+
+        expect(result.current.system?.statistics).toEqual({
+            subsystemsCount: 1,
+            sparePartsCount: 1,
+            minimalSpareParstCount: 2,
+            sparePartsCoverageSum: 1,
+            sp_coverage: 0.5,
+        })
+    })
+
     it('surfaces isFetching for the refreshing indicator', () => {
         mockUseGraphQL.mockReturnValue({
             data: undefined,

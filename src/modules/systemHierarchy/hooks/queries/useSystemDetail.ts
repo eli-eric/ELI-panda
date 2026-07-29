@@ -142,6 +142,17 @@ export const useSystemDetail = (leafUid: string | null) => {
               attribute: systemDetail.attribute ?? null,
               sparesIn: systemDetail.sparePartsConnection?.edges?.length ?? 0,
               sparesOut: systemDetail.sparePartsFor?.length ?? 0,
+              // The leaves REST payload carries these per row; the detail query
+              // returns them as top-level fields, so mirror them into the same
+              // shape the sidebar and row coloring read.
+              statistics: {
+                  subsystemsCount:
+                      systemDetail.subSystems?.filter(sub => !sub?.deleted).length ?? 0,
+                  sparePartsCount: systemDetail.sparePartsConnection?.edges?.length ?? 0,
+                  minimalSpareParstCount: systemDetail.minimalSpareParstCount ?? undefined,
+                  sparePartsCoverageSum: systemDetail.sparePartsCoverageSum ?? undefined,
+                  sp_coverage: systemDetail.sp_coverage ?? undefined,
+              },
           }
         : null
 

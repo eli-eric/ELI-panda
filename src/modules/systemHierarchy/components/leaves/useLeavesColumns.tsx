@@ -9,6 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
+import { formatCoverage } from '@/modules/shared/system/coverage'
 import { IconCell } from '@/modules/systems/components/table/cells/IconCell'
 import type { ITEM_USAGE } from '@/modules/systems/types/constants'
 import { FALLBACK_IMAGE } from '@/types/constants/common'
@@ -213,11 +214,7 @@ export const useLeavesColumns = () => {
             },
             {
                 header: fm({ id: message.systemHierarchy.columns.spCoverage }),
-                accessorFn: row =>
-                    row.statistics?.sp_coverage != null
-                        ? (parseFloat(Number(row.statistics.sp_coverage).toFixed(2)) * 100).toString() +
-                          '%'
-                        : undefined,
+                accessorFn: row => formatCoverage(row.statistics?.sp_coverage) ?? undefined,
                 id: 'statistics.sp_coverage',
                 size: 200,
             },

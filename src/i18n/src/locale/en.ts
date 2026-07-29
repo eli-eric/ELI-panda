@@ -1568,6 +1568,7 @@ export const messages = {
             statistics: 'Statistics',
             subsystemsCount: 'Subsystems',
             sparePartsCount: 'Spare Parts',
+            spRequirement: 'SP Requirement',
             spareCoverage: 'Spare Coverage',
             metadata: 'Metadata',
         },
