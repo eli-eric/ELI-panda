@@ -144,17 +144,25 @@ describe('ActionsDropdown', () => {
     })
 
     it('calls openSetMinimalSparesModal with the system and its current minimum', () => {
-        render(
-            <IntlProvider locale="en" messages={messages}>
-                <ActionsDropdown system={baseSystem} minimalSpareParstCount={0.25} />
-            </IntlProvider>,
-        )
+        const systemWithMinimum: SystemLeaf = {
+            ...baseSystem,
+            statistics: { minimalSpareParstCount: 0.25 },
+        }
+        renderDropdown(systemWithMinimum)
         fireEvent.click(screen.getByText('Set Minimal Spares'))
         expect(openSetMinimalSparesModal).toHaveBeenCalledWith({
-            system: baseSystem,
+            system: systemWithMinimum,
             title: 'Set Minimal Spares',
             currentValue: 0.25,
         })
+    })
+
+    it('passes a null minimum for systems that have no requirement yet', () => {
+        renderDropdown(baseSystem)
+        fireEvent.click(screen.getByText('Set Minimal Spares'))
+        expect(openSetMinimalSparesModal).toHaveBeenCalledWith(
+            expect.objectContaining({ currentValue: null }),
+        )
     })
 
     it('disables the actions when the user cannot edit the system', () => {

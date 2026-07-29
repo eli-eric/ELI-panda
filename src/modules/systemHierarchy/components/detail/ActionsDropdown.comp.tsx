@@ -21,13 +21,9 @@ import { openSetMinimalSparesModal } from './set-minimal-spares.modal'
 
 interface ActionsDropdownProps {
     system: SystemLeaf
-    minimalSpareParstCount?: number | null
 }
 
-export const ActionsDropdown: FC<ActionsDropdownProps> = ({
-    system,
-    minimalSpareParstCount = null,
-}) => {
+export const ActionsDropdown: FC<ActionsDropdownProps> = ({ system }) => {
     const { formatMessage: fm } = useIntl()
     const { canEdit } = useSystemEditPermission(system.uid)
     const hasPhysicalItem = !!system.physicalItem
@@ -76,7 +72,7 @@ export const ActionsDropdown: FC<ActionsDropdownProps> = ({
                         openSetMinimalSparesModal({
                             system,
                             title: fm({ id: message.systemHierarchy.detail.setMinimalSpares }),
-                            currentValue: minimalSpareParstCount,
+                            currentValue: system.statistics?.minimalSpareParstCount ?? null,
                         })
                     }
                 >

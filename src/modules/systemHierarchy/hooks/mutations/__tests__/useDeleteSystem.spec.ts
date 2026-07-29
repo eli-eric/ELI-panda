@@ -49,9 +49,17 @@ describe('useDeleteSystem', () => {
         expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['systemsHierarchy'] })
         expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['systemLeaves'] })
         expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['systemLeavesCount'] })
-        // Immediate hierarchy round (4) + the shared recalc's own keys (3) + the
-        // hierarchy round it can't cover (4).
-        await waitFor(() => expect(invalidateSpy).toHaveBeenCalledTimes(11))
+        // Coverage keys come from the shared recalc hook; the hierarchy round is
+        // repeated once it lands, so the leaves list re-reads the new numbers.
+        await waitFor(() =>
+            expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['systemDetail'] }),
+        )
+        expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['systems'] })
+        expect(
+            invalidateSpy.mock.calls.filter(
+                ([arg]) => arg?.queryKey?.[0] === 'systemsHierarchy',
+            ),
+        ).toHaveLength(2)
     })
 
     it('keeps the immediate refresh and skips the second round when recalc fails', async () => {
@@ -64,6 +72,11 @@ describe('useDeleteSystem', () => {
             expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['systemsHierarchy'] })
         })
         // Only the immediate round; the failed recalc must not trigger a second one.
-        expect(invalidateSpy).toHaveBeenCalledTimes(4)
+        expect(
+            invalidateSpy.mock.calls.filter(
+                ([arg]) => arg?.queryKey?.[0] === 'systemsHierarchy',
+            ),
+        ).toHaveLength(1)
+        expect(invalidateSpy).not.toHaveBeenCalledWith({ queryKey: ['systemDetail'] })
     })
 })

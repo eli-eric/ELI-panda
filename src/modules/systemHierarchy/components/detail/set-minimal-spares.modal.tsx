@@ -33,6 +33,12 @@ const SetMinimalSparesModalContent: FC<SetMinimalSparesModalContentProps> = ({
     const [value, setValue] = useState(currentValue ?? 0)
 
     const handleOk = () => {
+        // Saving an untouched value would still write history and kick off a
+        // graph-wide recalculation, so treat OK as Cancel when nothing changed.
+        if (value === (currentValue ?? 0)) {
+            closeModal(modalId)
+            return
+        }
         // 0/empty means "no minimum" and is stored as null, matching the legacy
         // system form payload and the gray (no requirement) coverage coloring.
         const promise = updateField(
@@ -75,10 +81,12 @@ const SetMinimalSparesModalContent: FC<SetMinimalSparesModalContentProps> = ({
                     value={value}
                     // valueAsNumber is NaN for intermediate states ("", "-"); fall
                     // back to 0 so the controlled input never goes uncontrolled.
+                    // Negatives are clamped rather than silently saved as "no
+                    // requirement" — min={0} only constrains the spinner.
                     onChange={e =>
                         setValue(
                             Number.isFinite(e.target.valueAsNumber)
-                                ? e.target.valueAsNumber
+                                ? Math.max(0, e.target.valueAsNumber)
                                 : 0,
                         )
                     }

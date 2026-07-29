@@ -19,8 +19,7 @@ export const SystemDetailViewContainer: FC = () => {
     const { formatMessage: fm } = useIntl()
     const { selectedLeafUid, goBackToLeaves, selectParent, clearSelection } =
         useHierarchyNavigation()
-    const { system, minimalSpareParstCount, isLoading, isFetching, error, refetch } =
-        useSystemDetail(selectedLeafUid)
+    const { system, isLoading, isFetching, error, refetch } = useSystemDetail(selectedLeafUid)
     const editPermission = useSystemEditPermission(selectedLeafUid)
 
     // Selecting a node in the tree only changes the URL/leaf; the detail query keeps
@@ -103,7 +102,6 @@ export const SystemDetailViewContainer: FC = () => {
                 onBack={goBackToLeaves}
                 onSelectAncestor={selectParent}
                 isRefreshing={isFetching && !isLoading}
-                minimalSpareParstCount={minimalSpareParstCount}
             />
             <SystemEditRestrictionBanner
                 status={editPermission.status}

@@ -124,6 +124,34 @@ describe('openSetMinimalSparesModal', () => {
         expect(mockRecalculate).not.toHaveBeenCalled()
     })
 
+    // Saving an untouched value would write history and trigger a graph-wide
+    // recalculation for nothing.
+    it('skips the save entirely when the value was not changed', () => {
+        renderModal(2)
+        clickOk()
+
+        expect(mockUpdateField).not.toHaveBeenCalled()
+        expect(mockCloseModal).toHaveBeenCalledWith('set-minimal-spares-sys-1')
+    })
+
+    it('treats an unset minimum and a typed 0 as the same no-op', () => {
+        renderModal(null)
+        typeValue('0')
+        clickOk()
+
+        expect(mockUpdateField).not.toHaveBeenCalled()
+    })
+
+    it('clamps negative input to 0 instead of saving it', () => {
+        renderModal(2)
+        typeValue('-5')
+        clickOk()
+
+        expect(mockUpdateField).toHaveBeenCalledWith('sys-1', 'minimalSpareParstCount', null, {
+            previousValue: 2,
+        })
+    })
+
     it('closes without saving on Cancel', () => {
         renderModal(2)
         fireEvent.click(screen.getByText('Cancel'))

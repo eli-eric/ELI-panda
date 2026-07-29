@@ -53,13 +53,18 @@ export const useDeleteRelationship = () => {
 
         queryClient.invalidateQueries({ queryKey: [RELATIONSHIP_GRAPH_QUERY_KEY] })
         if (isSpareDisconnect(field)) {
-            queryClient.invalidateQueries({
-                predicate: matchesSpareAffectedQuery([currentSystemUid, relatedSystemUid]),
+            const invalidateSpareViews = () =>
+                queryClient.invalidateQueries({
+                    predicate: matchesSpareAffectedQuery([currentSystemUid, relatedSystemUid]),
+                })
+            // Refresh right away so the row disappears, then again once the
+            // recalculation lands — dropping one IS_SPARE_FOR edge re-splits the
+            // spare's coverage across the systems it still covers, and the first
+            // round would otherwise re-read the pre-recalc numbers.
+            invalidateSpareViews()
+            void recalculateSpareParts().then(recalculated => {
+                if (recalculated) invalidateSpareViews()
             })
-            // Dropping one IS_SPARE_FOR edge re-splits the spare's coverage across
-            // the systems it still covers, so the stored sums no longer hold. The
-            // refresh above lands first; this one catches up in the background.
-            void recalculateSpareParts()
         }
 
         return deletedCount
