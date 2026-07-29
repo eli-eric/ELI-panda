@@ -49,8 +49,9 @@ describe('useDeleteSystem', () => {
         expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['systemsHierarchy'] })
         expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['systemLeaves'] })
         expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['systemLeavesCount'] })
-        // Two refresh rounds: immediate (on delete) + after the background recalc.
-        await waitFor(() => expect(invalidateSpy).toHaveBeenCalledTimes(8))
+        // Immediate hierarchy round (4) + the shared recalc's own keys (3) + the
+        // hierarchy round it can't cover (4).
+        await waitFor(() => expect(invalidateSpy).toHaveBeenCalledTimes(11))
     })
 
     it('keeps the immediate refresh and skips the second round when recalc fails', async () => {

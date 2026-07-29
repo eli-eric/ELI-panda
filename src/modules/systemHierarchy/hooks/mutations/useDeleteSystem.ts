@@ -9,11 +9,13 @@ import {
     LEAVES_QUERY_KEY,
     RELATIONSHIP_GRAPH_QUERY_KEY,
 } from '../../types/constants'
+import { useRecalculateSpareParts } from './useRecalculateSpareParts'
 
 type DeleteSystemVariables = { uid: string }
 
 export const useDeleteSystem = () => {
     const queryClient = useQueryClient()
+    const recalculateSpareParts = useRecalculateSpareParts()
 
     // Refresh the hierarchy/leaves/graph views. Fire-and-forget on purpose —
     // TanStack handles the refetch; we never need to await it here.
@@ -35,13 +37,12 @@ export const useDeleteSystem = () => {
             // Run unconditionally: a recursive delete may remove subsystems with
             // spare relations we can't cheaply detect client-side, and a stale
             // coverage number is worse than one extra request (matches legacy delete).
-            // Recompute in the background, then refresh again so coverage stats
-            // catch up. A recalc failure must not mask the successful delete.
-            void queryMutate('recalculateSpareParts', 'post')(undefined)
-                .then(() => invalidateHierarchy())
-                .catch(() => {
-                    // ignore — the immediate refresh above already reflects the delete
-                })
+            // Recompute in the background, then refresh the hierarchy views the
+            // shared recalc doesn't cover. A recalc failure must not mask the
+            // successful delete — the hook swallows it.
+            void recalculateSpareParts().then(recalculated => {
+                if (recalculated) invalidateHierarchy()
+            })
         },
     })
 }

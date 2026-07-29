@@ -7,6 +7,7 @@ import { RELATIONSHIP_GRAPH_QUERY_KEY } from '@/utils/query/queryKeys'
 import { matchesSpareAffectedQuery } from '@/utils/query/spareInvalidationPredicate'
 
 import { getDisconnectField, isSpareDisconnect } from '../../types/relationshipDisconnect'
+import { useRecalculateSpareParts } from './useRecalculateSpareParts'
 
 const DELETE_RELATIONSHIP = gql(`
     mutation DeleteSystemRelationship($where: SystemWhere, $disconnect: SystemDisconnectInput) {
@@ -27,6 +28,7 @@ interface DeleteRelationshipParams {
 
 export const useDeleteRelationship = () => {
     const queryClient = useQueryClient()
+    const recalculateSpareParts = useRecalculateSpareParts()
 
     const { mutateAsync, isPending } = useGraphQLMutation(DELETE_RELATIONSHIP)
 
@@ -54,6 +56,10 @@ export const useDeleteRelationship = () => {
             queryClient.invalidateQueries({
                 predicate: matchesSpareAffectedQuery([currentSystemUid, relatedSystemUid]),
             })
+            // Dropping one IS_SPARE_FOR edge re-splits the spare's coverage across
+            // the systems it still covers, so the stored sums no longer hold. The
+            // refresh above lands first; this one catches up in the background.
+            void recalculateSpareParts()
         }
 
         return deletedCount

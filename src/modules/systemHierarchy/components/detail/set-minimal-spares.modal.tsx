@@ -1,4 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query'
 import type { FC } from 'react'
 import { useState } from 'react'
 import { FormattedMessage } from 'react-intl'
@@ -7,12 +6,11 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Paragraph } from '@/components/visuals/Paragraph'
 import { message } from '@/i18n/src/messages'
-import { SYSTEMS_TABLE_ID } from '@/modules/systems/types/constants'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 
+import { useRecalculateSpareParts } from '../../hooks/mutations/useRecalculateSpareParts'
 import { useSystemFieldUpdate } from '../../hooks/mutations/useSystemFieldUpdate'
 import type { SystemLeaf } from '../../types'
-import { LEAVES_QUERY_KEY } from '../../types/constants'
 
 const messages = message.systemsPage.systemDetail
 
@@ -30,7 +28,7 @@ const SetMinimalSparesModalContent: FC<SetMinimalSparesModalContentProps> = ({
     currentValue,
 }) => {
     const { closeModal } = useDynamicModalStore()
-    const queryClient = useQueryClient()
+    const recalculateSpareParts = useRecalculateSpareParts()
     const { updateField } = useSystemFieldUpdate()
     const [value, setValue] = useState(currentValue ?? 0)
 
@@ -43,14 +41,16 @@ const SetMinimalSparesModalContent: FC<SetMinimalSparesModalContentProps> = ({
             value > 0 ? value : null,
             { previousValue: currentValue },
         )
-        // sp_coverage is recomputed server-side on read; refresh the tables that
-        // color rows by it. A blocked save resolves undefined — nothing changed,
-        // so skip. Failures are surfaced by the hook's toast.
+        // The requirement is the divisor of sp_coverage, and this save goes to
+        // Neo4j through GraphQL, which the API's recalculation never sees — so
+        // ask for it explicitly, or coverage stays at whatever it was (null for
+        // a system that had no requirement until now). A blocked save resolves
+        // undefined — nothing changed, so skip. Failures are surfaced by the
+        // update hook's toast.
         void promise
             .then(result => {
                 if (!result) return
-                queryClient.invalidateQueries({ queryKey: [LEAVES_QUERY_KEY] })
-                queryClient.invalidateQueries({ queryKey: [SYSTEMS_TABLE_ID] })
+                return recalculateSpareParts()
             })
             .catch(() => {})
         closeModal(modalId)

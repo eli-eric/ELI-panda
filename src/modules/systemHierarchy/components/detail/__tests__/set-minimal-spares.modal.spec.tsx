@@ -3,15 +3,17 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import { IntlProvider } from 'react-intl'
 
-import { SYSTEMS_TABLE_ID } from '@/modules/systems/types/constants'
-
 import type { SystemLeaf } from '../../../types'
-import { LEAVES_QUERY_KEY } from '../../../types/constants'
 import { openSetMinimalSparesModal } from '../set-minimal-spares.modal'
 
 const mockUpdateField = jest.fn()
 jest.mock('../../../hooks/mutations/useSystemFieldUpdate', () => ({
     useSystemFieldUpdate: () => ({ updateField: mockUpdateField, isPending: false }),
+}))
+
+const mockRecalculate = jest.fn()
+jest.mock('../../../hooks/mutations/useRecalculateSpareParts', () => ({
+    useRecalculateSpareParts: () => mockRecalculate,
 }))
 
 const mockCloseModal = jest.fn()
@@ -38,7 +40,6 @@ const system: SystemLeaf = {
 }
 
 let queryClient: QueryClient
-let invalidateSpy: jest.SpyInstance
 
 // The modal body is what openSetMinimalSparesModal hands to the modal store —
 // render it directly so the store stays a thin mock.
@@ -64,8 +65,8 @@ const typeValue = (value: string) =>
 beforeEach(() => {
     jest.clearAllMocks()
     queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
-    invalidateSpy = jest.spyOn(queryClient, 'invalidateQueries').mockImplementation(jest.fn())
     mockUpdateField.mockResolvedValue({ updateSystems: {} })
+    mockRecalculate.mockResolvedValue(true)
 })
 
 describe('openSetMinimalSparesModal', () => {
@@ -102,24 +103,25 @@ describe('openSetMinimalSparesModal', () => {
         })
     })
 
-    it('invalidates the coverage-colored tables after a successful save', async () => {
+    // The requirement is sp_coverage's divisor, and this save bypasses the API
+    // that maintains it — without the recalc the tab keeps showing "Available 0".
+    it('recalculates coverage after a successful save', async () => {
         renderModal(null)
         typeValue('1')
         clickOk()
         await Promise.resolve()
 
-        expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: [LEAVES_QUERY_KEY] })
-        expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: [SYSTEMS_TABLE_ID] })
+        expect(mockRecalculate).toHaveBeenCalled()
     })
 
-    it('skips invalidation when the save is blocked by the edit guard', async () => {
+    it('skips the recalculation when the save is blocked by the edit guard', async () => {
         mockUpdateField.mockResolvedValue(undefined)
         renderModal(null)
         typeValue('1')
         clickOk()
         await Promise.resolve()
 
-        expect(invalidateSpy).not.toHaveBeenCalled()
+        expect(mockRecalculate).not.toHaveBeenCalled()
     })
 
     it('closes without saving on Cancel', () => {
