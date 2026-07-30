@@ -6,8 +6,18 @@ import { hasPhysicalItem } from '../../../utils/predicates'
 import { QuickInfoSidebar } from '../QuickInfoSidebar.comp'
 
 jest.mock('../MetadataSection.comp', () => ({
-    MetadataSection: ({ title }: { title: string }) => (
-        <div data-testid="section" data-title={title} />
+    MetadataSection: ({ title, items }: { title: string; items: any[] }) => (
+        <div data-testid="section" data-title={title}>
+            {items.map(item => (
+                <span
+                    key={item.label}
+                    data-testid={`item-${item.label}`}
+                    className={item.valueClassName}
+                >
+                    {item.value ?? 'N/A'}
+                </span>
+            ))}
+        </div>
     ),
 }))
 
@@ -56,5 +66,34 @@ describe('QuickInfoSidebar', () => {
         mockHasPhysicalItem.mockReturnValue(false)
         renderWithProviders(<QuickInfoSidebar system={{ statistics: {} } as any} />)
         expect(screen.getAllByTestId('section').length).toBe(2)
+    })
+
+    describe('spare parts statistics', () => {
+        const renderWithStatistics = (statistics: Record<string, number>) => {
+            mockHasPhysicalItem.mockReturnValue(false)
+            renderWithProviders(<QuickInfoSidebar system={{ statistics } as any} />)
+        }
+
+        it('shows the requirement and the coverage as a percentage', () => {
+            renderWithStatistics({ minimalSpareParstCount: 2, sp_coverage: 0.5 })
+            expect(screen.getByTestId('item-SP Requirement')).toHaveTextContent('2')
+            expect(screen.getByTestId('item-Spare Coverage')).toHaveTextContent('50%')
+        })
+
+        it('flags coverage below the requirement in red', () => {
+            renderWithStatistics({ minimalSpareParstCount: 2, sp_coverage: 0.5 })
+            expect(screen.getByTestId('item-Spare Coverage')).toHaveClass('text-red-500')
+        })
+
+        it('leaves fully covered systems unflagged', () => {
+            renderWithStatistics({ minimalSpareParstCount: 2, sp_coverage: 1 })
+            expect(screen.getByTestId('item-Spare Coverage')).not.toHaveClass('text-red-500')
+        })
+
+        it('falls back to N/A when the system has no coverage data', () => {
+            renderWithStatistics({})
+            expect(screen.getByTestId('item-Spare Coverage')).toHaveTextContent('N/A')
+            expect(screen.getByTestId('item-SP Requirement')).toHaveTextContent('N/A')
+        })
     })
 })

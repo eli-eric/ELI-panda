@@ -11,13 +11,14 @@ jest.mock('@/modules/shared/table/pandaTableV2/PandaTableV2', () => ({
         <table>
             <tbody>
                 {(data ?? []).map((original: any) => {
-                    const { onClick, onContextMenu } = getRowProps({ original })
+                    const { onClick, onContextMenu, className } = getRowProps({ original })
                     return (
                         <tr
                             key={original.uid}
                             data-testid={`row-${original.uid}`}
                             onClick={onClick}
                             onContextMenu={onContextMenu}
+                            className={className}
                         >
                             <td>{original.name}</td>
                         </tr>
@@ -33,6 +34,12 @@ jest.mock('@/modules/shared/table/PaginationV2', () => ({ PaginationV2: () => nu
 const leaves = [
     { uid: 'leaf-1', name: 'Pump A' },
     { uid: 'leaf-2', name: 'Valve B' },
+]
+
+const coverageLeaves = [
+    { uid: 'under', name: 'Under covered', statistics: { sp_coverage: 0.5 } },
+    { uid: 'covered', name: 'Covered', statistics: { sp_coverage: 1 } },
+    { uid: 'no-requirement', name: 'No requirement', statistics: {} },
 ]
 
 const renderTable = (props: Partial<React.ComponentProps<typeof LeavesTableComponent>> = {}) =>
@@ -84,5 +91,20 @@ describe('LeavesTableComponent context menu', () => {
 
         fireEvent.contextMenu(screen.getByTestId('row-leaf-1'))
         expect(screen.queryByTestId('context-delete-system')).not.toBeInTheDocument()
+    })
+})
+
+describe('LeavesTableComponent coverage coloring', () => {
+    beforeEach(() => {
+        renderTable({ data: coverageLeaves as never })
+    })
+
+    it('marks rows below full spare-parts coverage', () => {
+        expect(screen.getByTestId('row-under')).toHaveClass('text-red-500', 'font-bold')
+    })
+
+    it('leaves covered rows and rows without a requirement unmarked', () => {
+        expect(screen.getByTestId('row-covered')).not.toHaveClass('text-red-500')
+        expect(screen.getByTestId('row-no-requirement')).not.toHaveClass('text-red-500')
     })
 })

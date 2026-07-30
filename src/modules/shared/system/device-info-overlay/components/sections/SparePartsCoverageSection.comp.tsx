@@ -8,6 +8,7 @@ import { Disclosure } from '@/components/ui'
 import { Badge } from '@/components/ui/badge'
 import { isFeatureEnabled } from '@/config/featureFlags'
 import { message } from '@/i18n/src/messages'
+import { formatCoverage, isUnderCovered } from '@/modules/shared/system/coverage'
 import { useSystemStore } from '@/modules/shared/system/device-info-overlay/store/useShowDeviceStore'
 import { IconCell } from '@/modules/systems/components/table/cells/IconCell'
 import type { ITEM_USAGE } from '@/modules/systems/types/constants'
@@ -59,16 +60,9 @@ export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
                 {systemDetail.sp_coverage !== null && systemDetail.sp_coverage !== undefined && (
                     <SystemDetailParameter
                         title="Current Coverage"
-                        value={
-                            systemDetail.sp_coverage !== null &&
-                            systemDetail.sp_coverage !== undefined
-                                ? `${(systemDetail.sp_coverage * 100).toFixed(1)}%`
-                                : 'N/A'
-                        }
+                        value={formatCoverage(systemDetail.sp_coverage) ?? 'N/A'}
                         className={
-                            systemDetail.sp_coverage !== null &&
-                            systemDetail.sp_coverage !== undefined &&
-                            systemDetail.sp_coverage < 1
+                            isUnderCovered(systemDetail)
                                 ? 'text-red-600 dark:text-red-400 font-medium'
                                 : 'text-green-600 dark:text-green-400 font-medium'
                         }

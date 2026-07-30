@@ -10,6 +10,8 @@ import {
     ContextMenuTrigger,
 } from '@/components/ui/context-menu'
 import { message } from '@/i18n/src/messages'
+import { cn } from '@/lib/utils'
+import { isUnderCovered } from '@/modules/shared/system/coverage'
 import { PaginationV2 as Pagination } from '@/modules/shared/table/PaginationV2'
 import {
     PandaTableV2,
@@ -71,7 +73,11 @@ export const LeavesTableComponent: FC<LeavesTableProps> = ({
                         onContextMenu: onDeleteSystem
                             ? () => setContextSystem(original)
                             : undefined,
-                        className: 'cursor-pointer hover:text-primary hover:bg-primary/10',
+                        className: cn(
+                            'cursor-pointer hover:text-primary hover:bg-primary/10',
+                            isUnderCovered(original.statistics) &&
+                                'text-red-500 dark:text-red-500 font-bold',
+                        ),
                     })}
                     settings={{
                         enableSorting: true,

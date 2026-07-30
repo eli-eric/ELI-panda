@@ -33,3 +33,7 @@ export const ITEM_USAGE_OPTION = {
     STOCK_ITEM: { uid: ITEM_USAGE.STOCK_ITEM, name: ITEM_USAGE_NAME.STOCK_ITEM },
     OTHER: { uid: ITEM_USAGE.OTHER, name: ITEM_USAGE_NAME.OTHER },
 } as const
+
+// Table id of the systems overview grid — doubles as its TanStack Query key,
+// so other modules invalidate it after mutations that change row coloring.
+export const SYSTEMS_TABLE_ID = 'systems'

@@ -7,12 +7,16 @@ import { openItemMoveModal } from '@/modules/shared/form/itemMoving/item-move.mo
 
 import type { SystemLeaf } from '../../../types'
 import { ActionsDropdown } from '../ActionsDropdown.comp'
+import { openSetMinimalSparesModal } from '../set-minimal-spares.modal'
 
 jest.mock('@/modules/shared/form/itemMoving/item-move.modal', () => ({
     openItemMoveModal: jest.fn(),
 }))
 jest.mock('@/modules/shared/form/itemAssign/item-assign.modal', () => ({
     openItemAssignModal: jest.fn(),
+}))
+jest.mock('../set-minimal-spares.modal', () => ({
+    openSetMinimalSparesModal: jest.fn(),
 }))
 
 const mockAssignSpares = jest.fn()
@@ -54,6 +58,7 @@ jest.mock('@/components/ui/dropdown-menu', () => ({
 const messages: Record<string, string> = {
     'systemHierarchy.detail.moveItem': 'Move Item',
     'systemHierarchy.detail.assignSpares': 'Assign Spares',
+    'systemHierarchy.detail.setMinimalSpares': 'Set Minimal Spares',
     'systemHierarchy.detail.assignItem': 'Assign Item',
 }
 
@@ -131,10 +136,40 @@ describe('ActionsDropdown', () => {
         expect(mockAssignSpares).toHaveBeenCalled()
     })
 
+    // Visible even without spare parts — setting a minimum on a system with none
+    // is what flags it as under-covered.
+    it('always renders Set Minimal Spares', () => {
+        renderDropdown(baseSystem)
+        expect(screen.getByText('Set Minimal Spares')).toBeInTheDocument()
+    })
+
+    it('calls openSetMinimalSparesModal with the system and its current minimum', () => {
+        const systemWithMinimum: SystemLeaf = {
+            ...baseSystem,
+            statistics: { minimalSpareParstCount: 0.25 },
+        }
+        renderDropdown(systemWithMinimum)
+        fireEvent.click(screen.getByText('Set Minimal Spares'))
+        expect(openSetMinimalSparesModal).toHaveBeenCalledWith({
+            system: systemWithMinimum,
+            title: 'Set Minimal Spares',
+            currentValue: 0.25,
+        })
+    })
+
+    it('passes a null minimum for systems that have no requirement yet', () => {
+        renderDropdown(baseSystem)
+        fireEvent.click(screen.getByText('Set Minimal Spares'))
+        expect(openSetMinimalSparesModal).toHaveBeenCalledWith(
+            expect.objectContaining({ currentValue: null }),
+        )
+    })
+
     it('disables the actions when the user cannot edit the system', () => {
         mockCanEditSystem.mockReturnValue(false)
         renderDropdown(systemWithPhysicalItem)
         expect(screen.getByText('Move Item').closest('button')).toBeDisabled()
         expect(screen.getByText('Assign Spares').closest('button')).toBeDisabled()
+        expect(screen.getByText('Set Minimal Spares').closest('button')).toBeDisabled()
     })
 })
