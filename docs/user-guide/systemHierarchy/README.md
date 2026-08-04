@@ -31,6 +31,7 @@ The System Hierarchy module is the central place to browse, organize, and inspec
 
 - **System** — a hierarchical entity representing a piece of facility infrastructure (e.g. a beamline, a vacuum chamber, a controller).
 - **Subsystem** — a system nested under a parent system. A system can have any number of subsystems.
+- **End system** — a system with no subsystems of its own; the bottom of a branch. End systems are never shown in the left tree (which lists only systems that *have* children) — they appear in the middle panel. See [Navigating the tree](./workflows/navigating-the-tree.md#finding-a-nodes-own-end-systems).
 - **System level** — classification of where in the hierarchy a system sits: `SYSTEM_DOMAIN`, `TECHNOLOGY_UNIT`, `KEY_SYSTEMS`, `SUBSYSTEMS_AND_PARTS`, `TRASH`. Levels drive both visual styling and (in Phase 1) edit permissions. The `TRASH` level marks a holding area for retired or replaced items — see [Managing spare parts](./workflows/managing-spare-parts.md).
 - **System type** — codebook classification of *what kind* of system this is. Used for code generation and filtering.
 - **System code** — short identifier for the system, generated based on type, level, and ancestry.
@@ -51,8 +52,8 @@ The System Hierarchy module is the central place to browse, organize, and inspec
 
 The module is a three-panel explorer:
 
-- **Left — System tree.** Resizable. Top of the tree has a search box (300 ms debounced) and a *Collapse All* button. Each tree node shows the system name, a folder icon colored by system level, and a subsystem-count badge. Selecting a node auto-expands its ancestors. On mobile the tree collapses behind a toggle.
-- **Middle — Leaves panel.** Shows the children of the selected tree node, either as a table (default) or as a relationship graph. Has a toolbar with *Filters*, *Search*, and *Column visibility* controls, and a view switcher between *Tree View* (table) and *Graph View*.
+- **Left — System tree.** Resizable. Top of the tree has a search box (300 ms debounced) and a *Collapse All* button. Each tree node shows the system name, a folder icon colored by system level, a badge counting the end systems beneath it, and a small dot when some of them hang directly off that node. Selecting a node auto-expands its ancestors. On mobile the tree collapses behind a toggle.
+- **Middle — Leaves panel.** Shows the end systems beneath the selected tree node — at any depth by default, or only the direct ones with the *Direct only* checkbox — either as a table (default) or as a relationship graph. Has a toolbar with *Filters*, *Search*, *Direct only*, and *Column visibility* controls, and a view switcher between *Tree View* (table) and *Graph View*.
 - **Right — Quick Info sidebar.** On large screens a sticky 320 px panel with statistics (subsystem count, spare-part count, spare coverage), metadata, and — when the system has a physical item — its catalogue properties (with any service-modified values flagged). On smaller screens accessible via a floating *Info* button.
 - **Top — Breadcrumb.** Shows the ancestor path of the currently selected system. Clicking any ancestor navigates to it. Long paths collapse with an ellipsis (first ancestor + last two).
 
@@ -61,8 +62,8 @@ When a system is selected for full detail view, a tabbed area replaces the leave
 ## Common workflows
 
 - [Understanding edit permissions](./workflows/edit-permissions.md) — who can edit a given system, what a blocked user sees, and how to find the responsible person to contact.
-- [Navigating the tree](./workflows/navigating-the-tree.md) — expanding the tree, breadcrumb navigation, switching between table and graph views in the leaves panel.
-- [Searching and filtering](./workflows/searching-and-filtering.md) — search box and the multi-field filter sheet for the leaves panel.
+- [Navigating the tree](./workflows/navigating-the-tree.md) — expanding the tree, breadcrumb navigation, switching between table and graph views in the leaves panel, and finding a node's own end systems.
+- [Searching and filtering](./workflows/searching-and-filtering.md) — search box, the *Direct only* scope control, and the multi-field filter sheet for the leaves panel.
 - [Editing system details](./workflows/editing-system-details.md) — inline edit of name, code, level, type, location, zone, description on the *Detail* tab. Includes system code generation and the special meaning of the `TRASH` level.
 - [Managing system people](./workflows/managing-system-people.md) — responsible person, owner, responsible team, and the operators / maintained-by tables on the *Persons* tab.
 - [Managing relationships](./workflows/managing-relationships.md) — the 9 engineering relationship types, viewing them in the list and the graph, creating and deleting edges.

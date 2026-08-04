@@ -80,8 +80,8 @@ The leaves panel toggles between **Tree View** (the default `LeavesTable`) and *
 | Hook | Endpoint key / GraphQL doc | Cache key (`HIERARCHY_QUERY_KEY` etc.) |
 |---|---|---|
 | `useSystemHierarchy` | `queryFetcher('systemsHierarchy')` (REST) | `HIERARCHY_QUERY_KEY`. 5-minute `staleTime`, no refetch on mount. |
-| `useSystemLeaves` | `queryFetcher('systemSubsystems')` (REST) | parameterised by parent uid |
-| `useSystemLeavesCount` | `queryFetcher('systemSubsystems')` count variant | optimised for tree badges |
+| `useSystemLeaves` | `queryFetcher('systemLeaves')` (REST) | `[LEAVES_QUERY_KEY, { uid, query }]`. `query` carries pagination/search/filter/sorting from `useQueryManager` plus the optional `directOnly` flag — see [Direct end systems](#direct-end-systems). |
+| `useSystemLeavesCount` | `queryFetcher('systemLeavesCount')` (REST) | `[LEAVES_COUNT_QUERY_KEY, { uid }]`, one query **per rendered tree node**. 5-minute `staleTime`. Always counts every descendant leaf — deliberately unaffected by `directOnly`. |
 | `useSystemDetail` | `graphql-request` `query SystemHierarchyDetail($where)` (`gql` document) | seeded by `primeSystemDetailCache` |
 | `useSystemHistory` | REST endpoint per uid | tab consumer |
 | `useSystemRelationships` | REST endpoint per uid | Relationships tab |
@@ -258,7 +258,9 @@ Note this is about the *tabs*. The detail-header **`ActionsDropdown`** (which in
 
 ## Deep links & URL contract
 
-The explorer's URL is its source of truth (`useHierarchyNavigation`): `?parent=<uid>` (tree selection), `?leaf=<uid>` (detail view), `?tab=` (defaults to `detail`), `?view=` (`tree`/`graph`), plus table `page`/`filter`. All in-page updates are shallow `router.push`; `updateQuery` accepts `{ replace: true }` for history-neutral updates.
+The explorer's URL is its source of truth (`useHierarchyNavigation`): `?parent=<uid>` (tree selection), `?leaf=<uid>` (detail view), `?tab=` (defaults to `detail`), `?view=` (`tree`/`graph`), `?direct=1` ([direct end systems](#direct-end-systems)), plus table `page`/`filter`/`search`. All in-page updates are shallow `router.push`; `updateQuery` accepts `{ replace: true }` for history-neutral updates.
+
+`selectParent` resets **only** `page` when the parent changes. `filter`, `search`, and `direct` deliberately carry over — they describe how the user wants to read any node, not one particular node.
 
 **`getSystemHierarchyDetailPath(uid)`** (`utils/hierarchyLinks.ts`) is the canonical builder for cross-module links into the explorer: `/systems/hierarchy?leaf=<uid>`. It deliberately omits `parent` — **`useHierarchyDeepLinkResolver`** (`hooks/useHierarchyDeepLinkResolver.ts`, mounted once in `SystemHierarchyExplorer.cont.tsx`) fills it in client-side:
 
@@ -340,18 +342,41 @@ The leaves filter sheet (`components/filters/`) is a multi-field RHF form persis
 
 `utils/graphFilters.ts` reproduces the filter logic client-side for the graph (which receives the *whole* relationship slice from the server, not a filtered one).
 
+## Direct end systems
+
+`GET /system/{uid}/leaves` returns every **end system** below the selected node — `HAS_SUBSYSTEM*1..50` plus `WHERE NOT (sys)-[:HAS_SUBSYSTEM]->(:System{deleted:false})`. The tree, symmetrically, returns only nodes that *have* children (plus parentless roots), so end systems never appear in it.
+
+Between the two there was no way to ask **"what hangs directly off this node"**. A node with three direct end systems and a subtree of two thousand deeper ones drowned those three in the table, and the tree could not show them at all.
+
+The **Direct only** checkbox in `LeavesToolbar` (next to the search input) closes that gap by sending `?directOnly=true`, which narrows the server-side traversal to `*1..1`. The existing end-system predicate is what makes depth 1 mean *direct end systems* rather than *all direct children* — no extra predicate is involved.
+
+| Aspect | Behaviour |
+|---|---|
+| State | `?direct=1`, read as `directOnly` and written by `setDirectOnly` (`useHierarchyNavigation`). Survives reload, deep links, and tree navigation. |
+| Page reset | `setDirectOnly` clears `?page` in the same `updateQuery` — the narrowed list is shorter, so a retained page would land past its end. |
+| Filters / search / sorting | Unaffected. `useSystemLeaves` merges `directOnly` into the query object `useQueryManager` already builds, so the server applies it *and* everything else. The mode narrows scope; it does not replace filtering. |
+| Cache | The flag is part of the query key, so the two modes never serve each other's rows. |
+| Tree badge | Unchanged — still the total descendant-leaf count. It describes the node, not the current view, and `useSystemLeavesCount` runs per rendered node, so binding it to the mode would fire one request per node on every toggle. |
+| Empty state | Takes precedence over the filters empty state and offers **Show all levels** (`setDirectOnly(false)`). |
+
+**Discoverability** comes from `HierarchyNode.hasLeafChildren`, which the API had always returned and the frontend ignored. `TreeNode` now renders a dot next to the count badge when it is true. The dot is an indicator only — a click target inside a row that already handles clicks would be hit by accident.
+
+The checkbox is never disabled. Gating it on the cached `hasLeafChildren` would lock the control with no explanation whenever another session had added a child, and would couple the leaves panel to tree data; the empty state says the same thing but only after a real query.
+
+Backend contract and the rejected alternatives: [ADR 0001](../../adr/0001-direct-only-param-on-leaves-endpoint.md).
+
 ## Tests
 
 Unit coverage under `__tests__/` is heaviest in:
 
 - `types/__tests__/` — schema parsing.
 - `utils/__tests__/` — tree search, graph layout, filter predicates, change-builder, **parent→child level rules** (`systemLevelRules.spec.ts`), **create-subsystem payload builder** (`buildCreateSubsystemPayload.spec.ts` — locks the `updatedBy[Insert]` audit edge).
-- `hooks/queries/__tests__/` — `primeSystemDetailCache.test.ts` (the contract above), `useSystemLeaves.test.ts`, `useSystemLeavesCount.test.ts`.
+- `hooks/queries/__tests__/` — `primeSystemDetailCache.test.ts` (the contract above), `useSystemLeaves.test.ts`, `useSystemLeaves.spec.ts` (also: `directOnly` reaches the query only when enabled, survives alongside `search`, and keys the two modes apart), `useSystemLeavesCount.test.ts`.
 - `hooks/mutations/__tests__/` — `useSystemFieldUpdate.spec.ts` (also: guard blocks the patch when denied, `['systemCanEdit']` invalidated after a responsible change), `useItemFieldUpdate.spec.ts` (locks the System-node `WAS_UPDATED_BY` edge + change entries for item edits; guard checks the owning system), `useDeleteSystem.spec.ts` (immediate invalidate + background recalc → second invalidate; recalc failure keeps only the immediate round).
 - **Per-system permission** (in the shared `edit-permission` module) — `hooks/__tests__/useSystemEditPermission.spec.ts` (fail-closed derivation for loading/error/allowed/denied + `formatResponsibleName`), `utils/__tests__/guardSystemEdit.spec.ts` (allow / deny-with-toast / no-responsibles / fail-closed-on-throw), `components/__tests__/SystemEditRestrictionBanner.spec.tsx` (denied lists responsibles, distinct verify-error + retry, nothing while loading/allowed).
-- `hooks/__tests__/useHierarchyDeepLinkResolver.spec.tsx` — parent resolution from `parentPath`, root parent==leaf case, stale-uid guard, single-replace idempotency, re-resolution after the URL settles; `utils/__tests__/hierarchyLinks.spec.ts` — deep-link shape + encoding; `components/detail/__tests__/SystemDetailView.spec.tsx` — skeleton / not-found / loaded states.
+- `hooks/__tests__/useHierarchyDeepLinkResolver.spec.tsx` — parent resolution from `parentPath`, root parent==leaf case, stale-uid guard, single-replace idempotency, re-resolution after the URL settles; `hooks/__tests__/useHierarchyNavigation.spec.ts` — URL contract per key, including that `setDirectOnly` clears `page` but leaves `filter`/`search` alone and that `direct` survives `selectParent`; `utils/__tests__/hierarchyLinks.spec.ts` — deep-link shape + encoding; `components/detail/__tests__/SystemDetailView.spec.tsx` — skeleton / not-found / loaded states.
 - `hooks/__tests__/useDeleteSystemAction.spec.tsx` — permission gate, in-flight re-entry guard, per-system check-on-click block, recursive confirm, 409 item-list + `(+N)` overflow + generic fallback, and selection reset for both open-leaf-ancestor and selected-parent-ancestor; `hooks/__tests__/useCreateSubsystemAction.spec.tsx` — role gate + per-parent check-on-click.
-- `components/{tree,leaves,filters,graph,detail,copy,create,shared,tabs,physical-item}/__tests__/` — `physical-item/` covers the grouped renderer and sidebar wrapper (grouping, override marker, service-only additions, empty → hidden); the Delete context item is covered in `tree/TreeNode.test.tsx`, `graph/SystemNode.test.tsx`, and `leaves/LeavesTable.test.tsx` (the last stubs the virtualized `PandaTableV2` to exercise the capture/bubble row capture, disabled-on-empty-area, and no-handler short-circuit).
+- `components/{tree,leaves,filters,graph,detail,copy,create,shared,tabs,physical-item}/__tests__/` — `physical-item/` covers the grouped renderer and sidebar wrapper (grouping, override marker, service-only additions, empty → hidden); the Delete context item is covered in `tree/TreeNode.test.tsx`, `graph/SystemNode.test.tsx`, and `leaves/LeavesTable.test.tsx` (the last stubs the virtualized `PandaTableV2` to exercise the capture/bubble row capture, disabled-on-empty-area, and no-handler short-circuit). `tree/TreeNode.test.tsx` also locks the `hasLeafChildren` dot and that the count badge stays the total; `leaves/LeavesToolbar.spec.tsx` locks the Direct-only checkbox (reflects the prop, reports the toggle, never disabled, leaves filter + search reachable so the mode can be exited).
 
 ## Deprecated / legacy
 
@@ -377,4 +402,6 @@ Unit coverage under `__tests__/` is heaviest in:
 
 > 🔧 *Engineer-only; stripped from the wiki.*
 >
-> Relevant schema: `System`, `SystemInterface`, `ParentPathItem` (`src/server/apollo/schema.graphql:266-369`). Relationship registry: `src/modules/systemHierarchy/types/graph.ts` (`RELATIONSHIP_DEFINITIONS`). Endpoint keys consumed: `systemsHierarchy`, `systemSubsystems`, `systemDetail`, `systemCanEdit` (`GET /system/{uid}/can-edit` → `{ result, responsibles }`; `/v1` prefix is already in `BASE_URL`), `systemRelationships`, `system/<uid>/copy`, `system` (`DELETE /system/{uid}`, soft+recursive, 409 → `SystemPhysicalItemInfo[]`), `recalculateSpareParts`.
+> Relevant schema: `System`, `SystemInterface`, `ParentPathItem` (`src/server/apollo/schema.graphql:266-369`). Relationship registry: `src/modules/systemHierarchy/types/graph.ts` (`RELATIONSHIP_DEFINITIONS`). Endpoint keys consumed: `systemsHierarchy`, `systemLeaves` and `systemLeavesCount` (both accept `directOnly=true` → traversal narrows to `*1..1`; `GetSystemLeavesByParentUIDQuery` / `…CountQuery` in the API's `systems-db-queries.go`), `systemDetail`, `systemCanEdit` (`GET /system/{uid}/can-edit` → `{ result, responsibles }`; `/v1` prefix is already in `BASE_URL`), `systemRelationships`, `system/<uid>/copy`, `system` (`DELETE /system/{uid}`, soft+recursive, 409 → `SystemPhysicalItemInfo[]`), `recalculateSpareParts`.
+>
+> `systemSubsystems` (`GET /system/{uid}/subsystems`) exists but is **not** consumed by this module — only by `modules/systems/hooks/useSubsystems.ts` for lazy row expansion in the overview table. See [ADR 0001](../../adr/0001-direct-only-param-on-leaves-endpoint.md) for why the direct-only view did not reuse it.

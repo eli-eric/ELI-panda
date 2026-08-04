@@ -4,6 +4,12 @@ Short, append-only records of architectural decisions that future contributors (
 
 Until this directory grows, the existing **Maintenance recommendations**, **Open questions**, **Deprecated / legacy**, and **🔮 Planned** sections in [`docs/technical/`](../technical/README.md) act as informal ADRs — promote any entry from there to a proper ADR here when a real decision crystallizes.
 
+## Records
+
+| ADR | Title | Status |
+|---|---|---|
+| [0001](./0001-direct-only-param-on-leaves-endpoint.md) | Scope the leaves endpoint with `directOnly`, don't reuse `/subsystems` | Accepted |
+
 ## When to write an ADR
 
 Write one when:
