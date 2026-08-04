@@ -107,7 +107,12 @@ export const TreeNode: FC<TreeNodeProps> = ({
                 indicator — the row already handles clicks. */}
             {node.hasLeafChildren && (
                 <Tooltip content={fm({ id: message.systemHierarchy.tree.hasDirectLeaves })}>
+                    {/* The tooltip is hover-only, so without an accessible name the marker
+                        would be invisible to screen readers — exactly the users who can
+                        least afford to miss the one cue that end systems are hiding here. */}
                     <span
+                        role="img"
+                        aria-label={fm({ id: message.systemHierarchy.tree.hasDirectLeaves })}
                         className="size-1.5 shrink-0 rounded-full bg-primary/60"
                         data-testid={`tree-node-direct-leaves-${node.uid}`}
                     />

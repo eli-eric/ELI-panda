@@ -30,6 +30,7 @@ const messages = {
     'systemHierarchy.copy.pasteSystem': 'Paste System',
     'systemHierarchy.create.menuItem': 'Create System',
     'systemHierarchy.delete.menuItem': 'Delete System',
+    'systemHierarchy.tree.hasDirectLeaves': 'Has end systems directly under it',
 }
 
 const renderTreeNode = (props: Partial<React.ComponentProps<typeof TreeNode>> = {}) =>
@@ -85,6 +86,15 @@ describe('TreeNode', () => {
         it('marks a node that has end systems directly under it', () => {
             renderTreeNode()
             expect(screen.getByTestId('tree-node-direct-leaves-node-1')).toBeInTheDocument()
+        })
+
+        it('exposes the marker to assistive tech, not just to hover', () => {
+            // The tooltip is hover-only; without a name the one cue that end systems are
+            // hiding under this node is invisible to screen-reader users.
+            renderTreeNode()
+            expect(
+                screen.getByRole('img', { name: 'Has end systems directly under it' }),
+            ).toBeInTheDocument()
         })
 
         it('omits the marker when every end system sits deeper', () => {

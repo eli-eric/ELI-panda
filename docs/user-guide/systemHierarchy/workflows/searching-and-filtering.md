@@ -38,7 +38,12 @@ By default the table lists every end system beneath the selected parent, however
 
 5. **Combine it freely.** Search, filters, sorting, and paging all keep working on the narrowed list. Ticking the box does not clear anything you had set.
 
-6. **If the table comes up empty**, you see *No end systems directly under this system* — everything beneath the parent sits deeper. Use *Show all levels* in that message to go back to the full list.
+6. **If the table comes up empty**, the message tells you which of the two is responsible:
+
+   | You see | Meaning | Offered |
+   |---|---|---|
+   | *No end systems directly under this system* | Nothing hangs directly off this parent — it all sits deeper | *Show all levels* |
+   | *No end systems directly under this system match the current search and filters* | There may well be some; your search or filter excluded them | *Show all levels* **and** *Clear Filters* |
 
 > **Tip:** the dot next to a node's count badge in the tree tells you in advance whether *Direct only* will find anything there. See [Navigating the tree](./navigating-the-tree.md#finding-a-nodes-own-end-systems).
 

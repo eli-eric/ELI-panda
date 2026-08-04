@@ -44,9 +44,7 @@ export const useHierarchyNavigation = () => {
             const parentChanged = (router.query.parent as string | undefined) !== uid
             const pageReset = parentChanged ? { page: undefined } : {}
             updateQuery(
-                inDetail
-                    ? { parent: uid, leaf: uid, ...pageReset }
-                    : { parent: uid, ...pageReset },
+                inDetail ? { parent: uid, leaf: uid, ...pageReset } : { parent: uid, ...pageReset },
             )
         },
         [queryClient, router, updateQuery],

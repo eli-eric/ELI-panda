@@ -68,6 +68,13 @@ describe('LeavesPanelHeader', () => {
         expect(screen.queryByText('(0)')).toBeNull()
     })
 
+    it('qualifies the count in direct-only mode', () => {
+        // The tree badge for the same node keeps showing the total, so an unqualified
+        // number here would put two conflicting figures on screen with no explanation.
+        renderWithProviders(<LeavesPanelHeader {...baseProps} totalCount={12} directOnly />)
+        expect(screen.getByText('(12 direct)')).toBeInTheDocument()
+    })
+
     it('parentSystemType falls back to default leaves title when null', () => {
         renderWithProviders(
             <LeavesPanelHeader {...baseProps} parentSystemType={null} />,

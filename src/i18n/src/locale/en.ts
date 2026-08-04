@@ -1513,7 +1513,10 @@ export const messages = {
             directOnlyTooltip:
                 'Show only end systems directly under this system, instead of everything deeper in the tree.',
             noDirectLeaves: 'No end systems directly under this system',
+            noDirectLeavesMatching:
+                'No end systems directly under this system match the current search and filters',
             showAllLevels: 'Show all levels',
+            directCountSuffix: 'direct',
             filtersApplied: 'Filters Applied',
             openFilters: 'Open Filters',
         },

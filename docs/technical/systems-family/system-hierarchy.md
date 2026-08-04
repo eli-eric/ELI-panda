@@ -357,9 +357,24 @@ The **Direct only** checkbox in `LeavesToolbar` (next to the search input) close
 | Filters / search / sorting | Unaffected. `useSystemLeaves` merges `directOnly` into the query object `useQueryManager` already builds, so the server applies it *and* everything else. The mode narrows scope; it does not replace filtering. |
 | Cache | The flag is part of the query key, so the two modes never serve each other's rows. |
 | Tree badge | Unchanged — still the total descendant-leaf count. It describes the node, not the current view, and `useSystemLeavesCount` runs per rendered node, so binding it to the mode would fire one request per node on every toggle. |
-| Empty state | Takes precedence over the filters empty state and offers **Show all levels** (`setDirectOnly(false)`). |
+| Header count | Rendered as `(N direct)` while the mode is on. The tree badge for the same node still shows the total, so two different numbers sit on screen at once and the header is what accounts for the difference. |
+| Pagination | `setDirectOnly` drops `?page`, but `useQueryManager` reads the zustand `paginationState` *first* and that is only cleared by an effect. `LeavesPanel.cont` therefore calls `useResetPaginationOnChange(LEAVES_TABLE_ID)` before navigating, so no render requests a page that does not exist in the narrowed set. |
 
-**Discoverability** comes from `HierarchyNode.hasLeafChildren`, which the API had always returned and the frontend ignored. `TreeNode` now renders a dot next to the count badge when it is true. The dot is an indicator only — a click target inside a row that already handles clicks would be hit by accident.
+### Empty state
+
+Two independent things can empty the table — the direct-only scope and the search/filter set — and they can both be true. `LeavesEmptyState.comp.tsx` branches on the pair rather than letting one win:
+
+| `directOnly` | narrowed query | Message | Actions |
+|---|---|---|---|
+| off | on | *No subsystems found* | Clear filters |
+| on | off | *No end systems directly under this system* | Show all levels |
+| on | on | *…match the current search and filters* | Show all levels **and** Clear filters |
+
+Letting `directOnly` short-circuit would state something potentially false — there may well be direct end systems, just none matching the filter — and offer an escape that lands the user in a second empty state.
+
+"Narrowed query" counts **search as well as column filters** (`instances[LEAVES_TABLE_ID].search`, not just `storeFilters`), because search narrows the result exactly like a filter does.
+
+**Discoverability** comes from `HierarchyNode.hasLeafChildren`, which the API had always returned and the frontend ignored. `TreeNode` now renders a dot next to the count badge when it is true, carrying `role="img"` + `aria-label` — the tooltip is hover-only, and a marker that exists purely for discoverability must not be invisible to the users least able to compensate. The dot is an indicator only, with no click handler: a small target with different behaviour inside a row that already handles clicks would be hit by accident.
 
 The checkbox is never disabled. Gating it on the cached `hasLeafChildren` would lock the control with no explanation whenever another session had added a child, and would couple the leaves panel to tree data; the empty state says the same thing but only after a real query.
 
@@ -376,7 +391,7 @@ Unit coverage under `__tests__/` is heaviest in:
 - **Per-system permission** (in the shared `edit-permission` module) — `hooks/__tests__/useSystemEditPermission.spec.ts` (fail-closed derivation for loading/error/allowed/denied + `formatResponsibleName`), `utils/__tests__/guardSystemEdit.spec.ts` (allow / deny-with-toast / no-responsibles / fail-closed-on-throw), `components/__tests__/SystemEditRestrictionBanner.spec.tsx` (denied lists responsibles, distinct verify-error + retry, nothing while loading/allowed).
 - `hooks/__tests__/useHierarchyDeepLinkResolver.spec.tsx` — parent resolution from `parentPath`, root parent==leaf case, stale-uid guard, single-replace idempotency, re-resolution after the URL settles; `hooks/__tests__/useHierarchyNavigation.spec.ts` — URL contract per key, including that `setDirectOnly` clears `page` but leaves `filter`/`search` alone and that `direct` survives `selectParent`; `utils/__tests__/hierarchyLinks.spec.ts` — deep-link shape + encoding; `components/detail/__tests__/SystemDetailView.spec.tsx` — skeleton / not-found / loaded states.
 - `hooks/__tests__/useDeleteSystemAction.spec.tsx` — permission gate, in-flight re-entry guard, per-system check-on-click block, recursive confirm, 409 item-list + `(+N)` overflow + generic fallback, and selection reset for both open-leaf-ancestor and selected-parent-ancestor; `hooks/__tests__/useCreateSubsystemAction.spec.tsx` — role gate + per-parent check-on-click.
-- `components/{tree,leaves,filters,graph,detail,copy,create,shared,tabs,physical-item}/__tests__/` — `physical-item/` covers the grouped renderer and sidebar wrapper (grouping, override marker, service-only additions, empty → hidden); the Delete context item is covered in `tree/TreeNode.test.tsx`, `graph/SystemNode.test.tsx`, and `leaves/LeavesTable.test.tsx` (the last stubs the virtualized `PandaTableV2` to exercise the capture/bubble row capture, disabled-on-empty-area, and no-handler short-circuit). `tree/TreeNode.test.tsx` also locks the `hasLeafChildren` dot and that the count badge stays the total; `leaves/LeavesToolbar.spec.tsx` locks the Direct-only checkbox (reflects the prop, reports the toggle, never disabled, leaves filter + search reachable so the mode can be exited).
+- `components/{tree,leaves,filters,graph,detail,copy,create,shared,tabs,physical-item}/__tests__/` — `physical-item/` covers the grouped renderer and sidebar wrapper (grouping, override marker, service-only additions, empty → hidden); the Delete context item is covered in `tree/TreeNode.test.tsx`, `graph/SystemNode.test.tsx`, and `leaves/LeavesTable.test.tsx` (the last stubs the virtualized `PandaTableV2` to exercise the capture/bubble row capture, disabled-on-empty-area, and no-handler short-circuit). `tree/TreeNode.test.tsx` also locks the `hasLeafChildren` dot and that the count badge stays the total; `leaves/LeavesToolbar.spec.tsx` locks the Direct-only checkbox (reflects the prop, reports the toggle, never disabled, leaves filter + search reachable so the mode can be exited); `leaves/LeavesEmptyState.spec.tsx` locks all four rows of the empty-state matrix above, including that the both-causes case does not assert the scope-only message.
 
 ## Deprecated / legacy
 

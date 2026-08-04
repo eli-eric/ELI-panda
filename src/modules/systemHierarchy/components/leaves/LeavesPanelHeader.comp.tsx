@@ -18,6 +18,7 @@ interface LeavesPanelHeaderProps {
     parentSystemType: string | null
     parentPath: ParentPathItem[] | null
     totalCount: number
+    directOnly?: boolean
     isLoading: boolean
     onViewParentDetail: () => void
     onSelectAncestor: SelectAncestorHandler
@@ -29,6 +30,7 @@ export const LeavesPanelHeader: FC<LeavesPanelHeaderProps> = ({
     parentSystemType,
     parentPath,
     totalCount,
+    directOnly = false,
     isLoading,
     onViewParentDetail,
     onSelectAncestor,
@@ -77,7 +79,14 @@ export const LeavesPanelHeader: FC<LeavesPanelHeaderProps> = ({
                         {fm({ id: message.systemHierarchy.leaves.viewParent })}
                     </Button>
                     {totalCount > 0 && (
-                        <span className="text-xs text-muted-foreground">({totalCount})</span>
+                        // Qualified in direct-only mode: the tree badge for the same node
+                        // still shows the total, so two different numbers are on screen
+                        // at once and the header is what explains the difference.
+                        <span className="text-xs text-muted-foreground">
+                            {directOnly
+                                ? `(${totalCount} ${fm({ id: message.systemHierarchy.leaves.directCountSuffix })})`
+                                : `(${totalCount})`}
+                        </span>
                     )}
                 </div>
             </div>

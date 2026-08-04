@@ -62,7 +62,7 @@ See [Access & Responsibilities](../README.md#access--responsibilities) for what 
 
 The tree lists only systems that *have* children, and the table lists everything beneath the selected node at any depth. Between the two, a node's own end systems can be hard to spot: three of them sit unnoticed among two thousand rows coming from deeper branches.
 
-13. **Tick *Direct only*** next to the search box in the leaves panel toolbar. The table narrows to the end systems hanging immediately off the selected node.
+13. **Tick *Direct only*** next to the search box in the leaves panel toolbar. The table narrows to the end systems hanging immediately off the selected node, and the count in the panel header reads e.g. *(12 direct)* to distinguish it from the tree badge, which keeps counting everything below.
 
     `[SCREENSHOT PLACEHOLDER: leaves panel toolbar with the Direct only checkbox ticked, and a short table below it — contrast with the same node unticked showing a long paginated list]`
 
