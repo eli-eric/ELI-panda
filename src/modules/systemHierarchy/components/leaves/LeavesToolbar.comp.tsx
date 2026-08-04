@@ -5,8 +5,9 @@ import { useIntl } from 'react-intl'
 
 import { Tooltip } from '@/components/Tooltip'
 import { Button } from '@/components/ui/button'
-import { CheckboxWithLabel } from '@/components/ui/checkbox'
+import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import { message } from '@/i18n/src/messages'
 import { FilterBadges } from '@/modules/shared/form/FilterBadges'
@@ -85,15 +86,28 @@ export const LeavesToolbar: FC<LeavesToolbarProps> = ({
                         />
                     </div>
                 </div>
+                {/* The explanation is bound to the checkbox with aria-describedby rather
+                    than left to live only in the tooltip: Radix puts its describedby on
+                    the trigger, which here is the wrapper, so the control itself would
+                    otherwise carry no description at all. The tooltip stays for pointer
+                    users; sr-only text is what makes it reachable without one. */}
                 <Tooltip content={fm({ id: message.systemHierarchy.leaves.directOnlyTooltip })}>
-                    <div data-testid="leaves-toolbar-direct-only">
-                        <CheckboxWithLabel
+                    <div
+                        className="flex items-center gap-2"
+                        data-testid="leaves-toolbar-direct-only"
+                    >
+                        <Checkbox
                             id="leaves-direct-only"
-                            label={fm({ id: message.systemHierarchy.leaves.directOnly })}
                             checked={directOnly}
-                            onChange={onDirectOnlyChange}
-                            className="whitespace-nowrap"
+                            onCheckedChange={checked => onDirectOnlyChange(checked === true)}
+                            aria-describedby="leaves-direct-only-hint"
                         />
+                        <Label htmlFor="leaves-direct-only" className="whitespace-nowrap">
+                            {fm({ id: message.systemHierarchy.leaves.directOnly })}
+                        </Label>
+                        <span id="leaves-direct-only-hint" className="sr-only">
+                            {fm({ id: message.systemHierarchy.leaves.directOnlyTooltip })}
+                        </span>
                     </div>
                 </Tooltip>
                 <ColumnVisibilityDropdown table={table} excludeColumns={['icon']} />

@@ -122,6 +122,21 @@ describe('LeavesToolbar', () => {
             expect(checkbox()).toBeEnabled()
         })
 
+        it('carries the explanation as a description, not only in the tooltip', () => {
+            // Radix puts its own aria-describedby on the tooltip trigger — the wrapper —
+            // so without this the control itself would have no description at all, and
+            // the help text would be reachable by pointer only.
+            renderToolbar()
+            expect(checkbox()).toHaveAccessibleDescription(
+                'Show only end systems directly under this system, instead of everything deeper in the tree.',
+            )
+        })
+
+        it('is labelled by the visible label', () => {
+            renderToolbar()
+            expect(checkbox()).toHaveAccessibleName('Direct only')
+        })
+
         it('leaves filter and search reachable so the mode can be exited', () => {
             renderToolbar({ directOnly: true })
             expect(screen.getByTestId('leaves-toolbar-filter-btn')).toBeEnabled()

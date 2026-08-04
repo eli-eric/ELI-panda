@@ -350,6 +350,8 @@ Between the two there was no way to ask **"what hangs directly off this node"**.
 
 The **Direct only** checkbox in `LeavesToolbar` (next to the search input) closes that gap by sending `?directOnly=true`, which narrows the server-side traversal to `*1..1`. The existing end-system predicate is what makes depth 1 mean *direct end systems* rather than *all direct children* — no extra predicate is involved.
 
+The explanation is bound to the checkbox with `aria-describedby` → an `sr-only` span, not left to the tooltip alone: Radix puts its own `aria-describedby` on the tooltip *trigger*, which here is the wrapper `div`, so the control itself would carry no description. The tooltip stays for pointer users.
+
 | Aspect | Behaviour |
 |---|---|
 | State | `?direct=1`, read as `directOnly` and written by `setDirectOnly` (`useHierarchyNavigation`). Survives reload, deep links, and tree navigation. |
