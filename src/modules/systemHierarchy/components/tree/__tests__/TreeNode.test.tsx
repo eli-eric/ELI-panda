@@ -30,6 +30,7 @@ const messages = {
     'systemHierarchy.copy.pasteSystem': 'Paste System',
     'systemHierarchy.create.menuItem': 'Create System',
     'systemHierarchy.delete.menuItem': 'Delete System',
+    'systemHierarchy.tree.hasDirectLeaves': 'Has end systems directly under it',
 }
 
 const renderTreeNode = (props: Partial<React.ComponentProps<typeof TreeNode>> = {}) =>
@@ -75,6 +76,37 @@ describe('TreeNode', () => {
         renderTreeNode()
 
         expect(screen.getByText('7')).toBeInTheDocument()
+    })
+
+    describe('direct end-systems marker', () => {
+        beforeEach(() => {
+            mockUseSystemLeavesCount.mockReturnValue({ count: 7, isLoading: false, error: null })
+        })
+
+        it('marks a node that has end systems directly under it', () => {
+            renderTreeNode()
+            expect(screen.getByTestId('tree-node-direct-leaves-node-1')).toBeInTheDocument()
+        })
+
+        it('exposes the marker to assistive tech, not just to hover', () => {
+            // The tooltip is hover-only; without a name the one cue that end systems are
+            // hiding under this node is invisible to screen-reader users.
+            renderTreeNode()
+            expect(
+                screen.getByRole('img', { name: 'Has end systems directly under it' }),
+            ).toBeInTheDocument()
+        })
+
+        it('omits the marker when every end system sits deeper', () => {
+            renderTreeNode({ node: { ...baseNode, hasLeafChildren: false } })
+            expect(screen.queryByTestId('tree-node-direct-leaves-node-1')).toBeNull()
+        })
+
+        it('leaves the count badge untouched — it stays the total, not the direct one', () => {
+            renderTreeNode()
+            expect(screen.getByText('7')).toBeInTheDocument()
+            expect(mockUseSystemLeavesCount).toHaveBeenCalledWith('node-1')
+        })
     })
 
     it('calls onToggle and does not trigger onSelect when chevron button is clicked', () => {

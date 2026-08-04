@@ -32,6 +32,8 @@ When you sharpen a term during a design conversation, update both this file and 
 
 - **System** — facility item with hierarchy and relations. See [`systems-family/systems-overview.md`](./technical/systems-family/systems-overview.md).
 - **System hierarchy** — parent/child tree of systems. See [`systems-family/system-hierarchy.md`](./technical/systems-family/system-hierarchy.md).
+- **End system** — a system with no subsystems of its own; the API calls these *leaves*. Never shown in the hierarchy tree (which lists only nodes that have children) — they live in the leaves table. See [`systems-family/system-hierarchy.md`](./technical/systems-family/system-hierarchy.md#direct-end-systems).
+- **Direct end systems** — the end systems hanging *immediately* below a node, as opposed to every end system anywhere beneath it. Surfaced by the *Direct only* checkbox (`?direct=1` → `directOnly=true`). See [`systems-family/system-hierarchy.md`](./technical/systems-family/system-hierarchy.md#direct-end-systems) and [ADR 0001](./adr/0001-direct-only-param-on-leaves-endpoint.md).
 - **System item** — leaf attached to a system. The `systemItem` module / `/system/<uid>` page is **deprecated** — detail now lives in the hierarchy explorer (`/systems/hierarchy?leaf=<uid>`). See [`systems-family/system-item.md`](./technical/systems-family/system-item.md).
 - **System type** — schema/template that drives a system's editable fields. See [`systems-family/system-type-edit.md`](./technical/systems-family/system-type-edit.md).
 - **Moving flow / Multi-move** — bulk re-parenting of systems. See [`systems-family/moving.md`](./technical/systems-family/moving.md).

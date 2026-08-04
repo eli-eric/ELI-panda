@@ -3,8 +3,8 @@ import type { FC } from 'react'
 import { useCallback, useEffect } from 'react'
 import { useIntl } from 'react-intl'
 
-import { Button } from '@/components/ui/button'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
+import { useResetPaginationOnChange } from '@/hooks/table/usePagination'
 import { message } from '@/i18n/src/messages'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import useTableStateStore from '@/store/useTableStateStore'
@@ -15,6 +15,7 @@ import { useDeleteSystemAction } from '../../hooks/useDeleteSystemAction'
 import { useHierarchyNavigation } from '../../hooks/useHierarchyNavigation'
 import { LEAVES_TABLE_ID } from '../../types/constants'
 import { SystemDetailViewContainer } from '../detail/SystemDetailView.cont'
+import { LeavesEmptyState } from './LeavesEmptyState.comp'
 import { LeavesPanelHeader } from './LeavesPanelHeader.comp'
 import { LeavesTableComponent } from './LeavesTable.comp'
 import { LeavesToolbar } from './LeavesToolbar.comp'
@@ -27,9 +28,14 @@ export const LeavesPanelContainer: FC = () => {
         selectedLeafUid,
         selectLeaf,
         selectParent,
+        directOnly,
+        setDirectOnly,
     } = useHierarchyNavigation()
     const { system: parentSystem, isLoading: isParentLoading } = useSystemDetail(selectedParentUid)
-    const { leaves, totalCount, isLoading, isInitialLoad } = useSystemLeaves(selectedParentUid)
+    const { leaves, totalCount, isLoading, isInitialLoad } = useSystemLeaves(
+        selectedParentUid,
+        directOnly,
+    )
 
     const { columns } = useLeavesColumns()
     const { canEdit, handleDeleteSystem } = useDeleteSystemAction()
@@ -82,7 +88,28 @@ export const LeavesPanelContainer: FC = () => {
         tableId: LEAVES_TABLE_ID,
         enableQueryUrl: true,
     })
-    const hasActiveFilters = storeFilters.length > 0
+    // Search narrows the result exactly like a column filter does, so the empty state
+    // has to account for both or it will blame the wrong thing.
+    const activeSearch = useTableStateStore(s => s.instances[LEAVES_TABLE_ID]?.search) ?? ''
+    const hasNarrowedQuery = storeFilters.length > 0 || activeSearch.length > 0
+
+    const handleClearNarrowing = useCallback(() => {
+        setColumnFilters([])
+        setSearch(LEAVES_TABLE_ID, '')
+        setSearchValue(LEAVES_TABLE_ID, '')
+    }, [setColumnFilters, setSearch, setSearchValue])
+
+    // setDirectOnly drops ?page, but useQueryManager reads the zustand paginationState
+    // first and that is only cleared by an effect — one render would otherwise request
+    // a page that does not exist in the narrowed set.
+    const resetPagination = useResetPaginationOnChange(LEAVES_TABLE_ID)
+    const handleDirectOnlyChange = useCallback(
+        (next: boolean) => {
+            resetPagination()
+            setDirectOnly(next)
+        },
+        [resetPagination, setDirectOnly],
+    )
 
     const handleViewParentDetail = useCallback(() => {
         if (selectedParentUid) {
@@ -112,33 +139,32 @@ export const LeavesPanelContainer: FC = () => {
             parentSystemType={parentSystem?.systemType?.name ?? null}
             parentPath={parentSystem?.parentPath ?? null}
             totalCount={totalCount}
+            directOnly={directOnly}
             isLoading={isParentLoading}
             onViewParentDetail={handleViewParentDetail}
             onSelectAncestor={selectParent}
         />
     )
 
-    const toolbar = <LeavesToolbar tableId={LEAVES_TABLE_ID} table={table} enableQueryURL={true} />
+    const toolbar = (
+        <LeavesToolbar
+            tableId={LEAVES_TABLE_ID}
+            table={table}
+            enableQueryURL={true}
+            directOnly={directOnly}
+            onDirectOnlyChange={handleDirectOnlyChange}
+        />
+    )
 
-    const emptyState = hasActiveFilters ? (
-        <div className="flex items-center justify-center py-12 text-muted-foreground text-sm">
-            <div className="text-center">
-                <p>{fm({ id: message.systemHierarchy.leaves.noLeaves })}</p>
-                <Button
-                    variant="link"
-                    size="sm"
-                    className="mt-2"
-                    onClick={() => {
-                        setColumnFilters([])
-                        setSearch(LEAVES_TABLE_ID, '')
-                        setSearchValue(LEAVES_TABLE_ID, '')
-                    }}
-                >
-                    {fm({ id: message.common.ui.clearFilters })}
-                </Button>
-            </div>
-        </div>
-    ) : undefined
+    const emptyState =
+        directOnly || hasNarrowedQuery ? (
+            <LeavesEmptyState
+                directOnly={directOnly}
+                hasNarrowedQuery={hasNarrowedQuery}
+                onShowAllLevels={() => handleDirectOnlyChange(false)}
+                onClearFilters={handleClearNarrowing}
+            />
+        ) : undefined
 
     return (
         <div

@@ -3,6 +3,7 @@ import type { FC } from 'react'
 import { useCallback } from 'react'
 import { useIntl } from 'react-intl'
 
+import { Tooltip } from '@/components/Tooltip'
 import {
     ContextMenu,
     ContextMenuContent,
@@ -101,6 +102,22 @@ export const TreeNode: FC<TreeNodeProps> = ({
             <span className="truncate flex-1">
                 {search ? highlightText(node.name, search) : node.name}
             </span>
+            {/* End systems never appear in the tree, so without this marker there is no
+                way to tell which node hides some directly beneath it. Purely an
+                indicator — the row already handles clicks. */}
+            {node.hasLeafChildren && (
+                <Tooltip content={fm({ id: message.systemHierarchy.tree.hasDirectLeaves })}>
+                    {/* The tooltip is hover-only, so without an accessible name the marker
+                        would be invisible to screen readers — exactly the users who can
+                        least afford to miss the one cue that end systems are hiding here. */}
+                    <span
+                        role="img"
+                        aria-label={fm({ id: message.systemHierarchy.tree.hasDirectLeaves })}
+                        className="size-1.5 shrink-0 rounded-full bg-primary/60"
+                        data-testid={`tree-node-direct-leaves-${node.uid}`}
+                    />
+                </Tooltip>
+            )}
             <code className="text-[10px] text-muted-foreground shrink-0 rounded bg-muted px-1 py-0.5">
                 {isLeavesCountLoading ? '…' : count}
             </code>

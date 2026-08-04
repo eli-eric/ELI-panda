@@ -31,7 +31,7 @@ export const SystemDetailHeader: FC<SystemDetailHeaderProps> = ({
             data-testid="system-hierarchy-detail-header"
         >
             <Button
-                variant="ghost"
+                variant="outline"
                 size="sm"
                 onClick={onBack}
                 className="h-8 gap-1.5 px-2 text-xs"

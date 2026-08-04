@@ -1,5 +1,5 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { toast } from 'sonner'
 
 import useQueryManager from '@/hooks/useQueryManager'
@@ -9,10 +9,22 @@ import { queryFetcher } from '@/utils/fetcher'
 import type { LeavesResponse } from '../../types'
 import { LEAVES_QUERY_KEY, LEAVES_TABLE_ID } from '../../types/constants'
 
-export const useSystemLeaves = (parentUid: string | null) => {
+/**
+ * @param directOnly Restrict the result to the parent's direct children instead of
+ * every descendant leaf. The server narrows the traversal depth; search, filters,
+ * sorting and pagination keep working on top of the narrowed set.
+ */
+export const useSystemLeaves = (parentUid: string | null, directOnly: boolean = false) => {
     const { query } = useQueryManager(LEAVES_TABLE_ID, undefined, true)
 
-    const queryKey: QueryFetcherKey = [LEAVES_QUERY_KEY, { uid: parentUid, query }]
+    // Only added when enabled — getEndpoints drops null/undefined/'' but would
+    // happily serialise `directOnly=false` and split the cache for no reason.
+    const effectiveQuery = useMemo(
+        () => (directOnly ? { ...query, directOnly: true } : query),
+        [query, directOnly],
+    )
+
+    const queryKey: QueryFetcherKey = [LEAVES_QUERY_KEY, { uid: parentUid, query: effectiveQuery }]
 
     const { data, isFetching, isError, error } = useQuery<
         LeavesResponse,
