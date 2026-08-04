@@ -81,4 +81,51 @@ describe('useHierarchyNavigation', () => {
         act(() => result.current.selectParent('B'))
         expect(lastPushedQuery()).toEqual({ parent: 'B', leaf: 'B' })
     })
+
+    describe('directOnly', () => {
+        it('reads the flag off the URL', () => {
+            mockQuery = { parent: 'A', direct: '1' }
+            const { result } = renderHook(() => useHierarchyNavigation(), { wrapper })
+            expect(result.current.directOnly).toBe(true)
+        })
+
+        it('treats any other value as off', () => {
+            mockQuery = { parent: 'A', direct: 'true' }
+            const { result } = renderHook(() => useHierarchyNavigation(), { wrapper })
+            expect(result.current.directOnly).toBe(false)
+        })
+
+        it('setDirectOnly(true) sets the flag and drops a stale page', () => {
+            mockQuery = { parent: 'A', page: '9' }
+            const { result } = renderHook(() => useHierarchyNavigation(), { wrapper })
+            act(() => result.current.setDirectOnly(true))
+            expect(lastPushedQuery()).toEqual({ parent: 'A', direct: '1' })
+        })
+
+        it('setDirectOnly(false) removes the flag and the page alike', () => {
+            mockQuery = { parent: 'A', direct: '1', page: '4' }
+            const { result } = renderHook(() => useHierarchyNavigation(), { wrapper })
+            act(() => result.current.setDirectOnly(false))
+            expect(lastPushedQuery()).toEqual({ parent: 'A' })
+        })
+
+        it('keeps filters and search — the mode narrows scope, it does not replace them', () => {
+            mockQuery = { parent: 'A', search: 'pump', filter: '[{"id":"zone"}]' }
+            const { result } = renderHook(() => useHierarchyNavigation(), { wrapper })
+            act(() => result.current.setDirectOnly(true))
+            expect(lastPushedQuery()).toEqual({
+                parent: 'A',
+                search: 'pump',
+                filter: '[{"id":"zone"}]',
+                direct: '1',
+            })
+        })
+
+        it('survives switching to another tree node, unlike page', () => {
+            mockQuery = { parent: 'A', direct: '1', page: '3' }
+            const { result } = renderHook(() => useHierarchyNavigation(), { wrapper })
+            act(() => result.current.selectParent('B'))
+            expect(lastPushedQuery()).toEqual({ parent: 'B', direct: '1' })
+        })
+    })
 })

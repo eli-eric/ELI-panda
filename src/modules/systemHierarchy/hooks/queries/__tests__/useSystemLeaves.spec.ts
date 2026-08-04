@@ -11,7 +11,7 @@ jest.mock('@/utils/fetcher', () => ({
 
 jest.mock('@/hooks/useQueryManager', () => ({
     __esModule: true,
-    default: () => ({ query: {} }),
+    default: () => ({ query: { search: 'pump' } }),
 }))
 
 const mockQueryFetcher = queryFetcher as jest.Mock
@@ -53,6 +53,39 @@ describe('useSystemLeaves', () => {
         await waitFor(() => expect(result.current.isInitialLoad).toBe(false))
         expect(result.current.leaves).toHaveLength(1)
         expect(result.current.totalCount).toBe(1)
+    })
+
+    describe('directOnly', () => {
+        const queryOf = (result: { current: { queryKey: unknown[] } }) =>
+            (result.current.queryKey[1] as { query: Record<string, unknown> }).query
+
+        it('omits the param when off, so the endpoint keeps its current shape', () => {
+            mockQueryFetcher.mockReturnValue(jest.fn(() => new Promise<never>(() => {})))
+            const { result } = renderHook(() => useSystemLeaves('sys-1'), {
+                wrapper: QueryClientWrapper,
+            })
+            expect(queryOf(result)).not.toHaveProperty('directOnly')
+        })
+
+        it('adds the param alongside the existing query when on', () => {
+            mockQueryFetcher.mockReturnValue(jest.fn(() => new Promise<never>(() => {})))
+            const { result } = renderHook(() => useSystemLeaves('sys-1', true), {
+                wrapper: QueryClientWrapper,
+            })
+            // search must survive — the mode narrows the scope, it does not replace filtering
+            expect(queryOf(result)).toEqual({ search: 'pump', directOnly: true })
+        })
+
+        it('keys the two modes apart so neither serves the other cached rows', () => {
+            mockQueryFetcher.mockReturnValue(jest.fn(() => new Promise<never>(() => {})))
+            const { result: all } = renderHook(() => useSystemLeaves('sys-1'), {
+                wrapper: QueryClientWrapper,
+            })
+            const { result: direct } = renderHook(() => useSystemLeaves('sys-1', true), {
+                wrapper: QueryClientWrapper,
+            })
+            expect(all.current.queryKey).not.toEqual(direct.current.queryKey)
+        })
     })
 
     it('isInitialLoad false after a failed first fetch (no perpetual skeleton)', async () => {
