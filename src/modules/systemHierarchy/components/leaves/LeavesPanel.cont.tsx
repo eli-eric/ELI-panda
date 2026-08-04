@@ -27,9 +27,14 @@ export const LeavesPanelContainer: FC = () => {
         selectedLeafUid,
         selectLeaf,
         selectParent,
+        directOnly,
+        setDirectOnly,
     } = useHierarchyNavigation()
     const { system: parentSystem, isLoading: isParentLoading } = useSystemDetail(selectedParentUid)
-    const { leaves, totalCount, isLoading, isInitialLoad } = useSystemLeaves(selectedParentUid)
+    const { leaves, totalCount, isLoading, isInitialLoad } = useSystemLeaves(
+        selectedParentUid,
+        directOnly,
+    )
 
     const { columns } = useLeavesColumns()
     const { canEdit, handleDeleteSystem } = useDeleteSystemAction()
@@ -118,9 +123,34 @@ export const LeavesPanelContainer: FC = () => {
         />
     )
 
-    const toolbar = <LeavesToolbar tableId={LEAVES_TABLE_ID} table={table} enableQueryURL={true} />
+    const toolbar = (
+        <LeavesToolbar
+            tableId={LEAVES_TABLE_ID}
+            table={table}
+            enableQueryURL={true}
+            directOnly={directOnly}
+            onDirectOnlyChange={setDirectOnly}
+        />
+    )
 
-    const emptyState = hasActiveFilters ? (
+    // Direct-only takes precedence: with the mode on, "nothing here" is far more
+    // likely to be the narrowed scope than the filters, so offer that escape first.
+    const emptyState = directOnly ? (
+        <div className="flex items-center justify-center py-12 text-muted-foreground text-sm">
+            <div className="text-center">
+                <p>{fm({ id: message.systemHierarchy.leaves.noDirectLeaves })}</p>
+                <Button
+                    variant="link"
+                    size="sm"
+                    className="mt-2"
+                    onClick={() => setDirectOnly(false)}
+                    data-testid="leaves-show-all-levels"
+                >
+                    {fm({ id: message.systemHierarchy.leaves.showAllLevels })}
+                </Button>
+            </div>
+        </div>
+    ) : hasActiveFilters ? (
         <div className="flex items-center justify-center py-12 text-muted-foreground text-sm">
             <div className="text-center">
                 <p>{fm({ id: message.systemHierarchy.leaves.noLeaves })}</p>

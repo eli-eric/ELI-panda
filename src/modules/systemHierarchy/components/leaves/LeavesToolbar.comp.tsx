@@ -5,6 +5,7 @@ import { useIntl } from 'react-intl'
 
 import { Tooltip } from '@/components/Tooltip'
 import { Button } from '@/components/ui/button'
+import { CheckboxWithLabel } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import { message } from '@/i18n/src/messages'
@@ -19,12 +20,16 @@ interface LeavesToolbarProps {
     tableId: string
     table: Table<SystemLeaf>
     enableQueryURL?: boolean
+    directOnly: boolean
+    onDirectOnlyChange: (next: boolean) => void
 }
 
 export const LeavesToolbar: FC<LeavesToolbarProps> = ({
     tableId,
     table,
     enableQueryURL = true,
+    directOnly,
+    onDirectOnlyChange,
 }) => {
     const { formatMessage: fm } = useIntl()
     const openFilterSheet = useLeavesFilterSheet()
@@ -80,6 +85,17 @@ export const LeavesToolbar: FC<LeavesToolbarProps> = ({
                         />
                     </div>
                 </div>
+                <Tooltip content={fm({ id: message.systemHierarchy.leaves.directOnlyTooltip })}>
+                    <div data-testid="leaves-toolbar-direct-only">
+                        <CheckboxWithLabel
+                            id="leaves-direct-only"
+                            label={fm({ id: message.systemHierarchy.leaves.directOnly })}
+                            checked={directOnly}
+                            onChange={onDirectOnlyChange}
+                            className="whitespace-nowrap"
+                        />
+                    </div>
+                </Tooltip>
                 <ColumnVisibilityDropdown table={table} excludeColumns={['icon']} />
             </div>
             {hasActiveFilters && <FilterBadges tableId={tableId} enableQueryURL={enableQueryURL} />}

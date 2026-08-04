@@ -1502,12 +1502,18 @@ export const messages = {
             noSystems: 'No systems found',
             noResults: 'No matching systems',
             searchPlaceholder: 'Search systems...',
+            hasDirectLeaves: 'Has end systems directly under it',
         },
         leaves: {
             title: 'Subsystems',
             noLeaves: 'No subsystems found',
             selectParent: 'Select a system from the tree to view its subsystems',
             viewParent: 'View Detail',
+            directOnly: 'Direct only',
+            directOnlyTooltip:
+                'Show only end systems directly under this system, instead of everything deeper in the tree.',
+            noDirectLeaves: 'No end systems directly under this system',
+            showAllLevels: 'Show all levels',
             filtersApplied: 'Filters Applied',
             openFilters: 'Open Filters',
         },
