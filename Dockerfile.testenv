@@ -74,8 +74,18 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Install sharp in the production image with the correct platform binaries
+# Install sharp in the production image with the correct platform binaries.
+#
+# The lockfile must come along. `yarn add` in a directory that has package.json but
+# no yarn.lock re-resolves the WHOLE dependency tree from the registry, and it writes
+# into /app/node_modules — the very directory the standalone output above put its
+# traced, build-pinned modules in. That is how a range like "next": "^16.3.0" ended up
+# installing a newer minor at runtime than the one `yarn build` compiled against, and
+# the standalone server.js carries a config serialized by the build: any field the
+# newer runtime expects but the older build never emitted reads as undefined and
+# crashes on boot (next 16.3.0 vs 16.2.9 → experimental.instantInsights.validationLevel).
 COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/yarn.lock ./yarn.lock
 RUN yarn add sharp --ignore-scripts --prefer-offline
 
 USER nextjs
