@@ -6,7 +6,9 @@ import { Readable } from 'stream'
 
 import s3Client from '@/server/s3client'
 
-import { resizeImageAndUpload } from '../service/image-service'
+import { listObjectsWithMetadata } from '../api/list-files'
+import { handleMiniImages, resizeImageAndUpload } from '../service/image-service'
+import { saveUrlsToNode } from '../service/node-service'
 import { safeGetObject, safeStatObject } from '../utils/s3-error-utils'
 
 jest.mock('@/server/s3client', () => ({
@@ -27,10 +29,13 @@ jest.mock('../utils/s3-error-utils', () => ({
 
 jest.mock('../api/list-files', () => ({ listObjectsWithMetadata: jest.fn() }))
 jest.mock('../service/node-service', () => ({ saveUrlsToNode: jest.fn() }))
+jest.mock('next-auth/jwt', () => ({ getToken: jest.fn().mockResolvedValue({ sub: 'user-1' }) }))
 
 const putObject = s3Client.putObject as jest.Mock
 const getObject = safeGetObject as jest.Mock
 const statObject = safeStatObject as jest.Mock
+const listObjects = listObjectsWithMetadata as jest.Mock
+const saveUrls = saveUrlsToNode as jest.Mock
 
 const SOURCE_METADATA = { 'content-type': 'image/jpeg' }
 
@@ -94,12 +99,32 @@ describe('resizeImageAndUpload', () => {
         expect(uploadedThumbnail()).toEqual(source)
     })
 
-    it('rejects when the source cannot be decoded', async () => {
+    it('applies EXIF orientation, as jimp did implicitly', async () => {
+        // Orientation 6 means "rotate 90° CW to display", so a 400x200 source is really
+        // a 200x400 image. The PNG encode drops the tag, so if we do not bake the
+        // rotation in here nothing downstream can: the thumbnail is sideways forever.
+        const source = await sharp({
+            create: { width: 400, height: 200, channels: 3, background: '#ff00ff' },
+        })
+            .jpeg()
+            .withMetadata({ orientation: 6 })
+            .toBuffer()
+        await givenSourceImage(source)
+
+        await resizeImageAndUpload('system/uid-1', 'system/uid-1/images/file-1')
+
+        const thumbnail = await sharp(uploadedThumbnail()).metadata()
+        expect(thumbnail.width).toBe(100)
+        expect(thumbnail.height).toBe(200)
+    })
+
+    it('rejects when the source cannot be decoded, keeping the cause', async () => {
         await givenSourceImage(Buffer.from('not an image at all'))
 
-        await expect(
-            resizeImageAndUpload('system/uid-1', 'system/uid-1/images/file-1'),
-        ).rejects.toThrow('Failed to resize and upload image')
+        const rejection = resizeImageAndUpload('system/uid-1', 'system/uid-1/images/file-1')
+
+        await expect(rejection).rejects.toThrow('Failed to resize and upload image')
+        await expect(rejection).rejects.toHaveProperty('cause')
         expect(putObject).not.toHaveBeenCalled()
     })
 
@@ -109,5 +134,48 @@ describe('resizeImageAndUpload', () => {
         await resizeImageAndUpload('system/uid-1', 'system/uid-1/images/file-1')
 
         expect(putObject).not.toHaveBeenCalled()
+    })
+})
+
+describe('handleMiniImages', () => {
+    // `/api/system/uid-1/images/` -> prefix `system/uid-1/images/`, uid `uid-1`.
+    const request = { url: '/api/system/uid-1/images/' } as any
+
+    beforeEach(() => {
+        jest.clearAllMocks()
+        listObjects.mockResolvedValue([{ name: 'system/uid-1/image-small/file-0' }])
+        saveUrls.mockResolvedValue(undefined)
+    })
+
+    it('still refreshes the node URL list when the image cannot be thumbnailed', async () => {
+        // The whole point of tolerating undecodable uploads: the node must still pick up
+        // the thumbnails that DO exist, rather than silently keeping a stale list.
+        await givenSourceImage(Buffer.from('a bmp sharp cannot read'))
+
+        await expect(
+            handleMiniImages({ req: request, id: 'file-1', isDelete: false }),
+        ).resolves.toBeUndefined()
+
+        expect(saveUrls).toHaveBeenCalledTimes(1)
+        expect(saveUrls).toHaveBeenCalledWith(
+            'uid-1',
+            ['/api/system/uid-1/image-small/file-0'],
+            { sub: 'user-1' },
+            'System',
+        )
+    })
+
+    it('propagates a node URL sync failure so the caller can 500', async () => {
+        const source = await sharp({
+            create: { width: 400, height: 200, channels: 3, background: '#fff' },
+        })
+            .png()
+            .toBuffer()
+        await givenSourceImage(source, { 'content-type': 'image/png' })
+        saveUrls.mockRejectedValue(new Error('graph is unreachable'))
+
+        await expect(
+            handleMiniImages({ req: request, id: 'file-1', isDelete: false }),
+        ).rejects.toThrow('graph is unreachable')
     })
 })

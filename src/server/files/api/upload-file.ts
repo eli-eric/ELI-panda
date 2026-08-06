@@ -55,12 +55,13 @@ async function uploadFile(req: NextApiRequest, res: NextApiResponse) {
         const isImage = prefix.includes('/image')
         if (isImage) {
             try {
+                // An undecodable image is swallowed inside handleMiniImages so the upload
+                // still succeeds; anything that reaches here (listing, node URL sync) is a
+                // genuine failure worth a 500.
                 await handleMiniImages({ req, id, isDelete: false })
             } catch (e) {
-                // The original object is already stored and verified above, and not every
-                // image type sharp accepts is one the galleries accept (they take image/*,
-                // which includes bmp/ico). A missing preview must not fail a good upload.
-                logger.error(`Thumbnail generation failed for ${objectKey}: ${e}`)
+                logger.error(e)
+                throw new Error('Error handling mini images')
             }
         }
 

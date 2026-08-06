@@ -62,16 +62,15 @@ describe('uploadFile', () => {
         expect(res.status).toHaveBeenCalledWith(201)
     })
 
-    it('still returns 201 when thumbnail generation fails', async () => {
-        // sharp cannot decode every type the galleries accept (they take image/*,
-        // which includes bmp/ico). The original is already stored at this point.
-        miniImages.mockRejectedValue(new Error('Input buffer contains unsupported image format'))
+    it('returns 500 when the node URL sync fails', async () => {
+        // An undecodable image is swallowed inside handleMiniImages (covered in
+        // image-service.spec.ts); anything that escapes it is a genuine failure.
+        miniImages.mockRejectedValue(new Error('graph is unreachable'))
         const res = mockResponse()
 
         await uploadFile(imageUploadRequest(), res)
 
-        expect(res.status).toHaveBeenCalledWith(201)
-        expect(res.status).not.toHaveBeenCalledWith(500)
+        expect(res.status).toHaveBeenCalledWith(500)
     })
 
     it('returns 500 when storing the file itself fails', async () => {

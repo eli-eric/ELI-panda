@@ -40,8 +40,13 @@ export const resizeImageAndUpload = async (prefix: string, name: string) => {
             return
         }
 
+        // `.rotate()` with no argument applies the EXIF orientation and clears the tag.
+        // Jimp did this implicitly in parseBitmap; sharp does not, and the PNG encode
+        // below drops the tag, so without it a phone photo thumbnails sideways with no
+        // way for the browser to correct it.
+        //
         // Width-only resize keeps the aspect ratio, matching the previous Jimp.AUTO height.
-        const outputBuffer = await sharp(buffer).resize({ width: 100 }).png().toBuffer()
+        const outputBuffer = await sharp(buffer).rotate().resize({ width: 100 }).png().toBuffer()
 
         const newDir = `${prefix}/image-small`
         const newFileName = `${newDir}/${name.split('/').pop()}`
@@ -54,7 +59,7 @@ export const resizeImageAndUpload = async (prefix: string, name: string) => {
             originalFileMeta.metaData,
         )
     } catch (e) {
-        throw new Error('Failed to resize and upload image')
+        throw new Error('Failed to resize and upload image', { cause: e })
     }
 }
 
@@ -75,7 +80,18 @@ export async function handleMiniImages({
     const normalizedPrefix = sanitizeS3Key(shortPrefix)
 
     if (!isDelete) {
-        await resizeImageAndUpload(normalizedPrefix, prefix + id)
+        try {
+            await resizeImageAndUpload(normalizedPrefix, prefix + id)
+        } catch (e) {
+            // Scoped to the resize alone. The galleries accept `image/*`, which includes
+            // types sharp cannot decode (bmp, ico), and the original object is already
+            // stored and verified by the caller - a missing preview must not fail the
+            // upload. Everything below still runs so the node's URL list is refreshed
+            // from the thumbnails that do exist.
+            logger.error(
+                `Thumbnail generation failed for ${prefix + id}: ${(e as Error)?.cause ?? e}`,
+            )
+        }
     }
 
     const list = await listObjectsWithMetadata(bucket, `${normalizedPrefix}/image-small`, true)
