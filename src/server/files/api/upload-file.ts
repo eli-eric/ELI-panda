@@ -57,8 +57,10 @@ async function uploadFile(req: NextApiRequest, res: NextApiResponse) {
             try {
                 await handleMiniImages({ req, id, isDelete: false })
             } catch (e) {
-                logger.error(e)
-                throw new Error('Error handling mini images')
+                // The original object is already stored and verified above, and not every
+                // image type sharp accepts is one the galleries accept (they take image/*,
+                // which includes bmp/ico). A missing preview must not fail a good upload.
+                logger.error(`Thumbnail generation failed for ${objectKey}: ${e}`)
             }
         }
 

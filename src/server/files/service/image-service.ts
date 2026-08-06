@@ -1,5 +1,5 @@
-import Jimp from 'jimp'
 import { getToken } from 'next-auth/jwt'
+import sharp from 'sharp'
 
 import logger from '@/server/logger'
 import s3Client, { config } from '@/server/s3client'
@@ -40,9 +40,8 @@ export const resizeImageAndUpload = async (prefix: string, name: string) => {
             return
         }
 
-        const image = await Jimp.read(buffer)
-        image.resize(100, Jimp.AUTO)
-        const outputBuffer = await image.getBufferAsync(Jimp.MIME_PNG)
+        // Width-only resize keeps the aspect ratio, matching the previous Jimp.AUTO height.
+        const outputBuffer = await sharp(buffer).resize({ width: 100 }).png().toBuffer()
 
         const newDir = `${prefix}/image-small`
         const newFileName = `${newDir}/${name.split('/').pop()}`
