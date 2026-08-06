@@ -1,0 +1,23 @@
+# No `target-branch` on purpose: `dev` is already the repository default, and
+# setting target-branch would disable Dependabot *security* updates for that
+# ecosystem, which is the part we actually care about.
+version: 2
+updates:
+    - package-ecosystem: npm
+      directory: '/'
+      schedule:
+          interval: weekly
+      open-pull-requests-limit: 10
+      groups:
+          # One PR for all minor/patch bumps; majors stay separate so they get
+          # reviewed individually.
+          minor-and-patch:
+              update-types:
+                  - minor
+                  - patch
+
+    - package-ecosystem: github-actions
+      directory: '/'
+      schedule:
+          interval: weekly
+      open-pull-requests-limit: 5

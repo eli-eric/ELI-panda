@@ -70,7 +70,7 @@
         "moment": "^2.29.4",
         "neo4j-driver": "^5.14.0",
         "next": "^16.3.0",
-        "next-auth": "~4.24.13",
+        "next-auth": "~4.24.15",
         "next-themes": "^0.4.6",
         "next-usequerystate": "^1.12.2",
         "prop-types": "^15.8.1",
@@ -86,7 +86,7 @@
         "react-intl": "^6.5.5",
         "react-range-slider-input": "^3.0.7",
         "react-resizable-panels": "^4.6.2",
-        "sharp": "^0.34.4",
+        "sharp": "^0.35.3",
         "sonner": "^2.0.7",
         "tailwind-merge": "^3.3.1",
         "tailwind-scrollbar": "^3.0.5",
@@ -166,16 +166,16 @@
         "graphql-ws": "5.12.1",
         "handlebars": "^4.7.9",
         "immutable": "^5.1.5",
-        "js-yaml": "4.1.1",
+        "js-yaml": "^4.3.0",
         "lodash": "^4.18.0",
         "min-document": "2.19.1",
         "minimatch": "^10.2.3",
         "path-to-regexp": "^0.1.13",
         "picomatch": "^4.0.4",
-        "postcss": "^8.5.10",
         "preact": "10.27.3",
-        "qs": "6.14.2",
+        "qs": "^6.15.2",
         "test-exclude": "^8.0.0",
-        "ws": "8.18.3"
+        "uuid": "^11.1.1",
+        "ws": "^8.21.0"
     }
 }
