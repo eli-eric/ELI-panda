@@ -12,6 +12,14 @@ import { saveUrlsToNode } from './node-service'
 
 const { bucket } = config
 
+/**
+ * The source image could not be decoded or re-encoded. Distinct from an infrastructure
+ * failure so callers can tolerate a missing preview without also swallowing an S3 outage.
+ */
+export class ImageDecodeError extends Error {
+    override readonly name = 'ImageDecodeError'
+}
+
 export const resizeImageAndUpload = async (prefix: string, name: string) => {
     try {
         const fileStream = await safeGetObject(s3Client, bucket, name)
@@ -40,13 +48,30 @@ export const resizeImageAndUpload = async (prefix: string, name: string) => {
             return
         }
 
-        // `.rotate()` with no argument applies the EXIF orientation and clears the tag.
-        // Jimp did this implicitly in parseBitmap; sharp does not, and the PNG encode
-        // below drops the tag, so without it a phone photo thumbnails sideways with no
-        // way for the browser to correct it.
-        //
-        // Width-only resize keeps the aspect ratio, matching the previous Jimp.AUTO height.
-        const outputBuffer = await sharp(buffer).rotate().resize({ width: 100 }).png().toBuffer()
+        // Only the decode/encode is wrapped as an ImageDecodeError. Everything else in
+        // this function is S3 or stream work, and a thumbnail we failed to *store* is a
+        // different problem from one we failed to *render*.
+        let outputBuffer: Buffer
+        try {
+            // `failOn: 'none'` matches jimp's leniency. sharp defaults to `'warning'`,
+            // which aborts on any libvips warning - a JPEG truncated by a partial upload
+            // throws "premature end of JPEG image" even though it is largely decodable
+            // and jimp produced a thumbnail for it.
+            //
+            // `.rotate()` with no argument applies the EXIF orientation and clears the
+            // tag. Jimp did this implicitly in parseBitmap; sharp does not, and the PNG
+            // encode below drops the tag, so without it a phone photo thumbnails sideways
+            // with no way for the browser to correct it.
+            //
+            // Width-only resize keeps the aspect ratio, matching the previous Jimp.AUTO.
+            outputBuffer = await sharp(buffer, { failOn: 'none' })
+                .rotate()
+                .resize({ width: 100 })
+                .png()
+                .toBuffer()
+        } catch (e) {
+            throw new ImageDecodeError(`Cannot render a thumbnail for ${name}`, { cause: e })
+        }
 
         const newDir = `${prefix}/image-small`
         const newFileName = `${newDir}/${name.split('/').pop()}`
@@ -59,6 +84,7 @@ export const resizeImageAndUpload = async (prefix: string, name: string) => {
             originalFileMeta.metaData,
         )
     } catch (e) {
+        if (e instanceof ImageDecodeError) throw e
         throw new Error('Failed to resize and upload image', { cause: e })
     }
 }
@@ -83,19 +109,25 @@ export async function handleMiniImages({
         try {
             await resizeImageAndUpload(normalizedPrefix, prefix + id)
         } catch (e) {
-            // Scoped to the resize alone. The galleries accept `image/*`, which includes
-            // types sharp cannot decode (bmp, ico), and the original object is already
-            // stored and verified by the caller - a missing preview must not fail the
-            // upload. Everything below still runs so the node's URL list is refreshed
-            // from the thumbnails that do exist.
+            // Only an undecodable image is tolerated. The galleries accept `image/*`,
+            // which includes types sharp cannot render (bmp, ico), and the original
+            // object is already stored and verified by the caller - a missing preview
+            // must not fail the upload. Everything below still runs so the node's URL
+            // list is refreshed from the thumbnails that do exist.
             //
-            // `cause` is stringified rather than passed as an Error: it is a
-            // non-enumerable property, and this logger has no `format.errors`, so
-            // handing winston the Error object serializes it as `"cause":{}` and the
-            // real reason for the failure is lost.
+            // An S3 or stream failure is NOT tolerated: it propagates, because it says
+            // nothing about the image and everything about the infrastructure.
+            if (!(e instanceof ImageDecodeError)) throw e
+
+            // `cause` is stringified and its stack read directly. `cause` is a
+            // non-enumerable property, so handing winston the Error serializes it as
+            // `"cause":{}` (this logger has no `format.errors`), and the wrapper's own
+            // stack only ever points at the throw site above - the real failure site
+            // lives on the cause.
+            const cause = e.cause as Error | undefined
             logger.error(`Thumbnail generation failed for ${prefix + id}`, {
-                cause: String((e as Error)?.cause ?? e),
-                stack: (e as Error)?.stack,
+                cause: String(cause ?? e),
+                stack: cause?.stack ?? e.stack,
             })
         }
     }

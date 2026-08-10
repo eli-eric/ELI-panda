@@ -7,7 +7,7 @@ import { Readable } from 'stream'
 import s3Client from '@/server/s3client'
 
 import { listObjectsWithMetadata } from '../api/list-files'
-import { handleMiniImages, resizeImageAndUpload } from '../service/image-service'
+import { handleMiniImages, ImageDecodeError, resizeImageAndUpload } from '../service/image-service'
 import { saveUrlsToNode } from '../service/node-service'
 import { safeGetObject, safeStatObject } from '../utils/s3-error-utils'
 
@@ -49,6 +49,7 @@ const uploadedThumbnail = () => putObject.mock.calls[0][2] as Buffer
 describe('resizeImageAndUpload', () => {
     beforeEach(() => {
         jest.clearAllMocks()
+        putObject.mockResolvedValue(undefined)
     })
 
     it('writes a 100px-wide PNG thumbnail to the image-small directory', async () => {
@@ -118,14 +119,45 @@ describe('resizeImageAndUpload', () => {
         expect(thumbnail.height).toBe(200)
     })
 
-    it('rejects when the source cannot be decoded, keeping the cause', async () => {
+    it('decodes truncated JPEGs rather than aborting, as jimp did', async () => {
+        // sharp defaults to failOn:'warning', which throws "premature end of JPEG image"
+        // on a partial upload that is still largely decodable.
+        const full = await sharp({
+            create: { width: 400, height: 200, channels: 3, background: '#0a0' },
+        })
+            .jpeg()
+            .toBuffer()
+        await givenSourceImage(full.subarray(0, Math.floor(full.length * 0.6)))
+
+        await resizeImageAndUpload('system/uid-1', 'system/uid-1/images/file-1')
+
+        const thumbnail = await sharp(uploadedThumbnail()).metadata()
+        expect(thumbnail.width).toBe(100)
+    })
+
+    it('raises ImageDecodeError when the source cannot be decoded, keeping the cause', async () => {
         await givenSourceImage(Buffer.from('not an image at all'))
 
         const rejection = resizeImageAndUpload('system/uid-1', 'system/uid-1/images/file-1')
 
-        await expect(rejection).rejects.toThrow('Failed to resize and upload image')
+        await expect(rejection).rejects.toBeInstanceOf(ImageDecodeError)
         await expect(rejection).rejects.toHaveProperty('cause')
         expect(putObject).not.toHaveBeenCalled()
+    })
+
+    it('does not disguise a thumbnail store failure as a decode failure', async () => {
+        const source = await sharp({
+            create: { width: 400, height: 200, channels: 3, background: '#abc' },
+        })
+            .png()
+            .toBuffer()
+        await givenSourceImage(source, { 'content-type': 'image/png' })
+        putObject.mockRejectedValue(new Error('minio is down'))
+
+        const rejection = resizeImageAndUpload('system/uid-1', 'system/uid-1/images/file-1')
+
+        await expect(rejection).rejects.toThrow('Failed to resize and upload image')
+        await expect(rejection).rejects.not.toBeInstanceOf(ImageDecodeError)
     })
 
     it('skips quietly when the source object is missing', async () => {
@@ -142,7 +174,10 @@ describe('handleMiniImages', () => {
     const request = { url: '/api/system/uid-1/images/' } as any
 
     beforeEach(() => {
+        // clearAllMocks wipes calls but keeps implementations, so restore the happy
+        // path explicitly - otherwise a rejection set by one test leaks into the next.
         jest.clearAllMocks()
+        putObject.mockResolvedValue(undefined)
         listObjects.mockResolvedValue([{ name: 'system/uid-1/image-small/file-0' }])
         saveUrls.mockResolvedValue(undefined)
     })
@@ -163,6 +198,21 @@ describe('handleMiniImages', () => {
             { sub: 'user-1' },
             'System',
         )
+    })
+
+    it('propagates an S3 failure instead of mistaking it for an undecodable image', async () => {
+        const source = await sharp({
+            create: { width: 400, height: 200, channels: 3, background: '#abc' },
+        })
+            .png()
+            .toBuffer()
+        await givenSourceImage(source, { 'content-type': 'image/png' })
+        putObject.mockRejectedValue(new Error('minio is down'))
+
+        await expect(
+            handleMiniImages({ req: request, id: 'file-1', isDelete: false }),
+        ).rejects.toThrow('Failed to resize and upload image')
+        expect(saveUrls).not.toHaveBeenCalled()
     })
 
     it('propagates a node URL sync failure so the caller can 500', async () => {
