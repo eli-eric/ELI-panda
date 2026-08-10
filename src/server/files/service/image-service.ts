@@ -1,5 +1,4 @@
 import { getToken } from 'next-auth/jwt'
-import sharp from 'sharp'
 
 import logger from '@/server/logger'
 import s3Client, { config } from '@/server/s3client'
@@ -47,6 +46,18 @@ export const resizeImageAndUpload = async (prefix: string, name: string) => {
             )
             return
         }
+
+        // Loaded lazily, and deliberately OUTSIDE the ImageDecodeError block below.
+        //
+        // sharp is a native binding. Imported at module scope it would throw at load
+        // time if `@img/sharp-linuxmusl-x64` failed to resolve in the Alpine runner
+        // (Dockerfile, `--ignore-scripts`), taking down every route that imports this
+        // file - including remove-file.ts, which never needs sharp at all. Deletes and
+        // the webp copy-through path above now never load it.
+        //
+        // A load failure is an infrastructure failure, not an undecodable image: it must
+        // stay loud rather than degrade every upload to a silently missing thumbnail.
+        const { default: sharp } = await import('sharp')
 
         // Only the decode/encode is wrapped as an ImageDecodeError. Everything else in
         // this function is S3 or stream work, and a thumbnail we failed to *store* is a
