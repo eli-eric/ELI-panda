@@ -88,9 +88,15 @@ export async function handleMiniImages({
             // stored and verified by the caller - a missing preview must not fail the
             // upload. Everything below still runs so the node's URL list is refreshed
             // from the thumbnails that do exist.
-            logger.error(
-                `Thumbnail generation failed for ${prefix + id}: ${(e as Error)?.cause ?? e}`,
-            )
+            //
+            // `cause` is stringified rather than passed as an Error: it is a
+            // non-enumerable property, and this logger has no `format.errors`, so
+            // handing winston the Error object serializes it as `"cause":{}` and the
+            // real reason for the failure is lost.
+            logger.error(`Thumbnail generation failed for ${prefix + id}`, {
+                cause: String((e as Error)?.cause ?? e),
+                stack: (e as Error)?.stack,
+            })
         }
     }
 
