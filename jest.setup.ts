@@ -40,20 +40,24 @@ afterAll(() => {
     console.error = originalError
 })
 
-// Mock window.matchMedia for components that use media queries (e.g., Embla Carousel)
-Object.defineProperty(window, 'matchMedia', {
-    writable: true,
-    value: jest.fn().mockImplementation(query => ({
-        matches: false,
-        media: query,
-        onchange: null,
-        addListener: jest.fn(), // deprecated
-        removeListener: jest.fn(), // deprecated
-        addEventListener: jest.fn(),
-        removeEventListener: jest.fn(),
-        dispatchEvent: jest.fn(),
-    })),
-})
+// Mock window.matchMedia for components that use media queries (e.g., Embla Carousel).
+// This setup file runs for every suite, including the server-side ones that opt into
+// `@jest-environment node`, where there is no `window` to define anything on.
+if (typeof window !== 'undefined') {
+    Object.defineProperty(window, 'matchMedia', {
+        writable: true,
+        value: jest.fn().mockImplementation(query => ({
+            matches: false,
+            media: query,
+            onchange: null,
+            addListener: jest.fn(), // deprecated
+            removeListener: jest.fn(), // deprecated
+            addEventListener: jest.fn(),
+            removeEventListener: jest.fn(),
+            dispatchEvent: jest.fn(),
+        })),
+    })
+}
 
 // Mock IntersectionObserver for components that use it (e.g., Embla Carousel)
 /* eslint-disable @typescript-eslint/no-empty-function */
