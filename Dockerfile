@@ -85,7 +85,10 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 # crashes on boot (next 16.3.0 vs 16.2.9 → experimental.instantInsights.validationLevel).
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/yarn.lock ./yarn.lock
-RUN yarn add sharp --ignore-scripts --prefer-offline
+# Keep this pinned to the exact version in package.json/yarn.lock. An unpinned
+# `yarn add sharp` re-resolves to the newest release and can run a different sharp
+# than `yarn build` compiled against. Bump it together with the dependency.
+RUN yarn add sharp@0.35.3 --ignore-scripts --prefer-offline
 
 USER nextjs
 
