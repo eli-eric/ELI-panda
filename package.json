@@ -63,7 +63,6 @@
         "embla-carousel-react": "^8.6.0",
         "graphql": "^16.8.1",
         "graphql-request": "^6.1.0",
-        "jimp": "^0.22.12",
         "jsonwebtoken": "~9.0.3",
         "lucide-react": "^0.525.0",
         "minio": "~8.0.6",
