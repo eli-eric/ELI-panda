@@ -47,6 +47,8 @@ See [Access & Responsibilities](../README.md#access--responsibilities) for what 
 
 9. **Pick a parent in the tree.** The middle panel lists every **end system** beneath that parent — at any depth, not only its direct children. The panel header reads *Subsystems*. If there is nothing beneath it, you see *No subsystems found*.
 
+   The **System Path** column shows only the part of the path *below* the system you picked — the part above it is already in the breadcrumb, so it is not repeated in every row. When a system hangs directly off the selected one, the column names that system instead. Hover the cell to see the full path from the very top.
+
 10. **Use the view switcher** in the panel header to flip between two layouts:
 
    - **Tree View** (default) — a sortable, paginated table of subsystems with columns for code, path, name, type, location, zone, importance, and spare counts. See [Searching and filtering](./searching-and-filtering.md) for the toolbar above it.

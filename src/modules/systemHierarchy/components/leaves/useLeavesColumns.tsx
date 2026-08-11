@@ -19,8 +19,20 @@ import { truncateString } from '@/utils'
 import { getBadgeVariantBySystemLevel } from '@/utils/systemLevel'
 
 import type { SystemLeaf } from '../../types'
+import { getPathBelow } from '../../utils/relativePath'
 
-export const useLeavesColumns = () => {
+interface UseLeavesColumnsArgs {
+    /** Node currently selected in the tree — the point the System Path column is relative to. */
+    parentUid?: string | null
+    parentName?: string | null
+    parentSystemLevel?: string | null
+}
+
+export const useLeavesColumns = ({
+    parentUid,
+    parentName,
+    parentSystemLevel,
+}: UseLeavesColumnsArgs = {}) => {
     const { formatMessage: fm } = useIntl()
 
     const columns = useMemo(
@@ -83,17 +95,44 @@ export const useLeavesColumns = () => {
             },
             {
                 header: fm({ id: message.systemHierarchy.columns.systemPath }),
-                accessorFn: row => row.parentPath?.map(p => p.name).join(' → '),
+                // Mirrors the cell: the visible text is the segment below the selected
+                // node, falling back to that node's own name when nothing sits between.
+                accessorFn: row => {
+                    const below = getPathBelow(row.parentPath, parentUid)
+                    return below.length
+                        ? below.map(p => p.name).join(' → ')
+                        : (parentName ?? undefined)
+                },
                 id: 'systemPath',
                 size: 300,
                 cell: ({ row }) => {
                     const parentPath = row.original.parentPath
                     if (!parentPath?.length) return null
+
+                    // Tooltip keeps the absolute path, so trimming the cell hides nothing.
                     const fullPath = parentPath.map(p => p.name).join(' → ')
+                    const below = getPathBelow(parentPath, parentUid)
+
+                    // Nothing between the selected node and this system. Naming the node
+                    // reads as "hangs right here" and keeps the column a constant width;
+                    // while the parent detail is still loading there is no name to show yet.
+                    const segments = below.length
+                        ? below
+                        : parentName
+                          ? [
+                                {
+                                    uid: parentUid ?? 'selected-parent',
+                                    name: parentName,
+                                    systemLevel: parentSystemLevel,
+                                },
+                            ]
+                          : []
+                    if (!segments.length) return null
+
                     return (
                         <Tooltip content={fullPath}>
                             <div className="flex items-center gap-1 overflow-hidden">
-                                {parentPath.map((item, index) => (
+                                {segments.map((item, index) => (
                                     <Fragment key={item.uid}>
                                         <Badge
                                             variant="outline"
@@ -106,7 +145,7 @@ export const useLeavesColumns = () => {
                                         >
                                             {item.name}
                                         </Badge>
-                                        {index < parentPath.length - 1 && (
+                                        {index < segments.length - 1 && (
                                             <span className="text-muted-foreground shrink-0">
                                                 {fm({
                                                     id: message.common.system.arrow,
@@ -325,7 +364,7 @@ export const useLeavesColumns = () => {
                 },
             },
         ],
-        [fm],
+        [fm, parentUid, parentName, parentSystemLevel],
     )
 
     return { columns }
