@@ -20,8 +20,13 @@ describe('getPathBelow', () => {
         expect(getPathBelow(path, 'b')).toEqual([])
     })
 
-    it('returns the whole path when the root itself is selected', () => {
-        expect(getPathBelow(path, 'root')).toEqual(path.slice(1))
+    it('drops the root when the root is the selected node', () => {
+        // Everything below it, same rule as any other node — not the whole path.
+        expect(getPathBelow(path, 'root')).toEqual([
+            { uid: 'x', name: 'Beamline X' },
+            { uid: 'a', name: 'Chamber A' },
+            { uid: 'b', name: 'Module B' },
+        ])
     })
 
     it('falls back to the full path when the selected node is not in it', () => {
