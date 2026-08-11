@@ -97,6 +97,22 @@ describe('TreeNode', () => {
             ).toBeInTheDocument()
         })
 
+        it('announces the marker once — the visual dot stays hidden', () => {
+            // The padded hover target carries the name; the inner dot is decoration and
+            // would otherwise be announced as a second, nameless image.
+            renderTreeNode()
+            expect(screen.getAllByRole('img')).toHaveLength(1)
+        })
+
+        it('gives the marker a hover target larger than the dot itself', () => {
+            // A bare 6px trigger cannot hold a pointer, which is what made the tooltip
+            // flicker; the padding is the fix, the negative margin keeps the layout.
+            renderTreeNode()
+            const target = screen.getByTestId('tree-node-direct-leaves-node-1')
+            expect(target).toHaveClass('p-1', '-m-1')
+            expect(target.firstElementChild).toHaveClass('size-1.5')
+        })
+
         it('omits the marker when every end system sits deeper', () => {
             renderTreeNode({ node: { ...baseNode, hasLeafChildren: false } })
             expect(screen.queryByTestId('tree-node-direct-leaves-node-1')).toBeNull()

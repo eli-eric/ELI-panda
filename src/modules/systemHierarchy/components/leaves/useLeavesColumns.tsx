@@ -19,8 +19,14 @@ import { truncateString } from '@/utils'
 import { getBadgeVariantBySystemLevel } from '@/utils/systemLevel'
 
 import type { SystemLeaf } from '../../types'
+import { getVisiblePathSegments } from '../../utils/relativePath'
 
-export const useLeavesColumns = () => {
+interface UseLeavesColumnsArgs {
+    /** Node currently selected in the tree — the point the System Path column is relative to. */
+    parentUid?: string | null
+}
+
+export const useLeavesColumns = ({ parentUid }: UseLeavesColumnsArgs = {}) => {
     const { formatMessage: fm } = useIntl()
 
     const columns = useMemo(
@@ -83,17 +89,29 @@ export const useLeavesColumns = () => {
             },
             {
                 header: fm({ id: message.systemHierarchy.columns.systemPath }),
-                accessorFn: row => row.parentPath?.map(p => p.name).join(' → '),
+                // Same derivation as the cell, so the value can never drift from the text.
+                accessorFn: row => {
+                    const segments = getVisiblePathSegments(row.parentPath, parentUid)
+                    return segments.length ? segments.map(p => p.name).join(' → ') : undefined
+                },
                 id: 'systemPath',
                 size: 300,
+                // The server's sort allowlist has no `systemPath` entry, so it silently
+                // falls back to ordering by name — the header would look like a working
+                // control that reorders by something the column does not show.
+                enableSorting: false,
                 cell: ({ row }) => {
                     const parentPath = row.original.parentPath
-                    if (!parentPath?.length) return null
+                    const segments = getVisiblePathSegments(parentPath, parentUid)
+                    if (!parentPath?.length || !segments.length) return null
+
+                    // Tooltip keeps the absolute path, so trimming the cell hides nothing.
                     const fullPath = parentPath.map(p => p.name).join(' → ')
+
                     return (
                         <Tooltip content={fullPath}>
                             <div className="flex items-center gap-1 overflow-hidden">
-                                {parentPath.map((item, index) => (
+                                {segments.map((item, index) => (
                                     <Fragment key={item.uid}>
                                         <Badge
                                             variant="outline"
@@ -106,7 +124,7 @@ export const useLeavesColumns = () => {
                                         >
                                             {item.name}
                                         </Badge>
-                                        {index < parentPath.length - 1 && (
+                                        {index < segments.length - 1 && (
                                             <span className="text-muted-foreground shrink-0">
                                                 {fm({
                                                     id: message.common.system.arrow,
@@ -325,7 +343,7 @@ export const useLeavesColumns = () => {
                 },
             },
         ],
-        [fm],
+        [fm, parentUid],
     )
 
     return { columns }

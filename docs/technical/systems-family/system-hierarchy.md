@@ -378,6 +378,27 @@ Letting `directOnly` short-circuit would state something potentially false — t
 
 **Discoverability** comes from `HierarchyNode.hasLeafChildren`, which the API had always returned and the frontend ignored. `TreeNode` now renders a dot next to the count badge when it is true, carrying `role="img"` + `aria-label` — the tooltip is hover-only, and a marker that exists purely for discoverability must not be invisible to the users least able to compensate. The dot is an indicator only, with no click handler: a small target with different behaviour inside a row that already handles clicks would be hit by accident.
 
+The 6px dot is wrapped in a `p-1 -m-1` trigger and the tooltip gets `sideOffset={8}`. Both are required: the shared `Tooltip` sets `disableHoverableContent`, so Radix renders `TooltipContentImpl` *without* `pointer-events: none` and the content closes the tooltip the moment the pointer reaches it. With the default `sideOffset={0}` the content — and the arrow, nudged further out by `translate-y-[calc(-50%_-_2px)]` — sits on the trigger, and `delayDuration={0}` reopens instantly, so the tooltip flickered. The padding makes the target holdable; the negative margin keeps the row's visual footprint; the offset clears the content off the trigger. `src/components/Tooltip.tsx` gained an optional `sideOffset` for this — omitting it preserves the previous behaviour for every other caller.
+
+### System Path column
+
+`useLeavesColumns` takes `{ parentUid }` and renders only the segment of `parentPath` **below the selected node**, via `utils/relativePath.ts#getVisiblePathSegments`. The prefix up to that node is already in the breadcrumbs above the table, so repeating it in every row spent the column's width on nothing.
+
+| Case | Cell |
+|---|---|
+| System sits deeper | the segment between the selected node and the system |
+| Hangs directly off the selected node | a single badge naming the selected node — constant column width, reads as "right here" |
+| Selected node absent from the path | the full path (mismatched data or a stale cache: showing too much beats hiding where the system lives) |
+| System has no path at all | empty |
+
+The fallback name is taken from the **row's own `parentPath`**, not from `useSystemDetail`. `getPathBelow` empties only when the selected node is the last entry in the path, so it is always present in the row's data — while `useSystemDetail` carries `placeholderData: keepPreviousData` and would, mid-navigation, hand back the *previous* node's name for every row.
+
+Cell and `accessorFn` both go through `getVisiblePathSegments`, so the sort/filter value cannot drift from the rendered text.
+
+`enableSorting: false`: the server's order-by allowlist (`GetSystemLeavesOrderByClauses`) has no `systemPath` entry, so a sort request on it silently falls back to `ORDER BY name`. A header that reorders by something the column does not show is worse than no header control.
+
+Badges in this column are always the neutral variant — the REST leaves query returns `parentPath` as `{uid, name}` only, with no `systemLevel` to colour by.
+
 The checkbox is never disabled. Gating it on the cached `hasLeafChildren` would lock the control with no explanation whenever another session had added a child, and would couple the leaves panel to tree data; the empty state says the same thing but only after a real query.
 
 Backend contract and the rejected alternatives: [ADR 0001](../../adr/0001-direct-only-param-on-leaves-endpoint.md).
@@ -393,7 +414,7 @@ Unit coverage under `__tests__/` is heaviest in:
 - **Per-system permission** (in the shared `edit-permission` module) — `hooks/__tests__/useSystemEditPermission.spec.ts` (fail-closed derivation for loading/error/allowed/denied + `formatResponsibleName`), `utils/__tests__/guardSystemEdit.spec.ts` (allow / deny-with-toast / no-responsibles / fail-closed-on-throw), `components/__tests__/SystemEditRestrictionBanner.spec.tsx` (denied lists responsibles, distinct verify-error + retry, nothing while loading/allowed).
 - `hooks/__tests__/useHierarchyDeepLinkResolver.spec.tsx` — parent resolution from `parentPath`, root parent==leaf case, stale-uid guard, single-replace idempotency, re-resolution after the URL settles; `hooks/__tests__/useHierarchyNavigation.spec.ts` — URL contract per key, including that `setDirectOnly` clears `page` but leaves `filter`/`search` alone and that `direct` survives `selectParent`; `utils/__tests__/hierarchyLinks.spec.ts` — deep-link shape + encoding; `components/detail/__tests__/SystemDetailView.spec.tsx` — skeleton / not-found / loaded states.
 - `hooks/__tests__/useDeleteSystemAction.spec.tsx` — permission gate, in-flight re-entry guard, per-system check-on-click block, recursive confirm, 409 item-list + `(+N)` overflow + generic fallback, and selection reset for both open-leaf-ancestor and selected-parent-ancestor; `hooks/__tests__/useCreateSubsystemAction.spec.tsx` — role gate + per-parent check-on-click.
-- `components/{tree,leaves,filters,graph,detail,copy,create,shared,tabs,physical-item}/__tests__/` — `physical-item/` covers the grouped renderer and sidebar wrapper (grouping, override marker, service-only additions, empty → hidden); the Delete context item is covered in `tree/TreeNode.test.tsx`, `graph/SystemNode.test.tsx`, and `leaves/LeavesTable.test.tsx` (the last stubs the virtualized `PandaTableV2` to exercise the capture/bubble row capture, disabled-on-empty-area, and no-handler short-circuit). `tree/TreeNode.test.tsx` also locks the `hasLeafChildren` dot and that the count badge stays the total; `leaves/LeavesToolbar.spec.tsx` locks the Direct-only checkbox (reflects the prop, reports the toggle, never disabled, leaves filter + search reachable so the mode can be exited); `leaves/LeavesEmptyState.spec.tsx` locks all four rows of the empty-state matrix above, including that the both-causes case does not assert the scope-only message.
+- `components/{tree,leaves,filters,graph,detail,copy,create,shared,tabs,physical-item}/__tests__/` — `physical-item/` covers the grouped renderer and sidebar wrapper (grouping, override marker, service-only additions, empty → hidden); the Delete context item is covered in `tree/TreeNode.test.tsx`, `graph/SystemNode.test.tsx`, and `leaves/LeavesTable.test.tsx` (the last stubs the virtualized `PandaTableV2` to exercise the capture/bubble row capture, disabled-on-empty-area, and no-handler short-circuit). `tree/TreeNode.test.tsx` also locks the `hasLeafChildren` dot and that the count badge stays the total; `leaves/LeavesToolbar.spec.tsx` locks the Direct-only checkbox (reflects the prop, reports the toggle, never disabled, leaves filter + search reachable so the mode can be exited); `leaves/LeavesEmptyState.spec.tsx` locks all four rows of the empty-state matrix above, including that the both-causes case does not assert the scope-only message; `leaves/useLeavesColumns.spec.tsx` locks the System Path cases (segment below, selected-node fallback, empty while loading, absolute path retained in the tooltip); `utils/__tests__/relativePath.spec.ts` covers `getPathBelow` including the not-in-path fallback.
 
 ## Deprecated / legacy
 

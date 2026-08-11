@@ -106,16 +106,24 @@ export const TreeNode: FC<TreeNodeProps> = ({
                 way to tell which node hides some directly beneath it. Purely an
                 indicator — the row already handles clicks. */}
             {node.hasLeafChildren && (
-                <Tooltip content={fm({ id: message.systemHierarchy.tree.hasDirectLeaves })}>
+                <Tooltip
+                    content={fm({ id: message.systemHierarchy.tree.hasDirectLeaves })}
+                    sideOffset={8}
+                >
                     {/* The tooltip is hover-only, so without an accessible name the marker
                         would be invisible to screen readers — exactly the users who can
-                        least afford to miss the one cue that end systems are hiding here. */}
+                        least afford to miss the one cue that end systems are hiding here.
+                        The padding is the hover target: a bare 6px dot is far too small to
+                        hold a pointer on, and the negative margin gives the padding back to
+                        the layout so the row looks unchanged. */}
                     <span
                         role="img"
                         aria-label={fm({ id: message.systemHierarchy.tree.hasDirectLeaves })}
-                        className="size-1.5 shrink-0 rounded-full bg-primary/60"
+                        className="flex shrink-0 items-center justify-center p-1 -m-1"
                         data-testid={`tree-node-direct-leaves-${node.uid}`}
-                    />
+                    >
+                        <span aria-hidden className="size-1.5 rounded-full bg-primary/60" />
+                    </span>
                 </Tooltip>
             )}
             <code className="text-[10px] text-muted-foreground shrink-0 rounded bg-muted px-1 py-0.5">
