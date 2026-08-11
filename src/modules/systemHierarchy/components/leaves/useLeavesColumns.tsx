@@ -19,20 +19,14 @@ import { truncateString } from '@/utils'
 import { getBadgeVariantBySystemLevel } from '@/utils/systemLevel'
 
 import type { SystemLeaf } from '../../types'
-import { getPathBelow } from '../../utils/relativePath'
+import { getVisiblePathSegments } from '../../utils/relativePath'
 
 interface UseLeavesColumnsArgs {
     /** Node currently selected in the tree — the point the System Path column is relative to. */
     parentUid?: string | null
-    parentName?: string | null
-    parentSystemLevel?: string | null
 }
 
-export const useLeavesColumns = ({
-    parentUid,
-    parentName,
-    parentSystemLevel,
-}: UseLeavesColumnsArgs = {}) => {
+export const useLeavesColumns = ({ parentUid }: UseLeavesColumnsArgs = {}) => {
     const { formatMessage: fm } = useIntl()
 
     const columns = useMemo(
@@ -95,39 +89,24 @@ export const useLeavesColumns = ({
             },
             {
                 header: fm({ id: message.systemHierarchy.columns.systemPath }),
-                // Mirrors the cell: the visible text is the segment below the selected
-                // node, falling back to that node's own name when nothing sits between.
+                // Same derivation as the cell, so the value can never drift from the text.
                 accessorFn: row => {
-                    const below = getPathBelow(row.parentPath, parentUid)
-                    return below.length
-                        ? below.map(p => p.name).join(' → ')
-                        : (parentName ?? undefined)
+                    const segments = getVisiblePathSegments(row.parentPath, parentUid)
+                    return segments.length ? segments.map(p => p.name).join(' → ') : undefined
                 },
                 id: 'systemPath',
                 size: 300,
+                // The server's sort allowlist has no `systemPath` entry, so it silently
+                // falls back to ordering by name — the header would look like a working
+                // control that reorders by something the column does not show.
+                enableSorting: false,
                 cell: ({ row }) => {
                     const parentPath = row.original.parentPath
-                    if (!parentPath?.length) return null
+                    const segments = getVisiblePathSegments(parentPath, parentUid)
+                    if (!parentPath?.length || !segments.length) return null
 
                     // Tooltip keeps the absolute path, so trimming the cell hides nothing.
                     const fullPath = parentPath.map(p => p.name).join(' → ')
-                    const below = getPathBelow(parentPath, parentUid)
-
-                    // Nothing between the selected node and this system. Naming the node
-                    // reads as "hangs right here" and keeps the column a constant width;
-                    // while the parent detail is still loading there is no name to show yet.
-                    const segments = below.length
-                        ? below
-                        : parentName
-                          ? [
-                                {
-                                    uid: parentUid ?? 'selected-parent',
-                                    name: parentName,
-                                    systemLevel: parentSystemLevel,
-                                },
-                            ]
-                          : []
-                    if (!segments.length) return null
 
                     return (
                         <Tooltip content={fullPath}>
@@ -364,7 +343,7 @@ export const useLeavesColumns = ({
                 },
             },
         ],
-        [fm, parentUid, parentName, parentSystemLevel],
+        [fm, parentUid],
     )
 
     return { columns }

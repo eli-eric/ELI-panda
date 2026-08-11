@@ -38,7 +38,7 @@ const renderCell = (column: ColumnDef<SystemLeaf, any>, row: SystemLeaf) => {
 
 describe('useLeavesColumns — System Path', () => {
     it('shows only the segment below the selected node', () => {
-        const column = getSystemPathColumn({ parentUid: 'x', parentName: 'Beamline X' })
+        const column = getSystemPathColumn({ parentUid: 'x' })
         renderCell(column, leaf(fullPath))
 
         expect(screen.getByText('Chamber A')).toBeInTheDocument()
@@ -48,23 +48,23 @@ describe('useLeavesColumns — System Path', () => {
     })
 
     it('names the selected node when nothing sits in between', () => {
-        const column = getSystemPathColumn({ parentUid: 'a', parentName: 'Chamber A' })
+        const column = getSystemPathColumn({ parentUid: 'a' })
         renderCell(column, leaf(fullPath))
 
         expect(screen.getByText('Chamber A')).toBeInTheDocument()
     })
 
-    it('renders nothing while the selected node has no name yet', () => {
-        // Parent detail still loading: better an empty cell than a placeholder that
-        // pops into a different value a moment later.
-        const column = getSystemPathColumn({ parentUid: 'a', parentName: undefined })
-        const { container } = renderCell(column, leaf(fullPath))
+    it('takes the fallback name from the row, not from the selected system query', () => {
+        // useSystemDetail keeps previous data, so mid-navigation it still holds the node
+        // we came from. Reading the name off the row's own path cannot go stale that way.
+        const column = getSystemPathColumn({ parentUid: 'a' })
+        renderCell(column, leaf([...fullPath.slice(0, 2), { uid: 'a', name: 'Renamed A' }]))
 
-        expect(container).toBeEmptyDOMElement()
+        expect(screen.getByText('Renamed A')).toBeInTheDocument()
     })
 
     it('keeps the absolute path in the tooltip', () => {
-        const column = getSystemPathColumn({ parentUid: 'x', parentName: 'Beamline X' })
+        const column = getSystemPathColumn({ parentUid: 'x' })
         renderCell(column, leaf(fullPath))
 
         expect(screen.getByTestId('tooltip').dataset.content).toBe(
@@ -72,18 +72,27 @@ describe('useLeavesColumns — System Path', () => {
         )
     })
 
-    it('accessor mirrors what the cell shows', () => {
-        const column = getSystemPathColumn({ parentUid: 'x', parentName: 'Beamline X' })
+    it('accessor mirrors what the cell shows, including the fallback', () => {
+        const column = getSystemPathColumn({ parentUid: 'x' })
         const accessor = (column as any).accessorFn as (row: SystemLeaf) => string | undefined
 
         expect(accessor(leaf(fullPath))).toBe('Chamber A')
         expect(accessor(leaf([{ uid: 'x', name: 'Beamline X' }]))).toBe('Beamline X')
     })
 
-    it('renders nothing when the system has no path at all', () => {
-        const column = getSystemPathColumn({ parentUid: 'x', parentName: 'Beamline X' })
-        const { container } = renderCell(column, leaf(null))
+    it('accessor is undefined where the cell renders nothing', () => {
+        // A root-level system shows an empty cell; carrying a value here would sort and
+        // filter it under a name that is nowhere on screen.
+        const column = getSystemPathColumn({ parentUid: 'x' })
+        const accessor = (column as any).accessorFn as (row: SystemLeaf) => string | undefined
 
-        expect(container).toBeEmptyDOMElement()
+        expect(accessor(leaf(null))).toBeUndefined()
+        expect(renderCell(column, leaf(null)).container).toBeEmptyDOMElement()
+    })
+
+    it('is not sortable — the server has no sort key for this column', () => {
+        // systemPath is absent from the leaves order-by allowlist, so the backend would
+        // quietly order by name instead.
+        expect(getSystemPathColumn({ parentUid: 'x' }).enableSorting).toBe(false)
     })
 })

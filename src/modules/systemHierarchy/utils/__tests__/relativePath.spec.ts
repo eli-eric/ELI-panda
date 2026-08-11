@@ -1,4 +1,4 @@
-import { getPathBelow } from '../relativePath'
+import { getPathBelow, getVisiblePathSegments } from '../relativePath'
 
 const path = [
     { uid: 'root', name: 'Facility' },
@@ -50,5 +50,29 @@ describe('getPathBelow', () => {
         const input = [...path]
         getPathBelow(input, 'x')
         expect(input).toEqual(path)
+    })
+})
+
+describe('getVisiblePathSegments', () => {
+    it('returns the segment below the selected node', () => {
+        expect(getVisiblePathSegments(path, 'x')).toEqual([
+            { uid: 'a', name: 'Chamber A' },
+            { uid: 'b', name: 'Module B' },
+        ])
+    })
+
+    it('falls back to the selected node itself when nothing sits below it', () => {
+        // Taken from the row's own path — getPathBelow only empties when the selected
+        // node is the last entry, so it is always present here.
+        expect(getVisiblePathSegments(path, 'b')).toEqual([{ uid: 'b', name: 'Module B' }])
+    })
+
+    it('returns nothing for a system with no path', () => {
+        expect(getVisiblePathSegments(null, 'b')).toEqual([])
+        expect(getVisiblePathSegments([], 'b')).toEqual([])
+    })
+
+    it('shows the whole path when the selected node is unknown', () => {
+        expect(getVisiblePathSegments(path, 'somewhere-else')).toEqual(path)
     })
 })

@@ -382,16 +382,22 @@ The 6px dot is wrapped in a `p-1 -m-1` trigger and the tooltip gets `sideOffset=
 
 ### System Path column
 
-`useLeavesColumns` takes `{ parentUid, parentName, parentSystemLevel }` and renders only the segment of `parentPath` **below the selected node**, via `utils/relativePath.ts#getPathBelow`. The prefix up to that node is already in the breadcrumbs above the table, so repeating it in every row spent the column's width on nothing.
+`useLeavesColumns` takes `{ parentUid }` and renders only the segment of `parentPath` **below the selected node**, via `utils/relativePath.ts#getVisiblePathSegments`. The prefix up to that node is already in the breadcrumbs above the table, so repeating it in every row spent the column's width on nothing.
 
 | Case | Cell |
 |---|---|
 | System sits deeper | the segment between the selected node and the system |
 | Hangs directly off the selected node | a single badge naming the selected node — constant column width, reads as "right here" |
 | Selected node absent from the path | the full path (mismatched data or a stale cache: showing too much beats hiding where the system lives) |
-| Parent detail still loading | empty, rather than a placeholder that changes value a moment later |
+| System has no path at all | empty |
 
-The cell's tooltip keeps the **absolute** path, so nothing is lost by trimming. `accessorFn` mirrors the displayed text.
+The fallback name is taken from the **row's own `parentPath`**, not from `useSystemDetail`. `getPathBelow` empties only when the selected node is the last entry in the path, so it is always present in the row's data — while `useSystemDetail` carries `placeholderData: keepPreviousData` and would, mid-navigation, hand back the *previous* node's name for every row.
+
+Cell and `accessorFn` both go through `getVisiblePathSegments`, so the sort/filter value cannot drift from the rendered text.
+
+`enableSorting: false`: the server's order-by allowlist (`GetSystemLeavesOrderByClauses`) has no `systemPath` entry, so a sort request on it silently falls back to `ORDER BY name`. A header that reorders by something the column does not show is worse than no header control.
+
+Badges in this column are always the neutral variant — the REST leaves query returns `parentPath` as `{uid, name}` only, with no `systemLevel` to colour by.
 
 The checkbox is never disabled. Gating it on the cached `hasLeafChildren` would lock the control with no explanation whenever another session had added a child, and would couple the leaves panel to tree data; the empty state says the same thing but only after a real query.
 

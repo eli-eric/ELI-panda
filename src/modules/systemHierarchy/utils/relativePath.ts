@@ -29,3 +29,27 @@ export const getPathBelow = (
     // system lives entirely, which is worse.
     return index === -1 ? parentPath : parentPath.slice(index + 1)
 }
+
+/**
+ * What the System Path column actually renders: the segment below the selected node, or —
+ * when the system hangs directly off it — that node on its own, so the column keeps a
+ * constant width and reads as "right here".
+ *
+ * The fallback name comes from the row's own `parentPath`, not from the selected system's
+ * detail query. `getPathBelow` returns empty only when the selected node is the *last*
+ * entry in the path, so the node is right there in the row's data. Reading it from
+ * `useSystemDetail` instead would mean rendering whatever that query currently holds —
+ * and it uses `keepPreviousData`, so mid-navigation that is the *previous* node's name.
+ *
+ * Cell and accessor both go through this, so the sort/filter value cannot drift from the
+ * text on screen.
+ */
+export const getVisiblePathSegments = (
+    parentPath: PathItem[] | null | undefined,
+    parentUid: string | null | undefined,
+): PathItem[] => {
+    if (!parentPath?.length) return []
+
+    const below = getPathBelow(parentPath, parentUid)
+    return below.length ? below : [parentPath[parentPath.length - 1]]
+}

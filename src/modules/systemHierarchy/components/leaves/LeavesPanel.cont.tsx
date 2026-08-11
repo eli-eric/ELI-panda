@@ -37,11 +37,7 @@ export const LeavesPanelContainer: FC = () => {
         directOnly,
     )
 
-    const { columns } = useLeavesColumns({
-        parentUid: selectedParentUid,
-        parentName: parentSystem?.name,
-        parentSystemLevel: parentSystem?.systemLevel,
-    })
+    const { columns } = useLeavesColumns({ parentUid: selectedParentUid })
     const { canEdit, handleDeleteSystem } = useDeleteSystemAction()
 
     const table = usePandaTable({
