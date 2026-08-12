@@ -79,19 +79,43 @@ describe('TreeNode', () => {
     })
 
     describe('direct end-systems marker', () => {
+        // The marker only means something on an expandable node, so every case here
+        // renders one that has a branch child.
+        const branchNode: HierarchyNode = {
+            ...baseNode,
+            children: [
+                {
+                    uid: 'branch-1',
+                    name: 'Branch 1',
+                    systemCode: null,
+                    systemLevel: SystemLevel.SubsystemsAndParts,
+                    hasLeafChildren: false,
+                    children: [],
+                },
+            ],
+        }
+
         beforeEach(() => {
             mockUseSystemLeavesCount.mockReturnValue({ count: 7, isLoading: false, error: null })
         })
 
         it('marks a node that has end systems directly under it', () => {
-            renderTreeNode()
+            renderTreeNode({ node: branchNode })
             expect(screen.getByTestId('tree-node-direct-leaves-node-1')).toBeInTheDocument()
+        })
+
+        it('omits the marker when the node cannot be expanded', () => {
+            // The tree lists branch children only, so a node without them has nothing but
+            // end systems below it — the count badge already says so, and there is no
+            // chevron implying anything is hidden.
+            renderTreeNode({ node: { ...baseNode, children: [] } })
+            expect(screen.queryByTestId('tree-node-direct-leaves-node-1')).toBeNull()
         })
 
         it('exposes the marker to assistive tech, not just to hover', () => {
             // The tooltip is hover-only; without a name the one cue that end systems are
             // hiding under this node is invisible to screen-reader users.
-            renderTreeNode()
+            renderTreeNode({ node: branchNode })
             expect(
                 screen.getByRole('img', { name: 'Has end systems directly under it' }),
             ).toBeInTheDocument()
@@ -100,26 +124,26 @@ describe('TreeNode', () => {
         it('announces the marker once — the visual dot stays hidden', () => {
             // The padded hover target carries the name; the inner dot is decoration and
             // would otherwise be announced as a second, nameless image.
-            renderTreeNode()
+            renderTreeNode({ node: branchNode })
             expect(screen.getAllByRole('img')).toHaveLength(1)
         })
 
         it('gives the marker a hover target larger than the dot itself', () => {
             // A bare 6px trigger cannot hold a pointer, which is what made the tooltip
             // flicker; the padding is the fix, the negative margin keeps the layout.
-            renderTreeNode()
+            renderTreeNode({ node: branchNode })
             const target = screen.getByTestId('tree-node-direct-leaves-node-1')
             expect(target).toHaveClass('p-1', '-m-1')
             expect(target.firstElementChild).toHaveClass('size-1.5')
         })
 
         it('omits the marker when every end system sits deeper', () => {
-            renderTreeNode({ node: { ...baseNode, hasLeafChildren: false } })
+            renderTreeNode({ node: { ...branchNode, hasLeafChildren: false } })
             expect(screen.queryByTestId('tree-node-direct-leaves-node-1')).toBeNull()
         })
 
         it('leaves the count badge untouched — it stays the total, not the direct one', () => {
-            renderTreeNode()
+            renderTreeNode({ node: branchNode })
             expect(screen.getByText('7')).toBeInTheDocument()
             expect(mockUseSystemLeavesCount).toHaveBeenCalledWith('node-1')
         })

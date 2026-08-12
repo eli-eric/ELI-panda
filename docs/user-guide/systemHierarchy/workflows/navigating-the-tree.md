@@ -27,7 +27,9 @@ See [Access & Responsibilities](../README.md#access--responsibilities) for what 
 
 3. **Read each node:** name on the left (highlighted if a search term matches), a folder icon colored by system level, and a small badge with the count of **end systems anywhere beneath it** — not just its direct children. The badge shows `…` while the count is loading.
 
-4. **Watch for the small dot** just before the count badge. It means the node has at least one end system hanging *directly* off it. Because end systems never appear in the tree itself, the dot is your only cue that something is there — see [Finding a node's own end systems](#finding-a-nodes-own-end-systems) below.
+4. **Watch for the small dot** just before the count badge. On a node you can expand, it means that *besides* the branches you can open, some end systems hang directly off it — and because end systems never appear in the tree, the dot is your only cue that they are there. See [Finding a node's own end systems](#finding-a-nodes-own-end-systems) below.
+
+   Nodes with no chevron carry no dot: there is nothing to expand, so everything the count badge reports already hangs directly off them.
 
    `[SCREENSHOT PLACEHOLDER: two adjacent tree nodes at the same level, one showing the dot before its count badge and one without, to make the difference legible]`
 
@@ -82,7 +84,7 @@ The tree lists only systems that *have* children, and the table lists everything
 - **Mobile layout** collapses the tree behind a toggle and replaces the right sidebar with a floating *Info* button.
 - **The tree shows folder icons** colored by system level — use this as a quick visual cue for what kind of node you're looking at without having to read the breadcrumb.
 - **The count badge ignores *Direct only*.** It always counts every end system beneath a node, so you can keep comparing nodes against each other while the table shows a narrowed view. A node with a dot and a badge of `250` has *some* direct end systems among those 250 — tick *Direct only* to see how many.
-- **A node with no dot has nothing directly beneath it.** Everything under it sits deeper in the tree, so *Direct only* will come up empty there.
+- **On an expandable node, no dot means nothing hangs directly beneath it** — everything under it sits deeper, so *Direct only* will come up empty there. On a node with no chevron the dot is never shown, because everything below it is direct by definition.
 
 ## Related
 

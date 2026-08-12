@@ -105,7 +105,11 @@ export const TreeNode: FC<TreeNodeProps> = ({
             {/* End systems never appear in the tree, so without this marker there is no
                 way to tell which node hides some directly beneath it. Purely an
                 indicator — the row already handles clicks. */}
-            {node.hasLeafChildren && (
+            {/* Only worth marking on a node you can expand. The tree lists a node's
+                branch children only, so a node with none of those has nothing but end
+                systems below it — the count badge already reads as "this many, directly
+                here", and there is no chevron suggesting hidden structure. */}
+            {hasChildren && node.hasLeafChildren && (
                 <Tooltip
                     content={fm({ id: message.systemHierarchy.tree.hasDirectLeaves })}
                     sideOffset={8}
