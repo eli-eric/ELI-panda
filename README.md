@@ -4,7 +4,7 @@
 
 The premise that good maintenance practices are fundamental to success is beyond question. In accordance with IMPULSE Project requirements, ELI facilities had an obligation to create a joint spare parts database. The essential intention behind this requirement had several purposes, such as: to build up a relevant database in order to minimize possible downtime for user experiments, to determine which spare parts must be stocked in advance, and to make cost-effective maintenance decisions.
 
-This repository contains the main frontend web application built with [Next.js](https://nextjs.org/), [React](https://react.dev/), [TypeScript](https://www.typescriptlang.org/), [Tailwind CSS](https://tailwindcss.com/), and [NextAuth](https://next-auth.js.org/).
+This repository contains the main frontend web application built with [Next.js 16](https://nextjs.org/), [React](https://react.dev/), [TypeScript](https://www.typescriptlang.org/), [Tailwind CSS](https://tailwindcss.com/), and [NextAuth](https://next-auth.js.org/).
 
 ## Prerequisites
 

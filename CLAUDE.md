@@ -30,7 +30,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Architecture Overview
 
-Next.js 14 frontend for ELI PANDA - maintenance management system for scientific facilities. Uses TanStack Query + GraphQL (Neo4j), React Hook Form + Zod, Zustand, shadcn/ui, Tailwind CSS v4.
+Next.js 16 frontend for ELI PANDA - maintenance management system for scientific facilities. Uses TanStack Query + GraphQL (Neo4j), React Hook Form + Zod, Zustand, shadcn/ui, Tailwind CSS v4.
 
 For project structure and module organization, see `architecture` skill.
 
