@@ -99,7 +99,7 @@
     "devDependencies": {
         "@graphql-codegen/cli": "^5.0.0",
         "@graphql-codegen/client-preset": "4.1.0",
-        "@graphql-codegen/introspection": "4.0.0",
+        "@graphql-codegen/introspection": "6.1.0",
         "@graphql-codegen/typescript-react-apollo": "^4.1.0",
         "@graphql-eslint/eslint-plugin": "^3.20.1",
         "@jest/globals": "^29.7.0",
