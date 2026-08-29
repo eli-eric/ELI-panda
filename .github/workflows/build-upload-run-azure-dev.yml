@@ -41,7 +41,7 @@ jobs:
         needs: validate-secrets
         steps:
             - name: Checkout code
-              uses: actions/checkout@v4
+              uses: actions/checkout@v7
             - uses: actions/setup-node@v4
               with:
                   node-version: 22
@@ -56,7 +56,7 @@ jobs:
         needs: unit-tests
         steps:
             - name: Checkout code
-              uses: actions/checkout@v4
+              uses: actions/checkout@v7
             - name: Build E2E Docker image
               run: docker build -f Dockerfile.e2e -t panda-e2e:${{ github.sha }} .
             - name: Prepare E2E artifact directories
@@ -82,7 +82,7 @@ jobs:
         needs: [unit-tests, e2e-tests]
         steps:
             - name: Checkout code
-              uses: actions/checkout@v4
+              uses: actions/checkout@v7
 
             - name: Login to Azure using managed identity
               run: |
