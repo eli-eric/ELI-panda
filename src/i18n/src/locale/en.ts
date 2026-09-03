@@ -1217,6 +1217,12 @@ export const messages = {
             name: { label: 'Name', placeholder: 'Enter zone name' },
             code: { label: 'Code', placeholder: 'Enter zone code' },
             parentZone: { label: 'Parent Zone', placeholder: 'Select parent zone (optional)' },
+            defaultParentSystem: {
+                label: 'Default Parent System',
+                placeholder: 'Click here to select a system',
+            },
+            defaultParentSystemInvalid:
+                'Selected default parent system is not available in this facility',
             notes: { label: 'Notes', placeholder: 'Enter zone notes' },
             emptyParent: 'None (root zone)',
             saving: 'Saving zone...',
@@ -1233,6 +1239,7 @@ export const messages = {
             name: 'Name',
             code: 'Code',
             parentZone: 'Parent Zone',
+            defaultParentSystem: 'Default Parent System',
             notes: 'Notes',
         },
         import: {
