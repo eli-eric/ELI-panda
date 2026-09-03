@@ -7,6 +7,7 @@ import RecordNotFound from '@/components/pages/record-not-found.comp'
 import { Skeleton } from '@/components/ui/skeleton'
 import { message } from '@/i18n/src/messages'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
+import { getErrorStatus } from '@/types/http'
 
 import { useZone } from '../hooks/useZone'
 import { ZoneFormContainer } from './zone-form.cont'
@@ -39,7 +40,7 @@ export const ZoneEditContainer: FC<Props> = ({ uid }) => {
         closeModal(`zone-edit-${uid}`)
     }
 
-    if (error?.response?.status === 404) {
+    if (getErrorStatus(error) === 404) {
         return <RecordNotFound onClick={handleClose} />
     }
 
