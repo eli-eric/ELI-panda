@@ -1386,6 +1386,17 @@ export const messages = {
             previewing: 'Loading preview...',
             previewFailed: 'Failed to load preview',
         },
+        errors: {
+            missingDefaultParentSystem:
+                'The selected zone has no default parent system, so system codes cannot be generated.',
+            zoneNotFound: 'The selected zone no longer exists.',
+            systemTypeNotFound: 'The selected system type no longer exists.',
+            invalidBatch: 'Batch count must be greater than zero.',
+            noSystemCodeMask:
+                'The selected system type has no system code mask with a serial number for this facility.',
+            setOnZone: 'Set it on zone {zone}',
+            askAdmin: 'Ask an administrator with zone edit rights to set it.',
+        },
         buttons: {
             create: 'Create System Codes',
             preview: 'Preview',

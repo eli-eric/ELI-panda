@@ -1,20 +1,26 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Minus, Plus } from 'lucide-react'
+import { AlertTriangle, Minus, Plus } from 'lucide-react'
 import { useCallback, useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 
 import Combobox from '@/components/form/Combobox'
 import { Form } from '@/components/form/Form'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { useAccessControl } from '@/hooks/useAccessControl'
 import { useDebounce } from '@/hooks/useDebounce'
 import { message } from '@/i18n/src/messages'
 import { SystemTypeComboBox } from '@/modules/shared/form/systemType/SelectSystemType.combo'
+import { useOpenZoneEdit } from '@/modules/zones/hooks/useOpenZoneEdit'
 import { CODEBOOK } from '@/types/constants/codebook'
+import { ROLE } from '@/types/constants/roles'
 
 import { BATCH_LIMIT, ONLY_ROOT_ZONES } from '../../types/constants'
+import type { SystemCodesErrorKind } from '../../utils/systemCodesErrors'
+import { SYSTEM_CODES_ERROR } from '../../utils/systemCodesErrors'
 import type { SystemCodesFormInput, SystemCodesFormValues } from './SystemCodesForm.schema'
 import { systemCodesFormSchema } from './SystemCodesForm.schema'
 
@@ -22,10 +28,22 @@ interface Props {
     onPreview: (values: SystemCodesFormValues) => void
     onSubmit: (values: SystemCodesFormValues) => Promise<boolean>
     isPending?: boolean
+    isPreviewLoading?: boolean
+    previewErrorMessage?: string
+    previewErrorKind?: SystemCodesErrorKind | null
 }
 
-export const SystemCodesForm = ({ onPreview, onSubmit }: Props) => {
+export const SystemCodesForm = ({
+    onPreview,
+    onSubmit,
+    isPending = false,
+    isPreviewLoading = false,
+    previewErrorMessage,
+    previewErrorKind,
+}: Props) => {
     const { formatMessage: fm } = useIntl()
+    const canEditZones = useAccessControl(ROLE.ZONES_EDIT)()
+    const { openZoneEdit } = useOpenZoneEdit()
 
     const defaultValues: SystemCodesFormInput = useMemo(
         () => ({
@@ -71,6 +89,18 @@ export const SystemCodesForm = ({ onPreview, onSubmit }: Props) => {
             } as SystemCodesFormValues)
         }
     }, [debouncedZoneUid, debouncedSystemTypeUid, debouncedBatch, zone, systemType, onPreview])
+
+    // The debounced values are exactly what was previewed, so comparing against them
+    // tells us whether the preview still describes the form the user is looking at.
+    // Without this there is a ~500ms window after a change where Create is enabled
+    // against state that was never validated.
+    const isPreviewStale =
+        zone?.uid !== debouncedZoneUid ||
+        systemType?.uid !== debouncedSystemTypeUid ||
+        Number(batch) !== Number(debouncedBatch)
+
+    const canFixOnZone =
+        previewErrorKind === SYSTEM_CODES_ERROR.MISSING_DEFAULT_PARENT_SYSTEM && !!zone
 
     const handleFormSubmit = useCallback(
         async (values: SystemCodesFormInput) => {
@@ -154,8 +184,39 @@ export const SystemCodesForm = ({ onPreview, onSubmit }: Props) => {
                 </div>
             </div>
 
+            {previewErrorMessage && (
+                <Alert variant="destructive">
+                    <AlertTriangle />
+                    <AlertDescription className="flex flex-col items-start gap-2">
+                        <span>{previewErrorMessage}</span>
+                        {canFixOnZone &&
+                            (canEditZones ? (
+                                <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => openZoneEdit(zone.uid)}
+                                >
+                                    {fm(
+                                        { id: message.controlSystems.errors.setOnZone },
+                                        { zone: zone.name },
+                                    )}
+                                </Button>
+                            ) : (
+                                <span>{fm({ id: message.controlSystems.errors.askAdmin })}</span>
+                            ))}
+                    </AlertDescription>
+                </Alert>
+            )}
+
             {/* Submit button */}
-            <Button type="submit" className="w-full">
+            <Button
+                type="submit"
+                className="w-full"
+                disabled={
+                    isPending || isPreviewLoading || isPreviewStale || !!previewErrorMessage
+                }
+            >
                 {fm({ id: message.controlSystems.buttons.create })}
             </Button>
         </Form>
