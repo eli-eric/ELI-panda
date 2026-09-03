@@ -76,4 +76,59 @@ describe('zoneSchema', () => {
         const result = zoneSchema.safeParse({ ...validData, notes: '' })
         expect(result.success).toBe(true)
     })
+
+    describe('defaultParentSystem', () => {
+        it('accepts a full codebook object', () => {
+            const result = zoneSchema.safeParse({
+                ...validData,
+                defaultParentSystem: { uid: 'sys-1', name: '01 - L1 laser system', code: 'PLC01-001' },
+            })
+            expect(result.success).toBe(true)
+            if (result.success) {
+                expect(result.data.defaultParentSystem?.uid).toBe('sys-1')
+            }
+        })
+
+        it('accepts an object without a code — migrated systems have none', () => {
+            const result = zoneSchema.safeParse({
+                ...validData,
+                defaultParentSystem: { uid: 'sys-2', name: 'Legacy system' },
+            })
+            expect(result.success).toBe(true)
+        })
+
+        it('accepts an explicit null code', () => {
+            const result = zoneSchema.safeParse({
+                ...validData,
+                defaultParentSystem: { uid: 'sys-3', name: 'Legacy system', code: null },
+            })
+            expect(result.success).toBe(true)
+        })
+
+        it('accepts null', () => {
+            const result = zoneSchema.safeParse({ ...validData, defaultParentSystem: null })
+            expect(result.success).toBe(true)
+            if (result.success) {
+                expect(result.data.defaultParentSystem).toBeNull()
+            }
+        })
+
+        it('accepts undefined', () => {
+            const result = zoneSchema.safeParse({ ...validData, defaultParentSystem: undefined })
+            expect(result.success).toBe(true)
+        })
+
+        it('rejects an object missing uid', () => {
+            const result = zoneSchema.safeParse({
+                ...validData,
+                defaultParentSystem: { name: 'No uid' },
+            })
+            expect(result.success).toBe(false)
+        })
+
+        it('rejects a bare uid string', () => {
+            const result = zoneSchema.safeParse({ ...validData, defaultParentSystem: 'sys-1' })
+            expect(result.success).toBe(false)
+        })
+    })
 })
