@@ -176,7 +176,42 @@ describe('buildWosResearcherIdLinks', () => {
         ]
 
         expect(buildWosResearcherIdLinks(authors, { 0: 'ada', 1: 'grace' }, [0, 1])).toEqual([
-            { researcherUid: 'ada', researcherId: 'A-1' },
+            { researcherUid: 'ada', researcherId: 'A-1', makePrimary: false },
+        ])
+    })
+
+    it('flags only the authors whose swap the user confirmed', () => {
+        const authors = [
+            {
+                sourceIndex: 0,
+                displayName: 'Ada Lovelace',
+                researcherId: 'HKH-1227-2023',
+                match: {
+                    kind: 'name' as const,
+                    candidates: [
+                        {
+                            uid: 'ada',
+                            firstName: 'Ada',
+                            lastName: 'Lovelace',
+                            currentResearcherId: 'E-9444-2015',
+                        },
+                    ],
+                },
+            },
+            {
+                sourceIndex: 1,
+                displayName: 'Grace Hopper',
+                researcherId: 'GZZ-7943-2022',
+                match: {
+                    kind: 'name' as const,
+                    candidates: [{ uid: 'grace', firstName: 'Grace', lastName: 'Hopper' }],
+                },
+            },
+        ]
+
+        expect(buildWosResearcherIdLinks(authors, { 0: 'ada', 1: 'grace' }, [0, 1], [0])).toEqual([
+            { researcherUid: 'ada', researcherId: 'HKH-1227-2023', makePrimary: true },
+            { researcherUid: 'grace', researcherId: 'GZZ-7943-2022', makePrimary: false },
         ])
     })
 })

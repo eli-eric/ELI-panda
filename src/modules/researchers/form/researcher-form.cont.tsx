@@ -44,6 +44,20 @@ export const ResearcherFormContainer: FC<Props> = ({ researcher, onSuccess }) =>
 
     const { isDirty } = formMethods.formState
 
+    // RIV exports exactly one ResearcherID, so the form edits the current one and
+    // lists the rest as history the librarian can promote from.
+    const currentResearcherId = formMethods.watch('researcherId')
+    const normalizeId = (value: string) => value.trim().toUpperCase()
+    const otherResearcherIds = (researcher?.researcherIds ?? []).filter(
+        id => normalizeId(id) !== normalizeId(currentResearcherId ?? ''),
+    )
+
+    const makeResearcherIdCurrent = (researcherId: string) =>
+        formMethods.setValue('researcherId', researcherId, {
+            shouldDirty: true,
+            shouldValidate: true,
+        })
+
     // Sync form dirty state with global modal store
     useEffect(() => {
         setIsDirty(isDirty)
@@ -83,7 +97,11 @@ export const ResearcherFormContainer: FC<Props> = ({ researcher, onSuccess }) =>
                 saveLabel={researcher ? 'Save Researcher' : 'Create Researcher'}
                 loadingText={researcher ? 'Saving researcher...' : 'Creating researcher...'}
             />
-            <ResearcherFormFields disabled={isPending} />
+            <ResearcherFormFields
+                disabled={isPending}
+                otherResearcherIds={otherResearcherIds}
+                onMakeCurrent={makeResearcherIdCurrent}
+            />
         </Form>
     )
 }

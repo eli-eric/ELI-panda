@@ -148,8 +148,10 @@ export const buildWosResearcherIdLinks = (
     authors: PublicationWosAuthor[],
     selections: PublicationWosAuthorSelections,
     rememberedSourceIndexes: number[],
+    promotedSourceIndexes: number[] = [],
 ): ResearcherIdLink[] => {
     const remembered = new Set(rememberedSourceIndexes)
+    const promoted = new Set(promotedSourceIndexes)
 
     return authors.flatMap(author => {
         if (
@@ -163,6 +165,12 @@ export const buildWosResearcherIdLinks = (
         const researcherUid = selections[author.sourceIndex]
         if (!researcherUid) return []
 
-        return [{ researcherUid, researcherId: author.researcherId }]
+        return [
+            {
+                researcherUid,
+                researcherId: author.researcherId,
+                makePrimary: promoted.has(author.sourceIndex),
+            },
+        ]
     })
 }

@@ -1093,6 +1093,10 @@ export const messages = {
             selectResearcher: 'Select the PANDA researcher matching {author}',
             doNotMatch: 'Do not add an ELI researcher',
             rememberResearcherId: 'Remember this ResearcherID for future imports',
+            makePrimaryResearcherId:
+                'Make it the current ID for RIV export — {incoming} replaces {current}',
+            makePrimaryHint:
+                'RIV sends one ResearcherID per author. Only the current one is exported.',
             missingTitle: 'Not present in this Web of Science record',
             unavailableTitle: 'Still needs to be entered manually',
             noneUnavailable: 'No unavailable fields were reported.',
@@ -1277,7 +1281,15 @@ export const messages = {
             identifiersHint: 'At least one identifier is required',
             orcid: { label: 'ORCID', placeholder: 'e.g., 0000-0002-1825-0097' },
             scopusId: { label: 'Scopus ID', placeholder: 'e.g., 57200983210' },
-            researcherId: { label: 'Researcher ID', placeholder: 'e.g., A-1234-5678' },
+            researcherId: {
+                label: 'Researcher ID (used for RIV export)',
+                placeholder: 'e.g., A-1234-5678',
+            },
+            otherResearcherIds: {
+                label: 'Other ResearcherIDs on file',
+                hint: 'Matched against Web of Science imports. RIV exports only the current one.',
+                makeCurrent: 'Make current',
+            },
             citizenship: { label: 'Citizenship', placeholder: 'Select country' },
             selectedCount: 'Selected ({count}):',
             createNew: 'Create New Researcher',

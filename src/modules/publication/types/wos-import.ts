@@ -46,7 +46,10 @@ export interface PublicationWosImportValues {
     mediaTypeCb?: CodebookType
 }
 
-export interface PublicationWosResearcherCandidate extends SelectedResearcher {}
+export interface PublicationWosResearcherCandidate extends SelectedResearcher {
+    /** The candidate's current ResearcherID — the one RIV export sends today. */
+    currentResearcherId?: string
+}
 
 export type PublicationWosAuthorMatchKind = 'researcher-id' | 'name' | 'none' | 'ambiguous'
 
@@ -99,6 +102,8 @@ export interface PublicationWosAuthorSelection {
 export interface ResearcherIdLink {
     researcherUid: string
     researcherId: string
+    /** Also make this the researcher's current ID, replacing what RIV exports. */
+    makePrimary: boolean
 }
 
 export interface PublicationWosImportSelection {

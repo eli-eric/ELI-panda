@@ -9,13 +9,13 @@ import type { ResearcherIdLink } from '../types/wos-import'
 export const useRememberResearcherId = () => {
     const mutation = useMutation({
         mutationKey: ['researcher-wos-id'],
-        mutationFn: ({ researcherUid, researcherId }: ResearcherIdLink) => {
+        mutationFn: ({ researcherUid, researcherId, makePrimary }: ResearcherIdLink) => {
             const endpoint = getEndpoints({ uid: researcherUid }).researcherWosIds
             if (!endpoint) throw new Error('Researcher UID is required')
 
             return fetchRequest<void>(buildUrl(endpoint), {
                 method: 'PUT',
-                body: { researcherId },
+                body: { researcherId, makePrimary },
             })
         },
     })

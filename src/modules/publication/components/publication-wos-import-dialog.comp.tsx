@@ -25,6 +25,7 @@ import type {
     PublicationWosImportSelection,
     PublicationWosPreviewResponse,
 } from '../types/wos-import'
+import { isNewerResearcherId } from '../utils/doi'
 import {
     buildDefaultWosAuthorSelections,
     buildWosComparisonValues,
@@ -131,6 +132,7 @@ export const PublicationWosImportDialog = ({
         buildDefaultWosAuthorSelections(preview.authors),
     )
     const [rememberedAuthors, setRememberedAuthors] = useState<Set<number>>(new Set())
+    const [promotedAuthors, setPromotedAuthors] = useState<Set<number>>(new Set())
     const [isSubmitting, setIsSubmitting] = useState(false)
     const selectedFieldList = useMemo(() => Array.from(selectedFields), [selectedFields])
     const isbnTarget = getWosIsbnTargetField(currentValues, preview.values, selectedFieldList)
@@ -176,6 +178,23 @@ export const PublicationWosImportDialog = ({
             else next.delete(sourceIndex)
             return next
         })
+        // Promotion only means anything alongside remembering.
+        if (!checked) {
+            setPromotedAuthors(current => {
+                const next = new Set(current)
+                next.delete(sourceIndex)
+                return next
+            })
+        }
+    }
+
+    const togglePromoteAuthor = (sourceIndex: number, checked: boolean) => {
+        setPromotedAuthors(current => {
+            const next = new Set(current)
+            if (checked) next.add(sourceIndex)
+            else next.delete(sourceIndex)
+            return next
+        })
     }
 
     const handleSubmit = async () => {
@@ -196,6 +215,7 @@ export const PublicationWosImportDialog = ({
                     preview.authors,
                     authorSelections,
                     Array.from(rememberedAuthors),
+                    Array.from(promotedAuthors),
                 ),
             })
         } finally {
@@ -289,6 +309,18 @@ export const PublicationWosImportDialog = ({
                             author.match.kind !== 'researcher-id' &&
                             selection !== 'none' &&
                             Boolean(author.researcherId)
+                        const selectedCandidate = author.match.candidates.find(
+                            candidate => candidate.uid === selection,
+                        )
+                        // Only a strictly newer vintage is offered. An equal or
+                        // unreadable one is a decision for the Researchers page,
+                        // and an older paper must never demote a current ID.
+                        const currentResearcherId = selectedCandidate?.currentResearcherId
+                        const canPromote =
+                            canRemember &&
+                            rememberedAuthors.has(author.sourceIndex) &&
+                            Boolean(currentResearcherId) &&
+                            isNewerResearcherId(author.researcherId ?? '', currentResearcherId)
                         return (
                             <div key={author.sourceIndex} className="rounded-md border p-3">
                                 <div className="mb-2 flex flex-wrap items-center gap-2">
@@ -360,6 +392,34 @@ export const PublicationWosImportDialog = ({
                                         <Label htmlFor={`wos-remember-${author.sourceIndex}`}>
                                             {fm({ id: wosMessages.rememberResearcherId })}
                                         </Label>
+                                    </div>
+                                )}
+                                {canPromote && (
+                                    <div className="mt-2 ml-6">
+                                        <div className="flex items-center gap-2">
+                                            <Checkbox
+                                                id={`wos-promote-${author.sourceIndex}`}
+                                                checked={promotedAuthors.has(author.sourceIndex)}
+                                                onCheckedChange={checked =>
+                                                    togglePromoteAuthor(
+                                                        author.sourceIndex,
+                                                        checked === true,
+                                                    )
+                                                }
+                                            />
+                                            <Label htmlFor={`wos-promote-${author.sourceIndex}`}>
+                                                {fm(
+                                                    { id: wosMessages.makePrimaryResearcherId },
+                                                    {
+                                                        incoming: author.researcherId,
+                                                        current: currentResearcherId,
+                                                    },
+                                                )}
+                                            </Label>
+                                        </div>
+                                        <p className="mt-1 text-xs text-muted-foreground">
+                                            {fm({ id: wosMessages.makePrimaryHint })}
+                                        </p>
                                     </div>
                                 )}
                             </div>
