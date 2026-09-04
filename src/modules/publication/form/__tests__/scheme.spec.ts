@@ -103,6 +103,29 @@ describe('publicationPeerReviewedSchema', () => {
         expect(result.success).toBe(false)
     })
 
+    it('accepts DOI URLs and rejects malformed DOI values', () => {
+        expect(
+            publicationPeerReviewedSchema.safeParse({
+                ...peerReviewedData,
+                doi: 'https://doi.org/10.1234/Test',
+            }).success,
+        ).toBe(true)
+        expect(
+            publicationPeerReviewedSchema.safeParse({
+                ...peerReviewedData,
+                doi: 'not-a-doi',
+            }).success,
+        ).toBe(false)
+    })
+
+    it('requires a four-digit publication year', () => {
+        const result = publicationPeerReviewedSchema.safeParse({
+            ...peerReviewedData,
+            yearOfPublication: '26',
+        })
+        expect(result.success).toBe(false)
+    })
+
     it('requires volume for peer-reviewed articles', () => {
         const result = publicationPeerReviewedSchema.safeParse({
             ...peerReviewedData,
@@ -124,6 +147,29 @@ describe('publicationOtherSchema', () => {
             doi: null,
         })
         expect(result.success).toBe(true)
+    })
+
+    it('allows a blank optional DOI but rejects malformed DOI text', () => {
+        expect(
+            publicationOtherSchema.safeParse({
+                ...baseValidData,
+                doi: '',
+            }).success,
+        ).toBe(true)
+        expect(
+            publicationOtherSchema.safeParse({
+                ...baseValidData,
+                doi: 'not-a-doi',
+            }).success,
+        ).toBe(false)
+    })
+
+    it('requires a four-digit publication year', () => {
+        const result = publicationOtherSchema.safeParse({
+            ...baseValidData,
+            yearOfPublication: '20261',
+        })
+        expect(result.success).toBe(false)
     })
 
     it('allows null volume for other articles', () => {

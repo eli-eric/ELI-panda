@@ -66,6 +66,19 @@ describe('formatFormData', () => {
         expect(out.eliResearchers).toEqual([])
         expect(out.eliAuthors).toBe('')
     })
+
+    it('submits a canonical DOI without overwriting the selected web link', () => {
+        const out = formatFormData({
+            doi: ' DOI: 10.1234/Example.Article ',
+            webLink: 'https://doi.org/old-value',
+            allAuthorsCount: '1',
+            eliAuthorsCount: '1',
+            pagesCount: '1',
+        })
+
+        expect(out.doi).toBe('10.1234/example.article')
+        expect(out.webLink).toBe('https://doi.org/old-value')
+    })
 })
 
 describe('formatPublication', () => {

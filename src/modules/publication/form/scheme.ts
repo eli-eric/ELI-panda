@@ -1,6 +1,32 @@
 import { z } from 'zod'
 
+import { messages as englishMessages } from '@/i18n/src/locale/en'
+
 import { ELI_PUBLICATION, isMediaTypeC, isMediaTypeCOrD, isMediaTypeD } from '../types/constants'
+import { normalizeDoi } from '../utils/doi'
+
+const publicationMessages = englishMessages.publication.form
+
+const publicationYearSchema = z
+    .string()
+    .regex(/^\d{4}$/u, publicationMessages.yearOfPublication.invalid)
+
+const requiredDoiSchema = z
+    .string()
+    .min(1, 'DOI is required')
+    .refine(
+        value => Boolean(normalizeDoi(value)),
+        englishMessages.publication.wosImport.errors.invalid,
+    )
+
+const optionalDoiSchema = z
+    .string()
+    .refine(
+        value => value.trim() === '' || Boolean(normalizeDoi(value)),
+        englishMessages.publication.wosImport.errors.invalid,
+    )
+    .nullable()
+    .optional()
 
 const codebookSchema = z.object({
     uid: z.string().min(1, 'UID is required'),
@@ -47,7 +73,7 @@ export const publicationPeerReviewedSchema = z.object({
     // Required fields
     eliPublication: z.nativeEnum(ELI_PUBLICATION).default(ELI_PUBLICATION.YES),
     code: z.string().min(1, 'Code is required'),
-    doi: z.string().min(1, 'DOI is required'),
+    doi: requiredDoiSchema,
     openAccessType: codebookSchema.nullable().refine(val => val !== null, {
         message: 'Open Access Type is required',
     }),
@@ -75,7 +101,7 @@ export const publicationPeerReviewedSchema = z.object({
         return !isNaN(num) && num > 0 && Number.isInteger(num)
     }, 'Must be a positive integer'),
     citeAs: z.string().min(1, 'Cite As is required'),
-    yearOfPublication: z.string().min(1, 'Year of Publication is required'),
+    yearOfPublication: publicationYearSchema,
     dateOfPublication: z.string().min(1, 'Date of Publication is required'),
     abstract: z.string().min(1, 'Abstract is required'),
     keywords: z.string().min(1, 'Keywords is required'),
@@ -174,7 +200,7 @@ export const publicationOtherSchema = z
             return !isNaN(num) && num > 0 && Number.isInteger(num)
         }, 'Must be a positive integer'),
         citeAs: z.string().min(1, 'Cite As is required'),
-        yearOfPublication: z.string().min(1, 'Year of Publication is required'),
+        yearOfPublication: publicationYearSchema,
         dateOfPublication: z.string().min(1, 'Date of Publication is required'),
         abstract: z.string().min(1, 'Abstract is required'),
         keywords: z.string().min(1, 'Keywords is required'),
@@ -186,7 +212,7 @@ export const publicationOtherSchema = z
         mediaTypeCb: codebookSchema.nullable().refine(val => val !== null, {
             message: 'Media Type is required',
         }),
-        doi: z.string().nullable().optional(), // Optional for Other articles
+        doi: optionalDoiSchema, // Optional for Other articles
         volume: z.union([z.string(), z.number()]).nullable().optional(), // Optional for Other articles
         oecdFord: z.string().nullable().optional(), // Optional for Other articles
         experimentalSystemCb: codebookSchema.nullable().optional(),

@@ -38,6 +38,7 @@ export const messages = {
             description: 'Description',
         },
         warning: 'Warning',
+        remove: 'Remove {name}',
         errors: {
             somethingWentWrong: 'Something went wrong!',
             noResults: 'No results',
@@ -179,10 +180,8 @@ export const messages = {
             fileSizeKb: '{value} KB',
             actions: 'Actions',
             uploading: 'Uploading {done}/{total, plural, one {# file} other {# files}}',
-            uploadSuccess:
-                '{count, plural, one {# file uploaded} other {# files uploaded}}',
-            uploadError:
-                '{count, plural, one {# file failed} other {# files failed}}: {names}',
+            uploadSuccess: '{count, plural, one {# file uploaded} other {# files uploaded}}',
+            uploadError: '{count, plural, one {# file failed} other {# files failed}}: {names}',
             fileTooLarge: '{name} exceeds 100MB limit',
             retry: 'Retry',
             updateSuccess: '{name} updated',
@@ -1072,6 +1071,61 @@ export const messages = {
     orderItem: { head: 'ELI Panda - Order Item' },
     publication: {
         head: 'ELI Panda - Publication',
+        wosImport: {
+            dialogTitle: 'Web of Science import preview',
+            dialogDescription:
+                'Review each value before applying it to the publication form. This does not save the publication.',
+            fetch: 'Fetch from Web of Science',
+            refresh: 'Refresh from Web of Science',
+            helper: 'Use Web of Science to preview publication details for this DOI.',
+            loading: 'Loading Web of Science preview...',
+            fieldsTitle: 'Publication fields',
+            authorsTitle: 'ELI researcher matches',
+            importColumn: 'Import',
+            fieldColumn: 'Field',
+            currentColumn: 'Current value',
+            incomingColumn: 'Web of Science value',
+            importField: 'Import {field}',
+            empty: '(empty)',
+            same: 'Already up to date',
+            noAuthors: 'Web of Science returned no authors.',
+            noResearcherMatch: 'No PANDA researcher match was found.',
+            selectResearcher: 'Select the PANDA researcher matching {author}',
+            doNotMatch: 'Do not add an ELI researcher',
+            missingTitle: 'Not present in this Web of Science record',
+            unavailableTitle: 'Still needs to be entered manually',
+            noneUnavailable: 'No unavailable fields were reported.',
+            apply: 'Apply selected fields',
+            cancel: 'Cancel',
+            applied: 'Selected Web of Science values were applied to the form.',
+            match: {
+                researcherId: 'Matched by ResearcherID',
+                name: 'Possible name match — confirmation required',
+                none: 'Unmatched',
+                ambiguous: 'Several possible name matches',
+            },
+            duplicate: {
+                title: 'This DOI is already in PANDA',
+                description:
+                    'Publication {code} already uses DOI {doi}. Open it instead of creating a duplicate.',
+                open: 'Open existing publication',
+            },
+            errors: {
+                invalid: 'Enter a valid DOI before fetching from Web of Science.',
+                notFound: 'This DOI was not found in Web of Science.',
+                ambiguous:
+                    'Web of Science returned more than one exact record for this DOI. Nothing was changed.',
+                unavailable: 'Web of Science is currently unavailable. Please try again later.',
+                notConfigured:
+                    'Web of Science integration is not configured. Contact PANDA support.',
+                rateLimited:
+                    'The Web of Science lookup limit has been reached. Please try again later.',
+                authentication:
+                    'PANDA could not authenticate with Web of Science. Contact PANDA support.',
+                timeout: 'Web of Science took too long to respond. Please try again.',
+                failed: 'The Web of Science preview could not be loaded. Nothing was changed.',
+            },
+        },
         pdfFileMessage:
             'In order to upload a PDF you must first fill in all mandatory fields and save the publication.',
         addDepartmentButton: 'Add Another ELI Department',
@@ -1128,7 +1182,8 @@ export const messages = {
             quartil: { label: 'Quartil', placeholder: 'Select' },
             yearOfPublication: {
                 label: 'Year of Publication (R09)*',
-                placeholder: 'Select',
+                placeholder: 'YYYY',
+                invalid: 'Enter a four-digit publication year.',
             },
             dateOfPublication: { label: 'Date of Publication*' },
             abstract: { label: 'Abstract*' },
@@ -1554,8 +1609,7 @@ export const messages = {
             setMinimalSpares: 'Set Minimal Spares',
             assignItem: 'Assign Item',
             notFoundTitle: 'System not found',
-            notFoundDescription:
-                'The system may have been deleted or the link is no longer valid.',
+            notFoundDescription: 'The system may have been deleted or the link is no longer valid.',
             notFoundBack: 'Back to hierarchy',
             loadErrorTitle: 'Failed to load system',
             loadErrorDescription: 'Something went wrong while loading the system detail.',
