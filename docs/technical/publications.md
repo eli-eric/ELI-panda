@@ -125,7 +125,8 @@ erDiagram
         string identificationNumber
         string orcid
         string scopusId
-        string researcherId
+        string researcherId "current, RIV exports this"
+        string_array researcherIds "every ID ever held"
         string updatedAt
     }
     Grant {
@@ -234,6 +235,21 @@ The dialog separately lists fields that the particular WoS record omitted and fi
 The API compares WoS authors with PANDA's Researcher register. A unique ResearcherID match is preselected. Name matches and ambiguous matches are visible but never preselected; the editor must choose a PANDA researcher. Confirmed authors merge with the form's existing `eliResearchers` by UID rather than replacing them.
 
 For a name match that includes a WoS ResearcherID, the dialog can call `PUT /researcher/:uid/researcher-ids` after the editor opts in. The backend owns conflict detection and stores multiple IDs without changing the legacy Researcher CRUD payload. A remember failure is reported but does not roll back the selected publication-form values.
+
+### Which ResearcherID RIV exports
+
+RIV carries exactly one `<researcherid>` per author, so the two researcher properties divide the work:
+
+| Property        | Meaning            | Read by                                            |
+| --------------- | ------------------ | -------------------------------------------------- |
+| `researcherId`  | the **current** ID | Researchers form and table, search, **RIV export** |
+| `researcherIds` | every ID ever held | WoS author matching                                |
+
+The current ID is always a member of the array. Clarivate mints IDs as `LETTERS-NNNN-YYYY`, so the issue year travels with the value — `researcherIdYear` and `isNewerResearcherId` in `src/modules/publication/utils/doi.ts` read it, and the same rule lives server-side in Go, which is what actually decides.
+
+Promotion is never silent. Remembering a ResearcherID sends `makePrimary` on `PUT /researcher/:uid/researcher-ids`; the dialog offers that tick only when the incoming ID's year is strictly later than the candidate's current one, and it names both values. An equal or unreadable vintage is not offered — that is settled on the Researchers page, where every other ID on file is listed with a _Make current_ action. An empty current ID is filled by the API without asking, since nothing can be lost.
+
+RIV validation warns when an exported author has IDs on file but no current one, and when the exported ID is not the newest known. Both are warnings, consistent with the other RIV checks.
 
 ## Fetcher surface
 
@@ -370,7 +386,9 @@ Other smells:
 
 - The publications list page (`/publications/overview`) requires `BASICS` — meaning _every_ authenticated user sees every publication. Is that the intended audience, or should `PUBLICATIONS_VIEW` gate it instead?
 - `Publication.code` is required and looks like a server-generated identifier (`useGenerateUid.ts` exists in the module). Is the code reused as the RIV identifier?
-- `Researcher.identificationNumber`, `orcid`, `scopusId`, `researcherId` are all optional. Is any of them treated as the canonical key by RIV export? The validator returns `publicationCode` warnings — does it also warn on missing researcher IDs?
+- ~~`Researcher.identificationNumber`, `orcid`, `scopusId`, `researcherId` are all optional. Is any of them treated as the canonical key by RIV export? The validator returns `publicationCode` warnings — does it also warn on missing researcher IDs?~~ **Answered (ELIPANDA-413):** the RIV `<autor>` element carries all four, none as a key — the author is identified by name plus `rodne-cislo` / `identifikacni-cislo`. The validator does warn per researcher, keyed by `publicationCode`: on a missing identification number, and now on a missing or stale current ResearcherID.
+- Two same-year ResearcherIDs have no automatic winner, so promotion falls to a human on the Researchers page. Is that acceptable, or should the register record when each ID was confirmed?
+- Does anything outside this repo read `Researcher.researcherId`? RIV export is the only consumer found here, but an external report or the OKbase integration could rely on it.
 - The drift between `src/modules/publication/types/responses.ts` (`Publication`) and `src/modules/publications/types/responses.ts` (`Publication`) is named-collision risky in imports — was the projection intentional?
 
 ---

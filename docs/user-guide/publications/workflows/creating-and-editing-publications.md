@@ -59,6 +59,7 @@ See [Access & Responsibilities](../README.md#access--responsibilities) for what 
     - An author matched by **ResearcherID** is pre-selected.
     - An author matched **by name only** is shown but never pre-selected — most scientists hold several ResearcherIDs, so you confirm the right person yourself.
     - After confirming a name match, tick **Remember this ResearcherID for future imports** and PANDA stores that ID against the researcher, so the same author matches automatically next time.
+    - If that ID is newer than the one the researcher currently uses, a second tick appears offering to **make it the current ID for RIV export**, naming both values so you can see exactly what would be replaced. It only ever appears for a newer ID — importing an older paper can never replace a newer one. Same-year IDs are not offered here; set those on the [Researchers](./managing-researchers.md) page.
 
     Confirmed researchers are added to the ones already on the form; nothing you selected earlier is removed.
 
@@ -104,7 +105,7 @@ See [Access & Responsibilities](../README.md#access--responsibilities) for what 
 
 3. **Submit**. Same as creation; the toast confirms.
 
-`[VIDEO PLACEHOLDER: 90s — Add Publication → pick Journal article → set ELI Publication YES → paste a doi.org URL into DOI (R87) → press Fetch from Web of Science → walk the preview dialog: blank fields pre-ticked, a filled Title left un-ticked, one row ticked deliberately to overwrite, the ResearcherID match pre-selected and a name match confirmed with Remember this ResearcherID → Apply selected fields → show the form filled and still unsaved → pick the Language codebook value → add a grant → fill Abstract and Open Access Type by hand → upload PDF → Submit → reopen → press Refresh from Web of Science → Submit & Exit]`
+`[VIDEO PLACEHOLDER: 90s — Add Publication → pick Journal article → set ELI Publication YES → paste a doi.org URL into DOI (R87) → press Fetch from Web of Science → walk the preview dialog: blank fields pre-ticked, a filled Title left un-ticked, one row ticked deliberately to overwrite, the ResearcherID match pre-selected and a name match confirmed with Remember this ResearcherID and its newer ID promoted for RIV → Apply selected fields → show the form filled and still unsaved → pick the Language codebook value → add a grant → fill Abstract and Open Access Type by hand → upload PDF → Submit → reopen → press Refresh from Web of Science → Submit & Exit]`
 
 ## What gets created / changed
 

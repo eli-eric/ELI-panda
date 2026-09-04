@@ -76,6 +76,7 @@ When you sharpen a term during a design conversation, update both this file and 
 
 - **Publication / Researcher / Grant** — REST-only entities. See [`publications.md`](./technical/publications.md).
 - **WoS import preview** — exact Web of Science DOI lookup that proposes publication metadata and ELI researcher matches for the editor to confirm; blank fields are pre-selected, filled ones are never overwritten without an explicit tick, and applying saves nothing. See [`publications.md`](./technical/publications.md#web-of-science-import-flow).
+- **Current ResearcherID** — the single ResearcherID RIV exports for an author (`researcherId`), as opposed to `researcherIds`, the full set used to match Web of Science authors. See [`publications.md`](./technical/publications.md#which-researcherid-riv-exports).
 - **RIV export** — periodic report-generation flow.
 
 ### Administration
