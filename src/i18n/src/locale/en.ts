@@ -1271,7 +1271,8 @@ export const messages = {
                 label: 'Identification Number',
                 placeholder: 'Enter identification number',
             },
-            identifiersHint: 'At least one identifier is required',
+            identifiersHint:
+                'Add any identifiers you have. They improve Web of Science matching and RIV reporting, but none of them is required.',
             orcid: { label: 'ORCID', placeholder: 'e.g., 0000-0002-1825-0097' },
             scopusId: { label: 'Scopus ID', placeholder: 'e.g., 57200983210' },
             researcherId: { label: 'Researcher ID', placeholder: 'e.g., A-1234-5678' },

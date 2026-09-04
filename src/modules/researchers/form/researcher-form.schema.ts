@@ -5,27 +5,19 @@ const codebookSchema = z.object({
     name: z.string().min(1, 'Name is required'),
 })
 
-export const researcherSchema = z
-    .object({
-        firstName: z.string().min(1, 'First name is required'),
-        lastName: z.string().min(1, 'Last name is required'),
-        identificationNumber: z.string().optional(),
-        orcid: z.string().optional(),
-        scopusId: z.string().optional(),
-        researcherId: z.string().optional(),
-        citizenship: codebookSchema.nullable().optional(),
-    })
-    .refine(
-        data => {
-            const hasOrcid = data.orcid && data.orcid.trim().length > 0
-            const hasScopusId = data.scopusId && data.scopusId.trim().length > 0
-            const hasResearcherId = data.researcherId && data.researcherId.trim().length > 0
-            return hasOrcid || hasScopusId || hasResearcherId
-        },
-        {
-            message: 'At least one identifier is required (ORCID, Scopus ID, or Researcher ID)',
-            path: ['orcid'],
-        },
-    )
+// Every identifier is optional. A researcher who holds none of them is a real
+// person the register still has to be able to record, and RIV does not key
+// authors on any of these — it uses the name plus identificationNumber. Missing
+// identifiers surface as RIV validation warnings at export time, where they
+// actually matter, rather than blocking data entry.
+export const researcherSchema = z.object({
+    firstName: z.string().min(1, 'First name is required'),
+    lastName: z.string().min(1, 'Last name is required'),
+    identificationNumber: z.string().optional(),
+    orcid: z.string().optional(),
+    scopusId: z.string().optional(),
+    researcherId: z.string().optional(),
+    citizenship: codebookSchema.nullable().optional(),
+})
 
 export type ResearcherFormData = z.infer<typeof researcherSchema>
