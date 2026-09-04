@@ -2,31 +2,37 @@ import type { SelectedResearcher } from '@/modules/shared/form/researcherSelect'
 
 import { ELI_PUBLICATION } from '../types/constants'
 import type { Publication } from '../types/responses'
+import { normalizeDoi } from './doi'
 
 /**
  * Formats form data before submission to API.
  * Converts string numbers to actual numbers and generates backward-compatible eliAuthors string.
  */
-export const formatFormData = (data: any): Publication => ({
-    ...data,
-    eliPublication: data.eliPublication ?? ELI_PUBLICATION.YES,
-    allAuthorsCount: Number(data.allAuthorsCount),
-    eliAuthorsCount: Number(data.eliAuthorsCount),
-    volume: data.volume ? Number(data.volume) : null,
-    bookPagesCount: data.bookPagesCount ? Number(data.bookPagesCount) : null,
-    pagesCount: Number(data.pagesCount),
-    issue: data.issue ? Number(data.issue) : null,
-    impactFactor: data.impactFactor ? Number(data.impactFactor) : null,
-    authorsDepartments:
-        data.authorsDepartments?.map((author: any) => ({
-            ...author,
-            authorsCount: Number(author.authorsCount),
-        })) ?? [],
-    // Ensure eliResearchers is always an array
-    eliResearchers: data.eliResearchers ?? [],
-    // Generate eliAuthors string for backward compatibility
-    eliAuthors: generateEliAuthorsString(data.eliResearchers),
-})
+export const formatFormData = (data: any): Publication => {
+    const normalizedDoi = normalizeDoi(String(data.doi ?? ''))
+
+    return {
+        ...data,
+        doi: normalizedDoi ?? data.doi,
+        eliPublication: data.eliPublication ?? ELI_PUBLICATION.YES,
+        allAuthorsCount: Number(data.allAuthorsCount),
+        eliAuthorsCount: Number(data.eliAuthorsCount),
+        volume: data.volume ? Number(data.volume) : null,
+        bookPagesCount: data.bookPagesCount ? Number(data.bookPagesCount) : null,
+        pagesCount: Number(data.pagesCount),
+        issue: data.issue ? Number(data.issue) : null,
+        impactFactor: data.impactFactor ? Number(data.impactFactor) : null,
+        authorsDepartments:
+            data.authorsDepartments?.map((author: any) => ({
+                ...author,
+                authorsCount: Number(author.authorsCount),
+            })) ?? [],
+        // Ensure eliResearchers is always an array
+        eliResearchers: data.eliResearchers ?? [],
+        // Generate eliAuthors string for backward compatibility
+        eliAuthors: generateEliAuthorsString(data.eliResearchers),
+    }
+}
 
 /**
  * Formats publication data from API for form display.

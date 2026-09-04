@@ -172,6 +172,7 @@ export const usePublicationFields = () => {
         },
         yearOfPublication: {
             label: form.yearOfPublication.label,
+            placeholder: form.yearOfPublication.placeholder,
             rounded: 'rounded-md',
             name: 'yearOfPublication',
             type: 'number',
