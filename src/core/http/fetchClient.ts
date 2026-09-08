@@ -42,6 +42,9 @@ const toHeadersObject = (headers: Headers): Record<string, string> => {
     return Object.fromEntries(headers.entries())
 }
 
+const isHtmlBody = (contentType: string | null, rawText: string) =>
+    Boolean(contentType?.includes('html')) || rawText.trimStart().startsWith('<')
+
 const parseResponseBody = async <T>(
     response: Response,
     responseType: FetchRequestOptions['responseType'] = 'json',
@@ -51,6 +54,7 @@ const parseResponseBody = async <T>(
     if (response.status === 204) return undefined as T
 
     const rawText = await response.text()
+    const contentType = response.headers.get('content-type')
 
     if (isFeatureEnabled('enableHttpLogging')) {
         //eslint-disable-next-line
@@ -58,7 +62,7 @@ const parseResponseBody = async <T>(
             url: response.url,
             status: response.status,
             statusText: response.statusText,
-            contentType: response.headers.get('content-type'),
+            contentType,
             rawText: rawText.substring(0, 200),
             rawTextLength: rawText.length,
         })
@@ -70,7 +74,16 @@ const parseResponseBody = async <T>(
         return JSON.parse(rawText) as T
     } catch {
         // Endpoint returned a non-JSON body (e.g. a plain string like "DM04-001").
-        // Fall back to the raw text instead of failing the whole request.
+        // Fall back to the raw text instead of failing the whole request — unless it is
+        // HTML, which means a proxy or login page answered instead of the API. Handing
+        // that back as data would report a failed request as a successful one.
+        if (isHtmlBody(contentType, rawText)) {
+            const error: NormalizedHttpError = new Error('Unexpected HTML response body')
+            error.status = response.status
+            error.details = rawText
+            throw error
+        }
+
         return rawText as T
     }
 }

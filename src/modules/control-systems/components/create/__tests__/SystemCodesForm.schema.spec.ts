@@ -1,3 +1,4 @@
+import { BATCH_LIMIT } from '../../../types/constants'
 import { systemCodesFormSchema } from '../SystemCodesForm.schema'
 
 describe('systemCodesFormSchema', () => {
@@ -45,15 +46,23 @@ describe('systemCodesFormSchema', () => {
         }
     })
 
-    it('requires batch to not exceed 100', () => {
+    it('requires batch to not exceed BATCH_LIMIT', () => {
+        // Above the limit both preview and create truncate to BATCH_LIMIT, so accepting
+        // the larger number would promise rows the user never gets.
         const result = systemCodesFormSchema.safeParse({
             ...validData,
-            batch: 101,
+            batch: BATCH_LIMIT + 1,
         })
         expect(result.success).toBe(false)
         if (!result.success) {
-            expect(result.error.issues[0].message).toBe('Batch cannot exceed 100')
+            expect(result.error.issues[0].message).toBe(`Batch cannot exceed ${BATCH_LIMIT}`)
         }
+    })
+
+    it('accepts a batch of exactly BATCH_LIMIT', () => {
+        expect(systemCodesFormSchema.safeParse({ ...validData, batch: BATCH_LIMIT }).success).toBe(
+            true,
+        )
     })
 
     it('coerces string batch to number', () => {
