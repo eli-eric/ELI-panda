@@ -149,4 +149,19 @@ describe('getErrorMessageText', () => {
         expect(getErrorMessageText(undefined)).toBe('')
         expect(getErrorMessageText({})).toBe('')
     })
+
+    it.each(['HTTP 400', 'HTTP 500', 'Bad request: HTTP 400'])(
+        'treats the synthesised %s as no message at all',
+        text => {
+            // fetchClient falls back to `HTTP <status>` when the body has no message;
+            // showing that to a user is worse than the caller's generic copy.
+            expect(getErrorMessageText(normalizedError(400, text))).toBe('')
+        },
+    )
+
+    it('keeps a real message that merely mentions HTTP', () => {
+        expect(getErrorMessageText(normalizedError(400, 'HTTP 400 received from PLC'))).toBe(
+            'HTTP 400 received from PLC',
+        )
+    })
 })

@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { useCallback, useState } from 'react'
 
 import type { SystemCodesFormValues } from './components/create/SystemCodesForm.schema'
@@ -11,6 +12,7 @@ import { BATCH_LIMIT } from './types/constants'
 import { getSystemCodesErrorKind } from './utils/systemCodesErrors'
 
 const SystemCodesCreateContainer = () => {
+    const queryClient = useQueryClient()
     const [previewParams, setPreviewParams] = useState<PreviewParams | null>(null)
     const [createdData, setCreatedData] = useState<SystemCodeResult[]>([])
 
@@ -28,14 +30,19 @@ const SystemCodesCreateContainer = () => {
     const previewErrorMessage = previewError ? getErrorMessage(previewError) : undefined
     const previewErrorKind = previewError ? getSystemCodesErrorKind(previewError) : null
 
-    const handlePreview = useCallback((values: SystemCodesFormValues) => {
-        if (values.zone && values.systemType) {
-            setPreviewParams({
-                zoneUid: values.zone.uid,
-                systemTypeUid: values.systemType.uid,
-                batch: values.batch,
-            })
+    // `null` means the form no longer has a complete selection. Dropping the params then
+    // is what disables the query, so a cleared field cannot leave its error on screen.
+    const handlePreview = useCallback((values: SystemCodesFormValues | null) => {
+        if (!values?.zone || !values.systemType) {
+            setPreviewParams(null)
+            return
         }
+
+        setPreviewParams({
+            zoneUid: values.zone.uid,
+            systemTypeUid: values.systemType.uid,
+            batch: values.batch,
+        })
     }, [])
 
     const handleSubmit = useCallback(
@@ -52,8 +59,11 @@ const SystemCodesCreateContainer = () => {
                 if (response?.data) {
                     // Add created items to the created data list
                     setCreatedData(prev => [...prev, ...response.data])
-                    // Clear preview params to remove preview rows
-                    setPreviewParams(null)
+                    // The codes just created are taken now, so the preview that produced
+                    // them describes nothing. Refetching replaces it with the next batch;
+                    // clearing the params instead would leave Create enabled against
+                    // codes that no longer exist, with an empty preview pane.
+                    void queryClient.invalidateQueries({ queryKey: ['systemCodesPreview'] })
                     return true
                 }
                 return false
@@ -63,11 +73,12 @@ const SystemCodesCreateContainer = () => {
                 return false
             }
         },
-        [create],
+        [create, queryClient],
     )
 
     return (
         <SystemCodesCreateComponent
+            previewedParams={previewParams}
             previewData={previewData ?? []}
             createdData={createdData}
             isPreviewLoading={isPreviewLoading}

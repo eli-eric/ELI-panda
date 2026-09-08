@@ -46,7 +46,12 @@ export const ZoneFormContainer: FC<Props> = ({ zone, onSuccess }) => {
         name: zone?.name ?? '',
         code: zone?.code ?? '',
         parentUid: zone?.parentZone?.uid ?? null,
-        defaultParentSystem: zone?.defaultParentSystem ?? null,
+        // Narrowed to the shape the picker writes: RHF deep-compares values against the
+        // defaults, so keeping the API's wider object here would mark the form dirty —
+        // and trip the unsaved-changes guard — after re-picking the same system.
+        defaultParentSystem: zone?.defaultParentSystem
+            ? { uid: zone.defaultParentSystem.uid, name: zone.defaultParentSystem.name }
+            : null,
         notes: zone?.notes ?? '',
     }
 

@@ -75,6 +75,15 @@ export const isClientError = (error: unknown): boolean => {
 
 export const isBadRequestError = (error: unknown): boolean => getErrorStatus(error) === 400
 
+/**
+ * `fetchClient` synthesises `HTTP <status>` when the failing response carries no message
+ * of its own, so a non-empty `message` is not proof there is anything worth showing a
+ * user. Callers that fall back to the backend's own text must not surface these.
+ */
+const isSyntheticMessage = (text: string) => /^HTTP \d{3}$/.test(text)
+
 /** Backend messages are prefixed with "Bad request: " — strip it before showing them. */
-export const getErrorMessageText = (error: unknown): string =>
-    ((error as Error)?.message ?? '').replace(/^bad request:\s*/i, '').trim()
+export const getErrorMessageText = (error: unknown): string => {
+    const text = ((error as Error)?.message ?? '').replace(/^bad request:\s*/i, '').trim()
+    return isSyntheticMessage(text) ? '' : text
+}
