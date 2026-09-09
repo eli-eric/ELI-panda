@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import { FormProvider, useForm } from 'react-hook-form'
 
 import { usePublicationFields } from '../../hooks/usePublicationFields'
@@ -29,6 +29,7 @@ const renderWithValues = (defaultValues: { doi: string; webLink: string }) => {
         return (
             <FormProvider {...methods}>
                 <span data-testid="capture">{webLink}</span>
+                <input aria-label="DOI" {...methods.register('doi')} />
                 <WebLinkField />
             </FormProvider>
         )
@@ -66,5 +67,32 @@ describe('WebLinkField', () => {
     it('does not overwrite an existing web link when the DOI is empty', () => {
         const capture = renderWithValues({ doi: '', webLink: 'stale' })
         expect(capture.textContent).toBe('stale')
+    })
+})
+
+describe('DOI edits', () => {
+    it('refreshes and clears a derived resolver link', () => {
+        const capture = renderWithValues({
+            doi: '10.1234/old',
+            webLink: 'https://doi.org/10.1234/old',
+        })
+        fireEvent.change(screen.getByLabelText('DOI'), { target: { value: '10.1234/new' } })
+        expect(capture.textContent).toBe('https://doi.org/10.1234/new')
+        fireEvent.change(screen.getByLabelText('DOI'), { target: { value: '' } })
+        expect(capture.textContent).toBe('')
+    })
+    it('preserves an independent record URL through DOI changes and removal', () => {
+        const url = 'https://www.webofscience.com/wos/woscc/full-record/WOS:123'
+        const capture = renderWithValues({ doi: '10.1234/old', webLink: url })
+        fireEvent.change(screen.getByLabelText('DOI'), { target: { value: '10.1234/new' } })
+        expect(capture.textContent).toBe(url)
+        fireEvent.change(screen.getByLabelText('DOI'), { target: { value: '' } })
+        expect(capture.textContent).toBe(url)
+    })
+    it('refreshes a legacy dx.doi.org URL', () => {
+        expect(
+            renderWithValues({ doi: '10.1234/new', webLink: 'http://dx.doi.org/10.1234/old' })
+                .textContent,
+        ).toBe('https://doi.org/10.1234/new')
     })
 })

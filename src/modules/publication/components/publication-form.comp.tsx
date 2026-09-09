@@ -21,6 +21,7 @@ import { DepartmentsComponent } from './departments.comp'
 import { DoiLookupField } from './doi-lookup.field'
 import { EliAuthorsSelectComponent } from './eli-authors-select.comp'
 import { GrantsSelectComponent } from './grants-select.comp'
+import { PublicationYearField } from './publication-year.field'
 import { WebLinkField } from './web-link.field'
 
 export type Publication = {
@@ -137,7 +138,7 @@ export const PublicationFormComponent = () => {
                     <Listbox {...fields.quartil} customOptions={['Q1', 'Q2', 'Q3', 'Q4']} />
                 </Col>
                 <Col lg={2}>
-                    <Input {...fields.yearOfPublication} min="1000" max="9999" step="1" />
+                    <PublicationYearField />
                 </Col>
                 <Col lg={4}>
                     <Input {...fields.dateOfPublication} />

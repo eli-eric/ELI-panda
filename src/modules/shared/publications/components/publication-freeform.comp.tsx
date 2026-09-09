@@ -6,6 +6,7 @@ import { useAccessControl } from '@/hooks/useAccessControl'
 import { DepartmentsComponent } from '@/modules/publication/components/departments.comp'
 import { DoiLookupField } from '@/modules/publication/components/doi-lookup.field'
 import { EliAuthorsSelectComponent } from '@/modules/publication/components/eli-authors-select.comp'
+import { PublicationYearField } from '@/modules/publication/components/publication-year.field'
 import { WebLinkField } from '@/modules/publication/components/web-link.field'
 import { useMediaTypeStore } from '@/modules/publication/hooks/useMediaTypeStore'
 import { usePublicationFields } from '@/modules/publication/hooks/usePublicationFields'
@@ -63,7 +64,7 @@ export const PublicationFreeFormComponent = () => {
             <Input {...fields.impactFactor} />
             <Input {...fields.quartilBasis} />
             <Listbox {...fields.quartil} customOptions={['Q1', 'Q2', 'Q3', 'Q4']} />
-            <Input {...fields.yearOfPublication} min="1000" max="9999" step="1" />
+            <PublicationYearField />
             <Input {...fields.dateOfPublication} />
             <TextArea {...fields.abstract} />
             <TextArea {...fields.keywords} />

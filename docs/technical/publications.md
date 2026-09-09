@@ -215,17 +215,23 @@ sequenceDiagram
     Note over D: no publication POST/PUT; the editor still presses Save
 ```
 
-`usePublicationWosPreview` models the explicit request as a TanStack mutation under `['publication-wos-preview']`. It calls `GET /publications/wos-preview` with the normalized DOI and, during edit, the current publication UID so the record does not report itself as a duplicate. Both the preview and ResearcherID write require `publications-edit` on the API. The frontend contains no Clarivate credential and performs no provider fallback.
+`usePublicationWosPreview` models the explicit request as a TanStack mutation under `['publication-wos-preview']`. It calls `GET /publications/wos-preview` with the normalized DOI and, during edit, the current publication UID so the record does not report itself as a duplicate. The preview requires `publications-edit` on the API and has an explicit 30-second client timeout, compared with the backend’s 10-second upstream budget. The frontend contains no Clarivate credential and performs no provider fallback.
 
 The input accepts a bare DOI, a case-insensitive `doi:` prefix, or an `https://doi.org/` / `http://dx.doi.org/` URL and canonicalizes it to a lowercase bare DOI for lookup. Invalid values stop before a request. The API returns explicit not-found, ambiguous, authentication, rate-limit, timeout, configuration, and upstream errors; none changes the form. If PANDA already contains the DOI, the response names that publication and the dialog offers to open it.
+
+Only `INVALID_DOI` failures mark the DOI field invalid; other lookup failures produce a toast. Error codes and their union type live in `types/wos-import.ts`, with an exhaustive message map in `constants/wos-import.ts` and null-safe handling in `utils/wos-errors.ts`.
+
+Ordinary saves preserve DOI text. Schema factories validate new or changed DOIs with the same normalization and syntax checks used by lookup. Only the exact persisted DOI is exempt during editing, so unrelated changes to legacy records remain possible. Both detail and sheet forms supply the original DOI; new records have no exemption. Peer-reviewed publications still require a nonempty DOI, while other media types allow an empty DOI. Lookup stays strict even for legacy records. Blank or DOI-derived Web Links follow DOI edits and clear when the DOI is removed; independent record links are preserved.
+
+The year remains a listbox in both detail and sheet forms. The shared helper offers the current year, eleven previous years and one future year, newest first, plus any valid loaded/imported four-digit year. For 2026, the standard range is 2015–2027 inclusive (13 options).
 
 ### Review and apply rules
 
 The preview contract can carry `title`, `doi`, WOS number, long journal title, volume, issue, pages and page count, publication year and month, ISSN, e-ISSN, ISBN, web link, keywords, the full author string and count, and a media-type suggestion. Only values actually returned by WoS appear as comparison rows.
 
-Each row displays the current form value next to the incoming value. A blank current field is selected by default; a different existing value is not selected, but the editor can explicitly opt in to replace it. Equal values are disabled. The ISBN row targets `isbn` for book/chapter media type C and `proceedingsIsbn` for conference media type D, so the dialog never writes an identifier into a hidden field.
+Each row displays the current form value next to the incoming value. A blank current field is selected by default; a different existing value is not selected, but the editor can explicitly opt in to replace it. Equal values are disabled and collapsed by default. Overwrites have amber badges and row tints. Selection counts, bulk actions, and a differences-only view support review; filtering does not change selections. Zero is not blank. The ISBN row targets `isbn` for book/chapter media type C and `proceedingsIsbn` for conference media type D, using the codebook UID rather than its optional `code`. A media-type change that redirects ISBN clears its selection for fresh confirmation.
 
-The dialog separately lists fields that the particular WoS record omitted and fields WoS Starter cannot supply. The latter includes abstract, open-access type, publishing country, OECD FORD, citation text, impact factor/quartile, departments, grants, and ELI-internal fields. Applying a selection only updates React Hook Form state and marks those fields dirty; it never invokes the publication create/update mutation.
+The modal description contains record identity. The dialog owns scrolling, with a sticky table header and Apply/Cancel footer. Authors are paginated in groups of 20 with selections retained across pages. A conditional muted footnote lists fields that the record omitted and fields WoS Starter cannot supply. The latter includes abstract, open-access type, publishing country, OECD FORD, citation text, impact factor/quartile, departments, grants, and ELI-internal fields. Applying a selection only updates React Hook Form state and marks those fields dirty; it never invokes the publication create/update mutation.
 
 ### ELI researcher matching
 
@@ -306,14 +312,14 @@ Schema-level: none. The entities are REST-only.
 
 The WoS review flow has focused unit, hook, component, and browser coverage:
 
-- `src/modules/publication/form/__tests__/scheme.spec.ts` — peer-reviewed/other schema matrix, DOI syntax, and four-digit year validation.
+- `src/modules/publication/form/__tests__/scheme.spec.ts` — peer-reviewed/other schema matrix, legacy DOI edit compatibility, and four-digit year validation.
 - `src/modules/publication/utils/__tests__/doi.spec.ts` — accepted DOI forms and invalid values.
 - `src/modules/publication/utils/__tests__/wos-import.spec.ts` — default selections, overwrite opt-in, author merge, and C/D ISBN targeting.
-- `src/modules/publication/components/__tests__/doi-lookup-field.spec.tsx` — explicit Fetch/Refresh, preview opening, duplicate navigation, typed errors, apply-without-save, and ResearcherID writes.
+- `src/modules/publication/components/__tests__/doi-lookup-field.spec.tsx` — explicit Fetch/Refresh, preview opening, duplicate navigation, typed/nullish errors and apply-without-save.
 - `src/modules/publication/components/__tests__/publication-wos-import-dialog.spec.tsx` — current/incoming comparisons and author confirmation.
 - `src/modules/publication/hooks/__tests__/usePublicationWosPreview.spec.ts` — authenticated REST path and payload.
 - `src/modules/publication/components/__tests__/web-link-field.spec.tsx` — lookup values are not overwritten by a DOI side effect.
-- `src/modules/publication/utils/__tests__/formatters.spec.ts` — canonical DOI submission without changing the chosen web link.
+- `src/modules/publication/utils/__tests__/formatters.spec.ts` — unchanged DOI text and zero-valued issue/volume submission.
 - `src/utils/__tests__/getEndpoints.spec.ts` — preview and ResearcherID endpoint construction.
 - `e2e/publication/publicationWosPreview.e2e.ts` — mocked preview → review → apply, including the assertion that no publication POST/PUT occurs.
 

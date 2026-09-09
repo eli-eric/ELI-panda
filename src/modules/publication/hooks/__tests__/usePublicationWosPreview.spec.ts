@@ -4,7 +4,7 @@ import { fetchRequest } from '@/core/http/fetchClient'
 import { renderHookWithQuery } from '@/testutils/wrappers/renderWithProviders'
 import { BASE_URL } from '@/types/constants/common'
 
-import type { PublicationWosPreviewResponse } from '../../types/wos-import'
+import { type PublicationWosPreviewResponse, WOS_PREVIEW_TIMEOUT_MS } from '../../types/wos-import'
 import { usePublicationWosPreview } from '../usePublicationWosPreview'
 
 jest.mock('@/core/http/fetchClient', () => ({
@@ -35,6 +35,7 @@ describe('usePublicationWosPreview', () => {
 
         expect(mockFetchRequest).toHaveBeenCalledWith(
             `${BASE_URL}/publications/wos-preview?doi=10.1234%2Flaser.test&currentPublicationUid=publication-1`,
+            { timeoutMs: WOS_PREVIEW_TIMEOUT_MS },
         )
     })
 })

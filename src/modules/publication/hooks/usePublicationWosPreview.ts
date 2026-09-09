@@ -4,7 +4,7 @@ import { fetchRequest } from '@/core/http/fetchClient'
 import { buildUrl } from '@/utils/fetcher'
 import { getEndpoints } from '@/utils/getEndpoints'
 
-import type { PublicationWosPreviewResponse } from '../types/wos-import'
+import { type PublicationWosPreviewResponse, WOS_PREVIEW_TIMEOUT_MS } from '../types/wos-import'
 
 interface PreviewRequest {
     doi: string
@@ -22,7 +22,9 @@ export const usePublicationWosPreview = () => {
                 },
             }).publicationWosPreview
 
-            return fetchRequest<PublicationWosPreviewResponse>(buildUrl(endpoint))
+            return fetchRequest<PublicationWosPreviewResponse>(buildUrl(endpoint), {
+                timeoutMs: WOS_PREVIEW_TIMEOUT_MS,
+            })
         },
     })
 

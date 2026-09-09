@@ -100,3 +100,19 @@ export interface PublicationWosImportSelection {
     fields: PublicationWosImportField[]
     authors: PublicationWosAuthorSelection[]
 }
+
+/** Error codes emitted by publications-wos-import.go in eli-panda-api PR #432. */
+export const WOS_ERROR_CODES = {
+    INVALID_DOI: 'INVALID_DOI',
+    WOS_RECORD_NOT_FOUND: 'WOS_RECORD_NOT_FOUND',
+    WOS_RECORD_AMBIGUOUS: 'WOS_RECORD_AMBIGUOUS',
+    WOS_NOT_CONFIGURED: 'WOS_NOT_CONFIGURED',
+    WOS_AUTHENTICATION_FAILED: 'WOS_AUTHENTICATION_FAILED',
+    WOS_RATE_LIMITED: 'WOS_RATE_LIMITED',
+    WOS_UPSTREAM_TIMEOUT: 'WOS_UPSTREAM_TIMEOUT',
+    WOS_UPSTREAM_ERROR: 'WOS_UPSTREAM_ERROR',
+} as const
+export type WosErrorCode = (typeof WOS_ERROR_CODES)[keyof typeof WOS_ERROR_CODES]
+
+/** Backend upstream budget is 10 s; allow additional time for matching and transport. */
+export const WOS_PREVIEW_TIMEOUT_MS = 30_000

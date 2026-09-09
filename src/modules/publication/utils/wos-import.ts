@@ -1,5 +1,6 @@
 import type { SelectedResearcher } from '@/modules/shared/form/researcherSelect'
 
+import { MEDIA_TYPE_UID } from '../types/constants'
 import type {
     PublicationWosAuthor,
     PublicationWosFieldRow,
@@ -8,12 +9,11 @@ import type {
 } from '../types/wos-import'
 import { PUBLICATION_WOS_IMPORT_FIELDS } from '../types/wos-import'
 
+/** Checks absence without mistaking numeric zero for an empty field. */
 const isBlank = (value: unknown): boolean =>
-    value === undefined ||
-    value === null ||
-    value === 0 ||
-    (typeof value === 'string' && value.trim() === '')
+    value === undefined || value === null || (typeof value === 'string' && value.trim() === '')
 
+/** Compares codebooks by UID and scalar values by their trimmed form representation. */
 const isSameValue = (currentValue: unknown, incomingValue: unknown): boolean => {
     if (
         typeof currentValue === 'object' &&
@@ -29,6 +29,7 @@ const isSameValue = (currentValue: unknown, incomingValue: unknown): boolean => 
     return String(currentValue).trim() === String(incomingValue).trim()
 }
 
+/** Builds comparison rows; only empty destinations are selected by default. */
 export const buildWosFieldRows = (
     currentValues: Record<string, unknown>,
     incomingValues: PublicationWosImportValues,
@@ -52,6 +53,7 @@ export const buildWosFieldRows = (
         ]
     })
 
+/** Copies only explicitly selected, present values from supported import fields. */
 export const buildWosFieldPatch = (
     incomingValues: PublicationWosImportValues,
     selectedFields: PublicationWosImportField[],
@@ -66,11 +68,7 @@ export const buildWosFieldPatch = (
     ) as PublicationWosImportValues
 }
 
-const getMediaTypeCode = (value: unknown): string | undefined => {
-    if (typeof value !== 'object' || value === null || !('code' in value)) return undefined
-    return typeof value.code === 'string' ? value.code.toUpperCase() : undefined
-}
-
+/** Routes ISBN using the effective media-type UID, including API values without a code. */
 export const getWosIsbnTargetField = (
     currentValues: Record<string, unknown>,
     incomingValues: PublicationWosImportValues,
@@ -80,9 +78,15 @@ export const getWosIsbnTargetField = (
         ? incomingValues.mediaTypeCb
         : currentValues.mediaTypeCb
 
-    return getMediaTypeCode(mediaType) === 'D' ? 'proceedingsIsbn' : 'isbn'
+    return typeof mediaType === 'object' &&
+        mediaType !== null &&
+        'uid' in mediaType &&
+        mediaType.uid === MEDIA_TYPE_UID.CONFERENCE_PROCEEDINGS
+        ? 'proceedingsIsbn'
+        : 'isbn'
 }
 
+/** Compares incoming ISBN against the destination field for the selected media type. */
 export const buildWosComparisonValues = (
     currentValues: Record<string, unknown>,
     incomingValues: PublicationWosImportValues,
@@ -92,6 +96,7 @@ export const buildWosComparisonValues = (
     return { ...currentValues, isbn: currentValues[isbnTarget] }
 }
 
+/** Builds a form-only patch and routes proceedings ISBN to its visible field. */
 export const buildWosFormPatch = (
     currentValues: Record<string, unknown>,
     incomingValues: PublicationWosImportValues,
@@ -111,6 +116,7 @@ export const buildWosFormPatch = (
 
 export type PublicationWosAuthorSelections = Record<number, string>
 
+/** Preselects only a unique ResearcherID match, never an uncertain name match. */
 export const buildDefaultWosAuthorSelections = (
     authors: PublicationWosAuthor[],
 ): PublicationWosAuthorSelections =>
@@ -124,6 +130,7 @@ export const buildDefaultWosAuthorSelections = (
         }),
     )
 
+/** Merges confirmed candidates with current researchers, deduplicated by UID. */
 export const buildSelectedWosResearchers = (
     currentResearchers: SelectedResearcher[],
     authors: PublicationWosAuthor[],
@@ -141,4 +148,23 @@ export const buildSelectedWosResearchers = (
     })
 
     return Array.from(researchers.values())
+}
+
+/** Reads optional form researcher selections without inventing an author list. */
+export const getCurrentResearchers = (value: unknown): SelectedResearcher[] =>
+    Array.isArray(value) ? value : []
+
+/** Detects a change to ordered researcher UIDs before marking form fields dirty. */
+export const researchersDiffer = (
+    current: SelectedResearcher[],
+    incoming: SelectedResearcher[],
+): boolean =>
+    current.length !== incoming.length ||
+    current.some((researcher, index) => researcher.uid !== incoming[index]?.uid)
+
+/** Formats scalar and codebook values for the import comparison table. */
+export const displayWosValue = (value: unknown, emptyLabel: string): string => {
+    if (value === undefined || value === null || value === '') return emptyLabel
+    if (typeof value === 'object' && 'name' in value) return String(value.name)
+    return String(value)
 }

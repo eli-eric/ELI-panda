@@ -1,4 +1,4 @@
-import { LoaderCircle } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useIntl } from 'react-intl'
 
@@ -6,6 +6,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
+import { DialogFooter } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import {
@@ -19,8 +20,8 @@ import {
 } from '@/components/ui/simple-table'
 import { message } from '@/i18n/src/messages'
 
+import { WOS_AUTHORS_PAGE_SIZE,WOS_MATCH_LABEL_IDS } from '../constants/wos-import'
 import type {
-    PublicationWosAuthorMatchKind,
     PublicationWosImportField,
     PublicationWosImportSelection,
     PublicationWosPreviewResponse,
@@ -29,57 +30,13 @@ import {
     buildDefaultWosAuthorSelections,
     buildWosComparisonValues,
     buildWosFieldRows,
+    displayWosValue,
     getWosIsbnTargetField,
     type PublicationWosAuthorSelections,
 } from '../utils/wos-import'
+import { getWosFieldLabelId } from '../utils/wos-presentation'
 
 const wosMessages = message.publication.wosImport
-const formMessages = message.publication.form
-
-// The wire uses kebab-case match kinds; message ids stay camelCase per the
-// dictionary convention enforced by i18n/src/__tests__/messages.spec.ts.
-const matchLabelIds: Record<PublicationWosAuthorMatchKind, string> = {
-    'researcher-id': wosMessages.match.researcherId,
-    name: wosMessages.match.name,
-    none: wosMessages.match.none,
-    ambiguous: wosMessages.match.ambiguous,
-}
-
-const fieldLabelIds: Record<string, string> = {
-    abstract: formMessages.abstract.label,
-    allAuthors: formMessages.allAuthors.label,
-    allAuthorsCount: formMessages.allAuthorsCount.label,
-    authorsDepartments: formMessages.department.label,
-    citeAs: formMessages.citeAs.label,
-    code: formMessages.code.label,
-    dateOfPublication: formMessages.dateOfPublication.label,
-    doi: formMessages.doi.label,
-    eissn: formMessages.eissn.label,
-    eliPublication: formMessages.eliPublication.label,
-    experimentalSystemCb: formMessages.experimentalSystemCb.label,
-    grants: formMessages.grants.label,
-    impactFactor: formMessages.impactFactor.label,
-    isbn: formMessages.isbn.label,
-    issue: formMessages.issue.label,
-    keywords: formMessages.keywords.label,
-    longJournalTitle: formMessages.longJournalTitle.label,
-    mediaTypeCb: formMessages.mediaTypeCb.label,
-    note: formMessages.note.label,
-    oecdFord: formMessages.oecdFord.label,
-    openAccessType: formMessages.openAccessType.label,
-    pages: formMessages.pages.label,
-    pagesCount: formMessages.pagesCount.label,
-    publishingCountry: formMessages.publishingCountry.label,
-    quartil: formMessages.quartil.label,
-    quartilBasis: formMessages.quartilBasis.label,
-    title: formMessages.title.label,
-    userCall: formMessages.userCall.label,
-    userExperimentCb: formMessages.userExperimentCb.label,
-    volume: formMessages.volume.label,
-    webLink: formMessages.webLink.label,
-    wosNumber: formMessages.wosNumber.label,
-    yearOfPublication: formMessages.yearOfPublication.label,
-}
 
 type FoundPreview = Extract<PublicationWosPreviewResponse, { status: 'found' }>
 
@@ -94,14 +51,6 @@ interface DuplicateProps {
     preview: Extract<PublicationWosPreviewResponse, { status: 'already-exists' }>
     onOpenExisting: () => void | Promise<void>
     onClose: () => void
-}
-
-const displayValue = (value: unknown, emptyLabel: string): string => {
-    if (value === undefined || value === null || value === '') return emptyLabel
-    if (typeof value === 'object' && value !== null && 'name' in value) {
-        return String(value.name)
-    }
-    return String(value)
 }
 
 export const PublicationWosImportDialog = ({
@@ -130,6 +79,9 @@ export const PublicationWosImportDialog = ({
         buildDefaultWosAuthorSelections(preview.authors),
     )
     const [isSubmitting, setIsSubmitting] = useState(false)
+    const [showUnchanged, setShowUnchanged] = useState(false)
+    const [differencesOnly, setDifferencesOnly] = useState(false)
+    const [authorPage, setAuthorPage] = useState(0)
     const selectedFieldList = useMemo(() => Array.from(selectedFields), [selectedFields])
     const isbnTarget = getWosIsbnTargetField(currentValues, preview.values, selectedFieldList)
     const rows = useMemo(
@@ -141,11 +93,24 @@ export const PublicationWosImportDialog = ({
         [currentValues, preview.values, selectedFieldList],
     )
 
+    const actionableRows = rows.filter(row => row.status !== 'same')
+    const selectedActionableFields = actionableRows
+        .filter(row => selectedFields.has(row.field))
+        .map(row => row.field)
+    const unchangedCount = rows.length - actionableRows.length
+    const visibleRows = rows
+        .filter(row =>
+            differencesOnly ? row.status === 'different' : showUnchanged || row.status !== 'same',
+        )
+        .sort((a, b) => Number(a.status === 'same') - Number(b.status === 'same'))
+    const authorPageCount = Math.ceil(preview.authors.length / WOS_AUTHORS_PAGE_SIZE)
+    const visibleAuthors = preview.authors.slice(
+        authorPage * WOS_AUTHORS_PAGE_SIZE,
+        (authorPage + 1) * WOS_AUTHORS_PAGE_SIZE,
+    )
+
     const fieldLabel = (field: string): string => {
-        if (field === 'isbn' && isbnTarget === 'proceedingsIsbn') {
-            return fm({ id: formMessages.proceedingsIsbn.label })
-        }
-        const id = fieldLabelIds[field]
+        const id = getWosFieldLabelId(field, isbnTarget)
         return id ? fm({ id }) : field
     }
 
@@ -154,8 +119,28 @@ export const PublicationWosImportDialog = ({
             const next = new Set(current)
             if (checked) next.add(field)
             else next.delete(field)
+            // A media-type change can move ISBN to a populated destination. Require
+            // a fresh choice rather than silently retaining a previously safe selection.
+            if (
+                field === 'mediaTypeCb' &&
+                getWosIsbnTargetField(currentValues, preview.values, Array.from(current)) !==
+                    getWosIsbnTargetField(currentValues, preview.values, Array.from(next))
+            )
+                next.delete('isbn')
             return next
         })
+    }
+
+    const selectAllFields = () => {
+        const allFields = rows.map(row => row.field)
+        const comparison = buildWosComparisonValues(currentValues, preview.values, allFields)
+        setSelectedFields(
+            new Set(
+                buildWosFieldRows(comparison, preview.values)
+                    .filter(row => row.status !== 'same')
+                    .map(row => row.field),
+            ),
+        )
     }
 
     const selectAuthor = (sourceIndex: number, researcherUid: string) => {
@@ -179,7 +164,7 @@ export const PublicationWosImportDialog = ({
         setIsSubmitting(true)
         try {
             await onSubmit({
-                fields: Array.from(selectedFields),
+                fields: selectedActionableFields,
                 authors,
             })
         } finally {
@@ -190,21 +175,64 @@ export const PublicationWosImportDialog = ({
     const emptyLabel = fm({ id: wosMessages.empty })
 
     return (
-        <div className="space-y-5" data-testid="publication-wos-import-dialog">
-            <div className="rounded-md border bg-muted/30 p-3">
-                <p className="font-semibold">{preview.values.title}</p>
-                <p className="text-sm text-muted-foreground">
-                    {preview.values.longJournalTitle || preview.doi}
-                </p>
-            </div>
-
+        <div className="shrink-0 space-y-5" data-testid="publication-wos-import-dialog">
             <section className="space-y-2" aria-labelledby="wos-fields-heading">
                 <h3 id="wos-fields-heading" className="font-semibold">
                     {fm({ id: wosMessages.fieldsTitle })}
                 </h3>
-                <TableContainer className="max-h-[38vh] overflow-auto">
+                <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-sm text-muted-foreground" role="status">
+                        {fm(
+                            { id: wosMessages.selectionSummary },
+                            {
+                                selected: selectedActionableFields.length,
+                                total: actionableRows.length,
+                            },
+                        )}
+                    </span>
+                    <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        onClick={selectAllFields}
+                        disabled={isSubmitting || actionableRows.length === 0}
+                    >
+                        {fm({ id: wosMessages.selectAll })}
+                    </Button>
+                    <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setSelectedFields(new Set())}
+                        disabled={isSubmitting || selectedFields.size === 0}
+                    >
+                        {fm({ id: wosMessages.selectNone })}
+                    </Button>
+                    <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        aria-pressed={differencesOnly}
+                        onClick={() => setDifferencesOnly(value => !value)}
+                    >
+                        {fm({ id: wosMessages.differencesOnly })}
+                    </Button>
+                    {unchangedCount > 0 && (
+                        <Button
+                            type="button"
+                            size="sm"
+                            variant="ghost"
+                            aria-expanded={showUnchanged}
+                            disabled={differencesOnly}
+                            onClick={() => setShowUnchanged(value => !value)}
+                        >
+                            {fm({ id: wosMessages.unchangedFields }, { count: unchangedCount })}
+                        </Button>
+                    )}
+                </div>
+                <TableContainer className="overflow-visible">
                     <Table>
-                        <TableHeader className="sticky top-0 z-10">
+                        <TableHeader className="sticky top-0 z-10 bg-muted">
                             <TableRow>
                                 <TableHead className="w-12">
                                     <span className="sr-only">
@@ -217,11 +245,20 @@ export const PublicationWosImportDialog = ({
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {rows.map(row => {
+                            {visibleRows.map(row => {
                                 const label = fieldLabel(row.field)
                                 const checkboxId = `wos-import-field-${row.field}`
                                 return (
-                                    <TableRow key={row.field}>
+                                    <TableRow
+                                        key={row.field}
+                                        className={
+                                            row.status === 'different'
+                                                ? 'bg-amber-50 dark:bg-amber-950/30'
+                                                : row.status === 'same'
+                                                  ? 'text-muted-foreground'
+                                                  : undefined
+                                        }
+                                    >
                                         <TableCell>
                                             <Checkbox
                                                 id={checkboxId}
@@ -229,8 +266,11 @@ export const PublicationWosImportDialog = ({
                                                     { id: wosMessages.importField },
                                                     { field: label },
                                                 )}
-                                                checked={selectedFields.has(row.field)}
-                                                disabled={row.status === 'same'}
+                                                checked={
+                                                    row.status !== 'same' &&
+                                                    selectedFields.has(row.field)
+                                                }
+                                                disabled={isSubmitting || row.status === 'same'}
                                                 onCheckedChange={checked =>
                                                     toggleField(row.field, checked === true)
                                                 }
@@ -238,6 +278,14 @@ export const PublicationWosImportDialog = ({
                                         </TableCell>
                                         <TableCell>
                                             <Label htmlFor={checkboxId}>{label}</Label>
+                                            {row.status === 'different' && (
+                                                <Badge
+                                                    variant="outline"
+                                                    className="ml-2 border-amber-600 text-amber-800 dark:text-amber-300"
+                                                >
+                                                    {fm({ id: wosMessages.overwrites })}
+                                                </Badge>
+                                            )}
                                             {row.status === 'same' && (
                                                 <Badge variant="outline" className="ml-2">
                                                     {fm({ id: wosMessages.same })}
@@ -245,10 +293,10 @@ export const PublicationWosImportDialog = ({
                                             )}
                                         </TableCell>
                                         <TableCell className="max-w-72 whitespace-normal break-words">
-                                            {displayValue(row.currentValue, emptyLabel)}
+                                            {displayWosValue(row.currentValue, emptyLabel)}
                                         </TableCell>
                                         <TableCell className="max-w-72 whitespace-normal break-words">
-                                            {displayValue(row.incomingValue, emptyLabel)}
+                                            {displayWosValue(row.incomingValue, emptyLabel)}
                                         </TableCell>
                                     </TableRow>
                                 )
@@ -267,14 +315,14 @@ export const PublicationWosImportDialog = ({
                         {fm({ id: wosMessages.noAuthors })}
                     </p>
                 ) : (
-                    preview.authors.map(author => {
+                    visibleAuthors.map(author => {
                         const selection = authorSelections[author.sourceIndex] ?? 'none'
                         return (
                             <div key={author.sourceIndex} className="rounded-md border p-3">
                                 <div className="mb-2 flex flex-wrap items-center gap-2">
                                     <span className="font-medium">{author.displayName}</span>
                                     <Badge variant="secondary">
-                                        {fm({ id: matchLabelIds[author.match.kind] })}
+                                        {fm({ id: WOS_MATCH_LABEL_IDS[author.match.kind] })}
                                     </Badge>
                                     {author.researcherId && (
                                         <code className="text-xs text-muted-foreground">
@@ -288,6 +336,7 @@ export const PublicationWosImportDialog = ({
                                     </p>
                                 ) : (
                                     <RadioGroup
+                                        disabled={isSubmitting}
                                         value={selection}
                                         onValueChange={value =>
                                             selectAuthor(author.sourceIndex, value)
@@ -331,33 +380,73 @@ export const PublicationWosImportDialog = ({
                 )}
             </section>
 
-            {preview.missingImportableFields.length > 0 && (
-                <Alert>
-                    <AlertTitle>{fm({ id: wosMessages.missingTitle })}</AlertTitle>
-                    <AlertDescription>
-                        {preview.missingImportableFields.map(fieldLabel).join(', ')}
-                    </AlertDescription>
-                </Alert>
+            {authorPageCount > 1 && (
+                <nav
+                    className="flex flex-wrap items-center gap-2"
+                    aria-label={fm({ id: wosMessages.authorPages })}
+                >
+                    <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        disabled={authorPage === 0}
+                        onClick={() => setAuthorPage(page => page - 1)}
+                    >
+                        {fm({ id: wosMessages.previousAuthors })}
+                    </Button>
+                    <span className="text-sm text-muted-foreground" role="status">
+                        {fm(
+                            { id: wosMessages.authorPage },
+                            {
+                                page: authorPage + 1,
+                                pages: authorPageCount,
+                                total: preview.authors.length,
+                            },
+                        )}
+                    </span>
+                    <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        disabled={authorPage + 1 === authorPageCount}
+                        onClick={() => setAuthorPage(page => page + 1)}
+                    >
+                        {fm({ id: wosMessages.nextAuthors })}
+                    </Button>
+                </nav>
             )}
 
-            <Alert>
-                <AlertTitle>{fm({ id: wosMessages.unavailableTitle })}</AlertTitle>
-                <AlertDescription>
-                    {preview.unavailableFields.length > 0
-                        ? preview.unavailableFields.map(fieldLabel).join(', ')
-                        : fm({ id: wosMessages.noneUnavailable })}
-                </AlertDescription>
-            </Alert>
+            {(preview.missingImportableFields.length > 0 ||
+                preview.unavailableFields.length > 0) && (
+                <p className="text-xs text-muted-foreground">
+                    {[
+                        preview.missingImportableFields.length > 0
+                            ? `${fm({
+                                  id: wosMessages.missingTitle,
+                              })}: ${preview.missingImportableFields.map(fieldLabel).join(', ')}`
+                            : '',
+                        preview.unavailableFields.length > 0
+                            ? `${fm({
+                                  id: wosMessages.unavailableTitle,
+                              })}: ${preview.unavailableFields.map(fieldLabel).join(', ')}`
+                            : '',
+                    ]
+                        .filter(Boolean)
+                        .join(' · ')}
+                </p>
+            )}
 
-            <div className="flex justify-end gap-2 border-t pt-4">
+            <DialogFooter className="sticky bottom-0 z-20 border-t bg-background pt-2 pb-2">
                 <Button type="button" variant="outline" onClick={onClose} disabled={isSubmitting}>
-                    {fm({ id: wosMessages.cancel })}
+                    {fm({ id: message.common.buttons.cancel })}
                 </Button>
                 <Button type="button" onClick={handleSubmit} disabled={isSubmitting}>
-                    {isSubmitting && <LoaderCircle className="animate-spin" aria-hidden="true" />}
+                    {isSubmitting && (
+                        <Loader2 className="mr-2 size-4 animate-spin" aria-hidden="true" />
+                    )}
                     {fm({ id: wosMessages.apply })}
                 </Button>
-            </div>
+            </DialogFooter>
         </div>
     )
 }
@@ -381,14 +470,14 @@ export const PublicationWosDuplicateDialog = ({
                     )}
                 </AlertDescription>
             </Alert>
-            <div className="flex justify-end gap-2 border-t pt-4">
+            <DialogFooter className="border-t pt-2">
                 <Button type="button" variant="outline" onClick={onClose}>
-                    {fm({ id: wosMessages.cancel })}
+                    {fm({ id: message.common.buttons.cancel })}
                 </Button>
                 <Button type="button" onClick={onOpenExisting}>
                     {fm({ id: wosMessages.duplicate.open })}
                 </Button>
-            </div>
+            </DialogFooter>
         </div>
     )
 }

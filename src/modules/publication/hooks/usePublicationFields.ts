@@ -175,7 +175,6 @@ export const usePublicationFields = () => {
             placeholder: form.yearOfPublication.placeholder,
             rounded: 'rounded-md',
             name: 'yearOfPublication',
-            type: 'number',
             disabled,
         },
         dateOfPublication: {

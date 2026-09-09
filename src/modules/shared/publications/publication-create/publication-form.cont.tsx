@@ -10,8 +10,8 @@ import { SheetFormButtons } from '@/components/sheet-form-buttons'
 import { useAccessControl } from '@/hooks/useAccessControl'
 import { message } from '@/i18n/src/messages'
 import {
-    publicationOtherSchema,
-    publicationPeerReviewedSchema,
+    createPublicationOtherSchema,
+    createPublicationPeerReviewedSchema,
 } from '@/modules/publication/form/scheme'
 import { useMediaTypeStore } from '@/modules/publication/hooks/useMediaTypeStore'
 import { MEDIA_TYPE_CODE } from '@/modules/publication/types/constants'
@@ -53,8 +53,8 @@ export const PublicationFormContainer: FC<Props> = ({ publication, refetch }) =>
         defaultValues: defaultValues,
         resolver: zodResolver(
             mediaType === MEDIA_TYPE_CODE.PeerReviewedArticle
-                ? publicationPeerReviewedSchema
-                : publicationOtherSchema,
+                ? createPublicationPeerReviewedSchema(publication?.doi)
+                : createPublicationOtherSchema(publication?.doi),
         ),
     })
 

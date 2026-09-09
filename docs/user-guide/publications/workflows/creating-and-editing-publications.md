@@ -36,7 +36,7 @@ See [Access & Responsibilities](../README.md#access--responsibilities) for what 
 
 3. **Set the _ELI Publication_ flag.** Required. `YES` = ELI is an author affiliation (RIV-eligible); `NO` = tracked but not ELI-attributed.
 
-4. **Load available metadata with the _DOI (R87)_ field.** Enter a bare DOI (`10.1234/example`), a `doi:` value (`doi: 10.1234/example`), or a DOI link (`https://doi.org/10.1234/example`), then press **Fetch from Web of Science**. PANDA converts the value to a bare DOI, fills **Web Link (R86)** with its canonical `https://doi.org/…` link, and asks Web of Science for an exact DOI match. Nothing on the form changes yet.
+4. **Load available metadata with the _DOI (R87)_ field.** Enter a bare DOI (`10.1234/example`), a `doi:` value (`doi: 10.1234/example`), or a DOI link (`https://doi.org/10.1234/example`), then press **Fetch from Web of Science**. PANDA normalizes the value for lookup and asks Web of Science for an exact DOI match. A blank or DOI-derived **Web Link (R86)** follows DOI edits; an independent link is preserved. Imported metadata is applied only after you confirm the preview.
 
     A malformed DOI is rejected before PANDA sends a lookup request.
 
@@ -46,13 +46,15 @@ See [Access & Responsibilities](../README.md#access--responsibilities) for what 
 
     - Fields that are **blank** on your form are ticked for you.
     - Fields you have **already filled** are _not_ ticked — nothing overwrites your work unless you tick it yourself.
-    - Fields that already match are shown as _Already up to date_ and cannot be ticked.
+    - Fields that already match are collapsed under _N unchanged fields_. Expand this section to inspect them; they cannot be ticked.
 
     Web of Science can supply: **Title**, **DOI**, **WOS Number**, **Long Journal Title**, **Volume**, **Issue**, **Pages**, **Pages Count**, **Year of Publication**, **Date of Publication**, **ISSN**, **eISSN**, **ISBN**, **Web Link**, **Keywords**, **All Authors list** and **All Authors Count**, and a **Media Type** suggestion.
 
     The dialog also names what Web of Science **cannot** supply, so you know what is left to complete by hand. **Abstract**, **Open Access Type**, **Publishing Country** and **OECD FORD** are required by the form and are never imported — an import always leaves the record roughly half-complete by design.
 
-    `[SCREENSHOT PLACEHOLDER: Web of Science import preview dialog — field table with Import checkboxes, Field / Current value / Web of Science value columns, an untickable "Already up to date" row, and the ELI researcher matches section below]`
+    `[SCREENSHOT PLACEHOLDER: Web of Science import preview dialog — field table with Import checkboxes, Field / Current value / Web of Science value columns, a highlighted "Replaces current value" row, the selected-count and Select all fields / Select none controls, and the ELI researcher matches section below]`
+
+    A row that would **replace something you already typed** is tinted and badged _Replaces current value_ — it is never ticked for you. Rows that already agree with the form are collapsed under _N unchanged fields_ and can be expanded. The heading shows how many fields are selected and offers **Select all fields** / **Select none**. **Show differing fields only** narrows the view to replacements; it does not change your selections. Select all includes every actionable field, including replacements, regardless of that filter.
 
     **Confirm the ELI researchers.** PANDA compares each Web of Science author with the Researchers registry:
 
@@ -60,7 +62,7 @@ See [Access & Responsibilities](../README.md#access--responsibilities) for what 
     - An author matched **by name only** is shown but never pre-selected — most scientists hold several ResearcherIDs, so you confirm the right person yourself.
     - Confirming a match credits the researcher on this publication only. PANDA does not yet learn the ResearcherID for next time — that is coming separately.
 
-    Confirmed researchers are added to the ones already on the form; nothing you selected earlier is removed.
+    Authors are displayed 20 at a time. Use **Previous authors** and **Next authors** to review them; choices are retained across pages. Confirmed researchers are added to those already on the form; earlier selections are retained.
 
     **Press _Apply selected fields_.** The form fills in. **Nothing is saved** — you still review the record and press _Submit_ as usual, and all normal validation still applies.
 
@@ -88,7 +90,7 @@ See [Access & Responsibilities](../README.md#access--responsibilities) for what 
 
 10. **Link _Grants_**. Click _Add Grant_ to open the [Grants](./managing-grants.md) selection modal. Picked grants render as badges. Free-text _Other Grants_ captures unstructured funding mentions that are not in the registry.
 
-11. **Fill _Bibliographic_ details** — _Year of Publication_ (required for RIV), _Date of Publication_, _Abstract_, _Keywords_, _OECD FORD_, _Language_ (codebook), _Publishing Country_ (codebook), _Impact Factor_, _Quartile Basis_, _Quartile_ (codebook), _Cite As_ (citation string), _Note_. **Year of Publication** accepts a four-digit year (`YYYY`); it is not limited to a fixed recent-year list.
+11. **Fill _Bibliographic_ details** — _Year of Publication_ (required for RIV), _Date of Publication_, _Abstract_, _Keywords_, _OECD FORD_, _Language_ (codebook), _Publishing Country_ (codebook), _Impact Factor_, _Quartile Basis_, _Quartile_ (codebook), _Cite As_ (citation string), _Note_. **Year of Publication** is a picker, so the year is chosen rather than typed. The list offers the current year, eleven previous years and one future year, newest first (2015–2027 in 2026). It also includes any valid four-digit year the record already holds — so a year arriving from an import, or an older year on an existing publication, is still shown and still selectable.
 
 12. **Attach the PDF** in the file manager block. Drag-drop the file, or use the _Upload File_ control. The publication form accepts one PDF attachment.
 
@@ -102,7 +104,7 @@ See [Access & Responsibilities](../README.md#access--responsibilities) for what 
 
 2. **Adjust fields**. Be careful when changing the **Media Type** — switching from _Journal article_ to _Book_ clears the journal-specific fields and shows the book-specific ones (any data in fields that disappear is preserved server-side but no longer rendered).
 
-3. **Submit**. Same as creation; the toast confirms.
+3. **Submit**. Same as creation; the toast confirms. An unchanged stored legacy DOI remains editable when you change other fields. A new or changed DOI must have valid DOI syntax; the original text is preserved when saved. Peer-reviewed publications still require a DOI, while other media types allow it to be empty. Web of Science lookup always requires valid syntax, including for legacy records.
 
 `[VIDEO PLACEHOLDER: 90s — Add Publication → pick Journal article → set ELI Publication YES → paste a doi.org URL into DOI (R87) → press Fetch from Web of Science → walk the preview dialog: blank fields pre-ticked, a filled Title left un-ticked, one row ticked deliberately to overwrite, the ResearcherID match pre-selected and a name match confirmed by hand → Apply selected fields → show the form filled and still unsaved → pick the Language codebook value → add a grant → fill Abstract and Open Access Type by hand → upload PDF → Submit → reopen → press Refresh from Web of Science → Submit & Exit]`
 
@@ -127,12 +129,12 @@ See [Access & Responsibilities](../README.md#access--responsibilities) for what 
 - **No draft state.** A publication is either submitted or not. Editing live publications is on production data.
 - **No co-authoring lock.** Two editors on the same publication can clobber each other. PANDA does not surface a conflict; the second submit wins.
 - **An import never completes the form on its own.** Web of Science Starter — the tier ELI subscribes to — publishes roughly 15 of the form's fields. **Abstract**, **Open Access Type**, **Publishing Country** and **OECD FORD** are all required and none of them can be imported, so every imported record still needs manual work before it will submit. **Impact Factor** and **Quartile** come from JCR, a separate Clarivate product, and author departments cannot be derived because Starter carries no affiliations.
-- **No fuzzy author matching.** Automatic ELI Author selection requires one exact full-name match in the Researchers registry. Initials, alternative spellings, punctuation differences, and duplicate names are not guessed.
+- **No fuzzy author matching.** Automatic ELI Author selection uses a ResearcherID match; name-only candidates require explicit confirmation. Initials, alternative spellings, punctuation differences, and duplicate names are not guessed.
 
 ## Tips & gotchas
 
 - **Set Media Type and ELI Publication first.** Both drive validation; setting them last means going back to fix required-field gaps revealed by their selection.
-- **Run DOI lookup before manual entry.** The lookup deliberately fills blanks only, so it is safe to run after partial entry, but it will not replace fields you already populated.
+- **Run DOI lookup before manual entry.** Blank fields are selected by default. Replacing an existing value requires you to select its row or use Select all fields. If changing the media type redirects ISBN to a different field, review and select ISBN again before applying.
 - **ELI Authors are RIV-critical.** Each ELI Author must exist in the [Researchers](./managing-researchers.md) registry — RIV validation will flag a publication with no ELI Authors when `ELI Publication = YES`.
 - **Capture the full author byline in _All Authors_.** RIV expects the complete citation order; _ELI Authors_ is the subset that ELI claims credit for.
 - **Quartile + Impact Factor.** RIV uses these for impact reporting. Pick a _Quartile Basis_ that documents _where_ (WoS / Scopus / journal-publisher) the value was sourced.

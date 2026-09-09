@@ -2,25 +2,21 @@ import type { SelectedResearcher } from '@/modules/shared/form/researcherSelect'
 
 import { ELI_PUBLICATION } from '../types/constants'
 import type { Publication } from '../types/responses'
-import { normalizeDoi } from './doi'
 
 /**
  * Formats form data before submission to API.
  * Converts string numbers to actual numbers and generates backward-compatible eliAuthors string.
  */
 export const formatFormData = (data: any): Publication => {
-    const normalizedDoi = normalizeDoi(String(data.doi ?? ''))
-
     return {
         ...data,
-        doi: normalizedDoi ?? data.doi,
         eliPublication: data.eliPublication ?? ELI_PUBLICATION.YES,
         allAuthorsCount: Number(data.allAuthorsCount),
         eliAuthorsCount: Number(data.eliAuthorsCount),
-        volume: data.volume ? Number(data.volume) : null,
+        volume: data.volume === '' || data.volume == null ? null : Number(data.volume),
         bookPagesCount: data.bookPagesCount ? Number(data.bookPagesCount) : null,
         pagesCount: Number(data.pagesCount),
-        issue: data.issue ? Number(data.issue) : null,
+        issue: data.issue === '' || data.issue == null ? null : Number(data.issue),
         impactFactor: data.impactFactor ? Number(data.impactFactor) : null,
         authorsDepartments:
             data.authorsDepartments?.map((author: any) => ({

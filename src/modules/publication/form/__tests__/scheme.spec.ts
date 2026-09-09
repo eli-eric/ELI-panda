@@ -1,4 +1,10 @@
-import { publicationOtherSchema, publicationPeerReviewedSchema } from '../scheme'
+import { publicationResolver } from '../resolver'
+import {
+    createPublicationOtherSchema,
+    createPublicationPeerReviewedSchema,
+    publicationOtherSchema,
+    publicationPeerReviewedSchema,
+} from '../scheme'
 
 const validCodebook = { uid: 'test-uid', name: 'Test Name', code: 'T' }
 
@@ -103,19 +109,20 @@ describe('publicationPeerReviewedSchema', () => {
         expect(result.success).toBe(false)
     })
 
-    it('accepts DOI URLs and rejects malformed DOI values', () => {
-        expect(
-            publicationPeerReviewedSchema.safeParse({
-                ...peerReviewedData,
-                doi: 'https://doi.org/10.1234/Test',
-            }).success,
-        ).toBe(true)
-        expect(
-            publicationPeerReviewedSchema.safeParse({
-                ...peerReviewedData,
-                doi: 'not-a-doi',
-            }).success,
-        ).toBe(false)
+    it.each([
+        'https://doi.org/10.1234/Test',
+        'not-a-doi',
+        '10.123/test',
+        '10.1234/with space',
+        '10.1234/literal%20',
+    ])('keeps legacy peer-reviewed DOI %s editable', doi => {
+        const result = createPublicationPeerReviewedSchema(doi).safeParse({
+            ...peerReviewedData,
+            doi,
+            abstract: 'Updated abstract',
+        })
+        expect(result.success).toBe(true)
+        if (result.success) expect(result.data.doi).toBe(doi)
     })
 
     it('requires a four-digit publication year', () => {
@@ -149,20 +156,14 @@ describe('publicationOtherSchema', () => {
         expect(result.success).toBe(true)
     })
 
-    it('allows a blank optional DOI but rejects malformed DOI text', () => {
-        expect(
-            publicationOtherSchema.safeParse({
-                ...baseValidData,
-                doi: '',
-            }).success,
-        ).toBe(true)
-        expect(
-            publicationOtherSchema.safeParse({
-                ...baseValidData,
-                doi: 'not-a-doi',
-            }).success,
-        ).toBe(false)
-    })
+    it.each(['', 'not-a-doi', '10.123/test', '10.1234/with space'])(
+        'keeps legacy optional DOI %s editable',
+        doi => {
+            expect(
+                createPublicationOtherSchema(doi).safeParse({ ...baseValidData, doi }).success,
+            ).toBe(true)
+        },
+    )
 
     it('requires a four-digit publication year', () => {
         const result = publicationOtherSchema.safeParse({
@@ -210,5 +211,86 @@ describe('publicationOtherSchema', () => {
         expect(shape).not.toHaveProperty('experimentalSystem')
         expect(shape).not.toHaveProperty('userExperiment')
         expect(shape).not.toHaveProperty('grant')
+    })
+})
+
+describe('DOI validation with a persisted original', () => {
+    it.each(['not-a-doi', '10.123/test', '10.1234/with space'])(
+        'rejects new or changed malformed DOI %s in both forms',
+        doi => {
+            expect(
+                publicationPeerReviewedSchema.safeParse({ ...peerReviewedData, doi }).success,
+            ).toBe(false)
+            expect(publicationOtherSchema.safeParse({ ...baseValidData, doi }).success).toBe(false)
+            expect(
+                createPublicationPeerReviewedSchema('older invalid DOI').safeParse({
+                    ...peerReviewedData,
+                    doi,
+                }).success,
+            ).toBe(false)
+            expect(
+                createPublicationOtherSchema('older invalid DOI').safeParse({
+                    ...baseValidData,
+                    doi,
+                }).success,
+            ).toBe(false)
+        },
+    )
+    it('requires an exact match to the persisted original', () => {
+        const schema = createPublicationOtherSchema('legacy DOI')
+        expect(
+            schema.safeParse({ ...baseValidData, doi: 'legacy DOI', title: 'Edited title' })
+                .success,
+        ).toBe(true)
+        expect(schema.safeParse({ ...baseValidData, doi: 'Legacy DOI' }).success).toBe(false)
+        expect(schema.safeParse({ ...baseValidData, doi: 'legacy DOI ' }).success).toBe(false)
+    })
+    it.each(['10.1234/MixedCase', 'https://doi.org/10.1234/MixedCase', '10.1234/literal%20'])(
+        'accepts a corrected DOI without rewriting %s',
+        doi => {
+            const result = createPublicationPeerReviewedSchema('legacy DOI').safeParse({
+                ...peerReviewedData,
+                doi,
+            })
+            expect(result.success).toBe(true)
+            if (result.success) expect(result.data.doi).toBe(doi)
+        },
+    )
+    it('uses a save-context error and keeps optional DOI empty', () => {
+        const result = publicationOtherSchema.safeParse({ ...baseValidData, doi: 'invalid' })
+        expect(result.success).toBe(false)
+        if (!result.success) {
+            const issue = result.error.issues.find(issue => issue.path[0] === 'doi')
+            expect(issue?.message).toBe('Enter a DOI in the form 10.1234/suffix.')
+        }
+        expect(publicationOtherSchema.safeParse({ ...baseValidData, doi: '' }).success).toBe(true)
+        expect(
+            createPublicationPeerReviewedSchema('').safeParse({ ...peerReviewedData, doi: '' })
+                .success,
+        ).toBe(false)
+    })
+})
+
+describe('publication resolver edit context', () => {
+    const options = { fields: {}, shouldUseNativeValidation: false }
+    it.each([
+        {
+            ...peerReviewedData,
+            mediaTypeCb: { uid: 'journal', code: 'J', name: 'Journal article' },
+        },
+        baseValidData,
+    ])('passes the persisted DOI to the selected media schema', async data => {
+        const values = { ...data, doi: 'legacy DOI', title: 'Unrelated edit' }
+        const edited = await publicationResolver(values, { originalDoi: 'legacy DOI' }, options)
+        expect(edited.errors).toEqual({})
+        expect(edited.values).toMatchObject({ doi: 'legacy DOI', title: 'Unrelated edit' })
+        const created = await publicationResolver(values, undefined, options)
+        expect(created.errors.doi).toBeDefined()
+        const changed = await publicationResolver(
+            values,
+            { originalDoi: 'another legacy DOI' },
+            options,
+        )
+        expect(changed.errors.doi).toBeDefined()
     })
 })

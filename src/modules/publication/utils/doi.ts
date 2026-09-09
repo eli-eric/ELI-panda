@@ -18,11 +18,24 @@ export const normalizeDoi = (raw: string): string | undefined => {
     const isDoiUrl = DOI_URL_PREFIX.test(value)
 
     if (isDoiUrl) {
-        value = value.replace(DOI_URL_PREFIX, '').split(/[?#]/u, 1)[0]
+        value = decodeDoi(value.replace(DOI_URL_PREFIX, '').split(/[?#]/u, 1)[0])
     } else {
         value = value.replace(DOI_LABEL_PREFIX, '')
     }
 
-    value = decodeDoi(value).trim().toLowerCase()
+    value = value.trim().toLowerCase()
     return DOI_PATTERN.test(value) ? value : undefined
+}
+
+/** Identifies resolver links that the read-only Web Link field may regenerate. */
+export const isDoiResolverLink = (value: string): boolean => DOI_URL_PREFIX.test(value.trim())
+
+/** Refreshes derived links while preserving independently supplied record links. */
+export const getDerivedWebLink = (doi: unknown, currentWebLink: unknown): string | undefined => {
+    const current = String(currentWebLink ?? '')
+    if (current && !isDoiResolverLink(current)) return undefined
+    const normalized = normalizeDoi(String(doi ?? ''))
+    const path = normalized?.split('/').map(encodeURIComponent).join('/')
+    const next = path ? `https://doi.org/${path}` : ''
+    return next === current ? undefined : next
 }

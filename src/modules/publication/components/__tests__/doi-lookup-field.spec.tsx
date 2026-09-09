@@ -8,7 +8,7 @@ import { renderWithProviders } from '@/testutils/wrappers/renderWithProviders'
 
 import { usePublicationFields } from '../../hooks/usePublicationFields'
 import { usePublicationWosPreview } from '../../hooks/usePublicationWosPreview'
-import type { PublicationWosPreviewResponse } from '../../types/wos-import'
+import { type PublicationWosPreviewResponse, WOS_ERROR_CODES } from '../../types/wos-import'
 import { DoiLookupField } from '../doi-lookup.field'
 
 jest.mock('next/router', () => ({ useRouter: jest.fn() }))
@@ -142,6 +142,7 @@ describe('DoiLookupField', () => {
                 id: 'publication-wos-preview-publication-1',
                 props: expect.objectContaining({
                     preview: foundPreview,
+                    description: expect.stringContaining(foundPreview.values.title!),
                     currentValues: expect.objectContaining({
                         title: 'Title entered by the librarian',
                     }),
@@ -236,7 +237,7 @@ describe('DoiLookupField', () => {
         fetchPreview.mockRejectedValue(
             Object.assign(new Error('upstream failed'), {
                 status: 503,
-                code: 'WOS_RATE_LIMITED',
+                code: WOS_ERROR_CODES.WOS_RATE_LIMITED,
             }),
         )
         const initialValues = { doi: '10.1234/laser.test', title: '' }
@@ -255,5 +256,36 @@ describe('DoiLookupField', () => {
         )
         expect(getFormValues()).toEqual(initialValues)
         expect(openModal).not.toHaveBeenCalled()
+    })
+})
+
+describe('lookup error field state', () => {
+    it.each([
+        ...Object.values(WOS_ERROR_CODES)
+            .filter(code => code !== WOS_ERROR_CODES.INVALID_DOI)
+            .map(code => ({ code })),
+        null,
+        undefined,
+        { name: 'AbortError' },
+    ])('shows a toast without invalidating the DOI for %p', async error => {
+        fetchPreview.mockRejectedValue(error)
+        const values = { doi: '10.1234/laser.test', title: 'Existing title' }
+        renderWithProviders(<TestForm />, { withForm: true, formProps: { defaultValues: values } })
+        fireEvent.click(screen.getByRole('button', { name: 'Fetch from Web of Science' }))
+        await waitFor(() => expect(mockToastError).toHaveBeenCalledTimes(1))
+        expect(screen.getByTestId('doi')).not.toHaveAttribute('aria-invalid', 'true')
+        expect(getFormValues()).toEqual(values)
+        expect(openModal).not.toHaveBeenCalled()
+    })
+    it('marks DOI invalid only when the server rejects its syntax', async () => {
+        fetchPreview.mockRejectedValue({ code: WOS_ERROR_CODES.INVALID_DOI })
+        renderWithProviders(<TestForm />, {
+            withForm: true,
+            formProps: { defaultValues: { doi: '10.1234/laser.test' } },
+        })
+        fireEvent.click(screen.getByRole('button', { name: 'Fetch from Web of Science' }))
+        await waitFor(() =>
+            expect(screen.getByTestId('doi')).toHaveAttribute('aria-invalid', 'true'),
+        )
     })
 })

@@ -1,3 +1,4 @@
+import { MEDIA_TYPE_UID } from '../../types/constants'
 import {
     buildDefaultWosAuthorSelections,
     buildSelectedWosResearchers,
@@ -60,7 +61,10 @@ describe('buildWosFieldPatch', () => {
 describe('media-specific ISBN mapping', () => {
     it('compares and writes a WoS ISBN as proceedingsIsbn for media type D', () => {
         const currentValues = {
-            mediaTypeCb: { uid: 'media-d', name: 'Conference proceedings', code: 'D' },
+            mediaTypeCb: {
+                uid: MEDIA_TYPE_UID.CONFERENCE_PROCEEDINGS,
+                name: 'Conference proceedings',
+            },
             isbn: 'hidden-book-isbn',
             proceedingsIsbn: 'current-proceedings-isbn',
         }
@@ -76,11 +80,14 @@ describe('media-specific ISBN mapping', () => {
 
     it('keeps a WoS ISBN in isbn when media type C is selected from the preview', () => {
         const currentValues = {
-            mediaTypeCb: { uid: 'media-d', name: 'Conference proceedings', code: 'D' },
+            mediaTypeCb: {
+                uid: MEDIA_TYPE_UID.CONFERENCE_PROCEEDINGS,
+                name: 'Conference proceedings',
+            },
         }
         const incomingValues = {
             isbn: '978-1-4028-9462-6',
-            mediaTypeCb: { uid: 'media-c', name: 'Book chapter', code: 'C' },
+            mediaTypeCb: { uid: MEDIA_TYPE_UID.BOOK_CHAPTER, name: 'Book chapter', code: 'C' },
         }
 
         expect(buildWosFormPatch(currentValues, incomingValues, ['mediaTypeCb', 'isbn'])).toEqual({
@@ -147,6 +154,39 @@ describe('buildSelectedWosResearchers', () => {
         ).toEqual([
             { uid: 'ada', firstName: 'Ada', lastName: 'Lovelace' },
             { uid: 'grace', firstName: 'Grace', lastName: 'Hopper' },
+        ])
+    })
+})
+
+describe('numeric zero values', () => {
+    it('offers zero-valued incoming issue and volume fields', () => {
+        expect(buildWosFieldRows({}, { issue: 0, volume: 0 })).toEqual([
+            expect.objectContaining({
+                field: 'volume',
+                incomingValue: 0,
+                status: 'empty',
+                selectedByDefault: true,
+            }),
+            expect.objectContaining({
+                field: 'issue',
+                incomingValue: 0,
+                status: 'empty',
+                selectedByDefault: true,
+            }),
+        ])
+        expect(buildWosFieldPatch({ issue: 0, volume: 0 }, ['issue', 'volume'])).toEqual({
+            issue: 0,
+            volume: 0,
+        })
+    })
+    it('requires confirmation before overwriting zero and recognizes identical zeroes', () => {
+        expect(buildWosFieldRows({ issue: 0, volume: 0 }, { issue: 1, volume: 0 })).toEqual([
+            expect.objectContaining({ field: 'volume', status: 'same', selectedByDefault: false }),
+            expect.objectContaining({
+                field: 'issue',
+                status: 'different',
+                selectedByDefault: false,
+            }),
         ])
     })
 })

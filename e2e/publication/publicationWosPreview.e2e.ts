@@ -48,6 +48,8 @@ test.describe('Publication Web of Science preview', () => {
             page.getByRole('heading', { name: 'Web of Science import preview' }),
         ).toBeVisible()
         await expect(page.getByText('Title entered by the librarian')).toBeVisible()
+        await expect(page.getByText('Replaces current value')).toBeVisible()
+        await expect(page.getByRole('button', { name: 'Apply selected fields' })).toBeInViewport()
         await expect(page.getByLabel('Import Title* (R06)')).not.toBeChecked()
         await expect(page.getByLabel('Import Long Journal Title (R16)*')).toBeChecked()
         // Scope to the radio role: each author's radiogroup is aria-labelled
@@ -71,6 +73,7 @@ test.describe('Publication Web of Science preview', () => {
         )
         await expect(page.getByText('Lovelace, Ada', { exact: true })).toBeVisible()
         await expect(page.getByText('Hopper, Grace', { exact: true })).toBeVisible()
+        await expect(page.getByRole('combobox').filter({ hasText: '2022' })).toBeVisible()
         expect(persistenceRequests).toEqual([])
     })
 })

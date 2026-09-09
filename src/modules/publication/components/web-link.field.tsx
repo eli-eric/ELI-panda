@@ -4,7 +4,7 @@ import { useFormContext, useWatch } from 'react-hook-form'
 import { Input } from '@/components/form/inputs'
 
 import { usePublicationFields } from '../hooks/usePublicationFields'
-import { normalizeDoi } from '../utils/doi'
+import { getDerivedWebLink } from '../utils/doi'
 
 export const WebLinkField = () => {
     const { webLink } = usePublicationFields()
@@ -12,14 +12,10 @@ export const WebLinkField = () => {
     const doi = useWatch({ control, name: 'doi' })
     const currentWebLink = useWatch({ control, name: 'webLink' })
 
-    // The field is read-only, so a canonical doi.org link is the only way it gets
-    // filled by hand. Never clobber a value already there — an applied Web of
-    // Science record link has to survive.
+    // Only blank or DOI-derived links follow DOI edits; imported record URLs survive.
     useEffect(() => {
-        if (!doi || currentWebLink) return
-
-        const normalized = normalizeDoi(String(doi))
-        if (normalized) setValue('webLink', `https://doi.org/${normalized}`)
+        const next = getDerivedWebLink(doi, currentWebLink)
+        if (next !== undefined) setValue('webLink', next)
     }, [doi, currentWebLink, setValue])
 
     return <Input {...webLink} />

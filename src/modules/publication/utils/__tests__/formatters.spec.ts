@@ -67,7 +67,7 @@ describe('formatFormData', () => {
         expect(out.eliAuthors).toBe('')
     })
 
-    it('submits a canonical DOI without overwriting the selected web link', () => {
+    it('preserves DOI and web link when saving unrelated edits', () => {
         const out = formatFormData({
             doi: ' DOI: 10.1234/Example.Article ',
             webLink: 'https://doi.org/old-value',
@@ -76,7 +76,7 @@ describe('formatFormData', () => {
             pagesCount: '1',
         })
 
-        expect(out.doi).toBe('10.1234/example.article')
+        expect(out.doi).toBe(' DOI: 10.1234/Example.Article ')
         expect(out.webLink).toBe('https://doi.org/old-value')
     })
 })
@@ -102,4 +102,10 @@ describe('formatPublication', () => {
         expect(out.eliPublication).toBe(ELI_PUBLICATION.NO)
         expect(out.language).toBe('Czech')
     })
+})
+
+it('preserves zero-valued issue and volume on save', () => {
+    expect(formatFormData({ issue: 0, volume: 0 })).toEqual(
+        expect.objectContaining({ issue: 0, volume: 0 }),
+    )
 })

@@ -1,4 +1,4 @@
-import { LoaderCircle } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { useFormContext } from 'react-hook-form'
 import { useIntl } from 'react-intl'
@@ -6,9 +6,7 @@ import { toast } from 'sonner'
 
 import { Input } from '@/components/form/inputs'
 import { Button } from '@/components/ui/button'
-import type { NormalizedHttpError } from '@/core/http/fetchClient'
 import { message } from '@/i18n/src/messages'
-import type { SelectedResearcher } from '@/modules/shared/form/researcherSelect'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { PATH } from '@/types/constants/paths'
 
@@ -19,11 +17,15 @@ import type {
     PublicationWosPreviewResponse,
 } from '../types/wos-import'
 import { normalizeDoi } from '../utils/doi'
+import { getWosErrorMessageId, isWosInvalidDoiError } from '../utils/wos-errors'
 import {
     buildSelectedWosResearchers,
     buildWosFormPatch,
+    getCurrentResearchers,
     type PublicationWosAuthorSelections,
+    researchersDiffer,
 } from '../utils/wos-import'
+import { getWosPreviewDescription } from '../utils/wos-presentation'
 import {
     PublicationWosDuplicateDialog,
     PublicationWosImportDialog,
@@ -33,45 +35,6 @@ const wosMessages = message.publication.wosImport
 
 type FoundPreview = Extract<PublicationWosPreviewResponse, { status: 'found' }>
 type DuplicatePreview = Extract<PublicationWosPreviewResponse, { status: 'already-exists' }>
-
-const getErrorMessageId = (error: unknown): string => {
-    const { code, status } = error as NormalizedHttpError
-
-    switch (code) {
-        case 'INVALID_DOI':
-            return wosMessages.errors.invalid
-        case 'WOS_RECORD_NOT_FOUND':
-            return wosMessages.errors.notFound
-        case 'WOS_RECORD_AMBIGUOUS':
-            return wosMessages.errors.ambiguous
-        case 'WOS_NOT_CONFIGURED':
-            return wosMessages.errors.notConfigured
-        case 'WOS_AUTHENTICATION_FAILED':
-            return wosMessages.errors.authentication
-        case 'WOS_RATE_LIMITED':
-            return wosMessages.errors.rateLimited
-        case 'WOS_UPSTREAM_TIMEOUT':
-            return wosMessages.errors.timeout
-        case 'WOS_UPSTREAM_ERROR':
-            return wosMessages.errors.unavailable
-        default:
-            if ((error as Error)?.name === 'AbortError') return wosMessages.errors.timeout
-            if (status === 502 || status === 503 || status === 504) {
-                return wosMessages.errors.unavailable
-            }
-            return wosMessages.errors.failed
-    }
-}
-
-const getCurrentResearchers = (value: unknown): SelectedResearcher[] =>
-    Array.isArray(value) ? value : []
-
-const researchersDiffer = (
-    current: SelectedResearcher[],
-    incoming: SelectedResearcher[],
-): boolean =>
-    current.length !== incoming.length ||
-    current.some((researcher, index) => researcher.uid !== incoming[index]?.uid)
 
 export const DoiLookupField = () => {
     const router = useRouter()
@@ -121,7 +84,11 @@ export const DoiLookupField = () => {
             component: PublicationWosImportDialog,
             props: {
                 title: fm({ id: wosMessages.dialogTitle }),
-                description: fm({ id: wosMessages.dialogDescription }),
+                description: getWosPreviewDescription(
+                    preview.values,
+                    preview.doi,
+                    fm({ id: wosMessages.dialogDescription }),
+                ),
                 size: 'xl',
                 preview,
                 currentValues: getValues(),
@@ -163,14 +130,16 @@ export const DoiLookupField = () => {
             if (preview.status === 'already-exists') openDuplicatePreview(preview)
             else openImportPreview(preview)
         } catch (error) {
-            const errorMessage = fm({ id: getErrorMessageId(error) })
-            setError('doi', { type: 'manual', message: errorMessage })
+            const errorMessage = fm({ id: getWosErrorMessageId(error) })
+            if (isWosInvalidDoiError(error))
+                setError('doi', { type: 'manual', message: errorMessage })
             toast.error(errorMessage)
         }
     }
 
     return (
-        <Input {...doiField} disabled={doiField.disabled || isPending} aria-busy={isPending}>
+        <div className="space-y-2">
+            <Input {...doiField} disabled={doiField.disabled || isPending} aria-busy={isPending} />
             <div className="flex flex-wrap items-center gap-2">
                 <Button
                     type="button"
@@ -180,7 +149,9 @@ export const DoiLookupField = () => {
                     onClick={handleLookup}
                     data-testid="publication-wos-preview-button"
                 >
-                    {isPending && <LoaderCircle className="animate-spin" aria-hidden="true" />}
+                    {isPending && (
+                        <Loader2 className="mr-2 size-4 animate-spin" aria-hidden="true" />
+                    )}
                     {fm({
                         id: currentPublicationUid ? wosMessages.refresh : wosMessages.fetch,
                     })}
@@ -189,6 +160,6 @@ export const DoiLookupField = () => {
                     {fm({ id: isPending ? wosMessages.loading : wosMessages.helper })}
                 </span>
             </div>
-        </Input>
+        </div>
     )
 }
