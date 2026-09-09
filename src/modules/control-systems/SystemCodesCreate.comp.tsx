@@ -9,6 +9,7 @@ import { SystemCodesForm } from './components/create/SystemCodesForm'
 import type { SystemCodesFormValues } from './components/create/SystemCodesForm.schema'
 import { SystemCodesPreviewTable } from './components/create/SystemCodesPreviewTable'
 import type { SystemCodeResult } from './types'
+import type { SystemCodesErrorKind } from './utils/systemCodesErrors'
 
 const FORM_WIDTH = 380
 
@@ -17,6 +18,8 @@ interface Props {
     createdData: SystemCodeResult[]
     isPreviewLoading: boolean
     isPending: boolean
+    previewErrorMessage?: string
+    previewErrorKind?: SystemCodesErrorKind | null
     onPreview: (values: SystemCodesFormValues) => void
     onSubmit: (values: SystemCodesFormValues) => Promise<boolean>
 }
@@ -26,6 +29,8 @@ export const SystemCodesCreateComponent = ({
     createdData,
     isPreviewLoading,
     isPending,
+    previewErrorMessage,
+    previewErrorKind,
     onPreview,
     onSubmit,
 }: Props) => {
@@ -54,6 +59,9 @@ export const SystemCodesCreateComponent = ({
                         onPreview={onPreview}
                         onSubmit={onSubmit}
                         isPending={isPending}
+                        isPreviewLoading={isPreviewLoading}
+                        previewErrorMessage={previewErrorMessage}
+                        previewErrorKind={previewErrorKind}
                     />
                 </div>
 

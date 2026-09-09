@@ -56,8 +56,62 @@ describe('useCreateSystemCodes', () => {
             expect.objectContaining({
                 loading: expect.any(String),
                 success: expect.any(String),
-                error: expect.any(String),
+                // error is a callback now so the backend's reason reaches the user
+                error: expect.any(Function),
             }),
         )
+    })
+
+    it('translates a recognised 400 instead of showing a generic failure', async () => {
+        const promise = Promise.resolve([])
+        mockUseMutation.mockReturnValue({
+            mutateAsync: jest.fn().mockReturnValue(promise),
+            isPending: false,
+        })
+
+        const { result } = renderHook(() => useCreateSystemCodes())
+        await result.current.create({} as any)
+
+        const [, opts] = mockToast.promise.mock.calls[0]
+        const error = new Error(
+            'Bad request: missing default parent system for selected zone',
+        ) as Error & { status?: number }
+        error.status = 400
+
+        expect(opts.error(error)).toBe('controlSystems.errors.missingDefaultParentSystem')
+    })
+
+    it('falls back to the backend text for an unrecognised 400', async () => {
+        const promise = Promise.resolve([])
+        mockUseMutation.mockReturnValue({
+            mutateAsync: jest.fn().mockReturnValue(promise),
+            isPending: false,
+        })
+
+        const { result } = renderHook(() => useCreateSystemCodes())
+        await result.current.create({} as any)
+
+        const [, opts] = mockToast.promise.mock.calls[0]
+        const error = new Error('Bad request: brand new failure') as Error & { status?: number }
+        error.status = 400
+
+        expect(opts.error(error)).toBe('brand new failure')
+    })
+
+    it('falls back to the generic message for a non-400', async () => {
+        const promise = Promise.resolve([])
+        mockUseMutation.mockReturnValue({
+            mutateAsync: jest.fn().mockReturnValue(promise),
+            isPending: false,
+        })
+
+        const { result } = renderHook(() => useCreateSystemCodes())
+        await result.current.create({} as any)
+
+        const [, opts] = mockToast.promise.mock.calls[0]
+        const error = new Error('kaboom') as Error & { status?: number }
+        error.status = 500
+
+        expect(opts.error(error)).toBe('controlSystems.toast.failedToCreate')
     })
 })
