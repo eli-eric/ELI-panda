@@ -82,10 +82,32 @@ export interface Zone {
     code: string
     notes?: string | null
     parentZone?: CodebookType | null
+    defaultParentSystem?: CodebookType | null
 }
 ```
 
-`parentZone` is `CodebookType`-shaped (`{ uid, name }`) — the server flattens the inbound edge into a lightweight reference for table display. The form Zod schema uses `parentUid: string | null` instead — the form maps `parentZone?.uid → parentUid` on submit. See [Open questions](#open-questions).
+`parentZone` is `CodebookType`-shaped (`{ uid, name }`) — the server flattens the inbound edge into a lightweight reference for table display. See [Open questions](#open-questions).
+
+`defaultParentSystem` is the system that newly generated system codes are created under. It is `CodebookType`-shaped too, but its `code` is **optional** — systems created by migration have no system code, so only `uid` and `name` can be relied on. A zone without the link renders `—` in the table, and generating system codes for it fails with a 400 (see [Control systems](./control-systems.md) if present, or `modules/control-systems/utils/systemCodesErrors.ts`).
+
+### Write model is not the read model
+
+Reads return nested objects; writes take flat uids. `types/zone.types.ts` declares `ZoneRequest` for the write side and `zone-form.cont.tsx` maps between them on submit:
+
+| response (`Zone`) | request (`ZoneRequest`) |
+| --- | --- |
+| `parentZone?.uid` | `parentUid` |
+| `defaultParentSystem?.uid` | `defaultParentSystemUid` |
+
+**Both relationship fields are tri-state on the API**, and getting this wrong fails silently:
+
+| value sent | effect |
+| --- | --- |
+| field omitted, or `null` | link left unchanged |
+| `''` | link disconnected |
+| a uid | link set / replaced |
+
+Because the form always submits the whole object, "nothing selected" **must** be sent as `''`. Sending `null` would preserve the previous value — which is exactly why clearing a parent zone used to do nothing.
 
 ## Two surfaces, one URL
 
@@ -142,14 +164,22 @@ export const zoneSchema = z.object({
     name: z.string().min(1, 'Name is required'),
     code: z.string().min(1, 'Code is required'),
     parentUid: z.string().nullable().optional(),
+    defaultParentSystem: codebookSchema.nullable().optional(),
     notes: z.string().nullable().optional(),
 })
 export type ZoneFormData = z.infer<typeof zoneSchema>
 ```
 
+Note the asymmetry between the two pickers: `parentUid` holds a **uid string** because `Listbox` with `customOptions` yields one, while `defaultParentSystem` holds the **whole object** because `ModalSelect` stores what was picked. Both are flattened to uids in the submit transform.
+
 Both modes (`zone-form.cont` for create, `zone-edit.cont` for update) share `zone-form.comp` and the same Zod schema. Edit mode prefills from `useZone(uid)`; create mode starts blank. `useZoneMutation` switches between PUT and POST based on `uid` presence (`queryMutate<Zone, ZoneFormData>('zone', uid ? 'put' : 'post', { uid })`).
 
-`parentUid` lets the user nest a zone under another zone via a picker. The picker is a `Combobox` against `CODEBOOK.ZONE` (or `CODEBOOK.SUB_ZONE`) — see [Codebooks](./codebooks.md).
+`parentUid` lets the user nest a zone under another zone. The picker is a **`Listbox` with `customOptions`**, fed from a one-shot `useQuery` for up to 200 zones and filtered client-side to root zones only (`zone-form.comp.tsx`) — it is *not* a codebook combobox, and it is not searchable or paginated.
+
+`defaultParentSystem` uses **`SelectSystemComboBox`** (`modules/shared/form/systemSelect`), which opens the searchable system table in a nested dialog; `useSystemSelectionModal` handles the z-index so it stacks correctly above the zone sheet. Two caveats worth knowing:
+
+- Neither `SelectSystemComboBox` nor the underlying `ModalSelect` passes `shouldDirty` when it calls `setValue`, so the zone form wires an explicit `onChange` handler to keep `isDirty` (and therefore the unsaved-changes guard) honest.
+- The modal reads the systems list, which needs systems-side roles rather than `zones-edit`. New accounts get `SYSTEMS_VIEW` by default (`NewUser.cont.tsx`), so this rarely bites, but a zones-only account will see an empty picker.
 
 ## CSV import
 

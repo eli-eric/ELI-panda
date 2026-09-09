@@ -35,6 +35,12 @@ export const useZoneColumns = () => {
                 size: 400,
             },
             {
+                id: 'defaultParentSystem',
+                header: fm({ id: cols.defaultParentSystem }),
+                accessorFn: row => row.defaultParentSystem?.name ?? '—',
+                size: 400,
+            },
+            {
                 id: 'notes',
                 header: fm({ id: cols.notes }),
                 accessorFn: row => row.notes ?? '—',
