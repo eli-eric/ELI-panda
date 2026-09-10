@@ -79,6 +79,15 @@ describe('useZoneColumns', () => {
         expect(renderColumns().map(c => c.id)).toContain('defaultParentSystem')
     })
 
+    it.each(['defaultParentSystem', 'notes'])(
+        'leaves %s unsortable — the API has no order-by for it',
+        columnId => {
+            // Sorting is server-side; offering an arrow the backend ignores re-sorts the
+            // list by zone name while the header claims otherwise.
+            expect(renderColumns().find(c => c.id === columnId)?.enableSorting).toBe(false)
+        },
+    )
+
     it('renders the default parent system name', () => {
         const zone: Zone = {
             uid: '1',

@@ -18,14 +18,18 @@ import { useOpenZoneEdit } from '@/modules/zones/hooks/useOpenZoneEdit'
 import { CODEBOOK } from '@/types/constants/codebook'
 import { ROLE } from '@/types/constants/roles'
 
+import type { PreviewParams } from '../../hooks/useSystemCodesPreview'
 import { BATCH_LIMIT, ONLY_ROOT_ZONES } from '../../types/constants'
+import { isPreviewCurrent } from '../../utils/previewParams'
 import type { SystemCodesErrorKind } from '../../utils/systemCodesErrors'
 import { SYSTEM_CODES_ERROR } from '../../utils/systemCodesErrors'
 import type { SystemCodesFormInput, SystemCodesFormValues } from './SystemCodesForm.schema'
 import { systemCodesFormSchema } from './SystemCodesForm.schema'
 
 interface Props {
-    onPreview: (values: SystemCodesFormValues) => void
+    /** What the container actually previewed — `null` means nothing is previewed. */
+    previewedParams: PreviewParams | null
+    onPreview: (values: SystemCodesFormValues | null) => void
     onSubmit: (values: SystemCodesFormValues) => Promise<boolean>
     isPending?: boolean
     isPreviewLoading?: boolean
@@ -34,6 +38,7 @@ interface Props {
 }
 
 export const SystemCodesForm = ({
+    previewedParams,
     onPreview,
     onSubmit,
     isPending = false,
@@ -87,17 +92,26 @@ export const SystemCodesForm = ({
                 systemType,
                 batch: debouncedBatch,
             } as SystemCodesFormValues)
+            return
         }
+
+        // Emptying a field has to clear the preview too: otherwise the previous zone's
+        // params keep the query — and its error — alive with nothing selected.
+        onPreview(null)
     }, [debouncedZoneUid, debouncedSystemTypeUid, debouncedBatch, zone, systemType, onPreview])
 
-    // The debounced values are exactly what was previewed, so comparing against them
-    // tells us whether the preview still describes the form the user is looking at.
-    // Without this there is a ~500ms window after a change where Create is enabled
-    // against state that was never validated.
-    const isPreviewStale =
-        zone?.uid !== debouncedZoneUid ||
-        systemType?.uid !== debouncedSystemTypeUid ||
-        Number(batch) !== Number(debouncedBatch)
+    // Only the container's previewed params prove the current form was validated, so
+    // everything downstream — the error, its fix, the submit button — hangs off this.
+    const isPreviewed = isPreviewCurrent(previewedParams, {
+        zoneUid: zone?.uid,
+        systemTypeUid: systemType?.uid,
+        batch: Number(batch),
+    })
+
+    // Gating on `isPreviewed` keeps the message and the zone it blames in step: mid-debounce
+    // the error still describes the previous zone, and offering to fix the newly picked one
+    // would send the user to edit a zone that has nothing wrong with it.
+    const errorMessage = isPreviewed ? previewErrorMessage : undefined
 
     const canFixOnZone =
         previewErrorKind === SYSTEM_CODES_ERROR.MISSING_DEFAULT_PARENT_SYSTEM && !!zone
@@ -184,11 +198,11 @@ export const SystemCodesForm = ({
                 </div>
             </div>
 
-            {previewErrorMessage && (
+            {errorMessage && (
                 <Alert variant="destructive">
                     <AlertTriangle />
                     <AlertDescription className="flex flex-col items-start gap-2">
-                        <span>{previewErrorMessage}</span>
+                        <span>{errorMessage}</span>
                         {canFixOnZone &&
                             (canEditZones ? (
                                 <Button
@@ -213,9 +227,7 @@ export const SystemCodesForm = ({
             <Button
                 type="submit"
                 className="w-full"
-                disabled={
-                    isPending || isPreviewLoading || isPreviewStale || !!previewErrorMessage
-                }
+                disabled={isPending || isPreviewLoading || !isPreviewed || !!errorMessage}
             >
                 {fm({ id: message.controlSystems.buttons.create })}
             </Button>

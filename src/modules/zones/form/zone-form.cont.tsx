@@ -13,6 +13,7 @@ import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { useModalFormStateStore } from '@/store/useModalFormStateStore'
 import { ROLE } from '@/types/constants/roles'
 import { getErrorMessageText, isBadRequestError } from '@/types/http'
+import { toLegacyPagination } from '@/types/pagination'
 import { queryFetcher } from '@/utils/fetcher'
 
 import { useZoneMutation } from '../hooks/useZoneMutation'
@@ -27,6 +28,10 @@ interface Props {
 
 const getModalId = (uid?: string) => (uid ? `zone-edit-${uid}` : 'zone-create')
 
+// GET /zones reads paging from the `pagination` JSON param; a bare `pageSize` is ignored,
+// which capped the parent-zone picker at the API default of 50 zones.
+const PARENT_ZONE_PAGINATION = toLegacyPagination({ page: 1, pageSize: 200 })
+
 const isInvalidDefaultParentSystem = (error: unknown) =>
     isBadRequestError(error) &&
     getErrorMessageText(error).toLowerCase().includes('default parent system not found')
@@ -38,7 +43,7 @@ export const ZoneFormContainer: FC<Props> = ({ zone, onSuccess }) => {
     const { setIsDirty, reset: resetModalFormState } = useModalFormStateStore()
 
     const { data: allZones } = useQuery({
-        queryKey: ['zones', { query: { pageSize: 200 } }],
+        queryKey: ['zones', { query: { pagination: PARENT_ZONE_PAGINATION } }],
         queryFn: queryFetcher<ZonesResponse>('zones'),
     })
 
@@ -46,7 +51,12 @@ export const ZoneFormContainer: FC<Props> = ({ zone, onSuccess }) => {
         name: zone?.name ?? '',
         code: zone?.code ?? '',
         parentUid: zone?.parentZone?.uid ?? null,
-        defaultParentSystem: zone?.defaultParentSystem ?? null,
+        // Narrowed to the shape the picker writes: RHF deep-compares values against the
+        // defaults, so keeping the API's wider object here would mark the form dirty —
+        // and trip the unsaved-changes guard — after re-picking the same system.
+        defaultParentSystem: zone?.defaultParentSystem
+            ? { uid: zone.defaultParentSystem.uid, name: zone.defaultParentSystem.name }
+            : null,
         notes: zone?.notes ?? '',
     }
 

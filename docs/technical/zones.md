@@ -172,9 +172,9 @@ export type ZoneFormData = z.infer<typeof zoneSchema>
 
 Note the asymmetry between the two pickers: `parentUid` holds a **uid string** because `Listbox` with `customOptions` yields one, while `defaultParentSystem` holds the **whole object** because `ModalSelect` stores what was picked. Both are flattened to uids in the submit transform.
 
-Both modes (`zone-form.cont` for create, `zone-edit.cont` for update) share `zone-form.comp` and the same Zod schema. Edit mode prefills from `useZone(uid)`; create mode starts blank. `useZoneMutation` switches between PUT and POST based on `uid` presence (`queryMutate<Zone, ZoneFormData>('zone', uid ? 'put' : 'post', { uid })`).
+Both modes (`zone-form.cont` for create, `zone-edit.cont` for update) share `zone-form.comp` and the same Zod schema. Edit mode prefills from `useZone(uid)`; create mode starts blank. `useZoneMutation` switches between PUT and POST based on `uid` presence (`queryMutate<Zone, ZoneRequest>('zone', uid ? 'put' : 'post', { uid })`) — the write model, not the form model: the submit transform flattens `ZoneFormData` to `ZoneRequest` first.
 
-`parentUid` lets the user nest a zone under another zone. The picker is a **`Listbox` with `customOptions`**, fed from a one-shot `useQuery` for up to 200 zones and filtered client-side to root zones only (`zone-form.comp.tsx`) — it is *not* a codebook combobox, and it is not searchable or paginated.
+`parentUid` lets the user nest a zone under another zone. The picker is a **`Listbox` with `customOptions`**, fed from a one-shot `useQuery` for up to 200 zones (asked for through the `pagination` JSON param — the API ignores a bare `pageSize` and would fall back to its default 50) and filtered client-side to root zones only (`zone-form.comp.tsx`) — it is *not* a codebook combobox, and it is not searchable or paginated.
 
 `defaultParentSystem` uses **`SelectSystemComboBox`** (`modules/shared/form/systemSelect`), which opens the searchable system table in a nested dialog; `useSystemSelectionModal` handles the z-index so it stacks correctly above the zone sheet. Two caveats worth knowing:
 

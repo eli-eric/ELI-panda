@@ -58,6 +58,34 @@ beforeEach(() => {
     global.fetch = jest.fn() as any
 })
 
+describe('non-JSON response bodies', () => {
+    it('returns a plain-text body as-is', async () => {
+        // Some endpoints answer with a bare string like "DM04-001".
+        ;(global.fetch as jest.Mock).mockResolvedValueOnce(
+            buildResponse({ headers: { 'content-type': 'text/plain' }, body: 'DM04-001' }),
+        )
+        await expect(fetchRequest('/x')).resolves.toBe('DM04-001')
+    })
+
+    it('rejects an HTML body instead of resolving it as data', async () => {
+        // A proxy or login page answering for the API is a failed request, not a string.
+        ;(global.fetch as jest.Mock).mockResolvedValueOnce(
+            buildResponse({
+                headers: { 'content-type': 'text/html' },
+                body: '<!doctype html><title>Sign in</title>',
+            }),
+        )
+        await expect(fetchRequest('/x')).rejects.toThrow('Unexpected HTML response body')
+    })
+
+    it('rejects an HTML body that arrives without a content type', async () => {
+        ;(global.fetch as jest.Mock).mockResolvedValueOnce(
+            buildResponse({ body: '  <html><body>nope</body></html>' }),
+        )
+        await expect(fetchRequest('/x')).rejects.toThrow('Unexpected HTML response body')
+    })
+})
+
 describe('fetchRequestDetailed', () => {
     it('adds Bearer token from session', async () => {
         mockGetSession.mockResolvedValue({ user: { apiAccessToken: 'TOK' } })
@@ -105,9 +133,7 @@ describe('fetchRequestDetailed', () => {
     })
 
     it('honors responseType=text', async () => {
-        ;(global.fetch as jest.Mock).mockResolvedValueOnce(
-            buildResponse({ body: 'raw payload' }),
-        )
+        ;(global.fetch as jest.Mock).mockResolvedValueOnce(buildResponse({ body: 'raw payload' }))
         const res = await fetchRequestDetailed<string>('/x', { responseType: 'text' })
         expect(res.data).toBe('raw payload')
     })
@@ -143,9 +169,7 @@ describe('fetchRequestDetailed', () => {
 
 describe('fetchRequest (data-only)', () => {
     it('unwraps data from fetchRequestDetailed', async () => {
-        ;(global.fetch as jest.Mock).mockResolvedValueOnce(
-            buildResponse({ body: { value: 42 } }),
-        )
+        ;(global.fetch as jest.Mock).mockResolvedValueOnce(buildResponse({ body: { value: 42 } }))
         const data = await fetchRequest<{ value: number }>('/x')
         expect(data).toEqual({ value: 42 })
     })
