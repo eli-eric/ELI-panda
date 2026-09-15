@@ -1,7 +1,6 @@
 import { message } from '@/i18n/src/messages'
 
-import { WOS_FIELD_LABEL_IDS } from '../constants/wos-import'
-import type { PublicationWosImportValues } from '../types/wos-import'
+import { type PublicationWosImportValues, WOS_FIELD_LABEL_IDS } from '../types/wos-import'
 
 /** Returns the field label id, accounting for the effective ISBN destination. */
 export const getWosFieldLabelId = (

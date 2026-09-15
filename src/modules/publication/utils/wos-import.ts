@@ -1,3 +1,5 @@
+import { isBlank } from '@/lib/predicates/data'
+import { isObject } from '@/lib/predicates/type-guards'
 import type { SelectedResearcher } from '@/modules/shared/form/researcherSelect'
 
 import { MEDIA_TYPE_UID } from '../types/constants'
@@ -8,10 +10,6 @@ import type {
     PublicationWosImportValues,
 } from '../types/wos-import'
 import { PUBLICATION_WOS_IMPORT_FIELDS } from '../types/wos-import'
-
-/** Checks absence without mistaking numeric zero for an empty field. */
-const isBlank = (value: unknown): boolean =>
-    value === undefined || value === null || (typeof value === 'string' && value.trim() === '')
 
 /** Compares codebooks by UID and scalar values by their trimmed form representation. */
 const isSameValue = (currentValue: unknown, incomingValue: unknown): boolean => {
@@ -164,7 +162,7 @@ export const researchersDiffer = (
 
 /** Formats scalar and codebook values for the import comparison table. */
 export const displayWosValue = (value: unknown, emptyLabel: string): string => {
-    if (value === undefined || value === null || value === '') return emptyLabel
-    if (typeof value === 'object' && 'name' in value) return String(value.name)
+    if (isBlank(value)) return emptyLabel
+    if (isObject(value) && 'name' in value) return String(value.name)
     return String(value)
 }

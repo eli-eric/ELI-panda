@@ -49,7 +49,6 @@ export const PublicationDetailContainer: FC<Props> = ({ publication, refetch }) 
     const formMethods = useForm<any>({
         defaultValues: publication ? formatPublication(publication) : defaultValues,
         resolver: publicationResolver,
-        context: { originalDoi: publication?.doi },
     })
 
     const { setMediaTypeUid } = useMediaTypeStore()

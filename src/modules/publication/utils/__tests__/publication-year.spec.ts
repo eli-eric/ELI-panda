@@ -9,18 +9,22 @@ describe('publication year choices', () => {
         expect(getPublicationYearOptions('', 2027)[0]).toBe('2028')
     })
     it('includes loaded or imported years outside the range exactly once', () => {
-        expect(getPublicationYearOptions('1998', 2026).at(-1)).toBe('1998')
+        expect(getPublicationYearOptions('1998', 2026)[0]).toBe('1998')
         expect(getPublicationYearOptions(2030, 2026)[0]).toBe('2030')
         expect(
             getPublicationYearOptions('2024', 2026).filter(year => year === '2024'),
         ).toHaveLength(1)
     })
-    it.each(['26', 'abc', '20261', '0000', null, undefined])(
-        'excludes malformed choice %p',
+    it.each(['26', 'abc', '20261', '0000', '2024 '])(
+        'preserves an exact nonconforming loaded choice %p',
         year => {
-            expect(getPublicationYearOptions(year, 2026)).toEqual(
-                getPublicationYearOptions('', 2026),
-            )
+            expect(getPublicationYearOptions(year, 2026)).toEqual([
+                year,
+                ...getPublicationYearOptions('', 2026),
+            ])
         },
     )
+    it.each(['', ' ', null, undefined])('omits a blank choice %p', year => {
+        expect(getPublicationYearOptions(year, 2026)).toEqual(getPublicationYearOptions('', 2026))
+    })
 })

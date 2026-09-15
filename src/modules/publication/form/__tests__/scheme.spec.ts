@@ -1,10 +1,6 @@
+import { MEDIA_TYPE_CODE } from '../../types/constants'
 import { publicationResolver } from '../resolver'
-import {
-    createPublicationOtherSchema,
-    createPublicationPeerReviewedSchema,
-    publicationOtherSchema,
-    publicationPeerReviewedSchema,
-} from '../scheme'
+import { publicationOtherSchema, publicationPeerReviewedSchema } from '../scheme'
 
 const validCodebook = { uid: 'test-uid', name: 'Test Name', code: 'T' }
 
@@ -115,8 +111,9 @@ describe('publicationPeerReviewedSchema', () => {
         '10.123/test',
         '10.1234/with space',
         '10.1234/literal%20',
+        '10.1234/trailing-space ',
     ])('keeps legacy peer-reviewed DOI %s editable', doi => {
-        const result = createPublicationPeerReviewedSchema(doi).safeParse({
+        const result = publicationPeerReviewedSchema.safeParse({
             ...peerReviewedData,
             doi,
             abstract: 'Updated abstract',
@@ -125,10 +122,10 @@ describe('publicationPeerReviewedSchema', () => {
         if (result.success) expect(result.data.doi).toBe(doi)
     })
 
-    it('requires a four-digit publication year', () => {
+    it('requires a publication year', () => {
         const result = publicationPeerReviewedSchema.safeParse({
             ...peerReviewedData,
-            yearOfPublication: '26',
+            yearOfPublication: '',
         })
         expect(result.success).toBe(false)
     })
@@ -159,16 +156,14 @@ describe('publicationOtherSchema', () => {
     it.each(['', 'not-a-doi', '10.123/test', '10.1234/with space'])(
         'keeps legacy optional DOI %s editable',
         doi => {
-            expect(
-                createPublicationOtherSchema(doi).safeParse({ ...baseValidData, doi }).success,
-            ).toBe(true)
+            expect(publicationOtherSchema.safeParse({ ...baseValidData, doi }).success).toBe(true)
         },
     )
 
-    it('requires a four-digit publication year', () => {
+    it('requires a publication year', () => {
         const result = publicationOtherSchema.safeParse({
             ...baseValidData,
-            yearOfPublication: '20261',
+            yearOfPublication: '',
         })
         expect(result.success).toBe(false)
     })
@@ -214,83 +209,80 @@ describe('publicationOtherSchema', () => {
     })
 })
 
-describe('DOI validation with a persisted original', () => {
-    it.each(['not-a-doi', '10.123/test', '10.1234/with space'])(
-        'rejects new or changed malformed DOI %s in both forms',
-        doi => {
-            expect(
-                publicationPeerReviewedSchema.safeParse({ ...peerReviewedData, doi }).success,
-            ).toBe(false)
-            expect(publicationOtherSchema.safeParse({ ...baseValidData, doi }).success).toBe(false)
-            expect(
-                createPublicationPeerReviewedSchema('older invalid DOI').safeParse({
-                    ...peerReviewedData,
-                    doi,
-                }).success,
-            ).toBe(false)
-            expect(
-                createPublicationOtherSchema('older invalid DOI').safeParse({
-                    ...baseValidData,
-                    doi,
-                }).success,
-            ).toBe(false)
+describe('legacy publication values', () => {
+    it.each(['1998', '26', '0000', '2024 ', 'unknown'])(
+        'preserves publication year %s in both schemas',
+        yearOfPublication => {
+            for (const schema of [publicationPeerReviewedSchema, publicationOtherSchema]) {
+                const result = schema.safeParse({ ...peerReviewedData, yearOfPublication })
+                expect(result.success).toBe(true)
+                if (result.success) expect(result.data.yearOfPublication).toBe(yearOfPublication)
+            }
         },
     )
-    it('requires an exact match to the persisted original', () => {
-        const schema = createPublicationOtherSchema('legacy DOI')
-        expect(
-            schema.safeParse({ ...baseValidData, doi: 'legacy DOI', title: 'Edited title' })
-                .success,
-        ).toBe(true)
-        expect(schema.safeParse({ ...baseValidData, doi: 'Legacy DOI' }).success).toBe(false)
-        expect(schema.safeParse({ ...baseValidData, doi: 'legacy DOI ' }).success).toBe(false)
-    })
-    it.each(['10.1234/MixedCase', 'https://doi.org/10.1234/MixedCase', '10.1234/literal%20'])(
-        'accepts a corrected DOI without rewriting %s',
+
+    it.each(['Legacy DOI', 'legacy DOI ', '10.1234/with space'])(
+        'allows DOI corrections without a persisted-original exemption: %s',
         doi => {
-            const result = createPublicationPeerReviewedSchema('legacy DOI').safeParse({
-                ...peerReviewedData,
-                doi,
-            })
-            expect(result.success).toBe(true)
-            if (result.success) expect(result.data.doi).toBe(doi)
+            for (const schema of [publicationPeerReviewedSchema, publicationOtherSchema]) {
+                const result = schema.safeParse({ ...peerReviewedData, doi, title: 'Edited title' })
+                expect(result.success).toBe(true)
+                if (result.success) expect(result.data.doi).toBe(doi)
+            }
         },
     )
-    it('uses a save-context error and keeps optional DOI empty', () => {
-        const result = publicationOtherSchema.safeParse({ ...baseValidData, doi: 'invalid' })
-        expect(result.success).toBe(false)
-        if (!result.success) {
-            const issue = result.error.issues.find(issue => issue.path[0] === 'doi')
-            expect(issue?.message).toBe('Enter a DOI in the form 10.1234/suffix.')
-        }
-        expect(publicationOtherSchema.safeParse({ ...baseValidData, doi: '' }).success).toBe(true)
-        expect(
-            createPublicationPeerReviewedSchema('').safeParse({ ...peerReviewedData, doi: '' })
-                .success,
-        ).toBe(false)
-    })
 })
 
-describe('publication resolver edit context', () => {
+describe('publication resolver', () => {
     const options = { fields: {}, shouldUseNativeValidation: false }
-    it.each([
-        {
-            ...peerReviewedData,
-            mediaTypeCb: { uid: 'journal', code: 'J', name: 'Journal article' },
+    const journal = { uid: 'journal', code: 'J', name: 'Journal article' }
+
+    it.each([journal, validCodebook])(
+        'preserves legacy DOI values without edit context',
+        async mediaTypeCb => {
+            const values = {
+                ...peerReviewedData,
+                mediaTypeCb,
+                doi: 'legacy DOI ',
+                title: 'Unrelated edit',
+            }
+            const result = await publicationResolver(values, undefined, options)
+            expect(result.errors).toEqual({})
+            expect(result.values).toMatchObject({ doi: 'legacy DOI ', title: 'Unrelated edit' })
         },
-        baseValidData,
-    ])('passes the persisted DOI to the selected media schema', async data => {
-        const values = { ...data, doi: 'legacy DOI', title: 'Unrelated edit' }
-        const edited = await publicationResolver(values, { originalDoi: 'legacy DOI' }, options)
-        expect(edited.errors).toEqual({})
-        expect(edited.values).toMatchObject({ doi: 'legacy DOI', title: 'Unrelated edit' })
-        const created = await publicationResolver(values, undefined, options)
-        expect(created.errors.doi).toBeDefined()
-        const changed = await publicationResolver(
-            values,
-            { originalDoi: 'another legacy DOI' },
+    )
+
+    it('requires DOI only for the peer-reviewed media schema', async () => {
+        const values = { ...peerReviewedData, doi: '' }
+        const peerReviewed = await publicationResolver(
+            { ...values, mediaTypeCb: journal },
+            undefined,
             options,
         )
-        expect(changed.errors.doi).toBeDefined()
+        expect(peerReviewed.errors).toHaveProperty('doi.message', 'DOI is required')
+        const other = await publicationResolver(values, undefined, options)
+        expect(other.errors).toEqual({})
     })
+
+    it.each([
+        [MEDIA_TYPE_CODE.PeerReviewedArticle, true],
+        [MEDIA_TYPE_CODE.OtherArticle, false],
+    ])('uses the legacy radio selection %s without a codebook', async (mediaType, requiresDoi) => {
+        const values = { ...peerReviewedData, doi: '', mediaType, mediaTypeCb: undefined }
+        const result = await publicationResolver(values, undefined, options)
+        expect('doi' in result.errors).toBe(requiresDoi)
+        expect(result.errors).toHaveProperty('mediaTypeCb')
+    })
+
+    it.each([
+        [journal, MEDIA_TYPE_CODE.OtherArticle, true],
+        [validCodebook, MEDIA_TYPE_CODE.PeerReviewedArticle, false],
+    ])(
+        'prefers the codebook over an obsolete radio selection',
+        async (mediaTypeCb, mediaType, requiresDoi) => {
+            const values = { ...peerReviewedData, doi: '', mediaTypeCb, mediaType }
+            const result = await publicationResolver(values, undefined, options)
+            expect('doi' in result.errors).toBe(requiresDoi)
+        },
+    )
 })

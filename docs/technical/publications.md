@@ -19,8 +19,11 @@ src/modules/publication/
 ├── form/__tests__/scheme.spec.ts
 ├── components/
 │   ├── publication-form.comp.tsx        — primary form layout
-│   ├── doi-lookup.field.tsx              — explicit WoS preview action and form apply
-│   ├── publication-wos-import-dialog.comp.tsx — field/author review and duplicate dialog
+│   ├── doi-lookup.field.tsx              — DOI input and preview button
+│   ├── publication-wos-import-dialog.comp.tsx — composes field/author review and actions
+│   ├── publication-wos-duplicate-dialog.comp.tsx — existing-publication dialog
+│   ├── wos-import-fields-table.comp.tsx — field comparison and selection controls
+│   ├── wos-author-matches.comp.tsx      — researcher matches and pagination
 │   ├── eli-authors-select.comp.tsx      — researcher picker
 │   ├── grants-select.comp.tsx           — grant picker
 │   ├── department.listbox.tsx           — single department combobox
@@ -29,6 +32,8 @@ src/modules/publication/
 ├── hooks/
 │   ├── usePublication.ts                — single read
 │   ├── usePublicationWosPreview.ts       — GET the server-built import preview
+│   ├── useWosLookup.ts                  — lookup, dialogs, and form application
+│   ├── useWosImportSelection.ts         — field/author selection and derived rows
 │   ├── usePublicationMutation.ts        — POST / PUT
 │   ├── usePublicationFields.ts          — derived form-field metadata
 │   ├── useMediaTypeStore.ts             — Zustand: selected media-type variant
@@ -219,11 +224,11 @@ sequenceDiagram
 
 The input accepts a bare DOI, a case-insensitive `doi:` prefix, or an `https://doi.org/` / `http://dx.doi.org/` URL and canonicalizes it to a lowercase bare DOI for lookup. Invalid values stop before a request. The API returns explicit not-found, ambiguous, authentication, rate-limit, timeout, configuration, and upstream errors; none changes the form. If PANDA already contains the DOI, the response names that publication and the dialog offers to open it.
 
-Only `INVALID_DOI` failures mark the DOI field invalid; other lookup failures produce a toast. Error codes and their union type live in `types/wos-import.ts`, with an exhaustive message map in `constants/wos-import.ts` and null-safe handling in `utils/wos-errors.ts`.
+Only `INVALID_DOI` failures mark the DOI field invalid; other lookup failures produce a toast. WoS constants, response types, and exhaustive error message mappings live together in `types/wos-import.ts`. `utils/wos-errors.ts` handles both normalized HTTP errors and the Axios-shaped errors returned by `queryMutate`. The preview hook uses an imperative GET through `queryMutate` with a 30-second timeout; each Refresh issues a new request.
 
-Ordinary saves preserve DOI text. Schema factories validate new or changed DOIs with the same normalization and syntax checks used by lookup. Only the exact persisted DOI is exempt during editing, so unrelated changes to legacy records remain possible. Both detail and sheet forms supply the original DOI; new records have no exemption. Peer-reviewed publications still require a nonempty DOI, while other media types allow an empty DOI. Lookup stays strict even for legacy records. Blank or DOI-derived Web Links follow DOI edits and clear when the DOI is removed; independent record links are preserved.
+Ordinary saves preserve DOI text and apply only the existing presence requirement: peer-reviewed publications require a nonempty DOI, while other media types allow an empty DOI. Strict DOI syntax validation applies to lookup, including for legacy records. Both detail and sheet forms use `publicationResolver`; it selects the schema from the codebook when present and otherwise uses the sheet form's media-type radio value. Blank Web Links and exact canonical links for the previous or current DOI follow DOI edits and clear when the DOI becomes empty or invalid. Independent record links and links to a different DOI are preserved.
 
-The year remains a listbox in both detail and sheet forms. The shared helper offers the current year, eleven previous years and one future year, newest first, plus any valid loaded/imported four-digit year. For 2026, the standard range is 2015–2027 inclusive (13 options).
+The year remains a listbox in both detail and sheet forms. The shared helper offers the current year, eleven previous years and one future year, newest first, with any nonblank loaded/imported value outside that list prepended exactly as stored. Presence-only validation preserves nonstandard legacy values; the listbox prevents manual typos. For 2026, the standard range is 2015–2027 inclusive (13 options).
 
 ### Review and apply rules
 
@@ -312,7 +317,7 @@ Schema-level: none. The entities are REST-only.
 
 The WoS review flow has focused unit, hook, component, and browser coverage:
 
-- `src/modules/publication/form/__tests__/scheme.spec.ts` — peer-reviewed/other schema matrix, legacy DOI edit compatibility, and four-digit year validation.
+- `src/modules/publication/form/__tests__/scheme.spec.ts` — peer-reviewed/other schema matrix, legacy DOI/year compatibility, media-type resolver selection, and required-field validation.
 - `src/modules/publication/utils/__tests__/doi.spec.ts` — accepted DOI forms and invalid values.
 - `src/modules/publication/utils/__tests__/wos-import.spec.ts` — default selections, overwrite opt-in, author merge, and C/D ISBN targeting.
 - `src/modules/publication/components/__tests__/doi-lookup-field.spec.tsx` — explicit Fetch/Refresh, preview opening, duplicate navigation, typed/nullish errors and apply-without-save.

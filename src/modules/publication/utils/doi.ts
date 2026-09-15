@@ -27,15 +27,32 @@ export const normalizeDoi = (raw: string): string | undefined => {
     return DOI_PATTERN.test(value) ? value : undefined
 }
 
-/** Identifies resolver links that the read-only Web Link field may regenerate. */
-export const isDoiResolverLink = (value: string): boolean => DOI_URL_PREFIX.test(value.trim())
-
-/** Refreshes derived links while preserving independently supplied record links. */
-export const getDerivedWebLink = (doi: unknown, currentWebLink: unknown): string | undefined => {
-    const current = String(currentWebLink ?? '')
-    if (current && !isDoiResolverLink(current)) return undefined
+/** Encodes a normalized DOI as a resolver URL, or clears an invalid DOI. */
+const getCanonicalDoiLink = (doi: unknown): string => {
     const normalized = normalizeDoi(String(doi ?? ''))
     const path = normalized?.split('/').map(encodeURIComponent).join('/')
-    const next = path ? `https://doi.org/${path}` : ''
+    return path ? `https://doi.org/${path}` : ''
+}
+
+/** Recognizes canonical links and the exact bare-DOI links saved by older forms. */
+const isDerivedFromDoi = (link: string, doi: unknown): boolean => {
+    const rawDoi = String(doi ?? '')
+    return (
+        link === getCanonicalDoiLink(doi) ||
+        (DOI_PATTERN.test(rawDoi) && link === `https://doi.org/${rawDoi}`)
+    )
+}
+
+/** Refreshes derived links while preserving independently supplied record links. */
+export const getDerivedWebLink = (
+    doi: unknown,
+    currentWebLink: unknown,
+    previousDoi?: unknown,
+): string | undefined => {
+    const current = String(currentWebLink ?? '')
+    if (current && !isDerivedFromDoi(current, doi) && !isDerivedFromDoi(current, previousDoi)) {
+        return undefined
+    }
+    const next = getCanonicalDoiLink(doi)
     return next === current ? undefined : next
 }

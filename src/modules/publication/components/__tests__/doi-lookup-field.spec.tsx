@@ -6,6 +6,7 @@ import { toast } from 'sonner'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { renderWithProviders } from '@/testutils/wrappers/renderWithProviders'
 
+import { publicationResolver } from '../../form/resolver'
 import { usePublicationFields } from '../../hooks/usePublicationFields'
 import { usePublicationWosPreview } from '../../hooks/usePublicationWosPreview'
 import { type PublicationWosPreviewResponse, WOS_ERROR_CODES } from '../../types/wos-import'
@@ -64,17 +65,18 @@ const FormValues = () => {
     return <output data-testid="form-values">{JSON.stringify(values)}</output>
 }
 
-const TestForm = ({ onSubmit = jest.fn() }: { onSubmit?: jest.Mock }) => (
-    <form
-        onSubmit={event => {
-            event.preventDefault()
-            onSubmit()
-        }}
-    >
-        <DoiLookupField />
-        <FormValues />
-    </form>
-)
+const saveLabel = 'Save'
+
+const TestForm = ({ onSubmit = jest.fn() }: { onSubmit?: jest.Mock }) => {
+    const { handleSubmit } = useFormContext()
+    return (
+        <form onSubmit={handleSubmit(onSubmit)}>
+            <DoiLookupField />
+            <FormValues />
+            <button type="submit">{saveLabel}</button>
+        </form>
+    )
+}
 
 const getFormValues = (): Record<string, unknown> =>
     JSON.parse(screen.getByTestId('form-values').textContent ?? '{}')
@@ -204,6 +206,45 @@ describe('DoiLookupField', () => {
         expect(mockToastError).toHaveBeenCalledWith(
             'Enter a valid DOI before fetching from Web of Science.',
         )
+    })
+
+    it('saves a legacy DOI after a failed preview without changing the stored value', async () => {
+        const onSubmit = jest.fn()
+        const codebook = { uid: 'other', name: 'Other' }
+        const values = {
+            code: 'PUB-001',
+            doi: 'legacy DOI with spaces ',
+            title: 'An unrelated title edit',
+            allAuthors: 'Ada Lovelace',
+            allAuthorsCount: 1,
+            eliResearchers: [{ uid: 'ada', firstName: 'Ada', lastName: 'Lovelace' }],
+            eliAuthorsCount: 1,
+            longJournalTitle: 'Journal of Testing',
+            pages: '1-10',
+            pagesCount: 10,
+            citeAs: 'Lovelace (2024)',
+            yearOfPublication: '2024',
+            dateOfPublication: '2024-01-01',
+            abstract: 'Abstract',
+            keywords: 'test',
+            openAccessType: codebook,
+            publishingCountry: codebook,
+            mediaTypeCb: codebook,
+        }
+        renderWithProviders(<TestForm onSubmit={onSubmit} />, {
+            withForm: true,
+            formProps: { defaultValues: values, resolver: publicationResolver },
+        })
+
+        fireEvent.click(screen.getByRole('button', { name: 'Fetch from Web of Science' }))
+        await waitFor(() =>
+            expect(screen.getByTestId('doi')).toHaveAttribute('aria-invalid', 'true'),
+        )
+        expect(fetchPreview).not.toHaveBeenCalled()
+        fireEvent.click(screen.getByRole('button', { name: saveLabel }))
+        await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1))
+        expect(onSubmit.mock.calls[0][0]).toMatchObject({ doi: values.doi, title: values.title })
+        expect(screen.getByTestId('doi')).not.toHaveAttribute('aria-invalid', 'true')
     })
 
     it('offers to open the existing publication when the DOI is already registered', async () => {

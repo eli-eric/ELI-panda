@@ -6,9 +6,22 @@ import {
     buildWosFieldPatch,
     buildWosFieldRows,
     buildWosFormPatch,
+    displayWosValue,
 } from '../wos-import'
 
 describe('buildWosFieldRows', () => {
+    it('treats whitespace as blank consistently in selection, patches, and display', () => {
+        expect(buildWosFieldRows({ title: '  ' }, { title: 'Incoming', pages: '  ' })).toEqual([
+            expect.objectContaining({ field: 'title', selectedByDefault: true, status: 'empty' }),
+        ])
+        expect(buildWosFieldPatch({ title: '  ', issue: 0 }, ['title', 'issue'])).toEqual({
+            issue: 0,
+        })
+        expect(displayWosValue('  ', '(empty)')).toBe('(empty)')
+        expect(displayWosValue(null, '(empty)')).toBe('(empty)')
+        expect(displayWosValue(0, '(empty)')).toBe('0')
+    })
+
     it('preselects blank fields and leaves existing values unselected', () => {
         const rows = buildWosFieldRows(
             {

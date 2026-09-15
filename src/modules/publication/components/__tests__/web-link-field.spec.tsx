@@ -22,7 +22,12 @@ beforeEach(() => {
     })
 })
 
-const renderWithValues = (defaultValues: { doi: string; webLink: string }) => {
+const importActionLabel = 'Apply imported values'
+
+const renderWithValues = (
+    defaultValues: { doi: string; webLink: string },
+    importedValues?: { doi: string; webLink: string },
+) => {
     const Wrapper = () => {
         const methods = useForm({ defaultValues })
         const webLink = methods.watch('webLink')
@@ -31,6 +36,17 @@ const renderWithValues = (defaultValues: { doi: string; webLink: string }) => {
                 <span data-testid="capture">{webLink}</span>
                 <input aria-label="DOI" {...methods.register('doi')} />
                 <WebLinkField />
+                {importedValues && (
+                    <button
+                        type="button"
+                        onClick={() => {
+                            methods.setValue('doi', importedValues.doi)
+                            methods.setValue('webLink', importedValues.webLink)
+                        }}
+                    >
+                        {importActionLabel}
+                    </button>
+                )}
             </FormProvider>
         )
     }
@@ -78,21 +94,45 @@ describe('DOI edits', () => {
         })
         fireEvent.change(screen.getByLabelText('DOI'), { target: { value: '10.1234/new' } })
         expect(capture.textContent).toBe('https://doi.org/10.1234/new')
+        fireEvent.change(screen.getByLabelText('DOI'), { target: { value: '10.1234/' } })
+        expect(capture.textContent).toBe('')
+        fireEvent.change(screen.getByLabelText('DOI'), { target: { value: '10.1234/fixed' } })
+        expect(capture.textContent).toBe('https://doi.org/10.1234/fixed')
         fireEvent.change(screen.getByLabelText('DOI'), { target: { value: '' } })
         expect(capture.textContent).toBe('')
     })
-    it('preserves an independent record URL through DOI changes and removal', () => {
-        const url = 'https://www.webofscience.com/wos/woscc/full-record/WOS:123'
+    it.each([
+        'https://www.webofscience.com/wos/woscc/full-record/WOS:123',
+        'https://publisher.example/article',
+        'https://doi.org/10.1234/unrelated',
+        'https://doi.org/10.1234/old?source=custom',
+        'http://dx.doi.org/10.1234/old',
+    ])('preserves independent link %s through hydration, DOI changes and removal', url => {
         const capture = renderWithValues({ doi: '10.1234/old', webLink: url })
+        expect(capture.textContent).toBe(url)
         fireEvent.change(screen.getByLabelText('DOI'), { target: { value: '10.1234/new' } })
         expect(capture.textContent).toBe(url)
         fireEvent.change(screen.getByLabelText('DOI'), { target: { value: '' } })
         expect(capture.textContent).toBe(url)
     })
-    it('refreshes a legacy dx.doi.org URL', () => {
-        expect(
-            renderWithValues({ doi: '10.1234/new', webLink: 'http://dx.doi.org/10.1234/old' })
-                .textContent,
-        ).toBe('https://doi.org/10.1234/new')
+    it('normalizes an exact legacy uppercase link and keeps following DOI edits', () => {
+        const capture = renderWithValues({
+            doi: '10.1234/Old',
+            webLink: 'https://doi.org/10.1234/Old',
+        })
+        expect(capture.textContent).toBe('https://doi.org/10.1234/old')
+        fireEvent.change(screen.getByLabelText('DOI'), { target: { value: '10.1234/new' } })
+        expect(capture.textContent).toBe('https://doi.org/10.1234/new')
+    })
+    it('preserves an independently imported DOI resolver link', () => {
+        const importedValues = { doi: '10.1234/new', webLink: 'https://doi.org/10.1234/other' }
+        const capture = renderWithValues(
+            { doi: '10.1234/old', webLink: 'https://doi.org/10.1234/old' },
+            importedValues,
+        )
+        fireEvent.click(screen.getByRole('button', { name: importActionLabel }))
+        expect(capture.textContent).toBe(importedValues.webLink)
+        fireEvent.change(screen.getByLabelText('DOI'), { target: { value: '10.1234/changed' } })
+        expect(capture.textContent).toBe(importedValues.webLink)
     })
 })

@@ -1104,9 +1104,7 @@ export const messages = {
             doNotMatch: 'Do not add an ELI researcher',
             missingTitle: 'Not present in this Web of Science record',
             unavailableTitle: 'Still needs to be entered manually',
-            noneUnavailable: 'No unavailable fields were reported.',
             apply: 'Apply selected fields',
-            cancel: 'Cancel',
             applied: 'Selected Web of Science values were applied to the form.',
             match: {
                 researcherId: 'Matched by ResearcherID',
@@ -1156,7 +1154,6 @@ export const messages = {
             userExperimentCb: { label: 'User Experiment', placeholder: 'Select' },
             doi: {
                 label: 'DOI (R87)*',
-                invalid: 'Enter a DOI in the form 10.1234/suffix.',
                 labelOptional: 'DOI (R87)',
             },
             webLink: {
@@ -1194,7 +1191,6 @@ export const messages = {
             yearOfPublication: {
                 label: 'Year of Publication (R09)*',
                 placeholder: 'YYYY',
-                invalid: 'Enter a four-digit publication year.',
             },
             dateOfPublication: { label: 'Date of Publication*' },
             abstract: { label: 'Abstract*' },

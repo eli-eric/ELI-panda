@@ -27,13 +27,16 @@ const Harness = () => {
         </>
     )
 }
-it('shows a loaded historical year in the listbox and follows a confirmed import', () => {
-    renderWithProviders(<Harness />, {
-        withForm: true,
-        formProps: { defaultValues: { yearOfPublication: '1998' } },
-    })
-    expect(screen.getByRole('combobox')).toHaveTextContent('1998')
-    expect(screen.queryByRole('spinbutton')).not.toBeInTheDocument()
-    fireEvent.click(screen.getByRole('button', { name: importActionLabel }))
-    expect(screen.getByRole('combobox')).toHaveTextContent('2011')
-})
+it.each(['1998', '26', '0000', 'unknown'])(
+    'shows loaded year %s in the listbox and follows a confirmed import',
+    yearOfPublication => {
+        renderWithProviders(<Harness />, {
+            withForm: true,
+            formProps: { defaultValues: { yearOfPublication } },
+        })
+        expect(screen.getByRole('combobox')).toHaveTextContent(yearOfPublication)
+        expect(screen.queryByRole('spinbutton')).not.toBeInTheDocument()
+        fireEvent.click(screen.getByRole('button', { name: importActionLabel }))
+        expect(screen.getByRole('combobox')).toHaveTextContent('2011')
+    },
+)

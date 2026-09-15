@@ -36,7 +36,7 @@ See [Access & Responsibilities](../README.md#access--responsibilities) for what 
 
 3. **Set the _ELI Publication_ flag.** Required. `YES` = ELI is an author affiliation (RIV-eligible); `NO` = tracked but not ELI-attributed.
 
-4. **Load available metadata with the _DOI (R87)_ field.** Enter a bare DOI (`10.1234/example`), a `doi:` value (`doi: 10.1234/example`), or a DOI link (`https://doi.org/10.1234/example`), then press **Fetch from Web of Science**. PANDA normalizes the value for lookup and asks Web of Science for an exact DOI match. A blank or DOI-derived **Web Link (R86)** follows DOI edits; an independent link is preserved. Imported metadata is applied only after you confirm the preview.
+4. **Load available metadata with the _DOI (R87)_ field.** Enter a bare DOI (`10.1234/example`), a `doi:` value (`doi: 10.1234/example`), or a DOI link (`https://doi.org/10.1234/example`), then press **Fetch from Web of Science**. PANDA normalizes the value for lookup and asks Web of Science for an exact DOI match. A blank **Web Link (R86)**, or one matching the previous or current DOI, follows DOI edits. Independent links and links to a different DOI are preserved. Imported metadata is applied only after you confirm the preview.
 
     A malformed DOI is rejected before PANDA sends a lookup request.
 
@@ -90,7 +90,7 @@ See [Access & Responsibilities](../README.md#access--responsibilities) for what 
 
 10. **Link _Grants_**. Click _Add Grant_ to open the [Grants](./managing-grants.md) selection modal. Picked grants render as badges. Free-text _Other Grants_ captures unstructured funding mentions that are not in the registry.
 
-11. **Fill _Bibliographic_ details** — _Year of Publication_ (required for RIV), _Date of Publication_, _Abstract_, _Keywords_, _OECD FORD_, _Language_ (codebook), _Publishing Country_ (codebook), _Impact Factor_, _Quartile Basis_, _Quartile_ (codebook), _Cite As_ (citation string), _Note_. **Year of Publication** is a picker, so the year is chosen rather than typed. The list offers the current year, eleven previous years and one future year, newest first (2015–2027 in 2026). It also includes any valid four-digit year the record already holds — so a year arriving from an import, or an older year on an existing publication, is still shown and still selectable.
+11. **Fill _Bibliographic_ details** — _Year of Publication_ (required for RIV), _Date of Publication_, _Abstract_, _Keywords_, _OECD FORD_, _Language_ (codebook), _Publishing Country_ (codebook), _Impact Factor_, _Quartile Basis_, _Quartile_ (codebook), _Cite As_ (citation string), _Note_. **Year of Publication** is a picker, so the year is chosen rather than typed. The list offers the current year, eleven previous years and one future year, newest first (2015–2027 in 2026). It also includes the year the record already holds or receives from an import, even when it falls outside the standard range or uses a nonstandard legacy format. That value is shown and preserved exactly as stored.
 
 12. **Attach the PDF** in the file manager block. Drag-drop the file, or use the _Upload File_ control. The publication form accepts one PDF attachment.
 
@@ -104,7 +104,7 @@ See [Access & Responsibilities](../README.md#access--responsibilities) for what 
 
 2. **Adjust fields**. Be careful when changing the **Media Type** — switching from _Journal article_ to _Book_ clears the journal-specific fields and shows the book-specific ones (any data in fields that disappear is preserved server-side but no longer rendered).
 
-3. **Submit**. Same as creation; the toast confirms. An unchanged stored legacy DOI remains editable when you change other fields. A new or changed DOI must have valid DOI syntax; the original text is preserved when saved. Peer-reviewed publications still require a DOI, while other media types allow it to be empty. Web of Science lookup always requires valid syntax, including for legacy records.
+3. **Submit**. Same as creation; the toast confirms. DOI text is preserved when saved, including legacy formatting. Peer-reviewed publications still require a DOI, while other media types allow it to be empty. Web of Science lookup requires valid DOI syntax, including for legacy records.
 
 `[VIDEO PLACEHOLDER: 90s — Add Publication → pick Journal article → set ELI Publication YES → paste a doi.org URL into DOI (R87) → press Fetch from Web of Science → walk the preview dialog: blank fields pre-ticked, a filled Title left un-ticked, one row ticked deliberately to overwrite, the ResearcherID match pre-selected and a name match confirmed by hand → Apply selected fields → show the form filled and still unsaved → pick the Language codebook value → add a grant → fill Abstract and Open Access Type by hand → upload PDF → Submit → reopen → press Refresh from Web of Science → Submit & Exit]`
 

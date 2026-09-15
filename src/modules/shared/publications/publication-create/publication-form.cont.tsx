@@ -1,4 +1,3 @@
-import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { type FC } from 'react'
 import { useForm } from 'react-hook-form'
@@ -9,12 +8,7 @@ import { Form } from '@/components/form/Form'
 import { SheetFormButtons } from '@/components/sheet-form-buttons'
 import { useAccessControl } from '@/hooks/useAccessControl'
 import { message } from '@/i18n/src/messages'
-import {
-    createPublicationOtherSchema,
-    createPublicationPeerReviewedSchema,
-} from '@/modules/publication/form/scheme'
-import { useMediaTypeStore } from '@/modules/publication/hooks/useMediaTypeStore'
-import { MEDIA_TYPE_CODE } from '@/modules/publication/types/constants'
+import { publicationResolver } from '@/modules/publication/form/resolver'
 import type { PublicationForm } from '@/modules/publication/types/form'
 import type { Publication } from '@/modules/publication/types/responses'
 import { formatFormData, formatPublication } from '@/modules/publication/utils/formatters'
@@ -36,8 +30,6 @@ interface Props {
 export const PublicationFormContainer: FC<Props> = ({ publication, refetch }) => {
     const hasEditRole = useAccessControl(ROLE.PUBLICATIONS_EDIT)()
 
-    const { mediaType } = useMediaTypeStore()
-
     const publicationsTableId = 'publications'
 
     const queryClient = useQueryClient()
@@ -51,11 +43,7 @@ export const PublicationFormContainer: FC<Props> = ({ publication, refetch }) =>
 
     const formMethods = useForm<any>({
         defaultValues: defaultValues,
-        resolver: zodResolver(
-            mediaType === MEDIA_TYPE_CODE.PeerReviewedArticle
-                ? createPublicationPeerReviewedSchema(publication?.doi)
-                : createPublicationOtherSchema(publication?.doi),
-        ),
+        resolver: publicationResolver,
     })
 
     const {

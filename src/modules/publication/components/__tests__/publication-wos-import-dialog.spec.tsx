@@ -4,10 +4,8 @@ import { renderWithProviders } from '@/testutils/wrappers/renderWithProviders'
 
 import { MEDIA_TYPE_UID } from '../../types/constants'
 import type { PublicationWosPreviewResponse } from '../../types/wos-import'
-import {
-    PublicationWosDuplicateDialog,
-    PublicationWosImportDialog,
-} from '../publication-wos-import-dialog.comp'
+import { PublicationWosDuplicateDialog } from '../publication-wos-duplicate-dialog.comp'
+import { PublicationWosImportDialog } from '../publication-wos-import-dialog.comp'
 
 const preview: Extract<PublicationWosPreviewResponse, { status: 'found' }> = {
     status: 'found',

@@ -88,6 +88,7 @@ describe('queryMutate', () => {
             expect.objectContaining({
                 method: 'POST',
                 body: { name: 'Test' },
+                timeoutMs: undefined,
             }),
         )
         expect(result.data).toEqual({ uid: '123' })
@@ -128,6 +129,23 @@ describe('queryMutate', () => {
         expect(mockFetchRequestDetailed).toHaveBeenCalledWith(
             expect.any(String),
             expect.objectContaining({ responseType: 'blob' }),
+        )
+    })
+
+    it('passes an explicit timeout and omits the body for GET requests', async () => {
+        mockFetchRequestDetailed.mockResolvedValue({
+            data: { uid: '123' },
+            status: 200,
+            statusText: 'OK',
+            headers: {},
+        })
+
+        const fn = queryMutate('system', 'get', { uid: '123', timeoutMs: 30_000 })
+        await fn({ name: 'ignored' })
+
+        expect(mockFetchRequestDetailed).toHaveBeenCalledWith(
+            expect.stringContaining('/system/123'),
+            expect.objectContaining({ method: 'GET', body: undefined, timeoutMs: 30_000 }),
         )
     })
 })
