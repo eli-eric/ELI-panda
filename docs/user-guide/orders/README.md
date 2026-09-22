@@ -4,7 +4,7 @@ The Orders module is the **procurement record** of the facility — every purcha
 
 Use this module when you need to register a new order, follow the progress of a partial delivery, look up which order brought a given physical item into the facility, or close out an order after the last line has been delivered.
 
-`[SCREENSHOT PLACEHOLDER: Orders list landing — top toolbar with Add / Refresh / Filter buttons, filter chips row, table with columns Name / Order Number / Supplier / Order Status / Delivery Status / Order Date / Notes; one row highlighted on hover with the action menu visible]`
+![Orders list with three orders showing Order Number, Request Number, Contract Number, Order Status and Delivery Status](./images/orders-list.png)
 
 ## Access & Responsibilities
 

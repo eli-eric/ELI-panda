@@ -33,19 +33,32 @@ This reads: the System Type Code, then the Zone Code, a hyphen, then a 3-digit z
 
 ### Tokens
 
+The server recognises **eight** tokens:
+
 | Token | Substituted with | Example |
 |---|---|---|
 | `{STC}` | **System Type Code** — the *code* field on the assigned System Type. Defined in this module on the type itself. | `ION` |
-| `{ZC}` | **Zone Code** — the code of the system's assigned zone (from the Zones codebook). Empty if no zone is set. | `B` |
-| `{serial(N)}` | **Sequential number, zero-padded to N digits.** The next available serial for this combination of `{STC}` and `{ZC}` (the server tracks per-prefix counters). Use `{serial(3)}` for three-digit padding, `{serial(4)}` for four-digit, etc. | `007` |
+| `{ZC}` | **Zone Code** — the code of the system's assigned zone. Empty if no zone is set. | `01` |
+| `{SZC}` | **Sub-Zone Code** — the code of the zone's parent-linked subzone, when the system sits on one. | `03` |
+| `{ZN}` | **Zone Name** — the zone's full display name rather than its code. Verbose; use sparingly. | `L1 laser system` |
+| `{LC}` | **Location Code** — the code of the system's assigned location. | `L.00.01` |
+| `{LN}` | **Location Name** — the location's display name. | `HVAC plant room` |
+| `{FC}` | **Facility Code** — the facility the system belongs to. | `B` |
+| `{serial(N)}` | **Sequential number, zero-padded to N digits.** The next available serial for the prefix produced by the rest of the mask (the server tracks per-prefix counters). Use `{serial(3)}` for three-digit padding, `{serial(4)}` for four-digit, etc. | `007` |
 
 **Static text** between tokens is preserved verbatim. The default mask's hyphen is a static separator; any character that is not part of a `{...}` token stays as is.
+
+> ⚠️ **`{serial(N)}` is mandatory.** A mask without it is rejected — the server needs a counter slot to guarantee uniqueness.
+
+Worked example: with the default mask `{STC}{ZC}-{serial(3)}`, a type coded `TMP`, and the zone coded `01`, generation produces `TMP01-001`, `TMP01-002`, … .
 
 ### What the mask does *not* know
 
 - The system's parent in the hierarchy (`HAS_SUBSYSTEM`). The mask is per-type, not per-position.
 - The system's *level* (`SYSTEM_DOMAIN` … `TRASH`). Codes do not encode level.
 - The catalogue item assigned. Codes are system-level, not item-level.
+
+It *does* know the system's location (`{LC}` / `{LN}`) and facility (`{FC}`), so a code can encode where a unit physically sits — bear in mind that a code built from location becomes misleading once the unit is moved.
 
 ## When (and how) generation runs
 

@@ -51,7 +51,8 @@ Workflow pages are designed to stand on their own — you can land on one direct
 - **Audience:** engineers and technicians who actually work with the systems being documented. Engineering-precise language is fine where it helps; access and responsibility sections stay user-friendly.
 - **Personas:** every workflow declares which personas (👁️ Viewer / ✏️ Editor / Admin) can perform it. See each module's *Access & Responsibilities* section for what those personas are.
 - **UI labels** in step instructions match the English UI.
-- **Screenshots and videos** are recorded during the wiki publishing stage. Placeholder boxes in the Markdown describe what the missing media should show.
+- **Screenshots** live in an `images/` folder next to the page that uses them (`<module>/images/*.png`) and are referenced with a relative link. `scripts/sync-wiki.mjs` copies them into the wiki and flattens the paths, so the same Markdown renders both on GitHub and on the published wiki. They are captured against a local stack with seeded data — see [Local development](../technical/local-development.md#running-the-whole-stack-locally).
+- **Videos**, and the screenshots not yet captured, are still `[SCREENSHOT PLACEHOLDER: …]` / `[VIDEO PLACEHOLDER: …]` boxes describing what the media should show.
 
 ## Templates
 

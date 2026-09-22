@@ -2,7 +2,7 @@
 
 The Catalogue module is the master list of *product specs* used at the facility — every piece of hardware that can be ordered, stocked, or installed exists here as a catalogue item. It is the abstract layer above the physical items installed in the System Hierarchy: a catalogue entry describes *what a thing is*; a physical item is *this specific one we own*. Procurement, spare-parts planning, and system-item assignment all reach back into the catalogue.
 
-`[SCREENSHOT PLACEHOLDER: catalogue landing screen — left category tree expanded to a leaf category, main panel showing item table with thumbnails, breadcrumbs above table, top action bar with Add / Refresh / Statistics / Filters buttons]`
+![Catalogue landing screen with the category tree and the item table](./images/catalogue-overview.png)
 
 ## Access & Responsibilities
 

@@ -2,7 +2,7 @@
 
 The System Hierarchy module is the central place to browse, organize, and inspect the tree of systems and subsystems at the facility. It surfaces accountability (responsible person and team), physical-item assignments, engineering relationships between systems, and a full change history.
 
-`[SCREENSHOT PLACEHOLDER: full module landing screen — left tree expanded to a leaf, middle leaves panel in table mode, right Quick Info sidebar visible, breadcrumb at top]`
+![System Hierarchy landing page with the system tree on the left and the leaves panel on the right](./images/hierarchy-tree.png)
 
 ## Access & Responsibilities
 
