@@ -1,5 +1,14 @@
 import { FormattedMessage, useIntl } from 'react-intl'
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import {
+    Bar,
+    BarChart,
+    CartesianGrid,
+    Cell,
+    ResponsiveContainer,
+    Tooltip,
+    XAxis,
+    YAxis,
+} from 'recharts'
 
 import { message } from '@/i18n/src/messages'
 
@@ -23,7 +32,7 @@ export const LinkBreakdown = ({ titleId, data }: Props) => {
     const { formatMessage: fm } = useIntl()
 
     const rows = data.map(entry => ({
-        name: entry.uid === UNLINKED_UID ? entry.name : entry.name,
+        name: entry.name,
         count: entry.count,
         unlinked: entry.uid === UNLINKED_UID,
     }))
@@ -70,10 +79,20 @@ export const LinkBreakdown = ({ titleId, data }: Props) => {
                             />
                             <Bar
                                 dataKey="count"
-                                fill="var(--viz-series-own)"
                                 radius={[0, 4, 4, 0]}
                                 label={{ position: 'right', fill: 'var(--viz-axis)', fontSize: 11 }}
-                            />
+                            >
+                                {rows.map(row => (
+                                    <Cell
+                                        key={row.name}
+                                        fill={
+                                            row.unlinked
+                                                ? 'var(--viz-neutral)'
+                                                : 'var(--viz-series-own)'
+                                        }
+                                    />
+                                ))}
+                            </Bar>
                         </BarChart>
                     </ResponsiveContainer>
                 </div>

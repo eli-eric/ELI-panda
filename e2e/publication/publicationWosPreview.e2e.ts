@@ -36,14 +36,17 @@ test.describe('Publication Web of Science preview', () => {
         await title.fill('Title entered by the librarian')
         await doi.fill(PUBLICATION_DOI_URL_INPUT)
 
-        const previewRequestPromise = page.waitForRequest(request =>
-            /\/publications\/wos-preview(?:\?|$)/u.test(request.url()),
+        const previewRequestPromise = page.waitForRequest(
+            request =>
+                /\/publications\/enrichment-preview$/u.test(request.url()) &&
+                request.method() === 'POST',
         )
         await page.getByRole('button', { name: 'Fetch from Web of Science' }).click()
         const previewRequest = await previewRequestPromise
 
-        const requestUrl = new URL(previewRequest.url())
-        expect(requestUrl.searchParams.get('doi')).toBe(PUBLICATION_DOI)
+        // The DOI travels in the body now: the preview spends provider quota, so
+        // it is a POST rather than a cacheable read.
+        expect(previewRequest.postDataJSON()).toMatchObject({ doi: PUBLICATION_DOI })
         await expect(
             page.getByRole('heading', { name: 'Web of Science import preview' }),
         ).toBeVisible()
