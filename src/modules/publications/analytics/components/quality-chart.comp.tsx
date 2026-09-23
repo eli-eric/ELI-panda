@@ -94,25 +94,27 @@ export const QualityChart = ({ own, user }: Props) => {
             {/* The bars carry no direct labels — 22 of them would be unreadable —
                 so the same numbers are available as text for screen readers,
                 print, and anyone checking a figure against the export. */}
-            <table className="w-full text-sm" data-testid="analytics-quality-table">
-                <caption className="sr-only">{fm({ id: quality.title })}</caption>
-                <thead>
-                    <tr className="border-b text-left text-muted-foreground">
-                        <th className="py-1">{fm({ id: quality.title })}</th>
-                        <th className="py-1 text-right">{fm({ id: quality.own })}</th>
-                        <th className="py-1 text-right">{fm({ id: quality.user })}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {data.map(row => (
-                        <tr key={row.band} className="border-b last:border-0">
-                            <td className="py-1">{row.band}</td>
-                            <td className="py-1 text-right">{row.own}</td>
-                            <td className="py-1 text-right">{row.user}</td>
+            <div className="overflow-x-auto">
+                <table className="w-full text-sm" data-testid="analytics-quality-table">
+                    <caption className="sr-only">{fm({ id: quality.title })}</caption>
+                    <thead>
+                        <tr className="border-b text-left text-muted-foreground">
+                            <th className="py-1">{fm({ id: quality.title })}</th>
+                            <th className="py-1 text-right">{fm({ id: quality.own })}</th>
+                            <th className="py-1 text-right">{fm({ id: quality.user })}</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {data.map(row => (
+                            <tr key={row.band} className="border-b last:border-0">
+                                <td className="py-1">{row.band}</td>
+                                <td className="py-1 text-right">{row.own}</td>
+                                <td className="py-1 text-right">{row.user}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </section>
     )
 }

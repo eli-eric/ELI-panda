@@ -48,18 +48,12 @@
     /* Data visualisation.
        Two categorical slots for the own/user comparison, validated for both
        colour-vision deficiency and normal-vision separation against this
-       surface. The quality ramp is a single hue, dark = the strongest band,
-       because quality bands are ordered rather than independent identities. */
+       surface. Quality bands are an axis, not a series, so they are not
+       coloured individually. */
     --viz-series-own: #2a78d6;
     --viz-series-user: #eb6834;
     --viz-grid: oklch(0.92 0.004 286.32);
     --viz-axis: oklch(0.552 0.016 285.938);
-    --viz-quality-1: #08306b;
-    --viz-quality-2: #1b5a9c;
-    --viz-quality-3: #2a78d6;
-    --viz-quality-4: #5b9bdf;
-    --viz-quality-5: #8fbce9;
-    --viz-quality-6: #c3dbf3;
     --viz-neutral: oklch(0.705 0.015 286.067);
 }
 
@@ -70,12 +64,6 @@
     --viz-series-user: #d95926;
     --viz-grid: oklch(0.274 0.006 286.033);
     --viz-axis: oklch(0.705 0.015 286.067);
-    --viz-quality-1: #c3dbf3;
-    --viz-quality-2: #8fbce9;
-    --viz-quality-3: #5b9bdf;
-    --viz-quality-4: #3987e5;
-    --viz-quality-5: #1b5a9c;
-    --viz-quality-6: #14406d;
     --viz-neutral: oklch(0.552 0.016 285.938);
     --background: oklch(0.141 0.005 285.823);
     --foreground: oklch(0.985 0 0);

@@ -18,22 +18,24 @@ export const JournalFrequencies = ({ rows }: { rows: ReportingCount[] }) => {
                     <FormattedMessage id={message.common.ui.noDataAvailable} />
                 </p>
             ) : (
-                <table className="w-full text-sm" data-testid="analytics-journals">
-                    <thead>
-                        <tr className="border-b text-left text-muted-foreground">
-                            <th className="py-1">{fm({ id: journals.name })}</th>
-                            <th className="py-1 text-right">{fm({ id: journals.count })}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {rows.map(row => (
-                            <tr key={row.uid} className="border-b last:border-0">
-                                <td className="py-1">{row.name}</td>
-                                <td className="py-1 text-right">{row.count}</td>
+                <div className="overflow-x-auto">
+                    <table className="w-full text-sm" data-testid="analytics-journals">
+                        <thead>
+                            <tr className="border-b text-left text-muted-foreground">
+                                <th className="py-1">{fm({ id: journals.name })}</th>
+                                <th className="py-1 text-right">{fm({ id: journals.count })}</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {rows.map(row => (
+                                <tr key={row.uid} className="border-b last:border-0">
+                                    <td className="py-1">{row.name}</td>
+                                    <td className="py-1 text-right">{row.count}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             )}
         </section>
     )

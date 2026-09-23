@@ -96,37 +96,41 @@ export const Q3Q4Trend = ({ data }: Props) => {
                     </LineChart>
                 </ResponsiveContainer>
             </div>
-            <table className="w-full text-sm">
-                <caption className="sr-only">{fm({ id: trend.title })}</caption>
-                <thead>
-                    <tr className="border-b text-left text-muted-foreground">
-                        <th className="py-1">{fm({ id: message.publicationsAnalytics.year })}</th>
-                        <th className="py-1">
-                            {fm({ id: message.publicationsAnalytics.quality.own })}
-                        </th>
-                        <th className="py-1">
-                            {fm({ id: message.publicationsAnalytics.quality.user })}
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {data.map(entry => (
-                        <tr key={entry.year} className="border-b last:border-0">
-                            <td className="py-1">{entry.year}</td>
-                            <td className="py-1">
-                                {entry.own.percent === null
-                                    ? fm({ id: trend.noRanked })
-                                    : `${entry.own.percent.toFixed(2)} % · ${fm({ id: trend.ratio }, { q3q4: entry.own.q3q4Count, ranked: entry.own.rankedCount })}`}
-                            </td>
-                            <td className="py-1">
-                                {entry.user.percent === null
-                                    ? fm({ id: trend.noRanked })
-                                    : `${entry.user.percent.toFixed(2)} % · ${fm({ id: trend.ratio }, { q3q4: entry.user.q3q4Count, ranked: entry.user.rankedCount })}`}
-                            </td>
+            <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                    <caption className="sr-only">{fm({ id: trend.title })}</caption>
+                    <thead>
+                        <tr className="border-b text-left text-muted-foreground">
+                            <th className="py-1">
+                                {fm({ id: message.publicationsAnalytics.year })}
+                            </th>
+                            <th className="py-1">
+                                {fm({ id: message.publicationsAnalytics.quality.own })}
+                            </th>
+                            <th className="py-1">
+                                {fm({ id: message.publicationsAnalytics.quality.user })}
+                            </th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {data.map(entry => (
+                            <tr key={entry.year} className="border-b last:border-0">
+                                <td className="py-1">{entry.year}</td>
+                                <td className="py-1">
+                                    {entry.own.percent === null
+                                        ? fm({ id: trend.noRanked })
+                                        : `${entry.own.percent.toFixed(2)} % · ${fm({ id: trend.ratio }, { q3q4: entry.own.q3q4Count, ranked: entry.own.rankedCount })}`}
+                                </td>
+                                <td className="py-1">
+                                    {entry.user.percent === null
+                                        ? fm({ id: trend.noRanked })
+                                        : `${entry.user.percent.toFixed(2)} % · ${fm({ id: trend.ratio }, { q3q4: entry.user.q3q4Count, ranked: entry.user.rankedCount })}`}
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </section>
     )
 }
