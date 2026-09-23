@@ -58,6 +58,10 @@ export const messages = {
             expand: 'Expand',
             collapse: 'Collapse',
             selectOption: 'Select option...',
+            selectOptions: 'Select options...',
+            selectedCount: '{count} selected',
+            removeSelection: 'Remove selection',
+            unavailableReference: 'Unavailable reference ({uid})',
             noItemsFound: 'No items found.',
             noDataAvailable: 'No data available',
             page: 'Page',
@@ -1071,6 +1075,105 @@ export const messages = {
     orderItem: { head: 'ELI Panda - Order Item' },
     publication: {
         head: 'ELI Panda - Publication',
+        enrichment: {
+            sourcesTitle: 'Sources consulted',
+            sourcesHelp:
+                'Values are only suggestions until you apply them, and nothing is saved until you submit the publication.',
+            provider: {
+                crossref: 'Crossref',
+                wosStarter: 'Web of Science',
+                unpaywall: 'Unpaywall',
+            },
+            state: {
+                ok: 'Answered',
+                error: 'Unavailable',
+                notFound: 'No record for this DOI',
+                notConfigured: 'Not configured',
+                ambiguous: 'More than one record',
+                skipped: 'Not consulted',
+            },
+            retryAfter: 'Retry after {seconds} s',
+            openAccessTitle: 'Open access',
+            openAccessStatus: 'Reported as {status}',
+            openAccessHelp:
+                'Open access is reported for information. Choose the matching Open Access Type on the form yourself.',
+            openAccessLink: 'Open the article',
+            openAccessPdf: 'Open the PDF',
+            conflictsTitle: 'Providers disagree',
+            conflictsHelp:
+                'Applying the preview uses the first value. Change the field on the form afterwards if the alternative is correct.',
+            conflictRow:
+                '{field}: {selected} (from {selectedProvider}) or {alternative} (from {alternativeProvider})',
+            datePrecision: {
+                year: 'Publication date is known to the year only.',
+                month: 'Publication date is known to the month only.',
+                day: 'Full publication date available.',
+            },
+            noProviderAnswered: 'No provider returned a record for this DOI.',
+        },
+        reporting: {
+            title: 'Management reporting review',
+            intro: 'Reporting classification is separate from the ELI Publication flag used for RIV. Records nobody has reviewed stay visible as unclassified in management reports.',
+            start: 'Review reporting details',
+            classification: 'Reporting classification',
+            classificationHelp:
+                'Own publications are ELI-led output. User publications are the subset produced from a user call.',
+            documentType: 'Document type',
+            departments: 'Credited departments at publication time',
+            departmentsHelp:
+                'Each selected department is credited once. Department totals can therefore exceed the distinct institutional total.',
+            userCalls: 'Confirmed user calls',
+            userExperiments: 'Confirmed user experiments',
+            experimentalSystems: 'Confirmed experimental systems',
+            linksHelp:
+                'Only confirmed links count. Papers left unlinked are reported as unlinked rather than assigned to a call.',
+            authorsTitle: 'Authorship at publication time',
+            authorsHelp:
+                'Pick ELI authors in the author field above, then record their reporting roles here. A role you do not set stays unknown.',
+            authorDepartments: 'Author departments at publication time',
+            addAuthor: 'Add roles: {name}',
+            removeAuthor: 'Remove reporting author',
+            unknownResearcher: 'Researcher ({uid})',
+            firstAuthor: 'First author',
+            correspondingAuthor: 'Corresponding author',
+            roleUnknown: 'Unknown',
+            roleYes: 'Yes',
+            roleNo: 'No',
+            metricsTitle: 'Journal Citation Reports evidence',
+            metricsHelp:
+                'Record every applicable JCR category for the publication year. The highest percentile decides the quality band, and a Q1 without a percentile is reported as Q1 unsplit rather than guessed into a half.',
+            metricYear: 'JCR year',
+            metricCategory: 'JCR category',
+            metricJournalId: 'Journal identifier (ISSN)',
+            metricQuartile: 'Quartile',
+            metricPercentile: 'Percentile',
+            metricImpactFactor: 'Impact factor',
+            metricBlankUnknown: 'Leave blank if unknown',
+            addMetric: 'Add JCR category',
+            removeMetric: 'Remove metric',
+            rankingStatus: 'When no JCR metric applies',
+            rankingUnknown: 'Unknown / not checked',
+            rankingUnranked: 'Confirmed unranked journal',
+            reviewed:
+                'I have reviewed this classification, authorship, links and journal evidence for reporting.',
+            reviewedHelp: 'Save the publication to record the review.',
+            lastReview: 'Last saved review: {at}',
+            invalid:
+                'Check the reporting fields. Each JCR row needs a year, a category and a quartile.',
+            classificationOptions: {
+                unclassified: 'Not classified yet',
+                ownUser: 'Own — user publication',
+                ownOther: 'Own — other',
+                coauthorship: 'Co-authorship',
+            },
+            documentTypeOptions: {
+                unknown: 'Unknown',
+                article: 'Journal article',
+                proceedings: 'Conference proceedings',
+                bookChapter: 'Book chapter',
+                other: 'Other',
+            },
+        },
         wosImport: {
             dialogTitle: 'Web of Science import preview',
             dialogDescription:

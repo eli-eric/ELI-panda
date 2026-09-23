@@ -62,6 +62,7 @@ export const PublicationDetailContainer: FC<Props> = ({ publication, refetch }) 
     const { mutate, isPending } = usePublicationMutation()
 
     const onSuccessfulSubmit = async () => {
+        await queryClient.invalidateQueries({ queryKey: ['publicationExecutiveSummary'] })
         await queryClient.invalidateQueries({ queryKey: [publicationsTableId] })
         await queryClient.invalidateQueries({
             queryKey: ['publication', { uid: publication?.uid }],

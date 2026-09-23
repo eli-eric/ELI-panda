@@ -64,6 +64,7 @@ export const PublicationFormContainer: FC<Props> = ({ publication, refetch }) =>
     const { closeModal } = useDynamicModalStore()
 
     const onSuccessfulSubmit = (publication: Publication) => {
+        queryClient.invalidateQueries({ queryKey: ['publicationExecutiveSummary'] })
         queryClient.invalidateQueries({ queryKey: [publicationsTableId] })
         refetch?.()
         toast.success('Publication was succesfuly saved')
