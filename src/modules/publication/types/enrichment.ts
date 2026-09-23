@@ -9,8 +9,7 @@ import type {
 const ENRICHMENT_MESSAGES = message.publication.enrichment
 
 /** Providers the preview consults, in the order the backend reports them. */
-export const ENRICHMENT_PROVIDERS = ['crossref', 'wos-starter', 'unpaywall'] as const
-export type EnrichmentProvider = (typeof ENRICHMENT_PROVIDERS)[number]
+export type EnrichmentProvider = 'crossref' | 'wos-starter' | 'unpaywall'
 
 /**
  * Per-provider outcome. `not-configured` is deliberately distinct from `error`:

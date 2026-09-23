@@ -61,5 +61,3 @@ export const useReportingFields = () => {
         },
     })
 }
-
-export const useReportingDisabled = () => !useAccessControl(ROLE.PUBLICATIONS_EDIT)()

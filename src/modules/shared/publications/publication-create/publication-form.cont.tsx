@@ -12,6 +12,7 @@ import { publicationResolver } from '@/modules/publication/form/resolver'
 import type { PublicationForm } from '@/modules/publication/types/form'
 import type { Publication } from '@/modules/publication/types/responses'
 import { formatFormData, formatPublication } from '@/modules/publication/utils/formatters'
+import { PUBLICATION_EXECUTIVE_SUMMARY_KEY } from '@/modules/publications/analytics/hooks/usePublicationExecutiveSummary'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { ROLE } from '@/types/constants/roles'
 import { queryMutate } from '@/utils/fetcher'
@@ -64,7 +65,7 @@ export const PublicationFormContainer: FC<Props> = ({ publication, refetch }) =>
     const { closeModal } = useDynamicModalStore()
 
     const onSuccessfulSubmit = (publication: Publication) => {
-        queryClient.invalidateQueries({ queryKey: ['publicationExecutiveSummary'] })
+        queryClient.invalidateQueries({ queryKey: [PUBLICATION_EXECUTIVE_SUMMARY_KEY] })
         queryClient.invalidateQueries({ queryKey: [publicationsTableId] })
         refetch?.()
         toast.success('Publication was succesfuly saved')

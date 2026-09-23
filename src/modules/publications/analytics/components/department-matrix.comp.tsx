@@ -2,7 +2,7 @@ import { FormattedMessage, useIntl } from 'react-intl'
 
 import { message } from '@/i18n/src/messages'
 
-import { type DepartmentReportingRow,QUALITY_BANDS } from '../types/executive-summary'
+import { type DepartmentReportingRow, QUALITY_BANDS } from '../types/executive-summary'
 import { BAND_LABEL_IDS } from '../utils/labels'
 
 const { departments } = message.publicationsAnalytics

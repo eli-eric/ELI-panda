@@ -2,7 +2,7 @@ import type { IntlShape } from 'react-intl'
 
 import { message } from '@/i18n/src/messages'
 
-import { type PublicationExecutiveSummary,QUALITY_BANDS } from '../types/executive-summary'
+import { type PublicationExecutiveSummary, QUALITY_BANDS } from '../types/executive-summary'
 import { BAND_LABEL_IDS } from './labels'
 
 const analytics = message.publicationsAnalytics

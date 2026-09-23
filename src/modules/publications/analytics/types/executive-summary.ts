@@ -21,9 +21,6 @@ export const QUALITY_BANDS = [
 
 export type QualityBand = (typeof QUALITY_BANDS)[number]
 
-/** Bands that represent a known journal quartile — the Q3+Q4 denominator. */
-export const RANKED_BANDS: QualityBand[] = ['q10Percent', 'q10To25', 'q1Unsplit', 'q2', 'q3', 'q4']
-
 /** UID the backend uses for papers with no confirmed link of a given kind. */
 export const UNLINKED_UID = '__unlinked__'
 

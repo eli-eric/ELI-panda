@@ -32,6 +32,7 @@ export const LinkBreakdown = ({ titleId, data }: Props) => {
     const { formatMessage: fm } = useIntl()
 
     const rows = data.map(entry => ({
+        uid: entry.uid,
         name: entry.name,
         count: entry.count,
         unlinked: entry.uid === UNLINKED_UID,
@@ -84,7 +85,7 @@ export const LinkBreakdown = ({ titleId, data }: Props) => {
                             >
                                 {rows.map(row => (
                                     <Cell
-                                        key={row.name}
+                                        key={row.uid}
                                         fill={
                                             row.unlinked
                                                 ? 'var(--viz-neutral)'

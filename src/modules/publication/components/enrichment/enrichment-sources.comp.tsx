@@ -29,6 +29,21 @@ const STATE_ICONS: Record<EnrichmentSourceState, ReactNode> = {
 const formatValue = (value: unknown) =>
     value === null || value === undefined || value === '' ? '—' : String(value)
 
+/**
+ * Open-access links come from a third party and end up in an href, where a
+ * `javascript:` or `data:` URL would run on click. Only absolute http(s) links
+ * are rendered; anything else is dropped rather than shown as a dead link.
+ */
+const safeHttpUrl = (value?: string) => {
+    if (!value) return undefined
+    try {
+        const parsed = new URL(value)
+        return parsed.protocol === 'https:' || parsed.protocol === 'http:' ? value : undefined
+    } catch {
+        return undefined
+    }
+}
+
 type Props = {
     sources: EnrichmentSourceStatus[]
     conflicts: EnrichmentConflict[]
@@ -108,9 +123,9 @@ export const EnrichmentSources = ({ sources, conflicts, openAccess, datePrecisio
                         <FormattedMessage id={enrichment.openAccessHelp} />
                     </p>
                     <div className="flex gap-3 text-sm">
-                        {openAccess.url && (
+                        {safeHttpUrl(openAccess.url) && (
                             <a
-                                href={openAccess.url}
+                                href={safeHttpUrl(openAccess.url)}
                                 target="_blank"
                                 rel="noreferrer noopener"
                                 className="underline"
@@ -118,9 +133,9 @@ export const EnrichmentSources = ({ sources, conflicts, openAccess, datePrecisio
                                 <FormattedMessage id={enrichment.openAccessLink} />
                             </a>
                         )}
-                        {openAccess.pdfUrl && (
+                        {safeHttpUrl(openAccess.pdfUrl) && (
                             <a
-                                href={openAccess.pdfUrl}
+                                href={safeHttpUrl(openAccess.pdfUrl)}
                                 target="_blank"
                                 rel="noreferrer noopener"
                                 className="underline"

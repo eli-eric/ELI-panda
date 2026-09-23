@@ -1,7 +1,7 @@
 'use client'
 
 import { Check, ChevronsUpDown, X } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 
@@ -61,17 +61,22 @@ const MultiCombobox = ({
     const [open, setOpen] = useState(false)
     const [query, setQuery] = useState('')
 
-    const { data: response } = useCodebook(codebookResponse ? undefined : codebook, { limit })
+    // The typed query goes to the server. Filtering only what the first page
+    // happened to return would silently hide entries in large codebooks such as
+    // user experiments, where the wanted value is usually not in the first 100.
+    const { data: response } = useCodebook(codebookResponse ? undefined : codebook, {
+        limit,
+        searchText: query || undefined,
+    })
     const options = useMemo(
         () => codebookResponse ?? response?.data ?? [],
         [codebookResponse, response],
     )
 
-    const nameByUid = useMemo(() => {
-        const lookup = new Map<string, string>()
-        options.forEach(option => lookup.set(option.uid, option.name))
-        return lookup
-    }, [options])
+    // Names of already-selected entries are remembered across searches, so
+    // narrowing the list does not turn existing selections into raw UIDs.
+    const nameByUid = useRef(new Map<string, string>())
+    options.forEach(option => nameByUid.current.set(option.uid, option.name))
 
     return (
         <Controller
@@ -161,7 +166,7 @@ const MultiCombobox = ({
                             <div className="flex flex-wrap gap-1 pt-1">
                                 {selected.map(uid => (
                                     <Badge key={uid} variant="secondary" className="gap-1">
-                                        {nameByUid.get(uid) ??
+                                        {nameByUid.current.get(uid) ??
                                             fm({ id: messages.ui.unavailableReference }, { uid })}
                                         {!disabled && (
                                             <button

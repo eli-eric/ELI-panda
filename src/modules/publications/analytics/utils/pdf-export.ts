@@ -23,19 +23,33 @@ const toBase64 = (buffer: ArrayBuffer) => {
  * report is full of researcher names, so an unregistered font would produce a
  * file nobody here could use.
  */
+let cachedFonts: { regular: string; bold: string } | undefined
+
+/**
+ * Fetches and base64-encodes the fonts once per page load. Encoding 1.5 MB of
+ * font on the main thread is noticeable, and doing it again on every export
+ * would make each subsequent download feel slower than the first.
+ */
+const loadFontData = async () => {
+    if (cachedFonts) return cachedFonts
+    const [regular, bold] = await Promise.all([
+        fetch(FONT_REGULAR).then(response => response.arrayBuffer()),
+        fetch(FONT_BOLD).then(response => response.arrayBuffer()),
+    ])
+    cachedFonts = { regular: toBase64(regular), bold: toBase64(bold) }
+    return cachedFonts
+}
+
 const registerCzechFont = async (doc: {
     addFileToVFS: (name: string, data: string) => void
     addFont: (file: string, name: string, style: string) => void
     setFont: (name: string, style?: string) => void
 }) => {
-    const [regular, bold] = await Promise.all([
-        fetch(FONT_REGULAR).then(response => response.arrayBuffer()),
-        fetch(FONT_BOLD).then(response => response.arrayBuffer()),
-    ])
+    const fonts = await loadFontData()
 
-    doc.addFileToVFS('DejaVuSans.ttf', toBase64(regular))
+    doc.addFileToVFS('DejaVuSans.ttf', fonts.regular)
     doc.addFont('DejaVuSans.ttf', FONT_FAMILY, 'normal')
-    doc.addFileToVFS('DejaVuSans-Bold.ttf', toBase64(bold))
+    doc.addFileToVFS('DejaVuSans-Bold.ttf', fonts.bold)
     doc.addFont('DejaVuSans-Bold.ttf', FONT_FAMILY, 'bold')
     doc.setFont(FONT_FAMILY, 'normal')
 }
@@ -78,8 +92,6 @@ export const buildReportPdf = async (document: ReportDocument): Promise<Blob> =>
             headStyles: { font: FONT_FAMILY, fontStyle: 'bold', fillColor: [42, 120, 214] },
             // Repeat the heading on every page a table spills onto.
             showHead: 'everyPage',
-            didDrawPage: () => undefined,
-            willDrawPage: () => undefined,
         })
 
         const lastTable = (doc as unknown as { lastAutoTable?: { finalY: number } }).lastAutoTable
