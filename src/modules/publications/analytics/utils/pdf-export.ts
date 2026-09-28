@@ -26,16 +26,23 @@ const toBase64 = (buffer: ArrayBuffer) => {
 let cachedFonts: { regular: string; bold: string } | undefined
 
 /**
+ * fetch resolves on HTTP errors too, and an error page cached as the font
+ * would break every export until the page is reloaded.
+ */
+const fetchFont = async (url: string) => {
+    const response = await fetch(url)
+    if (!response.ok) throw new Error(`Could not load ${url} (HTTP ${response.status})`)
+    return response.arrayBuffer()
+}
+
+/**
  * Fetches and base64-encodes the fonts once per page load. Encoding 1.5 MB of
  * font on the main thread is noticeable, and doing it again on every export
  * would make each subsequent download feel slower than the first.
  */
 const loadFontData = async () => {
     if (cachedFonts) return cachedFonts
-    const [regular, bold] = await Promise.all([
-        fetch(FONT_REGULAR).then(response => response.arrayBuffer()),
-        fetch(FONT_BOLD).then(response => response.arrayBuffer()),
-    ])
+    const [regular, bold] = await Promise.all([fetchFont(FONT_REGULAR), fetchFont(FONT_BOLD)])
     cachedFonts = { regular: toBase64(regular), bold: toBase64(bold) }
     return cachedFonts
 }
