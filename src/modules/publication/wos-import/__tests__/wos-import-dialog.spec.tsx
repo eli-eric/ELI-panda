@@ -176,6 +176,15 @@ describe('WosImportDialogContainer — shared API fixture', () => {
         ).toHaveAttribute('href', preview.recordUrl)
     })
 
+    it('shows the WoS UID without an unsafe record link', () => {
+        renderDialog({ data: { ...preview, recordUrl: 'javascript:alert(1)' } })
+
+        expect(screen.getAllByText('WOS:001164928200001').length).toBeGreaterThan(0)
+        expect(
+            screen.queryByRole('link', { name: `Open ${preview.wosUid} in Web of Science` }),
+        ).not.toBeInTheDocument()
+    })
+
     it('always lists what WoS cannot supply', () => {
         renderDialog()
 

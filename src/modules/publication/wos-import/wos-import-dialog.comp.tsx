@@ -10,6 +10,7 @@ import type { SelectedResearcher } from '@/modules/shared/form/researcherSelect'
 import { PATH } from '@/types/constants/paths'
 
 import type { ExistingPublicationSummary } from '../types/wos-import'
+import { safeHttpUrl } from '../utils/safe-http-url'
 import { WosAuthorRowComponent } from './components/wos-author-row.comp'
 import { WosFieldRowComponent } from './components/wos-field-row.comp'
 import type { WosAuthorSelections } from './hooks/useWosAuthorSelections'
@@ -124,6 +125,7 @@ export const WosImportDialog = ({
 }: Props) => {
     const { formatMessage: fm } = useIntl()
     const disabled = !canImport
+    const recordUrl = safeHttpUrl(header.recordUrl)
 
     return (
         <div className="space-y-5" data-testid="wos-import-dialog">
@@ -131,9 +133,9 @@ export const WosImportDialog = ({
                 {header.title && <p className="font-medium">{header.title}</p>}
                 <p className="flex flex-wrap items-center gap-x-3 text-sm text-muted-foreground">
                     {header.citation && <span>{header.citation}</span>}
-                    {header.wosUid && header.recordUrl && (
+                    {header.wosUid && recordUrl && (
                         <a
-                            href={header.recordUrl}
+                            href={recordUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-1 underline-offset-2 hover:underline"
@@ -146,6 +148,7 @@ export const WosImportDialog = ({
                             <ExternalLink className="size-3" aria-hidden="true" />
                         </a>
                     )}
+                    {header.wosUid && !recordUrl && <span>{header.wosUid}</span>}
                 </p>
             </header>
 
