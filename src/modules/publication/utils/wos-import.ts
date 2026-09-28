@@ -160,9 +160,13 @@ export const researchersDiffer = (
     current.length !== incoming.length ||
     current.some((researcher, index) => researcher.uid !== incoming[index]?.uid)
 
-/** Formats scalar and codebook values for the import comparison table. */
+/** Formats scalar, codebook and researcher-list values for the import comparison table. */
 export const displayWosValue = (value: unknown, emptyLabel: string): string => {
-    if (isBlank(value)) return emptyLabel
+    if (isBlank(value) || (Array.isArray(value) && value.length === 0)) return emptyLabel
+    if (Array.isArray(value))
+        return getCurrentResearchers(value)
+            .map(researcher => `${researcher.lastName}, ${researcher.firstName}`)
+            .join('; ')
     if (isObject(value) && 'name' in value) return String(value.name)
     return String(value)
 }

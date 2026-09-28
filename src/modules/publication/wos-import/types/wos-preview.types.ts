@@ -62,8 +62,8 @@ interface WosImportValueKinds {
     eliResearchers: SelectedResearcher[]
 }
 
-/** Indexing by the frozen list makes a missing value kind a compile error. */
-export type WosImportValues = Partial<{ [K in WosImportableField]: WosImportValueKinds[K] }>
+/** Picking by the frozen list makes a missing value kind a compile error. */
+export type WosImportValues = Partial<Pick<WosImportValueKinds, WosImportableField>>
 
 export const WOS_MATCH_CONFIDENCE = {
     EXACT_ID: 'EXACT_ID',
