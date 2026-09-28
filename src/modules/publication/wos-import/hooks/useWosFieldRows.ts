@@ -35,6 +35,11 @@ const identity = (value: unknown): string => {
     return String(value).trim()
 }
 
+// DOIs are case-insensitive by definition; WoS's canonical casing of the DOI
+// the user just typed is the same value, not an overwrite.
+const fieldIdentity = (field: WosImportableField, value: unknown): string =>
+    field === 'doi' ? identity(value).toLowerCase() : identity(value)
+
 /** Diffs incoming values against the form, one row per frozen field WoS said anything about. */
 export const buildWosFieldRows = (
     values: WosImportValues,
@@ -52,7 +57,7 @@ export const buildWosFieldRows = (
         }
         const status: WosFieldRowStatus = isEmptyFormValue(current)
             ? 'empty'
-            : identity(current) === identity(incoming)
+            : fieldIdentity(field, current) === fieldIdentity(field, incoming)
               ? 'same'
               : 'overwrite'
         return [{ field, current, incoming, status, warnings: fieldWarnings }]

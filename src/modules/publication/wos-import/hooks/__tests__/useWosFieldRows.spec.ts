@@ -81,6 +81,15 @@ describe('buildWosFieldRows', () => {
         })
         expect(row.status).toBe('empty')
     })
+
+    it('treats the DOI typed in lowercase as the same DOI WoS spells in canonical case', () => {
+        const [doi] = buildWosFieldRows({ doi: '10.1103/PhysRevResearch.6.013126' }, [], {
+            doi: '10.1103/physrevresearch.6.013126',
+        })
+        expect(doi.status).toBe('same')
+        const [title] = buildWosFieldRows({ title: 'Laser' }, [], { title: 'LASER' })
+        expect(title.status).toBe('overwrite')
+    })
 })
 
 describe('useWosFieldRows', () => {
