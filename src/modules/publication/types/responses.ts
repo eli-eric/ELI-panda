@@ -38,7 +38,7 @@ export interface Publication {
     citeAs: string
     impactFactor?: number
     quartilBasis?: string
-    quartil?: CodebookType
+    quartil?: string
     yearOfPublication: string
     dateOfPublication?: string
     abstract: string
@@ -53,7 +53,7 @@ export interface Publication {
     eissn?: string
     eidScopus?: string
     publishingCountry: CodebookType
-    language?: CodebookType
+    language?: string
     note?: string
     shortJournalTitle?: string
     // C or D
