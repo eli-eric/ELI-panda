@@ -1373,7 +1373,8 @@ export const messages = {
             unavailableEmpty:
                 'Web of Science supplied every field it can import. Check the rest of the form by hand.',
             import: 'Import {count, plural, one {# field} other {# fields}}',
-            imported: 'Imported {count, plural, one {# field} other {# fields}} from Web of Science.',
+            imported:
+                'Imported {count, plural, one {# field} other {# fields}} from Web of Science.',
             importRequiresEdit: 'Importing into the form requires the publications-edit role.',
             retry: 'Retry',
             errors: {
