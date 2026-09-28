@@ -28,4 +28,4 @@ export const getWosErrorMessageId = (error: unknown): string => {
 
 /** Only invalid-DOI responses describe field validity; outages belong in a toast. */
 export const isWosInvalidDoiError = (error: unknown): boolean =>
-    isObject(error) && error.code === WOS_ERROR_CODES.INVALID_DOI
+    isObject(error) && error.code === WOS_ERROR_CODES.DOI_INVALID

@@ -116,11 +116,11 @@ export interface PublicationWosImportSelection {
     authors: PublicationWosAuthorSelection[]
 }
 
-/** Error codes emitted by publications-wos-import.go in eli-panda-api PR #432. */
+/** Error codes emitted by publications-wos-import.go in eli-panda-api. */
 export const WOS_ERROR_CODES = {
-    INVALID_DOI: 'INVALID_DOI',
+    DOI_INVALID: 'DOI_INVALID',
     INTERNAL_ERROR: 'INTERNAL_ERROR',
-    WOS_RECORD_NOT_FOUND: 'WOS_RECORD_NOT_FOUND',
+    WOS_NOT_FOUND: 'WOS_NOT_FOUND',
     WOS_RECORD_AMBIGUOUS: 'WOS_RECORD_AMBIGUOUS',
     WOS_NOT_CONFIGURED: 'WOS_NOT_CONFIGURED',
     WOS_AUTHENTICATION_FAILED: 'WOS_AUTHENTICATION_FAILED',
@@ -184,9 +184,9 @@ export const WOS_FIELD_LABEL_IDS: Record<string, string> = {
 
 /** Exhaustive mapping: each new backend code requires a corresponding UI message. */
 export const WOS_ERROR_MESSAGE_IDS: Record<WosErrorCode, string> = {
-    [WOS_ERROR_CODES.INVALID_DOI]: WOS_MESSAGES.errors.invalid,
+    [WOS_ERROR_CODES.DOI_INVALID]: WOS_MESSAGES.errors.invalid,
     [WOS_ERROR_CODES.INTERNAL_ERROR]: WOS_MESSAGES.errors.failed,
-    [WOS_ERROR_CODES.WOS_RECORD_NOT_FOUND]: WOS_MESSAGES.errors.notFound,
+    [WOS_ERROR_CODES.WOS_NOT_FOUND]: WOS_MESSAGES.errors.notFound,
     [WOS_ERROR_CODES.WOS_RECORD_AMBIGUOUS]: WOS_MESSAGES.errors.ambiguous,
     [WOS_ERROR_CODES.WOS_NOT_CONFIGURED]: WOS_MESSAGES.errors.notConfigured,
     [WOS_ERROR_CODES.WOS_AUTHENTICATION_FAILED]: WOS_MESSAGES.errors.authentication,
