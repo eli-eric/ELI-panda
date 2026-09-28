@@ -33,6 +33,8 @@ type MultiComboboxProps = FieldProps & {
     className?: string
     /** Rendered under the control, for counting rules the reader needs to know. */
     description?: string
+    /** Called with the new UID list after every toggle, e.g. to sync a table filter. */
+    onChange?: (value: string[]) => void
 }
 
 /**
@@ -55,6 +57,7 @@ const MultiCombobox = ({
     className,
     description,
     limit = 100,
+    onChange,
 }: MultiComboboxProps) => {
     const { control } = useFormContext()
     const { formatMessage: fm } = useIntl()
@@ -86,12 +89,13 @@ const MultiCombobox = ({
             render={({ field, fieldState: { error } }) => {
                 const selected: string[] = Array.isArray(field.value) ? field.value : []
 
-                const toggle = (uid: string) =>
-                    field.onChange(
-                        selected.includes(uid)
-                            ? selected.filter(value => value !== uid)
-                            : [...selected, uid],
-                    )
+                const toggle = (uid: string) => {
+                    const next = selected.includes(uid)
+                        ? selected.filter(value => value !== uid)
+                        : [...selected, uid]
+                    field.onChange(next)
+                    onChange?.(next)
+                }
 
                 return (
                     <div className={cn('space-y-1 w-full', className)}>
