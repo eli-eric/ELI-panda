@@ -1,0 +1,141 @@
+{
+  "status": "already-exists",
+  "doi": "10.1103/physrevresearch.6.013126",
+  "wosUid": "WOS:001164928200001",
+  "recordUrl": "https://www.webofscience.com/wos/woscc/full-record/WOS:001164928200001",
+  "existingPublication": {
+    "uid": "pub-eli-2024-017",
+    "code": "ELI-2024-017",
+    "title": "Anomalous absorption of relativistic laser pulses in near-critical plasmas",
+    "doi": "10.1103/physrevresearch.6.013126"
+  },
+  "values": {
+    "doi": "10.1103/PhysRevResearch.6.013126",
+    "title": "Anomalous absorption of relativistic laser pulses in near-critical plasmas",
+    "wosNumber": "WOS:001164928200001",
+    "longJournalTitle": "PHYSICAL REVIEW RESEARCH",
+    "volume": 6,
+    "pages": "013126",
+    "pagesCount": 12,
+    "yearOfPublication": "2024",
+    "dateOfPublication": "2024-02",
+    "issn": "2643-1564",
+    "eissn": "2643-1564",
+    "webLink": "https://www.webofscience.com/wos/woscc/full-record/WOS:001164928200001",
+    "keywords": "laser-plasma interaction; relativistic optics",
+    "allAuthors": "Novak, Jan; Dvorak, Petr; Svoboda, Martin; Wang, Li",
+    "allAuthorsCount": 4,
+    "mediaTypeCb": {
+      "uid": "media-j",
+      "name": "J - Peer-reviewed article",
+      "code": "J"
+    }
+  },
+  "authors": [
+    {
+      "sourceIndex": 0,
+      "displayName": "Novak, Jan",
+      "wosStandard": "Novak, J",
+      "researcherId": "AAB-1234-2020",
+      "match": {
+        "kind": "researcher-id",
+        "confidence": "EXACT_ID",
+        "knownResearcherId": true,
+        "candidates": [
+          {
+            "uid": "res-novak",
+            "firstName": "Jan",
+            "lastName": "Novák"
+          }
+        ]
+      }
+    },
+    {
+      "sourceIndex": 1,
+      "displayName": "Dvorak, Petr",
+      "wosStandard": "Dvorak, P",
+      "researcherId": "AAC-5678-2021",
+      "match": {
+        "kind": "name",
+        "confidence": "NAME",
+        "knownResearcherId": false,
+        "candidates": [
+          {
+            "uid": "res-dvorak",
+            "firstName": "Petr",
+            "lastName": "Dvořák"
+          }
+        ]
+      }
+    },
+    {
+      "sourceIndex": 2,
+      "displayName": "Svoboda, Martin",
+      "wosStandard": "Svoboda, M",
+      "match": {
+        "kind": "ambiguous",
+        "confidence": "AMBIGUOUS",
+        "knownResearcherId": false,
+        "candidates": [
+          {
+            "uid": "res-svoboda-1",
+            "firstName": "Martin",
+            "lastName": "Svoboda"
+          },
+          {
+            "uid": "res-svoboda-2",
+            "firstName": "Martin",
+            "lastName": "Svoboda"
+          }
+        ]
+      }
+    },
+    {
+      "sourceIndex": 3,
+      "displayName": "Wang, Li",
+      "wosStandard": "Wang, L",
+      "match": {
+        "kind": "none",
+        "confidence": "NONE",
+        "knownResearcherId": false,
+        "candidates": []
+      }
+    }
+  ],
+  "missingImportableFields": [
+    "issue",
+    "isbn"
+  ],
+  "unavailableFields": [
+    "abstract",
+    "openAccessType",
+    "publishingCountry",
+    "oecdFord",
+    "citeAs",
+    "impactFactor",
+    "quartilBasis",
+    "quartil",
+    "authorsDepartments",
+    "grants",
+    "code",
+    "userCall",
+    "userExperimentCb",
+    "experimentalSystemCb",
+    "note",
+    "isbn"
+  ],
+  "warnings": [
+    {
+      "code": "ISSUE_NOT_NUMERIC",
+      "field": "issue",
+      "raw": "1-2",
+      "message": "Web of Science reports issue \"1-2\"; enter it manually."
+    },
+    {
+      "code": "DATE_DAY_MISSING",
+      "field": "dateOfPublication",
+      "raw": "2024-02",
+      "message": "Web of Science reports a month at best; complete the day manually."
+    }
+  ]
+}
