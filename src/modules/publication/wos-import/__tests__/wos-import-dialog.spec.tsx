@@ -27,8 +27,9 @@ const onClose = jest.fn()
 const label = (id: string) => messages.en[id]
 const form = message.publication.form
 
-// The DOI typed by the editor differs only in case from the canonical WoS DOI,
-// and a volume is already filled in: both must be offered, neither pre-checked.
+// The DOI typed by the editor differs only in case from the canonical WoS DOI
+// (the same DOI, not an overwrite), and a volume is already filled in (an
+// overwrite: offered, never pre-checked).
 const FORM_VALUES = {
     doi: '10.1103/physrevresearch.6.013126',
     title: '',
@@ -77,10 +78,9 @@ describe('WosImportDialogContainer — shared API fixture', () => {
 
         expect(within(row('title')).getByRole('checkbox')).toBeChecked()
         expect(within(row('longJournalTitle')).getByRole('checkbox')).toBeChecked()
-        for (const field of ['volume', 'doi']) {
-            expect(within(row(field)).getByRole('checkbox')).not.toBeChecked()
-            expect(within(row(field)).getByText('overwrites')).toBeInTheDocument()
-        }
+        expect(within(row('volume')).getByRole('checkbox')).not.toBeChecked()
+        expect(within(row('volume')).getByText('overwrites')).toBeInTheDocument()
+        expect(within(row('doi')).queryByText('overwrites')).not.toBeInTheDocument()
         expect(within(row('volume')).getByText('7')).toBeInTheDocument()
         expect(within(row('volume')).getByText('6')).toBeInTheDocument()
         expect(
@@ -245,7 +245,8 @@ describe('WosImportDialogContainer — shared API fixture', () => {
         fireEvent.click(screen.getByRole('button', { name: 'Only empty' }))
         expect(importButton()).toHaveTextContent('Import 14 fields')
         fireEvent.click(screen.getByRole('button', { name: 'All' }))
-        expect(importButton()).toHaveTextContent('Import 16 fields')
+        // Every importable row: the 14 empty ones plus the volume overwrite.
+        expect(importButton()).toHaveTextContent('Import 15 fields')
     })
 
     it('lets a view-only user review but not import', () => {
