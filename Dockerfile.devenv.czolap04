@@ -22,7 +22,6 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-ARG NEO4J_PASSWORD
 
 ENV PANDA_API_GW_URL="https://panda-api.dev.eli-laser.eu/v1"
 ENV PANDA_ENV="dev"
@@ -30,12 +29,6 @@ ENV MINIO_ENDPOINT="minio-main"
 ENV MINIO_BUCKET_NAME="panda-dev"
 ENV NEO4J_USER="neo4j"
 ENV NEO4J_URI="bolt://panda-neo4j-dev:7687"
-ENV NEO4J_PASSWORD="${NEO4J_PASSWORD}"
-ENV AZURE_AD_BEAMLINES_CLIENT_ID="${AZURE_AD_BEAMLINES_CLIENT_ID}"
-ENV AZURE_AD_BEAMLINES_CLIENT_SECRET="${AZURE_AD_BEAMLINES_CLIENT_SECRET}"
-ENV AZURE_AD_BEAMLINES_TENANT_ID="${AZURE_AD_BEAMLINES_TENANT_ID}"
-
-RUN env
 
 # This will do the trick, use the corresponding env file for each environment.
 # COPY .env.production.sample .env.production
@@ -53,12 +46,6 @@ ENV MINIO_ENDPOINT="minio-main"
 ENV MINIO_BUCKET_NAME="panda-dev"
 ENV NEO4J_USER="neo4j"
 ENV NEO4J_URI="bolt://panda-neo4j-dev:7687"
-ENV NEO4J_PASSWORD="${NEO4J_PASSWORD}"
-ENV AZURE_AD_BEAMLINES_CLIENT_ID="${AZURE_AD_BEAMLINES_CLIENT_ID}"
-ENV AZURE_AD_BEAMLINES_CLIENT_SECRET="${AZURE_AD_BEAMLINES_CLIENT_SECRET}"
-ENV AZURE_AD_BEAMLINES_TENANT_ID="${AZURE_AD_BEAMLINES_TENANT_ID}"
-
-RUN env
 
 # Install sharp dependencies for alpine
 RUN apk add --no-cache libc6-compat
@@ -94,6 +81,6 @@ USER nextjs
 
 EXPOSE 5001
 
-ENV PORT 5001
+ENV PORT=5001
 
 CMD ["node", "server.js"]
