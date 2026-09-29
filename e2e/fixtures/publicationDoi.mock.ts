@@ -1,9 +1,9 @@
-import type { PublicationWosPreviewResponse } from '../../src/modules/publication/types/wos-import'
+import type { EnrichmentPreviewResponse } from '../../src/modules/publication/types/enrichment'
 
 export const PUBLICATION_DOI = '10.1234/example.article'
 export const PUBLICATION_DOI_URL_INPUT = 'https://doi.org/10.1234/EXAMPLE.Article'
 
-export const PUBLICATION_WOS_PREVIEW: PublicationWosPreviewResponse = {
+export const PUBLICATION_WOS_PREVIEW: EnrichmentPreviewResponse = {
     status: 'found',
     doi: PUBLICATION_DOI,
     values: {
@@ -87,4 +87,19 @@ export const PUBLICATION_WOS_PREVIEW: PublicationWosPreviewResponse = {
         'grants',
         'code',
     ],
+    // Crossref answered, Web of Science is not configured in this environment.
+    // The dialog reports both, so a blank field is distinguishable from an
+    // unconsulted provider.
+    sources: [
+        { provider: 'crossref', status: 'ok', retryable: false, retrievedAt: '2026-01-01T00:00:00Z' },
+        { provider: 'wos-starter', status: 'not-configured', retryable: false },
+        { provider: 'unpaywall', status: 'not-configured', retryable: false },
+    ],
+    provenance: {
+        title: { provider: 'crossref', retrievedAt: '2026-01-01T00:00:00Z' },
+    },
+    conflicts: [],
+    publicationDatePrecision: 'month',
+    authorRolesStatus: 'unknown',
+    affiliationStatus: 'unknown',
 }

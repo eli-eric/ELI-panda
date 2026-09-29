@@ -60,12 +60,17 @@ describe('getEndpoints', () => {
         expect(endpoints.systemsList).toBe('/systems')
     })
 
-    it('builds the WoS preview endpoint with an encoded DOI query', () => {
+    it('encodes the executive summary year range into the query string', () => {
         const endpoints = getEndpoints({
-            query: { doi: '10.1234/laser test', currentPublicationUid: 'publication-1' },
+            query: { year: 2025, startYear: 2019, endYear: 2025 },
         })
-        expect(endpoints.publicationWosPreview).toBe(
-            '/publications/wos-preview?doi=10.1234%2Flaser+test&currentPublicationUid=publication-1',
+        expect(endpoints.publicationExecutiveSummary).toBe(
+            '/publications/analytics/executive-summary?year=2025&startYear=2019&endYear=2025',
         )
+    })
+
+    it('keeps the enrichment preview free of a query string, since the DOI travels in the body', () => {
+        const endpoints = getEndpoints({ query: { doi: '10.1234/laser test' } })
+        expect(endpoints.publicationEnrichmentPreview).toBe('/publications/enrichment-preview')
     })
 })

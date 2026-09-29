@@ -29,6 +29,7 @@ export enum PATH {
     PUBLICATIONS = '/publications/overview',
     RESEARCHERS = '/publications/researchers',
     GRANTS = '/publications/grants',
+    PUBLICATIONS_ANALYTICS = '/publications/analytics',
     PUBLICATION = '/publication',
     SERVICES = '/services',
     SERVICE = '/service',

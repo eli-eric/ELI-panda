@@ -9,6 +9,7 @@ import { PATH } from '@/types/constants/paths'
 
 import { PublicationWosDuplicateDialog } from '../components/publication-wos-duplicate-dialog.comp'
 import { PublicationWosImportDialog } from '../components/publication-wos-import-dialog.comp'
+import type { EnrichmentPreviewResponse } from '../types/enrichment'
 import {
     type PublicationWosDuplicatePreview,
     type PublicationWosFoundPreview,
@@ -25,7 +26,7 @@ import {
     researchersDiffer,
 } from '../utils/wos-import'
 import { getWosPreviewDescription } from '../utils/wos-presentation'
-import { usePublicationWosPreview } from './usePublicationWosPreview'
+import { usePublicationEnrichmentPreview } from './usePublicationEnrichmentPreview'
 
 const wosMessages = message.publication.wosImport
 
@@ -34,7 +35,7 @@ export const useWosLookup = () => {
     const router = useRouter()
     const { formatMessage: fm } = useIntl()
     const { clearErrors, getValues, setError, setValue } = useFormContext()
-    const { fetchPreview, isPending } = usePublicationWosPreview()
+    const { fetchEnrichmentPreview, isPending } = usePublicationEnrichmentPreview()
     const { openModal, closeModal } = useDynamicModalStore()
 
     const currentPublicationUid = getValues('uid') as string | undefined
@@ -74,7 +75,10 @@ export const useWosLookup = () => {
         toast.success(fm({ id: wosMessages.applied }))
     }
 
-    const openImportPreview = (preview: PublicationWosFoundPreview) => {
+    const openImportPreview = (
+        preview: PublicationWosFoundPreview,
+        enrichment: EnrichmentPreviewResponse,
+    ) => {
         openModal('dialog', {
             id: modalId,
             component: PublicationWosImportDialog,
@@ -88,6 +92,12 @@ export const useWosLookup = () => {
                 size: 'xl',
                 preview,
                 currentValues: getValues(),
+                // What each provider answered travels with the values, so the
+                // editor can tell a genuinely empty field from an unconsulted one.
+                sources: enrichment.sources,
+                conflicts: enrichment.conflicts,
+                openAccess: enrichment.openAccess,
+                datePrecision: enrichment.publicationDatePrecision,
             },
             onSubmit: (selection: PublicationWosImportSelection) =>
                 applyPreview(preview, selection),
@@ -122,9 +132,35 @@ export const useWosLookup = () => {
         clearErrors('doi')
 
         try {
-            const preview = await fetchPreview({ doi, currentPublicationUid })
-            if (preview.status === WOS_PREVIEW_STATUS.ALREADY_EXISTS) openDuplicatePreview(preview)
-            else openImportPreview(preview)
+            const enrichment = await fetchEnrichmentPreview({ doi, currentPublicationUid })
+
+            if (enrichment.status === WOS_PREVIEW_STATUS.ALREADY_EXISTS) {
+                openDuplicatePreview({
+                    status: WOS_PREVIEW_STATUS.ALREADY_EXISTS,
+                    doi: enrichment.doi,
+                    existingPublication: enrichment.existingPublication!,
+                })
+                return
+            }
+
+            // Without values there is nothing to review. Say so rather than
+            // opening an empty dialog the editor has to interpret.
+            if (enrichment.status !== WOS_PREVIEW_STATUS.FOUND || !enrichment.values) {
+                toast.error(fm({ id: message.publication.enrichment.noProviderAnswered }))
+                return
+            }
+
+            openImportPreview(
+                {
+                    status: WOS_PREVIEW_STATUS.FOUND,
+                    doi: enrichment.doi,
+                    values: enrichment.values,
+                    authors: enrichment.authors,
+                    missingImportableFields: enrichment.missingImportableFields,
+                    unavailableFields: enrichment.unavailableFields,
+                },
+                enrichment,
+            )
         } catch (error) {
             // Syntax failures need a DOI field error as well as a toast.
             const errorMessage = fm({ id: getWosErrorMessageId(error) })

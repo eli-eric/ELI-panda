@@ -7,13 +7,16 @@ import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { renderWithProviders } from '@/testutils/wrappers/renderWithProviders'
 
 import { publicationResolver } from '../../form/resolver'
+import { usePublicationEnrichmentPreview } from '../../hooks/usePublicationEnrichmentPreview'
 import { usePublicationFields } from '../../hooks/usePublicationFields'
-import { usePublicationWosPreview } from '../../hooks/usePublicationWosPreview'
-import { type PublicationWosPreviewResponse, WOS_ERROR_CODES } from '../../types/wos-import'
+import type { EnrichmentPreviewResponse } from '../../types/enrichment'
+import { WOS_ERROR_CODES } from '../../types/wos-import'
 import { DoiLookupField } from '../doi-lookup.field'
 
 jest.mock('next/router', () => ({ useRouter: jest.fn() }))
-jest.mock('../../hooks/usePublicationWosPreview', () => ({ usePublicationWosPreview: jest.fn() }))
+jest.mock('../../hooks/usePublicationEnrichmentPreview', () => ({
+    usePublicationEnrichmentPreview: jest.fn(),
+}))
 jest.mock('../../hooks/usePublicationFields', () => ({ usePublicationFields: jest.fn() }))
 jest.mock('@/store/useDynamicModalStore', () => ({ useDynamicModalStore: jest.fn() }))
 jest.mock('sonner', () => ({
@@ -24,18 +27,18 @@ jest.mock('sonner', () => ({
 }))
 
 const mockUseRouter = useRouter as jest.Mock
-const mockUsePublicationWosPreview = usePublicationWosPreview as jest.Mock
+const mockUsePublicationEnrichmentPreview = usePublicationEnrichmentPreview as jest.Mock
 const mockUsePublicationFields = usePublicationFields as jest.Mock
 const mockUseDynamicModalStore = useDynamicModalStore as unknown as jest.Mock
 const mockToastError = toast.error as unknown as jest.Mock
 const mockToastSuccess = toast.success as unknown as jest.Mock
 
-const fetchPreview = jest.fn()
+const fetchEnrichmentPreview = jest.fn()
 const openModal = jest.fn()
 const closeModal = jest.fn()
 const push = jest.fn()
 
-const foundPreview: Extract<PublicationWosPreviewResponse, { status: 'found' }> = {
+const foundPreview: EnrichmentPreviewResponse = {
     status: 'found',
     doi: '10.1234/laser.test',
     values: {
@@ -56,6 +59,17 @@ const foundPreview: Extract<PublicationWosPreviewResponse, { status: 'found' }> 
     ],
     missingImportableFields: ['issn'],
     unavailableFields: ['abstract'],
+    // One provider answered and one is not configured, which the dialog reports
+    // so a blank field is distinguishable from an unconsulted source.
+    sources: [
+        { provider: 'crossref', status: 'ok', retryable: false },
+        { provider: 'wos-starter', status: 'not-configured', retryable: false },
+        { provider: 'unpaywall', status: 'not-configured', retryable: false },
+    ],
+    provenance: { title: { provider: 'crossref', retrievedAt: '2026-01-01T00:00:00Z' } },
+    conflicts: [],
+    authorRolesStatus: 'unknown',
+    affiliationStatus: 'unknown',
 }
 
 const FormValues = () => {
@@ -92,13 +106,19 @@ beforeEach(() => {
             'data-testid': 'doi',
         },
     })
-    mockUsePublicationWosPreview.mockReturnValue({ fetchPreview, isPending: false })
+    mockUsePublicationEnrichmentPreview.mockReturnValue({
+        fetchEnrichmentPreview,
+        isPending: false,
+    })
     mockUseDynamicModalStore.mockReturnValue({ openModal, closeModal })
 })
 
 describe('DoiLookupField', () => {
     it('uses an explicit button and disables the field while a preview is pending', () => {
-        mockUsePublicationWosPreview.mockReturnValue({ fetchPreview, isPending: true })
+        mockUsePublicationEnrichmentPreview.mockReturnValue({
+            fetchEnrichmentPreview,
+            isPending: true,
+        })
 
         renderWithProviders(<TestForm />, {
             withForm: true,
@@ -112,7 +132,7 @@ describe('DoiLookupField', () => {
 
     it('opens a review and applies only the confirmed selection without submitting', async () => {
         const onSubmit = jest.fn()
-        fetchPreview.mockResolvedValue(foundPreview)
+        fetchEnrichmentPreview.mockResolvedValue(foundPreview)
 
         renderWithProviders(<TestForm onSubmit={onSubmit} />, {
             withForm: true,
@@ -133,7 +153,7 @@ describe('DoiLookupField', () => {
         fireEvent.click(screen.getByRole('button', { name: 'Refresh from Web of Science' }))
 
         await waitFor(() =>
-            expect(fetchPreview).toHaveBeenCalledWith({
+            expect(fetchEnrichmentPreview).toHaveBeenCalledWith({
                 doi: '10.1234/laser.test',
                 currentPublicationUid: 'publication-1',
             }),
@@ -143,8 +163,17 @@ describe('DoiLookupField', () => {
             expect.objectContaining({
                 id: 'publication-wos-preview-publication-1',
                 props: expect.objectContaining({
-                    preview: foundPreview,
-                    description: expect.stringContaining(foundPreview.values.title!),
+                    // The dialog receives the importable subset; the per-provider
+                    // outcome travels beside it rather than inside the preview.
+                    preview: expect.objectContaining({
+                        status: 'found',
+                        doi: foundPreview.doi,
+                        values: foundPreview.values,
+                        authors: foundPreview.authors,
+                    }),
+                    sources: foundPreview.sources,
+                    conflicts: [],
+                    description: expect.stringContaining(foundPreview.values!.title!),
                     currentValues: expect.objectContaining({
                         title: 'Title entered by the librarian',
                     }),
@@ -201,7 +230,7 @@ describe('DoiLookupField', () => {
         await waitFor(() =>
             expect(screen.getByTestId('doi')).toHaveAttribute('aria-invalid', 'true'),
         )
-        expect(fetchPreview).not.toHaveBeenCalled()
+        expect(fetchEnrichmentPreview).not.toHaveBeenCalled()
         expect(openModal).not.toHaveBeenCalled()
         expect(mockToastError).toHaveBeenCalledWith(
             'Enter a valid DOI before fetching from Web of Science.',
@@ -240,7 +269,7 @@ describe('DoiLookupField', () => {
         await waitFor(() =>
             expect(screen.getByTestId('doi')).toHaveAttribute('aria-invalid', 'true'),
         )
-        expect(fetchPreview).not.toHaveBeenCalled()
+        expect(fetchEnrichmentPreview).not.toHaveBeenCalled()
         fireEvent.click(screen.getByRole('button', { name: saveLabel }))
         await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1))
         expect(onSubmit.mock.calls[0][0]).toMatchObject({ doi: values.doi, title: values.title })
@@ -248,7 +277,7 @@ describe('DoiLookupField', () => {
     })
 
     it('offers to open the existing publication when the DOI is already registered', async () => {
-        fetchPreview.mockResolvedValue({
+        fetchEnrichmentPreview.mockResolvedValue({
             status: 'already-exists',
             doi: '10.1234/laser.test',
             existingPublication: {
@@ -257,7 +286,19 @@ describe('DoiLookupField', () => {
                 title: 'Existing publication',
                 doi: '10.1234/laser.test',
             },
-        } satisfies PublicationWosPreviewResponse)
+            authors: [],
+            missingImportableFields: [],
+            unavailableFields: [],
+            sources: [
+                { provider: 'crossref', status: 'skipped', retryable: false },
+                { provider: 'wos-starter', status: 'skipped', retryable: false },
+                { provider: 'unpaywall', status: 'skipped', retryable: false },
+            ],
+            provenance: {},
+            conflicts: [],
+            authorRolesStatus: 'unknown',
+            affiliationStatus: 'unknown',
+        } satisfies EnrichmentPreviewResponse)
 
         renderWithProviders(<TestForm />, {
             withForm: true,
@@ -275,7 +316,7 @@ describe('DoiLookupField', () => {
     })
 
     it('maps typed API failures to a clear message without changing the form', async () => {
-        fetchPreview.mockRejectedValue(
+        fetchEnrichmentPreview.mockRejectedValue(
             Object.assign(new Error('upstream failed'), {
                 status: 503,
                 code: WOS_ERROR_CODES.WOS_RATE_LIMITED,
@@ -309,7 +350,7 @@ describe('lookup error field state', () => {
         undefined,
         { name: 'AbortError' },
     ])('shows a toast without invalidating the DOI for %p', async error => {
-        fetchPreview.mockRejectedValue(error)
+        fetchEnrichmentPreview.mockRejectedValue(error)
         const values = { doi: '10.1234/laser.test', title: 'Existing title' }
         renderWithProviders(<TestForm />, { withForm: true, formProps: { defaultValues: values } })
         fireEvent.click(screen.getByRole('button', { name: 'Fetch from Web of Science' }))
@@ -319,7 +360,7 @@ describe('lookup error field state', () => {
         expect(openModal).not.toHaveBeenCalled()
     })
     it('marks DOI invalid only when the server rejects its syntax', async () => {
-        fetchPreview.mockRejectedValue({ code: WOS_ERROR_CODES.INVALID_DOI })
+        fetchEnrichmentPreview.mockRejectedValue({ code: WOS_ERROR_CODES.INVALID_DOI })
         renderWithProviders(<TestForm />, {
             withForm: true,
             formProps: { defaultValues: { doi: '10.1234/laser.test' } },

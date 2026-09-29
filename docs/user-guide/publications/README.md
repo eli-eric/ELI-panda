@@ -66,6 +66,7 @@ The module surfaces **four pages** under the _Publications_ sidebar group.
 - [Creating and editing a publication](./workflows/creating-and-editing-publications.md) — DOI metadata lookup, multi-section form, Media-Type-driven schema, linked researchers, linked grants, file attachment.
 - [Managing researchers](./workflows/managing-researchers.md) — adding researchers, ORCID / Scopus / ResearcherID, citizenship.
 - [Managing grants](./workflows/managing-grants.md) — grants, grant groups, codes.
+- [Reporting review & analytics](./workflows/reporting-and-analytics.md) — confirming the reporting classification, credited departments, authorship roles and JCR evidence on a publication; reading the analytics dashboard; Word / PDF downloads.
 - [Exporting to RIV](./workflows/riv-export.md) — validation, year / provider / delivery reference, XML download.
 
 ## Coming soon
