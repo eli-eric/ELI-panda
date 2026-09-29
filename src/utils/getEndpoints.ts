@@ -87,6 +87,7 @@ export const getEndpoints = ({
         publicationEnrichmentPreview: `/publications/enrichment-preview`,
         publicationExecutiveSummary: `/publications/analytics/executive-summary${query}`,
         publications: `/publications${query}`,
+        publicationsFilterOptions: `/publications/filter-options`,
         researcher: `/researcher${uidPart}`,
         researchers: `/researchers${query}`,
         grant: `/grant${uidPart}`,
