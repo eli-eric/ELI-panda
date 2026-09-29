@@ -116,11 +116,11 @@ export interface PublicationWosImportSelection {
     authors: PublicationWosAuthorSelection[]
 }
 
-/** Error codes emitted by publications-wos-import.go in eli-panda-api PR #432. */
+/** Error codes emitted by publications-wos-import.go in eli-panda-api. */
 export const WOS_ERROR_CODES = {
-    INVALID_DOI: 'INVALID_DOI',
+    DOI_INVALID: 'DOI_INVALID',
     INTERNAL_ERROR: 'INTERNAL_ERROR',
-    WOS_RECORD_NOT_FOUND: 'WOS_RECORD_NOT_FOUND',
+    WOS_NOT_FOUND: 'WOS_NOT_FOUND',
     WOS_RECORD_AMBIGUOUS: 'WOS_RECORD_AMBIGUOUS',
     WOS_NOT_CONFIGURED: 'WOS_NOT_CONFIGURED',
     WOS_AUTHENTICATION_FAILED: 'WOS_AUTHENTICATION_FAILED',
@@ -156,6 +156,7 @@ export const WOS_FIELD_LABEL_IDS: Record<string, string> = {
     doi: FORM_MESSAGES.doi.label,
     eissn: FORM_MESSAGES.eissn.label,
     eliPublication: FORM_MESSAGES.eliPublication.label,
+    eliResearchers: FORM_MESSAGES.eliAuthorsList.label,
     experimentalSystemCb: FORM_MESSAGES.experimentalSystemCb.label,
     grants: FORM_MESSAGES.grants.label,
     impactFactor: FORM_MESSAGES.impactFactor.label,
@@ -170,6 +171,7 @@ export const WOS_FIELD_LABEL_IDS: Record<string, string> = {
     openAccessType: FORM_MESSAGES.openAccessType.label,
     pages: FORM_MESSAGES.pages.label,
     pagesCount: FORM_MESSAGES.pagesCount.label,
+    proceedingsIsbn: FORM_MESSAGES.proceedingsIsbn.label,
     publishingCountry: FORM_MESSAGES.publishingCountry.label,
     quartil: FORM_MESSAGES.quartil.label,
     quartilBasis: FORM_MESSAGES.quartilBasis.label,
@@ -184,9 +186,9 @@ export const WOS_FIELD_LABEL_IDS: Record<string, string> = {
 
 /** Exhaustive mapping: each new backend code requires a corresponding UI message. */
 export const WOS_ERROR_MESSAGE_IDS: Record<WosErrorCode, string> = {
-    [WOS_ERROR_CODES.INVALID_DOI]: WOS_MESSAGES.errors.invalid,
+    [WOS_ERROR_CODES.DOI_INVALID]: WOS_MESSAGES.errors.invalid,
     [WOS_ERROR_CODES.INTERNAL_ERROR]: WOS_MESSAGES.errors.failed,
-    [WOS_ERROR_CODES.WOS_RECORD_NOT_FOUND]: WOS_MESSAGES.errors.notFound,
+    [WOS_ERROR_CODES.WOS_NOT_FOUND]: WOS_MESSAGES.errors.notFound,
     [WOS_ERROR_CODES.WOS_RECORD_AMBIGUOUS]: WOS_MESSAGES.errors.ambiguous,
     [WOS_ERROR_CODES.WOS_NOT_CONFIGURED]: WOS_MESSAGES.errors.notConfigured,
     [WOS_ERROR_CODES.WOS_AUTHENTICATION_FAILED]: WOS_MESSAGES.errors.authentication,

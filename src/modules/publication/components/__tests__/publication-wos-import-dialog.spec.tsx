@@ -246,7 +246,9 @@ describe('import review controls', () => {
                 ],
             }),
         )
-    })
+        // Rendering 500 author rows takes ~5 s alone in jsdom; the default 5 s
+        // budget fails it under full-suite load.
+    }, 20_000)
     it('requires a new ISBN choice when media type changes its destination', async () => {
         const onSubmit = jest.fn()
         renderWithProviders(

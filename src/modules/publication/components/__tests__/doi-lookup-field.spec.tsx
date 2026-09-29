@@ -344,7 +344,7 @@ describe('DoiLookupField', () => {
 describe('lookup error field state', () => {
     it.each([
         ...Object.values(WOS_ERROR_CODES)
-            .filter(code => code !== WOS_ERROR_CODES.INVALID_DOI)
+            .filter(code => code !== WOS_ERROR_CODES.DOI_INVALID)
             .map(code => ({ code })),
         null,
         undefined,
@@ -360,7 +360,7 @@ describe('lookup error field state', () => {
         expect(openModal).not.toHaveBeenCalled()
     })
     it('marks DOI invalid only when the server rejects its syntax', async () => {
-        fetchEnrichmentPreview.mockRejectedValue({ code: WOS_ERROR_CODES.INVALID_DOI })
+        fetchEnrichmentPreview.mockRejectedValue({ code: WOS_ERROR_CODES.DOI_INVALID })
         renderWithProviders(<TestForm />, {
             withForm: true,
             formProps: { defaultValues: { doi: '10.1234/laser.test' } },

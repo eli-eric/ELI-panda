@@ -4,11 +4,11 @@ import Listbox from '@/components/form/Listbox'
 import { RadioSelect } from '@/components/form/radio-select.comp'
 import { useAccessControl } from '@/hooks/useAccessControl'
 import { DepartmentsComponent } from '@/modules/publication/components/departments.comp'
-import { DoiLookupField } from '@/modules/publication/components/doi-lookup.field'
 import { EliAuthorsSelectComponent } from '@/modules/publication/components/eli-authors-select.comp'
 import { PublicationYearField } from '@/modules/publication/components/publication-year.field'
 import { PublicationReportingFields } from '@/modules/publication/components/reporting/reporting-fields.comp'
 import { WebLinkField } from '@/modules/publication/components/web-link.field'
+import { WosImportButton } from '@/modules/publication/components/wos-import.button'
 import { useMediaTypeStore } from '@/modules/publication/hooks/useMediaTypeStore'
 import { usePublicationFields } from '@/modules/publication/hooks/usePublicationFields'
 import type { MEDIA_TYPE_CODE } from '@/modules/publication/types/constants'
@@ -47,7 +47,14 @@ export const PublicationFreeFormComponent = () => {
             <Listbox {...fields.userCall} />
             <Combobox {...fields.userExperimentCb} />
             <Combobox {...fields.experimentalSystemCb} />
-            <DoiLookupField />
+            <div className="flex items-start gap-2">
+                <div className="min-w-0 flex-1">
+                    <Input {...fields.doi} />
+                </div>
+                <div className="pt-5">
+                    <WosImportButton />
+                </div>
+            </div>
             <WebLinkField />
             <Listbox {...fields.openAccessType} />
             <Input {...fields.title} />

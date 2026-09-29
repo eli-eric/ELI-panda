@@ -7,8 +7,8 @@ const errors = message.publication.wosImport.errors
 
 describe('WoS error contract', () => {
     it.each([
-        [WOS_ERROR_CODES.INVALID_DOI, errors.invalid],
-        [WOS_ERROR_CODES.WOS_RECORD_NOT_FOUND, errors.notFound],
+        [WOS_ERROR_CODES.DOI_INVALID, errors.invalid],
+        [WOS_ERROR_CODES.WOS_NOT_FOUND, errors.notFound],
         [WOS_ERROR_CODES.WOS_RECORD_AMBIGUOUS, errors.ambiguous],
         [WOS_ERROR_CODES.WOS_NOT_CONFIGURED, errors.notConfigured],
         [WOS_ERROR_CODES.WOS_AUTHENTICATION_FAILED, errors.authentication],
@@ -21,8 +21,8 @@ describe('WoS error contract', () => {
         const axiosError = toAxiosError({ code, status: 503 })
         expect(getWosErrorMessageId(axiosError)).toBe(expected)
         expect(isWosErrorCode(code)).toBe(true)
-        expect(isWosInvalidDoiError({ code })).toBe(code === WOS_ERROR_CODES.INVALID_DOI)
-        expect(isWosInvalidDoiError(axiosError)).toBe(code === WOS_ERROR_CODES.INVALID_DOI)
+        expect(isWosInvalidDoiError({ code })).toBe(code === WOS_ERROR_CODES.DOI_INVALID)
+        expect(isWosInvalidDoiError(axiosError)).toBe(code === WOS_ERROR_CODES.DOI_INVALID)
     })
     it.each([null, undefined, 'failure', 0, {}, { code: 'UNKNOWN' }, { code: 'toString' }])(
         'handles unknown rejection %p',
