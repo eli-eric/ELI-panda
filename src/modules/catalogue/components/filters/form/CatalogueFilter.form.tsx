@@ -1,4 +1,4 @@
-import { useQueryState } from 'next-usequerystate'
+import { useQueryState } from 'nuqs'
 import { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 
@@ -10,6 +10,7 @@ import useCatalogueFormFields from '@/modules/catalogueItem/components/form/Cata
 import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
 import { CategoryPropFilters } from '@/modules/shared/form/CategoryPropFilters'
 import { useFormControlStore } from '@/store/useFormControlStore'
+import { parseJsonParam } from '@/utils/urlQuery'
 
 interface CatalogueFilterFormProps {
     tableId: string
@@ -32,13 +33,7 @@ export const CatalogueFilterForm = ({
     // Keep the category field in sync with the URL param (mount + back/forward nav).
     // category is a user-editable URL param, so guard against malformed JSON.
     useEffect(() => {
-        let parsed = null
-        try {
-            parsed = categoryQuery ? JSON.parse(categoryQuery) : null
-        } catch {
-            parsed = null
-        }
-        setValue('category', parsed)
+        setValue('category', parseJsonParam<unknown>(categoryQuery, null))
     }, [categoryQuery, setValue])
 
     return (

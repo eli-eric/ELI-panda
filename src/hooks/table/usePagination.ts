@@ -1,4 +1,4 @@
-import { useQueryState } from 'next-usequerystate'
+import { useQueryState } from 'nuqs'
 import { useCallback, useMemo } from 'react'
 
 import useTableStateStore from '@/store/useTableStateStore'

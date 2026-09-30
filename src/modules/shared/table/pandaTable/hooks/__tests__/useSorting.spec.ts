@@ -1,11 +1,11 @@
 import { act, renderHook } from '@testing-library/react'
-import { useQueryState } from 'next-usequerystate'
+import { useQueryState } from 'nuqs'
 
 import useTableStateStore from '@/store/useTableStateStore'
 
 import { useSorting } from '../useSorting'
 
-jest.mock('next-usequerystate', () => ({
+jest.mock('nuqs', () => ({
     useQueryState: jest.fn(),
 }))
 

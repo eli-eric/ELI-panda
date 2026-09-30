@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react'
 
 let mockQueryValue: string | null = null
-jest.mock('next-usequerystate', () => ({
+jest.mock('nuqs', () => ({
     useQueryState: () => [mockQueryValue, jest.fn()],
 }))
 

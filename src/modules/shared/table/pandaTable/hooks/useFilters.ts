@@ -1,10 +1,11 @@
 import type { ColumnFiltersState } from '@tanstack/react-table'
-import { useQueryState } from 'next-usequerystate'
+import { useQueryState } from 'nuqs'
 import type { Dispatch, SetStateAction } from 'react'
 import { startTransition, useCallback, useEffect, useMemo } from 'react'
 import { useIsFirstRender } from 'usehooks-ts'
 
 import useTableStateStore from '@/store/useTableStateStore'
+import { parseColumnFilterParam, readQueryParamFromUrl } from '@/utils/urlQuery'
 
 export const useFilters = (
     tableId: string,
@@ -42,22 +43,43 @@ export const useFilters = (
         [enableQueryURL, setColumnFilter, setFilterQuery, tableId, filterInstance],
     )
 
-    // initialize update table state and query state and instance on first render
+    // Hydrate the table state on first render. The URL is read, never written:
+    // writing an empty store back would delete the `filter` param of a shared
+    // deep link before anything had a chance to read it (ELIPANDA-505).
     useEffect(() => {
-        if (isFirstRender && useFirstRender) {
-            startTransition(() => {
-                if (enableQueryURL) {
-                    setFiltering(
-                        filterInstance?.length > 0
-                            ? filterInstance
-                            : JSON.parse(filterQuery || '[]'),
-                    )
-                } else {
-                    setFiltering(filterInstance)
-                }
-            })
-        }
-    }, [isFirstRender, setFiltering, filterInstance, filterQuery, useFirstRender, enableQueryURL])
+        if (!isFirstRender || !useFirstRender) return
+
+        startTransition(() => {
+            if (!enableQueryURL) {
+                setColumnFilter(tableId, filterInstance)
+                return
+            }
+
+            // Filters already in the store (e.g. coming back to the table
+            // client-side) win, and get mirrored into the URL.
+            if (filterInstance.length > 0) {
+                setFiltering(filterInstance)
+                return
+            }
+
+            const urlFilters = parseColumnFilterParam(
+                filterQuery ?? readQueryParamFromUrl('filter'),
+            )
+            if (urlFilters.length > 0) {
+                // The URL is already correct — only the store needs filling in.
+                setColumnFilter(tableId, urlFilters)
+            }
+        })
+    }, [
+        isFirstRender,
+        setFiltering,
+        setColumnFilter,
+        tableId,
+        filterInstance,
+        filterQuery,
+        useFirstRender,
+        enableQueryURL,
+    ])
 
     return [filterInstance, setFiltering]
 }

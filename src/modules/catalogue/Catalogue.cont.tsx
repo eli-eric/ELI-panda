@@ -1,6 +1,6 @@
 import type { Table } from '@tanstack/react-table'
 import { X } from 'lucide-react'
-import { useQueryState } from 'next-usequerystate'
+import { useQueryState } from 'nuqs'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { useIntl } from 'react-intl'
 

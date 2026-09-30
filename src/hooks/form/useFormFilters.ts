@@ -1,5 +1,5 @@
 import type { ColumnFilter } from '@tanstack/react-table'
-import { useQueryState } from 'next-usequerystate'
+import { useQueryState } from 'nuqs'
 import { startTransition, useCallback, useEffect, useMemo } from 'react'
 import type { DefaultValues, FieldValues } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
@@ -8,6 +8,7 @@ import { useFilters } from '@/modules/shared/table/pandaTable/hooks/useFilters'
 import { useFormControlStore } from '@/store/useFormControlStore'
 import useTableStateStore from '@/store/useTableStateStore'
 import { getTablePageSizeDefault } from '@/types/pagination'
+import { parseColumnFilterParam } from '@/utils/urlQuery'
 
 interface IFilter<T> {
     tableId: string
@@ -51,7 +52,7 @@ export const useFormFilter = <T extends FieldValues>({
     const [filterQuery] = useQueryState('filter', { history: 'replace' })
 
     const columnFilters = useMemo(
-        () => (filterQuery ? JSON.parse(filterQuery || '[]') : storeFilters),
+        () => (filterQuery ? parseColumnFilterParam(filterQuery) : storeFilters),
         [filterQuery, storeFilters],
     )
     const formMethods = useForm<T>({
@@ -89,14 +90,14 @@ export const useFormFilter = <T extends FieldValues>({
                 }
             })
             reset(
-                columnFilters.reduce((acc, curr) => {
+                columnFilters.reduce<Record<string, unknown>>((acc, curr) => {
                     if (curr.id === 'systemLevel') {
                         acc[curr.id] = { uid: curr.value, name: curr.value }
                     }
                     acc[curr.id] = curr.value
 
                     return acc
-                }, {}),
+                }, {}) as DefaultValues<T>,
             )
         }
         //eslint-disable-next-line

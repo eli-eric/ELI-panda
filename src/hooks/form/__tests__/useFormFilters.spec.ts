@@ -4,7 +4,7 @@ import useTableStateStore from '@/store/useTableStateStore'
 
 import { useFormFilterState } from '../useFormFilters'
 
-jest.mock('next-usequerystate', () => ({
+jest.mock('nuqs', () => ({
     useQueryState: jest.fn().mockReturnValue([null, jest.fn()]),
 }))
 

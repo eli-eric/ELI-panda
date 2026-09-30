@@ -1,4 +1,4 @@
-import { useQueryState } from 'next-usequerystate'
+import { useQueryState } from 'nuqs'
 import type { FC } from 'react'
 import { useCallback, useEffect } from 'react'
 import { useIntl } from 'react-intl'
