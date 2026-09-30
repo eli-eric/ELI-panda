@@ -12,7 +12,10 @@ import { useFormControlStore } from '@/store/useFormControlStore'
 import { parseJsonParam } from '@/utils/urlQuery'
 
 // `value` on ComboboxTreeControlled collides with InputHTMLAttributes' own `value`,
-// so borrow the resolved prop type rather than widening it here.
+// so borrow the resolved prop type rather than widening it here. It goes straight
+// into HeadlessUI's <Combobox>, which reads `undefined` as "uncontrolled" and then
+// falls back to its own retained selection — so an absent category has to stay
+// `null`, as it was before this parse was hardened.
 type CategoryValue = ComponentProps<typeof ComboboxTreeControlled>['value']
 
 interface CatalogueFilterFormProps {
@@ -66,7 +69,7 @@ export const CatalogueFilterForm = ({
             <ComboboxTreeControlled
                 {...fields.category}
                 disabled={false}
-                value={parseJsonParam<CategoryValue>(categoryQuery, undefined)}
+                value={parseJsonParam<CategoryValue | null>(categoryQuery, null) as CategoryValue}
                 customLabel="Category"
                 className="col-span-2"
                 onChange={v => {

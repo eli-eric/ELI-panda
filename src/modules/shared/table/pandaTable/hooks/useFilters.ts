@@ -1,7 +1,6 @@
 import type { ColumnFiltersState } from '@tanstack/react-table'
 import type { Dispatch, SetStateAction } from 'react'
-import { startTransition, useCallback, useEffect, useMemo } from 'react'
-import { useIsFirstRender } from 'usehooks-ts'
+import { startTransition, useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { useUrlQueryState } from '@/hooks/useUrlQueryState'
 import useTableStateStore from '@/store/useTableStateStore'
@@ -23,8 +22,6 @@ export const useFilters = (
         history: 'replace',
     })
 
-    const isFirstRender = useIsFirstRender()
-
     const setFiltering: Dispatch<SetStateAction<ColumnFiltersState>> = useCallback(
         (filtering: SetStateAction<ColumnFiltersState>) => {
             if (typeof filtering === 'function') {
@@ -43,33 +40,41 @@ export const useFilters = (
         [enableQueryURL, setColumnFilter, setFilterQuery, tableId, filterInstance],
     )
 
-    // Hydrate the table state on first render. The URL is read, never written:
-    // writing an empty store back would delete the `filter` param of a shared
-    // deep link before anything had a chance to read it (ELIPANDA-505).
+    // Hydrate the table state once. The URL is read, never written: writing an
+    // empty store back would delete the `filter` param of a shared deep link
+    // before anything had a chance to read it (ELIPANDA-505).
+    //
+    // Keyed on "have we hydrated yet", not on the first render: on a
+    // server-rendered page the URL value only reaches us after hydration, so
+    // first-render-only would miss it entirely.
+    const hasHydrated = useRef(false)
+
     useEffect(() => {
-        if (!isFirstRender || !useFirstRender) return
+        if (!useFirstRender || hasHydrated.current) return
 
-        startTransition(() => {
-            if (!enableQueryURL) {
-                setColumnFilter(tableId, filterInstance)
-                return
-            }
+        if (!enableQueryURL) {
+            hasHydrated.current = true
+            startTransition(() => setColumnFilter(tableId, filterInstance))
+            return
+        }
 
-            // Filters already in the store (e.g. coming back to the table
-            // client-side) win, and get mirrored into the URL.
-            if (filterInstance.length > 0) {
-                setFiltering(filterInstance)
-                return
-            }
+        // Filters already in the store (e.g. coming back to the table
+        // client-side) win, and get mirrored into the URL.
+        if (filterInstance.length > 0) {
+            hasHydrated.current = true
+            startTransition(() => setFiltering(filterInstance))
+            return
+        }
 
-            const urlFilters = parseColumnFilterParam(filterQuery)
-            if (urlFilters.length > 0) {
-                // The URL is already correct — only the store needs filling in.
-                setColumnFilter(tableId, urlFilters)
-            }
-        })
+        // Nothing to hydrate from yet. Stay unlatched so a URL value arriving
+        // on a later render is still picked up.
+        const urlFilters = parseColumnFilterParam(filterQuery)
+        if (urlFilters.length === 0) return
+
+        // The URL is already correct — only the store needs filling in.
+        hasHydrated.current = true
+        startTransition(() => setColumnFilter(tableId, urlFilters))
     }, [
-        isFirstRender,
         setFiltering,
         setColumnFilter,
         tableId,

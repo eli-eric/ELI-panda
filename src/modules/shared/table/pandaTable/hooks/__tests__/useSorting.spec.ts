@@ -76,6 +76,45 @@ describe('useSorting', () => {
         expect(result.current[0]).toEqual([])
     })
 
+    it('does not clear ?sortBy before it has been read', () => {
+        // The sync effect must not publish an empty initial sort: on a
+        // server-rendered page ?sortBy arrives after the first render, and
+        // publishing [] first would delete the deep link's own param.
+        mockUseQueryState.mockReturnValue([null, setQueryFn])
+        const { rerender } = renderHook(() => useSorting('t1', true))
+        rerender()
+
+        expect(setQueryFn).not.toHaveBeenCalled()
+    })
+
+    it('hydrates when ?sortBy arrives after the first render', () => {
+        const sorting = [{ id: 'name', desc: true }]
+        mockUseQueryState.mockReturnValue([null, setQueryFn])
+        const { result, rerender } = renderHook(() => useSorting('t1', true))
+        expect(result.current[0]).toEqual([])
+
+        mockUseQueryState.mockReturnValue([JSON.stringify(sorting), setQueryFn])
+        rerender()
+
+        expect(result.current[0]).toEqual(sorting)
+        expect(setSortBy).toHaveBeenCalledWith('t1', sorting)
+    })
+
+    it('still clears ?sortBy once the user has actually sorted', () => {
+        mockUseQueryState.mockReturnValue([null, setQueryFn])
+        const { result } = renderHook(() => useSorting('t1', true))
+
+        act(() => {
+            result.current[1]([{ id: 'name', desc: true }])
+        })
+        expect(setQueryFn).toHaveBeenCalledWith(JSON.stringify([{ id: 'name', desc: true }]))
+
+        act(() => {
+            result.current[1]([])
+        })
+        expect(setQueryFn).toHaveBeenCalledWith(null)
+    })
+
     it('setSorting updates store + queryString', () => {
         const { result } = renderHook(() => useSorting('t1', true))
         const newSorting = [{ id: 'price', desc: true }]
