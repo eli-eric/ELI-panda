@@ -1,11 +1,11 @@
 import { Filter } from 'lucide-react'
-import { useQueryState } from 'nuqs'
 import { Fragment } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
 
 import { Button } from '@/components/Buttons'
 import { Tooltip } from '@/components/Tooltip'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
+import { useUrlQueryState } from '@/hooks/useUrlQueryState'
 
 import { useCatalogueFilterSheet } from './hooks/useCatalogueFilterSheet'
 
@@ -23,7 +23,7 @@ export const CatalogueFilterButtonContainer = ({
     side = 'left',
 }: CatalogueFilterButtonContainerProps) => {
     const openFilterSheet = useCatalogueFilterSheet()
-    const [categoryQuery] = useQueryState('category', { history: 'push' })
+    const [categoryQuery] = useUrlQueryState('category', { history: 'push' })
 
     const { storeFilters } = useFormFilterState({
         tableId,

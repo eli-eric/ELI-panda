@@ -1,7 +1,7 @@
-import { useQueryState } from 'nuqs'
 import type { ChangeEvent } from 'react'
 import { useEffect, useRef, useTransition } from 'react'
 
+import { useUrlQueryState } from '@/hooks/useUrlQueryState'
 import useTableStateStore from '@/store/useTableStateStore'
 
 interface Options {
@@ -38,7 +38,7 @@ export const useDebouncedSearchInput = ({
     onChange,
     delay = 500,
 }: Options): UseDebouncedSearchInputResult => {
-    const [querySearch, setQuerySearch] = useQueryState('search', {
+    const [querySearch, setQuerySearch] = useUrlQueryState('search', {
         history: 'replace',
     })
 

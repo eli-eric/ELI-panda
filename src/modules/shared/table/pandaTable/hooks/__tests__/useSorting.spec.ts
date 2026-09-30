@@ -51,6 +51,31 @@ describe('useSorting', () => {
         expect(result.current[0]).toEqual(sortByInstance)
     })
 
+    it('applies a ?sortBy deep link even when nuqs has not seen the URL yet', () => {
+        // pages router not ready -> nuqs reports null while the param is in the URL
+        const sorting = [{ id: 'name', desc: true }]
+        window.history.replaceState(
+            {},
+            '',
+            `/systems/overview?sortBy=${encodeURIComponent(JSON.stringify(sorting))}`,
+        )
+        mockUseQueryState.mockReturnValue([null, setQueryFn])
+
+        const { result } = renderHook(() => useSorting('t1', true))
+
+        expect(result.current[0]).toEqual(sorting)
+        expect(setSortBy).toHaveBeenCalledWith('t1', sorting)
+        window.history.replaceState({}, '', '/')
+    })
+
+    it('ignores a malformed ?sortBy instead of throwing', () => {
+        mockUseQueryState.mockReturnValue(['%5B%7Bbroken', setQueryFn])
+
+        const { result } = renderHook(() => useSorting('t1', true))
+
+        expect(result.current[0]).toEqual([])
+    })
+
     it('setSorting updates store + queryString', () => {
         const { result } = renderHook(() => useSorting('t1', true))
         const newSorting = [{ id: 'price', desc: true }]

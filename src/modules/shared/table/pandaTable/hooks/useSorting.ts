@@ -1,9 +1,9 @@
 import type { SortingState } from '@tanstack/react-table'
-import { useQueryState } from 'nuqs'
 import type { Dispatch, SetStateAction } from 'react'
 import { useEffect, useState } from 'react'
 import { useIsFirstRender } from 'usehooks-ts'
 
+import { useUrlQueryState } from '@/hooks/useUrlQueryState'
 import useTableStateStore from '@/store/useTableStateStore'
 import { parseJsonParam } from '@/utils/urlQuery'
 
@@ -15,7 +15,7 @@ export const useSorting = (
     const sortByInstance = instances[tableId]?.sortBy
     const sortByStringInstance = instances[tableId]?.sortByQueryString
 
-    const [sortByQuery, setSortByQuery] = useQueryState('sortBy', {
+    const [sortByQuery, setSortByQuery] = useUrlQueryState('sortBy', {
         history: 'replace',
     })
     // table state

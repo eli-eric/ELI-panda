@@ -1,13 +1,19 @@
-import { useQueryState } from 'nuqs'
+import type { ComponentProps } from 'react'
 
 import { ComboboxTreeControlled } from '@/components/form/ComboBoxControlled'
 import { Input } from '@/components/form/inputs'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
+import { useUrlQueryState } from '@/hooks/useUrlQueryState'
 import { cn } from '@/lib/utils'
 import useCatalogueFormFields from '@/modules/catalogueItem/components/form/CatalogueForm.fields'
 import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
 import { CategoryPropFilters } from '@/modules/shared/form/CategoryPropFilters'
 import { useFormControlStore } from '@/store/useFormControlStore'
+import { parseJsonParam } from '@/utils/urlQuery'
+
+// `value` on ComboboxTreeControlled collides with InputHTMLAttributes' own `value`,
+// so borrow the resolved prop type rather than widening it here.
+type CategoryValue = ComponentProps<typeof ComboboxTreeControlled>['value']
 
 interface CatalogueFilterFormProps {
     tableId: string
@@ -19,7 +25,7 @@ export const CatalogueFilterForm = ({
     catalogueCategoryProperties,
 }: CatalogueFilterFormProps) => {
     const fields = useCatalogueFormFields()
-    const [categoryQuery, setCategoryQuery] = useQueryState('category', {
+    const [categoryQuery, setCategoryQuery] = useUrlQueryState('category', {
         history: 'push',
     })
 
@@ -60,7 +66,7 @@ export const CatalogueFilterForm = ({
             <ComboboxTreeControlled
                 {...fields.category}
                 disabled={false}
-                value={categoryQuery ? JSON.parse(categoryQuery) : null}
+                value={parseJsonParam<CategoryValue>(categoryQuery, undefined)}
                 customLabel="Category"
                 className="col-span-2"
                 onChange={v => {

@@ -1,11 +1,11 @@
 import type { ColumnFiltersState } from '@tanstack/react-table'
-import { useQueryState } from 'nuqs'
 import type { Dispatch, SetStateAction } from 'react'
 import { startTransition, useCallback, useEffect, useMemo } from 'react'
 import { useIsFirstRender } from 'usehooks-ts'
 
+import { useUrlQueryState } from '@/hooks/useUrlQueryState'
 import useTableStateStore from '@/store/useTableStateStore'
-import { parseColumnFilterParam, readQueryParamFromUrl } from '@/utils/urlQuery'
+import { parseColumnFilterParam } from '@/utils/urlQuery'
 
 export const useFilters = (
     tableId: string,
@@ -19,7 +19,7 @@ export const useFilters = (
         [instances, tableId],
     )
 
-    const [filterQuery, setFilterQuery] = useQueryState('filter', {
+    const [filterQuery, setFilterQuery] = useUrlQueryState('filter', {
         history: 'replace',
     })
 
@@ -62,9 +62,7 @@ export const useFilters = (
                 return
             }
 
-            const urlFilters = parseColumnFilterParam(
-                filterQuery ?? readQueryParamFromUrl('filter'),
-            )
+            const urlFilters = parseColumnFilterParam(filterQuery)
             if (urlFilters.length > 0) {
                 // The URL is already correct — only the store needs filling in.
                 setColumnFilter(tableId, urlFilters)

@@ -29,8 +29,20 @@ export const parseJsonParam = <T>(raw: string | null | undefined, fallback: T): 
     }
 }
 
-/** Parses the serialized `filter` query param into table column filters. */
+const isColumnFilter = (value: unknown): value is ColumnFilter =>
+    typeof value === 'object' &&
+    value !== null &&
+    typeof (value as ColumnFilter).id === 'string' &&
+    (value as ColumnFilter).id.length > 0
+
+/**
+ * Parses the serialized `filter` query param into table column filters.
+ *
+ * Entries are shape-checked, not just array-checked: these go straight into the
+ * table store, get serialized into the `columnFilter` the API receives, and are
+ * rendered as badges keyed by `id`. `?filter=[1,2]` must not reach any of that.
+ */
 export const parseColumnFilterParam = (raw?: string | null): ColumnFilter[] => {
     const parsed = parseJsonParam<unknown>(raw, [])
-    return Array.isArray(parsed) ? (parsed as ColumnFilter[]) : []
+    return Array.isArray(parsed) ? parsed.filter(isColumnFilter) : []
 }
