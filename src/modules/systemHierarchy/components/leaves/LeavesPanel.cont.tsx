@@ -1,13 +1,14 @@
-import { useQueryState } from 'nuqs'
 import type { FC } from 'react'
 import { useCallback, useEffect } from 'react'
 import { useIntl } from 'react-intl'
 
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import { useResetPaginationOnChange } from '@/hooks/table/usePagination'
+import { useUrlQueryState } from '@/hooks/useUrlQueryState'
 import { message } from '@/i18n/src/messages'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import useTableStateStore from '@/store/useTableStateStore'
+import { parseColumnFilterParam } from '@/utils/urlQuery'
 
 import { useSystemDetail } from '../../hooks/queries/useSystemDetail'
 import { useSystemLeaves } from '../../hooks/queries/useSystemLeaves'
@@ -54,8 +55,8 @@ export const LeavesPanelContainer: FC = () => {
     })
 
     // Sync URL filter params → store on mount (enables persistence across refresh/new tab)
-    const [filterQuery] = useQueryState('filter')
-    const [pageQuery] = useQueryState('page')
+    const [filterQuery] = useUrlQueryState('filter')
+    const [pageQuery] = useUrlQueryState('page')
     const { setColumnFilter, setSearch, setSearchValue, setPaginationState } = useTableStateStore()
 
     // Pagination reset has two halves: selectParent clears ?page when the parent
@@ -70,16 +71,9 @@ export const LeavesPanelContainer: FC = () => {
     }, [pageQuery, selectedParentUid, setPaginationState])
 
     useEffect(() => {
-        if (filterQuery) {
-            try {
-                const parsed = JSON.parse(filterQuery)
-                const urlFilters = Array.isArray(parsed) ? parsed : []
-                if (urlFilters.length > 0) {
-                    setColumnFilter(LEAVES_TABLE_ID, urlFilters)
-                }
-            } catch {
-                // ignore malformed filter query
-            }
+        const urlFilters = parseColumnFilterParam(filterQuery)
+        if (urlFilters.length > 0) {
+            setColumnFilter(LEAVES_TABLE_ID, urlFilters)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])

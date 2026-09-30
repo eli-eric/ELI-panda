@@ -1,9 +1,9 @@
 import type { ColumnFilter } from '@tanstack/react-table'
-import { useQueryState } from 'nuqs'
 import { startTransition, useCallback, useEffect, useMemo } from 'react'
 import type { DefaultValues, FieldValues } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
 
+import { useUrlQueryState } from '@/hooks/useUrlQueryState'
 import { useFilters } from '@/modules/shared/table/pandaTable/hooks/useFilters'
 import { useFormControlStore } from '@/store/useFormControlStore'
 import useTableStateStore from '@/store/useTableStateStore'
@@ -49,7 +49,7 @@ export const useFormFilter = <T extends FieldValues>({
         deleteCustom,
     } = useFormControlStore()
 
-    const [filterQuery] = useQueryState('filter', { history: 'replace' })
+    const [filterQuery] = useUrlQueryState('filter', { history: 'replace' })
 
     const columnFilters = useMemo(
         () => (filterQuery ? parseColumnFilterParam(filterQuery) : storeFilters),
@@ -125,10 +125,10 @@ export const useFormFilterState = ({
     enableQueryUrl?: boolean
 }) => {
     const [storeFilters, setColumnFilters] = useFilters(tableId, enableQueryUrl, false)
-    const [, setQueryPage] = useQueryState('page', { history: 'replace' })
+    const [, setQueryPage] = useUrlQueryState('page', { history: 'replace' })
     const { setPaginationState, setSearch, setSearchValue, instances } = useTableStateStore()
 
-    const [, setQuerySearch] = useQueryState('search', { history: 'replace' })
+    const [, setQuerySearch] = useUrlQueryState('search', { history: 'replace' })
 
     const clearPageAndSearch = useCallback(() => {
         // Read from paginationState (new format) - this is what useQueryManager reads

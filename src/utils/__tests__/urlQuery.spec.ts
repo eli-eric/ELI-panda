@@ -28,6 +28,21 @@ describe('parseColumnFilterParam', () => {
         expect(parseColumnFilterParam('not-json')).toEqual([])
         expect(parseColumnFilterParam('{"id":"name"}')).toEqual([])
     })
+
+    it('drops entries that are not usable column filters', () => {
+        // these reach the store, the API payload and the badge React keys
+        expect(parseColumnFilterParam('[1,2]')).toEqual([])
+        expect(parseColumnFilterParam('["x"]')).toEqual([])
+        expect(parseColumnFilterParam('[null]')).toEqual([])
+        expect(parseColumnFilterParam('[{"value":"no-id"}]')).toEqual([])
+        expect(parseColumnFilterParam('[{"id":"","value":1}]')).toEqual([])
+    })
+
+    it('keeps the valid entries alongside invalid ones', () => {
+        expect(parseColumnFilterParam('[{"id":"name","value":"a"},7]')).toEqual([
+            { id: 'name', value: 'a' },
+        ])
+    })
 })
 
 describe('readQueryParamFromUrl', () => {

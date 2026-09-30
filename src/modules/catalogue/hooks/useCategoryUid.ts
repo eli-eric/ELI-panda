@@ -1,16 +1,10 @@
-import { useQueryState } from 'nuqs'
-
+import { useUrlQueryState } from '@/hooks/useUrlQueryState'
 import type { CodebookType } from '@/types/responses/codebook'
+import { parseJsonParam } from '@/utils/urlQuery'
 
 export const useCategoryUid = () => {
-    const [categoryQuery] = useQueryState('category', { history: 'push' })
-    if (!categoryQuery) return undefined
+    const [categoryQuery] = useUrlQueryState('category', { history: 'push' })
 
-    try {
-        const category: CodebookType | null = JSON.parse(categoryQuery)
-        return category?.uid
-    } catch {
-        // Malformed URL state — treat as absent rather than crashing render
-        return undefined
-    }
+    // Malformed URL state — treat as absent rather than crashing render
+    return parseJsonParam<CodebookType | null>(categoryQuery, null)?.uid
 }

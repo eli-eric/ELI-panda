@@ -1,6 +1,5 @@
 import type { Table } from '@tanstack/react-table'
 import { X } from 'lucide-react'
-import { useQueryState } from 'nuqs'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { useIntl } from 'react-intl'
 
@@ -8,6 +7,7 @@ import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 import { Badge } from '@/components/ui/badge'
 import { useFormFilter } from '@/hooks/form/useFormFilters'
+import { useUrlQueryState } from '@/hooks/useUrlQueryState'
 import { message } from '@/i18n/src/messages'
 import type { CodebookType } from '@/types/responses/codebook'
 
@@ -30,7 +30,7 @@ const CatalogueContainer = () => {
     const tableId = 'catalogueItems'
     const { catalogueItems, error, loading } = useCatalogueItems(tableId, undefined, true)
     const { catalogueCategories } = useCategoryList()
-    const [categoryQuery, setCategoryQuery] = useQueryState('category', {
+    const [categoryQuery, setCategoryQuery] = useUrlQueryState('category', {
         history: 'push',
     })
     const tableRef = useRef<PandaTableV2Handle>(null)

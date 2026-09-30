@@ -1,6 +1,6 @@
-import { useQueryState } from 'nuqs'
 import { useMemo } from 'react'
 
+import { useUrlQueryState } from '@/hooks/useUrlQueryState'
 import useTableStateStore from '@/store/useTableStateStore'
 import { DEFAULT_PAGINATION, resolvePageSizeDefault, toLegacyPagination } from '@/types/pagination'
 import type { CodebookType } from '@/types/responses/codebook'
@@ -20,7 +20,7 @@ export default function useQueryManager(
     enableQueryURL: boolean = false,
 ): { query: Query } {
     const { instances } = useTableStateStore()
-    const [categoryQuery] = useQueryState('category', { history: 'push' })
+    const [categoryQuery] = useUrlQueryState('category', { history: 'push' })
     const category = parseJsonParam<CodebookType | null>(categoryQuery, null)
 
     const categoryFilter = useMemo(
@@ -28,10 +28,10 @@ export default function useQueryManager(
         [category],
     )
 
-    const [searchQuery] = useQueryState('search')
-    const [filterQuery] = useQueryState('filter')
-    const [pageQuery] = useQueryState('page')
-    const [pageSizeQuery] = useQueryState('pageSize')
+    const [searchQuery] = useUrlQueryState('search')
+    const [filterQuery] = useUrlQueryState('filter')
+    const [pageQuery] = useUrlQueryState('page')
+    const [pageSizeQuery] = useUrlQueryState('pageSize')
 
     const resolvedPageSizeDefault = useMemo(
         () => resolvePageSizeDefault(tableId, pageSizeDefault),

@@ -1,10 +1,10 @@
-import { useQueryState } from 'nuqs'
 import { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import { ComboboxTree } from '@/components/form/ComboboxTree'
 import { Input } from '@/components/form/inputs'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
+import { useUrlQueryState } from '@/hooks/useUrlQueryState'
 import { cn } from '@/lib/utils'
 import useCatalogueFormFields from '@/modules/catalogueItem/components/form/CatalogueForm.fields'
 import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
@@ -22,7 +22,7 @@ export const CatalogueFilterForm = ({
     catalogueCategoryProperties,
 }: CatalogueFilterFormProps) => {
     const fields = useCatalogueFormFields()
-    const [categoryQuery, setCategoryQuery] = useQueryState('category', {
+    const [categoryQuery, setCategoryQuery] = useUrlQueryState('category', {
         history: 'push',
     })
 
