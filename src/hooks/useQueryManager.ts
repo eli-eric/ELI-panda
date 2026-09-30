@@ -1,9 +1,10 @@
-import { useQueryState } from 'next-usequerystate'
+import { useQueryState } from 'nuqs'
 import { useMemo } from 'react'
 
 import useTableStateStore from '@/store/useTableStateStore'
 import { DEFAULT_PAGINATION, resolvePageSizeDefault, toLegacyPagination } from '@/types/pagination'
 import type { CodebookType } from '@/types/responses/codebook'
+import { parseColumnFilterParam, parseJsonParam } from '@/utils/urlQuery'
 
 interface Query {
     pagination?: string
@@ -20,7 +21,7 @@ export default function useQueryManager(
 ): { query: Query } {
     const { instances } = useTableStateStore()
     const [categoryQuery] = useQueryState('category', { history: 'push' })
-    const category: CodebookType | null = categoryQuery ? JSON.parse(categoryQuery) : null
+    const category = parseJsonParam<CodebookType | null>(categoryQuery, null)
 
     const categoryFilter = useMemo(
         () => (category ? { value: category, id: 'category', name: 'category' } : undefined),
@@ -65,15 +66,8 @@ export default function useQueryManager(
     //columnFilter merge with categoryFilter, fallback to URL params only when opted in
     const columnFilter = useMemo(() => {
         const storeFilters = instances[tableId]?.columnFilter || []
-        let urlFilters: any[] = []
-        if (enableQueryURL && storeFilters.length === 0 && filterQuery) {
-            try {
-                const parsed = JSON.parse(filterQuery)
-                urlFilters = Array.isArray(parsed) ? parsed : []
-            } catch {
-                urlFilters = []
-            }
-        }
+        const urlFilters =
+            enableQueryURL && storeFilters.length === 0 ? parseColumnFilterParam(filterQuery) : []
         const filters = storeFilters.length > 0 ? storeFilters : urlFilters
         return JSON.stringify(filters.concat(categoryFilter || []))
     }, [instances, tableId, categoryFilter, filterQuery, enableQueryURL])

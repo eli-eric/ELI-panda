@@ -1,11 +1,11 @@
 import { renderHook } from '@testing-library/react'
-import { useQueryState } from 'next-usequerystate'
+import { useQueryState } from 'nuqs'
 
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
 
 import { useUsers } from '../useUsers'
 
-jest.mock('next-usequerystate', () => ({
+jest.mock('nuqs', () => ({
     useQueryState: jest.fn(),
 }))
 

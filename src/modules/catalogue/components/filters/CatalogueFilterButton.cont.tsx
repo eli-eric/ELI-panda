@@ -1,5 +1,5 @@
 import { Filter } from 'lucide-react'
-import { useQueryState } from 'next-usequerystate'
+import { useQueryState } from 'nuqs'
 import { Fragment } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
 

@@ -1,4 +1,4 @@
-import { useQueryState } from 'next-usequerystate'
+import { useQueryState } from 'nuqs'
 import { startTransition, useEffect, useMemo } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
 import { useIsFirstRender } from 'usehooks-ts'

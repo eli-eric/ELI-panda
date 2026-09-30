@@ -12,6 +12,8 @@ const ESM_PACKAGES_TO_TRANSFORM = [
     'd3-dispatch',
     'd3-quadtree',
     'd3-timer',
+    // nuqs v2 is ESM-only (no CJS build), so it has to go through the transform.
+    'nuqs',
 ]
 
 const customJestConfig = {

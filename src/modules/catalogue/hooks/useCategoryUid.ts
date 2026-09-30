@@ -1,4 +1,4 @@
-import { useQueryState } from 'next-usequerystate'
+import { useQueryState } from 'nuqs'
 
 import type { CodebookType } from '@/types/responses/codebook'
 

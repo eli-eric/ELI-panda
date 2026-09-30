@@ -1,4 +1,4 @@
-import { useQueryState } from 'next-usequerystate'
+import { useQueryState } from 'nuqs'
 
 import { ComboboxTreeControlled } from '@/components/form/ComboBoxControlled'
 import { Input } from '@/components/form/inputs'

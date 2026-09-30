@@ -1,10 +1,11 @@
 import type { SortingState } from '@tanstack/react-table'
-import { useQueryState } from 'next-usequerystate'
+import { useQueryState } from 'nuqs'
 import type { Dispatch, SetStateAction } from 'react'
 import { useEffect, useState } from 'react'
 import { useIsFirstRender } from 'usehooks-ts'
 
 import useTableStateStore from '@/store/useTableStateStore'
+import { parseJsonParam } from '@/utils/urlQuery'
 
 export const useSorting = (
     tableId,
@@ -28,7 +29,10 @@ export const useSorting = (
             if (enableQueryURL) {
                 // check if sortByQuery is set
                 if (sortByQuery) {
-                    const parsed = JSON.parse(sortByQuery)
+                    const decoded = parseJsonParam<unknown>(sortByQuery, [])
+                    const parsed: SortingState = Array.isArray(decoded)
+                        ? (decoded as SortingState)
+                        : []
                     setSorting(parsed)
                     setSortBy(tableId, parsed)
                     setSortByQueryString(tableId, parsed.length === 0 ? undefined : sortByQuery)
