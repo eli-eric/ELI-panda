@@ -38,7 +38,11 @@ export const useSorting = (
             hasHydrated.current = true
             setSorting(parsed)
             setSortBy(tableId, parsed)
-            setSortByQueryString(tableId, parsed.length === 0 ? undefined : sortByQuery)
+            // Store the canonical serialization, not the raw param: the sync
+            // effect below republishes `JSON.stringify(sorting)`, and anything
+            // comparing the two (PaginationV2's reset baseline) would otherwise
+            // see a hand-formatted `?sortBy` change out from under it.
+            setSortByQueryString(tableId, parsed.length === 0 ? undefined : JSON.stringify(parsed))
         } else if (sortByStringInstance) {
             hasHydrated.current = true
             setSortByQuery(sortByStringInstance)
@@ -56,8 +60,12 @@ export const useSorting = (
     ])
 
     // Publish user-driven sort changes to the store and the URL.
+    // Latched in an effect, not during render, so a render React throws away
+    // cannot flip it and re-enable the empty-sort publish below.
     const hasEverSorted = useRef(false)
-    if (sorting.length > 0) hasEverSorted.current = true
+    useEffect(() => {
+        if (sorting.length > 0) hasEverSorted.current = true
+    }, [sorting])
 
     useEffect(() => {
         if (isFirstRender) return

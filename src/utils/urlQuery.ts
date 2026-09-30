@@ -29,6 +29,19 @@ export const parseJsonParam = <T>(raw: string | null | undefined, fallback: T): 
     }
 }
 
+/**
+ * Parses a positive-integer query param (`page`, `pageSize`).
+ *
+ * `parseInt` alone yields `NaN` for `?page=abc`, and a `NaN` interpolated into a
+ * serialized pagination object produces invalid JSON that throws in whichever
+ * consumer parses it back — a blank page from one hand-edited link.
+ */
+export const parsePositiveIntParam = (raw: string | null | undefined, fallback: number): number => {
+    if (!raw) return fallback
+    const parsed = parseInt(raw, 10)
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback
+}
+
 const isColumnFilter = (value: unknown): value is ColumnFilter =>
     typeof value === 'object' &&
     value !== null &&

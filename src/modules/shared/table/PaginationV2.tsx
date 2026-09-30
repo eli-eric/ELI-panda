@@ -5,7 +5,7 @@ import { usePagination } from '@/hooks/table/usePagination'
 import useTableStateStore from '@/store/useTableStateStore'
 import type { PaginationSettings } from '@/types/pagination'
 import { PAGE_SIZE_OPTIONS, resolvePageSizeDefault } from '@/types/pagination'
-import { parseColumnFilterParam, readQueryParamFromUrl } from '@/utils/urlQuery'
+import { parseColumnFilterParam, parseJsonParam, readQueryParamFromUrl } from '@/utils/urlQuery'
 
 interface PaginationV2Props {
     tableId: string
@@ -24,6 +24,16 @@ interface PaginationV2Props {
  *
  * Same interface as old Pagination for drop-in replacement.
  */
+/**
+ * The URL's sort in the same canonical form the store holds it in, so a
+ * hand-formatted `?sortBy` (extra whitespace, reordered keys) still compares
+ * equal once it round-trips through `JSON.stringify`.
+ */
+const readUrlSortKey = (): string => {
+    const parsed = parseJsonParam<unknown>(readQueryParamFromUrl('sortBy'), [])
+    return Array.isArray(parsed) && parsed.length > 0 ? JSON.stringify(parsed) : ''
+}
+
 export function PaginationV2({ tableId, settings, onPageChange }: PaginationV2Props) {
     const {
         enableQueryURL,
@@ -74,7 +84,7 @@ export function PaginationV2({ tableId, settings, onPageChange }: PaginationV2Pr
         prevValuesRef.current = {
             search,
             filter,
-            sortBy: sortBy || (enableQueryURL ? readQueryParamFromUrl('sortBy') || '' : ''),
+            sortBy: sortBy || (enableQueryURL ? readUrlSortKey() : ''),
             columnFilterKey:
                 columnFilterRaw?.length || !enableQueryURL
                     ? columnFilterKey

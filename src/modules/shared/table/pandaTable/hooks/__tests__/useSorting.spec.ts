@@ -115,6 +115,19 @@ describe('useSorting', () => {
         expect(setQueryFn).toHaveBeenCalledWith(null)
     })
 
+    it('stores the canonical serialization of a hand-formatted ?sortBy', () => {
+        // PaginationV2 compares its reset baseline against the stored string, so
+        // the raw param and the republished JSON.stringify have to agree.
+        mockUseQueryState.mockReturnValue(['[{"id":"name", "desc":true}]', setQueryFn])
+
+        renderHook(() => useSorting('t1', true))
+
+        expect(setSortByQueryString).toHaveBeenCalledWith(
+            't1',
+            JSON.stringify([{ id: 'name', desc: true }]),
+        )
+    })
+
     it('setSorting updates store + queryString', () => {
         const { result } = renderHook(() => useSorting('t1', true))
         const newSorting = [{ id: 'price', desc: true }]

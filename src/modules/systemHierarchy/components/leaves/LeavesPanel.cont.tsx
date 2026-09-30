@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { useIntl } from 'react-intl'
 
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
@@ -70,13 +70,21 @@ export const LeavesPanelContainer: FC = () => {
         }
     }, [pageQuery, selectedParentUid, setPaginationState])
 
+    // Keyed on "have we hydrated yet" rather than on mount: `filterQuery` comes
+    // from useUrlQueryState, whose value arrives after the first commit on a
+    // server-rendered page. Mount-only works today purely because this panel is
+    // loaded via dynamic(..., { ssr: false }) — which is not a dependency worth
+    // relying on.
+    const hasHydratedFilters = useRef(false)
+
     useEffect(() => {
+        if (hasHydratedFilters.current) return
         const urlFilters = parseColumnFilterParam(filterQuery)
-        if (urlFilters.length > 0) {
-            setColumnFilter(LEAVES_TABLE_ID, urlFilters)
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+        if (urlFilters.length === 0) return
+
+        hasHydratedFilters.current = true
+        setColumnFilter(LEAVES_TABLE_ID, urlFilters)
+    }, [filterQuery, setColumnFilter])
 
     const { setColumnFilters, storeFilters } = useFormFilterState({
         tableId: LEAVES_TABLE_ID,

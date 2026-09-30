@@ -1,4 +1,9 @@
-import { parseColumnFilterParam, parseJsonParam, readQueryParamFromUrl } from '../urlQuery'
+import {
+    parseColumnFilterParam,
+    parseJsonParam,
+    parsePositiveIntParam,
+    readQueryParamFromUrl,
+} from '../urlQuery'
 
 describe('parseJsonParam', () => {
     it('parses valid JSON', () => {
@@ -14,6 +19,27 @@ describe('parseJsonParam', () => {
     it('falls back instead of throwing on malformed JSON', () => {
         expect(parseJsonParam('%5B%7Bnot-json', 'fb')).toBe('fb')
         expect(parseJsonParam('[{"id":', 'fb')).toBe('fb')
+    })
+})
+
+describe('parsePositiveIntParam', () => {
+    it('parses a positive integer', () => {
+        expect(parsePositiveIntParam('3', 1)).toBe(3)
+    })
+
+    it('falls back for anything that is not a usable page number', () => {
+        // `?page=abc` used to become the literal {"page":NaN,…}, which threw in
+        // whichever consumer parsed the pagination string back
+        expect(parsePositiveIntParam('abc', 1)).toBe(1)
+        expect(parsePositiveIntParam('0', 1)).toBe(1)
+        expect(parsePositiveIntParam('-2', 1)).toBe(1)
+        expect(parsePositiveIntParam('', 7)).toBe(7)
+        expect(parsePositiveIntParam(null, 7)).toBe(7)
+        expect(parsePositiveIntParam('Infinity', 7)).toBe(7)
+    })
+
+    it('accepts trailing junk the way parseInt does', () => {
+        expect(parsePositiveIntParam('12abc', 1)).toBe(12)
     })
 })
 
