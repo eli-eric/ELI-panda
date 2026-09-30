@@ -108,6 +108,23 @@ describe('useQueryManager', () => {
         })
     })
 
+    it('keeps the pagination string parseable when ?page is junk', () => {
+        queryState.page = 'abc'
+
+        const { result } = renderHook(() => useQueryManager('systemLeaves'))
+
+        expect(() => JSON.parse(result.current.query.pagination || '')).not.toThrow()
+        expect(getPagination(result.current.query.pagination)).toMatchObject({ page: 1 })
+    })
+
+    it('ignores a non-positive ?page', () => {
+        queryState.page = '0'
+
+        const { result } = renderHook(() => useQueryManager('systemLeaves'))
+
+        expect(getPagination(result.current.query.pagination)).toMatchObject({ page: 1 })
+    })
+
     it('ignores URL filter when enableQueryURL is false', () => {
         queryState.filter = JSON.stringify([{ id: 'name', value: 'abc' }])
 

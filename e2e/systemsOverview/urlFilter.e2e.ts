@@ -85,6 +85,19 @@ test.describe('Systems overview deep link', () => {
         expect(url.searchParams.get('sortBy')).toBe(SORTING)
     })
 
+    test('keeps ?page when ?sortBy is hand-formatted', async ({ page }) => {
+        const calls = await mockSystems(page)
+
+        // Extra whitespace: a real pasted link is not necessarily canonical JSON,
+        // and the page must not be reset just because it round-trips differently.
+        const looseSorting = '[{"id":"name", "desc":true}]'
+        await page.goto(`/systems/overview?page=3&sortBy=${encodeURIComponent(looseSorting)}`)
+
+        await expectLastCall(calls, 'sorting').toBe(SORTING)
+        expect(JSON.parse(calls.at(-1)?.pagination ?? '{}')).toMatchObject({ page: 3 })
+        expect(new URL(page.url()).searchParams.get('page')).toBe('3')
+    })
+
     test('clearing a deep-linked filter removes it and resets to page 1', async ({ page }) => {
         const calls = await mockSystems(page)
 

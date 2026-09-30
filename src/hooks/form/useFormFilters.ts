@@ -59,6 +59,12 @@ export const useFormFilter = <T extends FieldValues>({
         defaultValues: defValues,
     })
     const { reset, setValue } = formMethods
+    // Read during render, not inside the effect below: react-hook-form's
+    // formState is a lazy-subscription proxy, and it only starts recomputing a
+    // field once that field has been read. Reading `isDirty` for the first time
+    // from inside an effect returns the never-updated initial `false`, which
+    // would make the guard below wave through a form the user is editing.
+    const { isDirty } = formMethods.formState
 
     //sync form values (for example, when we click xmark icon in badge)
     useEffect(() => {
@@ -90,9 +96,10 @@ export const useFormFilter = <T extends FieldValues>({
 
     useEffect(() => {
         if (hasSeededForm.current || !columnFilters.length) return
-
+        // Latch only once the seed actually runs: bailing out while the user is
+        // mid-edit must not mean the filters never reach the form at all.
+        if (isDirty) return
         hasSeededForm.current = true
-        if (formMethods.formState.isDirty) return
 
         columnFilters.forEach(filter => {
             if (filter.type) {
@@ -102,16 +109,13 @@ export const useFormFilter = <T extends FieldValues>({
         })
         reset(
             columnFilters.reduce<Record<string, unknown>>((acc, curr) => {
-                if (curr.id === 'systemLevel') {
-                    acc[curr.id] = { uid: curr.value, name: curr.value }
-                }
                 acc[curr.id] = curr.value
 
                 return acc
             }, {}) as DefaultValues<T>,
         )
         //eslint-disable-next-line
-    }, [columnFilters])
+    }, [columnFilters, isDirty])
 
     //clear search on filter change, clear filters on search change
     useEffect(() => {
