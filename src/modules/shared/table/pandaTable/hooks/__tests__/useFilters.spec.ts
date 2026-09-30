@@ -98,6 +98,20 @@ describe('useFilters', () => {
             expect(setFilterQuery).not.toHaveBeenCalled()
         })
 
+        it('hydrates when the URL value arrives after the first render', () => {
+            // server-rendered page: the param only reaches the hook once
+            // hydration is done, so first-render-only would miss it
+            mockUseQueryState.mockReturnValue([null, setFilterQuery])
+            const { rerender } = renderHook(() => useFilters('t1', true))
+            expect(setColumnFilter).not.toHaveBeenCalledWith('t1', URL_FILTERS)
+
+            mockUseQueryState.mockReturnValue([JSON.stringify(URL_FILTERS), setFilterQuery])
+            rerender()
+
+            expect(setColumnFilter).toHaveBeenCalledWith('t1', URL_FILTERS)
+            expect(setFilterQuery).not.toHaveBeenCalled()
+        })
+
         it('never clears the URL when store and URL are both empty', () => {
             mockUseQueryState.mockReturnValue([null, setFilterQuery])
 

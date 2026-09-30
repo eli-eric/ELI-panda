@@ -1,6 +1,6 @@
 import type { SortingState } from '@tanstack/react-table'
 import type { Dispatch, SetStateAction } from 'react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useIsFirstRender } from 'usehooks-ts'
 
 import { useUrlQueryState } from '@/hooks/useUrlQueryState'
@@ -23,27 +23,29 @@ export const useSorting = (
 
     const isFirstRender = useIsFirstRender()
 
-    // initialize update table state and query state and instance on first render
+    // Hydrate once from the URL (or mirror the store into the URL). Keyed on
+    // "have we hydrated yet" rather than the first render: on a server-rendered
+    // page the URL value only reaches us after hydration, so first-render-only
+    // would never see a ?sortBy deep link.
+    const hasHydrated = useRef(false)
+
     useEffect(() => {
-        if (isFirstRender) {
-            if (enableQueryURL) {
-                // check if sortByQuery is set
-                if (sortByQuery) {
-                    const decoded = parseJsonParam<unknown>(sortByQuery, [])
-                    const parsed: SortingState = Array.isArray(decoded)
-                        ? (decoded as SortingState)
-                        : []
-                    setSorting(parsed)
-                    setSortBy(tableId, parsed)
-                    setSortByQueryString(tableId, parsed.length === 0 ? undefined : sortByQuery)
-                    // check if sortByStringInstance is set
-                } else if (sortByStringInstance) {
-                    setSortByQuery(sortByStringInstance)
-                }
-            }
+        if (hasHydrated.current || !enableQueryURL) return
+
+        if (sortByQuery) {
+            const decoded = parseJsonParam<unknown>(sortByQuery, [])
+            const parsed: SortingState = Array.isArray(decoded) ? (decoded as SortingState) : []
+            hasHydrated.current = true
+            setSorting(parsed)
+            setSortBy(tableId, parsed)
+            setSortByQueryString(tableId, parsed.length === 0 ? undefined : sortByQuery)
+        } else if (sortByStringInstance) {
+            hasHydrated.current = true
+            setSortByQuery(sortByStringInstance)
         }
+        // Otherwise stay unlatched: a URL value arriving on a later render must
+        // still be picked up.
     }, [
-        isFirstRender,
         tableId,
         sortByQuery,
         sortByStringInstance,
@@ -53,17 +55,22 @@ export const useSorting = (
         setSortByQuery,
     ])
 
-    // update effect
+    // Publish user-driven sort changes to the store and the URL.
+    const hasEverSorted = useRef(false)
+    if (sorting.length > 0) hasEverSorted.current = true
+
     useEffect(() => {
-        if (!isFirstRender) {
-            setSortBy(tableId, sorting)
-            setSortByQueryString(
-                tableId,
-                sorting.length === 0 ? undefined : JSON.stringify(sorting),
-            )
-            if (enableQueryURL) {
-                setSortByQuery(sorting.length === 0 ? null : JSON.stringify(sorting))
-            }
+        if (isFirstRender) return
+
+        // An empty sort that never came from the user is "not loaded yet", not
+        // "cleared": publishing it would delete the ?sortBy of a shared deep
+        // link before the hydration effect above got to read it.
+        if (sorting.length === 0 && !hasEverSorted.current) return
+
+        setSortBy(tableId, sorting)
+        setSortByQueryString(tableId, sorting.length === 0 ? undefined : JSON.stringify(sorting))
+        if (enableQueryURL) {
+            setSortByQuery(sorting.length === 0 ? null : JSON.stringify(sorting))
         }
         // reason for disabling eslint: isFirstRender is a dependency but it should not trigger a re-render
         // eslint-disable-next-line react-hooks/exhaustive-deps

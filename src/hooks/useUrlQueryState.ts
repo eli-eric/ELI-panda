@@ -1,10 +1,15 @@
 import type { Options, UseQueryStateReturn } from 'nuqs'
 import { useQueryState } from 'nuqs'
-import { useRef } from 'react'
+import { useEffect, useRef, useSyncExternalStore } from 'react'
 
 import { readQueryParamFromUrl } from '@/utils/urlQuery'
 
 type UrlQueryStateReturn = UseQueryStateReturn<string, undefined>
+
+/** Nothing to subscribe to: the address bar is only read, never watched. */
+const subscribeToNothing = () => () => undefined
+
+const readNothing = () => null
 
 /**
  * `useQueryState`, readable during the pages-router "not ready" window.
@@ -16,19 +21,36 @@ type UrlQueryStateReturn = UseQueryStateReturn<string, undefined>
  * modules — reads `null` for params that are sitting in the address bar. That is
  * what broke shared deep links (ELIPANDA-505).
  *
- * Until nuqs reports a value for the key, fall back to the address bar. The
- * fallback is dropped permanently the first time nuqs does report one, so a
- * param the user has since cleared is never resurrected.
+ * The address bar fills that gap, read through `useSyncExternalStore` so that it
+ * cannot reach the hydration render: prerendered HTML has no query string, so
+ * `getServerSnapshot` returns `null` for both SSR and hydration and the two
+ * trees agree. React swaps in the real value immediately afterwards, and
+ * anything mounting after hydration sees it on its first render.
+ *
+ * Once nuqs reports a value for the key the fallback is dropped for good, so a
+ * param the user has cleared is never resurrected. Consumers must therefore
+ * treat the value as something that can arrive late — hydrate when it shows up
+ * rather than only on first render.
  *
  * Writes are untouched — the setter is nuqs' own.
  */
 export const useUrlQueryState = (key: string, options: Options = {}): UrlQueryStateReturn => {
     const [routerValue, setValue] = useQueryState(key, options)
 
-    const hasRouterValue = useRef(false)
-    if (routerValue !== null) hasRouterValue.current = true
+    const urlValue = useSyncExternalStore(
+        subscribeToNothing,
+        () => readQueryParamFromUrl(key),
+        readNothing,
+    )
 
-    const value = hasRouterValue.current ? routerValue : readQueryParamFromUrl(key)
+    // Latched in an effect, not during render: a render React throws away must
+    // not be able to flip it.
+    const hasRouterValue = useRef(false)
+    useEffect(() => {
+        if (routerValue !== null) hasRouterValue.current = true
+    }, [routerValue])
+
+    const value = routerValue ?? (hasRouterValue.current ? null : urlValue)
 
     return [value, setValue]
 }

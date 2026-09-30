@@ -1,5 +1,5 @@
 import type { ColumnFilter } from '@tanstack/react-table'
-import { startTransition, useCallback, useEffect, useMemo } from 'react'
+import { startTransition, useCallback, useEffect, useMemo, useRef } from 'react'
 import type { DefaultValues, FieldValues } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
 
@@ -80,28 +80,38 @@ export const useFormFilter = <T extends FieldValues>({
         }
     }, [setValue, clearCustomFieldToSync, setFilters, deleteCustom, customFieldIdToSync])
 
-    //set default values to form from store or from url on first render
-    useEffect(() => {
-        if (columnFilters.length) {
-            columnFilters.forEach(filter => {
-                if (filter.type) {
-                    setValue(filter.id as any, null as any)
-                    setFilters(prev => prev.filter(item => item.id !== filter.id))
-                }
-            })
-            reset(
-                columnFilters.reduce<Record<string, unknown>>((acc, curr) => {
-                    if (curr.id === 'systemLevel') {
-                        acc[curr.id] = { uid: curr.value, name: curr.value }
-                    }
-                    acc[curr.id] = curr.value
+    // Seed the form from the store or the URL. This used to run on mount only,
+    // which is a render too early on a server-rendered page: the URL filter of a
+    // deep link arrives just after hydration, so the table showed the filter
+    // while the sheet's fields stayed blank. It now waits for the filters to
+    // turn up — but only while the form is untouched, so a late arrival can
+    // never reset fields the user is in the middle of filling in.
+    const hasSeededForm = useRef(false)
 
-                    return acc
-                }, {}) as DefaultValues<T>,
-            )
-        }
+    useEffect(() => {
+        if (hasSeededForm.current || !columnFilters.length) return
+
+        hasSeededForm.current = true
+        if (formMethods.formState.isDirty) return
+
+        columnFilters.forEach(filter => {
+            if (filter.type) {
+                setValue(filter.id as any, null as any)
+                setFilters(prev => prev.filter(item => item.id !== filter.id))
+            }
+        })
+        reset(
+            columnFilters.reduce<Record<string, unknown>>((acc, curr) => {
+                if (curr.id === 'systemLevel') {
+                    acc[curr.id] = { uid: curr.value, name: curr.value }
+                }
+                acc[curr.id] = curr.value
+
+                return acc
+            }, {}) as DefaultValues<T>,
+        )
         //eslint-disable-next-line
-    }, [])
+    }, [columnFilters])
 
     //clear search on filter change, clear filters on search change
     useEffect(() => {
