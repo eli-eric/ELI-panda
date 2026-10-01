@@ -68,7 +68,7 @@ jobs:
                     -v ${{ github.workspace }}/test-results:/app/test-results \
                     panda-e2e:${{ github.sha }}
             - name: Upload E2E report
-              uses: actions/upload-artifact@v4
+              uses: actions/upload-artifact@v7
               if: ${{ always() && !cancelled() }}
               with:
                   name: playwright-report-dev-${{ github.run_id }}
