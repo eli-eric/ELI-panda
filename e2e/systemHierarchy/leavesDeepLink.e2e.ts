@@ -49,8 +49,13 @@ test.describe('System hierarchy leaves deep link', () => {
                 `&filter=${encodeURIComponent(FILTER)}`,
         )
 
-        await expect.poll(() => paginations.length).toBeGreaterThan(0)
-        await expect.poll(() => JSON.parse(paginations.at(-1) ?? '{}').page).toBe(3)
+        const pageOf = (pagination: string | null) => JSON.parse(pagination ?? '{}').page
+
+        // One request carrying the deep-linked page — not whichever request
+        // happens to be newest when a single-field poll settles.
+        await expect.poll(() => paginations.some(p => pageOf(p) === 3)).toBe(true)
+        // ...and it must not then be reset away.
+        await expect.poll(() => pageOf(paginations.at(-1) ?? null)).toBe(3)
         expect(new URL(page.url()).searchParams.get('page')).toBe('3')
     })
 })
