@@ -1,9 +1,10 @@
-import { useQueryState } from 'next-usequerystate'
 import { useMemo } from 'react'
 
+import { useUrlQueryState } from '@/hooks/useUrlQueryState'
 import useTableStateStore from '@/store/useTableStateStore'
 import { DEFAULT_PAGINATION, resolvePageSizeDefault, toLegacyPagination } from '@/types/pagination'
 import type { CodebookType } from '@/types/responses/codebook'
+import { parseColumnFilterParam, parseJsonParam, parsePositiveIntParam } from '@/utils/urlQuery'
 
 interface Query {
     pagination?: string
@@ -19,18 +20,18 @@ export default function useQueryManager(
     enableQueryURL: boolean = false,
 ): { query: Query } {
     const { instances } = useTableStateStore()
-    const [categoryQuery] = useQueryState('category', { history: 'push' })
-    const category: CodebookType | null = categoryQuery ? JSON.parse(categoryQuery) : null
+    const [categoryQuery] = useUrlQueryState('category', { history: 'push' })
+    const category = parseJsonParam<CodebookType | null>(categoryQuery, null)
 
     const categoryFilter = useMemo(
         () => (category ? { value: category, id: 'category', name: 'category' } : undefined),
         [category],
     )
 
-    const [searchQuery] = useQueryState('search')
-    const [filterQuery] = useQueryState('filter')
-    const [pageQuery] = useQueryState('page')
-    const [pageSizeQuery] = useQueryState('pageSize')
+    const [searchQuery] = useUrlQueryState('search')
+    const [filterQuery] = useUrlQueryState('filter')
+    const [pageQuery] = useUrlQueryState('page')
+    const [pageSizeQuery] = useUrlQueryState('pageSize')
 
     const resolvedPageSizeDefault = useMemo(
         () => resolvePageSizeDefault(tableId, pageSizeDefault),
@@ -54,10 +55,12 @@ export default function useQueryManager(
             return legacyPagination
         }
 
-        // Priority 3: URL params with defaults
-        const page = pageQuery ? parseInt(pageQuery, 10) : DEFAULT_PAGINATION.page
-        const pageSize = pageSizeQuery ? parseInt(pageSizeQuery, 10) : resolvedPageSizeDefault
-        return `{"page":${page},"pageSize":${pageSize}}`
+        // Priority 3: URL params with defaults. Serialized, not interpolated:
+        // `?page=abc` used to reach consumers as the literal `{"page":NaN,…}`,
+        // which threw in whoever parsed it back.
+        const page = parsePositiveIntParam(pageQuery, DEFAULT_PAGINATION.page)
+        const pageSize = parsePositiveIntParam(pageSizeQuery, resolvedPageSizeDefault)
+        return JSON.stringify({ page, pageSize })
     }, [instances, tableId, pageQuery, pageSizeQuery, resolvedPageSizeDefault])
 
     const search = instances[tableId]?.search || searchQuery || ''
@@ -65,15 +68,8 @@ export default function useQueryManager(
     //columnFilter merge with categoryFilter, fallback to URL params only when opted in
     const columnFilter = useMemo(() => {
         const storeFilters = instances[tableId]?.columnFilter || []
-        let urlFilters: any[] = []
-        if (enableQueryURL && storeFilters.length === 0 && filterQuery) {
-            try {
-                const parsed = JSON.parse(filterQuery)
-                urlFilters = Array.isArray(parsed) ? parsed : []
-            } catch {
-                urlFilters = []
-            }
-        }
+        const urlFilters =
+            enableQueryURL && storeFilters.length === 0 ? parseColumnFilterParam(filterQuery) : []
         const filters = storeFilters.length > 0 ? storeFilters : urlFilters
         return JSON.stringify(filters.concat(categoryFilter || []))
     }, [instances, tableId, categoryFilter, filterQuery, enableQueryURL])
