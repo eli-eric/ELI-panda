@@ -6,6 +6,7 @@ import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
 import type { Publication } from '../publication/types/responses'
+import { FilterBadges } from '../shared/form/FilterBadges'
 import { ColumnVisibilityDropdown } from '../shared/table/ColumnVisibilityDropdown.comp'
 import { PaginationV2 as Pagination } from '../shared/table/PaginationV2'
 import { usePandaTable } from '../shared/table/pandaTable/hooks/usePandaTable'
@@ -13,6 +14,7 @@ import type { PandaTableSettings } from '../shared/table/pandaTable/PandaTable'
 import { PandaTableV2 } from '../shared/table/pandaTableV2/PandaTableV2'
 import { SearchBar, SearchBarButtonsComponent } from '../shared/table/SearchBar'
 import { ExportButton } from './components/export.button'
+import { PublicationsFilterButton } from './components/filters/PublicationsFilterButton.cont'
 import { RivExportButton } from './components/riv-export.button'
 import { usePublications } from './hooks/usePublications'
 import { usePublicationColumns } from './publications.columns'
@@ -26,7 +28,9 @@ export const PublicationsContainer: FC = () => {
 
     const tableSettings: PandaTableSettings<Publication> = {
         enableSorting: true,
-        manualSorting: false,
+        // Sorting runs in the API, so the whole filtered set is ordered rather
+        // than just the page already fetched.
+        manualSorting: true,
         enableColumnReordering: true,
         enableQueryURL: true,
         enableColumnHiding: false,
@@ -57,11 +61,13 @@ export const PublicationsContainer: FC = () => {
                         handleAdd={openCreateSheet}
                         handleRefresh={handleRefresh}
                     >
+                        <PublicationsFilterButton tableId={tableId} />
                         <ExportButton />
                         <RivExportButton />
                     </SearchBarButtonsComponent>
                 }
                 right={<ColumnVisibilityDropdown table={table} />}
+                secondRow={<FilterBadges tableId={tableId} />}
             />
             <PandaTableV2
                 tableId={tableId}
