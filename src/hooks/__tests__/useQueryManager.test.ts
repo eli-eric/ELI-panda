@@ -1,11 +1,11 @@
 import { renderHook } from '@testing-library/react'
-import { useQueryState } from 'next-usequerystate'
+import { useQueryState } from 'nuqs'
 
 import useTableStateStore from '@/store/useTableStateStore'
 
 import useQueryManager from '../useQueryManager'
 
-jest.mock('next-usequerystate', () => ({
+jest.mock('nuqs', () => ({
     useQueryState: jest.fn(),
 }))
 
@@ -106,6 +106,23 @@ describe('useQueryManager', () => {
             page: 4,
             pageSize: 25,
         })
+    })
+
+    it('keeps the pagination string parseable when ?page is junk', () => {
+        queryState.page = 'abc'
+
+        const { result } = renderHook(() => useQueryManager('systemLeaves'))
+
+        expect(() => JSON.parse(result.current.query.pagination || '')).not.toThrow()
+        expect(getPagination(result.current.query.pagination)).toMatchObject({ page: 1 })
+    })
+
+    it('ignores a non-positive ?page', () => {
+        queryState.page = '0'
+
+        const { result } = renderHook(() => useQueryManager('systemLeaves'))
+
+        expect(getPagination(result.current.query.pagination)).toMatchObject({ page: 1 })
     })
 
     it('ignores URL filter when enableQueryURL is false', () => {

@@ -1,13 +1,14 @@
-import { useQueryState } from 'next-usequerystate'
 import { startTransition, useEffect, useMemo } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
 import { useIsFirstRender } from 'usehooks-ts'
 
 import { Form } from '@/components/form/Form'
+import { useUrlQueryState } from '@/hooks/useUrlQueryState'
 import type { CatalogueItemForm } from '@/modules/catalogueItem/types/responses'
 import { useCategoryProperties } from '@/modules/systems/hooks/useCategoryProperties'
 import { useFormControlStore } from '@/store/useFormControlStore'
 import type { CodebookType } from '@/types/responses/codebook'
+import { parseJsonParam } from '@/utils/urlQuery'
 
 import { CatalogueFilterFooter } from './CatalogueFilterFooter.comp'
 import { CatalogueFilterForm } from './form/CatalogueFilter.form'
@@ -23,8 +24,8 @@ export const CatalogueFilterSheet = ({
     enableQueryURL,
     filterFormMethods,
 }: CatalogueFilterSheetProps) => {
-    const [categoryQuery] = useQueryState('category', { history: 'push' })
-    const category: CodebookType | null = categoryQuery ? JSON.parse(categoryQuery) : null
+    const [categoryQuery] = useUrlQueryState('category', { history: 'push' })
+    const category = parseJsonParam<CodebookType | null>(categoryQuery, null)
 
     const defaultValues = useMemo<CatalogueItemForm>(
         () => ({

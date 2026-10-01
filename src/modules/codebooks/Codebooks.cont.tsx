@@ -1,7 +1,7 @@
-import { useQueryState } from 'next-usequerystate'
 import { useCallback } from 'react'
 import { useIntl } from 'react-intl'
 
+import { useUrlQueryState } from '@/hooks/useUrlQueryState'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 import { useModalGlobalStore } from '@/store/useModalGlobalStore'
@@ -20,7 +20,7 @@ const SIDEBAR_WIDTH = 280
 
 export const CodebooksContainer = () => {
     const { formatMessage: fm } = useIntl()
-    const [selectedCodebook, setSelectedCodebook] = useQueryState('selectedCodebook')
+    const [selectedCodebook, setSelectedCodebook] = useUrlQueryState('selectedCodebook')
     const { openModal, closeModal } = useModalGlobalStore()
 
     const { data: codebookList, isLoading: isLoadingList } = useCodebookList()

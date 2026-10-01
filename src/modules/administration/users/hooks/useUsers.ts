@@ -1,8 +1,8 @@
-import { useQueryState } from 'next-usequerystate'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
 
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
+import { useUrlQueryState } from '@/hooks/useUrlQueryState'
 import { gql } from '@/types/gql'
 
 const USERS = gql(`
@@ -34,7 +34,7 @@ const USERS = gql(`
 `)
 
 export const useUsers = () => {
-    const [search] = useQueryState('search')
+    const [search] = useUrlQueryState('search')
 
     const { data, isLoading, error, refetch } = useGraphQL(USERS, {
         variables: {

@@ -1,7 +1,7 @@
-import { useQueryState } from 'next-usequerystate'
 import type { ChangeEvent } from 'react'
 import { useEffect, useRef, useTransition } from 'react'
 
+import { useUrlQueryState } from '@/hooks/useUrlQueryState'
 import useTableStateStore from '@/store/useTableStateStore'
 
 interface Options {
@@ -38,7 +38,7 @@ export const useDebouncedSearchInput = ({
     onChange,
     delay = 500,
 }: Options): UseDebouncedSearchInputResult => {
-    const [querySearch, setQuerySearch] = useQueryState('search', {
+    const [querySearch, setQuerySearch] = useUrlQueryState('search', {
         history: 'replace',
     })
 
@@ -64,7 +64,7 @@ export const useDebouncedSearchInput = ({
     // querySearch during our own commit window and cause a flash.
     //
     // Priority `storeSearch ?? querySearch`: Zustand updates synchronously on commit,
-    // URL (next-usequerystate) updates async. Reading store first avoids the brief
+    // URL (nuqs) updates async. Reading store first avoids the brief
     // window where store has new value but URL is still stale. Back-button URL sync is
     // not affected because `{ history: 'replace' }` (see useQueryState options above)
     // means search-value typing does NOT create history entries — so there is no

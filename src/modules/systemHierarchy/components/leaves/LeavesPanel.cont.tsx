@@ -1,13 +1,14 @@
-import { useQueryState } from 'next-usequerystate'
 import type { FC } from 'react'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { useIntl } from 'react-intl'
 
 import { Button } from '@/components/ui/button'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
+import { useUrlQueryState } from '@/hooks/useUrlQueryState'
 import { message } from '@/i18n/src/messages'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import useTableStateStore from '@/store/useTableStateStore'
+import { parseColumnFilterParam } from '@/utils/urlQuery'
 
 import { useSystemDetail } from '../../hooks/queries/useSystemDetail'
 import { useSystemLeaves } from '../../hooks/queries/useSystemLeaves'
@@ -49,8 +50,8 @@ export const LeavesPanelContainer: FC = () => {
     })
 
     // Sync URL filter params → store on mount (enables persistence across refresh/new tab)
-    const [filterQuery] = useQueryState('filter')
-    const [pageQuery] = useQueryState('page')
+    const [filterQuery] = useUrlQueryState('filter')
+    const [pageQuery] = useUrlQueryState('page')
     const { setColumnFilter, setSearch, setSearchValue, setPaginationState } = useTableStateStore()
 
     // Pagination reset has two halves: selectParent clears ?page when the parent
@@ -64,20 +65,21 @@ export const LeavesPanelContainer: FC = () => {
         }
     }, [pageQuery, selectedParentUid, setPaginationState])
 
+    // Keyed on "have we hydrated yet" rather than on mount: `filterQuery` comes
+    // from useUrlQueryState, whose value arrives after the first commit on a
+    // server-rendered page. Mount-only works today purely because this panel is
+    // loaded via dynamic(..., { ssr: false }) — which is not a dependency worth
+    // relying on.
+    const hasHydratedFilters = useRef(false)
+
     useEffect(() => {
-        if (filterQuery) {
-            try {
-                const parsed = JSON.parse(filterQuery)
-                const urlFilters = Array.isArray(parsed) ? parsed : []
-                if (urlFilters.length > 0) {
-                    setColumnFilter(LEAVES_TABLE_ID, urlFilters)
-                }
-            } catch {
-                // ignore malformed filter query
-            }
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+        if (hasHydratedFilters.current) return
+        const urlFilters = parseColumnFilterParam(filterQuery)
+        if (urlFilters.length === 0) return
+
+        hasHydratedFilters.current = true
+        setColumnFilter(LEAVES_TABLE_ID, urlFilters)
+    }, [filterQuery, setColumnFilter])
 
     const { setColumnFilters, storeFilters } = useFormFilterState({
         tableId: LEAVES_TABLE_ID,

@@ -134,7 +134,7 @@ flowchart LR
     F --> Stats["CatalogueStatistics"]
 ```
 
-`Catalogue.cont.tsx` hosts a category browser on the left (`CategoryList`), a filter sheet, and a shared `CatalogueTable` for items. The selected category is held in the URL via `?category=...` (`useQueryState('category', …)` from `next-usequerystate`); `useCatalogueItems(tableId, undefined, true)` honours that filter alongside the rest of the table state.
+`Catalogue.cont.tsx` hosts a category browser on the left (`CategoryList`), a filter sheet, and a shared `CatalogueTable` for items. The selected category is held in the URL via `?category=...` (`useQueryState('category', …)` from `nuqs`); `useCatalogueItems(tableId, undefined, true)` honours that filter alongside the rest of the table state.
 
 `CatalogueItem.cont.tsx` is the detail / edit page. It mounts:
 
