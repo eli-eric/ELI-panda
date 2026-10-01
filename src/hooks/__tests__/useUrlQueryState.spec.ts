@@ -72,6 +72,30 @@ describe('useUrlQueryState', () => {
         expect(result.current[0]).toBeNull()
     })
 
+    it('spends the fallback after the first commit that had a value', () => {
+        // nuqs throttles its URL write, so a hook mounting just after another
+        // component cleared the param must not keep reading the stale address bar
+        window.history.replaceState({}, '', '/systems/overview?filter=from-url')
+        setRouterValue(null)
+
+        const { result, rerender } = renderHook(() => useUrlQueryState('filter'))
+        expect(result.current[0]).toBe('from-url')
+
+        rerender()
+        expect(result.current[0]).toBeNull()
+    })
+
+    it('keeps the fallback alive across a commit that saw nothing', () => {
+        // a server-rendered page's hydration commit legitimately has no value
+        setRouterValue(null)
+        const { result, rerender } = renderHook(() => useUrlQueryState('filter'))
+        expect(result.current[0]).toBeNull()
+
+        window.history.replaceState({}, '', '/systems/overview?filter=arrived-late')
+        rerender()
+        expect(result.current[0]).toBe('arrived-late')
+    })
+
     it('passes the setter through untouched', () => {
         setRouterValue(null)
 

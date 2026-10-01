@@ -64,6 +64,21 @@ describe('parseColumnFilterParam', () => {
         expect(parseColumnFilterParam('[{"id":"","value":1}]')).toEqual([])
     })
 
+    it('drops entries with no usable value', () => {
+        // these reached the store and rendered a badge with no label
+        expect(parseColumnFilterParam('[{"id":"name"}]')).toEqual([])
+        expect(parseColumnFilterParam('[{"id":"name","value":null}]')).toEqual([])
+    })
+
+    it('keeps falsy-but-meaningful values', () => {
+        expect(parseColumnFilterParam('[{"id":"active","value":false}]')).toEqual([
+            { id: 'active', value: false },
+        ])
+        expect(parseColumnFilterParam('[{"id":"count","value":0}]')).toEqual([
+            { id: 'count', value: 0 },
+        ])
+    })
+
     it('keeps the valid entries alongside invalid ones', () => {
         expect(parseColumnFilterParam('[{"id":"name","value":"a"},7]')).toEqual([
             { id: 'name', value: 'a' },

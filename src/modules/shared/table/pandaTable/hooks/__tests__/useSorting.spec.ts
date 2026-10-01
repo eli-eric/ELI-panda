@@ -128,6 +128,15 @@ describe('useSorting', () => {
         )
     })
 
+    it('drops an empty ?sortBy instead of leaving it in every copied link', () => {
+        mockUseQueryState.mockReturnValue(['[]', setQueryFn])
+
+        renderHook(() => useSorting('t1', true))
+
+        expect(setQueryFn).toHaveBeenCalledWith(null)
+        expect(setSortByQueryString).toHaveBeenCalledWith('t1', undefined)
+    })
+
     it('setSorting updates store + queryString', () => {
         const { result } = renderHook(() => useSorting('t1', true))
         const newSorting = [{ id: 'price', desc: true }]

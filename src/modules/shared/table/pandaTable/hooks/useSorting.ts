@@ -36,13 +36,24 @@ export const useSorting = (
             const decoded = parseJsonParam<unknown>(sortByQuery, [])
             const parsed: SortingState = Array.isArray(decoded) ? (decoded as SortingState) : []
             hasHydrated.current = true
+
+            if (parsed.length === 0) {
+                // `?sortBy=[]` (or unparseable) carries no sort. Drop it rather
+                // than leave it in every link the user copies from here on: the
+                // publish effect below cannot clear it, since an empty sort that
+                // never came from the user is deliberately not published.
+                setSortByQueryString(tableId, undefined)
+                setSortByQuery(null)
+                return
+            }
+
             setSorting(parsed)
             setSortBy(tableId, parsed)
             // Store the canonical serialization, not the raw param: the sync
             // effect below republishes `JSON.stringify(sorting)`, and anything
             // comparing the two (PaginationV2's reset baseline) would otherwise
             // see a hand-formatted `?sortBy` change out from under it.
-            setSortByQueryString(tableId, parsed.length === 0 ? undefined : JSON.stringify(parsed))
+            setSortByQueryString(tableId, JSON.stringify(parsed))
         } else if (sortByStringInstance) {
             hasHydrated.current = true
             setSortByQuery(sortByStringInstance)

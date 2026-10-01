@@ -67,12 +67,8 @@ export function PaginationV2({ tableId, settings, onPageChange }: PaginationV2Pr
     const columnFilterRaw = instances[tableId]?.columnFilter
     const columnFilterKey = useMemo(() => JSON.stringify(columnFilterRaw || []), [columnFilterRaw])
 
-    // Baseline for "did the user change something". A deep link's filter/sort
-    // reaches the store one commit after this component mounts, and without
-    // seeding that late arrival looks like a user edit and knocks the URL's own
-    // ?page back to 1 (ELIPANDA-505). Seed from the URL when the store has not
-    // been hydrated yet, so hydration compares equal; the store still wins when
-    // it already holds state (client-side navigation back to the table).
+    // Baseline for "did the user change something", captured from the store as it
+    // is at mount.
     const prevValuesRef = useRef<{
         search: string
         filter: string | object
@@ -81,15 +77,26 @@ export function PaginationV2({ tableId, settings, onPageChange }: PaginationV2Pr
     } | null>(null)
 
     if (prevValuesRef.current === null) {
-        prevValuesRef.current = {
-            search,
-            filter,
-            sortBy: sortBy || (enableQueryURL ? readUrlSortKey() : ''),
-            columnFilterKey:
-                columnFilterRaw?.length || !enableQueryURL
-                    ? columnFilterKey
-                    : JSON.stringify(parseColumnFilterParam(readQueryParamFromUrl('filter'))),
-        }
+        prevValuesRef.current = { search, filter, sortBy, columnFilterKey }
+    }
+
+    // What the URL asked for when we mounted. A deep link's filter/sort only
+    // reaches the store a commit later, and that late arrival must not read as a
+    // user edit — it would knock the URL's own ?page back to 1 (ELIPANDA-505).
+    // Comparing against the URL rather than seeding the baseline from it means we
+    // do not have to assume the table's filter/sort hooks are URL-synced too:
+    // LeavesPanel pairs a URL-enabled PaginationV2 with a table that is not.
+    const hydrationValuesRef = useRef<{ sortBy: string; columnFilterKey: string } | null>(null)
+
+    if (hydrationValuesRef.current === null) {
+        hydrationValuesRef.current = enableQueryURL
+            ? {
+                  sortBy: readUrlSortKey(),
+                  columnFilterKey: JSON.stringify(
+                      parseColumnFilterParam(readQueryParamFromUrl('filter')),
+                  ),
+              }
+            : { sortBy: '', columnFilterKey: '[]' }
     }
 
     const isInitialMount = useRef(true)
@@ -103,14 +110,17 @@ export function PaginationV2({ tableId, settings, onPageChange }: PaginationV2Pr
             return
         }
 
-        // Check if any tracked value changed
+        // Check if any tracked value changed. Landing exactly on what the URL
+        // already advertised at mount is hydration, not an edit.
         const prev = prevValuesRef.current
-        if (!prev) return
+        const hydration = hydrationValuesRef.current
+        if (!prev || !hydration) return
         const hasChanged =
             prev.search !== search ||
             prev.filter !== filter ||
-            prev.sortBy !== sortBy ||
-            prev.columnFilterKey !== columnFilterKey
+            (prev.sortBy !== sortBy && sortBy !== hydration.sortBy) ||
+            (prev.columnFilterKey !== columnFilterKey &&
+                columnFilterKey !== hydration.columnFilterKey)
 
         if (hasChanged && pagination.page !== 1) {
             resetPagination()
