@@ -1,3 +1,5 @@
+import { MEDIA_TYPE_CODE } from '../../types/constants'
+import { publicationResolver } from '../resolver'
 import { publicationOtherSchema, publicationPeerReviewedSchema } from '../scheme'
 
 const validCodebook = { uid: 'test-uid', name: 'Test Name', code: 'T' }
@@ -103,6 +105,31 @@ describe('publicationPeerReviewedSchema', () => {
         expect(result.success).toBe(false)
     })
 
+    it.each([
+        'https://doi.org/10.1234/Test',
+        'not-a-doi',
+        '10.123/test',
+        '10.1234/with space',
+        '10.1234/literal%20',
+        '10.1234/trailing-space ',
+    ])('keeps legacy peer-reviewed DOI %s editable', doi => {
+        const result = publicationPeerReviewedSchema.safeParse({
+            ...peerReviewedData,
+            doi,
+            abstract: 'Updated abstract',
+        })
+        expect(result.success).toBe(true)
+        if (result.success) expect(result.data.doi).toBe(doi)
+    })
+
+    it('requires a publication year', () => {
+        const result = publicationPeerReviewedSchema.safeParse({
+            ...peerReviewedData,
+            yearOfPublication: '',
+        })
+        expect(result.success).toBe(false)
+    })
+
     it('requires volume for peer-reviewed articles', () => {
         const result = publicationPeerReviewedSchema.safeParse({
             ...peerReviewedData,
@@ -124,6 +151,21 @@ describe('publicationOtherSchema', () => {
             doi: null,
         })
         expect(result.success).toBe(true)
+    })
+
+    it.each(['', 'not-a-doi', '10.123/test', '10.1234/with space'])(
+        'keeps legacy optional DOI %s editable',
+        doi => {
+            expect(publicationOtherSchema.safeParse({ ...baseValidData, doi }).success).toBe(true)
+        },
+    )
+
+    it('requires a publication year', () => {
+        const result = publicationOtherSchema.safeParse({
+            ...baseValidData,
+            yearOfPublication: '',
+        })
+        expect(result.success).toBe(false)
     })
 
     it('allows null volume for other articles', () => {
@@ -165,4 +207,82 @@ describe('publicationOtherSchema', () => {
         expect(shape).not.toHaveProperty('userExperiment')
         expect(shape).not.toHaveProperty('grant')
     })
+})
+
+describe('legacy publication values', () => {
+    it.each(['1998', '26', '0000', '2024 ', 'unknown'])(
+        'preserves publication year %s in both schemas',
+        yearOfPublication => {
+            for (const schema of [publicationPeerReviewedSchema, publicationOtherSchema]) {
+                const result = schema.safeParse({ ...peerReviewedData, yearOfPublication })
+                expect(result.success).toBe(true)
+                if (result.success) expect(result.data.yearOfPublication).toBe(yearOfPublication)
+            }
+        },
+    )
+
+    it.each(['Legacy DOI', 'legacy DOI ', '10.1234/with space'])(
+        'allows DOI corrections without a persisted-original exemption: %s',
+        doi => {
+            for (const schema of [publicationPeerReviewedSchema, publicationOtherSchema]) {
+                const result = schema.safeParse({ ...peerReviewedData, doi, title: 'Edited title' })
+                expect(result.success).toBe(true)
+                if (result.success) expect(result.data.doi).toBe(doi)
+            }
+        },
+    )
+})
+
+describe('publication resolver', () => {
+    const options = { fields: {}, shouldUseNativeValidation: false }
+    const journal = { uid: 'journal', code: 'J', name: 'Journal article' }
+
+    it.each([journal, validCodebook])(
+        'preserves legacy DOI values without edit context',
+        async mediaTypeCb => {
+            const values = {
+                ...peerReviewedData,
+                mediaTypeCb,
+                doi: 'legacy DOI ',
+                title: 'Unrelated edit',
+            }
+            const result = await publicationResolver(values, undefined, options)
+            expect(result.errors).toEqual({})
+            expect(result.values).toMatchObject({ doi: 'legacy DOI ', title: 'Unrelated edit' })
+        },
+    )
+
+    it('requires DOI only for the peer-reviewed media schema', async () => {
+        const values = { ...peerReviewedData, doi: '' }
+        const peerReviewed = await publicationResolver(
+            { ...values, mediaTypeCb: journal },
+            undefined,
+            options,
+        )
+        expect(peerReviewed.errors).toHaveProperty('doi.message', 'DOI is required')
+        const other = await publicationResolver(values, undefined, options)
+        expect(other.errors).toEqual({})
+    })
+
+    it.each([
+        [MEDIA_TYPE_CODE.PeerReviewedArticle, true],
+        [MEDIA_TYPE_CODE.OtherArticle, false],
+    ])('uses the legacy radio selection %s without a codebook', async (mediaType, requiresDoi) => {
+        const values = { ...peerReviewedData, doi: '', mediaType, mediaTypeCb: undefined }
+        const result = await publicationResolver(values, undefined, options)
+        expect('doi' in result.errors).toBe(requiresDoi)
+        expect(result.errors).toHaveProperty('mediaTypeCb')
+    })
+
+    it.each([
+        [journal, MEDIA_TYPE_CODE.OtherArticle, true],
+        [validCodebook, MEDIA_TYPE_CODE.PeerReviewedArticle, false],
+    ])(
+        'prefers the codebook over an obsolete radio selection',
+        async (mediaTypeCb, mediaType, requiresDoi) => {
+            const values = { ...peerReviewedData, doi: '', mediaTypeCb, mediaType }
+            const result = await publicationResolver(values, undefined, options)
+            expect('doi' in result.errors).toBe(requiresDoi)
+        },
+    )
 })

@@ -7,6 +7,10 @@
 export const isEmpty = (value: unknown): boolean =>
     value === null || value === undefined || value === ''
 
+/** Treats whitespace-only strings as empty without discarding zero or false. */
+export const isBlank = (value: unknown): boolean =>
+    isEmpty(typeof value === 'string' ? value.trim() : value)
+
 export const isNotEmpty = (value: unknown): boolean => !isEmpty(value)
 
 export const hasValue = <T>(value: T | null | undefined): value is T =>

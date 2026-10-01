@@ -59,4 +59,13 @@ describe('getEndpoints', () => {
         const endpoints = getEndpoints({ query: null })
         expect(endpoints.systemsList).toBe('/systems')
     })
+
+    it('builds the WoS preview endpoint with an encoded DOI query', () => {
+        const endpoints = getEndpoints({
+            query: { doi: '10.1234/laser test', currentPublicationUid: 'publication-1' },
+        })
+        expect(endpoints.publicationWosPreview).toBe(
+            '/publications/wos-preview?doi=10.1234%2Flaser+test&currentPublicationUid=publication-1',
+        )
+    })
 })

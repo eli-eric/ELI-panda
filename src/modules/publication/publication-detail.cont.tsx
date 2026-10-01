@@ -1,4 +1,3 @@
-import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import { type FC, useEffect } from 'react'
@@ -16,23 +15,13 @@ import { ROLE } from '@/types/constants/roles'
 import FileManager from '../shared/fileManager/FileManager'
 import { FILE_TYPE } from '../shared/fileManager/types'
 import { PublicationFormComponent } from './components/publication-form.comp'
-import { publicationOtherSchema, publicationPeerReviewedSchema } from './form/scheme'
+import { publicationResolver } from './form/resolver'
 import { useMediaTypeStore } from './hooks/useMediaTypeStore'
 import { usePublicationMutation } from './hooks/usePublicationMutation'
-import { ELI_PUBLICATION, isPeerReviewedMediaType } from './types/constants'
+import { ELI_PUBLICATION } from './types/constants'
 import type { PublicationForm } from './types/form'
 import type { Publication } from './types/responses'
 import { formatFormData, formatPublication } from './utils/formatters'
-
-/**
- * Dynamic resolver that selects validation schema based on media type.
- * Defined outside component to maintain stable reference.
- */
-const dynamicResolver = async (values: any, context: any, options: any) => {
-    const isPeerReviewed = isPeerReviewedMediaType(values.mediaTypeCb)
-    const schema = isPeerReviewed ? publicationPeerReviewedSchema : publicationOtherSchema
-    return zodResolver(schema)(values, context, options)
-}
 
 const messages = message.publication
 
@@ -59,7 +48,7 @@ export const PublicationDetailContainer: FC<Props> = ({ publication, refetch }) 
 
     const formMethods = useForm<any>({
         defaultValues: publication ? formatPublication(publication) : defaultValues,
-        resolver: dynamicResolver,
+        resolver: publicationResolver,
     })
 
     const { setMediaTypeUid } = useMediaTypeStore()

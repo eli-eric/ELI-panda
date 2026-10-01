@@ -129,6 +129,7 @@ interface QueryMutateOptions {
     endpointVariables?: Record<string, string>
     responseType?: 'json' | 'text' | 'blob'
     query?: EndpointProps['query']
+    timeoutMs?: number
 }
 
 export const queryMutate = <TResponse, TVariables>(
@@ -136,7 +137,7 @@ export const queryMutate = <TResponse, TVariables>(
     mutationType: 'post' | 'put' | 'patch' | 'delete' | 'get',
     options?: QueryMutateOptions,
 ) => {
-    const { uid, isDefaultUrl, endpointVariables, responseType, query } = options ?? {}
+    const { uid, isDefaultUrl, endpointVariables, responseType, query, timeoutMs } = options ?? {}
     // plain 1-arg signature: assignable to TanStack's MutationFunction (which
     // passes an extra context arg) and still directly callable with one argument
     const mutateFn = async (variables: TVariables): Promise<AxiosResponse<TResponse>> => {
@@ -153,6 +154,7 @@ export const queryMutate = <TResponse, TVariables>(
                 method,
                 body: hasNoBody ? undefined : (variables as any),
                 responseType,
+                timeoutMs,
             })
             // Adapt to AxiosResponse shape expected by existing code
             const axiosLike = {
