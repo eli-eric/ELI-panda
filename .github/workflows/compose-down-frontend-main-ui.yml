@@ -8,6 +8,6 @@ jobs:
         runs-on: czechia-server
 
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v7
             - name: Build the Docker compose
               run: docker compose down

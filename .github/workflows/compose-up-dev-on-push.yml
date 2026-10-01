@@ -31,7 +31,7 @@ jobs:
         needs: use-secret
         steps:
             - name: Checkout code
-              uses: actions/checkout@v3
+              uses: actions/checkout@v7
             - uses: actions/setup-node@v3
               with:
                   node-version: 22
@@ -46,7 +46,7 @@ jobs:
         needs: unit-tests
         steps:
             - name: Checkout code
-              uses: actions/checkout@v3
+              uses: actions/checkout@v7
             - name: Build E2E Docker image
               run: docker build -f Dockerfile.e2e -t panda-e2e:${{ github.sha }} .
             - name: Prepare E2E artifact directories
@@ -71,7 +71,7 @@ jobs:
         runs-on: czechia-server
         needs: [unit-tests, e2e-tests]
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v7
             - run: |
                   docker compose -f docker-compose-dev.yml up -d --build
               env:

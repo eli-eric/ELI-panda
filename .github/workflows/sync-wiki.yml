@@ -15,12 +15,12 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout main repo
-              uses: actions/checkout@v4
+              uses: actions/checkout@v7
               with:
                   path: main
 
             - name: Checkout wiki repo
-              uses: actions/checkout@v4
+              uses: actions/checkout@v7
               with:
                   repository: ${{ github.repository }}.wiki
                   path: wiki
