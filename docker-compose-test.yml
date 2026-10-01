@@ -22,8 +22,6 @@ services:
             dockerfile: Dockerfile.testenv
             labels:
                 - panda-frontend-ui-main-app-test
-            args:
-                - NEO4J_PASSWORD=${NEO4J_PASSWORD}
         networks:
             - panda-net-test
         ports:

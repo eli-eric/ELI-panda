@@ -25,8 +25,6 @@ services:
             dockerfile: Dockerfile.devenv.czolap04
             labels:
                 - panda-frontend-ui-main-app-dev
-            args:
-                - NEO4J_PASSWORD=${NEO4J_PASSWORD}
                 - PANDA_API_GW_URL=${PANDA_API_GW_URL}
         networks:
             - panda-net-dev
