@@ -4,7 +4,7 @@ The Systems Moving module is the place to **re-parent a single system** — move
 
 The move is *not* a copy. The system keeps its UID, its name, its physical item, its relationships, and its full change history; only the `HAS_SUBSYSTEM` link to its parent is replaced. A `WAS_MOVED_FROM` audit entry is added so that the previous lineage is recoverable from history.
 
-`[SCREENSHOT PLACEHOLDER: Systems Moving landing — two side-by-side trees, left pane labeled with active filters, right pane scrolled to a different branch, a row in the left pane mid-drag with its system name displayed in the drag preview]`
+![Systems Moving landing page with its two side-by-side trees](./images/moving-page.png)
 
 ## Access & Responsibilities
 

@@ -19,7 +19,7 @@ See [Access & Responsibilities](../README.md#access--responsibilities) for what 
 
 1. **Open Administration → Users.** The list loads with the default sort order (username ascending).
 
-   `[SCREENSHOT PLACEHOLDER: Users list with eight rows visible — each row shows User Name link, Facility, First Name, Last Name, Is enabled badge, Roles badge stack; one row hovered showing the delete affordance next to the user name]`
+   ![Users list showing user name, facility, first and last name, enabled flag and role badges](../images/users-list.png)
 
 2. **Search.** Type into the search field in the top toolbar — matches against the *Username* field as a partial substring. Results refresh as you type.
 

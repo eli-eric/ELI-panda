@@ -2,7 +2,7 @@
 
 The Administration module is the **user and role management workbench** for PANDA. Every user account that can sign in to the application lives here; the *Roles* card on a user's detail page is what grants access to every other module in the system. Add an account when a new colleague needs PANDA access, toggle the *Is Enabled* flag to suspend access, edit the role set to grant or revoke permissions, or delete an account that should no longer exist.
 
-`[SCREENSHOT PLACEHOLDER: Administration → Users list — top toolbar with Add User and Refresh buttons on the left, search field, column visibility on the right; table with columns User Name (sticky link), Facility, First Name, Last Name, Is enabled, Roles (badge stack)]`
+![Administration → Users list, showing each user’s facility, name, enabled flag and role badges](./images/users-list.png)
 
 ## Access & Responsibilities
 
@@ -55,7 +55,7 @@ The module has two pages: a **Users list** and a **User detail / edit page** (cr
   - **Password** / **Confirm Password** — optional; setting these resets the user's password and re-flags *password-to-change* on next sign-in.
 - **Roles card.** A grid of checkboxes — one per role in the role registry. Tick to grant, untick to revoke.
 
-`[SCREENSHOT PLACEHOLDER: user detail page — User form card at the top showing Employee picker, Is Enabled checked, First/Last name and email filled, Facility selected; Roles card below with around a dozen role checkboxes, half ticked]`
+![User detail page with the user form and the role assignment panel](./images/user-detail.png)
 
 ## Common workflows
 

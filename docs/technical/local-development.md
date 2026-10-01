@@ -9,7 +9,7 @@ Everything you need to get the app running locally, plus the conventions every c
 | Node.js | 22.x | `node:22-alpine` is the production base — match locally. Pinned in `.nvmrc` and `engines.node` in `package.json`. |
 | Yarn | 1.x (classic) | Enforced — `npm` / `pnpm` are rejected by `scripts/enforce-package-manager.cjs`. |
 | Docker + Compose v2 | recent | Only needed for local MinIO or running compose images. |
-| Neo4j 5.x | running | Either local install, or SSH-tunnel to a shared instance (see `env-example`). |
+| Neo4j 4.4.x | running | The API's `docker-compose-local.yml` pins `neo4j:4.4.15` — match it. Either that compose file, a local install, or an SSH tunnel to a shared instance (see `env-example`). |
 
 `scripts/enforce-package-manager.cjs` runs from the `preinstall` hook in `package.json` and exits with `This repository requires Yarn. Please run: yarn install` if `npm_config_user_agent` does not start with `yarn/`.
 
@@ -36,7 +36,7 @@ The repo-root `env-example` is the canonical template. Minimum to boot locally a
 PANDA_ENV="localhost"
 PANDA_API_GW_URL="http://localhost:5001/api/mock-server"   # or the real dev gateway
 NEXTAUTH_URL="http://localhost:5001/"
-NEXTAUTH_SECRET="<dev secret matching your gateway>"
+NEXTAUTH_SECRET="<must equal the API's API_JWT_SECRET>"
 
 NEO4J_URI="bolt://localhost:7687"                          # or remote tunnel
 NEO4J_USER="neo4j"
@@ -54,7 +54,58 @@ MINIO_ACCESS_KEY="…"
 MINIO_SECRET_KEY="…"
 ```
 
+> ⚠️ **`NEXTAUTH_SECRET` is also the GraphQL authorization key.** `src/server/apollo/schema.ts` passes it to `Neo4jGraphQL` as `features.authorization.key`, and the token it verifies is the `apiAccessToken` minted by whichever provider signed you in. The Entra ID path signs that token with `NEXTAUTH_SECRET` itself, so it always matches — but the credentials path gets the token from the REST API, signed with the API's `API_JWT_SECRET`. **If the two secrets differ, every GraphQL query fails with `Unauthenticated`** and the modules listed under [GraphQL-backed modules](#graphql-backed-modules) render empty with no visible error beyond a toast. Set `NEXTAUTH_SECRET` to the same value as the API's `API_JWT_SECRET`.
+
+> 📎 **`NEO4J_SECRET` in `env-example` is dead.** Nothing in the codebase reads it. Ignore it; it is `NEXTAUTH_SECRET` that matters (above). `MINIO_PORT` and `MINIO_USE_SSL` *are* read (`src/server/s3client.ts`) but are missing from `env-example`.
+
 The full set of variables and what consumes them is in [Deployment & runbook → Environment variables](./deployment-runbook.md#environment-variables).
+
+### Running the whole stack locally
+
+The REST API lives in the sibling [`eli-panda-api`](https://github.com/eli-eric/eli-panda-api) repository and brings its own Neo4j. A working local loop:
+
+```bash
+# 1. API + Neo4j (in the eli-panda-api checkout)
+mkdir -p db/neo4j/dev-instance/import
+cp db/neo4j/data-for-import/test-data.cypher db/neo4j/dev-instance/import
+docker compose -f docker-compose-local.yml up -d --build
+docker exec -it panda-dev-neo4j cypher-shell -u neo4j -p 'elipanda2022' -f import/test-data.cypher
+
+# 2. MinIO (in this repo) — optional, needed for file/image features
+docker compose -f docker-compose.minio.yml up -d
+
+# 3. Front end
+yarn build && yarn start        # http://localhost:5001
+```
+
+Ports the API's `docker-compose-local.yml` publishes: API `50000`, Neo4j browser `7470`, Neo4j bolt `7680`. The matching front-end `.env`:
+
+```env
+PANDA_ENV="localhost"
+PANDA_API_GW_URL="http://localhost:50000/v1"   # note the /v1 — endpoint keys are relative to it
+NEXTAUTH_URL="http://localhost:5001/"
+NEXTAUTH_SECRET="createstrongsecretplease"     # == API_JWT_SECRET in the API's compose file
+NEO4J_URI="bolt://localhost:7680"
+NEO4J_USER="neo4j"
+NEO4J_PASSWORD="elipanda2022"
+MINIO_ENDPOINT="localhost"
+MINIO_BUCKET_NAME="panda-files"
+MINIO_ACCESS_KEY="12345678"
+MINIO_SECRET_KEY="12345678"
+```
+
+Sign in with one of the users in `test-data.cypher` through the **credentials** provider (`POST /api/auth/callback/credentials`). The landing page only renders the Entra ID button, so for a local account either drive the credentials callback directly or add a temporary button — the provider itself is always registered.
+
+Gotchas seen on a fresh local stack:
+
+- The API image is pinned to `platform: linux/amd64`; on Apple Silicon it runs under emulation. Building the Go binary natively (`go build .`) and running it against the compose Neo4j is considerably faster.
+- `docker-compose.minio.yml` references the bare `minio/minio` image, which no longer pulls anonymously from Docker Hub. `quay.io/minio/minio` works.
+- Migration-seeded `Location` nodes carry no `uid`, so the `LOCATION` codebook returns entries with an empty `uid` and location pickers cannot resolve a selection until you backfill them.
+- No `RoomCard`, `Order`, `Publication`, `ServiceType` or `Team` nodes exist after `test-data.cypher`; those modules render empty until you create records.
+
+### GraphQL-backed modules
+
+These modules read through `/api/graphql` (Neo4j GraphQL) rather than the REST API, so they are the ones that break when `NEXTAUTH_SECRET` is wrong: `administration`, `catalogue`, `catalogueExplorer`, `catalogueItem`, `roomCard`, `roomCards`, `systemHierarchy`, `systemItem`, `systemsMoving`, `systemsRelations`, and parts of `shared`.
 
 ### SSH tunnel cheat sheet
 
@@ -76,7 +127,9 @@ ssh -L 7472:127.0.0.1:7472 -L 7682:127.0.0.1:7682 \
 docker compose -f docker-compose.minio.yml up -d
 ```
 
-Default keys are `12345678`/`12345678` unless you set `MINIO_ACCESS_KEY` / `MINIO_SECRET_KEY` in the environment. The bucket is `panda-files` (default from `src/server/s3client.ts:6`) unless overridden.
+Default keys are `12345678`/`12345678` unless you set `MINIO_ACCESS_KEY` / `MINIO_SECRET_KEY` in the environment. The bucket is `panda-files` (default in `src/server/s3client.ts`) and the app creates it on start if it is missing.
+
+> ⚠️ The compose file pulls the bare `minio/minio` tag, which Docker Hub no longer serves anonymously (`pull access denied`). Use `quay.io/minio/minio` until the compose file is updated. The file also publishes only `9000`; add `9090` and `--console-address ":9090"` if you want the web console.
 
 ## Daily commands
 
@@ -286,7 +339,7 @@ Convention: tests live in `__tests__/` next to the unit under test, named `<unit
 
 - Runner config: `playwright.config.ts`.
 - Test dir: `e2e/`, test glob: `**/*.e2e.ts`.
-- `webServer`: Playwright builds and runs the app itself on port **5002** with `PANDA_ENV=localhost` and `PANDA_API_GW_URL=http://localhost:5002/api/mock-server`. Set `PLAYWRIGHT_E2E=1` to bypass the middleware auth redirect (`src/middleware.ts:15`).
+- `webServer`: Playwright builds and runs the app itself on port **5002** with `PANDA_ENV=localhost` and `PANDA_API_GW_URL=http://localhost:5002/api/mock-server`. Set `PLAYWRIGHT_E2E=1` to bypass the auth redirect — the check lives in `src/proxy.ts` (`shouldBypassAuthForE2E`), not in a `src/middleware.ts`.
 - Tests are **deterministic**: network is fully mocked (no live API, no live GraphQL). See `e2e/README.md` for the recipe.
 
 Helpers worth knowing:
@@ -353,23 +406,24 @@ For JetBrains IDEs, enable the *Prettier* and *ESLint* integrations and point th
 
 ## Maintenance recommendations
 
-1. **Add `.nvmrc`** pinning Node 20. The repo currently relies on the Docker image and CI workflow to pin the Node version; humans get whatever their `nvm` defaults to.
-2. **Run Prettier in `lint-staged`.** Today only ESLint runs at commit time, so formatting drift only gets caught by `yarn format` runs (or CI). Add `prettier --write` to the lint-staged glob.
-3. **Make `tsc --noEmit` part of CI.** Today CI runs unit tests and E2E but not `yarn type-check`. Adding it catches type regressions that Jest does not.
-4. **Document `.env` more granularly in this page.** The variables listed above came out of grepping the codebase; an authoritative comment-block-per-variable in `env-example` would make onboarding cheaper.
-5. **Promote skills to the wiki.** Today they live under `.claude/skills/` — invaluable for the team, invisible to anyone reading the GitHub wiki. Either copy them into `docs/conventions/` or auto-mirror via the wiki sync script.
-6. **Set `noImplicitAny: true`** once the residual `any` is paid down. The compiler is already on strict — this is the last remaining laxity.
+1. **Run Prettier in `lint-staged`.** Today only ESLint runs at commit time, so formatting drift only gets caught by `yarn format` runs (or CI). Add `prettier --write` to the lint-staged glob.
+2. **Make `tsc --noEmit` part of CI.** Today CI runs unit tests and E2E but not `yarn type-check`. Adding it catches type regressions that Jest does not.
+3. **Document `.env` more granularly in this page.** The variables listed above came out of grepping the codebase; an authoritative comment-block-per-variable in `env-example` would make onboarding cheaper.
+4. **Promote skills to the wiki.** Today they live under `.claude/skills/` — invaluable for the team, invisible to anyone reading the GitHub wiki. Either copy them into `docs/conventions/` or auto-mirror via the wiki sync script.
+5. **Set `noImplicitAny: true`** once the residual `any` is paid down. The compiler is already on strict — this is the last remaining laxity.
+6. **Fix the `system-edit` typo in `e2e/helpers/auth.ts`.** The default roles list contains `system-edit`, which is not a role: the registry and `ROLE.SYSTEM_EDIT` both use `systems-edit`. The mocked session therefore grants one role fewer than it appears to.
+7. **Point `make db-local-up` at a file that exists.** The API repo's Makefile targets `docker/docker-compose-databases-local.yml`, which is not in the tree; `docker-compose-local.yml` is the working one.
+8. **Add `MINIO_PORT` / `MINIO_USE_SSL` to `env-example`** and drop the unused `NEO4J_SECRET`.
 
 ## 🔮 Planned
 
 - Hungarian localisation (`hu` locale) for ELI ALPS — adding a `messages.hu` and an `IntlProvider` selector is the entry point, but no concrete schedule today.
-- A canonical `docs/conventions/` set in the wiki — see Maintenance #5.
+- A canonical `docs/conventions/` set in the wiki — see Maintenance #4.
 - A `/api/health` endpoint that doubles as a local-dev sanity check — see [Deployment & runbook → Maintenance](./deployment-runbook.md#maintenance-recommendations).
 
 ## Open questions
 
 - Where is the authoritative list of `data-testid` selectors? They are scattered across `.cont.tsx` files; no central registry. Worth one?
-- The `e2e/helpers/auth.ts` default roles are `basics`, `systems-view`, `system-edit` — but the canonical role for write is `systems-edit` (with an "s"). Is `system-edit` a typo or a parallel constant?
 - `tsconfig.json` sets `noImplicitAny: false` while `strict: true`. Was the laxity deliberate (codegen output?) or accidental?
 
 ---

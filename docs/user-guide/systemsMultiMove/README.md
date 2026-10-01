@@ -4,7 +4,7 @@ The Systems Multi-Move module is the place to **re-parent many systems at once**
 
 Every selected source keeps its identity — UID, name, code, type, attached physical item, engineering relationships, persons, attachments, and full change history. Only each source's `HAS_SUBSYSTEM` link to its parent is replaced. The descendants of each source come along, since they are reached through their parent's edge.
 
-`[SCREENSHOT PLACEHOLDER: Systems Multi-Move landing — two side-by-side tables, left labeled implicitly with multi-select checkboxes (Systems to Move), right with a single-select destination column, the Move Systems here button visible on the destination's Name row]`
+![Systems Multi-Move landing page with its two side-by-side tables](./images/multi-move-page.png)
 
 ## Access & Responsibilities
 

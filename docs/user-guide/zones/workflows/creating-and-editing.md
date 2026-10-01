@@ -33,7 +33,7 @@ See [Access & Responsibilities](../README.md#access--responsibilities) for what 
    | **Parent Zone** | — | Picker over root zones only. Leave blank for a root zone; pick a root zone to make this a subzone. Placeholder *Select parent zone (optional)*. The option *None (root zone)* explicitly returns to root. |
    | **Notes** | — | Multi-line free text. URLs in the notes will auto-link in the table tooltip. Placeholder *Enter zone notes*. |
 
-   `[SCREENSHOT PLACEHOLDER: Create Zone sheet open over the page — Name and Code filled, Parent Zone combobox open with two root zones in the dropdown plus the "None (root zone)" option at the top, Notes text area below with a URL pasted in]`
+   ![Create Zone sheet open over the Zones table](../images/create-zone-sheet.png)
 
 3. **Click *Create Zone***. Toast progression:
    - *Creating…* — request in flight.

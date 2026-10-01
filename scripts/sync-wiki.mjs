@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Walks docs/, mirrors its hierarchy into a flat wiki layout, rewrites internal
-// markdown links to wiki page slugs, and emits a _Sidebar.md.
+// markdown links to wiki page slugs, copies image assets, and emits a _Sidebar.md.
 //
 // Usage:
 //   WIKI_OUT=/path/to/wiki-checkout node scripts/sync-wiki.mjs
@@ -11,6 +11,10 @@
 //   docs/<top>/<file>.md                                  -> <Top>-<File>.md
 //   docs/<top>/<sub>/README.md                            -> <Top>-<Sub>.md
 //   docs/<top>/<sub>/<group>/<file>.md                    -> <Top>-<Sub>-<File>.md  (selected groups skipped)
+//   docs/<any>/images/<file>.png                          -> images/<any>-images-<file>.png
+//
+// Because the wiki is a flat namespace, images are flattened the same way pages
+// are and every relative image link is rewritten to the flattened name.
 //
 // Folder display names and skipped groups are configured in DISPLAY_NAMES and
 // SKIP_FOLDERS below.
@@ -27,6 +31,12 @@ const SKIP_TREES = new Set(['_template', 'implementation-plans'])
 
 // Folders whose name is dropped from the slug (children appear directly under parent slug).
 const SKIP_FOLDERS = new Set(['workflows'])
+
+// Asset types copied verbatim into the wiki's flat images/ folder.
+const IMAGE_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp'])
+
+// Subfolder of the wiki checkout that receives the flattened assets.
+const WIKI_IMAGE_DIR = 'images'
 
 const DISPLAY_NAMES = {
     'user-guide': 'User-Guide',
@@ -72,6 +82,26 @@ async function walk(dir) {
     return out
 }
 
+async function walkImages(dir) {
+    const out = []
+    const entries = await fs.readdir(dir, { withFileTypes: true })
+    for (const e of entries) {
+        if (SKIP_TREES.has(e.name)) continue
+        const p = path.join(dir, e.name)
+        if (e.isDirectory()) {
+            out.push(...(await walkImages(p)))
+        } else if (IMAGE_EXTENSIONS.has(path.extname(e.name).toLowerCase())) {
+            out.push(p)
+        }
+    }
+    return out
+}
+
+// docs/user-guide/zones/images/zones-list.png -> images/user-guide-zones-images-zones-list.png
+function imageRelToWikiName(relPath) {
+    return `${WIKI_IMAGE_DIR}/${relPath.split('/').join('-')}`
+}
+
 function resolveLink(currentSrcAbs, linkPath, manifest) {
     if (
         linkPath.startsWith('http://') ||
@@ -90,8 +120,32 @@ function resolveLink(currentSrcAbs, linkPath, manifest) {
     return hash ? `${slug}#${hash}` : slug
 }
 
-function rewriteLinks(content, srcAbs, manifest) {
-    return content.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (full, text, link) => {
+function resolveImage(currentSrcAbs, linkPath, imageManifest) {
+    if (
+        linkPath.startsWith('http://') ||
+        linkPath.startsWith('https://') ||
+        linkPath.startsWith('data:')
+    ) {
+        return null
+    }
+    const [pathPart] = linkPath.split('#')
+    if (!pathPart) return null
+    if (!IMAGE_EXTENSIONS.has(path.extname(pathPart).toLowerCase())) return null
+    const targetAbs = path.resolve(path.dirname(currentSrcAbs), pathPart)
+    const targetRel = path.relative(DOCS, targetAbs).split(path.sep).join('/')
+    return imageManifest[targetRel] ?? null
+}
+
+function rewriteLinks(content, srcAbs, manifest, imageManifest) {
+    // Images first: ![alt](path) is also matched by the link pattern below.
+    const withImages = content.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (full, alt, link) => {
+        const resolved = resolveImage(srcAbs, link, imageManifest)
+        if (resolved === null) return full
+        return `![${alt}](${resolved})`
+    })
+
+    return withImages.replace(/(!?)\[([^\]]+)\]\(([^)]+)\)/g, (full, bang, text, link) => {
+        if (bang) return full
         const resolved = resolveLink(srcAbs, link, manifest)
         if (resolved === null) return full
         return `[${text}](${resolved})`
@@ -146,7 +200,15 @@ async function main() {
         manifest[rel] = relPathToSlug(rel)
     }
 
+    const images = await walkImages(DOCS)
+    const imageManifest = {}
+    for (const f of images) {
+        const rel = path.relative(DOCS, f).split(path.sep).join('/')
+        imageManifest[rel] = imageRelToWikiName(rel)
+    }
+
     await fs.mkdir(WIKI_OUT, { recursive: true })
+    await fs.mkdir(path.join(WIKI_OUT, WIKI_IMAGE_DIR), { recursive: true })
 
     const existing = await fs.readdir(WIKI_OUT).catch(() => [])
     for (const name of existing) {
@@ -155,17 +217,31 @@ async function main() {
         }
     }
 
+    // Drop assets that no longer exist in docs/ so the wiki does not accumulate orphans.
+    const keep = new Set(Object.values(imageManifest).map(n => path.basename(n)))
+    const existingImages = await fs.readdir(path.join(WIKI_OUT, WIKI_IMAGE_DIR)).catch(() => [])
+    for (const name of existingImages) {
+        if (!keep.has(name)) {
+            await fs.unlink(path.join(WIKI_OUT, WIKI_IMAGE_DIR, name))
+        }
+    }
+
     for (const f of files) {
         const rel = path.relative(DOCS, f).split(path.sep).join('/')
         const slug = manifest[rel]
         const raw = await fs.readFile(f, 'utf8')
-        const rewritten = rewriteLinks(raw, f, manifest)
+        const rewritten = rewriteLinks(raw, f, manifest, imageManifest)
         await fs.writeFile(path.join(WIKI_OUT, `${slug}.md`), rewritten)
+    }
+
+    for (const f of images) {
+        const rel = path.relative(DOCS, f).split(path.sep).join('/')
+        await fs.copyFile(f, path.join(WIKI_OUT, imageManifest[rel]))
     }
 
     await fs.writeFile(path.join(WIKI_OUT, '_Sidebar.md'), buildSidebar(manifest))
 
-    console.log(`Synced ${files.length} pages to ${WIKI_OUT}`)
+    console.log(`Synced ${files.length} pages and ${images.length} images to ${WIKI_OUT}`)
 }
 
 main().catch((err) => {

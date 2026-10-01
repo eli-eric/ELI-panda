@@ -4,7 +4,7 @@ The Services module is the **catalogue of service kinds** offered or contracted 
 
 Service types are *templates*, not individual transactions. A specific service performed against a specific physical item is captured *elsewhere* — today, as a [Service Line](../orders/workflows/adding-service-lines.md) on an order. This module's job is to maintain the vocabulary of services so that order forms, reports, and pickers have a stable set of options to reference.
 
-`[SCREENSHOT PLACEHOLDER: Services list page — top bar with "Manage Services" title and "Add New Service" button on the right (visible for editors), table below with columns Name, Category (linked), Description, Action; each Name cell is a link to the detail page]`
+![Services list page with the service types table](./images/services-list.png)
 
 ## Access & Responsibilities
 
@@ -51,7 +51,7 @@ A simple two-surface module: a list page and a detail page.
   - *Service Type Description* — multi-line text area.
 - **Properties card.** One section per property group on the chosen category. Each property in the group is a checkbox; ticking it opts the service into covering that property. Grid layout — typically four columns on wide screens.
 
-`[SCREENSHOT PLACEHOLDER: service detail page — top form card with Service Type Name / Catalogue Category combobox / Description filled in, below it a Properties card with two property-group headings (e.g. "Performance", "Dimensions") and checkboxes under each]`
+![Service type detail page with the form card and the properties card](./images/service-type-detail.png)
 
 ## Common workflows
 
@@ -74,7 +74,7 @@ For where service types are *consumed* — adding a service line to an order —
 
 > 🔧 *This section is for engineers reading the docs in the repo. The wiki generator strips it.*
 >
-> Endpoints: `GET /serviceTypeList` (list, key `serviceTypeList`), `GET /serviceType/<uid>` (detail, key `serviceType`), `POST /serviceType` (create), `PUT /serviceType/<uid>` (update), `DELETE /serviceType/<uid>` (delete). Property checkboxes are sourced from the linked catalogue category via the same hook the [Catalogue item](../catalogue/README.md) form uses (`useGroupDetails`). The list of selected property names is stored as `properties: string[]` on the service-type record.
+> Endpoints (all under the API's `/v1` base): `GET /catalogue/service/types` (list, endpoint key `serviceTypeList`), `GET /catalogue/service/type/<uid>` (detail, key `serviceType`), `POST /catalogue/service/type` (create), `PUT /catalogue/service/type/<uid>` (update), `DELETE /catalogue/service/type/<uid>` (delete). `serviceType` / `serviceTypeList` are the keys in `src/utils/getEndpoints.ts`, **not** URL paths. Reads require `catalogue-service-view` or `catalogue-service-edit`; writes require `catalogue-service-edit`. Property checkboxes are sourced from the linked catalogue category via the same hook the [Catalogue item](../catalogue/README.md) form uses (`useGroupDetails`). The list of selected property names is stored as `properties: string[]` on the service-type record.
 
 ## Language
 
