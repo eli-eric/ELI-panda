@@ -42,11 +42,19 @@ export const parsePositiveIntParam = (raw: string | null | undefined, fallback: 
     return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback
 }
 
-const isColumnFilter = (value: unknown): value is ColumnFilter =>
-    typeof value === 'object' &&
-    value !== null &&
-    typeof (value as ColumnFilter).id === 'string' &&
-    (value as ColumnFilter).id.length > 0
+const isColumnFilter = (value: unknown): value is ColumnFilter => {
+    if (typeof value !== 'object' || value === null) return false
+    const candidate = value as ColumnFilter
+    // A filter needs both halves to be usable: the id keys the badge and the
+    // store, the value is what the API actually filters on. `[{"id":"name"}]`
+    // would otherwise reach both and render a badge with no label.
+    return (
+        typeof candidate.id === 'string' &&
+        candidate.id.length > 0 &&
+        candidate.value !== undefined &&
+        candidate.value !== null
+    )
+}
 
 /**
  * Parses the serialized `filter` query param into table column filters.
