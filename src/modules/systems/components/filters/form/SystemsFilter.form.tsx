@@ -89,7 +89,9 @@ export const SystemsFilterForm = ({
                     isFilter={true}
                 />
                 <RangeInput
-                    {...fields.sparePartsCoverage}
+                    name={fields.sparePartsCoverage.name}
+                    label={fields.sparePartsCoverage.label}
+                    disabled={fields.sparePartsCoverage.disabled}
                     placeholder={{ min: 'Min', max: 'Max' }}
                     isFilter={true}
                     onChange={value => {
