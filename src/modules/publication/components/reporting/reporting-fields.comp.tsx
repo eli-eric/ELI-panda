@@ -13,7 +13,7 @@ import type {
     ReportingClassification,
     ReportingDocumentType,
 } from '../../types/reporting'
-import { createPublicationReporting } from '../../types/reporting'
+import { createPublicationReporting, REPORTING_RANKING_STATUSES } from '../../types/reporting'
 import { ReportingAuthors } from './reporting-authors.comp'
 import { ReportingMetrics } from './reporting-metrics.comp'
 
@@ -39,8 +39,6 @@ const DOCUMENT_TYPE_LABEL_IDS: Record<ReportingDocumentType, string> = {
 const CLASSIFICATIONS = Object.keys(CLASSIFICATION_LABEL_IDS) as ReportingClassification[]
 const DOCUMENT_TYPES = Object.keys(DOCUMENT_TYPE_LABEL_IDS) as ReportingDocumentType[]
 
-const RANKING_STATUSES = ['unknown', 'unranked'] as const
-
 const ReportingEditor = () => {
     const { formatMessage: fm } = useIntl()
     const fields = useReportingFields()
@@ -59,7 +57,7 @@ const ReportingEditor = () => {
         uid: value,
         name: fm({ id: DOCUMENT_TYPE_LABEL_IDS[value] }),
     }))
-    const rankingOptions = RANKING_STATUSES.map(value => ({
+    const rankingOptions = REPORTING_RANKING_STATUSES.map(value => ({
         uid: value,
         name: fm({
             id: value === 'unranked' ? reporting.rankingUnranked : reporting.rankingUnknown,

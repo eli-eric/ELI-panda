@@ -135,10 +135,17 @@ export const useWosLookup = () => {
             const enrichment = await fetchEnrichmentPreview({ doi, currentPublicationUid })
 
             if (enrichment.status === WOS_PREVIEW_STATUS.ALREADY_EXISTS) {
+                // The contract promises existingPublication with this status;
+                // a malformed response must fall through to the honest toast
+                // instead of crashing the duplicate dialog on a null.
+                if (!enrichment.existingPublication) {
+                    toast.error(fm({ id: message.publication.enrichment.noProviderAnswered }))
+                    return
+                }
                 openDuplicatePreview({
                     status: WOS_PREVIEW_STATUS.ALREADY_EXISTS,
                     doi: enrichment.doi,
-                    existingPublication: enrichment.existingPublication!,
+                    existingPublication: enrichment.existingPublication,
                 })
                 return
             }

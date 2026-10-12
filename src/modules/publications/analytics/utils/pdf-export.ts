@@ -1,3 +1,5 @@
+import type { jsPDF } from 'jspdf'
+
 import type { ReportDocument } from './report-rows'
 
 const FONT_REGULAR = '/fonts/DejaVuSans.ttf'
@@ -47,11 +49,7 @@ const loadFontData = async () => {
     return cachedFonts
 }
 
-const registerCzechFont = async (doc: {
-    addFileToVFS: (name: string, data: string) => void
-    addFont: (file: string, name: string, style: string) => void
-    setFont: (name: string, style?: string) => void
-}) => {
+const registerCzechFont = async (doc: jsPDF) => {
     const fonts = await loadFontData()
 
     doc.addFileToVFS('DejaVuSans.ttf', fonts.regular)
@@ -67,7 +65,7 @@ export const buildReportPdf = async (document: ReportDocument): Promise<Blob> =>
     const { default: autoTable } = await import('jspdf-autotable')
 
     const doc = new jsPDF({ orientation: 'landscape', unit: 'pt', format: 'a4' })
-    await registerCzechFont(doc as never)
+    await registerCzechFont(doc)
 
     const margin = 32
     let cursor = margin + 8

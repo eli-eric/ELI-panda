@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
 
 import Card from '@/components/layout/Card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { useDebounce } from '@/hooks/useDebounce'
 import { message } from '@/i18n/src/messages'
 
 import { DepartmentMatrix } from './components/department-matrix.comp'
@@ -26,19 +27,38 @@ const YearInput = ({
     label: string
     value: number
     onChange: (value: number) => void
-}) => (
-    <div className="space-y-1">
-        <Label>{label}</Label>
-        <Input
-            type="number"
-            min={1900}
-            max={9999}
-            value={value}
-            onChange={event => onChange(Number(event.target.value))}
-            className="w-28"
-        />
-    </div>
-)
+}) => {
+    const [text, setText] = useState(String(value))
+    const debounced = useDebounce(text)
+
+    // Commit only a complete four-digit year: the API rejects shorter values
+    // with a 400 (optionalYearParam), so typing "2024" one keystroke at a
+    // time would otherwise fire failing queries and flash the error banner.
+    useEffect(() => {
+        if (/^\d{4}$/.test(debounced) && Number(debounced) !== value) {
+            onChange(Number(debounced))
+        }
+    }, [debounced, value, onChange])
+
+    // Follow the parent when it changes the window outside this input.
+    useEffect(() => {
+        setText(current => (Number(current) === value ? current : String(value)))
+    }, [value])
+
+    return (
+        <div className="space-y-1">
+            <Label>{label}</Label>
+            <Input
+                type="number"
+                min={1900}
+                max={9999}
+                value={text}
+                onChange={event => setText(event.target.value)}
+                className="w-28"
+            />
+        </div>
+    )
+}
 
 /**
  * Management reporting dashboard.

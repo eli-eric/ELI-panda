@@ -8,10 +8,9 @@ import { Button } from '@/components/ui/button'
 import { message } from '@/i18n/src/messages'
 
 import { REPORTING_FIELD_NAME } from '../../hooks/useReportingFields'
+import { REPORTING_QUARTILES } from '../../types/reporting'
 
 const { reporting } = message.publication
-
-const QUARTILES = ['Q1', 'Q2', 'Q3', 'Q4']
 
 type Props = {
     disabled: boolean
@@ -76,7 +75,7 @@ export const ReportingMetrics = ({ disabled, publicationYear }: Props) => {
                     <Listbox
                         name={`${REPORTING_FIELD_NAME}.journalMetrics.${index}.quartile`}
                         customLabel={fm({ id: reporting.metricQuartile })}
-                        customOptions={QUARTILES}
+                        customOptions={REPORTING_QUARTILES}
                         disabled={disabled}
                     />
                     <Input

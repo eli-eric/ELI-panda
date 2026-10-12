@@ -1,7 +1,7 @@
 'use client'
 
 import { Check, ChevronsUpDown, X } from 'lucide-react'
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 
@@ -75,8 +75,15 @@ const MultiCombobox = ({
 
     // Names of already-selected entries are remembered across searches, so
     // narrowing the list does not turn existing selections into raw UIDs.
-    const nameByUid = useRef(new Map<string, string>())
-    options.forEach(option => nameByUid.current.set(option.uid, option.name))
+    // Accumulated in an effect, never during render.
+    const [knownNames, setKnownNames] = useState<ReadonlyMap<string, string>>(new Map())
+    useEffect(() => {
+        setKnownNames(previous => {
+            const next = new Map(previous)
+            options.forEach(option => next.set(option.uid, option.name))
+            return next
+        })
+    }, [options])
 
     return (
         <Controller
@@ -128,7 +135,7 @@ const MultiCombobox = ({
                                 </Button>
                             </PopoverTrigger>
                             <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
-                                <Command>
+                                <Command shouldFilter={false}>
                                     <CommandInput
                                         value={query}
                                         onValueChange={setQuery}
@@ -142,7 +149,7 @@ const MultiCombobox = ({
                                             {options.map(option => (
                                                 <CommandItem
                                                     key={option.uid}
-                                                    value={option.name}
+                                                    value={option.uid}
                                                     onSelect={() => toggle(option.uid)}
                                                 >
                                                     <Check
@@ -166,7 +173,7 @@ const MultiCombobox = ({
                             <div className="flex flex-wrap gap-1 pt-1">
                                 {selected.map(uid => (
                                     <Badge key={uid} variant="secondary" className="gap-1">
-                                        {nameByUid.current.get(uid) ??
+                                        {knownNames.get(uid) ??
                                             fm({ id: messages.ui.unavailableReference }, { uid })}
                                         {!disabled && (
                                             <button
