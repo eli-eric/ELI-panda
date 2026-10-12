@@ -9,6 +9,7 @@ import { HeaderWithButtons } from '@/components/header/HeaderWithButtons'
 import Card from '@/components/layout/Card'
 import { useAccessControl } from '@/hooks/useAccessControl'
 import { message } from '@/i18n/src/messages'
+import { PUBLICATION_EXECUTIVE_SUMMARY_KEY } from '@/modules/publications/analytics/hooks/usePublicationExecutiveSummary'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
@@ -62,6 +63,7 @@ export const PublicationDetailContainer: FC<Props> = ({ publication, refetch }) 
     const { mutate, isPending } = usePublicationMutation()
 
     const onSuccessfulSubmit = async () => {
+        await queryClient.invalidateQueries({ queryKey: [PUBLICATION_EXECUTIVE_SUMMARY_KEY] })
         await queryClient.invalidateQueries({ queryKey: [publicationsTableId] })
         await queryClient.invalidateQueries({
             queryKey: ['publication', { uid: publication?.uid }],

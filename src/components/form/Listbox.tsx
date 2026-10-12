@@ -23,7 +23,7 @@ export type ListboxPropsT = FieldProps & {
     allowEmptyOption?: boolean
     emptyOption?: string
     optionsSize?: 'sm' | 'md' | 'lg'
-    customOptions?: string[] | any[]
+    customOptions?: readonly string[] | any[]
     unit?: string
     customLabel?: string
     codebookResponse?: CodebookType[]
@@ -142,7 +142,7 @@ const Listbox = ({
                                 onValueChange={value => {
                                     const processedValue = handleChange(value)
                                     field.onChange(processedValue)
-                                    onChange && onChange(processedValue)
+                                    onChange?.(processedValue)
                                 }}
                                 disabled={disabled}
                             >
@@ -185,7 +185,7 @@ const Listbox = ({
                                     className="absolute right-8 top-1/2 -translate-y-1/2 cursor-pointer opacity-50 hover:opacity-100"
                                     onClick={() => {
                                         field.onChange(null)
-                                        onChange && onChange(null)
+                                        onChange?.(null)
                                     }}
                                 >
                                     <X className="h-4 w-4" />

@@ -5,7 +5,7 @@ import { setupNetworkMocks } from './network'
 
 const CODEBOOK_ENDPOINT = /\/api\/mock-server\/codebook\/[^?]+(?:\?.*)?$/
 const LINKS_ENDPOINT = /\/api\/mock-server\/files\/links\/[^?]+(?:\?.*)?$/
-const WOS_PREVIEW_ENDPOINT = /\/api\/mock-server\/publications\/wos-preview(?:\?.*)?$/
+const ENRICHMENT_PREVIEW_ENDPOINT = /\/api\/mock-server\/publications\/enrichment-preview$/
 
 export async function setupPublicationDoiNetworkMocks(page: Page) {
     await setupNetworkMocks(page, {
@@ -27,8 +27,8 @@ export async function setupPublicationDoiNetworkMocks(page: Page) {
                 resolver: () => [],
             },
             {
-                matcher: WOS_PREVIEW_ENDPOINT,
-                method: 'GET',
+                matcher: ENRICHMENT_PREVIEW_ENDPOINT,
+                method: 'POST',
                 resolver: () => PUBLICATION_WOS_PREVIEW,
             },
         ],

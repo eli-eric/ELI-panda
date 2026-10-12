@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 import { ELI_PUBLICATION, isMediaTypeC, isMediaTypeCOrD, isMediaTypeD } from '../types/constants'
+import { publicationReportingSchema } from './reporting.schema'
 
 const codebookSchema = z.object({
     uid: z.string().min(1, 'UID is required'),
@@ -44,6 +45,7 @@ const authorsDepartmentSchema = z.object({
 })
 
 export const publicationPeerReviewedSchema = z.object({
+    reporting: publicationReportingSchema.nullable().optional(),
     // Required fields
     eliPublication: z.nativeEnum(ELI_PUBLICATION).default(ELI_PUBLICATION.YES),
     code: z.string().min(1, 'Code is required'),
@@ -148,6 +150,7 @@ export const publicationPeerReviewedSchema = z.object({
 
 export const publicationOtherSchema = z
     .object({
+        reporting: publicationReportingSchema.nullable().optional(),
         // Required fields
         eliPublication: z.nativeEnum(ELI_PUBLICATION).default(ELI_PUBLICATION.YES),
         code: z.string().min(1, 'Code is required'),

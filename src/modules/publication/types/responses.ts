@@ -3,8 +3,10 @@ import type { SelectedResearcher } from '@/modules/shared/form/researcherSelect'
 import type { CodebookType } from '@/types/responses/codebook'
 
 import type { ELI_PUBLICATION } from './constants'
+import type { PublicationReporting } from './reporting'
 
 export interface Publication {
+    reporting?: PublicationReporting | null
     uid?: string
     /** @deprecated use mediaTypeCb */
     mediaType: string

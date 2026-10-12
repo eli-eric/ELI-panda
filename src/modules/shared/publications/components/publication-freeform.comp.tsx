@@ -7,6 +7,7 @@ import { DepartmentsComponent } from '@/modules/publication/components/departmen
 import { DoiLookupField } from '@/modules/publication/components/doi-lookup.field'
 import { EliAuthorsSelectComponent } from '@/modules/publication/components/eli-authors-select.comp'
 import { PublicationYearField } from '@/modules/publication/components/publication-year.field'
+import { PublicationReportingFields } from '@/modules/publication/components/reporting/reporting-fields.comp'
 import { WebLinkField } from '@/modules/publication/components/web-link.field'
 import { useMediaTypeStore } from '@/modules/publication/hooks/useMediaTypeStore'
 import { usePublicationFields } from '@/modules/publication/hooks/usePublicationFields'
@@ -76,6 +77,7 @@ export const PublicationFreeFormComponent = () => {
             <Combobox {...fields.publishingCountry} />
             <Input {...fields.language} disabled={true} />
             <TextArea {...fields.note} />
+            <PublicationReportingFields />
         </div>
     )
 }

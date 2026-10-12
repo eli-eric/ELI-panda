@@ -22,6 +22,7 @@ import { DoiLookupField } from './doi-lookup.field'
 import { EliAuthorsSelectComponent } from './eli-authors-select.comp'
 import { GrantsSelectComponent } from './grants-select.comp'
 import { PublicationYearField } from './publication-year.field'
+import { PublicationReportingFields } from './reporting/reporting-fields.comp'
 import { WebLinkField } from './web-link.field'
 
 export type Publication = {
@@ -226,6 +227,9 @@ export const PublicationFormComponent = () => {
                 </Col>
                 <Col lg={12}>
                     <TextArea {...fields.note} />
+                </Col>
+                <Col lg={12}>
+                    <PublicationReportingFields />
                 </Col>
             </Grid>
         </Card>

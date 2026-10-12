@@ -38,10 +38,19 @@ src/modules/publication/
 │   ├── usePublicationFields.ts          — derived form-field metadata
 │   ├── useMediaTypeStore.ts             — Zustand: selected media-type variant
 │   └── useGenerateUid.ts                — local-only uid generator (form rows)
+├── components/reporting/                — management reporting review fieldset
+│   ├── reporting-fields.comp.tsx        — the fieldset, collapsed until opened
+│   ├── reporting-authors.comp.tsx       — per-publication authorship roles
+│   ├── reporting-metrics.comp.tsx       — JCR evidence rows
+│   └── reporting-role.select.tsx        — three-state role (yes / no / unknown)
+├── components/enrichment/
+│   └── enrichment-sources.comp.tsx      — per-provider outcome, conflicts, open access
 ├── types/
 │   ├── responses.ts                     — Publication wire shape
 │   ├── form.ts                          — re-exports + form type aliases
 │   ├── constants.ts                     — MEDIA_TYPE_UID, ELI_PUBLICATION, helpers
+│   ├── reporting.ts                     — reporting snapshot shape
+│   ├── enrichment.ts                    — multi-provider preview contract
 │   └── wos-import.ts                    — REST preview and selection contract
 └── utils/
     ├── doi.ts                           — DOI normalization and validation
@@ -388,3 +397,89 @@ Other smells:
 > 🔧 _Engineer-only; stripped from the wiki._
 >
 > No GraphQL schema entries exist for publications. Wire shapes live in `src/modules/publication/types/responses.ts`, `src/modules/publication/types/wos-import.ts`, `src/modules/researchers/types/researcher.types.ts`, `src/modules/grants/types/grant.types.ts`. Zod schemas live in the corresponding `form/` directories. The WoS REST key is `publicationWosPreview`; RIV keys are `rivValidate` and `rivExport` (`src/utils/getEndpoints.ts`). Hardcoded UIDs remain in `src/modules/publication/types/constants.ts` (`MEDIA_TYPE_UID`).
+
+
+## Management reporting
+
+Reporting is a **separate, editor-confirmed layer** over the publication record.
+It exists because the figures management reports on — is this ELI's own output,
+which departments should be credited, which user call produced it, what quality
+band does the journal sit in — cannot be derived from the bibliographic record
+with any honesty.
+
+### Where it lives
+
+| Piece | Path |
+| --- | --- |
+| Form fieldset | `src/modules/publication/components/reporting/` |
+| Field config | `src/modules/publication/hooks/useReportingFields.ts` |
+| Types / Zod | `src/modules/publication/types/reporting.ts`, `form/reporting.schema.ts` |
+| Dashboard | `src/modules/publications/analytics/` |
+| Page | `src/pages/publications/analytics/index.tsx` (`PATH.PUBLICATIONS_ANALYTICS`) |
+| Backend | `services/publications-service/publications-reporting-db-queries.go`, `publications-analytics.go` |
+
+### The contract
+
+`Publication.reporting` is optional on GET / POST / PUT:
+
+- **Omitted on save → the stored snapshot is preserved.** An older client that
+  knows nothing about reporting cannot erase a review by saving a publication.
+- **Present on save → the snapshot is replaced outright**, not merged.
+- `reviewedAt` / `reviewedBy` are authored server-side from the JWT and ignored
+  if a client sends them.
+- Editing a field the review depends on (year, DOI, journal, ISSN, media type,
+  quartile, impact factor, researchers, departments) **clears `reviewed`** while
+  keeping the selections.
+
+In Neo4j the snapshot hangs off the publication as its own subgraph
+(`HAS_REPORTING` → `PublicationReporting`) using **new relationship types**
+(`REPORTED_DEPARTMENT`, `REPORTED_USER_CALL`, …). The existing `HAS_USER_CALL`,
+`HAS_EXPERIMENTAL_SYSTEM` and `HAS_USER_EXPERIMENT` edges are singular; adding
+second edges to them would multiply rows in every existing publication query.
+
+Note that `REPORTED_DEPARTMENT` is the **first real publication-to-department
+edge in the graph**. The legacy `authorsDepartments` is a string-encoded
+`authorsDepartmentsArray` property, not a relationship, and it is left untouched.
+
+### Counting rules the dashboard depends on
+
+These are decisions, not implementation details — changing one changes what the
+institution reports:
+
+- Institutional totals count **distinct** publications; department, call and
+  system figures are **overlapping credits** and may sum higher. Never derive a
+  headline by summing rows.
+- A publication's quality band comes from the **highest category percentile for
+  its own publication year**. Q1 splits at percentile 90; without a percentile it
+  stays `q1Unsplit`.
+- Q3+Q4 percentages divide by papers with a **known quartile**. An empty
+  denominator returns `percent: null`, which the UI renders `N/A` — never 0 %.
+- User publications are a **subset** of own publications (`own-user`).
+- Unclassified and awaiting-review counts sit **beside** the totals, never inside.
+- A query failure returns an error, never a partial report.
+
+`ExecutiveSummary.policyVersion` stamps which version of these rules produced a
+given report.
+
+## DOI enrichment
+
+`POST /v1/publications/enrichment-preview` fans out to Crossref, Web of Science
+Starter and Unpaywall for a DOI and returns merged suggestions plus, for each
+provider, what it actually answered. Nothing is saved; the existing create and
+update endpoints still own persistence.
+
+The per-provider status is load-bearing in the UI: a field left blank because
+Crossref had no data is a different situation from one blank because Web of
+Science was never configured, and only the first is worth retrying.
+
+Provider facts worth not re-learning:
+
+- Crossref's `created` is when Crossref **received** the metadata, not when the
+  work was published. Publication dates come from `published` /
+  `published-print` / `published-online`, and partial precision is preserved
+  rather than padded to January 1st.
+- Unpaywall requires an email on every request; without `UNPAYWALL_EMAIL` the
+  provider reports itself *not configured* rather than failing.
+- Authors are matched by WoS ResearcherID, then ORCID, then name. **Only
+  identifier matches are presented as matches** — a name hit is a suggestion the
+  editor confirms.
