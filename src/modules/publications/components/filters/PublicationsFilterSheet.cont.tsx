@@ -3,10 +3,10 @@ import { useMemo } from 'react'
 import { Form } from '@/components/form/Form'
 import { useFormFilter } from '@/hooks/form/useFormFilters'
 import { usePublicationsFilterOptions } from '@/modules/publications/hooks/usePublicationsFilterOptions'
+import type { PublicationFilterType } from '@/modules/publications/types/filter'
 
 import { PublicationsFilterForm } from './form/PublicationsFilter.form'
 import { PublicationsFilterFooter } from './PublicationsFilterFooter.comp'
-import type { PublicationFilterType } from './types/filter'
 
 interface PublicationsFilterSheetProps {
     tableId: string

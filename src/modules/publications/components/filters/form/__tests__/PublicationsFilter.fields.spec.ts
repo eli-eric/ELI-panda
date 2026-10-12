@@ -1,29 +1,64 @@
 import { renderHook } from '@testing-library/react'
 
 import type { Publication } from '@/modules/publication/types/responses'
+import type { PublicationFilterType } from '@/modules/publications/types/filter'
 import { AllProvidersWrapper } from '@/testutils/wrappers/AllProvidersWrapper'
 
-import type { PublicationFilterType } from '../../types/filter'
 import { usePublicationsFilterFields } from '../PublicationsFilter.fields'
 
 // Filter ids the API recognizes (eli-panda-api ApplyPublicationFilters, ELIPANDA-503).
 const API_FILTER_IDS = {
     text: [
-        'title', 'code', 'doi', 'allAuthors', 'eliAuthors', 'keywords', 'longJournalTitle',
-        'shortJournalTitle', 'abstract', 'citeAs', 'wosNumber', 'issn', 'eissn', 'eidScopus',
-        'oecdFord', 'note', 'otherGrants', 'webLink', 'publisher', 'publishPlace', 'isbn',
-        'bookTitle', 'editionVolume', 'proceedingsIsbn', 'conferencePlace', 'pages',
+        'title',
+        'code',
+        'doi',
+        'allAuthors',
+        'eliAuthors',
+        'keywords',
+        'longJournalTitle',
+        'shortJournalTitle',
+        'abstract',
+        'citeAs',
+        'wosNumber',
+        'issn',
+        'eissn',
+        'eidScopus',
+        'oecdFord',
+        'note',
+        'otherGrants',
+        'webLink',
+        'publisher',
+        'publishPlace',
+        'isbn',
+        'bookTitle',
+        'editionVolume',
+        'proceedingsIsbn',
+        'conferencePlace',
+        'pages',
     ],
     list: ['yearOfPublication', 'eliPublication', 'quartil', 'quartilBasis', 'language'],
     numericRange: [
-        'impactFactor', 'allAuthorsCount', 'eliAuthorsCount', 'pagesCount', 'bookPagesCount',
-        'volume', 'issue',
+        'impactFactor',
+        'allAuthorsCount',
+        'eliAuthorsCount',
+        'pagesCount',
+        'bookPagesCount',
+        'volume',
+        'issue',
     ],
     dateRange: ['dateOfPublication', 'conferenceDate'],
     codebook: [
-        'mediaTypeCb', 'openAccessType', 'publishingCountry', 'userCall', 'userExperimentCb',
-        'experimentalSystemCb', 'publishFormatCb', 'conferenceScopeCb', 'grants',
-        'eliResearchers', 'department',
+        'mediaTypeCb',
+        'openAccessType',
+        'publishingCountry',
+        'userCall',
+        'userExperimentCb',
+        'experimentalSystemCb',
+        'publishFormatCb',
+        'conferenceScopeCb',
+        'grants',
+        'eliResearchers',
+        'department',
     ],
 }
 
@@ -35,8 +70,7 @@ const UNMAPPED_IDS: Record<Exclude<keyof PublicationFilterType, keyof Publicatio
 }
 
 const renderFields = () =>
-    renderHook(() => usePublicationsFilterFields(), { wrapper: AllProvidersWrapper }).result
-        .current
+    renderHook(() => usePublicationsFilterFields(), { wrapper: AllProvidersWrapper }).result.current
 
 describe('usePublicationsFilterFields', () => {
     it('uses exactly the API filter ids, once each', () => {

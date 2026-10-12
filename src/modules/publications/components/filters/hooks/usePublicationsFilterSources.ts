@@ -15,6 +15,13 @@ import { queryFetcher } from '@/utils/fetcher'
  * requested once (one page of FILTER_SOURCE_PAGE_SIZE) and narrowed
  * client-side by the Combobox (`hasClientFilter`).
  *
+ * The page size is the deliberate ceiling: neither endpoint caps rows
+ * server-side, so one open sheet asks for at most FILTER_SOURCE_PAGE_SIZE
+ * researchers/grants — a hidden "all rows" pull once the register outgrows
+ * it. The fix at that point is wiring the Combobox to the endpoints' `search`
+ * param (both handlers already read it); with current register sizes
+ * (hundreds of rows) a single cached fetch beats a request per keystroke.
+ *
  * `department` needs no bespoke source: the DEPARTMENT codebook already exists
  * and is what the publication reporting form uses, so the sheet reuses it via
  * the shared Combobox codebook plumbing.

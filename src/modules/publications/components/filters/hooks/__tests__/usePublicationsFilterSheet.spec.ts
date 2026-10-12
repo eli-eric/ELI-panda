@@ -24,8 +24,7 @@ beforeEach(() => {
 })
 
 const renderOpen = () =>
-    renderHook(() => usePublicationsFilterSheet(), { wrapper: AllProvidersWrapper }).result
-        .current
+    renderHook(() => usePublicationsFilterSheet(), { wrapper: AllProvidersWrapper }).result.current
 
 describe('usePublicationsFilterSheet', () => {
     it('opens the publications filter sheet on the left with a translated title', () => {

@@ -65,9 +65,7 @@ export type PublicationFilterType = {
     department: CodebookType | null
     grants: CodebookType | null
     eliResearchers: CodebookType | null
-    // numeric ranges (default undefined on purpose: RangeInput fires its
-    // onChange on mount for any seeded object value, which would push empty
-    // filters and reset pagination/search — see useFormFilterState.setFilter)
+    // Unset ranges stay undefined; RangeInput emits only user edits, not hydration.
     impactFactor?: FilterNumericRange
     allAuthorsCount?: FilterNumericRange
     eliAuthorsCount?: FilterNumericRange

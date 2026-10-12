@@ -88,15 +88,19 @@ export const useFormFilter = <T extends FieldValues>({
                     setFilters(prev => prev.filter(item => item.id !== filter.id))
                 }
             })
+            // Keep unfiltered fields at their defaults so hydration does not look like an edit.
             reset(
-                columnFilters.reduce((acc, curr) => {
-                    if (curr.id === 'systemLevel') {
-                        acc[curr.id] = { uid: curr.value, name: curr.value }
-                    }
-                    acc[curr.id] = curr.value
+                columnFilters.reduce(
+                    (acc, curr) => {
+                        if (curr.id === 'systemLevel') {
+                            acc[curr.id] = { uid: curr.value, name: curr.value }
+                        }
+                        acc[curr.id] = curr.value
 
-                    return acc
-                }, {}),
+                        return acc
+                    },
+                    { ...defValues },
+                ),
             )
         }
         //eslint-disable-next-line

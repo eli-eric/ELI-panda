@@ -4,9 +4,8 @@ import { useIntl } from 'react-intl'
 import { Button } from '@/components/Buttons'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import { message } from '@/i18n/src/messages'
+import type { PublicationFilterType } from '@/modules/publications/types/filter'
 import { FilterSaveSettings } from '@/modules/shared/filters/FilterSaveSettings'
-
-import type { PublicationFilterType } from './types/filter'
 
 interface PublicationsFilterFooterProps {
     tableId: string

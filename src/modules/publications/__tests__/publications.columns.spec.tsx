@@ -52,4 +52,12 @@ describe('usePublicationColumns', () => {
         const unique = new Set(ids)
         expect(unique.size).toBe(ids.length)
     })
+
+    it('disables server sorting for collection columns', () => {
+        const { result } = renderHookWithProviders()
+        expect(result.current.find(column => column.id === 'grant')?.enableSorting).toBe(false)
+        expect(result.current.find(column => column.id === 'eliResearchers')?.enableSorting).toBe(
+            false,
+        )
+    })
 })

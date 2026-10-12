@@ -34,7 +34,9 @@ See [Access & Responsibilities](../README.md#access--responsibilities) for what 
 
    `[SCREENSHOT PLACEHOLDER: filter sheet open with Media Type set to a couple of values and Year set to 2025; the overview table beneath the sheet shows the filtered subset]`
 
-3. **Sort** by clicking a column header. Common triage sorts: *Year of publication* descending (most recent first), *Updated at* (catch what was changed today), *Title* (alphabetical for proofreading).
+   Opening the sheet restores existing numeric and date ranges without changing the current page. Editing a range applies it after a short debounce and returns to page 1.
+
+3. **Sort** by clicking a sortable column header. Common triage sorts: *Year of publication* descending (most recent first), *Updated at* (catch what was changed today), *Title* (alphabetical for proofreading). *Grants* and *ELI Researchers* are collections and cannot be sorted.
 
 4. **Column visibility.** The overview table has a very wide column set; hide what you do not need with the dropdown on the right side of the toolbar (column choices persist locally).
 

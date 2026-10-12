@@ -106,6 +106,7 @@ export const usePublicationColumns = () => {
             {
                 id: 'eliResearchers',
                 header: 'ELI Researchers',
+                enableSorting: false,
                 accessorFn: row =>
                     row.eliResearchers?.map(er => `${er.firstName} ${er.lastName}`).join('; '),
                 size: 300,
@@ -200,6 +201,7 @@ export const usePublicationColumns = () => {
             {
                 id: 'grant',
                 header: 'Grants',
+                enableSorting: false,
                 size: 300,
                 accessorFn: row => row.grants?.map(g => g.code).join('; ') || row.grant,
                 cell: ({ getValue }) => <ShortCell value={getValue()} numberOfChars={40} />,

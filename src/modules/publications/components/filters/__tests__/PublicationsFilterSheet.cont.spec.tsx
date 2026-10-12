@@ -1,17 +1,18 @@
 import { act, fireEvent, screen, waitFor, within } from '@testing-library/react'
 
 import useQueryManager from '@/hooks/useQueryManager'
+import type { PublicationsFilterOptionsResponse } from '@/modules/publications/types/filter'
 import useTableStateStore from '@/store/useTableStateStore'
 import { renderWithProviders } from '@/testutils/wrappers/renderWithProviders'
 import { CODEBOOK } from '@/types/constants/codebook'
 
 import { PublicationsFilterSheet } from '../PublicationsFilterSheet.cont'
-import type { PublicationsFilterOptionsResponse } from '../types/filter'
 
 // The full sheet renders ~60 fields; debounced inputs need real timers.
 jest.setTimeout(20000)
 
 const TABLE_ID = 'publications'
+let mockFilterQuery: string | null = null
 
 const FILTER_OPTIONS: PublicationsFilterOptionsResponse = {
     years: ['2025', '2024'],
@@ -32,7 +33,7 @@ const CODEBOOK_DATA: Partial<Record<CODEBOOK, { uid: string; name: string }[]>> 
 }
 
 jest.mock('next-usequerystate', () => ({
-    useQueryState: () => [null, jest.fn()],
+    useQueryState: (name: string) => [name === 'filter' ? mockFilterQuery : null, jest.fn()],
 }))
 
 jest.mock('next-auth/react', () => ({
@@ -69,7 +70,8 @@ beforeAll(() => {
 })
 
 beforeEach(() => {
-    act(() => useTableStateStore.getState().setColumnFilter(TABLE_ID, []))
+    mockFilterQuery = null
+    act(() => useTableStateStore.setState({ instances: {} }))
 })
 
 /** Renders the `columnFilter` query param exactly as usePublications sends it to the API. */
@@ -102,7 +104,6 @@ const pickFromCombobox = (label: string, option: string) => {
 describe('PublicationsFilterSheet', () => {
     it('renders every section, sourcing options from filter-options and codebooks', () => {
         renderSheet()
-
         ;[
             'Identification',
             'Journal',
@@ -135,7 +136,10 @@ describe('PublicationsFilterSheet', () => {
             target: { value: '1.5' },
         })
         await waitFor(() =>
-            expect(sentFilters()).toContainEqual({ id: 'impactFactor', value: { min: 1.5 } }),
+            expect(sentFilters()).toContainEqual({
+                id: 'impactFactor',
+                value: { min: 1.5, max: null },
+            }),
         )
         fireEvent.change(screen.getByTestId('maxdateOfPublication'), {
             target: { value: '2024-12-31' },
@@ -153,7 +157,7 @@ describe('PublicationsFilterSheet', () => {
             { id: 'yearOfPublication', value: ['2024'] },
             { id: 'quartil', value: ['Q1'] },
             { id: 'department', value: { uid: 'dep-physics', name: 'Physics' } },
-            { id: 'impactFactor', value: { min: 1.5 } },
+            { id: 'impactFactor', value: { min: 1.5, max: null } },
             { id: 'dateOfPublication', value: { min: null, max: '2024-12-31' } },
         ])
     })
@@ -178,5 +182,35 @@ describe('PublicationsFilterSheet', () => {
 
         await waitFor(() => expect(sentFilters()).toEqual([]))
         expect(screen.getByLabelText('DOI')).toHaveValue('')
+    })
+
+    it.each(['store', 'URL'])('hydrates %s ranges without resetting page 3', async source => {
+        const filters = [
+            { id: 'impactFactor', value: { min: 1.5, max: 5 } },
+            { id: 'dateOfPublication', value: { min: '2024-01-01', max: '2024-12-31' } },
+        ]
+        act(() => {
+            useTableStateStore.getState().setPaginationState(TABLE_ID, { page: 3, pageSize: 100 })
+            useTableStateStore.getState().setColumnFilter(TABLE_ID, filters)
+        })
+        if (source === 'URL') mockFilterQuery = JSON.stringify(filters)
+        renderSheet()
+
+        expect(screen.getByTestId('minimpactFactor')).toHaveValue(1.5)
+        expect(screen.getByTestId('maxdateOfPublication')).toHaveValue('2024-12-31')
+        // Wait beyond the debounce: hydration must not enqueue a filter change.
+        await act(async () => {
+            const { promise, resolve } = Promise.withResolvers<void>()
+            setTimeout(resolve, 600)
+            await promise
+        })
+        expect(useTableStateStore.getState().instances[TABLE_ID].paginationState?.page).toBe(3)
+        expect(sentFilters()).toEqual(filters)
+
+        fireEvent.change(screen.getByTestId('minimpactFactor'), { target: { value: '2' } })
+        await waitFor(() =>
+            expect(useTableStateStore.getState().instances[TABLE_ID].paginationState?.page).toBe(1),
+        )
+        expect(sentFilters()).toContainEqual({ id: 'impactFactor', value: { min: 2, max: 5 } })
     })
 })

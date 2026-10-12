@@ -9,14 +9,13 @@ import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import { ELI_PUBLICATION } from '@/modules/publication/types/constants'
+import type { PublicationsFilterOptionsResponse } from '@/modules/publications/types/filter'
 import type { CodebookType } from '@/types/responses/codebook'
 
-import { DateRangeFilter } from '../DateRangeFilter.comp'
 import {
     useGrantFilterOptions,
     useResearcherFilterOptions,
 } from '../hooks/usePublicationsFilterSources'
-import type { PublicationsFilterOptionsResponse } from '../types/filter'
 import { usePublicationsFilterFields } from './PublicationsFilter.fields'
 
 const { filters } = message.publication
@@ -126,14 +125,18 @@ export const PublicationsFilterForm = ({ tableId, enableQueryUrl, filterOptions 
             <SectionTitle title={fm({ id: filters.sections.authorsDepartments })} />
             <Input {...fields.allAuthors} onChange={setFilter(fields.allAuthors.name)} isFilter />
             <RangeInput
-                {...fields.allAuthorsCount}
+                name={fields.allAuthorsCount.name}
+                label={fields.allAuthorsCount.label}
+                disabled={fields.allAuthorsCount.disabled}
                 placeholder={rangePlaceholder(fields.allAuthorsCount.name)}
                 isFilter
                 onChange={value => setFilter(fields.allAuthorsCount.name)(value)}
             />
             <Input {...fields.eliAuthors} onChange={setFilter(fields.eliAuthors.name)} isFilter />
             <RangeInput
-                {...fields.eliAuthorsCount}
+                name={fields.eliAuthorsCount.name}
+                label={fields.eliAuthorsCount.label}
+                disabled={fields.eliAuthorsCount.disabled}
                 placeholder={rangePlaceholder(fields.eliAuthorsCount.name)}
                 isFilter
                 onChange={value => setFilter(fields.eliAuthorsCount.name)(value)}
@@ -158,15 +161,18 @@ export const PublicationsFilterForm = ({ tableId, enableQueryUrl, filterOptions 
                 codebookResponse={yearOptions}
                 onChange={setFilter(fields.yearOfPublication.name)}
             />
-            <DateRangeFilter
+            <RangeInput
                 name={fields.dateOfPublication.name}
                 label={fields.dateOfPublication.label}
+                type="date"
                 bounds={filterOptions?.dateBounds?.dateOfPublication}
                 onChange={setFilter(fields.dateOfPublication.name)}
                 isFilter
             />
             <RangeInput
-                {...fields.impactFactor}
+                name={fields.impactFactor.name}
+                label={fields.impactFactor.label}
+                disabled={fields.impactFactor.disabled}
                 placeholder={rangePlaceholder(fields.impactFactor.name)}
                 isFilter
                 onChange={value => setFilter(fields.impactFactor.name)(value)}
@@ -182,19 +188,25 @@ export const PublicationsFilterForm = ({ tableId, enableQueryUrl, filterOptions 
                 onChange={setFilter(fields.quartilBasis.name)}
             />
             <RangeInput
-                {...fields.pagesCount}
+                name={fields.pagesCount.name}
+                label={fields.pagesCount.label}
+                disabled={fields.pagesCount.disabled}
                 placeholder={rangePlaceholder(fields.pagesCount.name)}
                 isFilter
                 onChange={value => setFilter(fields.pagesCount.name)(value)}
             />
             <RangeInput
-                {...fields.volume}
+                name={fields.volume.name}
+                label={fields.volume.label}
+                disabled={fields.volume.disabled}
                 placeholder={rangePlaceholder(fields.volume.name)}
                 isFilter
                 onChange={value => setFilter(fields.volume.name)(value)}
             />
             <RangeInput
-                {...fields.issue}
+                name={fields.issue.name}
+                label={fields.issue.label}
+                disabled={fields.issue.disabled}
                 placeholder={rangePlaceholder(fields.issue.name)}
                 isFilter
                 onChange={value => setFilter(fields.issue.name)(value)}
@@ -204,7 +216,9 @@ export const PublicationsFilterForm = ({ tableId, enableQueryUrl, filterOptions 
             <Input {...fields.isbn} onChange={setFilter(fields.isbn.name)} isFilter />
             <Input {...fields.bookTitle} onChange={setFilter(fields.bookTitle.name)} isFilter />
             <RangeInput
-                {...fields.bookPagesCount}
+                name={fields.bookPagesCount.name}
+                label={fields.bookPagesCount.label}
+                disabled={fields.bookPagesCount.disabled}
                 placeholder={rangePlaceholder(fields.bookPagesCount.name)}
                 isFilter
                 onChange={value => setFilter(fields.bookPagesCount.name)(value)}
@@ -232,9 +246,10 @@ export const PublicationsFilterForm = ({ tableId, enableQueryUrl, filterOptions 
                 onChange={setFilter(fields.proceedingsIsbn.name)}
                 isFilter
             />
-            <DateRangeFilter
+            <RangeInput
                 name={fields.conferenceDate.name}
                 label={fields.conferenceDate.label}
+                type="date"
                 bounds={filterOptions?.dateBounds?.conferenceDate}
                 onChange={setFilter(fields.conferenceDate.name)}
                 isFilter
@@ -263,11 +278,7 @@ export const PublicationsFilterForm = ({ tableId, enableQueryUrl, filterOptions 
                 onSelect={setFilter(fields.grants.name)}
                 isFilter
             />
-            <Input
-                {...fields.otherGrants}
-                onChange={setFilter(fields.otherGrants.name)}
-                isFilter
-            />
+            <Input {...fields.otherGrants} onChange={setFilter(fields.otherGrants.name)} isFilter />
             <Combobox
                 {...fields.experimentalSystemCb}
                 codebook={fields.experimentalSystemCb.codebook}
