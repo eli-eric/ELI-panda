@@ -8,8 +8,10 @@ import { setupPublicationDoiNetworkMocks } from '../helpers/publicationDoiMocks'
 const PUBLICATION_ROLES = ['basics', 'publications-view', 'publications-edit']
 
 const researcherRadio = (page: Page, name: string) => page.getByRole('radio', { name, exact: true })
+const fieldRow = (page: Page, field: string) => page.getByTestId(`wos-field-row-${field}`)
+const authorRow = (page: Page, index: number) => page.getByTestId(`wos-import-author-${index}`)
 
-test.describe('Publication Web of Science preview', () => {
+test.describe('Publication Web of Science import', () => {
     test.beforeEach(async ({ page }) => {
         await mockNextAuthSession(page, { roles: PUBLICATION_ROLES })
         await setupPublicationDoiNetworkMocks(page)
@@ -36,43 +38,37 @@ test.describe('Publication Web of Science preview', () => {
         await title.fill('Title entered by the librarian')
         await doi.fill(PUBLICATION_DOI_URL_INPUT)
 
-        const previewRequestPromise = page.waitForRequest(
+        const lookupRequestPromise = page.waitForRequest(
             request =>
-                /\/publications\/enrichment-preview$/u.test(request.url()) &&
-                request.method() === 'POST',
+                /\/publications\/wos\/lookup/u.test(request.url()) && request.method() === 'GET',
         )
-        await page.getByRole('button', { name: 'Fetch from Web of Science' }).click()
-        const previewRequest = await previewRequestPromise
+        await page.getByTestId('wos-import-button').click()
+        const lookupRequest = await lookupRequestPromise
 
-        // The DOI travels in the body now: the preview spends provider quota, so
-        // it is a POST rather than a cacheable read.
-        expect(previewRequest.postDataJSON()).toMatchObject({ doi: PUBLICATION_DOI })
-        await expect(
-            page.getByRole('heading', { name: 'Web of Science import preview' }),
-        ).toBeVisible()
-        await expect(page.getByText('Title entered by the librarian')).toBeVisible()
-        await expect(
-            page
-                .getByRole('row')
-                .filter({ hasText: 'Title entered by the librarian' })
-                .getByText('Replaces current value'),
-        ).toBeVisible()
-        await expect(page.getByRole('button', { name: 'Apply selected fields' })).toBeInViewport()
-        await expect(page.getByLabel('Import Title* (R06)')).not.toBeChecked()
-        await expect(page.getByLabel('Import Long Journal Title (R16)*')).toBeChecked()
+        // The DOI travels as a query parameter on a GET (ELIPANDA-412 / #438):
+        // a cacheable read behind the publications-view role.
+        expect(new URL(lookupRequest.url()).searchParams.get('doi')).toBe(PUBLICATION_DOI)
+
+        const dialog = page.getByTestId('wos-import-dialog')
+        await expect(dialog).toBeVisible()
+
+        // Overwrites are offered, never pre-checked; empty destinations are.
+        await expect(fieldRow(page, 'title').getByRole('checkbox')).not.toBeChecked()
+        await expect(fieldRow(page, 'longJournalTitle').getByRole('checkbox')).toBeChecked()
         // Scope to the radio role: each author's radiogroup is aria-labelled
         // "…matching <displayName>", which substring-matches a candidate of the same name.
         await expect(researcherRadio(page, 'Lovelace, Ada')).toBeChecked()
-        await expect(researcherRadio(page, 'Hopper, Grace')).not.toBeChecked()
+        await expect(
+            authorRow(page, 1).getByRole('radio', { name: 'Hopper, Grace' }),
+        ).not.toBeChecked()
 
         await researcherRadio(page, 'Hopper, Grace').click()
-        await page.getByRole('button', { name: 'Apply selected fields' }).click()
+        await dialog.getByRole('button', { name: /^Import \d+ fields$/u }).click()
 
-        await expect(
-            page.getByRole('heading', { name: 'Web of Science import preview' }),
-        ).not.toBeVisible()
-        await expect(doi).toHaveValue(PUBLICATION_DOI_URL_INPUT)
+        await expect(dialog).not.toBeVisible()
+        // The unchecked overwrite keeps the librarian's title; empties fill.
         await expect(title).toHaveValue('Title entered by the librarian')
+        await expect(doi).toHaveValue(PUBLICATION_DOI_URL_INPUT)
         await expect(page.getByRole('textbox', { name: /All Authors list/i })).toHaveValue(
             'Ada Lovelace; Hopper, Grace; Duplicate Person',
         )
@@ -83,5 +79,35 @@ test.describe('Publication Web of Science preview', () => {
         await expect(page.getByText('Hopper, Grace', { exact: true })).toBeVisible()
         await expect(page.getByRole('combobox').filter({ hasText: '2022' })).toBeVisible()
         expect(persistenceRequests).toEqual([])
+    })
+
+    test('refuses to import a DOI another publication already holds', async ({ page }) => {
+        // Same wire, but PANDA says the DOI belongs to a different record.
+        await page.route('**/publications/wos/lookup*', route =>
+            route.fulfill({
+                json: {
+                    status: 'already-exists',
+                    doi: PUBLICATION_DOI,
+                    existingPublication: {
+                        uid: 'publication-someone-elses',
+                        code: 'PANDA-42',
+                        title: 'Metadata title returned by Web of Science',
+                    },
+                    values: {},
+                    authors: [],
+                    missingImportableFields: [],
+                    unavailableFields: [],
+                    warnings: [],
+                },
+            }),
+        )
+
+        await page.getByTestId('doi').fill(PUBLICATION_DOI_URL_INPUT)
+        await page.getByTestId('wos-import-button').click()
+
+        const dialog = page.getByTestId('wos-import-dialog')
+        await expect(dialog).toBeVisible()
+        await expect(page.getByTestId('wos-import-existing')).toBeVisible()
+        await expect(dialog.getByRole('button', { name: /^Import \d+ fields$/u })).toBeDisabled()
     })
 })

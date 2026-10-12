@@ -28,7 +28,8 @@ src/modules/publication/
 │   ├── grants-select.comp.tsx           — grant picker
 │   ├── department.listbox.tsx           — single department combobox
 │   ├── departments.comp.tsx             — repeating departments + author-count rows
-│   └── web-link.field.tsx
+│   ├── web-link.field.tsx
+│   └── wos-import.button.tsx            — sheet-form Fetch/Refresh from Web of Science
 ├── hooks/
 │   ├── usePublication.ts                — single read
 │   ├── usePublicationWosPreview.ts       — GET the server-built import preview
@@ -52,6 +53,18 @@ src/modules/publication/
 │   ├── reporting.ts                     — reporting snapshot shape
 │   ├── enrichment.ts                    — multi-provider preview contract
 │   └── wos-import.ts                    — REST preview and selection contract
+├── wos-import/                          — sheet-form WoS lookup dialog (ELIPANDA-502)
+│   ├── types/wos-preview.types.ts       — WOS_IMPORTABLE_FIELDS + GET /publications/wos/lookup DTO
+│   ├── __fixtures__/wos-lookup-preview.json — verbatim copy of the API's shared fixture
+│   ├── hooks/useWosLookup.ts            — manual react-query lookup, abortable
+│   ├── hooks/useWosImportDialog.ts      — opens modal `wos-import`, per-code error feedback
+│   ├── hooks/useWosFieldRows.ts         — diff against the form, pre-check rules, bulk selection
+│   ├── hooks/useWosAuthorSelections.ts  — confidence-driven author choices, ResearcherID memory
+│   ├── hooks/useWosAvailability.ts      — session memo for WOS_NOT_CONFIGURED
+│   ├── utils/wos-lookup-error.ts        — error code → feedback switch
+│   ├── wos-import-dialog.cont.tsx       — selection state and apply via setValue
+│   ├── wos-import-dialog.comp.tsx       — pure dialog UI and loading skeleton
+│   └── components/                      — field row and author row
 └── utils/
     ├── doi.ts                           — DOI normalization and validation
     ├── wos-import.ts                    — comparison, selection, and form-patch helpers
@@ -233,7 +246,7 @@ sequenceDiagram
 
 The input accepts a bare DOI, a case-insensitive `doi:` prefix, or an `https://doi.org/` / `http://dx.doi.org/` URL and canonicalizes it to a lowercase bare DOI for lookup. Invalid values stop before a request. The API returns explicit not-found, ambiguous, authentication, rate-limit, timeout, configuration, and upstream errors; none changes the form. If PANDA already contains the DOI, the response names that publication and the dialog offers to open it.
 
-Only `INVALID_DOI` failures mark the DOI field invalid; other lookup failures produce a toast. WoS constants, response types, and exhaustive error message mappings live together in `types/wos-import.ts`. `utils/wos-errors.ts` handles both normalized HTTP errors and the Axios-shaped errors returned by `queryMutate`. The preview hook uses an imperative GET through `queryMutate` with a 30-second timeout; each Refresh issues a new request.
+Only `DOI_INVALID` failures mark the DOI field invalid; other lookup failures produce a toast. WoS constants, response types, and exhaustive error message mappings live together in `types/wos-import.ts`. `utils/wos-errors.ts` handles both normalized HTTP errors and the Axios-shaped errors returned by `queryMutate`. The preview hook uses an imperative GET through `queryMutate` with a 30-second timeout; each Refresh issues a new request.
 
 Ordinary saves preserve DOI text and apply only the existing presence requirement: peer-reviewed publications require a nonempty DOI, while other media types allow an empty DOI. Strict DOI syntax validation applies to lookup, including for legacy records. Both detail and sheet forms use `publicationResolver`; it selects the schema from the codebook when present and otherwise uses the sheet form's media-type radio value. Blank Web Links and exact canonical links for the previous or current DOI follow DOI edits and clear when the DOI becomes empty or invalid. Independent record links and links to a different DOI are preserved.
 
@@ -253,6 +266,16 @@ The API compares WoS authors with PANDA's Researcher register. A unique Research
 
 Matching reads the researcher's stored `researcherId`. The import does not write back to the researcher register — persisting a confirmed ResearcherID, and deciding which of several is current for RIV export, is deferred to ELIPANDA-413.
 
+### Sheet import dialog
+
+The publication create/edit sheet (`publication-freeform.comp.tsx`) uses the WoS-only lookup instead of the multi-provider preview: `WosImportButton` sits beside the DOI input, labelled **Fetch from Web of Science** on create and **Refresh from Web of Science** when the form has a `uid`. It is disabled until `normalizeDoi` accepts the DOI and is shown to `publications-view` and `publications-edit`; only `publications-edit` can press **Import**.
+
+Pressing it opens dynamic modal `wos-import` immediately with skeleton rows and runs `GET /publications/wos/lookup?doi=&currentPublicationUid=` (query key `['wosLookup', doi, currentPublicationUid]`, `enabled: false`, 30-second timeout). Cancel or × aborts the request through the query's `AbortSignal`. Failures switch on the API `code` only: `DOI_INVALID` sets an error on the DOI field, `WOS_NOT_FOUND` and `WOS_RATE_LIMITED` close the dialog with a toast, `WOS_UPSTREAM_ERROR` (and `WOS_UPSTREAM_TIMEOUT`, `WOS_RECORD_AMBIGUOUS`, `WOS_AUTHENTICATION_FAILED`, `INTERNAL_ERROR`, or an uncoded failure) toasts with **Retry**, and `WOS_NOT_CONFIGURED` hides the button for the rest of the page session.
+
+The response values are already keyed by form field names and shaped as the form stores them; the dialog does no mapping. `WOS_IMPORTABLE_FIELDS` freezes the 21 keys and a test asserts each is a key of `publicationPeerReviewedSchema.shape`. One row is rendered per frozen field present in `values`, plus a non-importable row for a field whose only trace is a warning (for example a non-numeric issue); warnings render on their row. A blank form field is pre-checked, a different existing value is unchecked and marked as an overwrite, an equal value is shown as unchanged. Author rows follow `match.confidence`: `EXACT_ID` pre-checked, `NAME` unchecked, `AMBIGUOUS` offers the candidates, `NONE` is an external author; **change**/**choose** stack `ResearcherModalContent` above the dialog. A `NAME` match whose ResearcherID the researcher does not yet carry offers “also remember”, which fires `PATCH /researcher/{uid}/researcher-ids` on import and toasts if it fails.
+
+**Import N fields** counts only values that will change (the ELI researcher list counts as one) and is disabled at zero. Import calls `setValue(field, value, { shouldDirty: true })` per checked row and sets `eliResearchers` to the current list plus the confirmed researchers; `eliAuthorsCount` follows from `EliAuthorsSelectComponent` and `eliAuthors` from `formatFormData`. Nothing is saved. The “Not available from WoS” block always renders, listing `unavailableFields` and `missingImportableFields` that have no row. The dialog tests render from `wos-import/__fixtures__/wos-lookup-preview.json`, a verbatim copy of the API repository's `testdata/wos-lookup-preview.json`.
+
 ## Fetcher surface
 
 All REST. Keys from `src/utils/getEndpoints.ts`:
@@ -262,11 +285,13 @@ All REST. Keys from `src/utils/getEndpoints.ts`:
 | `publication`           | `/publication{uid?}`                        | `usePublication`, `usePublicationMutation` |
 | `publicationWosPreview` | `/publications/wos-preview${query}`         | `usePublicationWosPreview`                 |
 | `publications`          | `/publications${query}`                     | `usePublications`                          |
+| `wosLookup`             | `/publications/wos/lookup${query}`          | `useWosLookup` (sheet dialog)              |
 | `publicationsExport`    | `/publications/export${query}`              | `useExport` (CSV button)                   |
 | `rivValidate`           | `/publications/export/riv/validate${query}` | `useRivValidate`                           |
 | `rivExport`             | `/publications/export/riv${query}`          | `useRivExport` (XML blob)                  |
 | `researcher`            | `/researcher{uid?}`                         | researchers module                         |
 | `researchers`           | `/researchers${query}`                      | researchers module                         |
+| `researcherIds`         | `/researcher/{uid}/researcher-ids`          | WoS dialog “also remember” (PATCH)         |
 | `grant`                 | `/grant{uid?}`                              | grants module                              |
 | `grants`                | `/grants${query}`                           | grants module                              |
 
@@ -335,6 +360,11 @@ The WoS review flow has focused unit, hook, component, and browser coverage:
 - `src/modules/publication/components/__tests__/web-link-field.spec.tsx` — lookup values are not overwritten by a DOI side effect.
 - `src/modules/publication/utils/__tests__/formatters.spec.ts` — unchanged DOI text and zero-valued issue/volume submission.
 - `src/utils/__tests__/getEndpoints.spec.ts` — preview and ResearcherID endpoint construction.
+- `src/modules/publication/wos-import/types/__tests__/wos-preview.types.spec.ts` — every frozen importable field is a form schema key.
+- `src/modules/publication/wos-import/hooks/__tests__/useWosFieldRows.spec.ts` — diff statuses, pre-check rules, bulk selection.
+- `src/modules/publication/wos-import/utils/__tests__/wos-lookup-error.spec.ts` — error code switch.
+- `src/modules/publication/wos-import/__tests__/wos-import-dialog.spec.tsx` — dialog rendered from the shared API fixture: rows, warnings, chips, remember-ID, count, apply.
+- `src/modules/publication/components/__tests__/wos-import-button.spec.tsx` — button gating, lookup request, per-code feedback, cancel.
 - `e2e/publication/publicationWosPreview.e2e.ts` — mocked preview → review → apply, including the assertion that no publication POST/PUT occurs.
 
 There are still no local tests on the list pages or RIV export flow.
@@ -398,7 +428,6 @@ Other smells:
 >
 > No GraphQL schema entries exist for publications. Wire shapes live in `src/modules/publication/types/responses.ts`, `src/modules/publication/types/wos-import.ts`, `src/modules/researchers/types/researcher.types.ts`, `src/modules/grants/types/grant.types.ts`. Zod schemas live in the corresponding `form/` directories. The WoS REST key is `publicationWosPreview`; RIV keys are `rivValidate` and `rivExport` (`src/utils/getEndpoints.ts`). Hardcoded UIDs remain in `src/modules/publication/types/constants.ts` (`MEDIA_TYPE_UID`).
 
-
 ## Management reporting
 
 Reporting is a **separate, editor-confirmed layer** over the publication record.
@@ -409,14 +438,14 @@ with any honesty.
 
 ### Where it lives
 
-| Piece | Path |
-| --- | --- |
-| Form fieldset | `src/modules/publication/components/reporting/` |
-| Field config | `src/modules/publication/hooks/useReportingFields.ts` |
-| Types / Zod | `src/modules/publication/types/reporting.ts`, `form/reporting.schema.ts` |
-| Dashboard | `src/modules/publications/analytics/` |
-| Page | `src/pages/publications/analytics/index.tsx` (`PATH.PUBLICATIONS_ANALYTICS`) |
-| Backend | `services/publications-service/publications-reporting-db-queries.go`, `publications-analytics.go` |
+| Piece         | Path                                                                                              |
+| ------------- | ------------------------------------------------------------------------------------------------- |
+| Form fieldset | `src/modules/publication/components/reporting/`                                                   |
+| Field config  | `src/modules/publication/hooks/useReportingFields.ts`                                             |
+| Types / Zod   | `src/modules/publication/types/reporting.ts`, `form/reporting.schema.ts`                          |
+| Dashboard     | `src/modules/publications/analytics/`                                                             |
+| Page          | `src/pages/publications/analytics/index.tsx` (`PATH.PUBLICATIONS_ANALYTICS`)                      |
+| Backend       | `services/publications-service/publications-reporting-db-queries.go`, `publications-analytics.go` |
 
 ### The contract
 
@@ -479,7 +508,7 @@ Provider facts worth not re-learning:
   `published-print` / `published-online`, and partial precision is preserved
   rather than padded to January 1st.
 - Unpaywall requires an email on every request; without `UNPAYWALL_EMAIL` the
-  provider reports itself *not configured* rather than failing.
+  provider reports itself _not configured_ rather than failing.
 - Authors are matched by WoS ResearcherID, then ORCID, then name. **Only
   identifier matches are presented as matches** — a name hit is a suggestion the
   editor confirms.

@@ -1,11 +1,14 @@
-import type { EnrichmentPreviewResponse } from '../../src/modules/publication/types/enrichment'
+import type { WosLookupResponse } from '../../src/modules/publication/wos-import/types/wos-preview.types'
 
 export const PUBLICATION_DOI = '10.1234/example.article'
 export const PUBLICATION_DOI_URL_INPUT = 'https://doi.org/10.1234/EXAMPLE.Article'
 
-export const PUBLICATION_WOS_PREVIEW: EnrichmentPreviewResponse = {
+/** `GET /v1/publications/wos/lookup` answer — same shape as the #438 shared fixture. */
+export const PUBLICATION_WOS_LOOKUP: WosLookupResponse = {
     status: 'found',
     doi: PUBLICATION_DOI,
+    wosUid: 'WOS:000012345678900',
+    recordUrl: 'https://www.webofscience.com/wos/woscc/full-record/WOS:000012345678900',
     values: {
         doi: PUBLICATION_DOI,
         title: 'Metadata title returned by Web of Science',
@@ -30,12 +33,10 @@ export const PUBLICATION_WOS_PREVIEW: EnrichmentPreviewResponse = {
             researcherId: 'A-0001-2020',
             match: {
                 kind: 'researcher-id',
+                confidence: 'EXACT_ID',
+                knownResearcherId: true,
                 candidates: [
-                    {
-                        uid: 'researcher-ada-lovelace',
-                        firstName: 'Ada',
-                        lastName: 'Lovelace',
-                    },
+                    { uid: 'researcher-ada-lovelace', firstName: 'Ada', lastName: 'Lovelace' },
                 ],
             },
         },
@@ -45,12 +46,10 @@ export const PUBLICATION_WOS_PREVIEW: EnrichmentPreviewResponse = {
             researcherId: 'A-0002-2020',
             match: {
                 kind: 'name',
+                confidence: 'NAME',
+                knownResearcherId: false,
                 candidates: [
-                    {
-                        uid: 'researcher-grace-hopper',
-                        firstName: 'Grace',
-                        lastName: 'Hopper',
-                    },
+                    { uid: 'researcher-grace-hopper', firstName: 'Grace', lastName: 'Hopper' },
                 ],
             },
         },
@@ -60,6 +59,8 @@ export const PUBLICATION_WOS_PREVIEW: EnrichmentPreviewResponse = {
             researcherId: 'A-0003-2020',
             match: {
                 kind: 'ambiguous',
+                confidence: 'AMBIGUOUS',
+                knownResearcherId: false,
                 candidates: [
                     {
                         uid: 'researcher-duplicate-person-1',
@@ -87,19 +88,5 @@ export const PUBLICATION_WOS_PREVIEW: EnrichmentPreviewResponse = {
         'grants',
         'code',
     ],
-    // Crossref answered, Web of Science is not configured in this environment.
-    // The dialog reports both, so a blank field is distinguishable from an
-    // unconsulted provider.
-    sources: [
-        { provider: 'crossref', status: 'ok', retryable: false, retrievedAt: '2026-01-01T00:00:00Z' },
-        { provider: 'wos-starter', status: 'not-configured', retryable: false },
-        { provider: 'unpaywall', status: 'not-configured', retryable: false },
-    ],
-    provenance: {
-        title: { provider: 'crossref', retrievedAt: '2026-01-01T00:00:00Z' },
-    },
-    conflicts: [],
-    publicationDatePrecision: 'month',
-    authorRolesStatus: 'unknown',
-    affiliationStatus: 'unknown',
+    warnings: [],
 }

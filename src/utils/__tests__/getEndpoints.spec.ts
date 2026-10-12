@@ -69,8 +69,8 @@ describe('getEndpoints', () => {
         )
     })
 
-    it('keeps the enrichment preview free of a query string, since the DOI travels in the body', () => {
+    it('encodes the lookup DOI into the query string of the WoS lookup route', () => {
         const endpoints = getEndpoints({ query: { doi: '10.1234/laser test' } })
-        expect(endpoints.publicationEnrichmentPreview).toBe('/publications/enrichment-preview')
+        expect(endpoints.wosLookup).toBe('/publications/wos/lookup?doi=10.1234%2Flaser+test')
     })
 })
