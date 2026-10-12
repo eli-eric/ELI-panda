@@ -7,8 +7,8 @@ import { Label } from '@/components/ui/label'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 
-import { displayWosValue } from '../../utils/wos-import'
 import type { WosFieldRow } from '../hooks/useWosFieldRows'
+import { displayWosValue } from '../utils/wos-import'
 
 const wosMessages = message.publication.wos
 

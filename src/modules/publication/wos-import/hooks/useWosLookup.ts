@@ -1,55 +1,30 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { useCallback } from 'react'
+import { useMutation } from '@tanstack/react-query'
 
-import { fetchRequest } from '@/core/http/fetchClient'
-import { buildUrl } from '@/utils/fetcher'
-import { getEndpoints } from '@/utils/getEndpoints'
+import { queryMutate } from '@/utils/fetcher'
 
 import { WOS_PREVIEW_TIMEOUT_MS } from '../../types/wos-import'
 import type { WosLookupResponse } from '../types/wos-preview.types'
 
-/**
- * `['wosLookup', doi]` prefix; the refreshed publication's UID follows because
- * the API answers differently for it (it is not its own duplicate).
- */
-export const getWosLookupQueryKey = (doi: string, currentPublicationUid?: string) =>
-    ['wosLookup', doi, currentPublicationUid ?? null] as const
+export interface WosLookupParams {
+    doi: string
+    currentPublicationUid?: string
+}
 
 /**
- * Web of Science lookup for one normalized DOI. The query never runs on its own:
- * the lookup spends provider quota, so only an explicit `lookup()` fetches, and
- * `cancel()` aborts the request through the query's AbortSignal.
+ * The lookup spends provider quota, so it never runs on render: the dialog
+ * triggers it on open. GET because the route is a cacheable read per #438; the
+ * generous timeout covers the provider's slower-than-HTTP budget.
  */
-export const useWosLookup = (doi: string, currentPublicationUid?: string) => {
-    const queryClient = useQueryClient()
-    const query = useQuery({
-        queryKey: getWosLookupQueryKey(doi, currentPublicationUid),
-        queryFn: ({ signal }) => {
-            const params = { doi, currentPublicationUid: currentPublicationUid ?? null }
-            return fetchRequest<WosLookupResponse>(
-                buildUrl(getEndpoints({ query: params }).wosLookup),
-                {
-                    signal,
-                    timeoutMs: WOS_PREVIEW_TIMEOUT_MS,
-                },
-            )
-        },
-        enabled: false,
+export const lookupWos = ({ doi, currentPublicationUid }: WosLookupParams) =>
+    queryMutate<WosLookupResponse, void>('wosLookup', 'get', {
+        query: { doi, currentPublicationUid: currentPublicationUid ?? null },
+        timeoutMs: WOS_PREVIEW_TIMEOUT_MS,
+    })().then(response => response.data)
+
+/** The lookup runs once per dialog open; a failure is routed by the opener. */
+export const useWosLookup = (params: WosLookupParams) =>
+    useMutation({
+        mutationKey: ['wosLookup', params.doi, params.currentPublicationUid ?? null],
+        mutationFn: () => lookupWos(params),
         retry: false,
     })
-
-    const cancel = useCallback(
-        () =>
-            queryClient.cancelQueries({
-                queryKey: getWosLookupQueryKey(doi, currentPublicationUid),
-            }),
-        [queryClient, doi, currentPublicationUid],
-    )
-
-    return {
-        data: query.data,
-        isFetching: query.isFetching,
-        lookup: query.refetch,
-        cancel,
-    }
-}

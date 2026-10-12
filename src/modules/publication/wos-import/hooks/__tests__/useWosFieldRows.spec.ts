@@ -1,5 +1,6 @@
 import { act, renderHook } from '@testing-library/react'
 
+import { MEDIA_TYPE_UID } from '../../../types/constants'
 import type { WosImportValues, WosImportWarning } from '../../types/wos-preview.types'
 import { buildWosFieldRows, useWosFieldRows, type WosFieldRow } from '../useWosFieldRows'
 
@@ -74,14 +75,6 @@ describe('buildWosFieldRows', () => {
         })
     })
 
-    it('treats an empty researcher list as an empty destination', () => {
-        const researchers = [{ uid: 'r-1', firstName: 'Jan', lastName: 'Novák' }]
-        const [row] = buildWosFieldRows({ eliResearchers: researchers }, [], {
-            eliResearchers: [],
-        })
-        expect(row.status).toBe('empty')
-    })
-
     it('treats the DOI typed in lowercase as the same DOI WoS spells in canonical case', () => {
         const [doi] = buildWosFieldRows({ doi: '10.1103/PhysRevResearch.6.013126' }, [], {
             doi: '10.1103/physrevresearch.6.013126',
@@ -93,8 +86,7 @@ describe('buildWosFieldRows', () => {
 })
 
 describe('useWosFieldRows', () => {
-    const render = () =>
-        renderHook(() => useWosFieldRows({ values, warnings: [], getValues: () => currentValues }))
+    const render = () => renderHook(() => useWosFieldRows({ values, warnings: [], currentValues }))
     const sorted = (fields: ReadonlySet<string>) => Array.from(fields).sort()
 
     it('pre-checks empty destinations only and counts just the rows that change', () => {
@@ -120,13 +112,119 @@ describe('useWosFieldRows', () => {
         expect(result.current.changes.map(row => row.field)).toContain('volume')
     })
 
-    it('diffs against the form values read when the preview arrived', () => {
-        const getValues = jest.fn(() => currentValues)
-        const { result, rerender } = renderHook(() =>
-            useWosFieldRows({ values, warnings: [], getValues }),
+    it('compares the ISBN row against proceedingsIsbn when the form is proceedings', () => {
+        const isbnValues: WosImportValues = { ...values, isbn: '978-0-00-000000-1' }
+        const proceedings: Record<string, unknown> = {
+            ...currentValues,
+            mediaTypeCb: { uid: MEDIA_TYPE_UID.CONFERENCE_PROCEEDINGS, name: 'D' },
+            proceedingsIsbn: '978-0-00-000000-1',
+        }
+        const { result } = renderHook(() =>
+            useWosFieldRows({ values: isbnValues, warnings: [], currentValues: proceedings }),
         )
-        rerender()
-        expect(getValues).toHaveBeenCalledTimes(1)
-        expect(result.current.rows).toHaveLength(6)
+        expect(result.current.isbnTarget).toBe('proceedingsIsbn')
+        const isbnRow = result.current.rows.find(row => row.field === 'isbn')
+        // The form already holds the ISBN — in the field the value would land in.
+        expect(isbnRow?.status).toBe('same')
+        expect(result.current.selected.has('isbn')).toBe(false)
+    })
+
+    it('keeps plain isbn as the target for non-proceedings forms', () => {
+        const isbnValues: WosImportValues = { ...values, isbn: '978-0-00-000000-1' }
+        const { result } = renderHook(() =>
+            useWosFieldRows({ values: isbnValues, warnings: [], currentValues }),
+        )
+        expect(result.current.isbnTarget).toBe('isbn')
+        expect(result.current.rows.find(row => row.field === 'isbn')?.status).toBe('empty')
+    })
+
+    it('does not preselect an overwrite in proceedingsIsbn when hidden isbn is empty', () => {
+        const { result } = renderHook(() =>
+            useWosFieldRows({
+                values: { isbn: 'incoming' },
+                warnings: [],
+                currentValues: {
+                    mediaTypeCb: { uid: MEDIA_TYPE_UID.CONFERENCE_PROCEEDINGS, name: 'D' },
+                    proceedingsIsbn: 'existing',
+                },
+            }),
+        )
+        expect(result.current.rows[0].status).toBe('overwrite')
+        expect(result.current.selected.has('isbn')).toBe(false)
+        expect(result.current.changes).toEqual([])
+    })
+
+    it('preselects an empty proceedings destination even when hidden isbn is populated', () => {
+        const { result } = renderHook(() =>
+            useWosFieldRows({
+                values: { isbn: 'incoming' },
+                warnings: [],
+                currentValues: {
+                    mediaTypeCb: { uid: MEDIA_TYPE_UID.CONFERENCE_PROCEEDINGS, name: 'D' },
+                    isbn: 'hidden',
+                },
+            }),
+        )
+        expect(result.current.selected.has('isbn')).toBe(true)
+        expect(result.current.changes.map(row => row.field)).toEqual(['isbn'])
+    })
+
+    it('uses the auto-selected media type to choose the initial ISBN destination', () => {
+        const { result } = renderHook(() =>
+            useWosFieldRows({
+                values: {
+                    isbn: 'incoming',
+                    mediaTypeCb: { uid: MEDIA_TYPE_UID.CONFERENCE_PROCEEDINGS, name: 'D' },
+                },
+                warnings: [],
+                currentValues: { proceedingsIsbn: 'existing' },
+            }),
+        )
+        expect(result.current.isbnTarget).toBe('proceedingsIsbn')
+        expect(sorted(result.current.selected)).toEqual(['mediaTypeCb'])
+    })
+
+    it('requires a fresh ISBN choice when toggling media type redirects the destination', () => {
+        const { result } = renderHook(() =>
+            useWosFieldRows({
+                values: {
+                    isbn: 'incoming',
+                    mediaTypeCb: { uid: MEDIA_TYPE_UID.CONFERENCE_PROCEEDINGS, name: 'D' },
+                },
+                warnings: [],
+                currentValues: { proceedingsIsbn: 'existing' },
+            }),
+        )
+        act(() => result.current.toggle('mediaTypeCb', false))
+        act(() => result.current.toggle('isbn', true))
+        expect(result.current.isbnTarget).toBe('isbn')
+        act(() => result.current.toggle('mediaTypeCb', true))
+        expect(result.current.isbnTarget).toBe('proceedingsIsbn')
+        expect(result.current.selected.has('isbn')).toBe(false)
+        act(() => result.current.toggle('isbn', true))
+        expect(result.current.changes.map(row => row.field)).toContain('isbn')
+        act(() => result.current.toggle('mediaTypeCb', false))
+        expect(result.current.selected.has('isbn')).toBe(false)
+    })
+
+    it('bulk selections classify ISBN against the media type they will actually select', () => {
+        const { result } = renderHook(() =>
+            useWosFieldRows({
+                values: {
+                    isbn: 'incoming',
+                    mediaTypeCb: { uid: MEDIA_TYPE_UID.CONFERENCE_PROCEEDINGS, name: 'D' },
+                },
+                warnings: [],
+                currentValues: { isbn: 'incoming', proceedingsIsbn: 'existing' },
+            }),
+        )
+        act(() => result.current.selectNone())
+        expect(result.current.rows.find(row => row.field === 'isbn')?.status).toBe('same')
+        act(() => result.current.selectAll())
+        expect(sorted(result.current.selected)).toEqual(['isbn', 'mediaTypeCb'])
+        expect(result.current.isbnTarget).toBe('proceedingsIsbn')
+        act(() => result.current.selectNone())
+        act(() => result.current.selectOnlyEmpty())
+        expect(sorted(result.current.selected)).toEqual(['mediaTypeCb'])
     })
 })

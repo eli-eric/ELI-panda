@@ -46,29 +46,29 @@ See [Access & Responsibilities](../README.md#access--responsibilities) for what 
 
     - Fields that are **blank** on your form are ticked for you.
     - Fields you have **already filled** are _not_ ticked — nothing overwrites your work unless you tick it yourself.
-    - Fields that already match are collapsed under _N unchanged fields_. Expand this section to inspect them; they cannot be ticked.
+    - Fields that already match are marked **same** and cannot be ticked.
 
     Web of Science can supply: **Title**, **DOI**, **WOS Number**, **Long Journal Title**, **Volume**, **Issue**, **Pages**, **Pages Count**, **Year of Publication**, **Date of Publication**, **ISSN**, **eISSN**, **ISBN**, **Web Link**, **Keywords**, **All Authors list** and **All Authors Count**, and a **Media Type** suggestion.
 
     The dialog also names what Web of Science **cannot** supply, so you know what is left to complete by hand. **Abstract**, **Open Access Type**, **Publishing Country** and **OECD FORD** are required by the form and are never imported — an import always leaves the record roughly half-complete by design.
 
-    `[SCREENSHOT PLACEHOLDER: Web of Science import preview dialog — field table with Import checkboxes, Field / Current value / Web of Science value columns, a highlighted "Replaces current value" row, the selected-count and Select all fields / Select none controls, and the ELI researcher matches section below]`
+    `[SCREENSHOT PLACEHOLDER: Web of Science import dialog — field table with checkboxes, Field / Current value / Web of Science value columns, a highlighted "overwrites" row, All / Only empty / None controls, and the ELI researcher matches section below]`
 
-    A row that would **replace something you already typed** is tinted and badged _Replaces current value_ — it is never ticked for you. Rows that already agree with the form are collapsed under _N unchanged fields_ and can be expanded. The heading shows how many fields are selected and offers **Select all fields** / **Select none**. **Show differing fields only** narrows the view to replacements; it does not change your selections. Select all includes every actionable field, including replacements, regardless of that filter.
+    A row that would **replace something you already typed** is tinted and badged **overwrites** — it is never ticked for you. **All**, **Only empty** and **None** change the selections. ISBN is compared with and imported into the field for the selected media type: **Proceedings ISBN** for conference proceedings, **ISBN** otherwise. If you toggle the media type and this destination changes, ISBN is unticked so you can review the new destination before selecting it again.
 
     **Confirm the ELI researchers.** PANDA compares each Web of Science author with the Researchers registry:
 
     - An author matched by **ResearcherID** is pre-selected.
     - An author matched **by name only** is shown but never pre-selected — most scientists hold several ResearcherIDs, so you confirm the right person yourself.
-    - Confirming a match credits the researcher on this publication only. PANDA does not yet learn the ResearcherID for next time — that is coming separately.
+    - Confirming a match credits the researcher on this publication. For a name match lacking its ResearcherID, **also remember …** optionally saves that ID to the Researchers registry when you import. This separate registry update is immediate, even if you later discard the publication; success or failure is reported by a toast.
 
-    Authors are displayed 20 at a time. Use **Previous authors** and **Next authors** to review them; choices are retained across pages. Confirmed researchers are added to those already on the form; earlier selections are retained.
+    Authors are displayed 20 at a time. Use **Previous** and **Next** to review them; choices are retained across pages. Confirmed researchers are added to those already on the form; earlier selections are retained.
 
-    **Press _Apply selected fields_.** The form fills in. **Nothing is saved** — you still review the record and press _Submit_ as usual, and all normal validation still applies.
+    **Press _Import N fields_.** The form fills in, but the publication is not saved — review it and press _Submit_ as usual. Normal validation still applies. Only an explicitly selected **also remember …** action writes to the Researchers registry immediately.
 
-    If the DOI is **already in PANDA**, the dialog says so, names the existing publication, and offers to open it instead of creating a duplicate. If the DOI is not in Web of Science, or the service is unavailable, PANDA reports the problem and changes nothing.
+    If the DOI is **already in PANDA**, the dialog names the existing publication and offers to open it. Import is blocked for a new or different publication; refreshing that same existing record is allowed. If the DOI is not in Web of Science, or the service is unavailable, PANDA reports the problem and changes nothing.
 
-    **In the add / edit side sheet** the button sits beside the DOI field and reads **Fetch from Web of Science** (new record) or **Refresh from Web of Science** (existing record); it stays disabled until the DOI looks valid. The dialog opens straight away with placeholder rows while Web of Science answers — **Cancel** stops the lookup. Each row shows _current → incoming_; blank fields are ticked, filled ones are marked **overwrites** and left unticked, and notes such as _day missing_ appear on the row they concern. **All**, **Only empty** and **None** change the ticks in one go. Authors carry a chip: **Exact ID** (ticked), **Name match** (tick it yourself; you can also tick _also remember …_ so PANDA stores that ResearcherID on the researcher for next time), **Ambiguous** (pick one of the candidates or press **choose**), or _external author_. **change** / **choose** open the researcher picker. The **Not available from WoS** block always lists what you must fill in by hand. **Import N fields** counts only values that will actually change and fills the form without saving; importing needs the _publications-edit_ role. A DOI that does not look like one is flagged under the DOI field; if Web of Science is not set up for PANDA the button disappears.
+    Both the full publication form and the add / edit side sheet use this same dialog. The button reads **Fetch from Web of Science** for a new record or **Refresh from Web of Science** for an existing record and stays disabled until the DOI looks valid. The dialog opens immediately with placeholder rows while Web of Science answers. **Cancel** closes the dialog without applying anything; an in-flight provider request may still finish, but its error cannot close a later dialog. A DOI error is flagged under the DOI field; if Web of Science is not configured for PANDA, the button disappears for the session.
 
 5. **Fill the _Title_ and any remaining basic identifiers.**
 
@@ -108,7 +108,7 @@ See [Access & Responsibilities](../README.md#access--responsibilities) for what 
 
 3. **Submit**. Same as creation; the toast confirms. DOI text is preserved when saved, including legacy formatting. Peer-reviewed publications still require a DOI, while other media types allow it to be empty. Web of Science lookup requires valid DOI syntax, including for legacy records.
 
-`[VIDEO PLACEHOLDER: 90s — Add Publication → pick Journal article → set ELI Publication YES → paste a doi.org URL into DOI (R87) → press Fetch from Web of Science → walk the preview dialog: blank fields pre-ticked, a filled Title left un-ticked, one row ticked deliberately to overwrite, the ResearcherID match pre-selected and a name match confirmed by hand → Apply selected fields → show the form filled and still unsaved → pick the Language codebook value → add a grant → fill Abstract and Open Access Type by hand → upload PDF → Submit → reopen → press Refresh from Web of Science → Submit & Exit]`
+`[VIDEO PLACEHOLDER: 90s — Add Publication → pick Journal article → set ELI Publication YES → paste a doi.org URL into DOI (R87) → press Fetch from Web of Science → walk the preview dialog: blank fields pre-ticked, a filled Title left un-ticked, one row ticked deliberately to overwrite, the ResearcherID match pre-selected and a name match confirmed by hand → Import selected fields → show the publication form filled and still unsaved → pick the Language codebook value → add a grant → fill Abstract and Open Access Type by hand → upload PDF → Submit → reopen → press Refresh from Web of Science → Submit & Exit]`
 
 ## What gets created / changed
 
@@ -121,7 +121,7 @@ See [Access & Responsibilities](../README.md#access--responsibilities) for what 
 
 **❌ Not affected:**
 
-- The Researcher and Grant master records. Linking them to a publication does not modify their fields.
+- The Grant master records. Linking grants does not modify their fields. Researcher fields are unchanged by linking alone; an explicitly selected **also remember …** import action does update that researcher's ResearcherIDs.
 - Other publications. Even if two share a researcher, edits to one's denormalised entry do not propagate to the other.
 
 ## Limitations
@@ -136,7 +136,7 @@ See [Access & Responsibilities](../README.md#access--responsibilities) for what 
 ## Tips & gotchas
 
 - **Set Media Type and ELI Publication first.** Both drive validation; setting them last means going back to fix required-field gaps revealed by their selection.
-- **Run DOI lookup before manual entry.** Blank fields are selected by default. Replacing an existing value requires you to select its row or use Select all fields. If changing the media type redirects ISBN to a different field, review and select ISBN again before applying.
+- **Run DOI lookup before manual entry.** Blank fields are selected by default. Replacing an existing value requires you to select its row or use **All**. If changing the media type redirects ISBN to a different field, review and select ISBN again before applying.
 - **ELI Authors are RIV-critical.** Each ELI Author must exist in the [Researchers](./managing-researchers.md) registry — RIV validation will flag a publication with no ELI Authors when `ELI Publication = YES`.
 - **Capture the full author byline in _All Authors_.** RIV expects the complete citation order; _ELI Authors_ is the subset that ELI claims credit for.
 - **Quartile + Impact Factor.** RIV uses these for impact reporting. Pick a _Quartile Basis_ that documents _where_ (WoS / Scopus / journal-publisher) the value was sourced.

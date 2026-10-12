@@ -1,11 +1,12 @@
 import type { Page } from '@playwright/test'
 
-import { PUBLICATION_WOS_PREVIEW } from '../fixtures/publicationDoi.mock'
+import { PUBLICATION_WOS_LOOKUP } from '../fixtures/publicationDoi.mock'
 import { setupNetworkMocks } from './network'
 
 const CODEBOOK_ENDPOINT = /\/api\/mock-server\/codebook\/[^?]+(?:\?.*)?$/
 const LINKS_ENDPOINT = /\/api\/mock-server\/files\/links\/[^?]+(?:\?.*)?$/
-const ENRICHMENT_PREVIEW_ENDPOINT = /\/api\/mock-server\/publications\/enrichment-preview$/
+const WOS_LOOKUP_ENDPOINT = /\/api\/mock-server\/publications\/wos\/lookup(?:\?.*)?$/
+const RESEARCHER_IDS_ENDPOINT = /\/api\/mock-server\/researcher\/[^/]+\/researcher-ids$/
 
 export async function setupPublicationDoiNetworkMocks(page: Page) {
     await setupNetworkMocks(page, {
@@ -27,9 +28,14 @@ export async function setupPublicationDoiNetworkMocks(page: Page) {
                 resolver: () => [],
             },
             {
-                matcher: ENRICHMENT_PREVIEW_ENDPOINT,
-                method: 'POST',
-                resolver: () => PUBLICATION_WOS_PREVIEW,
+                matcher: WOS_LOOKUP_ENDPOINT,
+                method: 'GET',
+                resolver: () => PUBLICATION_WOS_LOOKUP,
+            },
+            {
+                matcher: RESEARCHER_IDS_ENDPOINT,
+                method: 'PATCH',
+                resolver: () => ({}),
             },
         ],
     })

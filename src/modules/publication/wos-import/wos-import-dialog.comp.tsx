@@ -1,4 +1,5 @@
 import { ExternalLink, TriangleAlert } from 'lucide-react'
+import { useState } from 'react'
 import { useIntl } from 'react-intl'
 
 import { Alert, AlertDescription } from '@/components/ui/alert'
@@ -9,7 +10,7 @@ import { message } from '@/i18n/src/messages'
 import type { SelectedResearcher } from '@/modules/shared/form/researcherSelect'
 import { PATH } from '@/types/constants/paths'
 
-import type { ExistingPublicationSummary } from '../types/wos-import'
+import { type ExistingPublicationSummary, WOS_AUTHORS_PAGE_SIZE } from '../types/wos-import'
 import { safeHttpUrl } from '../utils/safe-http-url'
 import { WosAuthorRowComponent } from './components/wos-author-row.comp'
 import { WosFieldRowComponent } from './components/wos-field-row.comp'
@@ -23,11 +24,14 @@ const SKELETON_ROWS = 6
 const DialogActions = ({
     importCount,
     canImport,
+    importBlocked,
     onCancel,
     onImport,
 }: {
     importCount: number
     canImport: boolean
+    /** Another publication already holds this DOI; only refresh of one's own is allowed. */
+    importBlocked?: boolean
     onCancel: () => void
     onImport?: () => void
 }) => {
@@ -40,7 +44,7 @@ const DialogActions = ({
             <Button
                 type="button"
                 onClick={onImport}
-                disabled={!onImport || !canImport || importCount === 0}
+                disabled={!onImport || !canImport || importBlocked || importCount === 0}
             >
                 {fm({ id: wosMessages.import }, { count: importCount })}
             </Button>
@@ -79,6 +83,7 @@ export interface WosRecordHeader {
 interface Props {
     header: WosRecordHeader
     existingPublication?: ExistingPublicationSummary
+    importBlocked?: boolean
     fieldLabel: (field: string) => string
     fieldRows: WosFieldRow[]
     selectedFields: ReadonlySet<WosImportableField>
@@ -103,6 +108,7 @@ interface Props {
 export const WosImportDialog = ({
     header,
     existingPublication,
+    importBlocked,
     fieldLabel,
     fieldRows,
     selectedFields,
@@ -124,8 +130,15 @@ export const WosImportDialog = ({
     onCancel,
 }: Props) => {
     const { formatMessage: fm } = useIntl()
+    const [authorsPage, setAuthorsPage] = useState(0)
     const disabled = !canImport
     const recordUrl = safeHttpUrl(header.recordUrl)
+    const authorsPageCount = Math.max(1, Math.ceil(authors.length / WOS_AUTHORS_PAGE_SIZE))
+    const page = Math.min(authorsPage, authorsPageCount - 1)
+    const visibleAuthors = authors.slice(
+        page * WOS_AUTHORS_PAGE_SIZE,
+        (page + 1) * WOS_AUTHORS_PAGE_SIZE,
+    )
 
     return (
         <div className="space-y-5" data-testid="wos-import-dialog">
@@ -234,24 +247,56 @@ export const WosImportDialog = ({
                         {fm({ id: wosMessages.noAuthors })}
                     </p>
                 ) : (
-                    <ul className="divide-y">
-                        {authors.map(author => (
-                            <WosAuthorRowComponent
-                                key={author.sourceIndex}
-                                author={author}
-                                selection={authorSelections[author.sourceIndex]}
-                                disabled={disabled}
-                                onToggle={checked => onToggleAuthor(author.sourceIndex, checked)}
-                                onChoose={researcher =>
-                                    onChooseAuthor(author.sourceIndex, researcher)
-                                }
-                                onOpenPicker={() => onOpenAuthorPicker(author)}
-                                onToggleRemember={checked =>
-                                    onToggleRemember(author.sourceIndex, checked)
-                                }
-                            />
-                        ))}
-                    </ul>
+                    <>
+                        <ul className="divide-y">
+                            {visibleAuthors.map(author => (
+                                <WosAuthorRowComponent
+                                    key={author.sourceIndex}
+                                    author={author}
+                                    selection={authorSelections[author.sourceIndex]}
+                                    disabled={disabled}
+                                    onToggle={checked =>
+                                        onToggleAuthor(author.sourceIndex, checked)
+                                    }
+                                    onChoose={researcher =>
+                                        onChooseAuthor(author.sourceIndex, researcher)
+                                    }
+                                    onOpenPicker={() => onOpenAuthorPicker(author)}
+                                    onToggleRemember={checked =>
+                                        onToggleRemember(author.sourceIndex, checked)
+                                    }
+                                />
+                            ))}
+                        </ul>
+                        {authorsPageCount > 1 && (
+                            <div className="flex items-center justify-end gap-2 pt-2">
+                                <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="outline"
+                                    disabled={page === 0}
+                                    onClick={() => setAuthorsPage(page - 1)}
+                                >
+                                    {fm({ id: message.common.buttons.previous })}
+                                </Button>
+                                <span className="text-sm text-muted-foreground">
+                                    {fm(
+                                        { id: wosMessages.authorsPage },
+                                        { page: page + 1, count: authorsPageCount },
+                                    )}
+                                </span>
+                                <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="outline"
+                                    disabled={page >= authorsPageCount - 1}
+                                    onClick={() => setAuthorsPage(page + 1)}
+                                >
+                                    {fm({ id: message.common.buttons.next })}
+                                </Button>
+                            </div>
+                        )}
+                    </>
                 )}
             </section>
 
@@ -276,6 +321,7 @@ export const WosImportDialog = ({
             <DialogActions
                 importCount={importCount}
                 canImport={canImport}
+                importBlocked={importBlocked}
                 onCancel={onCancel}
                 onImport={onImport}
             />

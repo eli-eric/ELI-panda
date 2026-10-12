@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useRef } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 import { toast } from 'sonner'
@@ -11,7 +12,6 @@ import { normalizeDoi } from '../../utils/doi'
 import { resolveWosLookupError } from '../utils/wos-lookup-error'
 import { WosImportDialogContainer } from '../wos-import-dialog.cont'
 import { markWosNotConfigured, useWosAvailability } from './useWosAvailability'
-import { useWosLookup } from './useWosLookup'
 
 export const WOS_IMPORT_MODAL_ID = 'wos-import'
 
@@ -19,9 +19,11 @@ const wosMessages = message.publication.wos
 const LOOKUP_ROLES = [ROLE.PUBLICATIONS_VIEW, ROLE.PUBLICATIONS_EDIT]
 
 /**
- * Drives the WoS lookup from the publication form: opens the `wos-import`
- * dialog at once (skeleton while loading, cancel aborts the request) and turns
- * a failed lookup into the per-code feedback, closing the dialog.
+ * Drives the WoS lookup from a publication form: opens the `wos-import` dialog
+ * with a form snapshot and an `onApply` callback, so the dialog itself stays
+ * form-agnostic, and turns a failed lookup into per-code feedback. The lookup
+ * runs inside the dialog; closing it closes the dialog, nothing left to abort
+ * server-side (the provider already answered or will anyway).
  */
 export const useWosImportDialog = () => {
     const { formatMessage: fm } = useIntl()
@@ -31,13 +33,65 @@ export const useWosImportDialog = () => {
     const canLookup = useAccessControl(LOOKUP_ROLES)()
     const canImport = useAccessControl(ROLE.PUBLICATIONS_EDIT)()
     const isAvailable = useWosAvailability()
-    const { openModal, closeModal, getModalById } = useDynamicModalStore()
-    const { isFetching, lookup, cancel } = useWosLookup(doi, currentPublicationUid)
+    const isOpen = useDynamicModalStore(state => state.modalOrder.includes(WOS_IMPORT_MODAL_ID))
+    // Retry lives in a toast created before `open` exists; the ref hands it the
+    // latest closure without a declaration cycle.
+    const openRef = useRef<() => void>(() => {})
+    // Routes lookup failures inside the dialog's lifetime: the dialog closes,
+    // the reason appears where the user can act on it.
+    const handleError = useCallback(
+        (error: unknown) => {
+            if (!useDynamicModalStore.getState().modals[WOS_IMPORT_MODAL_ID]) return
+            useDynamicModalStore.getState().closeModal(WOS_IMPORT_MODAL_ID)
 
-    const open = async () => {
+            const { kind, messageId } = resolveWosLookupError(error)
+            const text = fm({ id: messageId })
+            switch (kind) {
+                case 'invalidDoi':
+                    setError('doi', { type: 'manual', message: text })
+                    break
+                case 'notConfigured':
+                    markWosNotConfigured()
+                    toast.info(text)
+                    break
+                case 'upstream':
+                    toast.error(text, {
+                        action: {
+                            label: fm({ id: wosMessages.retry }),
+                            onClick: () => openRef.current(),
+                        },
+                    })
+                    break
+                case 'notFound':
+                case 'rateLimited':
+                    toast.error(text)
+                    break
+            }
+        },
+        [fm, setError],
+    )
+
+    const open = () => {
         if (!doi) return
         clearErrors('doi')
-        openModal('dialog', {
+        // Snapshot once at open: the review compares against what the user saw,
+        // and applying stays a plain field patch marked dirty.
+        const currentValues = getValues() as Record<string, unknown>
+        const applyChanges = (patch: Record<string, unknown>) =>
+            Object.entries(patch).forEach(([field, value]) =>
+                setValue(field, value, { shouldDirty: true }),
+            )
+        // A cancelled lookup may settle after another dialog with this ID opens.
+        const onError = (error: unknown) => {
+            if (
+                useDynamicModalStore.getState().modals[WOS_IMPORT_MODAL_ID]?.props?.onError !==
+                onError
+            )
+                return
+            handleError(error)
+        }
+
+        useDynamicModalStore.getState().openModal('dialog', {
             id: WOS_IMPORT_MODAL_ID,
             component: WosImportDialogContainer,
             props: {
@@ -46,43 +100,21 @@ export const useWosImportDialog = () => {
                 doi,
                 currentPublicationUid,
                 canImport,
-                getValues,
-                setValue,
+                currentValues,
+                onApply: applyChanges,
+                onError,
             },
-            onClose: cancel,
         })
-
-        const { error } = await lookup()
-        // A cancelled lookup resolves without an error; a closed dialog wants no toast.
-        if (!error || !getModalById(WOS_IMPORT_MODAL_ID)) return
-        closeModal(WOS_IMPORT_MODAL_ID)
-
-        const { kind, messageId } = resolveWosLookupError(error)
-        const text = fm({ id: messageId })
-        switch (kind) {
-            case 'invalidDoi':
-                setError('doi', { type: 'manual', message: text })
-                break
-            case 'notConfigured':
-                markWosNotConfigured()
-                toast.info(text)
-                break
-            case 'upstream':
-                toast.error(text, {
-                    action: { label: fm({ id: wosMessages.retry }), onClick: () => void open() },
-                })
-                break
-            case 'notFound':
-            case 'rateLimited':
-                toast.error(text)
-                break
-        }
     }
+
+    useEffect(() => {
+        openRef.current = open
+    })
 
     return {
         isVisible: isAvailable && canLookup,
-        isDisabled: !doi || isFetching,
-        isLoading: isFetching,
+        isDisabled: !doi || isOpen,
+        isLoading: isOpen,
         label: fm({ id: currentPublicationUid ? wosMessages.refresh : wosMessages.fetch }),
         open,
     }

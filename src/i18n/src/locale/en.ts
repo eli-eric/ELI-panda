@@ -1165,42 +1165,6 @@ export const messages = {
     },
     publication: {
         head: 'ELI Panda - Publication',
-        enrichment: {
-            sourcesTitle: 'Sources consulted',
-            sourcesHelp:
-                'Values are only suggestions until you apply them, and nothing is saved until you submit the publication.',
-            provider: {
-                crossref: 'Crossref',
-                wosStarter: 'Web of Science',
-                unpaywall: 'Unpaywall',
-            },
-            state: {
-                ok: 'Answered',
-                error: 'Unavailable',
-                notFound: 'No record for this DOI',
-                notConfigured: 'Not configured',
-                ambiguous: 'More than one record',
-                skipped: 'Not consulted',
-            },
-            retryAfter: 'Retry after {seconds} s',
-            openAccessTitle: 'Open access',
-            openAccessStatus: 'Reported as {status}',
-            openAccessHelp:
-                'Open access is reported for information. Choose the matching Open Access Type on the form yourself.',
-            openAccessLink: 'Open the article',
-            openAccessPdf: 'Open the PDF',
-            conflictsTitle: 'Providers disagree',
-            conflictsHelp:
-                'Applying the preview uses the first value. Change the field on the form afterwards if the alternative is correct.',
-            conflictRow:
-                '{field}: {selected} (from {selectedProvider}) or {alternative} (from {alternativeProvider})',
-            datePrecision: {
-                year: 'Publication date is known to the year only.',
-                month: 'Publication date is known to the month only.',
-                day: 'Full publication date available.',
-            },
-            noProviderAnswered: 'No provider returned a record for this DOI.',
-        },
         reporting: {
             title: 'Management reporting review',
             intro: 'Reporting classification is separate from the ELI Publication flag used for RIV. Records nobody has reviewed stay visible as unclassified in management reports.',
@@ -1264,70 +1228,12 @@ export const messages = {
                 other: 'Other',
             },
         },
-        wosImport: {
-            dialogTitle: 'Web of Science import preview',
-            dialogDescription:
-                'Review each value before applying it to the publication form. This does not save the publication.',
-            fetch: 'Fetch from Web of Science',
-            refresh: 'Refresh from Web of Science',
-            helper: 'Use Web of Science to preview publication details for this DOI.',
-            loading: 'Loading Web of Science preview...',
-            fieldsTitle: 'Publication fields',
-            selectionSummary: '{selected} of {total} fields selected',
-            selectAll: 'Select all fields',
-            selectNone: 'Select none',
-            differencesOnly: 'Show differing fields only',
-            unchangedFields: '{count} unchanged fields',
-            overwrites: 'Replaces current value',
-            authorPages: 'Author pages',
-            authorPage: 'Page {page} of {pages} · {total} authors',
-            previousAuthors: 'Previous authors',
-            nextAuthors: 'Next authors',
-            authorsTitle: 'ELI researcher matches',
-            importColumn: 'Import',
-            fieldColumn: 'Field',
-            currentColumn: 'Current value',
-            incomingColumn: 'Web of Science value',
-            importField: 'Import {field}',
-            empty: '(empty)',
-            same: 'Already up to date',
-            noAuthors: 'Web of Science returned no authors.',
-            noResearcherMatch: 'No PANDA researcher match was found.',
-            selectResearcher: 'Select the PANDA researcher matching {author}',
-            doNotMatch: 'Do not add an ELI researcher',
-            missingTitle: 'Not present in this Web of Science record',
-            unavailableTitle: 'Still needs to be entered manually',
-            apply: 'Apply selected fields',
-            applied: 'Selected Web of Science values were applied to the form.',
-            match: {
-                researcherId: 'Matched by ResearcherID',
-                name: 'Possible name match — confirmation required',
-                none: 'Unmatched',
-                ambiguous: 'Several possible name matches',
-            },
-            duplicate: {
-                title: 'This DOI is already in PANDA',
-                description:
-                    'Publication {code} already uses DOI {doi}. Open it instead of creating a duplicate.',
-                open: 'Open existing publication',
-            },
-            errors: {
-                invalid: 'Enter a valid DOI before fetching from Web of Science.',
-                notFound: 'This DOI was not found in Web of Science.',
-                ambiguous:
-                    'Web of Science returned more than one exact record for this DOI. Nothing was changed.',
-                unavailable: 'Web of Science is currently unavailable. Please try again later.',
-                notConfigured:
-                    'Web of Science integration is not configured. Contact PANDA support.',
-                rateLimited:
-                    'The Web of Science lookup limit has been reached. Please try again later.',
-                authentication:
-                    'PANDA could not authenticate with Web of Science. Contact PANDA support.',
-                timeout: 'Web of Science took too long to respond. Please try again.',
-                failed: 'The Web of Science preview could not be loaded. Nothing was changed.',
-            },
-        },
         wos: {
+            authorsPage: 'Page {page} of {count}',
+            idsSaved:
+                'ResearcherIDs saved for {count, plural, one {# researcher} other {# researchers}}.',
+            idsSaveFailed:
+                'PANDA could not save some ResearcherIDs. The researchers list may be stale.',
             fetch: 'Fetch from Web of Science',
             refresh: 'Refresh from Web of Science',
             dialogTitle: 'Web of Science record',

@@ -18,12 +18,12 @@ import {
     MEDIA_TYPE_CODE,
 } from '../types/constants'
 import { DepartmentsComponent } from './departments.comp'
-import { DoiLookupField } from './doi-lookup.field'
 import { EliAuthorsSelectComponent } from './eli-authors-select.comp'
 import { GrantsSelectComponent } from './grants-select.comp'
 import { PublicationYearField } from './publication-year.field'
 import { PublicationReportingFields } from './reporting/reporting-fields.comp'
 import { WebLinkField } from './web-link.field'
+import { WosImportButton } from './wos-import.button'
 
 export type Publication = {
     abstract: string
@@ -85,7 +85,14 @@ export const PublicationFormComponent = () => {
                     <Combobox {...fields.experimentalSystemCb} />
                 </Col>
                 <Col lg={4}>
-                    <DoiLookupField />
+                    <div className="flex items-start gap-2">
+                        <div className="min-w-0 flex-1">
+                            <Input {...fields.doi} />
+                        </div>
+                        <div className="pt-5">
+                            <WosImportButton />
+                        </div>
+                    </div>
                 </Col>
                 <Col lg={4}>
                     <WebLinkField />

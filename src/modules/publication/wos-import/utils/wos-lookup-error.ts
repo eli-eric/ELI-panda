@@ -2,7 +2,10 @@ import { message } from '@/i18n/src/messages'
 import { isObject } from '@/lib/predicates/type-guards'
 
 import { WOS_ABORT_ERROR_NAME, WOS_ERROR_CODES, type WosErrorCode } from '../../types/wos-import'
-import { isWosErrorCode } from '../../utils/wos-errors'
+
+/** Guards untrusted API codes before indexing the exhaustive outcome map. */
+const isWosErrorCode = (code: unknown): code is WosErrorCode =>
+    typeof code === 'string' && (Object.values(WOS_ERROR_CODES) as string[]).includes(code)
 
 /**
  * How the lookup surfaces a failure:

@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import type { FieldValues, UseFormGetValues, UseFormSetValue } from 'react-hook-form'
+import { useQueryClient } from '@tanstack/react-query'
+import { useEffect } from 'react'
 import { useIntl } from 'react-intl'
 import { toast } from 'sonner'
 
@@ -12,7 +12,6 @@ import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { queryMutate } from '@/utils/fetcher'
 
 import { WOS_FIELD_LABEL_IDS, WOS_PREVIEW_STATUS } from '../types/wos-import'
-import { getCurrentResearchers, researchersDiffer } from '../utils/wos-import'
 import {
     mergeWosResearchers,
     useWosAuthorSelections,
@@ -27,6 +26,7 @@ import {
     type WosLookupResponse,
     type WosResearcherIdsRequest,
 } from './types/wos-preview.types'
+import { getCurrentResearchers, researchersDiffer } from './utils/wos-import'
 import { WosImportDialog, WosImportDialogSkeleton } from './wos-import-dialog.comp'
 
 const wosMessages = message.publication.wos
@@ -35,54 +35,81 @@ const NO_VALUES: WosImportValues = {}
 interface ReviewProps {
     preview: WosLookupResponse
     canImport: boolean
-    getValues: UseFormGetValues<FieldValues>
-    setValue: UseFormSetValue<FieldValues>
+    currentPublicationUid?: string
+    /** Form snapshot taken when the dialog opened; the review never re-reads it. */
+    currentValues: Record<string, unknown>
+    /** Applies the confirmed patch to the form; the dialog itself is form-agnostic. */
+    onApply: (patch: Record<string, unknown>) => void
     onClose: () => void
 }
 
-const WosImportReview = ({ preview, canImport, getValues, setValue, onClose }: ReviewProps) => {
+const WosImportReview = ({
+    preview,
+    canImport,
+    currentPublicationUid,
+    currentValues,
+    onApply,
+    onClose,
+}: ReviewProps) => {
     const { formatMessage: fm } = useIntl()
     const { openModal } = useDynamicModalStore()
+    const queryClient = useQueryClient()
     const values = preview.values ?? NO_VALUES
-    const fieldRows = useWosFieldRows({ values, warnings: preview.warnings, getValues })
+    const fieldRows = useWosFieldRows({ values, warnings: preview.warnings, currentValues })
     const authors = useWosAuthorSelections(preview.authors)
-    const [currentResearchers] = useState(() => getCurrentResearchers(getValues('eliResearchers')))
+    const currentResearchers = getCurrentResearchers(currentValues.eliResearchers)
 
-    // eliResearchers is applied once, as the union of an accepted incoming list
-    // and the confirmed authors; eliAuthorsCount follows from the form itself.
-    const incomingResearchersRow = fieldRows.changes.find(row => row.field === 'eliResearchers')
-    const researchers = mergeWosResearchers(
-        incomingResearchersRow
-            ? getCurrentResearchers(incomingResearchersRow.incoming)
-            : currentResearchers,
-        authors.confirmedResearchers,
-    )
+    // eliResearchers is applied once, as the union of the current selection and
+    // the confirmed authors; eliAuthorsCount follows from the form itself.
+    const researchers = mergeWosResearchers(currentResearchers, authors.confirmedResearchers)
     const researchersChange = researchersDiffer(currentResearchers, researchers)
-    const fieldChanges = fieldRows.changes.filter(row => row.field !== 'eliResearchers')
-    const importCount = fieldChanges.length + (researchersChange ? 1 : 0)
+    const importCount = fieldRows.changes.length + (researchersChange ? 1 : 0)
+    const existingPublication =
+        preview.status === WOS_PREVIEW_STATUS.ALREADY_EXISTS
+            ? preview.existingPublication
+            : undefined
+    const importBlocked =
+        preview.status === WOS_PREVIEW_STATUS.ALREADY_EXISTS &&
+        (!existingPublication || existingPublication.uid !== currentPublicationUid)
 
     const fieldLabel = (field: string) => {
-        const id = WOS_FIELD_LABEL_IDS[field]
+        const id = WOS_FIELD_LABEL_IDS[field === 'isbn' ? fieldRows.isbnTarget : field]
         return id ? fm({ id }) : field
     }
 
-    const rememberResearcherId = ({ researcher, researcherId }: WosResearcherIdToRemember) => {
-        void queryMutate<unknown, WosResearcherIdsRequest>('researcherIds', 'patch', {
-            uid: researcher.uid,
-        })({ researcherIds: [researcherId] }).catch(() =>
-            toast.error(
-                fm(
-                    { id: wosMessages.rememberFailed },
-                    { researcherId, name: `${researcher.firstName} ${researcher.lastName}` },
-                ),
+    const persistResearcherIds = async (targets: WosResearcherIdToRemember[]) => {
+        await Promise.all(
+            targets.map(({ researcher, researcherId }) =>
+                queryMutate<unknown, WosResearcherIdsRequest>('researcherIds', 'patch', {
+                    uid: researcher.uid,
+                })({ researcherIds: [researcherId] }),
             ),
         )
+        queryClient.invalidateQueries({ queryKey: ['researchers'] })
     }
 
     const handleImport = () => {
-        fieldChanges.forEach(row => setValue(row.field, row.incoming, { shouldDirty: true }))
-        if (researchersChange) setValue('eliResearchers', researchers, { shouldDirty: true })
-        authors.researcherIdsToRemember.forEach(rememberResearcherId)
+        if (!canImport || importBlocked || importCount === 0) return
+        const patch: Record<string, unknown> = {}
+        fieldRows.changes.forEach(row => {
+            // ISBN must land in the field the media type actually renders.
+            const field = row.field === 'isbn' ? fieldRows.isbnTarget : row.field
+            patch[field] = row.incoming
+        })
+        if (researchersChange) patch.eliResearchers = researchers
+        onApply(patch)
+
+        // ResearcherIDs are facts about the researcher register, not about the
+        // publication being edited, so they persist at once — visibly, and with
+        // the researchers tables invalidated so an open list refreshes.
+        const targets = authors.researcherIdsToRemember
+        if (targets.length > 0) {
+            toast.promise(persistResearcherIds(targets), {
+                success: fm({ id: wosMessages.idsSaved }, { count: targets.length }),
+                error: fm({ id: wosMessages.idsSaveFailed }),
+            })
+        }
+
         toast.success(fm({ id: wosMessages.imported }, { count: importCount }))
         onClose()
     }
@@ -119,18 +146,16 @@ const WosImportReview = ({ preview, canImport, getValues, setValue, onClose }: R
     return (
         <WosImportDialog
             header={{
-                title: values.title ?? preview.existingPublication?.title,
+                title: values.title ?? existingPublication?.title,
                 citation: [values.longJournalTitle, values.yearOfPublication, volume]
                     .filter(Boolean)
                     .join(' · '),
                 wosUid: preview.wosUid,
                 recordUrl: preview.recordUrl,
             }}
-            existingPublication={
-                preview.status === WOS_PREVIEW_STATUS.ALREADY_EXISTS
-                    ? preview.existingPublication
-                    : undefined
-            }
+            existingPublication={existingPublication}
+            // Refreshing one's own record is allowed; an unidentified duplicate is not.
+            importBlocked={importBlocked}
             fieldLabel={fieldLabel}
             fieldRows={fieldRows.rows}
             selectedFields={fieldRows.selected}
@@ -160,18 +185,41 @@ const WosImportReview = ({ preview, canImport, getValues, setValue, onClose }: R
 
 interface Props extends Omit<ReviewProps, 'preview'> {
     doi: string
-    currentPublicationUid?: string
+    onError: (error: unknown) => void
 }
 
-/** Opened as dynamic modal `wos-import`; errors are handled by the opener, which closes it. */
+/**
+ * Opened as dynamic modal `wos-import`. The lookup runs on open (it spends
+ * provider quota, never on render); a failure is routed by the opener, which
+ * closes this dialog and shows the per-code feedback.
+ */
 export const WosImportDialogContainer = ({
     doi,
     currentPublicationUid,
     onClose,
+    onError,
     ...props
 }: Props) => {
-    const { data, isFetching } = useWosLookup(doi, currentPublicationUid)
+    const lookup = useWosLookup({ doi, currentPublicationUid })
 
-    if (isFetching || !data) return <WosImportDialogSkeleton onCancel={onClose} />
-    return <WosImportReview preview={data} onClose={onClose} {...props} />
+    useEffect(() => {
+        void lookup.mutate()
+        // One lookup per dialog open; the dialog lifetime is the effect lifetime.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+    const { isError, error } = lookup
+    useEffect(() => {
+        if (isError && error) onError(error)
+    }, [isError, error, onError])
+
+    if (lookup.isPending || !lookup.data) return <WosImportDialogSkeleton onCancel={onClose} />
+    return (
+        <WosImportReview
+            preview={lookup.data}
+            currentPublicationUid={currentPublicationUid}
+            onClose={onClose}
+            {...props}
+        />
+    )
 }

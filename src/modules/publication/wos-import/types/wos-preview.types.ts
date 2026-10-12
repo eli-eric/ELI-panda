@@ -8,8 +8,10 @@ import type {
 } from '../../types/wos-import'
 
 /**
- * Form fields a Web of Science lookup may fill, mirroring the backend's
- * WosImportableFields. Every entry is a key of the publication form schema.
+ * The 18 values the backend's `wosImportableFields` can emit.
+ * `proceedingsIsbn` is an ISBN patch destination, not an incoming value;
+ * `eliResearchers` is applied separately from confirmed author selections;
+ * `citeAs` is listed as unavailable and must be entered by hand.
  */
 export const WOS_IMPORTABLE_FIELDS = [
     'doi',
@@ -25,14 +27,11 @@ export const WOS_IMPORTABLE_FIELDS = [
     'issn',
     'eissn',
     'isbn',
-    'proceedingsIsbn',
     'webLink',
     'keywords',
     'allAuthors',
     'allAuthorsCount',
-    'citeAs',
     'mediaTypeCb',
-    'eliResearchers',
 ] as const
 
 export type WosImportableField = (typeof WOS_IMPORTABLE_FIELDS)[number]
@@ -52,14 +51,11 @@ interface WosImportValueKinds {
     issn: string
     eissn: string
     isbn: string
-    proceedingsIsbn: string
     webLink: string
     keywords: string
     allAuthors: string
     allAuthorsCount: number
-    citeAs: string
     mediaTypeCb: CodebookType
-    eliResearchers: SelectedResearcher[]
 }
 
 /** Picking by the frozen list makes a missing value kind a compile error. */
