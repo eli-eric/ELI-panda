@@ -13,6 +13,12 @@ const USERS = gql(`
       employee {
         uid
         fullName
+        orgUnitCode
+      }
+      teams {
+        uid
+        name
+        code
       }
       roles {
         name

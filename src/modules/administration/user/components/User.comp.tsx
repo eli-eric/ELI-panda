@@ -6,6 +6,7 @@ import type { GetRolesQuery } from '@/types/gql/graphql'
 import type { CodebookType } from '@/types/responses/codebook'
 
 import { UserForm } from './form/User.form'
+import { UserOrganization, type UserOrganizationTeam } from './UserOrganization.comp'
 import { UserRoles } from './UserRoles'
 
 interface Props {
@@ -18,6 +19,10 @@ interface Props {
     roles: GetRolesQuery['roles']
     loading?: boolean
     selectedRoles?: GetRolesQuery['roles']
+    organization?: {
+        orgUnitCode?: string | null
+        teams?: UserOrganizationTeam[]
+    }
 }
 
 export const UserComponent = ({
@@ -30,6 +35,7 @@ export const UserComponent = ({
     roles,
     loading = false,
     selectedRoles,
+    organization,
 }: Props) => (
     <div>
         <Form
@@ -53,6 +59,11 @@ export const UserComponent = ({
                 </Card>
             </div>
         </Form>
+        {organization && (
+            <div className="p-4">
+                <UserOrganization {...organization} />
+            </div>
+        )}
         <div className="p-4">
             <UserRoles
                 key={`roles-${assignedRoles?.map(r => r.uid).join('-')}`}
