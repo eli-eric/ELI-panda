@@ -8,5 +8,9 @@ import { openItemMoveModal } from './item-move.modal'
 
 export const ItemMoveButton: FC = () => {
     const { formatMessage: fm } = useIntl()
-    return <Button onClick={openItemMoveModal}>{fm({ id: message.common.forms.moveItem })}</Button>
+    return (
+        <Button onClick={() => openItemMoveModal()}>
+            {fm({ id: message.common.forms.moveItem })}
+        </Button>
+    )
 }

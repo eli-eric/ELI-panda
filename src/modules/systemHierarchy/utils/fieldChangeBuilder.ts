@@ -1,10 +1,11 @@
 import { message } from '@/i18n/src/messages'
+
 import type {
     ChangeValue,
     CodebookSnapshot,
     FieldChangeEntry,
     FieldChangeType,
-} from '@/modules/systemItem/types/responses'
+} from '../types/history'
 
 // GraphQL field names that represent codebook relationships
 const CODEBOOK_FIELDS: ReadonlySet<string> = new Set([
@@ -14,6 +15,8 @@ const CODEBOOK_FIELDS: ReadonlySet<string> = new Set([
     'responsible',
     'responsibleTeam',
     'owner',
+    'itemUsage',
+    'conditionStatus',
 ])
 
 // Map GraphQL field name -> i18n message key for the label shown in history
@@ -28,6 +31,10 @@ export const FIELD_MESSAGE_KEYS: Record<string, string> = {
     responsible: message.systemHierarchy.persons.responsible,
     owner: message.systemHierarchy.persons.owner,
     responsibleTeam: message.systemHierarchy.fields.team,
+    serialNumber: message.systemsPage.systemDetail.form.physicalItem.serialNumber.label,
+    notes: message.systemsPage.systemDetail.form.physicalItem.notes.label,
+    itemUsage: message.systemsPage.systemDetail.form.physicalItem.itemUsage.label,
+    conditionStatus: message.systemsPage.systemDetail.form.physicalItem.conditionStatus.label,
 }
 
 export const getFieldType = (field: string): FieldChangeType => {

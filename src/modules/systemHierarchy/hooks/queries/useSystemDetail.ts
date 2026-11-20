@@ -1,15 +1,18 @@
 import type { QueryClient } from '@tanstack/react-query'
 import { keepPreviousData } from '@tanstack/react-query'
-import { request } from 'graphql-request'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
 
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
-import { gql, useFragment } from '@/types/gql'
+// `useFragment` is a pure runtime cast (see src/types/gql/fragment-masking.ts), not a React
+// hook — the `use` prefix would otherwise trip rules-of-hooks when called inside .map().
+// Alias to `unmaskFragment` everywhere to make that intent explicit.
+import { gql, useFragment as unmaskFragment } from '@/types/gql'
 import {
     CatalogueItemFragment,
     PhysicalItemFragment,
     SystemDetailFragment,
+    SystemFieldsFragment,
 } from '@/utils/graphql/fragments'
 
 import { SYSTEM_DETAIL_QUERY_KEY } from '../../types/constants'
@@ -22,10 +25,15 @@ const systemHierarchyDetailQuery = gql(`
   }
 `)
 
-const fetchSystemDetail = (uid: string) =>
-    request('/api/graphql', systemHierarchyDetailQuery, {
-        where: { deleted: false, uid },
-    })
+export interface SparePartsForSystem {
+    uid: string
+    name: string | null
+    physicalItem: {
+        uid: string | null
+        eun: string | null
+        itemUsage: { uid: string } | null
+    } | null
+}
 
 export interface OptimisticSystemHint {
     name: string
@@ -33,11 +41,11 @@ export interface OptimisticSystemHint {
     parentPath?: { uid: string; name: string }[]
 }
 
-// Seeds a partial SystemDetailFragment so the breadcrumb renders before the network
-// resolves, then kicks off a background fetch to replace the seed with the full fragment.
-// Background fetch is required because useSystemDetail uses refetchOnMount: false — a
-// seed alone would otherwise stick and the consumer would never see physicalItem,
-// operators, etc. Skips when an entry already exists (live cache or in-flight fetch).
+// Seeds a partial SystemDetailFragment so the breadcrumb (name/code/path) renders
+// instantly when a node is clicked, before the network resolves. The full fragment is
+// pulled in by the active SystemDetailView consumer, which refetches on every leaf
+// change (see SystemDetailView.cont.tsx) — so this only needs to plant the breadcrumb.
+// Skips when an entry already exists to avoid clobbering fuller data with a partial seed.
 export const primeSystemDetailCache = (
     queryClient: QueryClient,
     uid: string,
@@ -60,19 +68,10 @@ export const primeSystemDetailCache = (
             },
         ],
     })
-    queryClient
-        .fetchQuery({
-            queryKey: [SYSTEM_DETAIL_QUERY_KEY, uid],
-            queryFn: () => fetchSystemDetail(uid),
-            staleTime: 60 * 1000,
-        })
-        .catch(() => {
-            // errors surface via the active consumer's useQuery state
-        })
 }
 
 export const useSystemDetail = (leafUid: string | null) => {
-    const { data, error, isLoading, refetch } = useGraphQL(systemHierarchyDetailQuery, {
+    const { data, error, isLoading, isFetching, refetch } = useGraphQL(systemHierarchyDetailQuery, {
         variables: {
             where: {
                 deleted: false,
@@ -95,9 +94,9 @@ export const useSystemDetail = (leafUid: string | null) => {
         }
     }, [error])
 
-    const systemDetail = useFragment(SystemDetailFragment, data?.systems?.[0])
-    const physicalItem = useFragment(PhysicalItemFragment, systemDetail?.physicalItem)
-    const catalogueItem = useFragment(CatalogueItemFragment, physicalItem?.catalogueItem)
+    const systemDetail = unmaskFragment(SystemDetailFragment, data?.systems?.[0])
+    const physicalItem = unmaskFragment(PhysicalItemFragment, systemDetail?.physicalItem)
+    const catalogueItem = unmaskFragment(CatalogueItemFragment, physicalItem?.catalogueItem)
 
     // Map GraphQL response to SystemLeaf-like structure for compatibility
     const system = systemDetail
@@ -143,20 +142,51 @@ export const useSystemDetail = (leafUid: string | null) => {
               attribute: systemDetail.attribute ?? null,
               sparesIn: systemDetail.sparePartsConnection?.edges?.length ?? 0,
               sparesOut: systemDetail.sparePartsFor?.length ?? 0,
+              // The leaves REST payload carries these per row; the detail query
+              // returns them as top-level fields, so mirror them into the same
+              // shape the sidebar and row coloring read.
+              statistics: {
+                  subsystemsCount:
+                      systemDetail.subSystems?.filter(sub => !sub?.deleted).length ?? 0,
+                  sparePartsCount: systemDetail.sparePartsConnection?.edges?.length ?? 0,
+                  minimalSpareParstCount: systemDetail.minimalSpareParstCount ?? undefined,
+                  sparePartsCoverageSum: systemDetail.sparePartsCoverageSum ?? undefined,
+                  sp_coverage: systemDetail.sp_coverage ?? undefined,
+              },
           }
         : null
 
     const sparePartsEdges = systemDetail?.sparePartsConnection?.edges ?? []
+    const sparePartsForSystems: SparePartsForSystem[] =
+        systemDetail?.sparePartsFor?.map(s => {
+            const fields = unmaskFragment(SystemFieldsFragment, s)
+            const item = unmaskFragment(PhysicalItemFragment, s.physicalItem)
+            return {
+                uid: fields.uid,
+                name: fields.name ?? null,
+                physicalItem: item
+                    ? {
+                          uid: item.uid ?? null,
+                          eun: item.eun ?? null,
+                          itemUsage: item.itemUsage?.uid
+                              ? { uid: item.itemUsage.uid }
+                              : null,
+                      }
+                    : null,
+            }
+        }) ?? []
 
     return {
         system,
         physicalItem,
         catalogueItem,
         sparePartsEdges,
+        sparePartsForSystems,
         sparePartsCoverageSum: systemDetail?.sparePartsCoverageSum ?? null,
         minimalSpareParstCount: systemDetail?.minimalSpareParstCount ?? null,
         refetch,
         isLoading,
+        isFetching,
         error,
     }
 }

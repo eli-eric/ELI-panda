@@ -8,7 +8,7 @@ This command installs all available shadcn/ui components into your TanStack Star
 pnpm dlx shadcn@latest add --all
 ```
 
---------------------------------
+---
 
 ### Create TanStack Start Project with shadcn/ui
 
@@ -20,7 +20,7 @@ This command initializes a new TanStack Start project and integrates shadcn/ui, 
 pnpm create @tanstack/start@latest --tailwind --add-ons shadcn
 ```
 
---------------------------------
+---
 
 ### Custom Block Installation
 
@@ -30,11 +30,11 @@ Specifies a custom block to be installed from the shadcn/ui registry. In this ex
 
 ```json
 {
- "$schema": "https://u"
+    "$schema": "https://u"
 }
 ```
 
---------------------------------
+---
 
 ### Example: Multiple Registry Setup in components.json
 
@@ -44,26 +44,26 @@ Demonstrates a complex `components.json` configuration with multiple registries,
 
 ```json
 {
- "registries": {
- "@shadcn": "https://ui.shadcn.com/r/{name}.json",
- "@company-ui": {
- "url": "https://registry.company.com/ui/{name}.json",
- "headers": {
- "Authorization": "Bearer ${COMPANY_TOKEN}"
- }
- },
- "@team": {
- "url": "https://team.company.com/{name}.json",
- "params": {
- "team": "frontend",
- "version": "${REGISTRY_VERSION}"
- }
- }
- }
+    "registries": {
+        "@shadcn": "https://ui.shadcn.com/r/{name}.json",
+        "@company-ui": {
+            "url": "https://registry.company.com/ui/{name}.json",
+            "headers": {
+                "Authorization": "Bearer ${COMPANY_TOKEN}"
+            }
+        },
+        "@team": {
+            "url": "https://team.company.com/{name}.json",
+            "params": {
+                "team": "frontend",
+                "version": "${REGISTRY_VERSION}"
+            }
+        }
+    }
 }
 ```
 
---------------------------------
+---
 
 ### Universal Item with Multiple Files (JSON)
 
@@ -73,30 +73,28 @@ An example of a universal registry item that installs multiple files, including 
 
 ```json
 {
- "$schema": "https://ui.shadcn.com/schema/registry-item.json",
- "name": "my-custom-start-template",
- "type": "registry:item",
- "dependencies": [
- "better-auth"
- ],
- "files": [
- {
- "path": "/path/to/file-01.json",
- "type": "registry:file",
- "target": "~/file-01.json",
- "content": "..."
- },
- {
- "path": "/path/to/file-02.vue",
- "type": "registry:file",
- "target": "~/pages/file-02.vue",
- "content": "..."
- }
- ]
+    "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+    "name": "my-custom-start-template",
+    "type": "registry:item",
+    "dependencies": ["better-auth"],
+    "files": [
+        {
+            "path": "/path/to/file-01.json",
+            "type": "registry:file",
+            "target": "~/file-01.json",
+            "content": "..."
+        },
+        {
+            "path": "/path/to/file-02.vue",
+            "type": "registry:file",
+            "target": "~/pages/file-02.vue",
+            "content": "..."
+        }
+    ]
 }
 ```
 
---------------------------------
+---
 
 ### Create Gatsby Project using npm
 
@@ -108,7 +106,7 @@ Initializes a new Gatsby project using the npm command. This command is the star
 npm init gatsby
 ```
 
---------------------------------
+---
 
 ### Create React Project with Vite (TypeScript)
 
@@ -117,11 +115,11 @@ Source: https://ui.shadcn.com/docs/installation/vite
 Command to create a new React project using Vite with the TypeScript template. This is the initial step for setting up the project.
 
 ```bash
-pnpm create vite@latest 
+pnpm create vite@latest
  --template react-ts
 ```
 
---------------------------------
+---
 
 ### Install Component from Private Registry
 
@@ -133,7 +131,7 @@ Command-line instruction to install a component from a private registry using it
 npx shadcn@latest add @private/button
 ```
 
---------------------------------
+---
 
 ### Install Component from Configured Registry
 
@@ -145,7 +143,7 @@ Command-line instruction to install a component using a configured registry alia
 npx shadcn@latest add @v0/dashboard
 ```
 
---------------------------------
+---
 
 ### Install Tailwind CSS
 
@@ -157,7 +155,7 @@ Commands to install Tailwind CSS and Autoprefixer as development dependencies in
 pnpm add -D tailwindcss@latest autoprefixer@latest
 ```
 
---------------------------------
+---
 
 ### Universal Item for ESLint Configuration (JSON)
 
@@ -167,21 +165,21 @@ This example shows a universal registry item for installing a custom ESLint conf
 
 ```json
 {
- "$schema": "https://ui.shadcn.com/schema/registry-item.json",
- "name": "my-eslint-config",
- "type": "registry:item",
- "files": [
- {
- "path": "/path/to/your/registry/default/custom-eslint.json",
- "type": "registry:file",
- "target": "~/.eslintrc.json",
- "content": "..."
- }
- ]
+    "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+    "name": "my-eslint-config",
+    "type": "registry:item",
+    "files": [
+        {
+            "path": "/path/to/your/registry/default/custom-eslint.json",
+            "type": "registry:file",
+            "target": "~/.eslintrc.json",
+            "content": "..."
+        }
+    ]
 }
 ```
 
---------------------------------
+---
 
 ### Install Switch Component (Manual)
 
@@ -195,7 +193,7 @@ npm install switch
 yarn add switch
 ```
 
---------------------------------
+---
 
 ### Installing shadcn/ui Spinner Component
 
@@ -207,7 +205,7 @@ Shows how to add the Spinner component to your project using the shadcn-ui CLI. 
 pnpm dlx shadcn@latest add spinner
 ```
 
---------------------------------
+---
 
 ### Install Switch Component (CLI)
 
@@ -219,7 +217,7 @@ Instructions for installing the Switch component using the shadcn-ui CLI. This i
 pnpm dlx shadcn@latest add switch
 ```
 
---------------------------------
+---
 
 ### shadcn/ui Select Component Installation (CLI)
 
@@ -233,7 +231,7 @@ npx shadcn@latest add select
 yarn dlx shadcn@latest add select
 ```
 
---------------------------------
+---
 
 ### Installing Components from Namespaced Registries
 
@@ -245,7 +243,7 @@ Demonstrates how to install components using the shadcn CLI from different regis
 pnpm dlx shadcn add @acme/button @internal/auth-system
 ```
 
---------------------------------
+---
 
 ### Custom Style from Scratch
 
@@ -255,44 +253,41 @@ Creates a custom style from scratch without extending shadcn/ui. It installs spe
 
 ```json
 {
- "$schema": "https://ui.shadcn.com/schema/registry-item.json",
- "extends": "none",
- "name": "new-style",
- "type": "registry:style",
- "dependencies": [
- "tailwind-merge",
- "clsx"
- ],
- "registryDependencies": [
- "utils",
- "https://example.com/r/button.json",
- "https://example.com/r/input.json",
- "https://example.com/r/label.json",
- "https://example.com/r/select.json"
- ],
- "cssVars": {
- "theme": {
- "font-sans": "Inter, sans-serif"
- },
- "light": {
- "main": "#88aaee",
- "bg": "#dfe5f2",
- "border": "#000",
- "text": "#000",
- "ring": "#000"
- },
- "dark": {
- "main": "#88aaee",
- "bg": "#272933",
- "border": "#000",
- "text": "#e6e6e6",
- "ring": "#fff"
- }
- }
+    "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+    "extends": "none",
+    "name": "new-style",
+    "type": "registry:style",
+    "dependencies": ["tailwind-merge", "clsx"],
+    "registryDependencies": [
+        "utils",
+        "https://example.com/r/button.json",
+        "https://example.com/r/input.json",
+        "https://example.com/r/label.json",
+        "https://example.com/r/select.json"
+    ],
+    "cssVars": {
+        "theme": {
+            "font-sans": "Inter, sans-serif"
+        },
+        "light": {
+            "main": "#88aaee",
+            "bg": "#dfe5f2",
+            "border": "#000",
+            "text": "#000",
+            "ring": "#000"
+        },
+        "dark": {
+            "main": "#88aaee",
+            "bg": "#272933",
+            "border": "#000",
+            "text": "#e6e6e6",
+            "ring": "#fff"
+        }
+    }
 }
 ```
 
---------------------------------
+---
 
 ### Import and Use Button Component in React
 
@@ -312,7 +307,7 @@ function App() {
 export default App
 ```
 
---------------------------------
+---
 
 ### Add Dependencies to Project (npm, pnpm, yarn, bun)
 
@@ -324,7 +319,7 @@ Installs the required dependencies for shadcn/ui using package managers. Ensure 
 pnpm add class-variance-authority clsx tailwind-merge lucide-react tw-animate-css
 ```
 
---------------------------------
+---
 
 ### shadcn/ui Tooltip Installation (CLI)
 
@@ -336,7 +331,7 @@ This command installs the shadcn/ui Tooltip component using the shadcn CLI. This
 pnpm dlx shadcn@latest add tooltip
 ```
 
---------------------------------
+---
 
 ### Install Multiple Resources from Different Registries
 
@@ -348,7 +343,7 @@ Command-line instruction to install multiple resources from various configured r
 npx shadcn@latest add @acme/header @internal/auth-utils
 ```
 
---------------------------------
+---
 
 ### shadcn/ui Alert Component Import Example
 
@@ -357,10 +352,10 @@ Source: https://ui.shadcn.com/docs/components/alert
 Example of how to import the Alert, AlertDescription, and AlertTitle components from shadcn/ui after installation. This allows you to use them in your React components.
 
 ```jsx
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 ```
 
---------------------------------
+---
 
 ### Initialize shadcn/ui Project with CLI
 
@@ -372,7 +367,7 @@ Initializes your project with shadcn/ui, installing necessary dependencies and c
 pnpm dlx shadcn@latest init
 ```
 
---------------------------------
+---
 
 ### shadcn/ui CLI Installation Commands
 
@@ -396,7 +391,7 @@ yarn dlx shadcn@latest init
 bun dlx shadcn@latest init
 ```
 
---------------------------------
+---
 
 ### shadcn/ui Empty Component Installation (CLI)
 
@@ -408,7 +403,7 @@ Shows how to install the Empty component using the shadcn/ui CLI. This involves 
 pnpm dlx shadcn@latest add empty
 ```
 
---------------------------------
+---
 
 ### Add Tailwind CSS and Vite Plugin
 
@@ -421,7 +416,7 @@ pnpm add -D tailwindcss postcss autoprefixer
 pnpm add -D @tailwindcss/vite
 ```
 
---------------------------------
+---
 
 ### Import and Use 'Button' Component in React
 
@@ -439,7 +434,7 @@ function App() {
 }
 ```
 
---------------------------------
+---
 
 ### shadcn/ui Alert Component Installation (CLI)
 
@@ -451,7 +446,7 @@ Instructions for installing the Alert component using the shadcn/ui CLI. This co
 pnpm dlx shadcn@latest add alert
 ```
 
---------------------------------
+---
 
 ### Universal Item for Python Rules (JSON)
 
@@ -461,21 +456,21 @@ An example of a universal registry item designed to install custom Python rules 
 
 ```json
 {
- "$schema": "https://ui.shadcn.com/schema/registry-item.json",
- "name": "python-rules",
- "type": "registry:item",
- "files": [
- {
- "path": "/path/to/your/registry/default/custom-python.mdc",
- "type": "registry:file",
- "target": "~/.cursor/rules/custom-python.mdc",
- "content": "..."
- }
- ]
+    "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+    "name": "python-rules",
+    "type": "registry:item",
+    "files": [
+        {
+            "path": "/path/to/your/registry/default/custom-python.mdc",
+            "type": "registry:file",
+            "target": "~/.cursor/rules/custom-python.mdc",
+            "content": "..."
+        }
+    ]
 }
 ```
 
---------------------------------
+---
 
 ### Calendar Installation (CLI)
 
@@ -487,7 +482,7 @@ Provides commands for installing the Calendar component using different package 
 pnpm dlx shadcn@latest add calendar
 ```
 
---------------------------------
+---
 
 ### Dropdown Menu Basic Usage (JavaScript/React)
 
@@ -496,8 +491,14 @@ Source: https://ui.shadcn.com/docs/components/dropdown-menu
 This snippet shows the minimal setup for a dropdown menu component. It requires importing the necessary components from shadcn/ui and defining a trigger and content. This is a foundational example for integrating dropdown menus.
 
 ```javascript
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu"
-
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 ```
 
 ```javascript
@@ -527,7 +528,7 @@ OpenMy Account
 
 ```
 
---------------------------------
+---
 
 ### Install Progress Component using CLI
 
@@ -539,7 +540,7 @@ Command to add the Progress component to your project using the shadcn-ui CLI. T
 pnpm dlx shadcn@latest add progress
 ```
 
---------------------------------
+---
 
 ### Separator Component Installation (CLI)
 
@@ -551,7 +552,7 @@ Shows the command to install the Separator component using the shadcn-ui CLI. Th
 pnpm dlx shadcn@latest add separator
 ```
 
---------------------------------
+---
 
 ### Add CSS Import with URL Syntax
 
@@ -571,7 +572,7 @@ This example demonstrates importing CSS files using the `url()` syntax, includin
 }
 ```
 
---------------------------------
+---
 
 ### React Card Component Example (shadcn/ui)
 
@@ -598,7 +599,7 @@ CancelDeploy
 }
 ```
 
---------------------------------
+---
 
 ### Install shadcn/ui Toggle Component
 
@@ -610,7 +611,7 @@ Instructions for installing the shadcn/ui Toggle component using pnpm. This comm
 pnpm dlx shadcn@latest add toggle
 ```
 
---------------------------------
+---
 
 ### Create a Simple Component (TypeScript/React)
 
@@ -628,7 +629,7 @@ export function HelloWorld() {
 }
 ```
 
---------------------------------
+---
 
 ### shadcn/ui Alert Dialog Installation
 
@@ -640,7 +641,7 @@ Instructions for installing the Alert Dialog component using the shadcn-ui CLI. 
 pnpm dlx shadcn@latest add alert-dialog
 ```
 
---------------------------------
+---
 
 ### Install Remote Component using URL (CLI)
 
@@ -652,28 +653,28 @@ Installs a remote component by providing its registry URL to the shadcn CLI. Thi
 npx shadcn add https://acme.com/registry/navbar.json
 ```
 
---------------------------------
+---
 
 ### Add Functional CSS Utilities
 
 Source: https://ui.shadcn.com/docs/registry/examples
 
-This example demonstrates functional CSS utilities using a wildcard. The 'tab-*' utility allows for dynamic application of 'tab-size' based on the value provided.
+This example demonstrates functional CSS utilities using a wildcard. The 'tab-\*' utility allows for dynamic application of 'tab-size' based on the value provided.
 
 ```json
 {
- "$schema": "https://ui.shadcn.com/schema/registry-item.json",
- "name": "custom-component",
- "type": "registry:component",
- "css": {
- "@utility tab-*": {
- "tab-size": "var(--tab-size-)"
- }
- }
+    "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+    "name": "custom-component",
+    "type": "registry:component",
+    "css": {
+        "@utility tab-*": {
+            "tab-size": "var(--tab-size-)"
+        }
+    }
 }
 ```
 
---------------------------------
+---
 
 ### Install shadcn/ui Registry Item via CLI
 
@@ -685,7 +686,7 @@ Installs a registry item using the shadcn CLI by providing the URL of the regist
 pnpm dlx shadcn@latest add http://localhost:3000/r/hello-world.json
 ```
 
---------------------------------
+---
 
 ### shadcn/ui Drawer Component Usage Example
 
@@ -694,11 +695,19 @@ Source: https://ui.shadcn.com/docs/components/drawer
 Provides a basic import statement for using the Drawer component and its associated sub-components from shadcn/ui. This snippet is intended for developers who have installed the component and need to integrate it into their React application.
 
 ```javascript
-import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger, } from "@/components/ui/drawer"
-
+import {
+    Drawer,
+    DrawerClose,
+    DrawerContent,
+    DrawerDescription,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerTitle,
+    DrawerTrigger,
+} from '@/components/ui/drawer'
 ```
 
---------------------------------
+---
 
 ### Toggle Group Component Documentation
 
@@ -706,7 +715,7 @@ Source: https://ui.shadcn.com/docs/components/toggle-group
 
 This section details the Toggle Group component, its installation, usage, and various examples demonstrating its functionality and appearance.
 
-```APIDOC
+````APIDOC
 ## Toggle Group Component
 
 ### Description
@@ -716,9 +725,10 @@ A set of two-state buttons that can be toggled on or off. Provides "single" and 
 Use the shadcn-ui CLI to add the component to your project:
 ```bash
 pnpm dlx shadcn@latest add toggle-group
-```
+````
 
 ### Usage
+
 Import the necessary components and use them in your React application.
 
 ```javascript
@@ -740,6 +750,7 @@ function MyToggleGroup() {
 ### Examples
 
 #### Outline
+
 ```javascript
 import { Bold, Italic, Underline } from "lucide-react";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
@@ -752,6 +763,7 @@ export function ToggleGroupOutline() {
 ```
 
 #### Single
+
 ```javascript
 import { Bold, Italic, Underline } from "lucide-react";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
@@ -764,6 +776,7 @@ export function ToggleGroupSingle() {
 ```
 
 #### Small
+
 ```javascript
 import { Bold, Italic, Underline } from "lucide-react";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
@@ -776,6 +789,7 @@ export function ToggleGroupSmall() {
 ```
 
 #### Large
+
 ```javascript
 import { Bold, Italic, Underline } from "lucide-react";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
@@ -788,6 +802,7 @@ export function ToggleGroupLarge() {
 ```
 
 #### Disabled
+
 ```javascript
 import { Bold, Italic, Underline } from "lucide-react";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
@@ -800,7 +815,9 @@ export function ToggleGroupDisabled() {
 ```
 
 #### Spacing
+
 Use `spacing={2}` to add spacing between toggle group items.
+
 ```javascript
 import { BookmarkIcon, HeartIcon, StarIcon } from "lucide-react";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
@@ -815,24 +832,27 @@ export function ToggleGroupSpacing() {
 ### API Reference
 
 #### ToggleGroup
+
 The main component that wraps toggle group items.
 
-| Prop | Type | Default |
-|------------|-------------------------------------|-------------|
-| `type` | `"single" | "multiple"` | `"single"` |
-| `variant` | `"default" | "outline"` | `"default"` |
-| `size` | `"default" | "sm" | "lg"` | `"default"` |
-| `spacing` | `number` | `0` |
-| `className`| `string` | `''` |
+| Prop        | Type       | Default     |
+| ----------- | ---------- | ----------- | ----------- | ----------- |
+| `type`      | `"single"  | "multiple"` | `"single"`  |
+| `variant`   | `"default" | "outline"`  | `"default"` |
+| `size`      | `"default" | "sm"        | "lg"`       | `"default"` |
+| `spacing`   | `number`   | `0`         |
+| `className` | `string`   | `''`        |
 
 #### ToggleGroupItem
+
 Individual toggle items within a toggle group. Remember to add an `aria-label` to each item for accessibility.
 
-| Prop | Type | Default |
-|------------|----------|-----------|
-| `value` | `string` | Required |
-| `className`| `string` | `''` |
-```
+| Prop        | Type     | Default  |
+| ----------- | -------- | -------- |
+| `value`     | `string` | Required |
+| `className` | `string` | `''`     |
+
+````
 
 --------------------------------
 
@@ -850,9 +870,9 @@ export default function Home() {
  Click me
  )
 }
-```
+````
 
---------------------------------
+---
 
 ### Override Primitives with a Block
 
@@ -862,19 +882,19 @@ Demonstrates how to define a custom login block that overrides existing primitiv
 
 ```json
 {
- "$schema": "https://ui.shadcn.com/schema/registry-item.json",
- "name": "custom-login",
- "type": "registry:block",
- "registryDependencies": [
- "login-01",
- "https://example.com/r/button.json",
- "https://example.com/r/input.json",
- "https://example.com/r/label.json"
- ]
+    "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+    "name": "custom-login",
+    "type": "registry:block",
+    "registryDependencies": [
+        "login-01",
+        "https://example.com/r/button.json",
+        "https://example.com/r/input.json",
+        "https://example.com/r/label.json"
+    ]
 }
 ```
 
---------------------------------
+---
 
 ### Initialize Project with shadcn CLI
 
@@ -887,7 +907,7 @@ npx shadcn init
 pnpm dlx shadcn init sidebar-01 login-01
 ```
 
---------------------------------
+---
 
 ### shadcn CLI Commands
 
@@ -901,7 +921,7 @@ npx shadcn-ui@latest add
 npx shadcn-ui@latest diff (experimental)
 ```
 
---------------------------------
+---
 
 ### Install shadcn/ui Tabs Component
 
@@ -913,7 +933,7 @@ Instructions for installing the Tabs component using pnpm and the shadcn-ui CLI.
 pnpm dlx shadcn@latest add tabs
 ```
 
---------------------------------
+---
 
 ### Install shadcn/ui Badge Component (CLI)
 
@@ -925,7 +945,7 @@ Command-line instructions for adding the shadcn/ui Badge component to your proje
 pnpm dlx shadcn@latest add badge
 ```
 
---------------------------------
+---
 
 ### Define a Login Block
 
@@ -935,33 +955,28 @@ This example shows how to define a 'login-01' block, specifying its type, descri
 
 ```json
 {
- "$schema": "https://ui.shadcn.com/schema/registry-item.json",
- "name": "login-01",
- "type": "registry:block",
- "description": "A simple login form.",
- "registryDependencies": [
- "button",
- "card",
- "input",
- "label"
- ],
- "files": [
- {
- "path": "blocks/login-01/page.tsx",
- "content": "import { LoginForm } ...",
- "type": "registry:page",
- "target": "app/login/page.tsx"
- },
- {
- "path": "blocks/login-01/components/login-form.tsx",
- "content": "...",
- "type": "registry:component"
- }
- ]
+    "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+    "name": "login-01",
+    "type": "registry:block",
+    "description": "A simple login form.",
+    "registryDependencies": ["button", "card", "input", "label"],
+    "files": [
+        {
+            "path": "blocks/login-01/page.tsx",
+            "content": "import { LoginForm } ...",
+            "type": "registry:page",
+            "target": "app/login/page.tsx"
+        },
+        {
+            "path": "blocks/login-01/components/login-form.tsx",
+            "content": "...",
+            "type": "registry:component"
+        }
+    ]
 }
 ```
 
---------------------------------
+---
 
 ### Menubar Component Installation (pnpm)
 
@@ -973,7 +988,7 @@ Instructions for installing the Menubar component from shadcn/ui using the pnpm 
 pnpm dlx shadcn@latest add menubar
 ```
 
---------------------------------
+---
 
 ### shadcn/ui Card Component - Installation
 
@@ -985,7 +1000,7 @@ Instructions for installing the Card component in your project using the shadcn/
 pnpm dlx shadcn@latest add card
 ```
 
---------------------------------
+---
 
 ### Custom Theme Example
 
@@ -995,35 +1010,35 @@ Defines a custom theme with specific color variables for both light and dark mod
 
 ```json
 {
- "$schema": "https://ui.shadcn.com/schema/registry-item.json",
- "name": "custom-theme",
- "type": "registry:theme",
- "cssVars": {
- "light": {
- "background": "oklch(1 0 0)",
- "foreground": "oklch(0.141 0.005 285.823)",
- "primary": "oklch(0.546 0.245 262.881)",
- "primary-foreground": "oklch(0.97 0.014 254.604)",
- "ring": "oklch(0.746 0.16 232.661)",
- "sidebar-primary": "oklch(0.546 0.245 262.881)",
- "sidebar-primary-foreground": "oklch(0.97 0.014 254.604)",
- "sidebar-ring": "oklch(0.746 0.16 232.661)"
- },
- "dark": {
- "background": "oklch(1 0 0)",
- "foreground": "oklch(0.141 0.005 285.823)",
- "primary": "oklch(0.707 0.165 254.624)",
- "primary-foreground": "oklch(0.97 0.014 254.604)",
- "ring": "oklch(0.707 0.165 254.624)",
- "sidebar-primary": "oklch(0.707 0.165 254.624)",
- "sidebar-primary-foreground": "oklch(0.97 0.014 254.604)",
- "sidebar-ring": "oklch(0.707 0.165 254.624)"
- }
- }
+    "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+    "name": "custom-theme",
+    "type": "registry:theme",
+    "cssVars": {
+        "light": {
+            "background": "oklch(1 0 0)",
+            "foreground": "oklch(0.141 0.005 285.823)",
+            "primary": "oklch(0.546 0.245 262.881)",
+            "primary-foreground": "oklch(0.97 0.014 254.604)",
+            "ring": "oklch(0.746 0.16 232.661)",
+            "sidebar-primary": "oklch(0.546 0.245 262.881)",
+            "sidebar-primary-foreground": "oklch(0.97 0.014 254.604)",
+            "sidebar-ring": "oklch(0.746 0.16 232.661)"
+        },
+        "dark": {
+            "background": "oklch(1 0 0)",
+            "foreground": "oklch(0.141 0.005 285.823)",
+            "primary": "oklch(0.707 0.165 254.624)",
+            "primary-foreground": "oklch(0.97 0.014 254.604)",
+            "ring": "oklch(0.707 0.165 254.624)",
+            "sidebar-primary": "oklch(0.707 0.165 254.624)",
+            "sidebar-primary-foreground": "oklch(0.97 0.014 254.604)",
+            "sidebar-ring": "oklch(0.707 0.165 254.624)"
+        }
+    }
 }
 ```
 
---------------------------------
+---
 
 ### Install Form Component - CLI
 
@@ -1035,7 +1050,7 @@ Command to add the Form component to your project using the shadcn-ui CLI. This 
 pnpm dlx shadcn@latest add form
 ```
 
---------------------------------
+---
 
 ### Navigation Menu Installation (CLI)
 
@@ -1047,7 +1062,7 @@ Provides instructions for adding the Navigation Menu component to your project u
 pnpm dlx shadcn@latest add navigation-menu
 ```
 
---------------------------------
+---
 
 ### shadcn/ui Popover Installation Commands
 
@@ -1066,7 +1081,7 @@ bun
 pnpm dlx shadcn@latest add popover
 ```
 
---------------------------------
+---
 
 ### Install Calendar Blocks using shadcn-ui CLI
 
@@ -1078,7 +1093,7 @@ Instructions to install the latest version of the calendar blocks using the shad
 pnpm dlx shadcn@latest add calendar-02
 ```
 
---------------------------------
+---
 
 ### Initialize Project from Local File using shadcn CLI
 
@@ -1090,7 +1105,7 @@ This command initializes a project using a local JSON file as a template. It's u
 npx shadcn init ./template.json
 ```
 
---------------------------------
+---
 
 ### Avatar Component Installation
 
@@ -1102,7 +1117,7 @@ Provides instructions for installing the Avatar component using the shadcn/ui CL
 pnpm dlx shadcn@latest add avatar
 ```
 
---------------------------------
+---
 
 ### shadcn/ui Slider Component Installation
 
@@ -1114,7 +1129,7 @@ Instructions for installing the shadcn/ui Slider component. This includes method
 pnpm dlx shadcn@latest add slider
 ```
 
---------------------------------
+---
 
 ### Install shadcn/ui Button Component
 
@@ -1126,7 +1141,7 @@ Instructions for installing the shadcn/ui Button component using package manager
 pnpm dlx shadcn@latest add button
 ```
 
---------------------------------
+---
 
 ### Install Sidebar Component using PNPM
 
@@ -1138,7 +1153,7 @@ Installs the 'sidebar.tsx' component using the pnpm package manager. This is the
 pnpm dlx shadcn@latest add sidebar
 ```
 
---------------------------------
+---
 
 ### Custom Style Extending shadcn/ui
 
@@ -1148,32 +1163,26 @@ Defines a custom style that extends shadcn/ui, installing specific dependencies 
 
 ```json
 {
- "$schema": "https://ui.shadcn.com/schema/registry-item.json",
- "name": "example-style",
- "type": "registry:style",
- "dependencies": [
- "@tabler/icons-react"
- ],
- "registryDependencies": [
- "login-01",
- "calendar",
- "https://example.com/r/editor.json"
- ],
- "cssVars": {
- "theme": {
- "font-sans": "Inter, sans-serif"
- },
- "light": {
- "brand": "20 14.3% 4.1%"
- },
- "dark": {
- "brand": "20 14.3% 4.1%"
- }
- }
+    "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+    "name": "example-style",
+    "type": "registry:style",
+    "dependencies": ["@tabler/icons-react"],
+    "registryDependencies": ["login-01", "calendar", "https://example.com/r/editor.json"],
+    "cssVars": {
+        "theme": {
+            "font-sans": "Inter, sans-serif"
+        },
+        "light": {
+            "brand": "20 14.3% 4.1%"
+        },
+        "dark": {
+            "brand": "20 14.3% 4.1%"
+        }
+    }
 }
 ```
 
---------------------------------
+---
 
 ### Install shadcn/ui Table Component (CLI)
 
@@ -1185,7 +1194,7 @@ This command installs the Table component and its dependencies into your shadcn/
 pnpm dlx shadcn@latest add table
 ```
 
---------------------------------
+---
 
 ### Install Textarea Component with shadcn/ui
 
@@ -1197,7 +1206,7 @@ Instructions for installing the Textarea component using different package manag
 pnpm dlx shadcn@latest add textarea
 ```
 
---------------------------------
+---
 
 ### Create Remix Project
 
@@ -1209,7 +1218,7 @@ Command to create a new Remix project using pnpm, npm, or yarn. Ensures a fresh 
 pnpm dlx create-remix@latest my-app
 ```
 
---------------------------------
+---
 
 ### Sheet Component Installation (CLI)
 
@@ -1221,7 +1230,7 @@ Provides instructions for installing the Sheet component using the shadcn-ui CLI
 pnpm dlx shadcn@latest add sheet
 ```
 
---------------------------------
+---
 
 ### SidebarHeader Component Example
 
@@ -1247,7 +1256,7 @@ export function AppSidebar() {
 }
 ```
 
---------------------------------
+---
 
 ### shadcn/ui Drawer Component Installation Command
 
@@ -1260,7 +1269,7 @@ pnpm dlx shadcn@latest add drawer
 
 ```
 
---------------------------------
+---
 
 ### Add CSS Import with Media Queries
 
@@ -1280,7 +1289,7 @@ This configuration shows how to use CSS imports with media queries, allowing for
 }
 ```
 
---------------------------------
+---
 
 ### SidebarFooter Component Example
 
@@ -1304,7 +1313,7 @@ More optionsAccountBillingSettingsSign out
 }
 ```
 
---------------------------------
+---
 
 ### shadcn/ui Dialog Component Installation (CLI)
 
@@ -1316,7 +1325,7 @@ Provides the command to install the Dialog component using the shadcn/ui CLI wit
 pnpm dlx shadcn@latest add dialog
 ```
 
---------------------------------
+---
 
 ### shadcn CLI init Command Usage
 
@@ -1336,7 +1345,7 @@ Options:
  -t, --template
 ```
 
---------------------------------
+---
 
 ### Install shadcn/ui Accordion Component
 
@@ -1348,7 +1357,7 @@ Provides commands for installing the Accordion component using different package
 pnpm dlx shadcn@latest add accordion
 ```
 
---------------------------------
+---
 
 ### SidebarMenuAction - DropdownMenu Example
 
@@ -1362,7 +1371,7 @@ Edit Project
 Delete Project
 ```
 
---------------------------------
+---
 
 ### shadcn/ui Checkbox Installation
 
@@ -1374,7 +1383,7 @@ Provides instructions for installing the Checkbox component using different pack
 pnpm dlx shadcn@latest add checkbox
 ```
 
---------------------------------
+---
 
 ### Install Hover Card Component using pnpm
 
@@ -1386,7 +1395,7 @@ Command to install the Hover Card component and its dependencies into your proje
 pnpm dlx shadcn@latest add hover-card
 ```
 
---------------------------------
+---
 
 ### Create React Router Project
 
@@ -1398,7 +1407,7 @@ This command initializes a new React Router project using pnpm. It's the first s
 pnpm dlx create-react-router@latest my-app
 ```
 
---------------------------------
+---
 
 ### Create Astro Project with Tailwind CSS
 
@@ -1410,7 +1419,7 @@ Command to create a new Astro project with Tailwind CSS, React integration, pack
 pnpm dlx create-astro@latest astro-app --template with-tailwindcss --install --add react --git
 ```
 
---------------------------------
+---
 
 ### Express.js Example for Registry Authentication
 
@@ -1418,7 +1427,7 @@ Source: https://ui.shadcn.com/docs/registry/authentication
 
 Example of an Express.js route handler for registry authentication, checking the Authorization header for a Bearer token.
 
-```APIDOC
+````APIDOC
 ## Express.js Example
 
 ### Description
@@ -1479,8 +1488,9 @@ function getComponent(componentName) {
  // Example: return { name: componentName, data: "component data" };
  return null; // Placeholder
 }
-```
-```
+````
+
+````
 
 --------------------------------
 
@@ -1492,9 +1502,9 @@ Instructions for adding the shadcn/ui Context Menu component to your project usi
 
 ```bash
 pnpm dlx shadcn@latest add context-menu
-```
+````
 
---------------------------------
+---
 
 ### Add Complex CSS Utility
 
@@ -1504,22 +1514,22 @@ This example defines a more complex CSS utility called 'scrollbar-hidden'. It ta
 
 ```json
 {
- "$schema": "https://ui.shadcn.com/schema/registry-item.json",
- "name": "custom-component",
- "type": "registry:component",
- "css": {
- "@utility scrollbar-hidden": {
- "scrollbar-hidden": {
- "&::-webkit-scrollbar": {
- "display": "none"
- }
- }
- }
- }
+    "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+    "name": "custom-component",
+    "type": "registry:component",
+    "css": {
+        "@utility scrollbar-hidden": {
+            "scrollbar-hidden": {
+                "&::-webkit-scrollbar": {
+                    "display": "none"
+                }
+            }
+        }
+    }
 }
 ```
 
---------------------------------
+---
 
 ### shadcn/ui Label Component Installation
 
@@ -1531,7 +1541,7 @@ Provides instructions for installing the Label component into a shadcn/ui projec
 pnpm dlx shadcn@latest add label
 ```
 
---------------------------------
+---
 
 ### Install Aspect Ratio Component using pnpm
 
@@ -1543,7 +1553,7 @@ Command to install the Aspect Ratio component using the pnpm package manager. Th
 pnpm dlx shadcn@latest add aspect-ratio
 ```
 
---------------------------------
+---
 
 ### React ButtonGroup Installation using pnpm
 
@@ -1555,7 +1565,7 @@ Provides the command to install the 'button-group' component from shadcn/ui usin
 pnpm dlx shadcn@latest add button-group
 ```
 
---------------------------------
+---
 
 ### Switch Component Usage Example (React)
 

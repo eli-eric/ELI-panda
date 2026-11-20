@@ -12,7 +12,7 @@ jest.mock('@headlessui/react', () => {
     const Combobox = ({ children }: { children: React.ReactNode }) => (
         <div data-testid="combobox">{children}</div>
     )
-    Combobox.Input = ({
+    const ComboboxInput = ({
         value,
         onChange,
         placeholder,
@@ -28,13 +28,13 @@ jest.mock('@headlessui/react', () => {
             onChange={onChange}
         />
     )
-    Combobox.Button = ({ children }: { children: React.ReactNode }) => (
+    const ComboboxButton = ({ children }: { children: React.ReactNode }) => (
         <button data-testid="combobox-button">{children}</button>
     )
-    Combobox.Options = ({ children }: { children: React.ReactNode }) => (
+    const ComboboxOptions = ({ children }: { children: React.ReactNode }) => (
         <ul data-testid="combobox-options">{children}</ul>
     )
-    Combobox.Option = ({
+    const ComboboxOption = ({
         children,
         value,
     }: {
@@ -45,6 +45,10 @@ jest.mock('@headlessui/react', () => {
             {typeof children === 'function' ? children({ active: false }) : children}
         </li>
     )
+    Combobox.Input = ComboboxInput
+    Combobox.Button = ComboboxButton
+    Combobox.Options = ComboboxOptions
+    Combobox.Option = ComboboxOption
     return { Combobox }
 })
 

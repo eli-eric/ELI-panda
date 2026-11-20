@@ -14,10 +14,8 @@ jest.mock('../../../hooks/useHierarchyNavigation', () => ({
         setActiveTab: jest.fn(),
         selectedParentUid: null,
         selectedLeafUid: 'sys-1',
-        activeView: 'tree',
         selectParent: jest.fn(),
         selectLeaf: jest.fn(),
-        setActiveView: jest.fn(),
         goBackToLeaves: jest.fn(),
     }),
 }))

@@ -6,6 +6,7 @@ import { ColumnVisibilityDropdown } from '../ColumnVisibilityDropdown.comp'
 const createMockColumn = (id: string, header: string, isVisible = true) => ({
     id,
     columnDef: { header },
+    getCanHide: jest.fn(() => true),
     getIsVisible: jest.fn(() => isVisible),
     toggleVisibility: jest.fn(),
 })

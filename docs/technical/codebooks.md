@@ -134,7 +134,7 @@ flowchart LR
     DeleteM -.invalidate.-> Detail
 ```
 
-URL-state via `useQueryState('selectedCodebook')` (from `next-usequerystate`) makes the picked codebook bookmarkable and survives reloads. The middle pane lazy-loads via `useCodebookValues(selectedCodebook)`, which delegates to the shared `useCodebook(name, { limit: 5000 })` hook — a single REST round-trip per codebook.
+URL-state via `useQueryState('selectedCodebook')` (from `nuqs`) makes the picked codebook bookmarkable and survives reloads. The middle pane lazy-loads via `useCodebookValues(selectedCodebook)`, which delegates to the shared `useCodebook(name, { limit: 5000 })` hook — a single REST round-trip per codebook.
 
 ### Mutation surface
 

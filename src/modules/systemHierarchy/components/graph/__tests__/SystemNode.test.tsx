@@ -35,6 +35,7 @@ const renderNode = (props = defaultProps) =>
                 'systemHierarchy.graph.actions.loadMore': 'Load 10 More',
                 'systemHierarchy.copy.copySystem': 'Copy System',
                 'systemHierarchy.copy.pasteSystem': 'Paste System',
+                'systemHierarchy.delete.menuItem': 'Delete System',
             }}
         >
             <ReactFlowProvider>
@@ -207,5 +208,23 @@ describe('SystemNode', () => {
         fireEvent.contextMenu(screen.getByTestId('system-node'))
         const pasteItem = screen.getByTestId('context-paste-system')
         expect(pasteItem).not.toHaveAttribute('data-disabled')
+    })
+
+    it('omits Delete System when onDeleteSystem is not provided', () => {
+        renderNode()
+        fireEvent.contextMenu(screen.getByTestId('system-node'))
+        expect(screen.queryByTestId('context-delete-system')).not.toBeInTheDocument()
+    })
+
+    it('calls onDeleteSystem with node id and name when Delete System clicked', () => {
+        const onDeleteSystem = jest.fn()
+        const props = {
+            ...defaultProps,
+            data: { ...defaultProps.data, onDeleteSystem },
+        }
+        renderNode(props)
+        fireEvent.contextMenu(screen.getByTestId('system-node'))
+        fireEvent.click(screen.getByText('Delete System'))
+        expect(onDeleteSystem).toHaveBeenCalledWith('n1', 'Pump A')
     })
 })

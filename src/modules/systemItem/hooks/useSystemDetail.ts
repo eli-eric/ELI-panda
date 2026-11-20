@@ -25,6 +25,11 @@ type SearchPatterns = {
     itemUid?: string
 }
 
+/**
+ * @deprecated The systemItem module is deprecated — system detail lives in
+ * src/modules/systemHierarchy (/systems/hierarchy?leaf=<uid>). See
+ * src/modules/systemItem/DEPRECATED.md.
+ */
 export const useSystemDetail = (
     searchPatterns?: SearchPatterns,
     onSuccess?: (data: any) => void,

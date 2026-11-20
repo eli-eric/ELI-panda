@@ -1,5 +1,4 @@
 import type { CellContext } from '@tanstack/react-table'
-import { useRouter } from 'next/router'
 import { useIntl } from 'react-intl'
 import { toast } from 'sonner'
 
@@ -46,7 +45,6 @@ export const SparePartsActionsCell = ({
     },
 }: CellContext<SystemInterfaceSparePartsRelationship, string>) => {
     const { systemDetail, refetch } = useSystemDetail()
-    const router = useRouter()
     const openUseSpare = useSpareDialog()
     const [recalculate] = useRecalculate({
         onSuccess: () => {
@@ -61,7 +59,7 @@ export const SparePartsActionsCell = ({
             openUseSpare({
                 systemUid,
                 spareItemUid,
-                onSuccess: () => router.reload(),
+                spareSystemUid: node.uid,
             })
         }
     }
@@ -110,7 +108,7 @@ export const SparePartsActionsCell = ({
                 size="sm"
                 disabled={!isFeatureEnabled('enableSparePartsAssignment')}
             >
-                {fm({ id: message.common.systemOverlay.useSpare })}
+                {fm({ id: message.common.spareAssignment.useSpare })}
             </Button>
             <TableDeleteButton onClick={handleDelete} />
         </div>

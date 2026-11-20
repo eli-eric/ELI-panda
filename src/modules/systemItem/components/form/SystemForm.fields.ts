@@ -9,9 +9,12 @@ import { useSystemContext } from '../../store/useSystemContext'
 const { form } = message.systemsPage.systemDetail
 const { form: catalogueForm } = message.cataloguePage.itemDetail
 
-const useSystemEditFormFields = () => {
+// `canEdit` is the per-system responsibility gate (defaults true so the legacy
+// systemItem callers are unaffected); it disables the system fields alongside the
+// coarse SYSTEM_EDIT role. Catalogue fields keep their own CATALOGUE_EDIT gate.
+const useSystemEditFormFields = (canEdit = true) => {
     const { blockedEdit } = useSystemContext()
-    const disabledEdit = !usePermission([ROLE.SYSTEM_EDIT]) || blockedEdit
+    const disabledEdit = !usePermission([ROLE.SYSTEM_EDIT]) || blockedEdit || !canEdit
     const catalogueEdit = !usePermission([ROLE.CATALOGUE_EDIT]) || blockedEdit
     return useMakeFormFields({
         name: {

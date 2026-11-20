@@ -151,7 +151,9 @@ Check:
 
 ```typescript
 // Debug: Check if modal was created
-const modalId = openModal('dialog', { /* ... */ })
+const modalId = openModal('dialog', {
+    /* ... */
+})
 console.log('Modal ID:', modalId)
 
 const modal = getModalById(modalId)
@@ -176,7 +178,9 @@ Ensure you're calling `closeModal` with the correct ID:
 
 ```typescript
 // Good - correct ID
-const modalId = openModal('dialog', { /* ... */ })
+const modalId = openModal('dialog', {
+    /* ... */
+})
 closeModal(modalId)
 
 // Good - custom ID
@@ -199,7 +203,9 @@ const { dialog1, setDialog1 } = useModalGlobalStore()
 
 setDialog1({
     component: MyComponent,
-    props: { /* ... */ },
+    props: {
+        /* ... */
+    },
 })
 ```
 
@@ -213,7 +219,9 @@ const { openModal, closeModal } = useDynamicModalStore()
 
 const modalId = openModal('dialog', {
     component: MyComponent,
-    props: { /* ... */ },
+    props: {
+        /* ... */
+    },
 })
 
 // Close when done

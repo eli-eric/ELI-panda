@@ -14,8 +14,8 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { message } from '@/i18n/src/messages'
+import { getSystemHierarchyDetailPath } from '@/modules/systemHierarchy/utils/hierarchyLinks'
 import { useSystemDelete } from '@/modules/systems/hooks/useSystemDelete'
-import { PATH } from '@/types/constants/paths'
 import type { SystemDetail } from '@/types/responses/systems'
 import type { QueryFetcherKey } from '@/utils/fetcher'
 
@@ -52,8 +52,9 @@ const SystemCodeCell = ({ row, queryKey }: SystemCodeCellProps) => {
                     <DropdownMenuContent align="end">
                         <DropdownMenuItem asChild>
                             <Link
-                                href={`${PATH.SYSTEM}/${uid}`}
+                                href={getSystemHierarchyDetailPath(uid)}
                                 target="_blank"
+                                rel="noopener noreferrer"
                                 className="flex items-center cursor-pointer"
                             >
                                 <Edit className="h-4 w-4 mr-2" />

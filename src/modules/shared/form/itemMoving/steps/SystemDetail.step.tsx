@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { type FC, useMemo } from 'react'
+import { type FC, useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
@@ -12,7 +12,6 @@ import { Heading } from '@/components/layout/Heading'
 import ModalButtonsComponent from '@/components/overlays/modal/modal.buttons'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
-import { useSystemDetail } from '@/modules/systemItem/hooks/useSystemDetail'
 import { getColorBySystemLevel } from '@/modules/systemItem/utils'
 import type { ModalButtons } from '@/types/form'
 import type { CodebookType } from '@/types/responses/codebook'
@@ -21,6 +20,7 @@ import type { SystemDetail } from '@/types/responses/systems'
 import { SelectLocationCombo } from '../../location/SelectLocation.combo'
 import { useWizardStore } from '../../wizard/store/useWizardStore'
 import { useFormFields } from '../hooks/useFormFields'
+import { useWizardContextSystem } from '../hooks/useWizardContextSystem'
 import { useModalWizardStore } from '../store/useModalWizardStore'
 import { SummaryListParam } from './components/SymmaryListParam.comp'
 
@@ -48,7 +48,7 @@ export const SystemDetailStep: FC = () => {
         return [...(system?.parentPath || []), { uid: system?.uid, name: system?.name }]
     }, [system])
 
-    const { physicalItem, catalogueItem } = useSystemDetail()
+    const { physicalItem, catalogueItem } = useWizardContextSystem()
 
     const defaultValues = isMovingToNewSystem
         ? {
@@ -76,6 +76,15 @@ export const SystemDetailStep: FC = () => {
         defaultValues,
         resolver: yupResolver(schema),
     })
+
+    // Re-seed defaults once the moved item's detail arrives — the fetch may
+    // still be in flight when this step mounts
+    useEffect(() => {
+        if (physicalItem && !formMethods.formState.isDirty) {
+            formMethods.reset(defaultValues)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [physicalItem?.uid])
 
     const submit = (data: SystemDetailForm) => {
         updateFormData({ ...data })

@@ -2,8 +2,8 @@ import { type FC } from 'react'
 
 import { Disclosure } from '@/components/ui'
 import { cn } from '@/lib/utils'
+import { getSystemHierarchyDetailPath } from '@/modules/systemHierarchy/utils/hierarchyLinks'
 import { getColorBySystemLevel } from '@/modules/systemItem/utils'
-import { PATH } from '@/types/constants/paths'
 import type { SystemLevel } from '@/types/gql/graphql'
 
 import { SystemDetailParameter } from '../system-detail-parameter.comp'
@@ -36,7 +36,7 @@ export const SystemInformationSection: FC<SystemInformationSectionProps> = ({ sy
                 <SystemDetailParameter
                     title="System Name"
                     value={systemDetail.name}
-                    href={`${PATH.SYSTEM}/${systemDetail.uid}`}
+                    href={getSystemHierarchyDetailPath(systemDetail.uid)}
                 />
                 <SystemDetailParameter title="Location" value={systemDetail.location?.name} />
                 <SystemDetailParameter title="System Type" value={systemDetail.systemType?.name} />

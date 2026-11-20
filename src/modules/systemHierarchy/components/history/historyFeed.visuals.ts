@@ -1,6 +1,6 @@
 import { ArrowRightLeft, Box, CircleDot, type LucideIcon, Repeat } from 'lucide-react'
 
-import { HISTORY_TYPE } from '@/modules/systemItem/types/constants'
+import { HISTORY_TYPE } from '../../types/history'
 
 interface HistoryTypeVisual {
     badgeClassName: string

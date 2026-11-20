@@ -3,19 +3,23 @@ import type { FC } from 'react'
 import { useCallback } from 'react'
 import { useIntl } from 'react-intl'
 
+import { Tooltip } from '@/components/Tooltip'
 import {
     ContextMenu,
     ContextMenuContent,
     ContextMenuItem,
+    ContextMenuSeparator,
     ContextMenuTrigger,
 } from '@/components/ui/context-menu'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
+import type { SystemLevel } from '@/types/gql/graphql'
 import { highlightText } from '@/utils'
 import { getFontBySystemLevel } from '@/utils/systemLevel'
 
 import { useSystemLeavesCount } from '../../hooks/queries/useSystemLeavesCount'
 import type { HierarchyNode } from '../../types'
+import { canCreateUnder } from '../../utils/systemLevelRules'
 
 interface TreeNodeProps {
     node: HierarchyNode
@@ -27,8 +31,11 @@ interface TreeNodeProps {
     children?: React.ReactNode
     search?: string
     copiedSystemUid?: string | null
+    canEdit?: boolean
     onCopySystem?: (uid: string) => void
     onPasteSystem?: (uid: string) => void
+    onCreateSubsystem?: (parentUid: string, parentName: string, parentLevel: SystemLevel) => void
+    onDeleteSystem?: (uid: string, name: string) => void
 }
 
 export const TreeNode: FC<TreeNodeProps> = ({
@@ -41,8 +48,11 @@ export const TreeNode: FC<TreeNodeProps> = ({
     children,
     search,
     copiedSystemUid,
+    canEdit = true,
     onCopySystem,
     onPasteSystem,
+    onCreateSubsystem,
+    onDeleteSystem,
 }) => {
     const { formatMessage: fm } = useIntl()
     const hasChildren = node.children.length > 0
@@ -63,7 +73,9 @@ export const TreeNode: FC<TreeNodeProps> = ({
     }, [node.uid, onSelect])
 
     const canPaste = !!copiedSystemUid && copiedSystemUid !== node.uid
-    const hasContextMenu = !!onCopySystem || !!onPasteSystem
+    const canCreate = canCreateUnder(node.systemLevel)
+    const hasContextMenu =
+        !!onCopySystem || !!onPasteSystem || !!onCreateSubsystem || !!onDeleteSystem
 
     const nodeContent = (
         <div
@@ -90,6 +102,30 @@ export const TreeNode: FC<TreeNodeProps> = ({
             <span className="truncate flex-1">
                 {search ? highlightText(node.name, search) : node.name}
             </span>
+            {/* End systems never appear in the tree, so without this marker there is no
+                way to tell which node hides some directly beneath it. Purely an
+                indicator — the row already handles clicks. */}
+            {node.hasLeafChildren && (
+                <Tooltip
+                    content={fm({ id: message.systemHierarchy.tree.hasDirectLeaves })}
+                    sideOffset={8}
+                >
+                    {/* The tooltip is hover-only, so without an accessible name the marker
+                        would be invisible to screen readers — exactly the users who can
+                        least afford to miss the one cue that end systems are hiding here.
+                        The padding is the hover target: a bare 6px dot is far too small to
+                        hold a pointer on, and the negative margin gives the padding back to
+                        the layout so the row looks unchanged. */}
+                    <span
+                        role="img"
+                        aria-label={fm({ id: message.systemHierarchy.tree.hasDirectLeaves })}
+                        className="flex shrink-0 items-center justify-center p-1 -m-1"
+                        data-testid={`tree-node-direct-leaves-${node.uid}`}
+                    >
+                        <span aria-hidden className="size-1.5 rounded-full bg-primary/60" />
+                    </span>
+                </Tooltip>
+            )}
             <code className="text-[10px] text-muted-foreground shrink-0 rounded bg-muted px-1 py-0.5">
                 {isLeavesCountLoading ? '…' : count}
             </code>
@@ -102,9 +138,21 @@ export const TreeNode: FC<TreeNodeProps> = ({
                 <ContextMenu>
                     <ContextMenuTrigger asChild>{nodeContent}</ContextMenuTrigger>
                     <ContextMenuContent>
+                        {onCreateSubsystem && (
+                            <ContextMenuItem
+                                onSelect={() =>
+                                    onCreateSubsystem(node.uid, node.name, node.systemLevel)
+                                }
+                                disabled={!canEdit || !canCreate}
+                                data-testid="context-create-system"
+                            >
+                                {fm({ id: message.systemHierarchy.create.menuItem })}
+                            </ContextMenuItem>
+                        )}
                         {onCopySystem && (
                             <ContextMenuItem
                                 onSelect={() => onCopySystem(node.uid)}
+                                disabled={!canEdit}
                                 data-testid="context-copy-system"
                             >
                                 {fm({ id: message.systemHierarchy.copy.copySystem })}
@@ -113,11 +161,24 @@ export const TreeNode: FC<TreeNodeProps> = ({
                         {onPasteSystem && (
                             <ContextMenuItem
                                 onSelect={() => onPasteSystem(node.uid)}
-                                disabled={!canPaste}
+                                disabled={!canEdit || !canPaste}
                                 data-testid="context-paste-system"
                             >
                                 {fm({ id: message.systemHierarchy.copy.pasteSystem })}
                             </ContextMenuItem>
+                        )}
+                        {onDeleteSystem && (
+                            <>
+                                <ContextMenuSeparator />
+                                <ContextMenuItem
+                                    onSelect={() => onDeleteSystem(node.uid, node.name)}
+                                    disabled={!canEdit}
+                                    className="text-destructive focus:text-destructive"
+                                    data-testid="context-delete-system"
+                                >
+                                    {fm({ id: message.systemHierarchy.delete.menuItem })}
+                                </ContextMenuItem>
+                            </>
                         )}
                     </ContextMenuContent>
                 </ContextMenu>

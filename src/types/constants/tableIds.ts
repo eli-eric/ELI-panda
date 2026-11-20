@@ -36,6 +36,9 @@ export const TABLE_IDS = {
 
     // Researcher selection
     RESEARCHER_SELECT_MODAL: 'researcher-select-modal',
+
+    // Team member selection
+    TEAM_MEMBER_SELECT_MODAL: 'team-member-select',
 } as const
 
 // Type for table IDs

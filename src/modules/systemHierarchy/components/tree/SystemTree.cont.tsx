@@ -9,6 +9,8 @@ import { SidebarTrigger } from '@/components/ui/sidebar'
 import { message } from '@/i18n/src/messages'
 
 import { useSystemHierarchy } from '../../hooks/queries/useSystemHierarchy'
+import { useCreateSubsystemAction } from '../../hooks/useCreateSubsystemAction'
+import { useDeleteSystemAction } from '../../hooks/useDeleteSystemAction'
 import { useHierarchyNavigation } from '../../hooks/useHierarchyNavigation'
 import { useSystemCopyPaste } from '../../hooks/useSystemCopyPaste'
 import { useHierarchyStore } from '../../store/useHierarchyStore'
@@ -24,6 +26,8 @@ export const SystemTreeContainer: FC = () => {
     const { expandedNodes, toggleNode, collapseAll, expandNodes, setExpandedNodes } =
         useHierarchyStore()
     const { copiedSystemUid, canEdit, handleCopySystem, handlePasteSystem } = useSystemCopyPaste()
+    const { handleCreateSubsystem } = useCreateSubsystemAction()
+    const { handleDeleteSystem } = useDeleteSystemAction()
 
     const [searchInput, setSearchInput] = useState('')
     const [search, setSearch] = useState('')
@@ -121,8 +125,11 @@ export const SystemTreeContainer: FC = () => {
                         onSelect={handleSelect}
                         search={search}
                         copiedSystemUid={copiedSystemUid}
-                        onCopySystem={canEdit ? handleCopySystem : undefined}
-                        onPasteSystem={canEdit ? handlePasteSystem : undefined}
+                        canEdit={canEdit}
+                        onCopySystem={handleCopySystem}
+                        onPasteSystem={handlePasteSystem}
+                        onCreateSubsystem={handleCreateSubsystem}
+                        onDeleteSystem={handleDeleteSystem}
                     />
                 )}
             </div>

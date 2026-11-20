@@ -5,15 +5,19 @@ import { toast } from 'sonner'
 
 import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
 import { message } from '@/i18n/src/messages'
-import type {
-    ChangeValue,
-    CodebookSnapshot,
-    FieldChangeEntry,
-} from '@/modules/systemItem/types/responses'
+import {
+    guardSystemEdit,
+    SYSTEM_CAN_EDIT_QUERY_KEY,
+} from '@/modules/shared/system/edit-permission'
 import { gql } from '@/types/gql'
 
 import { SYSTEM_DETAIL_QUERY_KEY } from '../../types/constants'
+import type { ChangeValue, CodebookSnapshot, FieldChangeEntry } from '../../types/history'
 import { buildChangeEntry, buildCodebookSnapshot } from '../../utils/fieldChangeBuilder'
+
+// Changing responsibility can revoke the current user's own edit rights, so the
+// cached can-edit result must be re-derived after these saves.
+const RESPONSIBILITY_FIELDS = ['responsibleUid', 'responsibleTeamUid']
 
 // Lightweight mutation for single field updates
 const updateSystemFieldMutation = gql(`
@@ -158,6 +162,10 @@ export const useSystemFieldUpdate = (currentSystem?: SystemFieldCache) => {
             value: unknown,
             options?: { displayName?: string | null; previousValue?: unknown },
         ) => {
+            // Hard guard: never let an unpermitted GraphQL patch reach the server,
+            // regardless of whether the UI disabled the field.
+            if (!(await guardSystemEdit(queryClient, uid, fm))) return
+
             const displayName = options?.displayName
             let update: Record<string, unknown>
             let changeEntry: FieldChangeEntry | null = null
@@ -230,6 +238,18 @@ export const useSystemFieldUpdate = (currentSystem?: SystemFieldCache) => {
                 changes: changesPayload,
             })
 
+            // A responsible/team change may have revoked the user's own access —
+            // re-derive can-edit once the save lands.
+            if (RESPONSIBILITY_FIELDS.includes(fieldName)) {
+                void promise
+                    .then(() =>
+                        queryClient.invalidateQueries({ queryKey: [SYSTEM_CAN_EDIT_QUERY_KEY] }),
+                    )
+                    // The failure itself is surfaced by the toast.promise below; this
+                    // side-chain only needs to avoid an unhandled rejection.
+                    .catch(() => {})
+            }
+
             // Custom toast messages for systemCode
             if (fieldName === 'systemCode') {
                 toast.promise(promise, {
@@ -266,7 +286,7 @@ export const useSystemFieldUpdate = (currentSystem?: SystemFieldCache) => {
 
             return promise
         },
-        [fm, mutateAsync],
+        [fm, mutateAsync, queryClient],
     )
 
     return {

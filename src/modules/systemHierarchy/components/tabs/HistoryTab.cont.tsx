@@ -15,10 +15,10 @@ import {
     SelectValue,
 } from '@/components/ui/select'
 import { message } from '@/i18n/src/messages'
-import { HISTORY_TYPE } from '@/modules/systemItem/types/constants'
 
 import { useSystemHistory } from '../../hooks/queries/useSystemHistory'
 import type { SystemLeaf } from '../../types'
+import { HISTORY_TYPE } from '../../types/history'
 import { SystemHistoryFeed } from '../history/SystemHistoryFeed.comp'
 
 interface HistoryTabProps {

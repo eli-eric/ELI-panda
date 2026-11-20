@@ -1,13 +1,16 @@
-import { useQueryState } from 'next-usequerystate'
+import { useEffect } from 'react'
+import { useFormContext } from 'react-hook-form'
 
-import { ComboboxTreeControlled } from '@/components/form/ComboBoxControlled'
+import { ComboboxTree } from '@/components/form/ComboboxTree'
 import { Input } from '@/components/form/inputs'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
+import { useUrlQueryState } from '@/hooks/useUrlQueryState'
 import { cn } from '@/lib/utils'
 import useCatalogueFormFields from '@/modules/catalogueItem/components/form/CatalogueForm.fields'
 import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
 import { CategoryPropFilters } from '@/modules/shared/form/CategoryPropFilters'
 import { useFormControlStore } from '@/store/useFormControlStore'
+import { parseJsonParam } from '@/utils/urlQuery'
 
 interface CatalogueFilterFormProps {
     tableId: string
@@ -19,12 +22,19 @@ export const CatalogueFilterForm = ({
     catalogueCategoryProperties,
 }: CatalogueFilterFormProps) => {
     const fields = useCatalogueFormFields()
-    const [categoryQuery, setCategoryQuery] = useQueryState('category', {
+    const [categoryQuery, setCategoryQuery] = useUrlQueryState('category', {
         history: 'push',
     })
 
     const { setFilter } = useFormFilterState({ tableId, enableQueryUrl: true })
     const { toggleDeleteCustom } = useFormControlStore()
+    const { setValue } = useFormContext()
+
+    // Keep the category field in sync with the URL param (mount + back/forward nav).
+    // category is a user-editable URL param, so guard against malformed JSON.
+    useEffect(() => {
+        setValue('category', parseJsonParam<unknown>(categoryQuery, null))
+    }, [categoryQuery, setValue])
 
     return (
         <div className={cn('md:grid md:grid-cols-2 md:gap-4 md:min-w-[500px]')}>
@@ -57,13 +67,12 @@ export const CatalogueFilterForm = ({
                 />
             </div>
 
-            <ComboboxTreeControlled
+            <ComboboxTree
                 {...fields.category}
                 disabled={false}
-                value={categoryQuery ? JSON.parse(categoryQuery) : null}
                 customLabel="Category"
                 className="col-span-2"
-                onChange={v => {
+                onSelect={v => {
                     setCategoryQuery(v ? JSON.stringify(v) : null)
                     if (!v) {
                         toggleDeleteCustom()

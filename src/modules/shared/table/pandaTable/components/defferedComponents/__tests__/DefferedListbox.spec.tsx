@@ -12,13 +12,13 @@ jest.mock('@headlessui/react', () => {
     const Listbox = ({ children }: { children: React.ReactNode }) => (
         <div data-testid="listbox">{children}</div>
     )
-    Listbox.Button = ({ children }: { children: React.ReactNode }) => (
+    const ListboxButton = ({ children }: { children: React.ReactNode }) => (
         <button data-testid="listbox-button">{children}</button>
     )
-    Listbox.Options = ({ children }: { children: React.ReactNode }) => (
+    const ListboxOptions = ({ children }: { children: React.ReactNode }) => (
         <ul data-testid="listbox-options">{children}</ul>
     )
-    Listbox.Option = ({
+    const ListboxOption = ({
         children,
         value,
     }: {
@@ -29,6 +29,9 @@ jest.mock('@headlessui/react', () => {
             {typeof children === 'function' ? children({ active: false }) : children}
         </li>
     )
+    Listbox.Button = ListboxButton
+    Listbox.Options = ListboxOptions
+    Listbox.Option = ListboxOption
     return { Listbox }
 })
 

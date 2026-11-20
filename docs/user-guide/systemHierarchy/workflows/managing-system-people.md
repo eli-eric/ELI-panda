@@ -2,7 +2,7 @@
 
 ## What this is for
 
-Assign and update the people accountable for a system on the **Persons** tab: the responsible person, the responsible team, the (read-only) owner, plus the *Authorized Operators* and *Maintained By* tables. These assignments drive accountability today and — once Phase 2 ships — the technical edit permissions for the system's subtree.
+Assign and update the people accountable for a system on the **Persons** tab: the responsible person, the responsible team, the (read-only) owner, plus the *Authorized Operators* and *Maintained By* tables. The responsible person and team also **decide who may edit** this system and its subtree — see [Understanding edit permissions](./edit-permissions.md).
 
 ## Who can do this
 
@@ -10,7 +10,7 @@ Assign and update the people accountable for a system on the **Persons** tab: th
 
 > 🔮 *Coming soon — Phase 1:* changes to systems at `SYSTEM_DOMAIN` and `TECHNOLOGY_UNIT` levels (where responsibility decisions are most consequential) will be admin-only.
 
-> 🔮 *Coming soon — Phase 2:* responsible-team membership will technically gate edits to a system and its subtree. **Today this is policy only — the application does not enforce it.**
+> ✅ Responsible-person / responsible-team membership now gates edits to a system and its subtree — enforced, not just policy. Editing the Persons tab itself requires that you already be responsible for the system. See [Understanding edit permissions](./edit-permissions.md).
 
 See [Access & Responsibilities](../README.md#access--responsibilities) for what these personas mean.
 
@@ -41,7 +41,7 @@ The top of the tab shows three single-employee fields. All save on blur (toast: 
 3. **Owner is informational only.** It reflects an ownership computation and cannot be edited from this UI.
 
 > ⚠️ **Changing the responsible team is a high-impact change.**
-> The responsible team determines who *should* be allowed to edit this system and its subtree (per documented policy today, technically enforced in Phase 2). Reassigning the team can move edit-rights for the entire subtree from one team to another. Make sure the new team is aware before changing this.
+> The responsible team determines who is allowed to edit this system and its subtree (now enforced). Reassigning the team moves edit-rights for the entire subtree from one team to another — and can remove your own access if you were only editing via that team. Make sure the new team is aware before changing this.
 
 ### Operators and Maintained-By tables
 

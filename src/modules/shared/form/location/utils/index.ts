@@ -1,4 +1,4 @@
-import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
+import type { Codebooktree } from '@/components/form/shared/codebookTree.types'
 import type { LocationsQueryQuery } from '@/types/gql/graphql'
 
 export const updateLocationWithSublocation = (

@@ -64,6 +64,6 @@ describe('SystemInformationSection', () => {
             />,
         )
         const nameRow = screen.getByText('System Name:N')
-        expect(nameRow.getAttribute('data-href')).toBe('/system/sys-1')
+        expect(nameRow.getAttribute('data-href')).toBe('/systems/hierarchy?leaf=sys-1')
     })
 })

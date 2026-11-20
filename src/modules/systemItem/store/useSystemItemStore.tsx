@@ -8,6 +8,11 @@ type SystemStore = {
     clear: () => void
 }
 
+/**
+ * @deprecated The systemItem module is deprecated — system detail lives in
+ * src/modules/systemHierarchy (/systems/hierarchy?leaf=<uid>). See
+ * src/modules/systemItem/DEPRECATED.md.
+ */
 export const useSystemItemStore = create<SystemStore>(set => ({
     selectedPhysicalSystem: undefined,
 

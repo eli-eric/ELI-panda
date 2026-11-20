@@ -2,7 +2,7 @@
 
 The Systems Relations module is the dedicated workbench for creating engineering relationships **in bulk** between many systems at once. Where the [System Hierarchy](../systemHierarchy/README.md) detail page lets you wire up one system to another one at a time, this module is the place to declare "these ten spare units are spares for those three primary systems," or "everything in this zone is powered from that switchboard." It is also the canonical entry point for assigning **spare parts** (`IS_SPARE_FOR`) — the same operation that drives the spare-parts coverage indicator everywhere else in the app.
 
-`[SCREENSHOT PLACEHOLDER: Systems Relations landing — two side-by-side tables labeled Source Systems and Target Systems, each with its own filter row and column visibility, a Relationship Type selector and Assign Relationship button in the top-right of the target table]`
+![Systems Relations landing page with the Source Systems and Target Systems tables](./images/relations-page.png)
 
 ## Access & Responsibilities
 
@@ -75,7 +75,7 @@ For the read-only view of relationships on a single system (in either direction)
 
 ## Data model reference
 
-> 🔧 *This section is for engineers reading the docs in the repo. The Confluence generator strips it.*
+> 🔧 *This section is for engineers reading the docs in the repo. The wiki generator strips it.*
 >
 > Bulk-create is served by `POST /system/relationships/batch` (`systemRelationshipsBatch`). It accepts `sourceUids[]`, `targetUids[]`, and `relationshipType`, and returns `{ created, skipped, skippedDetails[] }`. Per-pair deletion uses the GraphQL `DeleteSystemRelationship` mutation with `SystemDisconnectInput`. Relationship definitions live in `src/modules/systemHierarchy/types/graph.ts` (`RELATIONSHIP_DEFINITIONS`). Spare-parts modals query `SystemsSpareParts` / `SystemSparePartsFor`.
 

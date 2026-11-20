@@ -106,7 +106,7 @@ No `__tests__` folder under `src/modules/systemsRelations/`. Coverage is end-to-
 ## 🔮 Planned
 
 - Permissions Phase 1 will restrict who can create relationships at the `SYSTEM_DOMAIN` / `TECHNOLOGY_UNIT` levels — see [Permissions model → 🔮 Planned](../permissions-model.md#-planned).
-- Spare-parts table is a candidate for inline "Use Spare" actions (currently dormant in a deprecated shared flow).
+- Inline *Use Spare* on this module's spare-parts table is a candidate now that the shared `useSpareDialog` + `matchesSpareAffectedQuery` invalidation predicate ([System Hierarchy → Cache invalidation for spare flows](./system-hierarchy.md#cache-invalidation-for-spare-flows)) have been hardened across systemHierarchy, systemItem, and the overlay. Wiring the button on this module's `SpareParts.columns.tsx` would mirror what already exists in those callers.
 
 ## Open questions
 

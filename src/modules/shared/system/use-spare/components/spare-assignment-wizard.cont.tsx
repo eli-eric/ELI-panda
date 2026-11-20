@@ -10,11 +10,11 @@ import { Label } from '@/components/ui/label'
 import { message } from '@/i18n/src/messages'
 import { SelectLocationCombo } from '@/modules/shared/form/location/SelectLocation.combo'
 import { FormWizard, WizardStep } from '@/modules/shared/form/wizardV3'
-import { RELATIONSHIP_GRAPH_QUERY_KEY } from '@/modules/systemHierarchy/types/constants'
 import { useRecalculate } from '@/modules/systemItem/hooks/useRecalculate'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import useTableStateStore from '@/store/useTableStateStore'
 import { CODEBOOK } from '@/types/constants/codebook'
+import { matchesSpareAffectedQuery } from '@/utils/query/spareInvalidationPredicate'
 
 import { useAssignSpare } from '../hooks/useAssignSpare'
 import type { SpareAssignmentFormType, SpareAssignmentPayload } from '../types'
@@ -23,6 +23,7 @@ import { SpareParentSystemSelectTable } from './spare-parent-system-select.table
 interface SpareAssignmentWizardProps {
     systemUid: string
     spareItemUid: string
+    spareSystemUid?: string
     onSuccess?: () => void
 }
 
@@ -57,10 +58,11 @@ const AutoAssignCheckbox = () => {
 export const SpareAssignmentWizardContainer = ({
     systemUid,
     spareItemUid,
+    spareSystemUid,
     onSuccess,
 }: SpareAssignmentWizardProps) => {
     const { formatMessage: fm } = useIntl()
-    const { mutateAsync, isPending } = useAssignSpare()
+    const { mutateAsync } = useAssignSpare()
     const { closeModal } = useDynamicModalStore()
     const queryClient = useQueryClient()
 
@@ -71,85 +73,69 @@ export const SpareAssignmentWizardContainer = ({
         [],
     )
 
-    const [recalculate] = useRecalculate({
-        onSuccess: () => {
-            toast.success(fm({ id: message.common.spareAssignment.success.assigned }))
-            if (onSuccess) {
-                onSuccess()
-            }
-            closeModal('spare-assignment-wizard')
-        },
-    })
+    const [recalculate] = useRecalculate({})
 
     const handleSubmit = async (data: SpareAssignmentFormType, reset: () => void) => {
-        try {
-            // Validate required fields
-            if (!data.oldItemCondition) {
-                toast.error(fm({ id: message.common.spareAssignment.errors.conditionRequired }))
-                return
-            }
-
-            if (!data.newItemLocation) {
-                toast.error(fm({ id: message.common.spareAssignment.errors.locationRequired }))
-                return
-            }
-
-            // Get selected system UID from table state if auto-assign is disabled
-            let newParentSystemUid: string | undefined
-
-            if (!data.autoAssignParent) {
-                const { instances } = useTableStateStore.getState()
-                const rowSelection = instances[tableId]?.rowSelection || {}
-
-                // Get selected row IDs (which are now system UIDs thanks to getRowId in table)
-                const selectedSystemUids = Object.keys(rowSelection).filter(
-                    key => rowSelection[key],
-                )
-
-                if (selectedSystemUids.length === 0) {
-                    toast.error(fm({ id: message.common.spareAssignment.errors.noSystemSelected }))
-                    return
-                }
-
-                // Row ID is now directly the system UID (configured via getRowId in SpareParentSystemSelectTable)
-                newParentSystemUid = selectedSystemUids[0]
-            }
-
-            const payload: SpareAssignmentPayload = {
-                systemUid,
-                spareItemUid,
-                oldItemCondition: data.oldItemCondition,
-                newItemLocation: data.newItemLocation,
-                ...(newParentSystemUid && { newParentSystemUid }),
-            }
-
-            await mutateAsync(payload)
-
-            // Recalculate system tree structure to preserve subsystems
-            await Promise.all([
-                queryClient.invalidateQueries({ queryKey: [systemUid] }),
-                queryClient.invalidateQueries({ queryKey: ['system-detail'] }),
-                queryClient.invalidateQueries({ queryKey: [RELATIONSHIP_GRAPH_QUERY_KEY] }),
-            ])
-            recalculate(null)
-            reset()
-        } catch (error) {
-            toast.error(fm({ id: message.common.spareAssignment.errors.assignmentFailed }))
-            //eslint-disable-next-line
-            console.error('Failed to assign spare part:', error)
+        // Validate required fields — early returns keep wizard open
+        if (!data.oldItemCondition) {
+            toast.error(fm({ id: message.common.spareAssignment.errors.conditionRequired }))
+            return
         }
-    }
+        if (!data.newItemLocation) {
+            toast.error(fm({ id: message.common.spareAssignment.errors.locationRequired }))
+            return
+        }
 
-    if (isPending) {
-        return (
-            <div className="flex items-center justify-center p-8">
-                <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-                    <p className="text-sm text-muted-foreground">
-                        {fm({ id: messages.processing })}
-                    </p>
-                </div>
-            </div>
+        let newParentSystemUid: string | undefined
+        if (!data.autoAssignParent) {
+            const { instances } = useTableStateStore.getState()
+            const rowSelection = instances[tableId]?.rowSelection || {}
+            const selectedSystemUids = Object.keys(rowSelection).filter(
+                key => rowSelection[key],
+            )
+            if (selectedSystemUids.length === 0) {
+                toast.error(fm({ id: message.common.spareAssignment.errors.noSystemSelected }))
+                return
+            }
+            newParentSystemUid = selectedSystemUids[0]
+        }
+
+        const payload: SpareAssignmentPayload = {
+            systemUid,
+            spareItemUid,
+            oldItemCondition: data.oldItemCondition,
+            newItemLocation: data.newItemLocation,
+            ...(newParentSystemUid && { newParentSystemUid }),
+        }
+
+        // Every system whose cached detail/overlay could be stale after the swap:
+        // the source system, the moved physical item, the spare's own system (it loses
+        // its item), and the chosen destination for the old item (if not auto-assigned).
+        const affectedUids = [systemUid, spareItemUid, spareSystemUid, newParentSystemUid].filter(
+            (uid): uid is string => Boolean(uid),
+        )
+
+        // Close immediately — pipeline feedback lives in the toast
+        closeModal('spare-assignment-wizard')
+        reset()
+
+        toast.promise(
+            (async () => {
+                await mutateAsync(payload)
+                await queryClient.invalidateQueries({
+                    predicate: matchesSpareAffectedQuery(affectedUids),
+                })
+                // Tree-structure recalc — intentionally fire-and-forget. Awaiting it would
+                // let a recalc failure flip this toast to "Failed to assign" even though the
+                // assignment itself succeeded; recalc surfaces its own toast via useRecalculate.
+                recalculate(null)
+                onSuccess?.()
+            })(),
+            {
+                loading: fm({ id: messages.processing }),
+                success: fm({ id: messages.success.assigned }),
+                error: fm({ id: messages.errors.assignmentFailed }),
+            },
         )
     }
 

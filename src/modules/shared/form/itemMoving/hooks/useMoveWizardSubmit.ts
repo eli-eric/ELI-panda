@@ -3,10 +3,9 @@ import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { toast } from 'sonner'
 
-import { useSystemDetail } from '@/modules/systemItem/hooks/useSystemDetail'
+import { getSystemHierarchyDetailPath } from '@/modules/systemHierarchy/utils/hierarchyLinks'
 import { useSystemsReload } from '@/modules/systemItem/hooks/useSystemsReload'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
-import { PATH } from '@/types/constants/paths'
 import type { AxiosError } from '@/types/http'
 import type { CodebookType } from '@/types/responses/codebook'
 import { queryMutate } from '@/utils/fetcher'
@@ -15,6 +14,7 @@ import { useWizardStore } from '../../wizard/store/useWizardStore'
 import { useModalWizardStore } from '../store/useModalWizardStore'
 import type { ItemMovePost } from '../types'
 import { MOVE_TYPE } from '../types/constants'
+import { useWizardContextSystem } from './useWizardContextSystem'
 
 export const useMoveWizardSubmit = () => {
     const {
@@ -26,7 +26,7 @@ export const useMoveWizardSubmit = () => {
     } = useModalWizardStore()
 
     const { closeModal } = useDynamicModalStore()
-    const { physicalItem, catalogueItem, systemDetail } = useSystemDetail()
+    const { physicalItem, catalogueItem, systemDetail } = useWizardContextSystem()
     const { formData, goBack, resetWizard, updateFormData } = useWizardStore()
     const router = useRouter()
 
@@ -34,14 +34,14 @@ export const useMoveWizardSubmit = () => {
 
     const onSuccessRedirect = () => {
         toast.success('Item moved successfully')
-        // NOTE: Modal is opened with ID 'item-move-wizard' in item-move.modal.tsx
-        closeModal('item-move-wizard')
+        // Ids must match the openModal configs in item-move.modal.tsx / item-assign.modal.tsx
+        closeModal(moveType === MOVE_TYPE.ASSIGN ? 'item-assign' : 'item-move')
         resetWizard()
         setSelectedSystem(null)
         if (moveType === MOVE_TYPE.ASSIGN) {
             router.reload()
-        } else {
-            router.push(PATH.SYSTEM + '/' + redirectUid)
+        } else if (redirectUid) {
+            router.push(getSystemHierarchyDetailPath(redirectUid))
         }
     }
 
@@ -129,6 +129,10 @@ export const useMoveWizardSubmit = () => {
     })
 
     const submitWizard = () => {
+        if (!systemDetail?.uid) {
+            toast.error('System detail is not loaded yet, please try again')
+            return
+        }
         if (moveType === MOVE_TYPE.EXCHANGE) {
             return mutateReplace({
                 condition: formData.conditionStatus,

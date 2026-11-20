@@ -1,7 +1,7 @@
-import { useQueryState } from 'next-usequerystate'
 import type { ChangeEvent } from 'react'
 import { useEffect, useRef, useTransition } from 'react'
 
+import { useUrlQueryState } from '@/hooks/useUrlQueryState'
 import useTableStateStore from '@/store/useTableStateStore'
 
 interface Options {
@@ -38,7 +38,7 @@ export const useDebouncedSearchInput = ({
     onChange,
     delay = 500,
 }: Options): UseDebouncedSearchInputResult => {
-    const [querySearch, setQuerySearch] = useQueryState('search', {
+    const [querySearch, setQuerySearch] = useUrlQueryState('search', {
         history: 'replace',
     })
 
@@ -47,7 +47,12 @@ export const useDebouncedSearchInput = ({
 
     // `??` not `||` so `?search=` (empty string) stays authoritative
     // over a stale store value — consistent with the sync effect below.
-    const initialValue = useRef(querySearch ?? storeSearch ?? '').current
+    // When URL sync is disabled (modal-local search) the global `?search=` param
+    // is irrelevant and must be ignored, otherwise the input prefills with an
+    // unrelated page search while the table/query reads store only.
+    const initialValue = useRef(
+        (enableQueryURL ? (querySearch ?? storeSearch) : storeSearch) ?? '',
+    ).current
 
     const inputRef = useRef<HTMLInputElement | null>(null)
     const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -64,7 +69,7 @@ export const useDebouncedSearchInput = ({
     // querySearch during our own commit window and cause a flash.
     //
     // Priority `storeSearch ?? querySearch`: Zustand updates synchronously on commit,
-    // URL (next-usequerystate) updates async. Reading store first avoids the brief
+    // URL (nuqs) updates async. Reading store first avoids the brief
     // window where store has new value but URL is still stale. Back-button URL sync is
     // not affected because `{ history: 'replace' }` (see useQueryState options above)
     // means search-value typing does NOT create history entries — so there is no
@@ -75,7 +80,7 @@ export const useDebouncedSearchInput = ({
     // clear landed, we must not let the stale timer revert the external state (500ms
     // later the timer would fire with the abandoned typed text).
     useEffect(() => {
-        const next = storeSearch ?? querySearch ?? ''
+        const next = (enableQueryURL ? (storeSearch ?? querySearch) : storeSearch) ?? ''
         if (next === lastCommittedRef.current) return
         if (timerRef.current) {
             clearTimeout(timerRef.current)
@@ -85,7 +90,7 @@ export const useDebouncedSearchInput = ({
         if (inputRef.current && inputRef.current.value !== next) {
             inputRef.current.value = next
         }
-    }, [querySearch, storeSearch])
+    }, [querySearch, storeSearch, enableQueryURL])
 
     useEffect(
         () => () => {

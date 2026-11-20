@@ -353,6 +353,6 @@ Schema migrations are out of scope for this repo (`SchemaMigration` exists in th
 
 ## Data model reference
 
-> 🔧 *This section is for engineers reading the docs in the repo. The Confluence/Wiki generator strips it.*
+> 🔧 *This section is for engineers reading the docs in the repo. The wiki generator strips it.*
 >
 > Authoritative entity definitions live in `src/server/apollo/schema.graphql`. Deployment-relevant types: `SchemaMigration` (`schema.graphql:241-245`) which tracks DB schema versions but is not consumed by any frontend mutation today. Image and bucket configuration: `src/server/s3client.ts`. Neo4j driver bootstrap: `src/utils/neo4j.ts`.

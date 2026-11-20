@@ -3,9 +3,11 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
 import { gql } from '@/types/gql'
 import type { SystemDisconnectInput } from '@/types/gql/graphql'
+import { RELATIONSHIP_GRAPH_QUERY_KEY } from '@/utils/query/queryKeys'
+import { matchesSpareAffectedQuery } from '@/utils/query/spareInvalidationPredicate'
 
-import { RELATIONSHIP_GRAPH_QUERY_KEY } from '../../types/constants'
 import { getDisconnectField, isSpareDisconnect } from '../../types/relationshipDisconnect'
+import { useRecalculateSpareParts } from './useRecalculateSpareParts'
 
 const DELETE_RELATIONSHIP = gql(`
     mutation DeleteSystemRelationship($where: SystemWhere, $disconnect: SystemDisconnectInput) {
@@ -26,6 +28,7 @@ interface DeleteRelationshipParams {
 
 export const useDeleteRelationship = () => {
     const queryClient = useQueryClient()
+    const recalculateSpareParts = useRecalculateSpareParts()
 
     const { mutateAsync, isPending } = useGraphQLMutation(DELETE_RELATIONSHIP)
 
@@ -50,8 +53,17 @@ export const useDeleteRelationship = () => {
 
         queryClient.invalidateQueries({ queryKey: [RELATIONSHIP_GRAPH_QUERY_KEY] })
         if (isSpareDisconnect(field)) {
-            queryClient.invalidateQueries({
-                predicate: q => q.queryKey?.[0] === 'SystemDetail',
+            const invalidateSpareViews = () =>
+                queryClient.invalidateQueries({
+                    predicate: matchesSpareAffectedQuery([currentSystemUid, relatedSystemUid]),
+                })
+            // Refresh right away so the row disappears, then again once the
+            // recalculation lands — dropping one IS_SPARE_FOR edge re-splits the
+            // spare's coverage across the systems it still covers, and the first
+            // round would otherwise re-read the pre-recalc numbers.
+            invalidateSpareViews()
+            void recalculateSpareParts().then(recalculated => {
+                if (recalculated) invalidateSpareViews()
             })
         }
 

@@ -6,7 +6,7 @@ import { getRedirectPath } from '../utils/getRedirectPath'
 describe('getRedirectPath', () => {
     it('returns correct path for System node type', () => {
         const result = getRedirectPath('System', 'abc-123')
-        expect(result).toBe(`${PATH.SYSTEM}/abc-123`)
+        expect(result).toBe(`${PATH.SYSTEMS_HIERARCHY}?leaf=abc-123`)
     })
 
     it('returns correct path for Order node type', () => {
@@ -22,7 +22,7 @@ describe('getRedirectPath', () => {
     it('handles special characters in uid', () => {
         const uidWithSpecialChars = 'test-123_ABC@xyz'
         const result = getRedirectPath('System', uidWithSpecialChars)
-        expect(result).toBe(`${PATH.SYSTEM}/${uidWithSpecialChars}`)
+        expect(result).toBe(`${PATH.SYSTEMS_HIERARCHY}?leaf=${encodeURIComponent(uidWithSpecialChars)}`)
     })
 
     it('generates correct paths for all node types', () => {
@@ -30,7 +30,7 @@ describe('getRedirectPath', () => {
         const uid = 'test-uid'
 
         const expectedPaths = {
-            System: `${PATH.SYSTEM}/${uid}`,
+            System: `${PATH.SYSTEMS_HIERARCHY}?leaf=${uid}`,
             Order: `${PATH.ORDER}/${uid}`,
             CatalogueItem: `${PATH.CATALOGUE_ITEM}/${uid}`,
         }

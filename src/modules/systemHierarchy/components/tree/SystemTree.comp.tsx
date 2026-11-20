@@ -1,6 +1,8 @@
 import type { FC } from 'react'
 import { useCallback } from 'react'
 
+import type { SystemLevel } from '@/types/gql/graphql'
+
 import type { HierarchyNode } from '../../types'
 import { TreeNode } from './TreeNode.comp'
 
@@ -12,8 +14,11 @@ interface SystemTreeComponentProps {
     onSelect: (uid: string) => void
     search?: string
     copiedSystemUid?: string | null
+    canEdit?: boolean
     onCopySystem?: (uid: string) => void
     onPasteSystem?: (uid: string) => void
+    onCreateSubsystem?: (parentUid: string, parentName: string, parentLevel: SystemLevel) => void
+    onDeleteSystem?: (uid: string, name: string) => void
 }
 
 export const SystemTreeComponent: FC<SystemTreeComponentProps> = ({
@@ -24,8 +29,11 @@ export const SystemTreeComponent: FC<SystemTreeComponentProps> = ({
     onSelect,
     search,
     copiedSystemUid,
+    canEdit,
     onCopySystem,
     onPasteSystem,
+    onCreateSubsystem,
+    onDeleteSystem,
 }) => {
     const renderNode = useCallback(
         (node: HierarchyNode, depth: number) => {
@@ -43,8 +51,11 @@ export const SystemTreeComponent: FC<SystemTreeComponentProps> = ({
                     onSelect={onSelect}
                     search={search}
                     copiedSystemUid={copiedSystemUid}
+                    canEdit={canEdit}
                     onCopySystem={onCopySystem}
                     onPasteSystem={onPasteSystem}
+                    onCreateSubsystem={onCreateSubsystem}
+                    onDeleteSystem={onDeleteSystem}
                 >
                     {isExpanded && node.children.map(child => renderNode(child, depth + 1))}
                 </TreeNode>
@@ -57,8 +68,11 @@ export const SystemTreeComponent: FC<SystemTreeComponentProps> = ({
             onSelect,
             search,
             copiedSystemUid,
+            canEdit,
             onCopySystem,
             onPasteSystem,
+            onCreateSubsystem,
+            onDeleteSystem,
         ],
     )
 

@@ -1,11 +1,11 @@
 import { renderHook } from '@testing-library/react'
-import { useQueryState } from 'next-usequerystate'
+import { useQueryState } from 'nuqs'
 
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
 
-import { useUsers } from '../useUsers'
+import { USERS_QUERY_KEY, useUsers } from '../useUsers'
 
-jest.mock('next-usequerystate', () => ({
+jest.mock('nuqs', () => ({
     useQueryState: jest.fn(),
 }))
 
@@ -18,6 +18,14 @@ jest.mock('sonner', () => ({
 }))
 
 import { toast } from 'sonner'
+
+const user = (uid: string, username: string) => ({
+    uid,
+    username,
+    email: username,
+    roles: [],
+    teams: [],
+})
 
 const mockUseQueryState = useQueryState as unknown as jest.Mock
 const mockUseGraphQL = useGraphQL as jest.Mock
@@ -35,29 +43,38 @@ beforeEach(() => {
 })
 
 describe('useUsers', () => {
-    it('passes empty username_CONTAINS when no search', () => {
-        renderHook(() => useUsers())
-        const variables = mockUseGraphQL.mock.calls[0][1].variables
-        expect(variables.where.username_CONTAINS).toBe('')
-    })
-
-    it('passes the search string when set', () => {
+    it('fetches all users under a stable query key (no server-side search)', () => {
         mockUseQueryState.mockReturnValue(['jan', jest.fn()])
         renderHook(() => useUsers())
-        const variables = mockUseGraphQL.mock.calls[0][1].variables
-        expect(variables.where.username_CONTAINS).toBe('jan')
+        const options = mockUseGraphQL.mock.calls[0][1]
+        expect(options.variables).toBeUndefined()
+        expect(options.customQueryKey).toEqual([USERS_QUERY_KEY])
+    })
+
+    it('filters users by the search string client-side', () => {
+        mockUseQueryState.mockReturnValue(['NOVAK', jest.fn()])
+        mockUseGraphQL.mockReturnValue({
+            data: {
+                users: [user('u1', 'jan.novak@eli-laser.eu'), user('u2', 'eva.mala@eli-laser.eu')],
+            },
+            isLoading: false,
+            error: undefined,
+            refetch: jest.fn(),
+        })
+        const { result } = renderHook(() => useUsers())
+        expect(result.current.users?.map(u => u.uid)).toEqual(['u1'])
     })
 
     it('returns aliased users + loading + refetch', () => {
         const refetch = jest.fn()
         mockUseGraphQL.mockReturnValue({
-            data: { users: [{ uid: 'u' }] },
+            data: { users: [user('u', 'u@eli-laser.eu')] },
             isLoading: true,
             error: undefined,
             refetch,
         })
         const { result } = renderHook(() => useUsers())
-        expect(result.current.users).toEqual([{ uid: 'u' }])
+        expect(result.current.users?.map(u => u.uid)).toEqual(['u'])
         expect(result.current.loading).toBe(true)
         expect(result.current.refetch).toBe(refetch)
     })

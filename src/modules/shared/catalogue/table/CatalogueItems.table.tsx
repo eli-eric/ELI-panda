@@ -22,6 +22,7 @@ interface CatalogueTableProps {
     getRowProps?: (row: Row<any>) => GetRowPropsReturnType
     pageSize?: number
     onTableReady?: (table: Table<any>) => void
+    onSelectItem?: (uid: string) => void
 }
 
 export const CatalogueTable = forwardRef<PandaTableV2Handle, CatalogueTableProps>(
@@ -37,6 +38,7 @@ export const CatalogueTable = forwardRef<PandaTableV2Handle, CatalogueTableProps
             pageSize = 10,
             setCategoryFilter,
             onTableReady,
+            onSelectItem,
         },
         ref,
     ) => {
@@ -45,6 +47,7 @@ export const CatalogueTable = forwardRef<PandaTableV2Handle, CatalogueTableProps
             hideButtons,
             catalogueItems,
             setCategoryFilter,
+            onSelectItem,
         })
 
         const table = usePandaTable({
@@ -62,9 +65,11 @@ export const CatalogueTable = forwardRef<PandaTableV2Handle, CatalogueTableProps
         })
 
         useEffect(() => {
-            table.setColumnVisibility({
+            // merge, not replace: replacing wiped every column the user had hidden
+            table.setColumnVisibility(previousVisibility => ({
+                ...previousVisibility,
                 categoryName: categoryList?.length !== 0,
-            })
+            }))
             table.setColumnOrder(table.getAllLeafColumns().map(column => column.id))
         }, [categoryList, columns, table])
 

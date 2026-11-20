@@ -28,6 +28,9 @@ const baseNode: HierarchyNode = {
 const messages = {
     'systemHierarchy.copy.copySystem': 'Copy System',
     'systemHierarchy.copy.pasteSystem': 'Paste System',
+    'systemHierarchy.create.menuItem': 'Create System',
+    'systemHierarchy.delete.menuItem': 'Delete System',
+    'systemHierarchy.tree.hasDirectLeaves': 'Has end systems directly under it',
 }
 
 const renderTreeNode = (props: Partial<React.ComponentProps<typeof TreeNode>> = {}) =>
@@ -73,6 +76,53 @@ describe('TreeNode', () => {
         renderTreeNode()
 
         expect(screen.getByText('7')).toBeInTheDocument()
+    })
+
+    describe('direct end-systems marker', () => {
+        beforeEach(() => {
+            mockUseSystemLeavesCount.mockReturnValue({ count: 7, isLoading: false, error: null })
+        })
+
+        it('marks a node that has end systems directly under it', () => {
+            renderTreeNode()
+            expect(screen.getByTestId('tree-node-direct-leaves-node-1')).toBeInTheDocument()
+        })
+
+        it('exposes the marker to assistive tech, not just to hover', () => {
+            // The tooltip is hover-only; without a name the one cue that end systems are
+            // hiding under this node is invisible to screen-reader users.
+            renderTreeNode()
+            expect(
+                screen.getByRole('img', { name: 'Has end systems directly under it' }),
+            ).toBeInTheDocument()
+        })
+
+        it('announces the marker once — the visual dot stays hidden', () => {
+            // The padded hover target carries the name; the inner dot is decoration and
+            // would otherwise be announced as a second, nameless image.
+            renderTreeNode()
+            expect(screen.getAllByRole('img')).toHaveLength(1)
+        })
+
+        it('gives the marker a hover target larger than the dot itself', () => {
+            // A bare 6px trigger cannot hold a pointer, which is what made the tooltip
+            // flicker; the padding is the fix, the negative margin keeps the layout.
+            renderTreeNode()
+            const target = screen.getByTestId('tree-node-direct-leaves-node-1')
+            expect(target).toHaveClass('p-1', '-m-1')
+            expect(target.firstElementChild).toHaveClass('size-1.5')
+        })
+
+        it('omits the marker when every end system sits deeper', () => {
+            renderTreeNode({ node: { ...baseNode, hasLeafChildren: false } })
+            expect(screen.queryByTestId('tree-node-direct-leaves-node-1')).toBeNull()
+        })
+
+        it('leaves the count badge untouched — it stays the total, not the direct one', () => {
+            renderTreeNode()
+            expect(screen.getByText('7')).toBeInTheDocument()
+            expect(mockUseSystemLeavesCount).toHaveBeenCalledWith('node-1')
+        })
     })
 
     it('calls onToggle and does not trigger onSelect when chevron button is clicked', () => {
@@ -157,6 +207,88 @@ describe('TreeNode', () => {
 
             fireEvent.contextMenu(screen.getByTestId('tree-node-node-1').firstChild!)
             expect(screen.queryByText('Copy System')).not.toBeInTheDocument()
+        })
+
+        it('shows Delete System and calls handler with uid and name', () => {
+            const onDeleteSystem = jest.fn()
+            renderTreeNode({ onDeleteSystem, canEdit: true })
+
+            fireEvent.contextMenu(screen.getByTestId('tree-node-node-1').firstChild!)
+            const deleteItem = screen.getByTestId('context-delete-system')
+            expect(deleteItem).not.toHaveAttribute('data-disabled')
+
+            fireEvent.click(deleteItem)
+            expect(onDeleteSystem).toHaveBeenCalledWith('node-1', 'Node 1')
+        })
+
+        it('disables Delete System and does not fire handler when canEdit is false', () => {
+            const onDeleteSystem = jest.fn()
+            renderTreeNode({ onDeleteSystem, canEdit: false })
+
+            fireEvent.contextMenu(screen.getByTestId('tree-node-node-1').firstChild!)
+            const deleteItem = screen.getByTestId('context-delete-system')
+            expect(deleteItem).toHaveAttribute('data-disabled')
+
+            fireEvent.click(deleteItem)
+            expect(onDeleteSystem).not.toHaveBeenCalled()
+        })
+
+        it('enables Create System when canEdit and parent level allows children, calls handler on click', () => {
+            const onCreateSubsystem = jest.fn()
+            renderTreeNode({ onCreateSubsystem, canEdit: true })
+
+            fireEvent.contextMenu(screen.getByTestId('tree-node-node-1').firstChild!)
+            const createItem = screen.getByTestId('context-create-system')
+            expect(createItem).not.toHaveAttribute('data-disabled')
+
+            fireEvent.click(createItem)
+            expect(onCreateSubsystem).toHaveBeenCalledWith(
+                'node-1',
+                'Node 1',
+                SystemLevel.KeySystems,
+            )
+        })
+
+        it('disables Create System under Trash node and does not fire handler', () => {
+            const onCreateSubsystem = jest.fn()
+            renderTreeNode({
+                node: { ...baseNode, systemLevel: SystemLevel.Trash },
+                onCreateSubsystem,
+                canEdit: true,
+            })
+
+            fireEvent.contextMenu(screen.getByTestId('tree-node-node-1').firstChild!)
+            const createItem = screen.getByTestId('context-create-system')
+            expect(createItem).toHaveAttribute('data-disabled')
+
+            fireEvent.click(createItem)
+            expect(onCreateSubsystem).not.toHaveBeenCalled()
+        })
+
+        it('disables all three actions when canEdit is false', () => {
+            const onCopySystem = jest.fn()
+            const onPasteSystem = jest.fn()
+            const onCreateSubsystem = jest.fn()
+            renderTreeNode({
+                onCopySystem,
+                onPasteSystem,
+                onCreateSubsystem,
+                copiedSystemUid: 'other',
+                canEdit: false,
+            })
+
+            fireEvent.contextMenu(screen.getByTestId('tree-node-node-1').firstChild!)
+
+            expect(screen.getByTestId('context-copy-system')).toHaveAttribute('data-disabled')
+            expect(screen.getByTestId('context-paste-system')).toHaveAttribute('data-disabled')
+            expect(screen.getByTestId('context-create-system')).toHaveAttribute('data-disabled')
+
+            fireEvent.click(screen.getByTestId('context-copy-system'))
+            fireEvent.click(screen.getByTestId('context-paste-system'))
+            fireEvent.click(screen.getByTestId('context-create-system'))
+            expect(onCopySystem).not.toHaveBeenCalled()
+            expect(onPasteSystem).not.toHaveBeenCalled()
+            expect(onCreateSubsystem).not.toHaveBeenCalled()
         })
     })
 })

@@ -8,9 +8,10 @@ import type { QueryFetcherKey } from '@/utils/fetcher'
 import { queryFetcher } from '@/utils/fetcher'
 
 import useQueryManager from '../../../hooks/useQueryManager'
+import { SYSTEMS_TABLE_ID } from '../types/constants'
 
 export const useSystems = (
-    tableId: string = 'systems',
+    tableId: string = SYSTEMS_TABLE_ID,
     refetchOnMount: boolean = false,
     pageSizeDefault?: PageSizeOption,
     enableQueryURL: boolean = false,

@@ -1,4 +1,4 @@
-import { useMutation as useQueryMutation } from '@tanstack/react-query'
+import { useMutation as useQueryMutation, useQueryClient } from '@tanstack/react-query'
 import { type MutableRefObject } from 'react'
 import { useIntl } from 'react-intl'
 
@@ -6,6 +6,7 @@ import axiosInstance from '@/core/axios/axiosInstance'
 import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
 import { message } from '@/i18n/src/messages'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
+import { guardSystemEdit } from '@/modules/shared/system/edit-permission'
 import { useSuspenseSystemDetail } from '@/modules/systemItem/hooks/useSuspenseSystemDetail'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { BASE_URL } from '@/types/constants/common'
@@ -83,6 +84,7 @@ export const useSystemSheetUpdate = ({
     physicalItemUid,
 }: UseSystemSheetUpdateProps) => {
     const intl = useIntl()
+    const queryClient = useQueryClient()
     const { mutate: mutateProperties } = usePropertiesUpdate(physicalItemUid)
     const { systemDetail, refetch, physicalItem } = useSuspenseSystemDetail({
         uid,
@@ -119,7 +121,11 @@ export const useSystemSheetUpdate = ({
         },
     })
 
-    function updateSystemQuery(systemForm: SystemDetailFormType) {
+    async function updateSystemQuery(systemForm: SystemDetailFormType) {
+        // Per-system edit guard: the GraphQL updateSystems path is role-guarded only,
+        // so block the patch here for anyone not responsible for this system.
+        if (!(await guardSystemEdit(queryClient, uid, intl.formatMessage))) return
+
         // Note: operators and maintainedBy are now handled separately via
         // useAddSystemEmployee and useRemoveSystemEmployee hooks.
         // They are no longer part of the main system update mutation.

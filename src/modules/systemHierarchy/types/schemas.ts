@@ -43,6 +43,35 @@ const statisticsSchema = z.object({
     sparePartsCoverageSum: z.number().optional(),
 })
 
+const catalogueItemRefSchema = z.object({
+    uid: z.string(),
+    name: z.string().optional().nullable(),
+    catalogueNumber: z.string().optional().nullable(),
+    description: z.string().optional().nullable(),
+    category: codebookRefSchema.optional().nullable(),
+    supplier: codebookRefSchema.optional().nullable(),
+})
+
+// SystemLeaf.physicalItem is fed by two sources that share this type:
+//  - the REST leaves list (table rows) → nested `catalogueItem`, price/order fields
+//  - the GraphQL `useSystemDetail` mapping (detail panel) → flat catalogue fields
+// Hence this schema is a superset of both shapes; all fields are optional.
+const physicalItemSchema = z.object({
+    uid: z.string().optional().nullable(),
+    name: z.string().optional().nullable(),
+    price: z.number().optional().nullable(),
+    currency: z.string().optional().nullable(),
+    eun: z.string().optional().nullable(),
+    serialNumber: z.string().optional().nullable(),
+    notes: z.string().optional().nullable(),
+    catalogueNumber: z.string().optional().nullable(),
+    orderUid: z.string().optional().nullable(),
+    orderNumber: z.string().optional().nullable(),
+    itemUsage: codebookRefSchema.optional().nullable(),
+    conditionStatus: codebookRefSchema.optional().nullable(),
+    catalogueItem: catalogueItemRefSchema.optional().nullable(),
+})
+
 // --- Hierarchy endpoint (recursive tree) ---
 export interface HierarchyNode {
     uid: string
@@ -92,7 +121,7 @@ export const systemLeafSchema = z.object({
     statistics: statisticsSchema.optional().nullable(),
     miniImageUrl: z.array(z.string()).optional().nullable(),
     subSystems: z.array(z.string()).optional().nullable(),
-    physicalItem: z.any().optional().nullable(),
+    physicalItem: physicalItemSchema.optional().nullable(),
 })
 
 export const leavesResponseSchema = z.object({

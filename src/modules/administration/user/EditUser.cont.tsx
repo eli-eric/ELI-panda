@@ -147,6 +147,11 @@ export const EditUserContainer = ({ userUid, roles }: Props) => {
                 roles,
                 loading,
                 selectedRoles,
+                organization: {
+                    orgUnitCode: userDetail?.employee?.orgUnitCode,
+                    ldapUser: userDetail?.employee?.ldapUser,
+                    teams: userDetail?.teams,
+                },
             }}
         />
     )

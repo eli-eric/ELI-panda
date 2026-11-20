@@ -1,5 +1,4 @@
-import { HISTORY_TYPE } from '@/modules/systemItem/types/constants'
-
+import { HISTORY_TYPE } from '../../../types/history'
 import { getHistoryTypeVisual } from '../historyFeed.visuals'
 
 describe('getHistoryTypeVisual', () => {

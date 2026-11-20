@@ -6,8 +6,6 @@ import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { message } from '@/i18n/src/messages'
 
-import type { HierarchyView } from '../../types/constants'
-import { ViewSwitcher } from '../graph/ViewSwitcher.comp'
 import type {
     ParentPathItem,
     SelectAncestorHandler,
@@ -20,11 +18,10 @@ interface LeavesPanelHeaderProps {
     parentSystemType: string | null
     parentPath: ParentPathItem[] | null
     totalCount: number
+    directOnly?: boolean
     isLoading: boolean
     onViewParentDetail: () => void
     onSelectAncestor: SelectAncestorHandler
-    activeView: HierarchyView
-    onViewChange: (view: HierarchyView) => void
 }
 
 export const LeavesPanelHeader: FC<LeavesPanelHeaderProps> = ({
@@ -33,11 +30,10 @@ export const LeavesPanelHeader: FC<LeavesPanelHeaderProps> = ({
     parentSystemType,
     parentPath,
     totalCount,
+    directOnly = false,
     isLoading,
     onViewParentDetail,
     onSelectAncestor,
-    activeView,
-    onViewChange,
 }) => {
     const { formatMessage: fm } = useIntl()
 
@@ -73,7 +69,6 @@ export const LeavesPanelHeader: FC<LeavesPanelHeaderProps> = ({
                     {parentSystemType ?? fm({ id: message.systemHierarchy.leaves.title })}
                 </span>
                 <div className="flex items-center gap-2">
-                    <ViewSwitcher activeView={activeView} onViewChange={onViewChange} />
                     <Button
                         variant="ghost"
                         size="sm"
@@ -84,7 +79,14 @@ export const LeavesPanelHeader: FC<LeavesPanelHeaderProps> = ({
                         {fm({ id: message.systemHierarchy.leaves.viewParent })}
                     </Button>
                     {totalCount > 0 && (
-                        <span className="text-xs text-muted-foreground">({totalCount})</span>
+                        // Qualified in direct-only mode: the tree badge for the same node
+                        // still shows the total, so two different numbers are on screen
+                        // at once and the header is what explains the difference.
+                        <span className="text-xs text-muted-foreground">
+                            {directOnly
+                                ? `(${totalCount} ${fm({ id: message.systemHierarchy.leaves.directCountSuffix })})`
+                                : `(${totalCount})`}
+                        </span>
                     )}
                 </div>
             </div>
