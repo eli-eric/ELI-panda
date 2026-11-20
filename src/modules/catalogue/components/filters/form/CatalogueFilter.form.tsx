@@ -1,15 +1,16 @@
-import { useQueryState } from 'next-usequerystate'
 import { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import { ComboboxTree } from '@/components/form/ComboboxTree'
 import { Input } from '@/components/form/inputs'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
+import { useUrlQueryState } from '@/hooks/useUrlQueryState'
 import { cn } from '@/lib/utils'
 import useCatalogueFormFields from '@/modules/catalogueItem/components/form/CatalogueForm.fields'
 import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
 import { CategoryPropFilters } from '@/modules/shared/form/CategoryPropFilters'
 import { useFormControlStore } from '@/store/useFormControlStore'
+import { parseJsonParam } from '@/utils/urlQuery'
 
 interface CatalogueFilterFormProps {
     tableId: string
@@ -21,7 +22,7 @@ export const CatalogueFilterForm = ({
     catalogueCategoryProperties,
 }: CatalogueFilterFormProps) => {
     const fields = useCatalogueFormFields()
-    const [categoryQuery, setCategoryQuery] = useQueryState('category', {
+    const [categoryQuery, setCategoryQuery] = useUrlQueryState('category', {
         history: 'push',
     })
 
@@ -32,13 +33,7 @@ export const CatalogueFilterForm = ({
     // Keep the category field in sync with the URL param (mount + back/forward nav).
     // category is a user-editable URL param, so guard against malformed JSON.
     useEffect(() => {
-        let parsed = null
-        try {
-            parsed = categoryQuery ? JSON.parse(categoryQuery) : null
-        } catch {
-            parsed = null
-        }
-        setValue('category', parsed)
+        setValue('category', parseJsonParam<unknown>(categoryQuery, null))
     }, [categoryQuery, setValue])
 
     return (

@@ -8,7 +8,7 @@ import { useCatalogueFilterSheet } from '../hooks/useCatalogueFilterSheet'
 
 let queryCategory: string | null = null
 
-jest.mock('next-usequerystate', () => ({
+jest.mock('nuqs', () => ({
     useQueryState: () => [queryCategory, jest.fn()],
 }))
 

@@ -1,6 +1,6 @@
-import { useQueryState } from 'next-usequerystate'
 import { useCallback, useMemo } from 'react'
 
+import { useUrlQueryState } from '@/hooks/useUrlQueryState'
 import useTableStateStore from '@/store/useTableStateStore'
 import type { PaginationSettings, PaginationState, UsePaginationReturn } from '@/types/pagination'
 import {
@@ -36,8 +36,8 @@ export function usePagination({
     onPageChange,
 }: UsePaginationOptions): UsePaginationReturn {
     // URL state (only used when enableQueryURL=true)
-    const [pageQuery, setPageQuery] = useQueryState('page')
-    const [pageSizeQuery, setPageSizeQuery] = useQueryState('pageSize')
+    const [pageQuery, setPageQuery] = useUrlQueryState('page')
+    const [pageSizeQuery, setPageSizeQuery] = useUrlQueryState('pageSize')
 
     // Store state and actions
     const { instances, setPaginationState } = useTableStateStore()

@@ -20,7 +20,7 @@ jest.mock('@/modules/shared/table/ColumnVisibilityDropdown.comp', () => ({
     ColumnVisibilityDropdown: () => <div data-testid="column-visibility-dropdown" />,
 }))
 
-jest.mock('next-usequerystate', () => ({
+jest.mock('nuqs', () => ({
     useQueryState: () => ['', jest.fn()],
 }))
 

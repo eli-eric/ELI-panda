@@ -80,7 +80,7 @@ jest.mock('@/hooks/useQueryManager', () => ({
     default: () => ({ query: '' }),
 }))
 
-jest.mock('next-usequerystate', () => ({
+jest.mock('nuqs', () => ({
     useQueryState: () => [null, jest.fn()],
 }))
 

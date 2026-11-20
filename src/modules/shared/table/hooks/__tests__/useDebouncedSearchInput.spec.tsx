@@ -7,7 +7,7 @@ const setQuerySearch = jest.fn()
 let querySearch: string | null = null
 let storeSearch: string | undefined
 
-jest.mock('next-usequerystate', () => ({
+jest.mock('nuqs', () => ({
     useQueryState: () => [querySearch, setQuerySearch],
 }))
 

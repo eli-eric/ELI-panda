@@ -2,56 +2,100 @@ import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 
 import { Badge } from '@/components/ui/badge'
-import type { User } from '@/types/gql/graphql'
 
+import type { UserListItem } from '../utils/filterUsers'
 import { UserNameCell } from './UserNameCell'
+
+const BadgeList = ({ items }: { items: { key: string; label: string }[] }) => (
+    <div className="flex flex-wrap gap-1">
+        {items.map(item => (
+            <Badge key={item.key} variant="secondary">
+                {item.label}
+            </Badge>
+        ))}
+    </div>
+)
 
 export const useUsersColumns = () => {
     const columns = useMemo(
-        (): ColumnDef<User, any>[] => [
+        (): ColumnDef<UserListItem, any>[] => [
             {
                 header: 'User Name',
-                accessorFn: row => row?.username,
+                accessorFn: row => row.username,
                 cell: UserNameCell,
                 id: 'username',
                 size: 300,
                 meta: { sticky: true },
             },
             {
-                header: 'Facility',
-                accessorFn: row => row?.facility?.name,
-                id: 'facility',
+                header: 'Name',
+                accessorFn: row => [row.firstName, row.lastName].filter(Boolean).join(' '),
+                id: 'name',
                 size: 200,
             },
             {
-                header: 'First Name',
-                accessorFn: row => row?.firstName,
-                id: 'firstName',
-                size: 100,
+                header: 'Email',
+                accessorFn: row => row.email,
+                id: 'email',
+                size: 260,
             },
             {
-                header: 'Last Name',
-                accessorFn: row => row?.lastName,
-                id: 'lastName',
-                size: 100,
+                header: 'LDAP User',
+                accessorFn: row => row.employee?.ldapUser,
+                id: 'ldapUser',
+                size: 260,
             },
             {
-                header: 'Is enabled',
-                accessorFn: row => row?.isEnabled,
+                header: 'Org. Unit (OJ)',
+                accessorFn: row => row.employee?.orgUnitCode,
+                id: 'orgUnitCode',
+                size: 130,
+            },
+            {
+                header: 'Teams',
+                accessorFn: row => row.teams.map(team => team.name).join(', '),
+                id: 'teams',
+                size: 220,
+                cell: ({ row }) => (
+                    <BadgeList
+                        items={row.original.teams.map(team => ({
+                            key: team.uid,
+                            label: team.name,
+                        }))}
+                    />
+                ),
+            },
+            {
+                header: 'Facility',
+                accessorFn: row => row.facility?.name,
+                id: 'facility',
+                size: 160,
+            },
+            {
+                header: 'Status',
+                accessorFn: row => (row.isEnabled ? 'Enabled' : 'Disabled'),
                 id: 'isEnabled',
+                size: 110,
+                cell: ({ row }) => (
+                    <Badge variant={row.original.isEnabled ? 'secondary' : 'destructive'}>
+                        {row.original.isEnabled ? 'Enabled' : 'Disabled'}
+                    </Badge>
+                ),
             },
             {
                 header: 'Roles',
-                accessorFn: row => row?.roles,
+                accessorFn: row => row.roles.map(role => role.code).join(', '),
                 id: 'roles',
-                cell: ({ getValue }) => (
-                    <div>
-                        {getValue()?.map(role => (
-                            <Badge key={role.code}>{role.code}</Badge>
-                        ))}
-                    </div>
-                ),
                 size: 500,
+                enableSorting: false,
+                cell: ({ row }) => (
+                    <BadgeList
+                        items={row.original.roles.map(role => ({
+                            key: role.uid,
+                            label: role.code,
+                        }))}
+                    />
+                ),
             },
         ],
         [],

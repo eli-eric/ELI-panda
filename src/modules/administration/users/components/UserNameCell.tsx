@@ -7,11 +7,11 @@ import usePermission from '@/hooks/usePermission'
 import useWarningModal from '@/hooks/useWarningModal'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
-import type { User } from '@/types/gql/graphql'
 
 import { useUserDelete } from '../hooks/useUserDelete'
+import type { UserListItem } from '../utils/filterUsers'
 
-interface LocationCellProps extends CellContext<User, any> {
+interface LocationCellProps extends CellContext<UserListItem, any> {
     isHoveringId?: number | string
 }
 

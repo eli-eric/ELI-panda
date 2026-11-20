@@ -3,7 +3,7 @@ name: Sync docs to GitHub Wiki
 on:
     push:
         branches:
-            - dev
+            - production
         paths:
             - 'docs/**'
             - 'scripts/sync-wiki.mjs'
