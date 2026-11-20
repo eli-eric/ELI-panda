@@ -117,6 +117,7 @@ type RoomCard @authentication {
 type Team @authentication {
     uid: ID! @id
     name: String!
+    code: String
     facility: Facility! @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
 }
 
@@ -133,6 +134,7 @@ type Employee @authentication {
     superiorNUmber: String
     jobPosition: String
     jobPositionCode: String
+    orgUnitCode: String
     workplaceName: String
     email: String
 }
@@ -517,6 +519,7 @@ type User
     passwordHash: String!
     passwordToChange: Boolean
     employee: Employee @relationship(type: "HAS_USER", direction: IN)
+    teams: [Team!]! @relationship(type: "BELONGS_TO_TEAM", direction: OUT)
     uid: ID! @id
     username: String!
     userSettings: [UserSettings!]! @relationship(type: "HAS_SETTINGS", direction: OUT)

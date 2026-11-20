@@ -5053,6 +5053,7 @@ export type Employee = {
   jobPosition?: Maybe<Scalars['String']['output']>;
   jobPositionCode?: Maybe<Scalars['String']['output']>;
   lastName: Scalars['String']['output'];
+  orgUnitCode?: Maybe<Scalars['String']['output']>;
   phone1?: Maybe<Scalars['String']['output']>;
   phone2?: Maybe<Scalars['String']['output']>;
   superiorNUmber?: Maybe<Scalars['String']['output']>;
@@ -5117,6 +5118,7 @@ export type EmployeeAggregateSelection = {
   jobPosition: StringAggregateSelectionNullable;
   jobPositionCode: StringAggregateSelectionNullable;
   lastName: StringAggregateSelectionNonNullable;
+  orgUnitCode: StringAggregateSelectionNullable;
   phone1: StringAggregateSelectionNullable;
   phone2: StringAggregateSelectionNullable;
   superiorNUmber: StringAggregateSelectionNullable;
@@ -5142,6 +5144,7 @@ export type EmployeeCreateInput = {
   jobPosition?: InputMaybe<Scalars['String']['input']>;
   jobPositionCode?: InputMaybe<Scalars['String']['input']>;
   lastName: Scalars['String']['input'];
+  orgUnitCode?: InputMaybe<Scalars['String']['input']>;
   phone1?: InputMaybe<Scalars['String']['input']>;
   phone2?: InputMaybe<Scalars['String']['input']>;
   superiorNUmber?: InputMaybe<Scalars['String']['input']>;
@@ -5322,6 +5325,7 @@ export type EmployeeSort = {
   jobPosition?: InputMaybe<SortDirection>;
   jobPositionCode?: InputMaybe<SortDirection>;
   lastName?: InputMaybe<SortDirection>;
+  orgUnitCode?: InputMaybe<SortDirection>;
   phone1?: InputMaybe<SortDirection>;
   phone2?: InputMaybe<SortDirection>;
   superiorNUmber?: InputMaybe<SortDirection>;
@@ -5338,6 +5342,7 @@ export type EmployeeUpdateInput = {
   jobPosition?: InputMaybe<Scalars['String']['input']>;
   jobPositionCode?: InputMaybe<Scalars['String']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
+  orgUnitCode?: InputMaybe<Scalars['String']['input']>;
   phone1?: InputMaybe<Scalars['String']['input']>;
   phone2?: InputMaybe<Scalars['String']['input']>;
   superiorNUmber?: InputMaybe<Scalars['String']['input']>;
@@ -5557,6 +5562,11 @@ export type EmployeeWhere = {
   lastName_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
   lastName_IN?: InputMaybe<Array<Scalars['String']['input']>>;
   lastName_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  orgUnitCode?: InputMaybe<Scalars['String']['input']>;
+  orgUnitCode_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  orgUnitCode_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  orgUnitCode_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  orgUnitCode_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
   phone1?: InputMaybe<Scalars['String']['input']>;
   phone1_CONTAINS?: InputMaybe<Scalars['String']['input']>;
   phone1_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
@@ -5892,6 +5902,7 @@ export type HallContactPersonEmployeeEmployeeNodeAggregateSelection = {
   jobPosition: StringAggregateSelectionNullable;
   jobPositionCode: StringAggregateSelectionNullable;
   lastName: StringAggregateSelectionNonNullable;
+  orgUnitCode: StringAggregateSelectionNullable;
   phone1: StringAggregateSelectionNullable;
   phone2: StringAggregateSelectionNullable;
   superiorNUmber: StringAggregateSelectionNullable;
@@ -5999,6 +6010,21 @@ export type HallContactPersonEmployeeNodeAggregationWhereInput = {
   lastName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   lastName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   lastName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  orgUnitCode_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  orgUnitCode_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  orgUnitCode_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  orgUnitCode_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  orgUnitCode_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
   phone1_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   phone1_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   phone1_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -11836,6 +11862,21 @@ export type RoomCardContactPersonsDeptNodeAggregationWhereInput = {
   lastName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   lastName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   lastName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  orgUnitCode_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  orgUnitCode_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  orgUnitCode_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  orgUnitCode_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  orgUnitCode_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
   phone1_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   phone1_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   phone1_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -12079,6 +12120,7 @@ export type RoomCardEmployeeContactPersonsDeptNodeAggregateSelection = {
   jobPosition: StringAggregateSelectionNullable;
   jobPositionCode: StringAggregateSelectionNullable;
   lastName: StringAggregateSelectionNonNullable;
+  orgUnitCode: StringAggregateSelectionNullable;
   phone1: StringAggregateSelectionNullable;
   phone2: StringAggregateSelectionNullable;
   superiorNUmber: StringAggregateSelectionNullable;
@@ -12395,6 +12437,7 @@ export type RoomCardTeamTeamsAggregationSelection = {
 
 export type RoomCardTeamTeamsNodeAggregateSelection = {
   __typename?: 'RoomCardTeamTeamsNodeAggregateSelection';
+  code: StringAggregateSelectionNullable;
   name: StringAggregateSelectionNonNullable;
   uid: IdAggregateSelectionNonNullable;
 };
@@ -12459,6 +12502,21 @@ export type RoomCardTeamsNodeAggregationWhereInput = {
   AND?: InputMaybe<Array<RoomCardTeamsNodeAggregationWhereInput>>;
   NOT?: InputMaybe<RoomCardTeamsNodeAggregationWhereInput>;
   OR?: InputMaybe<Array<RoomCardTeamsNodeAggregationWhereInput>>;
+  code_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  code_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
   name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -15958,6 +16016,7 @@ export type SystemEmployeeMaintainedByNodeAggregateSelection = {
   jobPosition: StringAggregateSelectionNullable;
   jobPositionCode: StringAggregateSelectionNullable;
   lastName: StringAggregateSelectionNonNullable;
+  orgUnitCode: StringAggregateSelectionNullable;
   phone1: StringAggregateSelectionNullable;
   phone2: StringAggregateSelectionNullable;
   superiorNUmber: StringAggregateSelectionNullable;
@@ -15980,6 +16039,7 @@ export type SystemEmployeeOperatorsNodeAggregateSelection = {
   jobPosition: StringAggregateSelectionNullable;
   jobPositionCode: StringAggregateSelectionNullable;
   lastName: StringAggregateSelectionNonNullable;
+  orgUnitCode: StringAggregateSelectionNullable;
   phone1: StringAggregateSelectionNullable;
   phone2: StringAggregateSelectionNullable;
   superiorNUmber: StringAggregateSelectionNullable;
@@ -16002,6 +16062,7 @@ export type SystemEmployeeResponsibleNodeAggregateSelection = {
   jobPosition: StringAggregateSelectionNullable;
   jobPositionCode: StringAggregateSelectionNullable;
   lastName: StringAggregateSelectionNonNullable;
+  orgUnitCode: StringAggregateSelectionNullable;
   phone1: StringAggregateSelectionNullable;
   phone2: StringAggregateSelectionNullable;
   superiorNUmber: StringAggregateSelectionNullable;
@@ -17796,6 +17857,21 @@ export type SystemMaintainedByNodeAggregationWhereInput = {
   lastName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   lastName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   lastName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  orgUnitCode_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  orgUnitCode_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  orgUnitCode_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  orgUnitCode_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  orgUnitCode_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
   phone1_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   phone1_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   phone1_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -17979,6 +18055,21 @@ export type SystemOperatorsNodeAggregationWhereInput = {
   lastName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   lastName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   lastName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  orgUnitCode_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  orgUnitCode_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  orgUnitCode_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  orgUnitCode_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  orgUnitCode_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
   phone1_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   phone1_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   phone1_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -19705,6 +19796,21 @@ export type SystemResponsibleNodeAggregationWhereInput = {
   lastName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   lastName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   lastName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  orgUnitCode_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  orgUnitCode_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  orgUnitCode_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  orgUnitCode_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  orgUnitCode_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
   phone1_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   phone1_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   phone1_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -19798,6 +19904,21 @@ export type SystemResponsibleTeamNodeAggregationWhereInput = {
   AND?: InputMaybe<Array<SystemResponsibleTeamNodeAggregationWhereInput>>;
   NOT?: InputMaybe<SystemResponsibleTeamNodeAggregationWhereInput>;
   OR?: InputMaybe<Array<SystemResponsibleTeamNodeAggregationWhereInput>>;
+  code_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  code_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
   name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -20698,6 +20819,7 @@ export type SystemTeamResponsibleTeamAggregationSelection = {
 
 export type SystemTeamResponsibleTeamNodeAggregateSelection = {
   __typename?: 'SystemTeamResponsibleTeamNodeAggregateSelection';
+  code: StringAggregateSelectionNullable;
   name: StringAggregateSelectionNonNullable;
   uid: IdAggregateSelectionNonNullable;
 };
@@ -22171,6 +22293,7 @@ export type SystemsConnection = {
 
 export type Team = {
   __typename?: 'Team';
+  code?: Maybe<Scalars['String']['output']>;
   facility: Facility;
   facilityAggregate?: Maybe<TeamFacilityFacilityAggregationSelection>;
   facilityConnection: TeamFacilityConnection;
@@ -22202,6 +22325,7 @@ export type TeamFacilityConnectionArgs = {
 
 export type TeamAggregateSelection = {
   __typename?: 'TeamAggregateSelection';
+  code: StringAggregateSelectionNullable;
   count: Scalars['Int']['output'];
   name: StringAggregateSelectionNonNullable;
   uid: IdAggregateSelectionNonNullable;
@@ -22216,6 +22340,7 @@ export type TeamConnectWhere = {
 };
 
 export type TeamCreateInput = {
+  code?: InputMaybe<Scalars['String']['input']>;
   facility?: InputMaybe<TeamFacilityFieldInput>;
   name: Scalars['String']['input'];
 };
@@ -22383,11 +22508,13 @@ export type TeamRelationInput = {
 
 /** Fields to sort Teams by. The order in which sorts are applied is not guaranteed when specifying many fields in one TeamSort object. */
 export type TeamSort = {
+  code?: InputMaybe<SortDirection>;
   name?: InputMaybe<SortDirection>;
   uid?: InputMaybe<SortDirection>;
 };
 
 export type TeamUpdateInput = {
+  code?: InputMaybe<Scalars['String']['input']>;
   facility?: InputMaybe<TeamFacilityUpdateFieldInput>;
   name?: InputMaybe<Scalars['String']['input']>;
 };
@@ -22396,6 +22523,11 @@ export type TeamWhere = {
   AND?: InputMaybe<Array<TeamWhere>>;
   NOT?: InputMaybe<TeamWhere>;
   OR?: InputMaybe<Array<TeamWhere>>;
+  code?: InputMaybe<Scalars['String']['input']>;
+  code_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  code_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  code_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  code_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
   facility?: InputMaybe<FacilityWhere>;
   facilityAggregate?: InputMaybe<TeamFacilityAggregateInput>;
   facilityConnection?: InputMaybe<TeamFacilityConnectionWhere>;
@@ -22723,6 +22855,9 @@ export type User = {
   roles: Array<Role>;
   rolesAggregate?: Maybe<UserRoleRolesAggregationSelection>;
   rolesConnection: UserRolesConnection;
+  teams: Array<Team>;
+  teamsAggregate?: Maybe<UserTeamTeamsAggregationSelection>;
+  teamsConnection: UserTeamsConnection;
   uid: Scalars['ID']['output'];
   userSettings: Array<UserSettings>;
   userSettingsAggregate?: Maybe<UserUserSettingsUserSettingsAggregationSelection>;
@@ -22797,6 +22932,28 @@ export type UserRolesConnectionArgs = {
 };
 
 
+export type UserTeamsArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  options?: InputMaybe<TeamOptions>;
+  where?: InputMaybe<TeamWhere>;
+};
+
+
+export type UserTeamsAggregateArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  where?: InputMaybe<TeamWhere>;
+};
+
+
+export type UserTeamsConnectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<UserTeamsConnectionSort>>;
+  where?: InputMaybe<UserTeamsConnectionWhere>;
+};
+
+
 export type UserUserSettingsArgs = {
   directed?: InputMaybe<Scalars['Boolean']['input']>;
   options?: InputMaybe<UserSettingsOptions>;
@@ -22833,6 +22990,7 @@ export type UserConnectInput = {
   employee?: InputMaybe<UserEmployeeConnectFieldInput>;
   facility?: InputMaybe<UserFacilityConnectFieldInput>;
   roles?: InputMaybe<Array<UserRolesConnectFieldInput>>;
+  teams?: InputMaybe<Array<UserTeamsConnectFieldInput>>;
   userSettings?: InputMaybe<Array<UserUserSettingsConnectFieldInput>>;
 };
 
@@ -22850,6 +23008,7 @@ export type UserCreateInput = {
   passwordHash: Scalars['String']['input'];
   passwordToChange?: InputMaybe<Scalars['Boolean']['input']>;
   roles?: InputMaybe<UserRolesFieldInput>;
+  teams?: InputMaybe<UserTeamsFieldInput>;
   userSettings?: InputMaybe<UserUserSettingsFieldInput>;
   username: Scalars['String']['input'];
 };
@@ -22858,6 +23017,7 @@ export type UserDeleteInput = {
   employee?: InputMaybe<UserEmployeeDeleteFieldInput>;
   facility?: InputMaybe<UserFacilityDeleteFieldInput>;
   roles?: InputMaybe<Array<UserRolesDeleteFieldInput>>;
+  teams?: InputMaybe<Array<UserTeamsDeleteFieldInput>>;
   userSettings?: InputMaybe<Array<UserUserSettingsDeleteFieldInput>>;
 };
 
@@ -22865,6 +23025,7 @@ export type UserDisconnectInput = {
   employee?: InputMaybe<UserEmployeeDisconnectFieldInput>;
   facility?: InputMaybe<UserFacilityDisconnectFieldInput>;
   roles?: InputMaybe<Array<UserRolesDisconnectFieldInput>>;
+  teams?: InputMaybe<Array<UserTeamsDisconnectFieldInput>>;
   userSettings?: InputMaybe<Array<UserUserSettingsDisconnectFieldInput>>;
 };
 
@@ -22939,6 +23100,7 @@ export type UserEmployeeEmployeeNodeAggregateSelection = {
   jobPosition: StringAggregateSelectionNullable;
   jobPositionCode: StringAggregateSelectionNullable;
   lastName: StringAggregateSelectionNonNullable;
+  orgUnitCode: StringAggregateSelectionNullable;
   phone1: StringAggregateSelectionNullable;
   phone2: StringAggregateSelectionNullable;
   superiorNUmber: StringAggregateSelectionNullable;
@@ -23046,6 +23208,21 @@ export type UserEmployeeNodeAggregationWhereInput = {
   lastName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   lastName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   lastName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  orgUnitCode_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  orgUnitCode_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  orgUnitCode_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  orgUnitCode_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  orgUnitCode_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  orgUnitCode_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
   phone1_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   phone1_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   phone1_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -23289,6 +23466,7 @@ export type UserRelationInput = {
   employee?: InputMaybe<UserEmployeeCreateFieldInput>;
   facility?: InputMaybe<UserFacilityCreateFieldInput>;
   roles?: InputMaybe<Array<UserRolesCreateFieldInput>>;
+  teams?: InputMaybe<Array<UserTeamsCreateFieldInput>>;
   userSettings?: InputMaybe<Array<UserUserSettingsCreateFieldInput>>;
 };
 
@@ -23735,6 +23913,130 @@ export type UserSort = {
   username?: InputMaybe<SortDirection>;
 };
 
+export type UserTeamTeamsAggregationSelection = {
+  __typename?: 'UserTeamTeamsAggregationSelection';
+  count: Scalars['Int']['output'];
+  node?: Maybe<UserTeamTeamsNodeAggregateSelection>;
+};
+
+export type UserTeamTeamsNodeAggregateSelection = {
+  __typename?: 'UserTeamTeamsNodeAggregateSelection';
+  code: StringAggregateSelectionNullable;
+  name: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
+};
+
+export type UserTeamsAggregateInput = {
+  AND?: InputMaybe<Array<UserTeamsAggregateInput>>;
+  NOT?: InputMaybe<UserTeamsAggregateInput>;
+  OR?: InputMaybe<Array<UserTeamsAggregateInput>>;
+  count?: InputMaybe<Scalars['Int']['input']>;
+  count_GT?: InputMaybe<Scalars['Int']['input']>;
+  count_GTE?: InputMaybe<Scalars['Int']['input']>;
+  count_LT?: InputMaybe<Scalars['Int']['input']>;
+  count_LTE?: InputMaybe<Scalars['Int']['input']>;
+  node?: InputMaybe<UserTeamsNodeAggregationWhereInput>;
+};
+
+export type UserTeamsConnectFieldInput = {
+  connect?: InputMaybe<Array<TeamConnectInput>>;
+  /** Whether or not to overwrite any matching relationship with the new properties. */
+  overwrite?: Scalars['Boolean']['input'];
+  where?: InputMaybe<TeamConnectWhere>;
+};
+
+export type UserTeamsConnection = {
+  __typename?: 'UserTeamsConnection';
+  edges: Array<UserTeamsRelationship>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type UserTeamsConnectionSort = {
+  node?: InputMaybe<TeamSort>;
+};
+
+export type UserTeamsConnectionWhere = {
+  AND?: InputMaybe<Array<UserTeamsConnectionWhere>>;
+  NOT?: InputMaybe<UserTeamsConnectionWhere>;
+  OR?: InputMaybe<Array<UserTeamsConnectionWhere>>;
+  node?: InputMaybe<TeamWhere>;
+};
+
+export type UserTeamsCreateFieldInput = {
+  node: TeamCreateInput;
+};
+
+export type UserTeamsDeleteFieldInput = {
+  delete?: InputMaybe<TeamDeleteInput>;
+  where?: InputMaybe<UserTeamsConnectionWhere>;
+};
+
+export type UserTeamsDisconnectFieldInput = {
+  disconnect?: InputMaybe<TeamDisconnectInput>;
+  where?: InputMaybe<UserTeamsConnectionWhere>;
+};
+
+export type UserTeamsFieldInput = {
+  connect?: InputMaybe<Array<UserTeamsConnectFieldInput>>;
+  create?: InputMaybe<Array<UserTeamsCreateFieldInput>>;
+};
+
+export type UserTeamsNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<UserTeamsNodeAggregationWhereInput>>;
+  NOT?: InputMaybe<UserTeamsNodeAggregationWhereInput>;
+  OR?: InputMaybe<Array<UserTeamsNodeAggregationWhereInput>>;
+  code_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  code_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  name_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type UserTeamsRelationship = {
+  __typename?: 'UserTeamsRelationship';
+  cursor: Scalars['String']['output'];
+  node: Team;
+};
+
+export type UserTeamsUpdateConnectionInput = {
+  node?: InputMaybe<TeamUpdateInput>;
+};
+
+export type UserTeamsUpdateFieldInput = {
+  connect?: InputMaybe<Array<UserTeamsConnectFieldInput>>;
+  create?: InputMaybe<Array<UserTeamsCreateFieldInput>>;
+  delete?: InputMaybe<Array<UserTeamsDeleteFieldInput>>;
+  disconnect?: InputMaybe<Array<UserTeamsDisconnectFieldInput>>;
+  update?: InputMaybe<UserTeamsUpdateConnectionInput>;
+  where?: InputMaybe<UserTeamsConnectionWhere>;
+};
+
 export type UserUpdateInput = {
   email?: InputMaybe<Scalars['String']['input']>;
   employee?: InputMaybe<UserEmployeeUpdateFieldInput>;
@@ -23745,6 +24047,7 @@ export type UserUpdateInput = {
   passwordHash?: InputMaybe<Scalars['String']['input']>;
   passwordToChange?: InputMaybe<Scalars['Boolean']['input']>;
   roles?: InputMaybe<Array<UserRolesUpdateFieldInput>>;
+  teams?: InputMaybe<Array<UserTeamsUpdateFieldInput>>;
   userSettings?: InputMaybe<Array<UserUserSettingsUpdateFieldInput>>;
   username?: InputMaybe<Scalars['String']['input']>;
 };
@@ -23942,6 +24245,23 @@ export type UserWhere = {
   roles_SINGLE?: InputMaybe<RoleWhere>;
   /** Return Users where some of the related Roles match this filter */
   roles_SOME?: InputMaybe<RoleWhere>;
+  teamsAggregate?: InputMaybe<UserTeamsAggregateInput>;
+  /** Return Users where all of the related UserTeamsConnections match this filter */
+  teamsConnection_ALL?: InputMaybe<UserTeamsConnectionWhere>;
+  /** Return Users where none of the related UserTeamsConnections match this filter */
+  teamsConnection_NONE?: InputMaybe<UserTeamsConnectionWhere>;
+  /** Return Users where one of the related UserTeamsConnections match this filter */
+  teamsConnection_SINGLE?: InputMaybe<UserTeamsConnectionWhere>;
+  /** Return Users where some of the related UserTeamsConnections match this filter */
+  teamsConnection_SOME?: InputMaybe<UserTeamsConnectionWhere>;
+  /** Return Users where all of the related Teams match this filter */
+  teams_ALL?: InputMaybe<TeamWhere>;
+  /** Return Users where none of the related Teams match this filter */
+  teams_NONE?: InputMaybe<TeamWhere>;
+  /** Return Users where one of the related Teams match this filter */
+  teams_SINGLE?: InputMaybe<TeamWhere>;
+  /** Return Users where some of the related Teams match this filter */
+  teams_SOME?: InputMaybe<TeamWhere>;
   uid?: InputMaybe<Scalars['ID']['input']>;
   uid_CONTAINS?: InputMaybe<Scalars['ID']['input']>;
   uid_ENDS_WITH?: InputMaybe<Scalars['ID']['input']>;
@@ -24867,7 +25187,7 @@ export type UserQueryQueryVariables = Exact<{
 }>;
 
 
-export type UserQueryQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', uid: string, email: string, firstName: string, isEnabled: boolean, lastName: string, passwordToChange?: boolean | null, username: string, employee?: { __typename?: 'Employee', uid: string, fullName?: string | null } | null, roles: Array<{ __typename?: 'Role', name: string, code: string, uid: string }>, facility?: { __typename?: 'Facility', name: string, code: string } | null }> };
+export type UserQueryQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', uid: string, email: string, firstName: string, isEnabled: boolean, lastName: string, passwordToChange?: boolean | null, username: string, employee?: { __typename?: 'Employee', uid: string, fullName?: string | null, orgUnitCode?: string | null } | null, teams: Array<{ __typename?: 'Team', uid: string, name: string, code?: string | null }>, roles: Array<{ __typename?: 'Role', name: string, code: string, uid: string }>, facility?: { __typename?: 'Facility', name: string, code: string } | null }> };
 
 export type UpdateUsersMutationVariables = Exact<{
   where?: InputMaybe<UserWhere>;
@@ -25331,7 +25651,7 @@ export const QueryDocument = {"kind":"Document","definitions":[{"kind":"Operatio
 export const GetFacilitiesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetFacilities"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"facilities"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<GetFacilitiesQuery, GetFacilitiesQueryVariables>;
 export const GetRolesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetRoles"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"roles"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}}]}}]} as unknown as DocumentNode<GetRolesQuery, GetRolesQueryVariables>;
 export const CreateUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateUser"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UserCreateInput"}}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createUsers"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}}]}}]}}]} as unknown as DocumentNode<CreateUserMutation, CreateUserMutationVariables>;
-export const UserQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"UserQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"UserWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"isEnabled"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"passwordToChange"}},{"kind":"Field","name":{"kind":"Name","value":"employee"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"roles"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"facility"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}}]}}]} as unknown as DocumentNode<UserQueryQuery, UserQueryQueryVariables>;
+export const UserQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"UserQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"UserWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"isEnabled"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"passwordToChange"}},{"kind":"Field","name":{"kind":"Name","value":"employee"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"orgUnitCode"}}]}},{"kind":"Field","name":{"kind":"Name","value":"teams"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}},{"kind":"Field","name":{"kind":"Name","value":"roles"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"facility"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}}]}}]} as unknown as DocumentNode<UserQueryQuery, UserQueryQueryVariables>;
 export const UpdateUsersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateUsers"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"UserWhere"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"update"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"UserUpdateInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateUsers"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}},{"kind":"Argument","name":{"kind":"Name","value":"update"},"value":{"kind":"Variable","name":{"kind":"Name","value":"update"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}}]}}]}}]} as unknown as DocumentNode<UpdateUsersMutation, UpdateUsersMutationVariables>;
 export const DeleteUsersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteUsers"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"UserWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteUsers"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodesDeleted"}}]}}]}}]} as unknown as DocumentNode<DeleteUsersMutation, DeleteUsersMutationVariables>;
 export const UsersQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"UsersQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"UserWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"isEnabled"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"passwordToChange"}},{"kind":"Field","name":{"kind":"Name","value":"employee"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"roles"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"facility"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}}]}}]} as unknown as DocumentNode<UsersQueryQuery, UsersQueryQueryVariables>;

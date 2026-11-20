@@ -426,6 +426,10 @@ export const messages = {
             email: 'Email address',
             facility: 'Facility',
             roles: 'Roles',
+            organization: 'Organization',
+            orgUnitCode: 'Org. unit code (OJ)',
+            teams: 'Teams',
+            noTeams: 'No teams',
         },
     },
     authPage: {
