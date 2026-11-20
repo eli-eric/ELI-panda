@@ -114,6 +114,8 @@ export const getEndpoints = ({
         teamMembers: uid ? `/teams/${uid}/members` : null,
         teamMember: uid && itemUid ? `/teams/${uid}/members/${itemUid}` : null,
         teamAssignableUsers: `/teams/assignable-users${query}`,
+        cronHistory: '/cron/history',
+        cronSyncEmployees: '/cron/sync-employees',
     }
     return endpoints
 }

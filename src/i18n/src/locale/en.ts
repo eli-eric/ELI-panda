@@ -179,10 +179,8 @@ export const messages = {
             fileSizeKb: '{value} KB',
             actions: 'Actions',
             uploading: 'Uploading {done}/{total, plural, one {# file} other {# files}}',
-            uploadSuccess:
-                '{count, plural, one {# file uploaded} other {# files uploaded}}',
-            uploadError:
-                '{count, plural, one {# file failed} other {# files failed}}: {names}',
+            uploadSuccess: '{count, plural, one {# file uploaded} other {# files uploaded}}',
+            uploadError: '{count, plural, one {# file failed} other {# files failed}}: {names}',
             fileTooLarge: '{name} exceeds 100MB limit',
             retry: 'Retry',
             updateSuccess: '{name} updated',
@@ -417,6 +415,7 @@ export const messages = {
         },
         userMenu: {
             profile: 'Profile',
+            administration: 'Administration',
             singout: 'Sign Out',
         },
         profile: {
@@ -427,6 +426,7 @@ export const messages = {
             facility: 'Facility',
             roles: 'Roles',
             organization: 'Organization',
+            ldapUser: 'LDAP user (login)',
             orgUnitCode: 'Org. unit code (OJ)',
             teams: 'Teams',
             noTeams: 'No teams',
@@ -1558,8 +1558,7 @@ export const messages = {
             setMinimalSpares: 'Set Minimal Spares',
             assignItem: 'Assign Item',
             notFoundTitle: 'System not found',
-            notFoundDescription:
-                'The system may have been deleted or the link is no longer valid.',
+            notFoundDescription: 'The system may have been deleted or the link is no longer valid.',
             notFoundBack: 'Back to hierarchy',
             loadErrorTitle: 'Failed to load system',
             loadErrorDescription: 'Something went wrong while loading the system detail.',
@@ -1956,6 +1955,41 @@ export const messages = {
             category: 'Category',
             submit: 'Create',
             cancel: 'Cancel',
+        },
+    },
+    adminPage: {
+        head: 'ELI Panda - Administration',
+        title: 'Administration',
+        subtitle: 'Manage users, teams and data synchronizations',
+        links: {
+            users: {
+                title: 'Users',
+                description: 'Accounts, roles and linked employees',
+            },
+            teams: {
+                title: 'Teams',
+                description: 'Teams and their members',
+            },
+        },
+        employeesSync: {
+            title: 'Employees sync',
+            description:
+                'Imports employees from HR (OKBase), including their org. unit code. Runs automatically every night at 02:00.',
+            run: 'Run sync now',
+            running: 'Syncing employees...',
+            success: 'Employees synced: {savedCount} saved, {errorCount} errors',
+            alreadyRunning: 'Employees sync is already running',
+            hrUnavailable: 'Employees could not be fetched from HR',
+            failed: 'Employees sync failed',
+            lastRun: 'Last run',
+            neverRun: 'No run recorded yet',
+            historyFailed: 'Failed to load sync history',
+            status: {
+                SUCCESS: 'Success',
+                ERROR: 'Error',
+                RUNNING: 'Running',
+                PENDING: 'Pending',
+            },
         },
     },
 }

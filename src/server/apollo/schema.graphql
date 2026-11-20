@@ -135,6 +135,7 @@ type Employee @authentication {
     jobPosition: String
     jobPositionCode: String
     orgUnitCode: String
+    ldapUser: String
     workplaceName: String
     email: String
 }

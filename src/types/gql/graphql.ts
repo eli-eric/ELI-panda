@@ -5053,6 +5053,7 @@ export type Employee = {
   jobPosition?: Maybe<Scalars['String']['output']>;
   jobPositionCode?: Maybe<Scalars['String']['output']>;
   lastName: Scalars['String']['output'];
+  ldapUser?: Maybe<Scalars['String']['output']>;
   orgUnitCode?: Maybe<Scalars['String']['output']>;
   phone1?: Maybe<Scalars['String']['output']>;
   phone2?: Maybe<Scalars['String']['output']>;
@@ -5118,6 +5119,7 @@ export type EmployeeAggregateSelection = {
   jobPosition: StringAggregateSelectionNullable;
   jobPositionCode: StringAggregateSelectionNullable;
   lastName: StringAggregateSelectionNonNullable;
+  ldapUser: StringAggregateSelectionNullable;
   orgUnitCode: StringAggregateSelectionNullable;
   phone1: StringAggregateSelectionNullable;
   phone2: StringAggregateSelectionNullable;
@@ -5144,6 +5146,7 @@ export type EmployeeCreateInput = {
   jobPosition?: InputMaybe<Scalars['String']['input']>;
   jobPositionCode?: InputMaybe<Scalars['String']['input']>;
   lastName: Scalars['String']['input'];
+  ldapUser?: InputMaybe<Scalars['String']['input']>;
   orgUnitCode?: InputMaybe<Scalars['String']['input']>;
   phone1?: InputMaybe<Scalars['String']['input']>;
   phone2?: InputMaybe<Scalars['String']['input']>;
@@ -5325,6 +5328,7 @@ export type EmployeeSort = {
   jobPosition?: InputMaybe<SortDirection>;
   jobPositionCode?: InputMaybe<SortDirection>;
   lastName?: InputMaybe<SortDirection>;
+  ldapUser?: InputMaybe<SortDirection>;
   orgUnitCode?: InputMaybe<SortDirection>;
   phone1?: InputMaybe<SortDirection>;
   phone2?: InputMaybe<SortDirection>;
@@ -5342,6 +5346,7 @@ export type EmployeeUpdateInput = {
   jobPosition?: InputMaybe<Scalars['String']['input']>;
   jobPositionCode?: InputMaybe<Scalars['String']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
+  ldapUser?: InputMaybe<Scalars['String']['input']>;
   orgUnitCode?: InputMaybe<Scalars['String']['input']>;
   phone1?: InputMaybe<Scalars['String']['input']>;
   phone2?: InputMaybe<Scalars['String']['input']>;
@@ -5562,6 +5567,11 @@ export type EmployeeWhere = {
   lastName_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
   lastName_IN?: InputMaybe<Array<Scalars['String']['input']>>;
   lastName_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  ldapUser?: InputMaybe<Scalars['String']['input']>;
+  ldapUser_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  ldapUser_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  ldapUser_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  ldapUser_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
   orgUnitCode?: InputMaybe<Scalars['String']['input']>;
   orgUnitCode_CONTAINS?: InputMaybe<Scalars['String']['input']>;
   orgUnitCode_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
@@ -5902,6 +5912,7 @@ export type HallContactPersonEmployeeEmployeeNodeAggregateSelection = {
   jobPosition: StringAggregateSelectionNullable;
   jobPositionCode: StringAggregateSelectionNullable;
   lastName: StringAggregateSelectionNonNullable;
+  ldapUser: StringAggregateSelectionNullable;
   orgUnitCode: StringAggregateSelectionNullable;
   phone1: StringAggregateSelectionNullable;
   phone2: StringAggregateSelectionNullable;
@@ -6010,6 +6021,21 @@ export type HallContactPersonEmployeeNodeAggregationWhereInput = {
   lastName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   lastName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   lastName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  ldapUser_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  ldapUser_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  ldapUser_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  ldapUser_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  ldapUser_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
   orgUnitCode_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   orgUnitCode_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   orgUnitCode_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -11862,6 +11888,21 @@ export type RoomCardContactPersonsDeptNodeAggregationWhereInput = {
   lastName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   lastName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   lastName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  ldapUser_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  ldapUser_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  ldapUser_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  ldapUser_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  ldapUser_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
   orgUnitCode_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   orgUnitCode_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   orgUnitCode_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -12120,6 +12161,7 @@ export type RoomCardEmployeeContactPersonsDeptNodeAggregateSelection = {
   jobPosition: StringAggregateSelectionNullable;
   jobPositionCode: StringAggregateSelectionNullable;
   lastName: StringAggregateSelectionNonNullable;
+  ldapUser: StringAggregateSelectionNullable;
   orgUnitCode: StringAggregateSelectionNullable;
   phone1: StringAggregateSelectionNullable;
   phone2: StringAggregateSelectionNullable;
@@ -16016,6 +16058,7 @@ export type SystemEmployeeMaintainedByNodeAggregateSelection = {
   jobPosition: StringAggregateSelectionNullable;
   jobPositionCode: StringAggregateSelectionNullable;
   lastName: StringAggregateSelectionNonNullable;
+  ldapUser: StringAggregateSelectionNullable;
   orgUnitCode: StringAggregateSelectionNullable;
   phone1: StringAggregateSelectionNullable;
   phone2: StringAggregateSelectionNullable;
@@ -16039,6 +16082,7 @@ export type SystemEmployeeOperatorsNodeAggregateSelection = {
   jobPosition: StringAggregateSelectionNullable;
   jobPositionCode: StringAggregateSelectionNullable;
   lastName: StringAggregateSelectionNonNullable;
+  ldapUser: StringAggregateSelectionNullable;
   orgUnitCode: StringAggregateSelectionNullable;
   phone1: StringAggregateSelectionNullable;
   phone2: StringAggregateSelectionNullable;
@@ -16062,6 +16106,7 @@ export type SystemEmployeeResponsibleNodeAggregateSelection = {
   jobPosition: StringAggregateSelectionNullable;
   jobPositionCode: StringAggregateSelectionNullable;
   lastName: StringAggregateSelectionNonNullable;
+  ldapUser: StringAggregateSelectionNullable;
   orgUnitCode: StringAggregateSelectionNullable;
   phone1: StringAggregateSelectionNullable;
   phone2: StringAggregateSelectionNullable;
@@ -17857,6 +17902,21 @@ export type SystemMaintainedByNodeAggregationWhereInput = {
   lastName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   lastName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   lastName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  ldapUser_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  ldapUser_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  ldapUser_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  ldapUser_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  ldapUser_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
   orgUnitCode_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   orgUnitCode_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   orgUnitCode_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -18055,6 +18115,21 @@ export type SystemOperatorsNodeAggregationWhereInput = {
   lastName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   lastName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   lastName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  ldapUser_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  ldapUser_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  ldapUser_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  ldapUser_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  ldapUser_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
   orgUnitCode_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   orgUnitCode_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   orgUnitCode_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -19796,6 +19871,21 @@ export type SystemResponsibleNodeAggregationWhereInput = {
   lastName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   lastName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   lastName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  ldapUser_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  ldapUser_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  ldapUser_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  ldapUser_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  ldapUser_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
   orgUnitCode_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   orgUnitCode_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   orgUnitCode_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -23100,6 +23190,7 @@ export type UserEmployeeEmployeeNodeAggregateSelection = {
   jobPosition: StringAggregateSelectionNullable;
   jobPositionCode: StringAggregateSelectionNullable;
   lastName: StringAggregateSelectionNonNullable;
+  ldapUser: StringAggregateSelectionNullable;
   orgUnitCode: StringAggregateSelectionNullable;
   phone1: StringAggregateSelectionNullable;
   phone2: StringAggregateSelectionNullable;
@@ -23208,6 +23299,21 @@ export type UserEmployeeNodeAggregationWhereInput = {
   lastName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   lastName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   lastName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  ldapUser_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  ldapUser_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  ldapUser_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  ldapUser_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  ldapUser_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  ldapUser_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
   orgUnitCode_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   orgUnitCode_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   orgUnitCode_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -25187,7 +25293,7 @@ export type UserQueryQueryVariables = Exact<{
 }>;
 
 
-export type UserQueryQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', uid: string, email: string, firstName: string, isEnabled: boolean, lastName: string, passwordToChange?: boolean | null, username: string, employee?: { __typename?: 'Employee', uid: string, fullName?: string | null, orgUnitCode?: string | null } | null, teams: Array<{ __typename?: 'Team', uid: string, name: string, code?: string | null }>, roles: Array<{ __typename?: 'Role', name: string, code: string, uid: string }>, facility?: { __typename?: 'Facility', name: string, code: string } | null }> };
+export type UserQueryQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', uid: string, email: string, firstName: string, isEnabled: boolean, lastName: string, passwordToChange?: boolean | null, username: string, employee?: { __typename?: 'Employee', uid: string, fullName?: string | null, orgUnitCode?: string | null, ldapUser?: string | null } | null, teams: Array<{ __typename?: 'Team', uid: string, name: string, code?: string | null }>, roles: Array<{ __typename?: 'Role', name: string, code: string, uid: string }>, facility?: { __typename?: 'Facility', name: string, code: string } | null }> };
 
 export type UpdateUsersMutationVariables = Exact<{
   where?: InputMaybe<UserWhere>;
@@ -25209,7 +25315,7 @@ export type UsersQueryQueryVariables = Exact<{
 }>;
 
 
-export type UsersQueryQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', uid: string, email: string, firstName: string, isEnabled: boolean, lastName: string, passwordToChange?: boolean | null, username: string, employee?: { __typename?: 'Employee', uid: string, fullName?: string | null } | null, roles: Array<{ __typename?: 'Role', name: string, code: string, uid: string }>, facility?: { __typename?: 'Facility', name: string, code: string } | null }> };
+export type UsersQueryQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', uid: string, email: string, firstName: string, isEnabled: boolean, lastName: string, passwordToChange?: boolean | null, username: string, employee?: { __typename?: 'Employee', uid: string, fullName?: string | null, ldapUser?: string | null, orgUnitCode?: string | null } | null, teams: Array<{ __typename?: 'Team', uid: string, name: string }>, roles: Array<{ __typename?: 'Role', name: string, code: string, uid: string }>, facility?: { __typename?: 'Facility', name: string, code: string } | null }> };
 
 export type GetCategoryQueryVariables = Exact<{
   uid?: InputMaybe<Scalars['ID']['input']>;
@@ -25651,10 +25757,10 @@ export const QueryDocument = {"kind":"Document","definitions":[{"kind":"Operatio
 export const GetFacilitiesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetFacilities"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"facilities"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<GetFacilitiesQuery, GetFacilitiesQueryVariables>;
 export const GetRolesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetRoles"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"roles"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}}]}}]} as unknown as DocumentNode<GetRolesQuery, GetRolesQueryVariables>;
 export const CreateUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateUser"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UserCreateInput"}}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createUsers"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}}]}}]}}]} as unknown as DocumentNode<CreateUserMutation, CreateUserMutationVariables>;
-export const UserQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"UserQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"UserWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"isEnabled"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"passwordToChange"}},{"kind":"Field","name":{"kind":"Name","value":"employee"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"orgUnitCode"}}]}},{"kind":"Field","name":{"kind":"Name","value":"teams"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}},{"kind":"Field","name":{"kind":"Name","value":"roles"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"facility"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}}]}}]} as unknown as DocumentNode<UserQueryQuery, UserQueryQueryVariables>;
+export const UserQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"UserQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"UserWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"isEnabled"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"passwordToChange"}},{"kind":"Field","name":{"kind":"Name","value":"employee"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"orgUnitCode"}},{"kind":"Field","name":{"kind":"Name","value":"ldapUser"}}]}},{"kind":"Field","name":{"kind":"Name","value":"teams"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}},{"kind":"Field","name":{"kind":"Name","value":"roles"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"facility"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}}]}}]} as unknown as DocumentNode<UserQueryQuery, UserQueryQueryVariables>;
 export const UpdateUsersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateUsers"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"UserWhere"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"update"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"UserUpdateInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateUsers"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}},{"kind":"Argument","name":{"kind":"Name","value":"update"},"value":{"kind":"Variable","name":{"kind":"Name","value":"update"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}}]}}]}}]} as unknown as DocumentNode<UpdateUsersMutation, UpdateUsersMutationVariables>;
 export const DeleteUsersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteUsers"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"UserWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteUsers"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodesDeleted"}}]}}]}}]} as unknown as DocumentNode<DeleteUsersMutation, DeleteUsersMutationVariables>;
-export const UsersQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"UsersQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"UserWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"isEnabled"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"passwordToChange"}},{"kind":"Field","name":{"kind":"Name","value":"employee"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"roles"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"facility"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}}]}}]} as unknown as DocumentNode<UsersQueryQuery, UsersQueryQueryVariables>;
+export const UsersQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"UsersQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"UserWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}},{"kind":"Argument","name":{"kind":"Name","value":"options"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"sort"},"value":{"kind":"ListValue","values":[{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"username"},"value":{"kind":"EnumValue","value":"ASC"}}]}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"isEnabled"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"passwordToChange"}},{"kind":"Field","name":{"kind":"Name","value":"employee"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"ldapUser"}},{"kind":"Field","name":{"kind":"Name","value":"orgUnitCode"}}]}},{"kind":"Field","name":{"kind":"Name","value":"teams"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"roles"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"facility"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}}]}}]} as unknown as DocumentNode<UsersQueryQuery, UsersQueryQueryVariables>;
 export const GetCategoryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCategory"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"uid"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}},"defaultValue":{"kind":"NullValue"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogueCategories"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"uid"},"value":{"kind":"Variable","name":{"kind":"Name","value":"uid"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"systemType"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"parentPath"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<GetCategoryQuery, GetCategoryQueryVariables>;
 export const GetCategoriesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCategories"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"CatalogueCategoryWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogueCategories"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"miniImageUrl"}}]}}]}}]} as unknown as DocumentNode<GetCategoriesQuery, GetCategoriesQueryVariables>;
 export const CatalogueCategoryContextInExplorerDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CatalogueCategoryContextInExplorer"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"CatalogueCategoryWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogueCategories"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"miniImageUrl"}},{"kind":"Field","name":{"kind":"Name","value":"systemType"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"parentPath"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"hasSubcategoryCatalogueCategoriesAggregate"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}}]}},{"kind":"Field","name":{"kind":"Name","value":"catalogueItemsBelongsToCategoryAggregate"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}}]}}]}}]}}]} as unknown as DocumentNode<CatalogueCategoryContextInExplorerQuery, CatalogueCategoryContextInExplorerQueryVariables>;
