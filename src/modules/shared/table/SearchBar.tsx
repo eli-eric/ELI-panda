@@ -21,6 +21,7 @@ interface Props {
     onChange?: (value: string) => void
     isGlobalSearch?: boolean
     hideSidebarTrigger?: boolean
+    placeholder?: string
 }
 
 export const SearchBar = ({
@@ -32,6 +33,7 @@ export const SearchBar = ({
     onChange,
     isGlobalSearch = false,
     hideSidebarTrigger = false,
+    placeholder = 'Search...',
 }: Props) => {
     const { inputRef, defaultValue, handleChange } = useDebouncedSearchInput({
         tableId,
@@ -59,7 +61,7 @@ export const SearchBar = ({
                                 ref={inputRef}
                                 defaultValue={defaultValue}
                                 onChange={handleChange}
-                                placeholder="Search..."
+                                placeholder={placeholder}
                                 className="pl-10"
                                 type="search"
                                 name="search"

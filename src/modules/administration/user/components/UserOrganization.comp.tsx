@@ -11,10 +11,11 @@ export interface UserOrganizationTeam {
 
 type Props = {
     orgUnitCode?: string | null
+    ldapUser?: string | null
     teams?: UserOrganizationTeam[]
 }
 
-export const UserOrganization: FC<Props> = ({ orgUnitCode, teams = [] }) => {
+export const UserOrganization: FC<Props> = ({ orgUnitCode, ldapUser, teams = [] }) => {
     const { formatMessage: fm } = useIntl()
 
     return (
@@ -26,6 +27,10 @@ export const UserOrganization: FC<Props> = ({ orgUnitCode, teams = [] }) => {
                 data-testid="user-organization"
                 className="grid grid-cols-1 gap-2 text-sm sm:grid-cols-2 dark:text-gray-300"
             >
+                <div>
+                    <dt className="font-medium">{fm({ id: message.layout.profile.ldapUser })}</dt>
+                    <dd data-testid="user-ldap-user">{ldapUser || '-'}</dd>
+                </div>
                 <div>
                     <dt className="font-medium">
                         {fm({ id: message.layout.profile.orgUnitCode })}

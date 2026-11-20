@@ -426,6 +426,7 @@ export const messages = {
             facility: 'Facility',
             roles: 'Roles',
             organization: 'Organization',
+            ldapUser: 'LDAP user (login)',
             orgUnitCode: 'Org. unit code (OJ)',
             teams: 'Teams',
             noTeams: 'No teams',

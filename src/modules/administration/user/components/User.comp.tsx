@@ -21,6 +21,7 @@ interface Props {
     selectedRoles?: GetRolesQuery['roles']
     organization?: {
         orgUnitCode?: string | null
+        ldapUser?: string | null
         teams?: UserOrganizationTeam[]
     }
 }

@@ -13,6 +13,7 @@ describe('UserOrganization', () => {
         render(
             <UserOrganization
                 orgUnitCode="1234"
+                ldapUser="jana.nova@eli-laser.eu"
                 teams={[
                     { uid: 't1', name: '1234 Lasers' },
                     { uid: 't2', name: '5678 Vacuum' },
@@ -21,6 +22,7 @@ describe('UserOrganization', () => {
         )
 
         expect(screen.getByTestId('user-org-unit-code')).toHaveTextContent('1234')
+        expect(screen.getByTestId('user-ldap-user')).toHaveTextContent('jana.nova@eli-laser.eu')
         expect(screen.getByTestId('user-teams')).toHaveTextContent('1234 Lasers, 5678 Vacuum')
     })
 
@@ -28,6 +30,7 @@ describe('UserOrganization', () => {
         render(<UserOrganization orgUnitCode={null} />)
 
         expect(screen.getByTestId('user-org-unit-code')).toHaveTextContent('-')
+        expect(screen.getByTestId('user-ldap-user')).toHaveTextContent('-')
         expect(screen.getByTestId('user-teams')).toHaveTextContent(message.layout.profile.noTeams)
     })
 })

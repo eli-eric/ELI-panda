@@ -14,6 +14,7 @@ const USERS = gql(`
         uid
         fullName
         orgUnitCode
+        ldapUser
       }
       teams {
         uid
