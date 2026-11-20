@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
-import type { AxiosError } from '@/types/http'
+import type { NormalizedHttpError } from '@/core/http/fetchClient'
+import { isClientError } from '@/types/http'
 import type { QueryFetcherKey } from '@/utils/fetcher'
 import { queryFetcher } from '@/utils/fetcher'
 
@@ -22,9 +23,12 @@ export const useSystemCodesPreview = (params: PreviewParams | null) => {
           }
         : undefined
 
-    return useQuery<SystemCodeResult[], AxiosError, SystemCodeResult[], QueryFetcherKey>({
+    return useQuery<SystemCodeResult[], NormalizedHttpError, SystemCodeResult[], QueryFetcherKey>({
         queryKey: ['systemCodesPreview', { query }],
         queryFn: queryFetcher<SystemCodeResult[]>('systemCodesPreview'),
         enabled: !!params?.zoneUid && !!params?.systemTypeUid && !!params?.batch,
+        // A 400 here is a verdict, not a hiccup: retrying it only delays the message by
+        // the backoff. Server and network errors still get the default three attempts.
+        retry: (failureCount, error) => !isClientError(error) && failureCount < 3,
     })
 }

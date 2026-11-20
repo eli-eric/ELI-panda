@@ -14,10 +14,9 @@ import {
 import { useAccessControl } from '@/hooks/useAccessControl'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
-import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { ROLE } from '@/types/constants/roles'
 
-import { ZoneEditContainer } from '../form/zone-edit.cont'
+import { useOpenZoneEdit } from '../hooks/useOpenZoneEdit'
 import { useZoneDelete } from '../hooks/useZoneDelete'
 import type { Zone } from '../types/zone.types'
 
@@ -30,23 +29,12 @@ export const ZoneActionsCell: FC<ZoneActionsCellProps> = ({
     },
 }) => {
     const { formatMessage: fm } = useIntl()
-    const { openModal } = useDynamicModalStore()
+    const { openZoneEdit } = useOpenZoneEdit()
     const labels = message.zonesPage.actions
     const name = getValue()
     const deleteZone = useZoneDelete(uid)
     const withWarning = useWarningModal(fm({ id: labels.deleteWarning }))
     const canEdit = useAccessControl(ROLE.ZONES_EDIT)()
-
-    const handleEdit = () => {
-        openModal('sheet', {
-            id: `zone-edit-${uid}`,
-            component: ZoneEditContainer,
-            props: {
-                uid,
-                title: fm({ id: labels.editTitle }),
-            },
-        })
-    }
 
     const handleDelete = () => {
         withWarning(() => {
@@ -73,7 +61,7 @@ export const ZoneActionsCell: FC<ZoneActionsCellProps> = ({
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start" sideOffset={4}>
-                        <DropdownMenuItem onClick={handleEdit}>
+                        <DropdownMenuItem onClick={() => openZoneEdit(uid)}>
                             <Pencil className="size-4" />
                             {fm({ id: message.common.buttons.edit })}
                         </DropdownMenuItem>

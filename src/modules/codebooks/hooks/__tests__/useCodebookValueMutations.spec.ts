@@ -85,4 +85,36 @@ describe('useCodebookValueMutations', () => {
         await result.current.delete('u')
         expect(mockToast.promise).toHaveBeenCalledTimes(2)
     })
+
+    describe('conflict handling', () => {
+        /** queryMutate wraps errors so the status lands on response.status, not status. */
+        const conflictError = () => ({
+            isAxiosError: true,
+            message: 'Code already exists',
+            response: { status: 409 },
+        })
+
+        it.each([
+            ['create', 'codebooksPage.toast.codeAlreadyExists'],
+            ['update', 'codebooksPage.toast.codeAlreadyExists'],
+        ])('reports a 409 from %s as a duplicate code', async (op, expected) => {
+            // Regression: the predicate read error.status, which queryMutate never sets,
+            // so every conflict showed the generic failure message instead.
+            const { result } = renderHook(() => useCodebookValueMutations(ARGS))
+            await (result.current as any)[op]({ uid: 'u', name: 'X', code: 'DUP' })
+
+            const [, opts] = mockToast.promise.mock.calls[0]
+            expect(opts.error(conflictError())).toBe(expected)
+        })
+
+        it('reports a non-409 with the generic failure message', async () => {
+            const { result } = renderHook(() => useCodebookValueMutations(ARGS))
+            await result.current.create({ name: 'X' })
+
+            const [, opts] = mockToast.promise.mock.calls[0]
+            expect(opts.error({ isAxiosError: true, response: { status: 500 } })).toBe(
+                'codebooksPage.toast.failedToAdd',
+            )
+        })
+    })
 })
