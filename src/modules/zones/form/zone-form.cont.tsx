@@ -12,10 +12,12 @@ import { message } from '@/i18n/src/messages'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { useModalFormStateStore } from '@/store/useModalFormStateStore'
 import { ROLE } from '@/types/constants/roles'
+import { getErrorMessageText, isBadRequestError } from '@/types/http'
+import { toLegacyPagination } from '@/types/pagination'
 import { queryFetcher } from '@/utils/fetcher'
 
 import { useZoneMutation } from '../hooks/useZoneMutation'
-import type { Zone, ZonesResponse } from '../types/zone.types'
+import type { Zone, ZoneRequest, ZonesResponse } from '../types/zone.types'
 import { ZoneFormFields } from './zone-form.comp'
 import { type ZoneFormData, zoneSchema } from './zone-form.schema'
 
@@ -26,6 +28,14 @@ interface Props {
 
 const getModalId = (uid?: string) => (uid ? `zone-edit-${uid}` : 'zone-create')
 
+// GET /zones reads paging from the `pagination` JSON param; a bare `pageSize` is ignored,
+// which capped the parent-zone picker at the API default of 50 zones.
+const PARENT_ZONE_PAGINATION = toLegacyPagination({ page: 1, pageSize: 200 })
+
+const isInvalidDefaultParentSystem = (error: unknown) =>
+    isBadRequestError(error) &&
+    getErrorMessageText(error).toLowerCase().includes('default parent system not found')
+
 export const ZoneFormContainer: FC<Props> = ({ zone, onSuccess }) => {
     const { formatMessage: fm } = useIntl()
     const labels = message.zonesPage.form
@@ -33,7 +43,7 @@ export const ZoneFormContainer: FC<Props> = ({ zone, onSuccess }) => {
     const { setIsDirty, reset: resetModalFormState } = useModalFormStateStore()
 
     const { data: allZones } = useQuery({
-        queryKey: ['zones', { query: { pageSize: 200 } }],
+        queryKey: ['zones', { query: { pagination: PARENT_ZONE_PAGINATION } }],
         queryFn: queryFetcher<ZonesResponse>('zones'),
     })
 
@@ -41,6 +51,12 @@ export const ZoneFormContainer: FC<Props> = ({ zone, onSuccess }) => {
         name: zone?.name ?? '',
         code: zone?.code ?? '',
         parentUid: zone?.parentZone?.uid ?? null,
+        // Narrowed to the shape the picker writes: RHF deep-compares values against the
+        // defaults, so keeping the API's wider object here would mark the form dirty —
+        // and trip the unsaved-changes guard — after re-picking the same system.
+        defaultParentSystem: zone?.defaultParentSystem
+            ? { uid: zone.defaultParentSystem.uid, name: zone.defaultParentSystem.name }
+            : null,
         notes: zone?.notes ?? '',
     }
 
@@ -64,14 +80,27 @@ export const ZoneFormContainer: FC<Props> = ({ zone, onSuccess }) => {
     })
 
     const handleSubmit = formMethods.handleSubmit(async data => {
-        toast.promise(mutateAsync(data), {
+        // Relationship fields are tri-state on the API: null leaves the link untouched,
+        // so "nothing selected" has to be sent as '' or the old value survives.
+        const payload: ZoneRequest = {
+            name: data.name,
+            code: data.code,
+            notes: data.notes ?? '',
+            parentUid: data.parentUid ?? '',
+            defaultParentSystemUid: data.defaultParentSystem?.uid ?? '',
+        }
+
+        toast.promise(mutateAsync(payload), {
             loading: fm({ id: zone ? labels.saving : labels.creating }),
             success: () => {
                 onSuccess?.()
                 closeModal(getModalId(zone?.uid))
                 return fm({ id: zone ? labels.saved : labels.created })
             },
-            error: fm({ id: labels.saveFailed }),
+            error: err =>
+                isInvalidDefaultParentSystem(err)
+                    ? fm({ id: labels.defaultParentSystemInvalid })
+                    : fm({ id: labels.saveFailed }),
         })
     })
 

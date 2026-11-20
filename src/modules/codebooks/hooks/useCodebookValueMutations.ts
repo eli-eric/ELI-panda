@@ -3,9 +3,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useIntl } from 'react-intl'
 import { toast } from 'sonner'
 
-import type { NormalizedHttpError } from '@/core/http/fetchClient'
 import { message } from '@/i18n/src/messages'
 import type { CODEBOOK } from '@/types/constants/codebook'
+import { getErrorStatus } from '@/types/http'
 import type { CodebookType } from '@/types/responses/codebook'
 import { queryMutate } from '@/utils/fetcher'
 
@@ -22,7 +22,7 @@ export const useCodebookValueMutations = ({ codebookType, queryKey }: Props) => 
 
     const sanitizeName = (name: string) => name.trim()
     const sanitizeCode = (code?: string) => code?.trim()
-    const isConflictError = (error: unknown) => (error as NormalizedHttpError)?.status === 409
+    const isConflictError = (error: unknown) => getErrorStatus(error) === 409
 
     const createMutation = useMutation({
         mutationFn: ({ name }: { name: string }) => {
