@@ -26,7 +26,7 @@ There is no separate "PANDA password" — credentials are managed by Microsoft E
 2. In the dropdown, click **Log out** (bottom option).
 3. The session ends and you are taken back to the sign-in screen.
 
-![Profile dropdown open at the bottom of the sidebar, listing Dark Mode, Support, Profile and Log out](./images/profile-dropdown.png)
+![Profile dropdown open at the bottom of the sidebar, listing Dark Mode, Support, Profile and Log out (administrators also see Administration)](./images/profile-dropdown.png)
 
 ## Layout
 
@@ -94,6 +94,7 @@ The profile dropdown at the bottom of the sidebar contains, in this order:
 - **Dark Mode / Light Mode** — theme toggle (see above). The label always names the theme you would switch *to*.
 - **Support** — opens a pre-addressed support email to `panda@eli-laser.eu` with the subject already filled in. It is a `mailto:` link, not a documentation page — leave the subject as it is so the request routes correctly.
 - **Profile** — opens your user profile settings page.
+- **Administration** — only for users with the `admin` role. Opens the [Administration](./administration/README.md) dashboard (users, teams, employees sync).
 - **Log out** — ends the session.
 
 ## Sessions and timeouts
