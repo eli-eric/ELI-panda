@@ -2,9 +2,9 @@
 
 The Room Cards module is the **operational record of cleanroom and technical-hall spaces** at the facility. Each room card captures a single space's identity (name, status, linked physical locations), its current operational state, the cleanroom purity requirements (ISO class, prescribed clothing, cleaning schedule), the utilities it is provisioned with (cooling water, indoor environment, compressed air, nitrogen, max pressure — both *facility-side* and *client-side*), and the people responsible for it (hall contacts, department contacts, assigned teams).
 
-Use this module when a space's operational state changes (e.g. transitioning from *In operation* to *Experimental Technology Standby*), when commissioning a new cleanroom area, when documenting the utility envelope for an experimental team, or when checking who is on-call for a specific hall.
+Use this module when a space's operational state changes (e.g. transitioning from *OS1: Standard Operation* to *OS2: Experimental technology standby*), when commissioning a new cleanroom area, when documenting the utility envelope for an experimental team, or when checking who is on-call for a specific hall.
 
-`[SCREENSHOT PLACEHOLDER: Room Cards list page — top bar with Add / Refresh buttons, table with columns Name (linked), Status badge, Operational State badge, Locations chip stack, Purity Class badge, Prescribed Clothing badges]`
+![Room Cards list page with Status, Operational State, Locations and Purity Class columns](./images/room-cards-list.png)
 
 ## Access & Responsibilities
 
@@ -28,9 +28,21 @@ Use this module when a space's operational state changes (e.g. transitioning fro
 
 - **Room card** — the record for a single space. Has *Name*, *Status*, *Operational State*, *Purity Class*, *Prescribed Clothing*, utilities, cleaning schedule, and links to locations, contacts, and teams.
 - **Status** — high-level mode of the space: `CLEAN_MODE`, `DIRTY_MODE`, `IN_PREPARATION_MODE`. Drives row colour in the list.
-- **Operational State** — finer-grained operational stage of the space. Six values: `OS1: In operation`, `OS2: Overnight standby`, `OS3: Experimental Technology Standby`, `OS4: Experimental Technology Safe State`, `OS5: All Technology Shutdown`, `OS6: Power Shutdown`. Editable only by Area Managers; every change is captured with timestamp + user in the Operational State History.
+- **Operational State** — finer-grained operational stage of the space. **Five** values, in increasing severity:
+
+  | Code | Name |
+  |---|---|
+  | `OS1` | OS1: Standard Operation |
+  | `OS2` | OS2: Experimental technology standby |
+  | `OS3` | OS3: Experimental technology safe state |
+  | `OS4` | OS4: All technology Shutdown |
+  | `OS5` | OS5: Power shutdown |
+
+  Editable only by Area Managers; every change is captured with timestamp + user in the Operational State History.
+
+  > ⚠️ **Known defect — the history view mislabels states.** The list column and the detail badge read the name straight from the database and are correct. The *Operational State History* modal instead resolves the code through a stale front-end label table that still carries a six-state scheme, so it renders each state **one step too mild** — a change to `OS3` (*safe state*) is shown as *Experimental technology standby*, and `OS5` (*Power shutdown*) is shown as *All technology Shutdown*. Until this is fixed, read operational state from the detail page or the list, not from the history modal.
 - **Purity Class** — cleanroom ISO classification: `ISO_5`, `ISO_6`, `ISO_7`, `ISO_8`.
-- **Prescribed Clothing** — a multi-select of garment requirements (e.g. *Cap*, *Coat*, *Gloves ISO 5*, *Boots ISO 5*, *Hood*, *Gown ISO 5*, *Beard cover*).
+- **Prescribed Clothing** — a multi-select of garment requirements. The full set of thirteen: *Beard cover*, *Boots ISO 5*, *Cap*, *Coat*, *CR shoes*, *Face mask*, *Gloves*, *Hood*, *Overal ISO 5*, *Overal ISO 7*, *Shoe covers*, *Socks ISO 5*, *T shirt and trousers*. (There is a single *Gloves* option, not a per-ISO-class one, and the coverall options are *Overal ISO 5 / ISO 7* rather than a "gown".)
 - **Utilities (facility-side / client-side)** — the room's provisioning envelope. Five utility families — *Cooling Water*, *Indoor Environment Quality*, *Compressed Air Distribution*, *Nitrogen Central Distribution*, *Max Pressure In Cold Distribution* — each captured with what the building provides (*facility-side*) and what the experimental client consumes (*client-side*).
 - **Cleaning schedule** — a set of recurring days (Mon–Sun) plus a next-cleaning date.
 - **Entry to HVAC tent** — free-text note describing entry procedure to the HVAC tent.
@@ -51,7 +63,7 @@ The module has a **list page** at `/room-cards` and a **detail page** at `/room-
 
 A single long form composed of six stacked cards:
 
-1. **Info card.** *Name*, *Status* picker (`Clean mode` / `Dirty mode` / `In preparation mode`), *Operational State* picker (OS1–OS6, gated by Area Manager) with *Last updated:* timestamp and *View History* button.
+1. **Info card.** *Name*, *Status* picker, *Operational State* picker (OS1–OS5, gated by Area Manager) with *Last updated:* timestamp and *View History* button. Both pickers currently show the **raw enum value** (`CLEAN_MODE`, `ISO_7`) rather than the friendly label — the badge next to the field shows the readable form.
 2. **Contacts card.** Three sub-tables side by side:
    - *Contact - Hall* (role + employee + phones)
    - *Contact - Dept.* (employee + phones)
@@ -63,7 +75,7 @@ A single long form composed of six stacked cards:
    - *Client-side requirements* — the equivalent five fields the experimental team requires.
 6. **File manager.** Attachments (drawings, SOPs, photos) — drag-drop upload, link mode for external URLs, tagging.
 
-`[SCREENSHOT PLACEHOLDER: room card detail page mid-scroll — Info card at top showing Status badge and Operational State dropdown with the Last updated timestamp and View History link, Contacts card below with three contact tables, Locations card with two location chips]`
+![Room card detail: the Info card with Status and Operational State, the three contact tables, the linked locations and the clean-room parameters](./images/room-card-detail.png)
 
 ## Common workflows
 
@@ -87,7 +99,7 @@ A single long form composed of six stacked cards:
 
 > 🔧 *This section is for engineers reading the docs in the repo. The wiki generator strips it.*
 >
-> Queries: `RoomCardsQuery` (list), `RoomCardQuery` (detail by uid), `RoomCardContactsHallQuery` / `RoomCardContactsDeptQuery` / `RoomCardTeamsQuery` / `RoomCardLocationsQuery` (per-section subqueries). Mutations: `CreateRoomCards`, `UpdateRoomCards`, `UpdateOperationalStateMutation` (separate so the audit log captures previous/new state), Connect/Disconnect mutations for contacts, teams, and locations. Enums (in the schema): `RoomCardStatus`, `OperationalState`, `PurityClass`, `PrescribedClothing`, `CleaningScheduleDay`. See `src/server/apollo/schema.graphql`.
+> Room cards have **no REST surface** — the only room-card route on the API is `GET /v1/room-card/layout/location/{code}`. Everything else goes through Neo4j GraphQL at `/api/graphql`. Queries: `RoomCardsQuery` (list), `RoomCardQuery` (detail by uid), `RoomCardContactsHallQuery` / `RoomCardContactsDeptQuery` / `RoomCardTeamsQuery` / `RoomCardLocationsQuery` (per-section subqueries). Mutations: `CreateRoomCards`, `UpdateRoomCardMutation`, `UpdateOperationalStateMutation` (separate so the audit log captures previous/new state), `DeleteRoomCards`, plus connect/disconnect on contacts, teams and locations. Enums in the schema: `RoomCardStatus`, `PurityClass`, `PrescribedClothing`, `CleaningScheduleDay`. `OperationalState` is **not** an enum — it is a node type (`{ uid, name, code }`) linked by `HAS_OPERATIONAL_STATE`, seeded by the API migration `20251205083909_add_new_cb_operation_state`. See `src/server/apollo/schema.graphql`.
 
 ## Language
 

@@ -4,7 +4,7 @@ The Control Systems module is the **bulk generator and registry of system codes*
 
 Use this module when commissioning a new zone (you need ten consecutive control-system codes for an upcoming installation), when planning labels ahead of physical receipt, or when auditing which codes have been generated against a zone / type.
 
-`[SCREENSHOT PLACEHOLDER: Control Systems Overview — sticky header with search field, Zone filter, System Type filter, filter badges row, Create System Codes button on the right; table beneath with columns System Code, Name, Location, Zone, System Type, Path, Updated By, Created By; row hover showing the per-row action menu]`
+![Control Systems Overview with the system-codes table](./images/control-systems-overview.png)
 
 ## Access & Responsibilities
 
@@ -62,7 +62,7 @@ A dedicated two-pane workbench, gated by `control-systems-edit`.
   - **Preview** rows below, badge *Preview*, dimmed. Live-debounced render of what the next submission would generate.
   - Empty state: *No preview available* / *Fill in the form to preview system codes that will be created.*
 
-`[SCREENSHOT PLACEHOLDER: Create System Codes page — left pane form with Zone, System Type, Batch Count fields filled, Create button at the bottom; right pane preview table showing two Created rows badged green at the top and five Preview rows badged grey below them]`
+![Create System Codes page: Zone, System Type and Batch Count on the left, and the generated preview rows on the right](./images/system-codes-preview.png)
 
 ## Common workflows
 
@@ -86,7 +86,7 @@ For per-system code generation (one system at a time, on-the-fly from a system's
 
 > 🔧 *This section is for engineers reading the docs in the repo. The wiki generator strips it.*
 >
-> Endpoints: `GET /systems/system-codes` (overview, key `systemCodes`), `GET /systems/system-codes/preview` (preview, key `systemCodesPreview`, query params `zoneUid`, `systemTypeUid`, `batch`), `POST /systems/system-codes` (commit, key `systemCodesCreate`). UI batch cap is 25 (enforced in `types/constants.ts` as `BATCH_LIMIT`); Zod schema allows up to 100. Code-string composition uses the System Type's mask — see `src/modules/systemHierarchy/components/SystemCodeActions.comp.tsx` for the per-system generation path. Root-zone filter constant: `ONLY_ROOT_ZONES`.
+> Endpoints: `GET /systems/system-codes` (overview, key `systemCodes`), `GET /systems/system-codes/preview` (preview, key `systemCodesPreview`, query params `zoneUid`, `systemTypeUid`, `batch`), `POST /systems/system-codes` (commit, key `systemCodesCreate`). Batch cap is 25 — `BATCH_LIMIT` in `src/modules/control-systems/types/constants.ts`, and the Zod schema caps at the same constant, so there is no looser second limit. Code-string composition uses the System Type's mask — see `src/modules/systemHierarchy/components/SystemCodeActions.comp.tsx` for the per-system generation path. Root-zone filter constant: `ONLY_ROOT_ZONES`.
 
 ## Language
 

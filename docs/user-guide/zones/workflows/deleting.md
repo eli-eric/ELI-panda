@@ -29,7 +29,7 @@ See [Access & Responsibilities](../README.md#access--responsibilities) for what 
 
 3. **Click *Delete***. A confirmation modal asks: *Are you sure you want to delete this zone?*
 
-   `[SCREENSHOT PLACEHOLDER: Zones row with the action dropdown open showing Edit and Delete entries; the confirmation modal in front asking to confirm the deletion]`
+   ![A zone row with its action dropdown open, showing Edit and Delete](../images/row-actions-menu.png)
 
 4. **Confirm in the modal.** Toast progression:
    - *Deleting…* — request in flight.

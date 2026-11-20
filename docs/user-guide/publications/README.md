@@ -6,7 +6,7 @@ The module pulls double duty as both an internal catalogue *and* the upstream so
 
 Use this module when registering a new publication, maintaining researcher / grant master data, linking authors and funding to an in-flight publication, or preparing an end-of-year RIV submission.
 
-`[SCREENSHOT PLACEHOLDER: Publications overview — top toolbar with Add / Refresh buttons on the left, Export and Export to RIV buttons on the right; table beneath with columns Title, Code, Media Type, DOI, Authors, Journal, Year; one row hovered showing per-row actions]`
+![Publications overview with the publications table](./images/publications-list.png)
 
 ## Access & Responsibilities
 

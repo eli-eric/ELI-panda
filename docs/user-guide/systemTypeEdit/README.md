@@ -4,7 +4,7 @@ The System Type Edit module is the **admin workbench for the system-type taxonom
 
 Manage the taxonomy here so the rest of the application has a stable vocabulary. New facility hardware classes start their life as a new System Type in this module.
 
-`[SCREENSHOT PLACEHOLDER: System Type Edit landing — two side-by-side cards: left card "System Type Groups" with five groups listed, the third selected and highlighted; right card "System Types" filled with the types belonging to that group; Add Group / Add Type buttons visible above each list]`
+![System Type Edit landing page with the System Type Groups and System Types panes](./images/type-edit-page.png)
 
 ## Access & Responsibilities
 

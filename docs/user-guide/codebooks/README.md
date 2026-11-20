@@ -1,26 +1,29 @@
 # Codebooks
 
-The Codebooks module is the **central registry of controlled vocabularies** — every dropdown, picker, and filter across PANDA that needs a finite, named set of values reads from here. *Suppliers*, *Manufacturers*, *Locations*, *Item Usage*, *Item Condition*, *System Importance*, *Operational State*, *Contact Person Role*, *Zone*, *Sub Zone*, *Order Status*, *Procurement Status*, *Country*, *Language*, *Department*, *Catalogue Category*, *Catalogue Property Type*, *Publication Category*, *Grant*, *Media Type*, and many more — each is a codebook. Keeping them clean keeps every form in the app coherent.
+The Codebooks module is where you **maintain the controlled vocabularies that PANDA's dropdowns, pickers and filters read from** — suppliers, teams, units, countries, languages, contact-person roles, operational states, and the publication/research reference lists. Keeping them clean keeps every form in the app coherent.
+
+Not every codebook in the app is edited here: system types, catalogue categories and zones each have their own module, and a number of reference lists are seeded by the API and read-only. See [Codebooks managed here](#codebooks-managed-here) for the exact split.
 
 Use this module to add a new value to an existing codebook (a new supplier, a new department), rename an existing value, fix a typo, or remove a value that is no longer used. Codebooks are administrative — they are not transactional records. Mutations here change the vocabulary the rest of the app uses; *they do not change* the records that already reference those values (those keep their connection by UID).
 
-`[SCREENSHOT PLACEHOLDER: Codebooks page — 280 px sidebar on the left with a searchable list of codebook codes (SYSTEM_TYPE, ITEM_USAGE, LOCATION, …), main detail area on the right showing the selected codebook's title, "Manage codebook values" subtitle, search bar, Add value button, and a data table of values]`
+![Codebooks page: the searchable list of editable codebooks on the left and the empty-state panel on the right](./images/codebooks-page.png)
 
 ## Access & Responsibilities
 
 **Today's reality:**
-- The page route `/codebooks` is **gated by the `admin` role**. Users without `admin` cannot navigate to it; the sidebar entry is hidden.
-- Server-side, individual codebooks may additionally carry an `editRole` setting (e.g. `catalogue-edit` for catalogue categories) so values inside that codebook are governed by the relevant module role rather than `admin` alone. The page exposes only the codebooks where the user has effective edit rights.
+- The page route `/codebooks` is **gated by the `admin` role**. Users without `admin` are redirected to the *not found* page when they try to open it.
+- ⚠️ The *Codebooks* sidebar entry is **not** hidden from non-admins — it is shown to anyone with `basics`, and clicking it lands on the *not found* page. Only `admin` can actually open the module.
+- Server-side, each codebook carries its own edit role (`metadata.roleEdit` — e.g. `publications-edit`, `room-cards-edit`). The API enforces that role on every create / rename / delete, and the page lists only the codebooks whose edit role you hold.
 
 **Personas (today):**
 
 | Persona | Role(s) | Can do |
 |---|---|---|
 | 🛡️ **Admin** | `admin` | Open the module, see every codebook, browse and edit values: add, rename, change the code, delete |
-| ✏️ **Domain Editor** | Module-specific edit role (e.g. `catalogue-edit`, `orders-edit`) | May see the page entry if their effective edit role covers at least one codebook; can edit values of codebooks scoped to their role only |
-| 👁️ **Viewer** | Any non-admin role | Does not see the *Codebooks* sidebar entry. Codebook *consumption* (picker values, filter dropdowns elsewhere in the app) is read-only and available everywhere |
+| ✏️ **Domain Editor** | A codebook edit role (e.g. `publications-edit`, `room-cards-edit`, `codebooks-admin`) | Can edit the values of the codebooks scoped to that role — but only once they can open the page, which today still needs `admin` |
+| 👁️ **Viewer** | Any non-admin role | Sees the *Codebooks* sidebar entry but cannot open the page — it redirects to *not found*. Codebook *consumption* (picker values, filter dropdowns elsewhere in the app) is read-only and available everywhere |
 
-> 🔮 **Coming soon — granular codebook roles** — a planned enhancement will introduce a dedicated `codebooks-admin` role that grants edit on codebooks without requiring full `admin`. Today, the role exists in the registry but the page route still requires `admin`.
+> 🔮 **Coming soon — opening the page to codebook stewards** — the `codebooks-admin` role already exists and is already the enforced edit role on several codebooks (`UNIT`, `SUPPLIER`, `TEAM`, `COUNTRY`, `LANGUAGE`, `OPERATIONAL_STATE`). What is still missing is the page itself: `/codebooks` requires full `admin`, so a steward holding only `codebooks-admin` cannot reach the codebooks they are authorised to edit.
 
 ## Key concepts
 
@@ -32,49 +35,65 @@ Use this module to add a new value to an existing codebook (a new supplier, a ne
 
 ### Codebooks managed here
 
-The following codebooks are surfaced (subject to your effective edit rights). Each manages the dropdown values across the app where the corresponding picker appears.
+A codebook appears in this module only if the server marks it with an **edit role** (`metadata.roleEdit`). That is a much smaller set than the list of codebooks the app *reads* — most pickers in PANDA are fed by codebooks that are maintained elsewhere or not editable at all.
 
-| Codebook code | Used in | Notes |
+**Exactly these 17 codebooks are manageable here**, and a user sees the subset whose edit role they hold. The right-hand column is the role that gates editing that codebook's values.
+
+| Codebook code | Used in | Edit role |
 |---|---|---|
-| `SYSTEM_TYPE` | [System Type Edit](../systemTypeEdit/README.md) | Managed in its dedicated module — listed here for reference, edits go through *System Type Edit*. |
-| `SYSTEM_IMPORTANCE` | System detail | Importance values for a system. |
-| `SYSTEM_CRITICALITY_CLASS` | System detail | Criticality classification. |
-| `SYSTEM_ATTRIBUTE` | System detail, Service Types | Attribute family per system / service. |
-| `SYSTEM_LEVEL` | System hierarchy | `SYSTEM_DOMAIN` … `TRASH`. Read-only in practice. |
-| `LOCATION` | System detail, [Room Cards](../roomCards/README.md), Orders | Physical location codebook. |
-| `ZONE` / `SUB_ZONE` | System detail | Control-system zones; sub-zones depend on parent zone. |
-| `TEAM` | System detail, [Room Cards](../roomCards/README.md) | Teams the facility groups people by. |
-| `EMPLOYEE` | Almost everywhere | The employee codebook. |
-| `USER`, `DEPARTMENT` | Profile, employees | User and department admin. |
-| `SUPPLIER`, `MANUFACTURER` | [Catalogue](../catalogue/README.md), [Orders](../orders/README.md) | Procurement codebooks. |
-| `UNIT`, `CATALOGUE_PROPERTY_TYPE`, `CATALOGUE_CATEGORY` | [Catalogue](../catalogue/README.md) | Catalogue property metadata and category tree. |
-| `ITEM_USAGE`, `ITEM_CONDITION_STATUS` | Physical items, orders | Usage and condition codebooks. |
-| `ORDER_STATUS`, `PROCUREMENT_STATUS` | [Orders](../orders/README.md) | Order lifecycle. |
-| `OPERATIONAL_STATE` | [Room Cards](../roomCards/README.md) | The six OS states (governance audit lives elsewhere). |
-| `CONTACT_PERSON_ROLE` | [Room Cards](../roomCards/README.md) | Roles for hall contacts. |
-| `LANGUAGE`, `COUNTRY` | Profile, publications | Reference data. |
-| `PUBLICATION_CATEGORY`, `PUBLICATION_SUPPORT`, `OPEN_ACCESS_TYPE`, `MEDIA_TYPE`, `PUBLISH_FORMAT`, `CONFERENCE_SCOPE` | Publications | Publication metadata. |
-| `USER_CALL`, `USER_EXPERIMENT`, `GRANT`, `GRANT_GROUP`, `EXPERIMENTAL_SYSTEM` | Research / publications | Research-program codebooks. |
-| `SYSTEM` | Internal | Reference list of systems; managed via [System Hierarchy](../systemHierarchy/README.md). |
-| `PROCUREMENTER` | Orders | Procurement officers. |
+| `UNIT` | [Catalogue](../catalogue/README.md) property units | `codebooks-admin` |
+| `SUPPLIER` | [Catalogue](../catalogue/README.md), [Orders](../orders/README.md) | `codebooks-admin` |
+| `TEAM` | System detail, [Room Cards](../roomCards/README.md) | `codebooks-admin` |
+| `COUNTRY` | Profile, publications | `codebooks-admin` |
+| `LANGUAGE` | Profile, publications | `codebooks-admin` |
+| `OPERATIONAL_STATE` | [Room Cards](../roomCards/README.md) | `codebooks-admin` |
+| `CONTACT_PERSON_ROLE` | [Room Cards](../roomCards/README.md) — roles for hall contacts | `room-cards-edit` |
+| `SYSTEM_ATTRIBUTE` | System detail, Service Types | `system-attribute-edit` |
+| `DEPARTMENT` | Publications — author departments | `publications-edit` |
+| `OPEN_ACCESS_TYPE` | Publications | `publications-edit` |
+| `MEDIA_TYPE` | Publications | `publications-edit` |
+| `PUBLISH_FORMAT` | Publications | `publications-edit` |
+| `CONFERENCE_SCOPE` | Publications | `publications-edit` |
+| `USER_CALL` | Research programmes | `publications-edit` |
+| `USER_EXPERIMENT` | Research programmes | `publications-edit` |
+| `EXPERIMENTAL_SYSTEM` | Research programmes | `publications-edit` |
+| `GRANT_GROUP` | [Publications](../publications/README.md) — grant grouping | `publications-edit` |
 
-The full enumeration lives in `src/types/constants/codebook.ts`.
+### Codebooks you cannot manage here
+
+These are read by the app but are **not** offered in this module. Some have a dedicated module, some are derived data, and some are not exposed by the API at all:
+
+| Codebook | Where it is actually maintained |
+|---|---|
+| `SYSTEM_TYPE` | [System Type Edit](../systemTypeEdit/README.md) |
+| `CATALOGUE_CATEGORY` | [Catalogue](../catalogue/README.md) category tree |
+| `ZONE` | [Zones](../zones/README.md) |
+| `SYSTEM` | Derived from [System Hierarchy](../systemHierarchy/README.md) |
+| `LOCATION` | Imported facility data — read-only in the app |
+| `EMPLOYEE`, `USER`, `PROCUREMENTER` | User administration / HR import |
+| `ITEM_USAGE`, `ITEM_CONDITION_STATUS`, `ORDER_STATUS` | Fixed reference data seeded by the API |
+| `SYSTEM_IMPORTANCE`, `SYSTEM_CRITICALITY_CLASS` | Fixed reference data seeded by the API |
+| `CATALOGUE_PROPERTY_TYPE` | Fixed reference data seeded by the API |
+
+> ⚠️ **Codes the UI knows but the API does not serve.** `SUB_ZONE`, `MANUFACTURER`, `SYSTEM_LEVEL`, `PROCUREMENT_STATUS`, `PUBLICATION_CATEGORY`, `PUBLICATION_SUPPORT` and `GRANT` are listed in the front-end enum but have no codebook behind them — requesting them returns a server error. They are not reachable from this page; treat them as vestigial until the API grows them.
+
+The front-end enumeration lives in `src/types/constants/codebook.ts`; the authoritative list of what is actually editable comes from `GET /codebooks?editable=true`.
 
 ## Layout
 
 A two-pane layout: sidebar of codebook codes on the left, editor on the right.
 
-- **Sidebar (280 px, left).** Title with a *Search codebook…* placeholder. Below: list of editable codebook codes (e.g. `SUPPLIER`, `LOCATION`). Click a code to select it; the right pane loads.
+- **Sidebar (280 px, left).** Title with a *Search codebook…* placeholder. Below: list of editable codebook codes (e.g. `UNIT`, `SUPPLIER`). Click a code to select it; the right pane loads.
 - **Main pane — empty state.** Before a selection: a placeholder card titled *Select a codebook* with the description *Select a codebook from the list on the left to view and edit values.*
 - **Main pane — codebook detail.** After a selection:
-  - Header with the codebook code (e.g. `LOCATION`) and an info-tooltip icon explaining the inline-edit gesture.
+  - Header with the codebook code (e.g. `UNIT`) and an info-tooltip icon explaining the inline-edit gesture.
   - Subtitle *Manage codebook values*.
   - A search field (*Search values…*) that filters by name, code, or UID.
   - *Add value* button on the right.
   - Data table with columns: **Name** (editable), **Code** (editable), **UID** (read-only, monospace), **Actions** (delete affordance). 10 rows per page; pagination beneath.
   - Empty states: *Codebook is empty* (no values yet) or *No values match the search* (with an active query).
 
-`[SCREENSHOT PLACEHOLDER: codebook detail in the main pane — LOCATION codebook selected, search field with a partial query, Add value button on the right, table showing five rows with Name / Code / UID / Actions, one row mid-edit on the Name cell with a checkmark and X confirm/cancel buttons]`
+![The UNIT codebook selected: search field, Add value button, and the Name / Code / UID table with ten rows per page](./images/codebook-detail.png)
 
 ## Common workflows
 
@@ -92,7 +111,7 @@ For codebooks managed by their own module (System Type Edit, Catalogue Categorie
 - 🔮 **Audit log.** Per-value history of name / code changes with timestamp and user.
 - 🔮 **Reordering / sorting per codebook.** Today values render in server-side order; some pickers would benefit from a custom sort.
 
-`[VIDEO PLACEHOLDER: 50s end-to-end — open Codebooks → search for LOCATION in the sidebar → select it → search values → click Add value → name a new location → Save → inline-edit an existing row's name and code → delete a stale row with the action menu]`
+`[VIDEO PLACEHOLDER: 50s end-to-end — open Codebooks → search for SUPPLIER in the sidebar → select it → search values → click Add value → name a new supplier → Save → inline-edit an existing row's name and code → delete a stale row with the action menu]`
 
 ## Data model reference
 

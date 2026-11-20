@@ -2,7 +2,7 @@
 
 The Systems Overview is the flat, table-only view of every system at the facility — the same entities that live in the [System Hierarchy](../systemHierarchy/README.md) tree, surfaced as a sortable, filterable, exportable list. Use the overview when you need to *answer questions across the whole population* (e.g. "all critical systems in zone B without a responsible person", "every catalogue item used in more than five systems"), or when you want a CSV snapshot for a meeting.
 
-`[SCREENSHOT PLACEHOLDER: Systems Overview landing — top action bar with Add / Refresh / Filter / Export CSV buttons, filter badge row beneath, wide PandaTable with sticky Name column and 20+ data columns visible, pagination at the bottom]`
+![Systems Overview landing page](./images/systems-overview.png)
 
 ## Access & Responsibilities
 

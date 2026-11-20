@@ -4,7 +4,7 @@ The Zones module is the **registry of control-system zones** used as a categoris
 
 Use this module to add a new zone (when an experimental hall or new wing comes online), maintain notes about a zone's scope or constraints, manage the parent/subzone relationships, or import a batch of zones from CSV.
 
-`[SCREENSHOT PLACEHOLDER: Zones page — top toolbar with Add Zone and Import CSV buttons on the left, column visibility dropdown on the right; table beneath with columns Name, Code, Parent Zone, Notes; one row with a subzone whose Parent Zone column shows the parent name]`
+![Zones page: the toolbar above a table of Name, Code, Parent Zone and Notes, with subzones showing their parent](./images/zones-list.png)
 
 ## Access & Responsibilities
 
@@ -35,7 +35,7 @@ Use this module to add a new zone (when an experimental hall or new wing comes o
 
 A single-pane explorer with a thin toolbar.
 
-- **Top bar.** *Add Zone* (gated by `zones-edit`), *Import CSV* (gated by `zones-edit`, opens a file picker), column visibility dropdown on the right.
+- **Top bar.** Icon-only buttons, left to right: sidebar toggle, *Refresh*, *Add Zone* (a **+**, gated by `zones-edit`), *Import CSV* (an upload arrow, gated by `zones-edit`, opens a file picker). Search field in the middle, column-visibility control on the right. The buttons carry no text labels — hover for the tooltip.
 - **Search field** narrows the list by name and code (partial match).
 - **Table.** Columns:
   - **Name** — the zone's display label.
@@ -70,7 +70,7 @@ For where zones are *consumed* — see *Editing system details* in the [System H
 
 > 🔧 *This section is for engineers reading the docs in the repo. The wiki generator strips it.*
 >
-> Endpoints: `GET /zones` (list, key `zones`), `GET /zone?uid=<uid>` (detail, key `zone`), `POST /zone` (create), `PUT /zone?uid=<uid>` (update), `DELETE /zone?uid=<uid>`, `POST /zones/import` (multipart CSV). GraphQL type: `Zone { uid, name, code, notes, parentZone, hasSubzoneZones[], zonesHasSubzone[] }` with `HAS_SUBZONE` relationship in both directions. Parent-zone picker on the form filters to root zones only (`parentZone == null`). Import result: `{ created: number, skipped: number, errors: string[] }`.
+> Endpoints (all under the API's `/v1` base): `GET /zones` (list, endpoint key `zones`), `GET /zones/<uid>` (detail, key `zone`), `POST /zones` (create), `PUT /zones/<uid>` (update), `DELETE /zones/<uid>`, `POST /zones/import` (multipart form, file field `file`). Read requires `zones-view`; every write requires `zones-edit`. GraphQL type: `Zone { uid, name, code, notes, parentZone, hasSubzoneZones[], zonesHasSubzone[] }` with `HAS_SUBZONE` relationship in both directions. Parent-zone picker on the form filters to root zones only (`parentZone == null`); the server independently rejects a parent that is itself a subzone (`max 2 levels of nesting`). Import result: `{ created: number, skipped: number, errors: string[] }`. The REST payload also carries `defaultParentSystemUid`, which the `dev` front-end does not use yet.
 
 ## Language
 

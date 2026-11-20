@@ -21,7 +21,7 @@ See [Access & Responsibilities](../README.md#access--responsibilities) for what 
 
 1. **Open the System Tree on the left.** The header shows *System Tree*, a search input, and a *Collapse All* button.
 
-   `[SCREENSHOT PLACEHOLDER: left tree panel with several top-level system domains visible, one expanded showing two levels of children, count badges on the right of each node]`
+   ![The system tree with a top-level domain expanded](../images/tree-expanded.png)
 
 2. **Click the chevron** next to a node to expand it, or click the node label to select it. Selecting a node automatically expands all its ancestors so you can always see where you are in the tree.
 
