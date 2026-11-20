@@ -1,10 +1,11 @@
 'use client'
 
-import { BadgeCheck, ChevronsUpDown, CircleHelp } from 'lucide-react'
+import { BadgeCheck, ChevronsUpDown, CircleHelp, ShieldCheck } from 'lucide-react'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import { useIntl } from 'react-intl'
 
+import { AccessControl } from '@/components/auth/AccesControl'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import {
     DropdownMenu,
@@ -23,6 +24,7 @@ import {
 } from '@/components/ui/sidebar'
 import { message } from '@/i18n/src/messages'
 import { PATH, SUPPORT } from '@/types/constants/paths'
+import { ROLE } from '@/types/constants/roles'
 
 import { DarkModeSwitch } from './darkmode-switch'
 import { LogoutButton } from './logout-button'
@@ -100,6 +102,14 @@ export function NavUser() {
                                     {fm({ id: message.layout.userMenu.profile })}
                                 </Link>
                             </DropdownMenuItem>
+                            <AccessControl roles={ROLE.ADMIN}>
+                                <DropdownMenuItem asChild>
+                                    <Link href={PATH.ADMIN} data-testid="user-menu-administration">
+                                        <ShieldCheck />
+                                        {fm({ id: message.layout.userMenu.administration })}
+                                    </Link>
+                                </DropdownMenuItem>
+                            </AccessControl>
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
                         <LogoutButton />
