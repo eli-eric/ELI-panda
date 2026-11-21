@@ -31,19 +31,15 @@ describe('researcherSchema', () => {
         ).toBe(true)
     })
 
-    it('rejects when all identifiers missing', () => {
-        const r = researcherSchema.safeParse({ firstName: 'Jan', lastName: 'Smith' })
-        expect(r.success).toBe(false)
-        if (!r.success) {
-            expect(
-                r.error.issues.some(i =>
-                    i.message?.toString().includes('At least one identifier is required'),
-                ),
-            ).toBe(true)
-        }
+    it('accepts a researcher who has no identifiers at all', () => {
+        // Plenty of real people hold none of the three, and RIV keys authors on
+        // the name plus identificationNumber, not on these.
+        expect(researcherSchema.safeParse({ firstName: 'Jan', lastName: 'Smith' }).success).toBe(
+            true,
+        )
     })
 
-    it('rejects when all identifiers whitespace-only', () => {
+    it('accepts a researcher whose identifiers are blank or whitespace', () => {
         expect(
             researcherSchema.safeParse({
                 ...baseValid,
@@ -51,7 +47,7 @@ describe('researcherSchema', () => {
                 scopusId: '',
                 researcherId: '',
             }).success,
-        ).toBe(false)
+        ).toBe(true)
     })
 
     it('rejects empty firstName / lastName', () => {
@@ -60,9 +56,7 @@ describe('researcherSchema', () => {
     })
 
     it('accepts nullable citizenship', () => {
-        expect(
-            researcherSchema.safeParse({ ...baseValid, citizenship: null }).success,
-        ).toBe(true)
+        expect(researcherSchema.safeParse({ ...baseValid, citizenship: null }).success).toBe(true)
     })
 
     it('rejects citizenship missing uid', () => {

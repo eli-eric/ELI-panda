@@ -92,7 +92,7 @@ export const EliAuthorsSelectComponent = () => {
                                     onClick={() => handleRemove(index)}
                                     className="ml-1 rounded-full hover:bg-muted p-0.5"
                                     aria-label={fm(
-                                        { id: 'common.remove' },
+                                        { id: message.common.remove },
                                         { name: `${field.firstName} ${field.lastName}` },
                                     )}
                                 >

@@ -53,7 +53,9 @@ describe('EliAuthorsSelectComponent', () => {
             withForm: true,
             formProps: { defaultValues: { eliResearchers: [] } },
         })
-        const addBtn = screen.getAllByRole('button').find(b => /add/i.test(b.textContent ?? '')) ?? screen.getByRole('button')
+        const addBtn =
+            screen.getAllByRole('button').find(b => /add/i.test(b.textContent ?? '')) ??
+            screen.getByRole('button')
         fireEvent.click(addBtn)
         expect(openResearcherModal).toHaveBeenCalled()
     })

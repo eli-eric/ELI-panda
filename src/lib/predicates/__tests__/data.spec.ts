@@ -2,6 +2,7 @@ import {
     hasItems,
     hasProperties,
     hasValue,
+    isBlank,
     isEmpty,
     isEmptyArray,
     isEmptyObject,
@@ -22,6 +23,22 @@ describe('isEmpty / isNotEmpty', () => {
     ])('isEmpty(%p) -> %s', (input, expected) => {
         expect(isEmpty(input)).toBe(expected)
         expect(isNotEmpty(input)).toBe(!expected)
+    })
+})
+
+describe('isBlank', () => {
+    it.each([
+        [null, true],
+        [undefined, true],
+        ['', true],
+        [' \t\n', true],
+        [' value ', false],
+        [0, false],
+        [false, false],
+        [[], false],
+        [{}, false],
+    ])('isBlank(%p) -> %s', (input, expected) => {
+        expect(isBlank(input)).toBe(expected)
     })
 })
 

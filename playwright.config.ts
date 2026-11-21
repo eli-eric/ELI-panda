@@ -31,7 +31,9 @@ export default defineConfig({
         command: `rm -rf .next && yarn build && PORT=${E2E_PORT} next start --hostname 127.0.0.1`,
         url: E2E_BASE_URL,
         reuseExistingServer: false,
-        timeout: 3 * 60 * 1000,
+        // A cold `rm -rf .next && yarn build` takes ~4 min for this app, so the
+        // previous 3-minute budget made the suite unstartable.
+        timeout: 8 * 60 * 1000,
         stdout: 'ignore',
         stderr: 'pipe',
         env: {

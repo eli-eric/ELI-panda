@@ -84,6 +84,7 @@ export const getEndpoints = ({
         systemsMove: `/systems/move`,
         systemsCopy: '/systems/copy',
         publication: `/publication${uidPart}`,
+        publicationWosPreview: `/publications/wos-preview${query}`,
         publications: `/publications${query}`,
         researcher: `/researcher${uidPart}`,
         researchers: `/researchers${query}`,

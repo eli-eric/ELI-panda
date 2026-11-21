@@ -12,10 +12,10 @@ export const formatFormData = (data: any): Publication => ({
     eliPublication: data.eliPublication ?? ELI_PUBLICATION.YES,
     allAuthorsCount: Number(data.allAuthorsCount),
     eliAuthorsCount: Number(data.eliAuthorsCount),
-    volume: data.volume ? Number(data.volume) : null,
+    volume: data.volume === '' || data.volume == null ? null : Number(data.volume),
     bookPagesCount: data.bookPagesCount ? Number(data.bookPagesCount) : null,
     pagesCount: Number(data.pagesCount),
-    issue: data.issue ? Number(data.issue) : null,
+    issue: data.issue === '' || data.issue == null ? null : Number(data.issue),
     impactFactor: data.impactFactor ? Number(data.impactFactor) : null,
     authorsDepartments:
         data.authorsDepartments?.map((author: any) => ({

@@ -18,8 +18,10 @@ import {
     MEDIA_TYPE_CODE,
 } from '../types/constants'
 import { DepartmentsComponent } from './departments.comp'
+import { DoiLookupField } from './doi-lookup.field'
 import { EliAuthorsSelectComponent } from './eli-authors-select.comp'
 import { GrantsSelectComponent } from './grants-select.comp'
+import { PublicationYearField } from './publication-year.field'
 import { WebLinkField } from './web-link.field'
 
 export type Publication = {
@@ -82,7 +84,7 @@ export const PublicationFormComponent = () => {
                     <Combobox {...fields.experimentalSystemCb} />
                 </Col>
                 <Col lg={4}>
-                    <Input {...fields.doi} />
+                    <DoiLookupField />
                 </Col>
                 <Col lg={4}>
                     <WebLinkField />
@@ -136,10 +138,7 @@ export const PublicationFormComponent = () => {
                     <Listbox {...fields.quartil} customOptions={['Q1', 'Q2', 'Q3', 'Q4']} />
                 </Col>
                 <Col lg={2}>
-                    <Listbox
-                        {...fields.yearOfPublication}
-                        customOptions={['2023', '2024', '2025', '2026']}
-                    />
+                    <PublicationYearField />
                 </Col>
                 <Col lg={4}>
                     <Input {...fields.dateOfPublication} />

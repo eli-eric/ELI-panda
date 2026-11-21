@@ -21,12 +21,8 @@ describe('useMediaTypeStore', () => {
     })
 
     it('setMediaType updates the type', () => {
-        act(() =>
-            useMediaTypeStore.getState().setMediaType(MEDIA_TYPE_CODE.OtherArticle),
-        )
-        expect(useMediaTypeStore.getState().mediaType).toBe(
-            MEDIA_TYPE_CODE.OtherArticle,
-        )
+        act(() => useMediaTypeStore.getState().setMediaType(MEDIA_TYPE_CODE.OtherArticle))
+        expect(useMediaTypeStore.getState().mediaType).toBe(MEDIA_TYPE_CODE.OtherArticle)
     })
 
     it('setMediaTypeUid stores + clears via undefined', () => {

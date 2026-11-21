@@ -4,7 +4,9 @@ import Listbox from '@/components/form/Listbox'
 import { RadioSelect } from '@/components/form/radio-select.comp'
 import { useAccessControl } from '@/hooks/useAccessControl'
 import { DepartmentsComponent } from '@/modules/publication/components/departments.comp'
+import { DoiLookupField } from '@/modules/publication/components/doi-lookup.field'
 import { EliAuthorsSelectComponent } from '@/modules/publication/components/eli-authors-select.comp'
+import { PublicationYearField } from '@/modules/publication/components/publication-year.field'
 import { WebLinkField } from '@/modules/publication/components/web-link.field'
 import { useMediaTypeStore } from '@/modules/publication/hooks/useMediaTypeStore'
 import { usePublicationFields } from '@/modules/publication/hooks/usePublicationFields'
@@ -44,7 +46,7 @@ export const PublicationFreeFormComponent = () => {
             <Listbox {...fields.userCall} />
             <Combobox {...fields.userExperimentCb} />
             <Combobox {...fields.experimentalSystemCb} />
-            <Input {...fields.doi} />
+            <DoiLookupField />
             <WebLinkField />
             <Listbox {...fields.openAccessType} />
             <Input {...fields.title} />
@@ -62,10 +64,7 @@ export const PublicationFreeFormComponent = () => {
             <Input {...fields.impactFactor} />
             <Input {...fields.quartilBasis} />
             <Listbox {...fields.quartil} customOptions={['Q1', 'Q2', 'Q3', 'Q4']} />
-            <Listbox
-                {...fields.yearOfPublication}
-                customOptions={['2023', '2024', '2025', '2026']}
-            />
+            <PublicationYearField />
             <Input {...fields.dateOfPublication} />
             <TextArea {...fields.abstract} />
             <TextArea {...fields.keywords} />
