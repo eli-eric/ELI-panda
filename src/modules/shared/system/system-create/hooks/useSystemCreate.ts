@@ -8,7 +8,6 @@ import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { useCreateSystem } from '@/modules/shared/system/system-detail/hooks/mutations/useCreateSystem'
 import type { CreateSystemBody, SystemDetail } from '@/modules/shared/system/system-detail/types'
 import { isDuplicateSystemCodeConflict } from '@/modules/shared/system/system-detail/utils/systemErrors'
-import { useSystems } from '@/modules/systems/hooks/useSystems'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 
 import type { SystemCreateFormData } from '../schema'
@@ -54,7 +53,6 @@ const uploadImages = (
 
 export const useSystemCreate = (imageRef?: MutableRefObject<ImageGalleryRef | undefined>) => {
     const { formatMessage: fm } = useIntl()
-    const { refetch } = useSystems('systems')
     const { closeModal } = useDynamicModalStore()
     const { parentUid, clear } = useSystemCreateParentStore()
     const { confirmCreate, createSystem: create, isPending } = useCreateSystem()
@@ -70,11 +68,10 @@ export const useSystemCreate = (imageRef?: MutableRefObject<ImageGalleryRef | un
                     ),
                 )
             }
-            void refetch()
             closeModal(CREATE_SHEET_ID)
             clear()
         },
-        [imageRef, fm, refetch, closeModal, clear],
+        [imageRef, fm, closeModal, clear],
     )
 
     const createSystem = useCallback(

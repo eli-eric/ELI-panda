@@ -32,7 +32,7 @@ export const useCreateSubsystem = (parentUid: string) => {
         onSuccess: created => {
             // seed the new system so the redirect target renders fully on first paint
             queryClient.setQueryData(getSystemDetailQueryKey(created.uid), created)
-            refreshSystemStructure(queryClient)
+            refreshSystemStructure(queryClient, created)
         },
     })
 

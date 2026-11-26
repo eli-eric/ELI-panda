@@ -25,7 +25,7 @@ export const useCreateSystem = () => {
             (await queryMutate<SystemDetail, CreateSystemBody>('systemCreate', 'post')(body)).data,
         onSuccess: created => {
             queryClient.setQueryData(getSystemDetailQueryKey(created.uid), created)
-            refreshSystemStructure(queryClient)
+            refreshSystemStructure(queryClient, created)
         },
     })
 

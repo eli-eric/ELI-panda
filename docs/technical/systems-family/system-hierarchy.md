@@ -241,7 +241,7 @@ A quick edit: one column, top to bottom. Each block is a collapsible `Disclosure
 
 Collapsed sections do not mount their content, so their queries only fire when opened.
 
-Every field saves on its own; there is no RHF form, Save button or unsaved-changes guard. Clicking a breadcrumb, spare or subsystem **re-targets the sheet in place** (`SystemEditContainer` keeps the current uid in state) instead of stacking sheets. The explorer tabs render the same sections, so the two surfaces cannot drift.
+Every field saves on its own; there is no RHF form, Save button or unsaved-changes guard. The systems overview's list cache is **patched in place** after a write (`utils/patchSystemsTableCaches.ts`) and created systems are inserted into it — never invalidated — because the overview merges lazily expanded subsystems into that cache and a refetch would drop the open tree. Clicking a breadcrumb, spare or subsystem **re-targets the sheet in place** (`SystemEditContainer` keeps the current uid in state) instead of stacking sheets. The explorer tabs render the same sections, so the two surfaces cannot drift.
 
 ## Deep links & URL contract
 

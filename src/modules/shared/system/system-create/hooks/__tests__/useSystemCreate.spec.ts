@@ -9,13 +9,9 @@ import { useSystemCreateParentStore } from '../../store/useSystemCreateParentSto
 import { buildCreateSystemBody, useSystemCreate } from '../useSystemCreate'
 
 const mockCloseModal = jest.fn()
-const mockRefetch = jest.fn()
 
 jest.mock('@/modules/shared/system/system-detail/hooks/mutations/useCreateSystem', () => ({
     useCreateSystem: jest.fn(),
-}))
-jest.mock('@/modules/systems/hooks/useSystems', () => ({
-    useSystems: () => ({ refetch: mockRefetch }),
 }))
 jest.mock('@/store/useDynamicModalStore', () => ({
     useDynamicModalStore: () => ({ closeModal: mockCloseModal }),
@@ -72,7 +68,7 @@ describe('buildCreateSystemBody', () => {
 })
 
 describe('useSystemCreate', () => {
-    it('confirms against the parent, creates, refreshes the overview and closes the sheet', async () => {
+    it('confirms against the parent, creates and closes the sheet (overview patched by the hook, no refetch)', async () => {
         const { result } = renderHook(() => useSystemCreate())
         await act(async () => {
             await result.current.createSystem(form)
@@ -80,7 +76,6 @@ describe('useSystemCreate', () => {
         expect(mockConfirm).toHaveBeenCalledWith('parent-1')
         expect(mockCreate).toHaveBeenCalledWith(expect.objectContaining({ parentUid: 'parent-1' }))
         expect(toast.promise).toHaveBeenCalled()
-        expect(mockRefetch).toHaveBeenCalled()
         expect(mockCloseModal).toHaveBeenCalledWith('system-create')
         expect(useSystemCreateParentStore.getState().parentUid).toBeNull()
     })
