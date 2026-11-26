@@ -17,7 +17,7 @@ import { cn } from '@/lib/utils'
 import useSystemEditFormFields from '@/modules/systemItem/components/form/SystemForm.fields'
 import { useSystemCodeGenerate } from '@/modules/systemItem/hooks/useSystemCodeGenerate'
 import { getBadgeVariantBySystemLevel, getFontBySystemLevel } from '@/modules/systemItem/utils'
-import { SystemLevel } from '@/types/gql/graphql'
+import { SystemLevel } from '@/types/constants/systemLevel'
 
 // Create flow only: the system does not exist yet, so the code can be generated
 // into the form but never released (that is a PATCH on an existing system).

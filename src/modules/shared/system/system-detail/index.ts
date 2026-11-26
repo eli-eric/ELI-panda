@@ -24,6 +24,7 @@ export { hasEmployeeAssignments, SystemPeopleFields } from './components/SystemP
 export { SystemTitleField } from './components/SystemTitleField.cont'
 export * from './history'
 export { useCreateSubsystem } from './hooks/mutations/useCreateSubsystem'
+export { useCreateSystem } from './hooks/mutations/useCreateSystem'
 export type { DeleteRelationshipParams } from './hooks/mutations/useDeleteSystemRelationship'
 export { useDeleteSystemRelationship } from './hooks/mutations/useDeleteSystemRelationship'
 export { useGenerateSystemCode } from './hooks/mutations/useGenerateSystemCode'

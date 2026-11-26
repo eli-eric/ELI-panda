@@ -89,6 +89,7 @@ All single-system writes share one engine, `useSystemScopedWrite`: soft-lock con
 | `useSystemPatch(uid)` | `PATCH /system/{uid}` | Partial: absent key = unchanged, `null` = clear; codebooks as `{ uid }`, `operators` / `maintainedBy` as full-replace arrays. Returns the fresh `SystemDetail`. |
 | `usePhysicalItemPatch(uid)` | `PATCH /system/{uid}/physical-item` | serial, notes, usage, condition. Same token + scope as the system (audit lands on the System node). |
 | `useGenerateSystemCode(uid)` | `POST /system/{uid}/system-code` | generate + save in one step. Release = `useSystemPatch` `{ systemCode: null }`. |
+| `useCreateSystem()` | `POST /systems` | root "Create System" sheet (`shared/system/system-create`): PATCH field shapes + optional `parentUid`; absent responsible / location / zone inherited. `confirmCreate(parentUid)` runs the soft-lock confirm before the toast. |
 | `useCreateSubsystem(parentUid)` | `POST /system/{parentUid}/subsystems` | body `{ name, systemLevel }`; the server inherits responsible / location / zone and validates level rules. Seeds the new detail, then `refreshSystemStructure`. |
 | `useDeleteSystemRelationship()` | `DELETE /system/{from}/relationships/{type}/{to}` | only the 8 engineering types (`REMOVABLE_RELATIONSHIP_TYPES`); the server re-splits spare coverage in the same transaction, so there is no client recalc. 404 also refreshes the views. |
 | `useSystemCopy` | `PUT /systems/copy` | server orchestrates the recursive copy. |
@@ -376,7 +377,7 @@ Backend contract and the rejected alternatives: [ADR 0001](../../adr/0001-direct
 1. **TTL the persisted graph state**. Two `persist`ed stores with arbitrary node arrays can outgrow `localStorage`'s 5 MB quota on large hierarchies. Add a soft cap (e.g. last 200 nodes) or invalidate on schema-version change.
 2. **Document the two-graph split** (`useHierarchyStore` vs `useDetailGraphStore`) inline. A single sentence at the top of each store would prevent newcomers from collapsing them.
 3. **Test `useSystemCopy`** — none of the existing specs cover the copy dialog combinatorics. The matrix in [Copy / Paste](#copy--paste) is a natural test parameterisation.
-4. **Delete `systemItem` and migrate the root "Create System" sheet** — the last GraphQL writers of `System` (and of `updatedByResolver`).
+4. **Delete `systemItem`** — with the root "Create System" sheet on `POST /systems`, it is the last GraphQL writer of `System` (`roomCard` still calls `updatedByResolver`). Unused exports are marked `@deprecated`; see its `DEPRECATED.md` removal criteria.
 
 ## Open questions
 

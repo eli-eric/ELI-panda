@@ -15,7 +15,7 @@ The Systems Explorer (`systemHierarchy`) and the shared Edit System sheet edited
 
 ## Decision
 
-1. **All system writes go through REST, and the API writes the audit.** `PATCH /system/:uid` and `PATCH /system/:uid/physical-item` (absent key = unchanged, `null` = clear), `POST /system/:uid/subsystems`, `POST /system/:uid/system-code`, `DELETE /system/:uid/relationships/:type/:otherUid`. The server diffs and writes `WAS_UPDATED_BY {action, changes}` in the same transaction. Reads use `GET /system/:uid` (+ `/spare-parts`, `/subsystems`, `/physical-item/:uid/catalogue-properties|orders`).
+1. **All system writes go through REST, and the API writes the audit.** `PATCH /system/:uid` and `PATCH /system/:uid/physical-item` (absent key = unchanged, `null` = clear), `POST /systems` (root or child via `parentUid`), `POST /system/:uid/subsystems`, `POST /system/:uid/system-code`, `DELETE /system/:uid/relationships/:type/:otherUid`. The server diffs and writes `WAS_UPDATED_BY {action, changes}` in the same transaction. Reads use `GET /system/:uid` (+ `/spare-parts`, `/subsystems`, `/physical-item/:uid/catalogue-properties|orders`).
 2. **Optimistic concurrency with one token per system.** Writes carry the system's `lastUpdateTime`; a mismatch is `409 STALE`. The FE serializes all writes to one system (TanStack mutation `scope: system-<uid>`) and reads the token at execution time, so consecutive inline saves never conflict with each other.
 3. **Responsibility is a soft lock.** No per-system 403 anywhere. A user who is not responsible is asked once per exact system uid per session to confirm (`confirmSystemEdit`); the server records `outsideResponsibility: true` on the audit edge and the History feed badges it. The `systems-edit` role stays a hard gate. Creating relationships never prompts, except the `HAS_SUBSYSTEM` edge of a new subsystem (prompted against the parent).
 4. **One edit implementation.** The explorer tabs and the Edit System sheet compose the same inline-field sections from `shared/system/system-detail`.
@@ -24,7 +24,7 @@ The Systems Explorer (`systemHierarchy`) and the shared Edit System sheet edited
 
 - **Positive** — audit is authoritative and atomic; nobody is locked out of fixing data; one read model (`SystemDetail`) and one write path for every surface; GraphQL is gone from the systems detail family.
 - **Negative** — a concurrent change to *another* field of the same system still yields a `409 STALE` (the user re-applies after the refetch). The confirmation is per uid, so walking a subtree outside one's responsibility asks for each system.
-- **Neutral / follow-ups** — `systemItem` (deprecated) and the root "Create System" sheet still use GraphQL; `updatedByResolver` stays live for them until they migrate.
+- **Neutral / follow-ups** — the root "Create System" sheet now posts to `POST /systems`. `systemItem` (deprecated; unused exports marked `@deprecated`) and `roomCard` still write through GraphQL, so `updatedByResolver` stays live until they migrate.
 
 ## Alternatives considered
 

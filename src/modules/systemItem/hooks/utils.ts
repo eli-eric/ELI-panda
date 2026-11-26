@@ -4,6 +4,7 @@ import { connectAndDisconnectNode } from '@/utils/graphql/mutations'
 
 import type { SystemDetailFormType } from '../types/form'
 
+/** @deprecated systemItem is deprecated (see modules/systemItem/DEPRECATED.md) and this has no live consumer — use modules/shared/system/system-detail. */
 export const makeSystemInputBody = ({
     systemForm,
     systemDetail,
@@ -136,6 +137,7 @@ export type PruneSystemDetail = {
     children?: PruneSystemDetail[]
 }
 
+/** @deprecated systemItem is deprecated (see modules/systemItem/DEPRECATED.md) and this has no live consumer — use modules/shared/system/system-detail. */
 export function pruneSystemDetail(system: SystemDetail): PruneSystemDetail {
     const { uid } = system
     const children = system.subSystems?.map(pruneSystemDetail)

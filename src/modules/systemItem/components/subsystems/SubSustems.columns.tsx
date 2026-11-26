@@ -10,6 +10,7 @@ import { PATH } from '@/types/constants/paths'
 
 import type { TableSystem } from './types'
 
+/** @deprecated systemItem is deprecated (see modules/systemItem/DEPRECATED.md) and this has no live consumer — use modules/shared/system/system-detail. */
 export const useSubSystemsColumns = () => {
     const columns = useMemo((): ColumnDef<TableSystem, any>[] => {
         const columns: ColumnDef<TableSystem, any>[] = [

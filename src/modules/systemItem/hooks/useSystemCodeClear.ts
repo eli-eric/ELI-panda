@@ -17,6 +17,7 @@ const clearSystemCodeMutation = gql(`
   }
 `)
 
+/** @deprecated systemItem is deprecated (see modules/systemItem/DEPRECATED.md) and this has no live consumer — use modules/shared/system/system-detail. */
 export const useSystemCodeClear = () => {
     const { setValue } = useFormContext()
 

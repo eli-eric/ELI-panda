@@ -21,6 +21,7 @@ import type { RelationshipTableRow } from './types'
 
 const FALLBACK_COLOR = '#94a3b8'
 
+/** @deprecated systemItem is deprecated (see modules/systemItem/DEPRECATED.md) and this has no live consumer — use modules/shared/system/system-detail. */
 export const RelationshipsContainer = () => {
     const { formatMessage: fm } = useIntl()
     const { systemDetail } = useSystemDetail()

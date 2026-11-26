@@ -70,7 +70,6 @@ export interface SystemDetail {
     location: Codebook | null
     zone: Codebook | null
     importance: Codebook | null
-    // Read-only: SystemAttribute hangs off SystemType, not System.
     attribute: Codebook | null
     responsible: EmployeeRef | null
     responsibleTeam: Codebook | null
@@ -96,6 +95,7 @@ export interface SystemPatchFields {
     location?: UidRef | null
     zone?: UidRef | null
     importance?: UidRef | null
+    attribute?: UidRef | null
     responsible?: UidRef | null
     responsibleTeam?: UidRef | null
     owner?: UidRef | null
@@ -112,6 +112,13 @@ export interface PhysicalItemPatchFields {
 }
 
 export type WithConcurrencyToken<T> = T & { lastUpdateTime?: string | null }
+
+// POST /systems — PATCH field shapes; absent responsible/location/zone are inherited from the parent.
+export interface CreateSystemBody extends SystemPatchFields {
+    parentUid?: string
+    name: string
+    systemLevel: SystemLevel
+}
 
 export interface CreateSubsystemBody {
     name: string

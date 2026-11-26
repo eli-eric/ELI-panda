@@ -15,6 +15,7 @@ interface Props {
     className?: string
 }
 
+/** @deprecated systemItem is deprecated (see modules/systemItem/DEPRECATED.md) and this has no live consumer — use modules/shared/system/system-detail. */
 export const HistoryFeeds: FC<Props> = ({ history, className }) => {
     const { formatMessage: fm } = useIntl()
 

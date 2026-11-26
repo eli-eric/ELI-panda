@@ -10,6 +10,7 @@ import type { ITEM_USAGE } from '@/modules/systems/types/constants'
 import { PATH } from '@/types/constants/paths'
 import type { System } from '@/types/gql/graphql'
 
+/** @deprecated systemItem is deprecated (see modules/systemItem/DEPRECATED.md) and this has no live consumer — use modules/shared/system/system-detail. */
 export const useSpareForColumns = (tableId?: string) => {
     const columns = useMemo((): ColumnDef<System, string>[] => {
         const columns: ColumnDef<System, string>[] = [

@@ -64,6 +64,7 @@ export const getEndpoints = ({
         systemsForRelationship: `/systems/for-relationship${query}`,
         systemSubsystemsForRelationship: `/system/${uid}/subsystems/for-relationship`,
         systemSubsystems: uid ? `/system/${uid}/subsystems` : null,
+        systemCreate: '/systems',
         systemsList: `/systems${query}`,
         systemCode: `/system/systemCode${query}`,
         orders: `/orders${query}`,

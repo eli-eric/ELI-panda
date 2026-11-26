@@ -5,7 +5,7 @@ import { Disclosure } from '@/components/ui'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import { useSystemStore } from '@/modules/shared/system/device-info-overlay/store/useShowDeviceStore'
-import type { SystemLevel } from '@/types/gql/graphql'
+import type { SystemLevel } from '@/types/constants/systemLevel'
 
 interface SystemHierarchyProps {
     parentPath: Array<{

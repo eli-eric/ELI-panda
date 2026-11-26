@@ -1,189 +1,114 @@
-import { useQueryClient } from '@tanstack/react-query'
-import { useSession } from 'next-auth/react'
 import { type MutableRefObject, useCallback } from 'react'
 import { useIntl } from 'react-intl'
+import { toast } from 'sonner'
 
-import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
 import { message } from '@/i18n/src/messages'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
-import {
-    showErrorToast,
-    showSuccessToast,
-    validateSystemForm as validateForm,
-} from '@/modules/systemItem/utils/hookHelpers'
+// deep imports: the system-detail barrel pulls in sections that import back into this module
+import { useCreateSystem } from '@/modules/shared/system/system-detail/hooks/mutations/useCreateSystem'
+import type { CreateSystemBody, SystemDetail } from '@/modules/shared/system/system-detail/types'
+import { isDuplicateSystemCodeConflict } from '@/modules/shared/system/system-detail/utils/systemErrors'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
-import { addSubsystem } from '@/modules/systems/utils'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
-import { gql } from '@/types/gql'
-import type { SystemLevel } from '@/types/gql/graphql'
-import { Actions } from '@/types/gql/graphql'
-import type { SystemsResponse } from '@/types/responses/systems'
-import { connectN, whereC, whereN } from '@/utils/graphql/mutations'
 
 import type { SystemCreateFormData } from '../schema'
 import { useSystemCreateParentStore } from '../store/useSystemCreateParentStore'
 
-const createSystemMutation = gql(`
-  mutation CreateSystems($input: [SystemCreateInput!]!) {
-    createSystems(input: $input) {
-      systems {
-       ...SystemDetail
-      }
-    }
-  }
-`)
+// NOTE: the sheet is opened with this id in useSystemCreateSheet.ts
+const CREATE_SHEET_ID = 'system-create'
 
-export const useSystemCreate = (imageRef?: MutableRefObject<ImageGalleryRef | undefined>) => {
-    const intl = useIntl()
-    const { queryKey, refetch } = useSystems('systems')
-    const queryClient = useQueryClient()
-    const { data: session } = useSession()
-    const { closeModal } = useDynamicModalStore()
-    const { parentUid, clear } = useSystemCreateParentStore()
+const toRef = (value?: { uid: string } | null) => (value?.uid ? { uid: value.uid } : null)
 
-    // Handle cache updates
-    const handleCacheUpdate = useCallback(
-        (body: any) => {
-            if (parentUid) {
-                queryClient.setQueryData<SystemsResponse>(queryKey, prev => {
-                    return prev ? addSubsystem(parentUid, body, prev) : prev
-                })
-            } else {
-                refetch()
-            }
-        },
-        [parentUid, queryClient, queryKey, refetch],
-    )
+const emptyToNull = (value?: string | null) => (value?.trim() ? value.trim() : null)
 
-    // Handle success completion
-    const handleSuccess = useCallback(
-        (responseUid: string, body: any) => {
-            showSuccessToast(intl, message.systemsPage.systemDetail.createModal.onSuccess, {
-                name: body.name,
-            })
+/** Maps the create form onto the POST /systems body (PATCH field shapes). */
+export const buildCreateSystemBody = (
+    form: SystemCreateFormData,
+    parentUid?: string | null,
+): CreateSystemBody => ({
+    ...(parentUid ? { parentUid } : {}),
+    name: form.name.trim(),
+    systemLevel: form.systemLevel,
+    description: emptyToNull(form.description),
+    systemCode: emptyToNull(form.systemCode),
+    systemType: toRef(form.systemType),
+    location: toRef(form.location),
+    zone: toRef(form.zone),
+    responsible: toRef(form.responsible),
+    attribute: toRef(form.attribute),
+})
 
-            handleCacheUpdate(body)
-            // NOTE: Modal is opened with ID 'system-create' in useSystemCreateSheet.ts
-            closeModal('system-create')
-            clear()
-        },
-        [intl, handleCacheUpdate, closeModal, clear],
-    )
-
-    // Handle image upload with success/error scenarios
-    const handleImageUpload = useCallback(
-        (responseUid: string, body: any) => {
-            if (!imageRef?.current) {
-                handleSuccess(responseUid, body)
-                return
-            }
-
-            try {
-                imageRef.current.submit(responseUid, () => {
-                    handleSuccess(responseUid, body)
-                })
-            } catch (error) {
-                showSuccessToast(
-                    intl,
-                    message.systemsPage.systemDetail.createModal.onSuccessWithImageError,
-                    { name: body.name },
-                )
-
-                handleCacheUpdate(body)
-                // NOTE: Modal is opened with ID 'system-create' in useSystemCreateSheet.ts
-                closeModal('system-create')
-                clear()
-            }
-        },
-        [intl, imageRef, handleSuccess, handleCacheUpdate, closeModal, clear],
-    )
-
-    // Main completion handler
-    const onCompleted = useCallback(
-        ({ createSystems: { systems } }) => {
-            const responseUid = systems[0].uid
-            const body = systems[0]
-
-            handleImageUpload(responseUid, body)
-        },
-        [handleImageUpload],
-    )
-
-    // Validation function using shared helper
-    const validateSystemForm = useCallback(
-        (systemForm: SystemCreateFormData) => {
-            return validateForm(systemForm, intl)
-        },
-        [intl],
-    )
-
-    // Build the mutation payload
-    const buildPayload = useCallback(
-        (systemForm: SystemCreateFormData) => {
-            return {
-                input: [
-                    {
-                        parentSystem: parentUid ? { connect: whereN(parentUid) } : undefined,
-                        name: systemForm.name || '',
-                        facility: { connect: whereC(session?.user?.facilityCode) },
-                        deleted: false,
-                        description: systemForm.description || null,
-                        attribute: connectN(systemForm?.attribute?.uid),
-                        systemCode: systemForm.systemCode || null,
-                        systemLevel: systemForm.systemLevel as SystemLevel,
-                        systemType: connectN(systemForm?.systemType?.uid),
-                        location: connectN(systemForm?.location?.uid),
-                        zone: connectN(systemForm?.zone?.uid),
-                        responsible: connectN(systemForm?.responsible?.uid),
-                        updatedBy: {
-                            connect: [
-                                {
-                                    where: { node: { uid: session?.user?.uid } },
-                                    edge: { action: Actions.Insert },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            }
-        },
-        [parentUid, session?.user?.facilityCode, session?.user?.uid],
-    )
-
-    const { mutate: create, isPending } = useGraphQLMutation(createSystemMutation, {
-        onError: error => {
-            showErrorToast(intl, message.systemsPage.systemDetail.createModal.onError, {
-                error: error.message,
-            })
-        },
+// Uploads the gallery images under the new system uid; resolves false if the upload threw.
+const uploadImages = (
+    imageRef: MutableRefObject<ImageGalleryRef | undefined> | undefined,
+    uid: string,
+) =>
+    new Promise<boolean>(resolve => {
+        if (!imageRef?.current) return resolve(true)
+        try {
+            imageRef.current.submit(uid, () => resolve(true))
+        } catch {
+            resolve(false)
+        }
     })
 
-    // Main create system function
-    const createSystem = useCallback(
-        (systemForm: SystemCreateFormData) => {
-            try {
-                if (!validateSystemForm(systemForm)) {
-                    return
-                }
+export const useSystemCreate = (imageRef?: MutableRefObject<ImageGalleryRef | undefined>) => {
+    const { formatMessage: fm } = useIntl()
+    const { refetch } = useSystems('systems')
+    const { closeModal } = useDynamicModalStore()
+    const { parentUid, clear } = useSystemCreateParentStore()
+    const { confirmCreate, createSystem: create, isPending } = useCreateSystem()
 
-                const payload = buildPayload(systemForm)
-
-                create(payload, {
-                    onSuccess: response => {
-                        onCompleted(response)
-                    },
-                })
-            } catch (error: any) {
-                showErrorToast(intl, message.systemsPage.systemDetail.createModal.onCreateError, {
-                    error: error.message || 'Unknown error',
-                })
+    const finish = useCallback(
+        async (created: SystemDetail) => {
+            const imagesUploaded = await uploadImages(imageRef, created.uid)
+            if (!imagesUploaded) {
+                toast.warning(
+                    fm(
+                        { id: message.systemsPage.systemDetail.createModal.onSuccessWithImageError },
+                        { name: created.name },
+                    ),
+                )
             }
+            void refetch()
+            closeModal(CREATE_SHEET_ID)
+            clear()
         },
-        [intl, validateSystemForm, buildPayload, create, onCompleted],
+        [imageRef, fm, refetch, closeModal, clear],
     )
 
-    return {
-        createSystem,
-        loading: isPending,
-    }
+    const createSystem = useCallback(
+        async (form: SystemCreateFormData) => {
+            if (!(await confirmCreate(parentUid))) return
+            const promise = create(buildCreateSystemBody(form, parentUid))
+            toast.promise(promise, {
+                loading: fm({ id: message.systemHierarchy.toast.saving }),
+                success: created =>
+                    fm(
+                        { id: message.systemsPage.systemDetail.createModal.onSuccess },
+                        { name: created.name },
+                    ),
+                error: err => {
+                    if (isDuplicateSystemCodeConflict(err)) {
+                        return fm(
+                            { id: message.systemHierarchy.toast.duplicateCode },
+                            { code: form.systemCode ?? '' },
+                        )
+                    }
+                    return fm(
+                        { id: message.systemsPage.systemDetail.createModal.onError },
+                        { error: err?.message ?? '' },
+                    )
+                },
+            })
+            try {
+                await finish(await promise)
+            } catch {
+                // surfaced by the toast above; the sheet stays open for a retry
+            }
+        },
+        [confirmCreate, create, parentUid, fm, finish],
+    )
+
+    return { createSystem, loading: isPending }
 }
