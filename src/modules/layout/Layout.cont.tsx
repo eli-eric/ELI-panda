@@ -2,9 +2,11 @@ import { Fragment, useEffect } from 'react'
 
 import { DeviceInfoOverlay } from '../shared/system/device-info-overlay/device-info'
 import { useShowDeviceStore } from '../shared/system/device-info-overlay/store/useShowDeviceStore'
+import { useOpenSystemEditByCode } from '../shared/system/system-edit/hooks/useOpenSystemEditByCode'
 
 const LayoutContainer = () => {
     const { setCode, setOpenDeviceInfo, setUID, setLocationCode } = useShowDeviceStore()
+    const openSystemEditByCode = useOpenSystemEditByCode()
 
     useEffect(() => {
         function handleMessage(
@@ -20,8 +22,7 @@ const LayoutContainer = () => {
                 const locationCode = query.get('getOfficeInfo')
                 if (systemCode) {
                     event.preventDefault()
-                    setCode(systemCode)
-                    setOpenDeviceInfo(true)
+                    void openSystemEditByCode(systemCode)
                 }
 
                 if (locationCode) {

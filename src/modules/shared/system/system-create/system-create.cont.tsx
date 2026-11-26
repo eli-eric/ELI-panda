@@ -13,7 +13,7 @@ import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { ROLE } from '@/types/constants/roles'
 import { SystemLevel } from '@/types/gql/graphql'
 
-import { SystemDetailSection } from '../system-edit/components/sections/system-detail.section'
+import { SystemCreateDetailSection } from './components/SystemCreateDetailSection'
 import { SystemHierarchy } from './components/SystemHierarchy.comp'
 import { useSystemCreate } from './hooks/useSystemCreate'
 import { useSystemCreateParent } from './hooks/useSystemCreateParent'
@@ -131,7 +131,7 @@ export const SystemCreateContainer: FC = () => {
                     />
                 )}
 
-                <SystemDetailSection />
+                <SystemCreateDetailSection />
             </div>
         </Form>
     )
