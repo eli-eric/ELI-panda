@@ -245,7 +245,7 @@ Every field saves on its own; there is no RHF form, Save button or unsaved-chang
 
 ## Deep links & URL contract
 
-The explorer's URL is its source of truth (`useHierarchyNavigation`): `?parent=<uid>` (tree selection), `?leaf=<uid>` (detail view), `?tab=` (defaults to `detail`), `?view=` (`tree`/`graph`), `?direct=1` ([direct end systems](#direct-end-systems)), plus table `page`/`filter`/`search`. All in-page updates are shallow `router.push`; `updateQuery` accepts `{ replace: true }` for history-neutral updates.
+The explorer's URL is its source of truth (`useHierarchyNavigation`): `?parent=<uid>` (tree selection), `?leaf=<uid>` (detail view), `?tab=` (defaults to the last tab the user picked — `useHierarchyStore.lastTab`, persisted, initially `detail`; a tab the system lacks falls back to `detail` without overwriting it), `?view=` (`tree`/`graph`), `?direct=1` ([direct end systems](#direct-end-systems)), plus table `page`/`filter`/`search`. All in-page updates are shallow `router.push`; `updateQuery` accepts `{ replace: true }` for history-neutral updates.
 
 `selectParent` resets **only** `page` when the parent changes. `filter`, `search`, and `direct` deliberately carry over — they describe how the user wants to read any node, not one particular node.
 
