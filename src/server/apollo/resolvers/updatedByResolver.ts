@@ -2,6 +2,10 @@ import { type Driver } from 'neo4j-driver'
 import type { TransactionPromise } from 'neo4j-driver-core'
 import type { JWT } from 'next-auth/jwt'
 
+// `node` is interpolated as a Cypher label (labels can't be parameterized), so it must be
+// one of these — anything else would let a client inject Cypher.
+export const AUDITED_NODE_LABELS: ReadonlySet<string> = new Set(['System', 'RoomCard'])
+
 const updatedByResolver = async (
     _source: unknown,
     {
@@ -26,12 +30,15 @@ const updatedByResolver = async (
     // eslint-disable-next-line
     _info: unknown,
 ): Promise<string> => {
-    const session = context.executor.executionContext.session()
-    let transaction: TransactionPromise | undefined
-
     if (!context.authorization.isAuthenticated) {
         throw new Error('Unauthorized: You do not have permission to perform this action.')
     }
+    if (!AUDITED_NODE_LABELS.has(node)) {
+        throw new Error(`Unsupported node: ${node}`)
+    }
+
+    const session = context.executor.executionContext.session()
+    let transaction: TransactionPromise | undefined
 
     try {
         transaction = session.beginTransaction()
