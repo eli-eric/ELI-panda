@@ -25,16 +25,20 @@ When you sharpen a term during a design conversation, update both this file and 
 - **Form Wizard V3** — multi-step RHF wizard in `src/modules/shared/form/wizardV3`. See the `wizard` skill.
 - **`@authorization` directive** — per-entity JWT-gated rule in the GraphQL schema. See [`permissions-model.md`](./technical/permissions-model.md).
 - **JWT role** — string entry in `session.user.roles` (e.g. `systems-view`, `systems-edit`, `admin`). See [`permissions-model.md`](./technical/permissions-model.md).
-- **Per-system edit responsibility** — beyond the `systems-edit` role, may-edit-*this*-system check (direct responsible / `responsibleTeam` / ancestor). Backend `GET /system/{uid}/can-edit`; frontend enforced by the shared `edit-permission` module (`useSystemEditPermission` / `guardSystemEdit`) across both System Hierarchy and the Edit System sheet. See [`permissions-model.md`](./technical/permissions-model.md#per-system-edit-responsibility).
+- **Per-system edit responsibility** — beyond the `systems-edit` role, is-the-user-responsible-for-*this*-system (direct responsible / `responsibleTeam` / ancestor). Backend `GET /system/{uid}/can-edit`. Implemented as a **soft lock**. See [`permissions-model.md`](./technical/permissions-model.md#per-system-edit-responsibility).
+- **Soft lock** — editing a system you are not responsible for is allowed after a one-time confirmation per system and session (`confirmSystemEdit`); the API flags such changes `outsideResponsibility` in history. See [ADR 0002](./adr/0002-system-edit-soft-lock-and-rest-patch.md).
 - **Codebook** — generic admin-managed reference list (`CODEBOOK` enum). See [`codebooks.md`](./technical/codebooks.md).
 
 ### Systems family
 
 - **System** — facility item with hierarchy and relations. See [`systems-family/systems-overview.md`](./technical/systems-family/systems-overview.md).
 - **System hierarchy** — parent/child tree of systems. See [`systems-family/system-hierarchy.md`](./technical/systems-family/system-hierarchy.md).
+- **Systems Explorer** — the three-panel tree / leaves / detail page at `/systems/explorer` (code module `systemHierarchy`; `/systems/hierarchy` redirects). See [`systems-family/system-hierarchy.md`](./technical/systems-family/system-hierarchy.md).
+- **Edit System sheet** — the Jira-like side sheet editing one system inline, shared with the explorer's tabs; replaced the device info overlay. See [`systems-family/system-hierarchy.md`](./technical/systems-family/system-hierarchy.md#edit-system-sheet).
+- **Concurrency token** — a system's `lastUpdateTime`, sent with every write; a mismatch is `409 STALE`. See [`systems-family/system-hierarchy.md`](./technical/systems-family/system-hierarchy.md#mutations).
 - **End system** — a system with no subsystems of its own; the API calls these *leaves*. Never shown in the hierarchy tree (which lists only nodes that have children) — they live in the leaves table. See [`systems-family/system-hierarchy.md`](./technical/systems-family/system-hierarchy.md#direct-end-systems).
 - **Direct end systems** — the end systems hanging *immediately* below a node, as opposed to every end system anywhere beneath it. Surfaced by the *Direct only* checkbox (`?direct=1` → `directOnly=true`). See [`systems-family/system-hierarchy.md`](./technical/systems-family/system-hierarchy.md#direct-end-systems) and [ADR 0001](./adr/0001-direct-only-param-on-leaves-endpoint.md).
-- **System item** — leaf attached to a system. The `systemItem` module / `/system/<uid>` page is **deprecated** — detail now lives in the hierarchy explorer (`/systems/hierarchy?leaf=<uid>`). See [`systems-family/system-item.md`](./technical/systems-family/system-item.md).
+- **System item** — leaf attached to a system. The `systemItem` module / `/system/<uid>` page is **deprecated** — detail now lives in the Systems Explorer (`/systems/explorer?leaf=<uid>`). See [`systems-family/system-item.md`](./technical/systems-family/system-item.md).
 - **System type** — schema/template that drives a system's editable fields. See [`systems-family/system-type-edit.md`](./technical/systems-family/system-type-edit.md).
 - **Moving flow / Multi-move** — bulk re-parenting of systems. See [`systems-family/moving.md`](./technical/systems-family/moving.md).
 - **Relations / Spares** — non-hierarchical links between systems. See [`systems-family/relations-and-spares.md`](./technical/systems-family/relations-and-spares.md).

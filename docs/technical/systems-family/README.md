@@ -8,7 +8,7 @@ The systems family covers every module that reads or writes the `System` graph �
 
 | Page | Module(s) | Surface |
 |---|---|---|
-| [System Hierarchy](./system-hierarchy.md) | `src/modules/systemHierarchy/` | `/systems/hierarchy` — tree explorer, leaves panel, tabbed detail, relationship graph |
+| [System Hierarchy](./system-hierarchy.md) | `src/modules/systemHierarchy/` | `/systems/explorer` (Systems Explorer; `/systems/hierarchy` redirects) — tree explorer, leaves panel, tabbed detail, relationship graph |
 | [Systems overview](./systems-overview.md) | `src/modules/systems/` | `/systems/overview` — flat table |
 | [System item (detail)](./system-item.md) — **deprecated** | `src/modules/systemItem/` | `/system/[uid]` — now a thin redirect to `/systems/hierarchy?leaf=<uid>`; module kept for shared utils until extracted |
 | [Relations & spares](./relations-and-spares.md) | `src/modules/systemsRelations/` | `/systems/relations` — engineering relations + spare-for tables |
@@ -125,7 +125,7 @@ Read with `systems-view` *or* `systems-edit`; write requires `systems-edit`. Not
 ```mermaid
 flowchart LR
     subgraph Pages["src/pages/"]
-        P1["/systems/hierarchy"]
+        P1["/systems/explorer"]
         P2["/systems/overview"]
         P3["/system/[uid] — redirect"]
         P4["/systems/relations"]
@@ -182,7 +182,7 @@ sequenceDiagram
     participant GQL as /api/graphql
     participant DB as Neo4j
 
-    U->>Hier: open /systems/hierarchy
+    U->>Hier: open /systems/explorer
     Hier->>GQL: systemsHierarchy + systemLeaves
     GQL-->>Hier: tree + leaves
     U->>Hier: click leaf

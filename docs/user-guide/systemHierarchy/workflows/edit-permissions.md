@@ -2,69 +2,67 @@
 
 ## What this is for
 
-Editing a system is now controlled per system, not just by your role. Having the `systems-edit` role means you *can* edit systems in general; whether you can edit **this particular system** depends on whether you are **responsible** for it. This page explains who can edit a given system, what you see when you can't, and how to find the right person to ask.
+Editing a system needs the `systems-edit` role. On top of that, every system has people **responsible** for it. If you edit a system you are not responsible for, the app does not stop you — it asks you once to confirm, and your change is marked in the system's history as made *outside responsibility*. This page explains who counts as responsible, what the confirmation looks like, and where you see it afterwards.
 
 ## Who can do this
 
-👁️ **Everyone with `systems-view`** can *see* whether they may edit a system and who is responsible for it. Only a responsible user (with the `systems-edit` role) can actually make changes.
+✏️ **Editors with `systems-edit`** can edit any system. Without the role, every field is read-only and edit actions are disabled.
 
-You may edit a system when any of these is true:
+You count as **responsible** for a system when any of these is true:
 
 - You are its **responsible person**.
 - You are a member of its **responsible team**.
 - You are responsible (person or team) for a system **above it** in the hierarchy — responsibility flows down to subsystems.
 - You are an **admin**.
-- The system and all of its ancestors have **no** responsible person or team at all (an unowned system is open to any editor).
-
-> This replaces the earlier "policy only" guidance: responsibility-based editing is now enforced, not just recommended.
+- The system and all of its ancestors have **no** responsible person or team at all.
 
 See [Access & Responsibilities](../README.md#access--responsibilities) for what the personas mean.
 
 ## Prerequisites
 
-- You are looking at a system's detail view in the System Hierarchy module.
+- You are looking at a system in the Systems Explorer detail view or in the *Edit System* sheet.
 - See [Key concepts](../README.md#key-concepts) for *responsible person* and *responsible team*.
-
-## What you can and can't do
-
-When you **are** allowed to edit a system, everything behaves as documented in the other workflows — fields are editable, actions are enabled.
-
-When you are **not** allowed to edit a system:
-
-- ❌ All fields on the **Detail**, **Persons**, and **Physical Item** tabs are shown but disabled.
-- ❌ Adding or removing operators / maintained-by people is disabled.
-- ❌ Uploading or deleting **Attachments** and the system image is disabled.
-- ❌ The **Actions** menu (move item, assign item, assign spares) is disabled.
-- ❌ Right-click **Create System** (under this system) and **Delete System** are blocked.
-- ✅ You can still browse, search, view relationships, and read the change history.
 
 ## Steps
 
-1. **Open a system's detail view.** Select a leaf in the tree, or click *View Detail* on a parent.
+1. **Open a system's detail.** Select a system in the Systems Explorer, or open the *Edit System* sheet from the systems overview.
 
-2. **Look for the permission notice at the top of the detail view.** If you cannot edit this system, a banner appears below the breadcrumb: *You don't have permission to edit this system.* All editable fields below are greyed out.
+2. **Check the notice at the top.** If you are not responsible, a banner reads *You're not responsible for this system.* with the line *You can still edit it — you will be asked to confirm once, and your changes are marked in history.* Hover the info icon next to the title to see who is responsible.
 
-   `[SCREENSHOT PLACEHOLDER: system detail view with the "You don't have permission to edit this system" banner under the header, an info icon next to it, and the Detail-tab fields visibly disabled]`
+   `[SCREENSHOT PLACEHOLDER: system detail with the "You're not responsible for this system." banner under the header, the info-icon tooltip open listing a responsible person's name and email, fields below fully editable]`
 
-3. **Find out who to contact.** The banner lists the responsible people under *Responsible people you can contact:* with their names and email addresses. Hovering the info icon next to the banner title shows the same list as a tooltip. If no one is listed, it reads *Please contact an administrator to request access.*
+3. **Edit a field as usual.** On your first change to this system a confirmation appears: *You are not responsible for this system (responsible: <names>). Your change will be recorded as made outside your responsibility. Do you want to continue?*
 
-   `[SCREENSHOT PLACEHOLDER: the info-icon tooltip open, showing a responsible person's name and email]`
+   `[SCREENSHOT PLACEHOLDER: the warning dialog with the outside-responsibility text and the Continue / Cancel buttons, an edited field visible behind it]`
 
-4. **If you try a blocked action anyway** (for example right-clicking *Delete System* on a system you're not responsible for), a message appears: *You're not responsible for this system. Contact: <names>* — and nothing is changed.
+4. **Choose *Continue* or *Cancel*.** *Continue* saves the change and the app does not ask again for this system until you reload the page. *Cancel* discards the change — the field returns to its previous value.
 
-`[VIDEO PLACEHOLDER: 25s — open a system you're not responsible for (banner + disabled fields shown), hover the info icon to reveal the responsible contact, then open a system you are responsible for and edit a field successfully]`
+5. **See it in the history.** Open the **History** tab: the entry carries an *Outside responsibility* badge next to your name.
+
+`[VIDEO PLACEHOLDER: 30s — open a system you're not responsible for, see the banner, edit the description, confirm the dialog, edit a second field without a new prompt, then open History and point at the "Outside responsibility" badge]`
+
+## When the confirmation appears
+
+| Action | Asks for confirmation? |
+|---|---|
+| Editing any field (detail, people, physical item, minimal spares, system code) | ✅ once per system and session |
+| **Create System** under a system | ✅ — checked against the **parent** system |
+| **Delete System** | ✅ — the note is added to the normal delete confirmation (one dialog) |
+| Creating or removing engineering relationships | ❌ |
+| Using / assigning spare parts | ❌ |
+| Uploading or deleting images and attachments | ❌ |
 
 ## Tips & gotchas
 
-- **Responsibility flows downward.** If you are responsible for a key system, you can also edit everything beneath it — you don't need to be named on every subsystem.
-- **Changing the responsible person or team can remove your own access.** If you reassign responsibility away from yourself on a system you only controlled directly, the fields lock immediately afterward — that's expected.
-- **"Couldn't verify" is different from "not permitted".** If the banner reads *Could not verify your edit permissions* with a **Retry** button, that's a temporary connection problem, not a permission denial — editing stays disabled until it can be confirmed. Click **Retry**.
-- **System codes follow the same rule here.** Generating or releasing a system code is disabled when you can't edit the system.
-- **The same gate applies wherever you edit a system.** The *Edit System* sheet opened from the [Systems overview](../../systems/README.md), the [Control Systems](../../controlSystems/README.md) code list, or a relationship graph node enforces the identical responsibility check — disabled fields, a greyed-out **Save System** button, and the same restriction banner.
+- **The confirmation is per system.** Confirming for a parent does not cover its subsystems — each system you edit outside your responsibility asks once.
+- **Someone else may change the system at the same time.** If another user saved the same system in the meantime, your save is rejected with *Someone else changed this system in the meantime. The latest data was loaded — please repeat your change.* Your field shows the latest value; apply your change again.
+- **"Couldn't verify" is not a denial.** *Could not verify your responsibility for this system.* means a temporary connection problem — editing stays available and the server records responsibility itself. Click **Retry** to refresh the banner.
+- **The same rule applies everywhere.** The *Edit System* sheet from the [Systems overview](../../systems/README.md), the [Control Systems](../../controlSystems/README.md) code list, or a relationship graph node behaves exactly like the Systems Explorer.
 
 ## Related
 
-- [Editing system details](./editing-system-details.md) — the fields this permission gates.
-- [Managing system people](./managing-system-people.md) — set the responsible person and team that decide who can edit.
-- [Creating systems](./creating-systems.md) and [Deleting systems](./deleting-systems.md) — both check your responsibility for the parent / target.
+- [Editing system details](./editing-system-details.md) — the fields you edit.
+- [Managing system people](./managing-system-people.md) — set the responsible person and team.
+- [Viewing change history](./viewing-change-history.md) — where the *Outside responsibility* badge shows.
+- [Creating systems](./creating-systems.md) and [Deleting systems](./deleting-systems.md).
 - Full permission model → see [user guide index](../../README.md).

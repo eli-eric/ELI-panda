@@ -23,8 +23,8 @@ See [Access & Responsibilities](../README.md#access--responsibilities) for what 
 
 2. **Open the system.** There are two paths:
 
-   - **Click the system *Name*** — opens the system in the System Hierarchy detail view, with the tree expanded to its location. The URL takes the form `/systems/hierarchy?leaf=<uid>` and the page is bookmarkable / shareable. Old `/system/<uid>` bookmarks and QR codes keep working — they redirect to the same view.
-   - **Click the avatar / image** on the *Name* column — opens a *Device Info* overlay in place, without leaving the overview. Useful for a quick look at the system without losing your filter and scroll position. Close the overlay to return to the table exactly where you were.
+   - **Click the system *Name*** — opens the system in the System Hierarchy detail view, with the tree expanded to its location. The URL takes the form `/systems/explorer?leaf=<uid>` and the page is bookmarkable / shareable. Old `/system/<uid>` and `/systems/hierarchy` links keep working — they redirect to the same view.
+   - **Click the avatar / image** on the *Name* column — opens the *Edit System* sheet in place, without leaving the overview: the full detail with every field editable inline (read-only without `systems-edit`). Close the sheet to return to the table exactly where you were.
 
    `[SCREENSHOT PLACEHOLDER: System Hierarchy open after clicking a row — tree on the left expanded to the system, detail view showing tabs Detail / Persons / Physical Item / Spare Parts / Relationships / Attachments / History / Graph, breadcrumb at top]`
 
@@ -38,7 +38,7 @@ See [Access & Responsibilities](../README.md#access--responsibilities) for what 
 
 ## Tips & gotchas
 
-- **Avatar overlay vs. row navigation.** Click the *image avatar* in the Name column for a non-navigational preview; click the *text name* to open the full detail page. The avatar overlay is the fastest way to scan a system's basics without losing your place in the table.
+- **Sheet vs. row navigation.** Click the *image avatar* in the Name column to view and edit the system in a side sheet; click the *text name* to open it in the Systems Explorer. The sheet is the fastest way to fix a value without losing your place in the table.
 - **Subsystem expansion is per-row.** Expanding one row does not affect the others — fold a row's children back up with the same chevron.
 - **The detail view opens in the same tab.** Use middle-click or *Ctrl/Cmd+click* on the system name to open in a new tab when you are walking through many systems.
 - **Detail opens inside the System Hierarchy.** You land in the full hierarchy explorer — the tree on the left shows where the system lives, and edits made in the tabs are the same as editing from the tree. Workflow documentation for editing lives under the [System Hierarchy](../../systemHierarchy/README.md) module.

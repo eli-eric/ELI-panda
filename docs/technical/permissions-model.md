@@ -4,7 +4,7 @@ How ELI PANDA expresses, stores, and enforces user permissions today, and the pl
 
 ## Overview
 
-Permissions are **flat, role-based, and JWT-carried**. A user has a set of role codes; each route, GraphQL operation, and UI control checks "does the user hold *any* of these roles?". There is no inheritance and no per-resource ACL in the GraphQL schema. The one exception now live is **[per-system edit responsibility](#per-system-edit-responsibility)** — a per-resource + team-scoped check the backend enforces on its REST endpoints and the frontend enforces on the client (shared `edit-permission` module, used by both System Hierarchy and the Edit System sheet); broader team-scoped enforcement remains policy-only and is tracked under [🔮 Planned](#-planned).
+Permissions are **flat, role-based, and JWT-carried**. A user has a set of role codes; each route, GraphQL operation, and UI control checks "does the user hold *any* of these roles?". There is no inheritance and no per-resource ACL in the GraphQL schema. The one exception now live is **[per-system edit responsibility](#per-system-edit-responsibility)** — a per-resource + team-scoped check implemented as a *soft lock*: it asks for confirmation and is recorded in the audit, but never blocks (shared `edit-permission` module, used by both the Systems Explorer and the Edit System sheet); broader team-scoped enforcement remains policy-only and is tracked under [🔮 Planned](#-planned).
 
 Authorization is enforced in **four** independent layers:
 
@@ -312,22 +312,25 @@ Sidebar visibility and the middleware route gate are **not** kept in sync automa
 
 ## Per-system edit responsibility
 
-A first step beyond the flat role model — and toward [Phase 2](#phase-2--team-based-scoping) — is now live for **systems**. `systems-edit` still answers "may edit systems at all"; a second, per-resource check answers "may edit *this* system": the user must be responsible for it directly, via its `responsibleTeam`, or via any ancestor up the `HAS_SUBSYSTEM` chain.
-
-The backend owns the decision and exposes it as a REST read, and enforces it (403) on its mutating REST endpoints:
+A first step beyond the flat role model — and toward [Phase 2](#phase-2--team-based-scoping) — is live for **systems**. `systems-edit` still answers "may edit systems at all" (a hard gate: 403 on the API, disabled controls on the FE). A second, per-resource check answers "is the user *responsible* for this system": directly, via its `responsibleTeam`, or via any ancestor up the `HAS_SUBSYSTEM` chain.
 
 ```
 GET /system/{uid}/can-edit → { result: boolean, responsibles: User[] }
 ```
 
-`result` folds in the role check (a non-`systems-edit` user gets `false`); `responsibles` is deduped across the system + ancestors so the UI can name who to contact.
+`result` folds in the role check; `responsibles` is deduped across the system + ancestors so the UI can name who is responsible.
 
-**Enforcement gap this closes.** `System.@authorization` (Layer 2) gates GraphQL by role only — it has no per-resource predicate — and the system-editing surfaces mutate via GraphQL (`updateSystems`, `updateItems`, `createSystems`), which the backend's REST 403 does **not** cover. So the frontend enforces per-system responsibility on the client: it fetches `can-edit`, disables every editable surface when denied, and **hard-guards** the mutation hooks (`guardSystemEdit` before `mutateAsync`) so an unpermitted GraphQL patch cannot fire. This is client-side enforcement standing in until those mutations migrate to guarded REST PATCH endpoints — it is not a substitute for schema-level authorization.
+**Soft lock, not a lock** ([ADR 0002](../adr/0002-system-edit-soft-lock-and-rest-patch.md)). Responsibility never blocks an edit:
 
-The guard building blocks live in one shared module, **`src/modules/shared/system/edit-permission/`** (`useSystemCanEdit` / `useSystemEditPermission` / `guardSystemEdit` / `SystemEditRestrictionBanner`; i18n under `message.systemPermission.*`), consumed by two surfaces:
+| Layer | Behaviour |
+|---|---|
+| API (REST) | No per-system 403. Every system write (PATCH system / physical item, create subsystem, system code, relationships, delete, copy, move, assign spare) is allowed for `systems-edit`; the server evaluates responsibility itself and stores `outsideResponsibility: true` on the `WAS_UPDATED_BY` edge it writes. |
+| FE write hooks | `confirmSystemEdit(queryClient, uid, fm)` runs before a write. Not responsible → a warning-modal confirmation naming the responsibles; the answer is remembered **per exact system uid for the session** (`useSystemEditConfirmationStore`, not persisted). Declining rejects with `SystemEditCancelledError` (inline fields revert). Unverifiable responsibility never blocks. |
+| Destructive actions | Delete merges the responsibility note into its existing confirm (`getOutsideResponsibilityNote`) — one dialog, not two. |
+| Relationships | Creating relationships never prompts; creating a subsystem prompts against the **parent** (the new `HAS_SUBSYSTEM` edge). |
+| UI | Fields are never disabled for responsibility — only for the missing role. `SystemEditRestrictionBanner` is informational; the History feed badges outside-responsibility entries. |
 
-- **System Hierarchy** (inline edit, create, delete) — engineering detail: [System Hierarchy → Per-system edit permission](./systems-family/system-hierarchy.md#per-system-edit-permission).
-- **The shared "Edit System" sheet** (`shared/system/system-edit/`, opened from the systems table, control-systems row-click, and the relationship graph) — `useSystemSheetUpdate` hard-guards the `updateSystems` patch, the system-code **Release** (`useSystemCodeClear`, a direct `updateSystems`) is guarded too, and `useSystemEditFormFields(canEdit)` disables every field. Detail: [System Item → Edit System sheet](./systems-family/system-item.md#edit-system-sheet-shared--per-system-guard).
+The building blocks live in **`src/modules/shared/system/edit-permission/`** (`useSystemCanEdit` / `useSystemEditPermission` / `confirmSystemEdit` / `getOutsideResponsibilityNote` / `SystemEditRestrictionBanner`; i18n under `message.systemPermission.*`). They are consumed by the shared write hooks in `shared/system/system-detail`, so the Systems Explorer and the Edit System sheet behave identically — engineering detail: [System Hierarchy → Per-system edit permission](./systems-family/system-hierarchy.md#per-system-edit-permission).
 
 ## Audit trail
 
@@ -414,7 +417,7 @@ Implementation sketch: add a `where: { node: { systemLevel_IN: [...] } }` clause
 
 ### Phase 2 — team-based scoping
 
-> Partially live: the backend now enforces per-system edit responsibility (direct responsible, `responsibleTeam`, or an ancestor's) on its **REST** endpoints, and the frontend enforces it client-side for its GraphQL mutations across both editing surfaces (System Hierarchy inline edit + the shared Edit System sheet), via the shared `edit-permission` module — see [Per-system edit responsibility](#per-system-edit-responsibility). What remains below is folding the same rule into `@neo4j/graphql` `@authorization` so raw GraphQL is gated too.
+> Partially live as a **soft lock**: responsibility (direct responsible, `responsibleTeam`, or an ancestor's) is confirmed on the client and recorded by the API as `outsideResponsibility` on the audit edge, but never enforced — see [Per-system edit responsibility](#per-system-edit-responsibility). Systems no longer write through GraphQL, so `System.@authorization` only matters for the remaining legacy GraphQL consumers.
 
 Each system already carries `responsibleTeam: Team @relationship(type: "HAS_RESPONSIBLE_TEAM")`. Phase 2 schema-level enforcement needs:
 

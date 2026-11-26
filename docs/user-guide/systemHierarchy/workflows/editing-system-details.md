@@ -10,7 +10,7 @@ Update the core attributes of a system on the **Detail** tab: name, description,
 
 > 🔮 *Coming soon — Phase 1:* edits to systems at `SYSTEM_DOMAIN` and `TECHNOLOGY_UNIT` levels will be admin-only; Editors will be restricted to lower levels (`KEY_SYSTEMS`, `SUBSYSTEMS_AND_PARTS`, `TRASH`).
 
-> ✅ Even with the `systems-edit` role, you can edit a system only if you are **responsible** for it (directly, via its responsible team, or via an ancestor) — this is now enforced. See [Understanding edit permissions](./edit-permissions.md).
+> ✅ If you are not **responsible** for the system, your first change asks for a one-time confirmation and is marked in history — nothing is blocked. The same fields are also available in the *Edit System* sheet. See [Understanding edit permissions](./edit-permissions.md).
 
 See [Access & Responsibilities](../README.md#access--responsibilities) for what these personas mean.
 
