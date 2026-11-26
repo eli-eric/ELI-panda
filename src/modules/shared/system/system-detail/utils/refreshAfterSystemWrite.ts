@@ -9,6 +9,7 @@ import {
     SYSTEM_CODES_QUERY_KEY,
     SYSTEM_HISTORY_QUERY_KEY,
     SYSTEM_SPARE_PARTS_QUERY_KEY,
+    SYSTEM_SUBSYSTEMS_QUERY_KEY,
 } from '@/utils/query/queryKeys'
 
 import { getSystemDetailQueryKey } from '../hooks/queries/useSystemDetail'
@@ -38,6 +39,8 @@ export const refreshAfterSystemWrite = (
     detail: SystemDetail,
     changedFields: readonly string[],
 ) => {
+    // an older in-flight refetch must not land after this and restore a stale token
+    void queryClient.cancelQueries({ queryKey: getSystemDetailQueryKey(detail.uid), exact: true })
     queryClient.setQueryData(getSystemDetailQueryKey(detail.uid), detail)
     void queryClient.invalidateQueries({
         queryKey: [SYSTEM_HISTORY_QUERY_KEY, { uid: detail.uid }],
@@ -61,11 +64,21 @@ export const refreshAfterSystemWrite = (
     }
 }
 
+/** A child was added or removed: the parent's subsystem list and counts are stale. */
+export const refreshParentOfChange = (queryClient: QueryClient, parentUid?: string | null) => {
+    if (!parentUid) return
+    void queryClient.invalidateQueries({ queryKey: getSystemDetailQueryKey(parentUid) })
+    void queryClient.invalidateQueries({
+        queryKey: [SYSTEM_SUBSYSTEMS_QUERY_KEY, { uid: parentUid }],
+    })
+}
+
 /**
  * After creating `created` every explorer tree-shaped view is stale; the systems overview
  * gets the new row inserted in place so its expanded tree survives.
  */
 export const refreshSystemStructure = (queryClient: QueryClient, created: SystemDetail) => {
+    refreshParentOfChange(queryClient, created.parentUid)
     void queryClient.invalidateQueries({ queryKey: [HIERARCHY_QUERY_KEY] })
     void queryClient.invalidateQueries({ queryKey: [LEAVES_QUERY_KEY] })
     void queryClient.invalidateQueries({ queryKey: [LEAVES_COUNT_QUERY_KEY] })

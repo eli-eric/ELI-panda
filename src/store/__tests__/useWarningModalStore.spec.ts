@@ -54,6 +54,22 @@ describe('useWarningModalStore', () => {
         expect(error).toMatch(/nope/)
     })
 
+    it('a prompt opened from a confirmed callback survives the delayed cleanup', () => {
+        jest.useFakeTimers()
+        const second = jest.fn()
+        act(() =>
+            useWarningModalStore
+                .getState()
+                .openModal('First?', () => useWarningModalStore.getState().openModal('Second?', second)),
+        )
+        act(() => useWarningModalStore.getState().confirmModal())
+        act(() => jest.advanceTimersByTime(200))
+
+        const state = useWarningModalStore.getState()
+        expect(state.params).toMatchObject({ isOpen: true, message: 'Second?' })
+        expect(state.pendingExecution?.callback).toBe(second)
+    })
+
     it('clearExecution wipes pending state and params', () => {
         act(() => useWarningModalStore.getState().openModal('x', jest.fn()))
         act(() => useWarningModalStore.getState().clearExecution())

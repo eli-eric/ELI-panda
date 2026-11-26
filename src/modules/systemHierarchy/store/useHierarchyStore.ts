@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 import type { HierarchyTab } from '../types/constants'
-import { HIERARCHY_TABS } from '../types/constants'
+import { HIERARCHY_TABS, isHierarchyTab } from '../types/constants'
 
 interface HierarchyStore {
     expandedNodes: string[]
@@ -59,6 +59,15 @@ export const useHierarchyStore = create<HierarchyStore>()(
                 expandedNodes: state.expandedNodes,
                 lastTab: state.lastTab,
             }),
+            // a stale or hand-edited tab in localStorage must not leave a blank panel
+            merge: (persisted, current) => {
+                const stored = (persisted ?? {}) as Partial<HierarchyStore>
+                return {
+                    ...current,
+                    ...stored,
+                    lastTab: isHierarchyTab(stored.lastTab) ? stored.lastTab : current.lastTab,
+                }
+            },
         },
     ),
 )

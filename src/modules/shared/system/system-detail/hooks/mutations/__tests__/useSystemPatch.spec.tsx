@@ -57,6 +57,8 @@ const serveTokens = (...tokens: string[]) => {
 beforeEach(() => {
     jest.clearAllMocks()
     queryClient = createTestQueryClient()
+    // no component observes the detail here; keep it from being garbage-collected (gcTime 0)
+    queryClient.setQueryDefaults([SYSTEM_DETAIL_QUERY_KEY], { gcTime: Infinity })
     sentBodies = []
     mockConfirm.mockResolvedValue(true)
     queryClient.setQueryData(
@@ -66,6 +68,22 @@ beforeEach(() => {
 })
 
 describe('useSystemPatch', () => {
+    it('omits the token while the cache only holds a navigation seed', async () => {
+        serveTokens(T1)
+        queryClient.setQueryData(
+            getSystemDetailQueryKey(UID),
+            makeSystemDetail({ uid: UID, lastUpdateTime: null }),
+            { updatedAt: 0 },
+        )
+        const { result } = renderHook(() => useSystemPatch(UID), { wrapper })
+
+        await act(async () => {
+            await result.current.patchSystem({ name: 'Renamed' })
+        })
+
+        expect(sentBodies[0]).toEqual({ name: 'Renamed' })
+    })
+
     it('sends the cached lastUpdateTime as concurrency token and stores the response', async () => {
         serveTokens(T1)
         const { result } = renderHook(() => useSystemPatch(UID), { wrapper })

@@ -34,9 +34,13 @@ export const useEmployeeAssignmentModal = ({
                 existingEmployeeUids,
             },
             onSubmit: async (data: EmployeeAssignmentFormData) => {
-                if (data.employee) {
+                if (!data.employee) return
+                try {
                     await onEmployeeSelected(data.employee)
                     closeModal(modalId)
+                } catch {
+                    // declined soft-lock confirm or failed save (already toasted):
+                    // keep the dialog open so the user can retry or cancel
                 }
             },
         })

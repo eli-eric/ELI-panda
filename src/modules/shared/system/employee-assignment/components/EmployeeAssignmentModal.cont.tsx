@@ -18,7 +18,7 @@ const nestedForm = message.roomCardsPage.nestedForm
 const messages = message.common.buttons
 
 interface EmployeeAssignmentModalProps {
-    onSubmit?: (data: EmployeeAssignmentFormData) => void
+    onSubmit?: (data: EmployeeAssignmentFormData) => void | Promise<void>
     onClose?: () => void
     existingEmployeeUids?: string[]
 }
@@ -70,9 +70,10 @@ export const EmployeeAssignmentModalContainer = ({
         },
     })
 
-    const handleFormSubmit = handleSubmit(() => {
+    // returned so RHF keeps isSubmitting true until the save settles (no double submit)
+    const handleFormSubmit = handleSubmit(async () => {
         if (onSubmit && selectedEmployee) {
-            onSubmit({ employee: selectedEmployee })
+            await onSubmit({ employee: selectedEmployee })
         }
     })
 

@@ -98,4 +98,17 @@ describe('systems table caches', () => {
         expect(data.data[0].uid).toBe('root')
         expect(data.totalCount).toBe(3)
     })
+
+    it('does not insert a new root into filtered or searched views (marks them stale instead)', () => {
+        const filteredKey = [
+            'systems',
+            { query: { pagination: '{"page":1}', search: '', columnFilter: '[{"id":"zone"}]' } },
+        ]
+        queryClient.setQueryData(filteredKey, tree())
+        insertIntoSystemsTableCaches(queryClient, makeSystemDetail({ uid: 'root', parentUid: null }))
+
+        expect(queryClient.getQueryData<SystemsResponse>(filteredKey)!.data[0].uid).toBe('parent')
+        expect(queryClient.getQueryState(filteredKey)?.isInvalidated).toBe(true)
+        expect(queryClient.getQueryData<SystemsResponse>(TABLE_KEY)!.data[0].uid).toBe('root')
+    })
 })

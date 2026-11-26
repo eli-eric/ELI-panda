@@ -54,7 +54,12 @@ export const markSystemEditConfirmed = (uid: string) =>
  * not responsible for the system is asked once per system per session to confirm.
  * Resolves true to proceed, false when the user declined.
  */
-export const confirmSystemEdit = async (
+// One prompt per system at a time: a second write to the same unconfirmed system (e.g. a
+// blur-commit plus the click that caused the blur) waits for the same answer instead of
+// opening a second modal that would cancel the first.
+const pendingConfirms = new Map<string, Promise<boolean>>()
+
+const askSystemEdit = async (
     queryClient: QueryClient,
     uid: string,
     fm: FormatMessage,
@@ -67,6 +72,18 @@ export const confirmSystemEdit = async (
     )
     if (confirmed) markSystemEditConfirmed(uid)
     return confirmed
+}
+
+export const confirmSystemEdit = (
+    queryClient: QueryClient,
+    uid: string,
+    fm: FormatMessage,
+): Promise<boolean> => {
+    const pending = pendingConfirms.get(uid)
+    if (pending) return pending
+    const prompt = askSystemEdit(queryClient, uid, fm).finally(() => pendingConfirms.delete(uid))
+    pendingConfirms.set(uid, prompt)
+    return prompt
 }
 
 /** Rejection used when the user declined the soft-lock confirmation. */

@@ -1,4 +1,4 @@
-import { formatDistanceToNow } from 'date-fns'
+import { formatDistanceToNow, isValid } from 'date-fns'
 import { ExternalLink } from 'lucide-react'
 import Link from 'next/link'
 import type { FC, ReactNode } from 'react'
@@ -117,7 +117,7 @@ export const SystemEditSheet: FC<SystemEditSheetProps> = ({ system, onSelectSyst
                         {fm({ id: sheetMessages.openInExplorer })}
                     </Link>
                 </div>
-                {system.lastUpdateTime && (
+                {system.lastUpdateTime && isValid(new Date(system.lastUpdateTime)) && (
                     <p className="text-xs text-muted-foreground" title={system.lastUpdateTime}>
                         {fm(
                             { id: sheetMessages.updated },

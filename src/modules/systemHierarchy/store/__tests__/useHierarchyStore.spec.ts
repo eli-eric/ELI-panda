@@ -58,3 +58,24 @@ describe('useHierarchyStore', () => {
         expect(useHierarchyStore.getState().copiedSystemUid).toBeNull()
     })
 })
+
+describe('useHierarchyStore lastTab rehydration', () => {
+    it('ignores an unknown persisted tab', async () => {
+        localStorage.setItem(
+            'hierarchy-expanded-nodes',
+            JSON.stringify({ state: { expandedNodes: ['a'], lastTab: 'bogus' }, version: 0 }),
+        )
+        await useHierarchyStore.persist.rehydrate()
+        expect(useHierarchyStore.getState().lastTab).toBe('detail')
+        expect(useHierarchyStore.getState().expandedNodes).toEqual(['a'])
+    })
+
+    it('restores a valid persisted tab', async () => {
+        localStorage.setItem(
+            'hierarchy-expanded-nodes',
+            JSON.stringify({ state: { expandedNodes: [], lastTab: 'history' }, version: 0 }),
+        )
+        await useHierarchyStore.persist.rehydrate()
+        expect(useHierarchyStore.getState().lastTab).toBe('history')
+    })
+})

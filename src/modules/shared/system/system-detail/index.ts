@@ -44,7 +44,11 @@ export { useSystemFieldSave } from './hooks/useSystemFieldSave'
 export * from './types'
 export type { OptimisticSystemHint } from './utils/primeSystemDetailCache'
 export { primeSystemDetailCache } from './utils/primeSystemDetailCache'
-export { refreshAfterSystemWrite, refreshSystemStructure } from './utils/refreshAfterSystemWrite'
+export {
+    refreshAfterSystemWrite,
+    refreshParentOfChange,
+    refreshSystemStructure,
+} from './utils/refreshAfterSystemWrite'
 export {
     isDuplicateSystemCodeConflict,
     isNotFoundError,

@@ -56,10 +56,12 @@ export const useSystemScopedWrite = <TBody extends object>(
         mutationFn: async ({ body }) => {
             // Read at execution time (not at call time): a queued write must carry the
             // token produced by the write that ran before it.
+            // A navigation seed (dataUpdatedAt 0) has no real token — send none rather
+            // than a placeholder null that would trip a spurious 409.
             const cached = getCachedSystemDetail(queryClient, uid)
-            const payload: WithConcurrencyToken<TBody> = cached
-                ? { ...body, lastUpdateTime: cached.lastUpdateTime }
-                : body
+            const isSeed = !queryClient.getQueryState(getSystemDetailQueryKey(uid))?.dataUpdatedAt
+            const payload: WithConcurrencyToken<TBody> =
+                cached && !isSeed ? { ...body, lastUpdateTime: cached.lastUpdateTime } : body
             const response = await queryMutate<SystemDetail, WithConcurrencyToken<TBody>>(
                 endpoint,
                 method,

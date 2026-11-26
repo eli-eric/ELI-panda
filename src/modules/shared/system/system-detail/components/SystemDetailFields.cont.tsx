@@ -15,7 +15,7 @@ import { message } from '@/i18n/src/messages'
 import { useLocationSelectionModal } from '@/modules/shared/form/location/hooks/useLocationSelectionModal'
 import { useSystemTypeSelectionModal } from '@/modules/shared/form/systemType/hooks/useSystemTypeSelectionModal'
 import { CODEBOOK } from '@/types/constants/codebook'
-import { isSystemLevel, SYSTEM_LEVELS } from '@/types/constants/systemLevel'
+import { isSystemLevel, SYSTEM_LEVELS, SystemLevel } from '@/types/constants/systemLevel'
 
 import { toNullableText, toUidRef, useSystemFieldSave } from '../hooks/useSystemFieldSave'
 import type { SystemDetail } from '../types'
@@ -126,6 +126,18 @@ export const SystemClassificationFields: FC<SystemFieldProps> = ({ system }) => 
                 isPending={isPending}
                 disabled={readOnly}
             />
+            {/* attribute only classifies key systems (as in the pre-REST sheet) */}
+            {system.systemLevel === SystemLevel.KeySystems && (
+                <InlineFieldCombobox
+                    label={fm({ id: fields.attribute })}
+                    value={system.attribute?.uid ?? null}
+                    displayValue={system.attribute?.name ?? null}
+                    codebook={CODEBOOK.SYSTEM_ATTRIBUTE}
+                    onSave={uid => saveSystem({ attribute: toUidRef(uid) })}
+                    isPending={isPending}
+                    disabled={readOnly}
+                />
+            )}
         </>
     )
 }

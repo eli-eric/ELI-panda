@@ -50,6 +50,19 @@ describe('confirmSystemEdit (soft lock)', () => {
         )
     })
 
+    it('concurrent writes to the same system share one prompt', async () => {
+        mockEnsure.mockResolvedValue({ result: false, responsibles: [responsible] })
+        let answer: (value: boolean) => void = () => {}
+        mockConfirmModal.mockReturnValue(new Promise<boolean>(resolve => (answer = resolve)))
+
+        const first = confirmSystemEdit(queryClient, 'sys-1', fm)
+        const second = confirmSystemEdit(queryClient, 'sys-1', fm)
+        answer(true)
+
+        await expect(Promise.all([first, second])).resolves.toEqual([true, true])
+        expect(mockConfirmModal).toHaveBeenCalledTimes(1)
+    })
+
     it('confirming one system does not cover another (exact uid only)', async () => {
         mockEnsure.mockResolvedValue({ result: false, responsibles: [] })
         mockConfirmModal.mockResolvedValue(true)

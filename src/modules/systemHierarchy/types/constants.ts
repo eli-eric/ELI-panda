@@ -23,3 +23,6 @@ export const HIERARCHY_TABS = {
 } as const
 
 export type HierarchyTab = (typeof HIERARCHY_TABS)[keyof typeof HIERARCHY_TABS]
+
+export const isHierarchyTab = (value: unknown): value is HierarchyTab =>
+    (Object.values(HIERARCHY_TABS) as unknown[]).includes(value)

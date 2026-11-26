@@ -108,9 +108,11 @@ export const useWarningModalStore = create<WarningModalStore>((set, get) => ({
                 }))
             }
 
-            // Clean up execution state
+            // Clean up execution state — unless the callback already opened the next
+            // prompt (chained confirms), which must not be wiped before it is answered
+            const confirmedId = state.pendingExecution.id
             setTimeout(() => {
-                get().clearExecution()
+                if (get().pendingExecution?.id === confirmedId) get().clearExecution()
             }, 100)
         }
     },

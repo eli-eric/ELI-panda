@@ -122,14 +122,48 @@ const insertUnderParent = (
             : item
     })
 
+type TableQueryParams = { pagination?: string; search?: string; columnFilter?: string }
+
+const parseJson = (value?: string): unknown => {
+    try {
+        return value ? JSON.parse(value) : undefined
+    } catch {
+        return undefined
+    }
+}
+
+// A new root row only belongs where it is certainly visible: unfiltered, unsearched page 1.
+const isUnfilteredFirstPage = (query: Query) => {
+    const params = (query.queryKey[1] as { query?: TableQueryParams } | undefined)?.query ?? {}
+    const page = (parseJson(params.pagination) as { page?: number } | undefined)?.page ?? 1
+    const filters = parseJson(params.columnFilter)
+    const hasFilters = Array.isArray(filters) && filters.length > 0
+    return page <= 1 && !params.search && !hasFilters
+}
+
 /** Adds a newly created system to cached systems tables without refetching them. */
 export const insertIntoSystemsTableCaches = (queryClient: QueryClient, detail: SystemDetail) => {
     const row = toNewRow(detail)
-    queryClient.setQueriesData<SystemsResponse>({ predicate: isSystemsTableQuery }, prev => {
-        if (!isSystemsResponse(prev)) return prev
-        if (detail.parentUid) {
-            return { ...prev, data: insertUnderParent(prev.data, detail.parentUid, row) }
-        }
-        return { ...prev, data: [row, ...prev.data], totalCount: prev.totalCount + 1 }
+    const { parentUid } = detail
+    if (parentUid) {
+        queryClient.setQueriesData<SystemsResponse>({ predicate: isSystemsTableQuery }, prev =>
+            isSystemsResponse(prev)
+                ? { ...prev, data: insertUnderParent(prev.data, parentUid, row) }
+                : prev,
+        )
+        return
+    }
+    queryClient.setQueriesData<SystemsResponse>(
+        { predicate: query => isSystemsTableQuery(query) && isUnfilteredFirstPage(query) },
+        prev =>
+            isSystemsResponse(prev)
+                ? { ...prev, data: [row, ...prev.data], totalCount: prev.totalCount + 1 }
+                : prev,
+    )
+    // filtered / later pages: let them pick the root up on their next fetch, without a
+    // refetch now (that would collapse an open tree)
+    void queryClient.invalidateQueries({
+        predicate: query => isSystemsTableQuery(query) && !isUnfilteredFirstPage(query),
+        refetchType: 'none',
     })
 }

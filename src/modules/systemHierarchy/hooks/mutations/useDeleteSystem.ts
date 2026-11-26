@@ -1,5 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
+import type { SystemDetail } from '@/modules/shared/system/system-detail'
+import { getSystemDetailQueryKey } from '@/modules/shared/system/system-detail/hooks/queries/useSystemDetail'
+import { refreshParentOfChange } from '@/modules/shared/system/system-detail/utils/refreshAfterSystemWrite'
 import type { AxiosError } from '@/types/http'
 import { queryMutate } from '@/utils/fetcher'
 
@@ -30,9 +33,13 @@ export const useDeleteSystem = () => {
         mutationFn: ({ uid }) => queryMutate('system', 'delete', { uid })(undefined),
         // Keep onSuccess synchronous so the delete (and its toast) resolves as soon
         // as the system is gone — without waiting on the slower recalc.
-        onSuccess: () => {
+        onSuccess: (_, { uid }) => {
             // Immediate refresh so the deleted node disappears promptly.
             invalidateHierarchy()
+            refreshParentOfChange(
+                queryClient,
+                queryClient.getQueryData<SystemDetail>(getSystemDetailQueryKey(uid))?.parentUid,
+            )
             // Deleting a system can shift spare-parts coverage of related systems.
             // Run unconditionally: a recursive delete may remove subsystems with
             // spare relations we can't cheaply detect client-side, and a stale

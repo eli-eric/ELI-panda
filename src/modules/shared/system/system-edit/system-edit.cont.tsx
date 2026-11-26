@@ -21,9 +21,11 @@ interface SystemEditContainerProps {
 export const SystemEditContainer: FC<SystemEditContainerProps> = ({ uid, onClose }) => {
     const { formatMessage: fm } = useIntl()
     const [currentUid, setCurrentUid] = useState(uid)
-    const { system, isLoading, isNotFound, error, refetch } = useSystemDetail(currentUid)
+    const { system, isLoading, isSeeded, isNotFound, error, refetch } = useSystemDetail(currentUid)
 
-    if (isLoading) return <SystemEditSkeleton />
+    // a navigation seed only carries the breadcrumb — editing it would save against a
+    // placeholder, so wait for the real detail
+    if (isLoading || (isSeeded && !error)) return <SystemEditSkeleton />
 
     if (isNotFound || (!system && !error)) {
         return (
