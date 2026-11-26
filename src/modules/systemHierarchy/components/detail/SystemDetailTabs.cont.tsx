@@ -1,15 +1,25 @@
 import type { LucideIcon } from 'lucide-react'
-import { History, Info, Package, Paperclip, Replace, Share2, Users, Workflow, Wrench } from 'lucide-react'
+import {
+    History,
+    Info,
+    Package,
+    Paperclip,
+    Replace,
+    Share2,
+    Users,
+    Workflow,
+    Wrench,
+} from 'lucide-react'
 import type { CSSProperties, FC } from 'react'
 import { useIntl } from 'react-intl'
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useIsLargeScreen } from '@/hooks/use-large-screen'
 import { message } from '@/i18n/src/messages'
+import type { SystemDetail } from '@/modules/shared/system/system-detail'
 
 import { useSystemRelationships } from '../../hooks/queries/useSystemRelationships'
 import { useHierarchyNavigation } from '../../hooks/useHierarchyNavigation'
-import type { SystemLeaf } from '../../types'
 import type { HierarchyTab } from '../../types/constants'
 import { HIERARCHY_TABS } from '../../types/constants'
 import { hasPhysicalItem, hasSpareFor, hasSpareParts } from '../../utils/predicates'
@@ -69,7 +79,7 @@ const HierarchyTabTrigger: FC<HierarchyTabTriggerProps> = ({ value, label }) => 
 }
 
 interface SystemDetailTabsProps {
-    system: SystemLeaf
+    system: SystemDetail
 }
 
 export const SystemDetailTabsContainer: FC<SystemDetailTabsProps> = ({ system }) => {

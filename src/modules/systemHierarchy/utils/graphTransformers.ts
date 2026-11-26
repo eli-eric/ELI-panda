@@ -119,6 +119,7 @@ export const fromSystemGraphResponse = (raw: SystemGraphResponse): RelationshipG
                               name: n.properties.systemType ?? '',
                           }
                         : null,
+                itemUsageUid: n.properties.itemUsageUid ?? null,
             }),
         ),
         links: raw.links

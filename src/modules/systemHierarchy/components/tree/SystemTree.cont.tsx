@@ -53,7 +53,10 @@ export const SystemTreeContainer: FC = () => {
             selectParent(uid, {
                 name: target.name,
                 systemCode: target.systemCode,
-                parentPath: path.slice(0, -1).map(n => ({ uid: n.uid, name: n.name })),
+                systemLevel: target.systemLevel,
+                parentPath: path
+                    .slice(0, -1)
+                    .map(n => ({ uid: n.uid, name: n.name, systemLevel: n.systemLevel })),
             })
         },
         [nodes, selectParent],

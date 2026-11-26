@@ -2,10 +2,11 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import { useCallback, useMemo } from 'react'
 
+import type { OptimisticSystemHint } from '@/modules/shared/system/system-detail'
+import { primeSystemDetailCache } from '@/modules/shared/system/system-detail'
+
 import type { HierarchyTab } from '../types/constants'
 import { HIERARCHY_TABS } from '../types/constants'
-import type { OptimisticSystemHint } from './queries/useSystemDetail'
-import { primeSystemDetailCache } from './queries/useSystemDetail'
 
 export const useHierarchyNavigation = () => {
     const router = useRouter()

@@ -6,11 +6,9 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Paragraph } from '@/components/visuals/Paragraph'
 import { message } from '@/i18n/src/messages'
+import type { SystemDetail } from '@/modules/shared/system/system-detail'
+import { useSystemPatch } from '@/modules/shared/system/system-detail'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
-
-import { useRecalculateSpareParts } from '../../hooks/mutations/useRecalculateSpareParts'
-import { useSystemFieldUpdate } from '../../hooks/mutations/useSystemFieldUpdate'
-import type { SystemLeaf } from '../../types'
 
 const messages = message.systemsPage.systemDetail
 
@@ -28,37 +26,21 @@ const SetMinimalSparesModalContent: FC<SetMinimalSparesModalContentProps> = ({
     currentValue,
 }) => {
     const { closeModal } = useDynamicModalStore()
-    const recalculateSpareParts = useRecalculateSpareParts()
-    const { updateField } = useSystemFieldUpdate()
+    const { patchSystem } = useSystemPatch(systemUid)
     const [value, setValue] = useState(currentValue ?? 0)
 
     const handleOk = () => {
-        // Saving an untouched value would still write history and kick off a
-        // graph-wide recalculation, so treat OK as Cancel when nothing changed.
+        // The server would no-op an untouched value anyway; skip the round trip.
         if (value === (currentValue ?? 0)) {
             closeModal(modalId)
             return
         }
         // 0/empty means "no minimum" and is stored as null, matching the legacy
         // system form payload and the gray (no requirement) coverage coloring.
-        const promise = updateField(
-            systemUid,
-            'minimalSpareParstCount',
-            value > 0 ? value : null,
-            { previousValue: currentValue },
-        )
-        // The requirement is the divisor of sp_coverage, and this save goes to
-        // Neo4j through GraphQL, which the API's recalculation never sees — so
-        // ask for it explicitly, or coverage stays at whatever it was (null for
-        // a system that had no requirement until now). A blocked save resolves
-        // undefined — nothing changed, so skip. Failures are surfaced by the
-        // update hook's toast.
-        void promise
-            .then(result => {
-                if (!result) return
-                return recalculateSpareParts()
-            })
-            .catch(() => {})
+        // The PATCH recalculates this system's coverage (the requirement is its
+        // divisor) server-side. Failures / a declined soft lock are surfaced by the
+        // patch hook itself.
+        patchSystem({ minimalSpareParstCount: value > 0 ? value : null }).catch(() => undefined)
         closeModal(modalId)
     }
 
@@ -108,7 +90,7 @@ const SetMinimalSparesModalContent: FC<SetMinimalSparesModalContentProps> = ({
 }
 
 interface OpenSetMinimalSparesModalArgs {
-    system: SystemLeaf
+    system: Pick<SystemDetail, 'uid'>
     title: string
     // Taken from the already-loaded system detail: opening a second observer of
     // the detail query here would duplicate its error toast.

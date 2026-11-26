@@ -14,7 +14,7 @@ import { IconCell } from '@/modules/systems/components/table/cells/IconCell'
 import type { ITEM_USAGE } from '@/modules/systems/types/constants'
 import { FALLBACK_IMAGE } from '@/types/constants/common'
 import { PATH } from '@/types/constants/paths'
-import type { SystemLevel } from '@/types/gql/graphql'
+import type { SystemLevel } from '@/types/constants/systemLevel'
 import { truncateString } from '@/utils'
 import { getBadgeVariantBySystemLevel } from '@/utils/systemLevel'
 

@@ -9,9 +9,10 @@ import { Button } from '@/components/ui/button'
 import { CheckboxWithLabel } from '@/components/ui/checkbox'
 import { Separator } from '@/components/ui/separator'
 import { message } from '@/i18n/src/messages'
+import type { SystemDetail } from '@/modules/shared/system/system-detail'
+import { useSystemDetail } from '@/modules/shared/system/system-detail'
 
 import { useSystemCopy } from '../../hooks/mutations/useSystemCopy'
-import { useSystemDetail } from '../../hooks/queries/useSystemDetail'
 
 interface CopySystemDialogProps {
     sourceSystemUid: string
@@ -22,7 +23,7 @@ interface CopySystemDialogProps {
 
 interface SystemInfoProps {
     label: string
-    system: ReturnType<typeof useSystemDetail>['system']
+    system: SystemDetail | null
     isLoading: boolean
 }
 

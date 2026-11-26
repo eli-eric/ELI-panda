@@ -1,4 +1,4 @@
-import { SystemLevel } from '@/types/gql/graphql'
+import { SystemLevel } from '@/types/constants/systemLevel'
 
 const ALLOWED_CHILDREN: Record<SystemLevel, SystemLevel[]> = {
     [SystemLevel.SystemDomain]: [SystemLevel.TechnologyUnit],

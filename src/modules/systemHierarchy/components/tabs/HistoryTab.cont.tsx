@@ -15,14 +15,15 @@ import {
     SelectValue,
 } from '@/components/ui/select'
 import { message } from '@/i18n/src/messages'
-
-import { useSystemHistory } from '../../hooks/queries/useSystemHistory'
-import type { SystemLeaf } from '../../types'
-import { HISTORY_TYPE } from '../../types/history'
-import { SystemHistoryFeed } from '../history/SystemHistoryFeed.comp'
+import type { SystemDetail } from '@/modules/shared/system/system-detail'
+import {
+    HISTORY_TYPE,
+    SystemHistoryFeed,
+    useSystemHistory,
+} from '@/modules/shared/system/system-detail'
 
 interface HistoryTabProps {
-    system: SystemLeaf
+    system: Pick<SystemDetail, 'uid'>
 }
 
 type HistoryTypeFilter = 'ALL' | HISTORY_TYPE

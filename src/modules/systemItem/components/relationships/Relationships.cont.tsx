@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button'
 import { Table } from '@/components/ui/table'
 import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
-import { useRelationshipItemUsage } from '@/modules/systemHierarchy/hooks/queries/useRelationshipItemUsage'
 import type { RelationshipRow } from '@/modules/systemHierarchy/hooks/queries/useSystemRelationships'
 import { useSystemRelationships } from '@/modules/systemHierarchy/hooks/queries/useSystemRelationships'
 import {
@@ -29,10 +28,9 @@ export const RelationshipsContainer = () => {
     const columns = useRelationshipsColumns(canEdit, systemDetail?.uid)
 
     const isSystemReady = !!systemDetail?.uid
-    const { inbound, outbound, relatedUids, isLoading, isError, refetch } = useSystemRelationships(
+    const { inbound, outbound, isLoading, isError, refetch } = useSystemRelationships(
         systemDetail?.uid,
     )
-    const { itemUsageMap } = useRelationshipItemUsage(relatedUids)
 
     const rows = useMemo<RelationshipTableRow[]>(() => {
         const build = (r: RelationshipRow): RelationshipTableRow => {
@@ -43,14 +41,13 @@ export const RelationshipsContainer = () => {
                 relationship: r.edge.relationship,
                 directionLabel: labelId ? fm({ id: labelId }) : r.edge.relationship,
                 color:
-                    RELATIONSHIP_COLORS[
-                        r.edge.relationship as keyof typeof RELATIONSHIP_COLORS
-                    ] ?? FALLBACK_COLOR,
+                    RELATIONSHIP_COLORS[r.edge.relationship as keyof typeof RELATIONSHIP_COLORS] ??
+                    FALLBACK_COLOR,
                 nodeUid: r.node.uid,
                 nodeName: r.node.name,
                 nodeSystemCode: r.node.systemCode,
                 nodeSystemTypeName: r.node.systemType?.name ?? null,
-                itemUsage: itemUsageMap[r.node.uid],
+                itemUsage: (r.node.itemUsageUid ?? undefined) as RelationshipTableRow['itemUsage'],
             }
         }
         return [...inbound.map(build), ...outbound.map(build)].sort((a, b) => {
@@ -61,7 +58,7 @@ export const RelationshipsContainer = () => {
             if (rankDelta !== 0) return rankDelta
             return a.nodeName.localeCompare(b.nodeName)
         })
-    }, [inbound, outbound, itemUsageMap, fm])
+    }, [inbound, outbound, fm])
 
     if (isError) {
         return (

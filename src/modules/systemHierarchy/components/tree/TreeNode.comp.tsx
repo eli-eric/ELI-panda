@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/context-menu'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
-import type { SystemLevel } from '@/types/gql/graphql'
+import type { SystemLevel } from '@/types/constants/systemLevel'
 import { highlightText } from '@/utils'
 import { getFontBySystemLevel } from '@/utils/systemLevel'
 

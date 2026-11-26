@@ -5,12 +5,8 @@ import { useIntl } from 'react-intl'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { message } from '@/i18n/src/messages'
-
-import type {
-    ParentPathItem,
-    SelectAncestorHandler,
-} from '../shared/SystemBreadcrumbs.comp'
-import { SystemBreadcrumbs } from '../shared/SystemBreadcrumbs.comp'
+import type { ParentPathItem, SelectAncestorHandler } from '@/modules/shared/system/system-detail'
+import { SystemBreadcrumbs } from '@/modules/shared/system/system-detail'
 
 interface LeavesPanelHeaderProps {
     parentName: string | null

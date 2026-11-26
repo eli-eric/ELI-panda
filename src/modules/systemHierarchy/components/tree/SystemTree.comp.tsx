@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import { useCallback } from 'react'
 
-import type { SystemLevel } from '@/types/gql/graphql'
+import type { SystemLevel } from '@/types/constants/systemLevel'
 
 import type { HierarchyNode } from '../../types'
 import { TreeNode } from './TreeNode.comp'

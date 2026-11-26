@@ -1,8 +1,9 @@
 import { useRouter } from 'next/router'
 import { useEffect, useRef } from 'react'
 
+import { useSystemDetail } from '@/modules/shared/system/system-detail'
+
 import { useHierarchyStore } from '../store/useHierarchyStore'
-import { useSystemDetail } from './queries/useSystemDetail'
 import { useHierarchyNavigation } from './useHierarchyNavigation'
 
 /**
@@ -23,11 +24,9 @@ export const useHierarchyDeepLinkResolver = (): void => {
     // until the parent param lands in the URL
     const resolvedLeafRef = useRef<string | null>(null)
 
-    // useSystemDetail rebuilds `system` every render — depend on stable scalars
+    // depend on stable scalars, not on the system object identity
     const systemUid = system?.uid ?? null
-    const ancestorKey = JSON.stringify(
-        (system?.parentPath ?? []).map(p => p.uid).filter(Boolean),
-    )
+    const ancestorKey = JSON.stringify((system?.parentPath ?? []).map(p => p.uid).filter(Boolean))
 
     useEffect(() => {
         if (!router.isReady) return
@@ -35,7 +34,7 @@ export const useHierarchyDeepLinkResolver = (): void => {
             resolvedLeafRef.current = null
             return
         }
-        // keepPreviousData can momentarily serve the previous leaf's detail
+        // only resolve once the detail of exactly this leaf is in
         if (!systemUid || systemUid !== selectedLeafUid) return
         if (resolvedLeafRef.current === selectedLeafUid) return
         resolvedLeafRef.current = selectedLeafUid
