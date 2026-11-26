@@ -55,3 +55,35 @@ export const toAxiosError = <T = any>(error: unknown): AxiosError<T> => {
 
     return defaultError
 }
+
+/**
+ * Reads the HTTP status off an error regardless of which fetch path threw it.
+ *
+ * `queryFetcher` lets the raw `NormalizedHttpError` propagate, which carries `status`
+ * directly. `queryMutate` wraps errors via `toAxiosError`, which moves the status to
+ * `response.status` and does not copy it back to the top level. Reading only one shape
+ * silently misses half the errors in the app.
+ */
+export const getErrorStatus = (error: unknown): number | undefined =>
+    (error as { status?: number })?.status ??
+    (error as { response?: { status?: number } })?.response?.status
+
+export const isClientError = (error: unknown): boolean => {
+    const status = getErrorStatus(error)
+    return status !== undefined && status >= 400 && status < 500
+}
+
+export const isBadRequestError = (error: unknown): boolean => getErrorStatus(error) === 400
+
+/**
+ * `fetchClient` synthesises `HTTP <status>` when the failing response carries no message
+ * of its own, so a non-empty `message` is not proof there is anything worth showing a
+ * user. Callers that fall back to the backend's own text must not surface these.
+ */
+const isSyntheticMessage = (text: string) => /^HTTP \d{3}$/.test(text)
+
+/** Backend messages are prefixed with "Bad request: " — strip it before showing them. */
+export const getErrorMessageText = (error: unknown): string => {
+    const text = ((error as Error)?.message ?? '').replace(/^bad request:\s*/i, '').trim()
+    return isSyntheticMessage(text) ? '' : text
+}

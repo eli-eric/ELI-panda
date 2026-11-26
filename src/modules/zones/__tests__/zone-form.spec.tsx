@@ -169,4 +169,63 @@ describe('ZoneFormContainer', () => {
             )
         })
     })
+
+    describe('tri-state relationship fields', () => {
+        const submitWithNameAndCode = async () => {
+            fireEvent.change(screen.getByPlaceholderText('Enter zone name'), {
+                target: { value: 'New Zone' },
+            })
+            fireEvent.change(screen.getByPlaceholderText('Enter zone code'), {
+                target: { value: 'NZ' },
+            })
+            fireEvent.click(screen.getByText('Create Zone'))
+            await waitFor(() => expect(mockMutateAsync).toHaveBeenCalled())
+            return mockMutateAsync.mock.calls[0][0]
+        }
+
+        it("sends '' — not null — when nothing is selected", async () => {
+            // The API reads null as "leave the link untouched", so null would silently
+            // preserve a stale parent instead of disconnecting it.
+            renderForm()
+            const payload = await submitWithNameAndCode()
+
+            expect(payload.parentUid).toBe('')
+            expect(payload.defaultParentSystemUid).toBe('')
+        })
+
+        it('flattens an existing default parent system to its uid', async () => {
+            const zone: Zone = {
+                uid: '1',
+                name: 'Existing Zone',
+                code: 'EZ',
+                parentZone: { uid: 'root-1', name: 'Root Zone' },
+                defaultParentSystem: { uid: 'sys-1', name: '01 - L1 laser system' },
+            }
+            renderForm(zone)
+
+            fireEvent.click(screen.getByText('Save Zone'))
+            await waitFor(() => expect(mockMutateAsync).toHaveBeenCalled())
+
+            expect(mockMutateAsync.mock.calls[0][0]).toEqual(
+                expect.objectContaining({
+                    parentUid: 'root-1',
+                    defaultParentSystemUid: 'sys-1',
+                }),
+            )
+        })
+
+        it('never sends the nested object the picker holds in form state', async () => {
+            renderForm()
+            const payload = await submitWithNameAndCode()
+
+            expect(payload).not.toHaveProperty('defaultParentSystem')
+            expect(Object.keys(payload).sort()).toEqual([
+                'code',
+                'defaultParentSystemUid',
+                'name',
+                'notes',
+                'parentUid',
+            ])
+        })
+    })
 })

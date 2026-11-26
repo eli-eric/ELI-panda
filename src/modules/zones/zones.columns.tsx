@@ -35,10 +35,21 @@ export const useZoneColumns = () => {
                 size: 400,
             },
             {
+                id: 'defaultParentSystem',
+                header: fm({ id: cols.defaultParentSystem }),
+                accessorFn: row => row.defaultParentSystem?.name ?? '—',
+                size: 400,
+                // The table sorts server-side and GET /zones has no order-by for these
+                // two, so it quietly falls back to the zone name — a sort arrow here
+                // would claim an ordering the list does not have.
+                enableSorting: false,
+            },
+            {
                 id: 'notes',
                 header: fm({ id: cols.notes }),
                 accessorFn: row => row.notes ?? '—',
                 size: 400,
+                enableSorting: false,
                 cell: NotesCell,
             },
         ],

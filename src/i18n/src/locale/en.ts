@@ -1217,6 +1217,12 @@ export const messages = {
             name: { label: 'Name', placeholder: 'Enter zone name' },
             code: { label: 'Code', placeholder: 'Enter zone code' },
             parentZone: { label: 'Parent Zone', placeholder: 'Select parent zone (optional)' },
+            defaultParentSystem: {
+                label: 'Default Parent System',
+                placeholder: 'Click here to select a system',
+            },
+            defaultParentSystemInvalid:
+                'Selected default parent system is not available in this facility',
             notes: { label: 'Notes', placeholder: 'Enter zone notes' },
             emptyParent: 'None (root zone)',
             saving: 'Saving zone...',
@@ -1233,6 +1239,7 @@ export const messages = {
             name: 'Name',
             code: 'Code',
             parentZone: 'Parent Zone',
+            defaultParentSystem: 'Default Parent System',
             notes: 'Notes',
         },
         import: {
@@ -1378,6 +1385,17 @@ export const messages = {
             failedToCreate: 'Failed to create system codes',
             previewing: 'Loading preview...',
             previewFailed: 'Failed to load preview',
+        },
+        errors: {
+            missingDefaultParentSystem:
+                'The selected zone has no default parent system, so system codes cannot be generated.',
+            zoneNotFound: 'The selected zone no longer exists.',
+            systemTypeNotFound: 'The selected system type no longer exists.',
+            invalidBatch: 'Batch count must be greater than zero.',
+            noSystemCodeMask:
+                'The selected system type has no system code mask with a serial number for this facility.',
+            setOnZone: 'Set it on zone {zone}',
+            askAdmin: 'Ask an administrator with zone edit rights to set it.',
         },
         buttons: {
             create: 'Create System Codes',
