@@ -4,9 +4,9 @@ import Link from 'next/link'
 import type { FC, ReactNode } from 'react'
 import { useIntl } from 'react-intl'
 
-import { InlineFieldDensityProvider } from '@/components/ui/inline-field'
-import { Separator } from '@/components/ui/separator'
+import { Disclosure } from '@/components/ui'
 import { message } from '@/i18n/src/messages'
+import { cn } from '@/lib/utils'
 import {
     SystemEditRestrictionBanner,
     useSystemEditPermission,
@@ -28,20 +28,37 @@ import {
     useSystemHistory,
 } from '@/modules/shared/system/system-detail'
 import { getSystemHierarchyDetailPath } from '@/modules/systemHierarchy/utils/hierarchyLinks'
+import { getBadgeVariantBySystemLevel } from '@/utils/systemLevel'
 
 const sheetMessages = message.systemHierarchy.sheet
 
-const SheetSection: FC<{ title: string; children: ReactNode; testId?: string }> = ({
+interface SheetSectionProps {
+    title: ReactNode
+    children: ReactNode
+    defaultOpen?: boolean
+    accentClassName?: string
+    testId?: string
+}
+
+// One collapsible quick-edit block; editing sections start open, long lists collapsed.
+const SheetSection: FC<SheetSectionProps> = ({
     title,
     children,
+    defaultOpen = true,
+    accentClassName,
     testId,
 }) => (
-    <section className="space-y-2" data-testid={testId}>
-        <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            {title}
-        </h3>
-        {children}
-    </section>
+    <div data-testid={testId}>
+        <Disclosure
+            title={title}
+            defaultOpen={defaultOpen}
+            className="w-full overflow-hidden rounded-md border shadow-sm"
+            buttonClassName={cn('rounded-none border-0 py-2 font-medium', accentClassName)}
+            panelClassName="space-y-1 px-3 py-3"
+        >
+            {children}
+        </Disclosure>
+    </div>
 )
 
 const SystemActivity: FC<{ uid: string }> = ({ uid }) => {
@@ -56,8 +73,8 @@ interface SystemEditSheetProps {
 }
 
 /**
- * Jira-like two-column layout: content on the left, the classification + people
- * "Details" panel on the right. Every field saves inline (PATCH) — no Save button.
+ * Quick edit: one column of collapsible sections. Every field saves inline (PATCH) —
+ * no Save button. Editable sections start open; lists and history start collapsed.
  */
 export const SystemEditSheet: FC<SystemEditSheetProps> = ({ system, onSelectSystem, onClose }) => {
     const { formatMessage: fm } = useIntl()
@@ -65,7 +82,7 @@ export const SystemEditSheet: FC<SystemEditSheetProps> = ({ system, onSelectSyst
     const { physicalItem, statistics } = system
 
     return (
-        <div className="flex flex-col gap-4 pb-6" data-testid="system-edit-sheet">
+        <div className="flex flex-col gap-3 pb-6" data-testid="system-edit-sheet">
             <div className="space-y-1">
                 <SystemBreadcrumbs
                     parentPath={system.parentPath}
@@ -74,7 +91,7 @@ export const SystemEditSheet: FC<SystemEditSheetProps> = ({ system, onSelectSyst
                     onSelectAncestor={onSelectSystem}
                 />
                 <div className="flex items-start gap-2">
-                    <div className="flex-1 min-w-0">
+                    <div className="min-w-0 flex-1">
                         <SystemTitleField system={system} />
                     </div>
                     <Link
@@ -86,6 +103,18 @@ export const SystemEditSheet: FC<SystemEditSheetProps> = ({ system, onSelectSyst
                         {fm({ id: sheetMessages.openInExplorer })}
                     </Link>
                 </div>
+                {system.lastUpdateTime && (
+                    <p className="text-xs text-muted-foreground" title={system.lastUpdateTime}>
+                        {fm(
+                            { id: sheetMessages.updated },
+                            {
+                                time: formatDistanceToNow(new Date(system.lastUpdateTime), {
+                                    addSuffix: true,
+                                }),
+                            },
+                        )}
+                    </p>
+                )}
             </div>
 
             <SystemEditRestrictionBanner
@@ -94,92 +123,83 @@ export const SystemEditSheet: FC<SystemEditSheetProps> = ({ system, onSelectSyst
                 refetch={editPermission.refetch}
             />
 
-            <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
-                <div className="min-w-0 space-y-6">
-                    <SystemDescriptionField system={system} />
+            <SystemImagePanel systemUid={system.uid} systemName={system.name} />
 
-                    <SheetSection title={fm({ id: sheetMessages.images })}>
-                        <SystemImagePanel systemUid={system.uid} systemName={system.name} />
+            <SheetSection
+                title={fm({ id: sheetMessages.details })}
+                accentClassName={getBadgeVariantBySystemLevel(system.systemLevel ?? undefined)}
+                testId="system-edit-details"
+            >
+                <SystemClassificationFields system={system} />
+                <SystemDescriptionField system={system} />
+            </SheetSection>
+
+            <SheetSection title={fm({ id: sheetMessages.people })} testId="system-edit-people">
+                <SystemPeopleFields system={system} />
+            </SheetSection>
+
+            {physicalItem && (
+                <>
+                    <SheetSection
+                        title={fm({ id: sheetMessages.physicalItem })}
+                        accentClassName="bg-amber-100 text-gray-900 dark:bg-amber-600/40 dark:text-gray-100"
+                        testId="system-edit-physical-item"
+                    >
+                        <PhysicalItemFields systemUid={system.uid} physicalItem={physicalItem} />
                     </SheetSection>
-
-                    {physicalItem && (
-                        <SheetSection
-                            title={fm({ id: sheetMessages.physicalItem })}
-                            testId="system-edit-physical-item"
-                        >
-                            <PhysicalItemFields
-                                systemUid={system.uid}
-                                physicalItem={physicalItem}
-                            />
-                            <CataloguePropertiesSection physicalItemUid={physicalItem.uid} />
-                            <PhysicalItemOrdersSection physicalItemUid={physicalItem.uid} />
-                        </SheetSection>
-                    )}
-
-                    {statistics.sparePartsCount > 0 && (
-                        <SheetSection title={fm({ id: sheetMessages.spareParts })}>
-                            <SpareRelationsSection
-                                systemUid={system.uid}
-                                mode="spareParts"
-                                onSelectSystem={onSelectSystem}
-                            />
-                        </SheetSection>
-                    )}
-
-                    {statistics.sparesForCount > 0 && (
-                        <SheetSection title={fm({ id: sheetMessages.spareFor })}>
-                            <SpareRelationsSection
-                                systemUid={system.uid}
-                                mode="spareFor"
-                                onSelectSystem={onSelectSystem}
-                                showHeader={false}
-                            />
-                        </SheetSection>
-                    )}
-
-                    {statistics.directSubsystemsCount > 0 && (
-                        <SheetSection
-                            title={`${fm({ id: sheetMessages.subsystems })} (${statistics.directSubsystemsCount})`}
-                        >
-                            <SubsystemsSection
-                                systemUid={system.uid}
-                                onSelectSystem={onSelectSystem}
-                            />
-                        </SheetSection>
-                    )}
-
-                    <SheetSection title={fm({ id: sheetMessages.activity })}>
-                        <SystemActivity uid={system.uid} />
+                    <SheetSection title={fm({ id: sheetMessages.properties })} defaultOpen={false}>
+                        <CataloguePropertiesSection physicalItemUid={physicalItem.uid} />
                     </SheetSection>
-                </div>
+                    <SheetSection title={fm({ id: sheetMessages.orders })} defaultOpen={false}>
+                        <PhysicalItemOrdersSection physicalItemUid={physicalItem.uid} />
+                    </SheetSection>
+                </>
+            )}
 
-                <aside
-                    className="h-fit space-y-3 rounded-lg border bg-card/40 p-3 lg:sticky lg:top-0"
-                    data-testid="system-edit-details-panel"
+            {statistics.sparePartsCount > 0 && (
+                <SheetSection
+                    title={`${fm({ id: sheetMessages.spareParts })} (${statistics.sparePartsCount})`}
+                    defaultOpen={false}
+                    testId="system-edit-spare-parts"
                 >
-                    <InlineFieldDensityProvider value="compact">
-                        <SheetSection title={fm({ id: sheetMessages.details })}>
-                            <SystemClassificationFields system={system} />
-                        </SheetSection>
-                        <Separator />
-                        <SheetSection title={fm({ id: sheetMessages.people })}>
-                            <SystemPeopleFields system={system} />
-                        </SheetSection>
-                    </InlineFieldDensityProvider>
-                    {system.lastUpdateTime && (
-                        <p className="text-xs text-muted-foreground" title={system.lastUpdateTime}>
-                            {fm(
-                                { id: sheetMessages.updated },
-                                {
-                                    time: formatDistanceToNow(new Date(system.lastUpdateTime), {
-                                        addSuffix: true,
-                                    }),
-                                },
-                            )}
-                        </p>
-                    )}
-                </aside>
-            </div>
+                    <SpareRelationsSection
+                        systemUid={system.uid}
+                        mode="spareParts"
+                        onSelectSystem={onSelectSystem}
+                        showHeader={false}
+                    />
+                </SheetSection>
+            )}
+
+            {statistics.sparesForCount > 0 && (
+                <SheetSection
+                    title={`${fm({ id: sheetMessages.spareFor })} (${statistics.sparesForCount})`}
+                    defaultOpen={false}
+                    testId="system-edit-spare-for"
+                >
+                    <SpareRelationsSection
+                        systemUid={system.uid}
+                        mode="spareFor"
+                        onSelectSystem={onSelectSystem}
+                        showHeader={false}
+                    />
+                </SheetSection>
+            )}
+
+            {statistics.directSubsystemsCount > 0 && (
+                <SheetSection
+                    title={`${fm({ id: sheetMessages.subsystems })} (${statistics.directSubsystemsCount})`}
+                    accentClassName="bg-blue-50 dark:bg-blue-900/20"
+                    defaultOpen={false}
+                    testId="system-edit-subsystems"
+                >
+                    <SubsystemsSection systemUid={system.uid} onSelectSystem={onSelectSystem} />
+                </SheetSection>
+            )}
+
+            <SheetSection title={fm({ id: sheetMessages.activity })} defaultOpen={false}>
+                <SystemActivity uid={system.uid} />
+            </SheetSection>
         </div>
     )
 }

@@ -26,7 +26,7 @@ export const useSystemEditSheet = () => {
             return openModal('sheet', {
                 id: getSystemEditSheetId(uid),
                 component: SystemEditContainer,
-                props: { uid, size: 'xl', title: fm({ id: message.systemHierarchy.sheet.title }) },
+                props: { uid, size: 'l', title: fm({ id: message.systemHierarchy.sheet.title }) },
             })
         },
         [fm, openModal],

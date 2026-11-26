@@ -39,7 +39,7 @@ describe('useSystemEditSheet', () => {
         expect(config.props).toEqual(
             expect.objectContaining({
                 uid: 'uid-1',
-                size: 'xl',
+                size: 'l',
                 title: 'systemHierarchy.sheet.title',
             }),
         )

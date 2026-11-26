@@ -225,13 +225,21 @@ The API records the same fact as `outsideResponsibility: true` on the `WAS_UPDAT
 
 User-facing companion: [Editing a system](../../user-guide/systemHierarchy/workflows/edit-permissions.md).
 
-`src/modules/shared/system/system-edit/` — opened by `useSystemEditSheet()(uid)` (xl sheet, id `system-edit-<uid>`) from the systems overview (avatar + row action), control-systems rows, the relationship graph, and the facility layout (`getDeviceInfo=<systemCode>` → `useOpenSystemEditByCode`, which resolves the code through `GET /systems?search=` and opens only an exact match). It replaced the form-based sheet **and** the read-only device info overlay (which now only serves `getOfficeInfo` location links).
+`src/modules/shared/system/system-edit/` — opened by `useSystemEditSheet()(uid)` (l sheet, id `system-edit-<uid>`) from the systems overview (avatar + row action), control-systems rows, the relationship graph, and the facility layout (`getDeviceInfo=<systemCode>` → `useOpenSystemEditByCode`, which resolves the code through `GET /systems?search=` and opens only an exact match). It replaced the form-based sheet **and** the read-only device info overlay (which now only serves `getOfficeInfo` location links).
 
-| Area | Content |
-|---|---|
-| Header | `SystemBreadcrumbs`, inline title (`SystemTitleField`), *Open in Systems Explorer* link, restriction banner |
-| Main column | description, images (`SystemImagePanel`, autosave), physical item (fields + catalogue properties + orders), spare parts / spare for / subsystems (only when the counts are > 0), activity (`SystemHistoryFeed`) |
-| Details panel (right, `InlineFieldDensityProvider value="compact"`) | `SystemClassificationFields` (code + generate / release, level, type, location, zone), `SystemPeopleFields` (responsible, team, owner, operators, maintained by), *Updated X ago* |
+A quick edit: one column, top to bottom. Each block is a collapsible `Disclosure` (local `SheetSection`), as in the pre-REST sheet.
+
+| Section | Content | Starts |
+|---|---|---|
+| Header | `SystemBreadcrumbs`, inline title (`SystemTitleField`), *Open in Systems Explorer* link, *Updated X ago*, restriction banner, images (`SystemImagePanel`, autosave) | — |
+| Details (level-coloured) | `SystemClassificationFields` (code + generate / release, level, type, location, zone), `SystemDescriptionField` | open |
+| People | `SystemPeopleFields` (responsible, team, owner, operators, maintained by) | open |
+| Physical item (amber) | `PhysicalItemFields` | open |
+| Catalogue properties · Orders & services | `CataloguePropertiesSection` · `PhysicalItemOrdersSection` (only with a physical item) | collapsed |
+| Spare parts (n) · Spare for (n) · Subsystems (n) | only when the count is > 0 | collapsed |
+| Activity | `SystemHistoryFeed` | collapsed |
+
+Collapsed sections do not mount their content, so their queries only fire when opened.
 
 Every field saves on its own; there is no RHF form, Save button or unsaved-changes guard. Clicking a breadcrumb, spare or subsystem **re-targets the sheet in place** (`SystemEditContainer` keeps the current uid in state) instead of stacking sheets. The explorer tabs render the same sections, so the two surfaces cannot drift.
 

@@ -28,7 +28,7 @@ See [Access & Responsibilities](../README.md#access--responsibilities) for what 
 
 2. **Edit fields directly in the sheet.** The sheet has the system's content on the left (description, images, physical item, spare parts, subsystems, activity) and a **Details** / **People** panel on the right (code with *Generate* / *Release*, level, type, location, zone, responsible person, team, operators, maintained by). Click a value to edit it; each field saves on its own — there is no Save button. If you are not **responsible** for this system, your first change asks for a one-time confirmation and is marked in history. See [Understanding edit permissions](../../systemHierarchy/workflows/edit-permissions.md).
 
-   `[SCREENSHOT PLACEHOLDER: Edit System sheet over the Control Systems Overview — breadcrumb and inline title at the top, description and physical item on the left, the Details panel with System Code (Generate / Release), Level, Type, Location, Zone and the People section on the right, "Updated 5 minutes ago" at the bottom of the panel]`
+   `[SCREENSHOT PLACEHOLDER: Edit System sheet over the Control Systems Overview — breadcrumb, inline title and "Updated 5 minutes ago" at the top, then collapsible sections: Details (System Code with Generate / Release, Level, Type, Location, Zone, Description) and People open, Subsystems and Activity collapsed]`
 
 3. **Watch the toast.** *Saved successfully* confirms each field; the Overview row reflects the change. If someone else changed the system meanwhile, the toast asks you to repeat the change on the freshly loaded data.
 

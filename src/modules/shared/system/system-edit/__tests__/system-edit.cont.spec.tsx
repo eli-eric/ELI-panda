@@ -1,4 +1,4 @@
-import { fireEvent, screen } from '@testing-library/react'
+import { fireEvent, screen, within } from '@testing-library/react'
 
 import { useSystemDetail } from '@/modules/shared/system/system-detail'
 import { makeSystemDetail } from '@/testutils/factories/systemDetail'
@@ -61,12 +61,16 @@ const detailState = (overrides: Record<string, unknown>) => ({
     ...overrides,
 })
 
+// Collapsed sections don't mount their content; open one by clicking its header.
+const expandSection = (testId: string) =>
+    fireEvent.click(within(screen.getByTestId(testId)).getByRole('button'))
+
 describe('SystemEditContainer (Edit System sheet)', () => {
     beforeEach(() => {
         mockUseSystemDetail.mockReset()
     })
 
-    it('renders the two-column layout without a Save button', () => {
+    it('renders one column of sections, editing ones open, without a Save button', () => {
         mockUseSystemDetail.mockReturnValue(
             detailState({ system: makeSystemDetail({ uid: 'sys-1', name: 'Pump' }) }),
         )
@@ -74,8 +78,9 @@ describe('SystemEditContainer (Edit System sheet)', () => {
 
         expect(screen.getByTestId('system-edit-sheet')).toBeInTheDocument()
         expect(screen.getByTestId('title-stub')).toHaveTextContent('Pump')
-        expect(screen.getByTestId('system-edit-details-panel')).toBeInTheDocument()
+        expect(screen.getByTestId('system-edit-details')).toBeInTheDocument()
         expect(screen.getByTestId('classification-stub')).toBeInTheDocument()
+        expect(screen.getByTestId('description-stub')).toBeInTheDocument()
         expect(screen.getByTestId('people-stub')).toBeInTheDocument()
         expect(screen.queryByRole('button', { name: /save/i })).not.toBeInTheDocument()
     })
@@ -85,8 +90,8 @@ describe('SystemEditContainer (Edit System sheet)', () => {
         mockUseSystemDetail.mockReturnValue(detailState({ system: bare }))
         const { unmount } = renderWithProviders(<SystemEditContainer uid="sys-1" />)
         expect(screen.queryByTestId('system-edit-physical-item')).not.toBeInTheDocument()
-        expect(screen.queryByTestId('spares-spareParts-stub')).not.toBeInTheDocument()
-        expect(screen.queryByTestId('subsystem-stub')).not.toBeInTheDocument()
+        expect(screen.queryByTestId('system-edit-spare-parts')).not.toBeInTheDocument()
+        expect(screen.queryByTestId('system-edit-subsystems')).not.toBeInTheDocument()
         unmount()
 
         mockUseSystemDetail.mockReturnValue(
@@ -104,7 +109,13 @@ describe('SystemEditContainer (Edit System sheet)', () => {
             }),
         )
         renderWithProviders(<SystemEditContainer uid="sys-1" />)
-        expect(screen.getByTestId('system-edit-physical-item')).toBeInTheDocument()
+        expect(screen.getByTestId('item-fields-stub')).toBeInTheDocument()
+        // lists start collapsed — present as headers, content mounts on expand
+        expect(screen.getByTestId('system-edit-subsystems')).toHaveTextContent('(2)')
+        expect(screen.queryByTestId('subsystem-stub')).not.toBeInTheDocument()
+        expandSection('system-edit-spare-parts')
+        expandSection('system-edit-spare-for')
+        expandSection('system-edit-subsystems')
         expect(screen.getByTestId('spares-spareParts-stub')).toBeInTheDocument()
         expect(screen.getByTestId('spares-spareFor-stub')).toBeInTheDocument()
         expect(screen.getByTestId('subsystem-stub')).toBeInTheDocument()
@@ -122,6 +133,7 @@ describe('SystemEditContainer (Edit System sheet)', () => {
         )
         renderWithProviders(<SystemEditContainer uid="sys-1" />)
 
+        expandSection('system-edit-subsystems')
         fireEvent.click(screen.getByTestId('subsystem-stub'))
 
         expect(mockUseSystemDetail).toHaveBeenLastCalledWith('child-1')

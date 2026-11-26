@@ -70,7 +70,7 @@ The module owns the *write* surface for everything attached to a system:
 
 > No longer part of this module — kept here because older pages link to this anchor.
 
-The shared **"Edit System" sheet** (`src/modules/shared/system/system-edit/`, opened by `useSystemEditSheet(uid)` from the systems table avatar / row action, the control-systems row-click, the relationship graph, and the facility layout's `getDeviceInfo=<systemCode>` link via `useOpenSystemEditByCode`) is a Jira-like two-column sheet on the REST system-detail module — the same inline-field sections the Systems Explorer tabs use. It replaced both the form-based sheet and the read-only *device info overlay*. Engineering detail: [System Hierarchy → Edit System sheet](./system-hierarchy.md#edit-system-sheet). Responsibility is a soft lock, see [ADR 0002](../../adr/0002-system-edit-soft-lock-and-rest-patch.md).
+The shared **"Edit System" sheet** (`src/modules/shared/system/system-edit/`, opened by `useSystemEditSheet(uid)` from the systems table avatar / row action, the control-systems row-click, the relationship graph, and the facility layout's `getDeviceInfo=<systemCode>` link via `useOpenSystemEditByCode`) is a one-column quick-edit sheet of collapsible sections on the REST system-detail module — the same inline-field sections the Systems Explorer tabs use. It replaced both the form-based sheet and the read-only *device info overlay*. Engineering detail: [System Hierarchy → Edit System sheet](./system-hierarchy.md#edit-system-sheet). Responsibility is a soft lock, see [ADR 0002](../../adr/0002-system-edit-soft-lock-and-rest-patch.md).
 
 ## Form
 
