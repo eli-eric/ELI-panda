@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import { IntlProvider } from 'react-intl'
 
-import { SystemLevel } from '@/types/gql/graphql'
+import { SystemLevel } from '@/types/constants/systemLevel'
 
 import { useSystemLeavesCount } from '../../../hooks/queries/useSystemLeavesCount'
 import type { HierarchyNode } from '../../../types'
