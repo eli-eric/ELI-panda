@@ -66,14 +66,11 @@ The module owns the *write* surface for everything attached to a system:
 
 `useSystemSheetUpdate` is the most-used mutation across the family — it is invoked by inline edits on the form, on the Hierarchy sidebar, and on the Relations table. (Note there are two: this `systemItem` hook, and a separate one in the shared Edit System sheet — see below.)
 
-## Edit System sheet (shared) — per-system guard
+## Edit System sheet
 
-The shared **"Edit System" sheet** (`src/modules/shared/system/system-edit/`, opened by `useSystemEditSheet` from the systems table, the control-systems row-click, and the relationship graph) persists via its own `useSystemSheetUpdate` (GraphQL `updateSystems`/`updateItems`). Like inline edit in Hierarchy, it is role-gated only at the GraphQL layer, so it enforces **per-system edit responsibility** on the client using the shared [`edit-permission`](./system-hierarchy.md#per-system-edit-permission) module — one guard covers all three entry points:
+> No longer part of this module — kept here because older pages link to this anchor.
 
-- **Hard guard** — `useSystemSheetUpdate.updateSystemQuery` `await guardSystemEdit(...)` before mutating; the system-code **Release** (`useSystemCodeClear`, a *direct* `updateSystems`) is guarded in `SystemCodeActions.handleClear` too, closing that second patch path.
-- **Field disable** — `useSystemEditFormFields(canEdit)` ORs `!canEdit` into `disabledEdit`, disabling every system field (catalogue fields keep their own `CATALOGUE_EDIT` gate). `useForm({ disabled })` is **not** used — the `InlineEdit*` inputs read their own `disabled` prop, not RHF's `field.disabled`.
-- **Save + banner** — `SheetFormButtons` gained an optional `canEdit` prop (defaults `true`; disables Save, Exit stays enabled); `SystemEditRestrictionBanner` renders below the button bar.
-- Tests: `system-edit/hooks/__tests__/useSystemSheetUpdate.spec.tsx`, `system-edit/components/__tests__/SystemCodeActions.spec.tsx`, `components/__tests__/sheet-form-buttons.spec.tsx`, `systemItem/components/form/__tests__/SystemForm.fields.spec.tsx`.
+The shared **"Edit System" sheet** (`src/modules/shared/system/system-edit/`, opened by `useSystemEditSheet(uid)` from the systems table avatar / row action, the control-systems row-click, the relationship graph, and the facility layout's `getDeviceInfo=<systemCode>` link via `useOpenSystemEditByCode`) is a one-column quick-edit sheet of collapsible sections on the REST system-detail module — the same inline-field sections the Systems Explorer tabs use. It replaced both the form-based sheet and the read-only *device info overlay*. Engineering detail: [System Hierarchy → Edit System sheet](./system-hierarchy.md#edit-system-sheet). Responsibility is a soft lock, see [ADR 0002](../../adr/0002-system-edit-soft-lock-and-rest-patch.md).
 
 ## Form
 

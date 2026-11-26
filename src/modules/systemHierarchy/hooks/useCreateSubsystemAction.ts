@@ -4,10 +4,10 @@ import { useIntl } from 'react-intl'
 
 import { usePermission } from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
-import { guardSystemEdit } from '@/modules/shared/system/edit-permission'
+import { confirmSystemEdit } from '@/modules/shared/system/edit-permission'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { ROLE } from '@/types/constants/roles'
-import type { SystemLevel } from '@/types/gql/graphql'
+import type { SystemLevel } from '@/types/constants/systemLevel'
 
 import { CreateSubsystemDialog } from '../components/create/CreateSubsystemDialog.comp'
 
@@ -19,10 +19,10 @@ export const useCreateSubsystemAction = () => {
 
     const handleCreateSubsystem = useCallback(
         async (parentUid: string, parentName: string, parentLevel: SystemLevel) => {
-            // Role is the cheap first-line filter; the per-system check (against the
-            // parent) confirms the user is responsible before opening the dialog.
+            // Role is the hard gate; responsibility for the PARENT (the new
+            // HAS_SUBSYSTEM edge) is the soft lock, confirmed before the dialog opens.
             if (!canEdit) return
-            if (!(await guardSystemEdit(queryClient, parentUid, fm))) return
+            if (!(await confirmSystemEdit(queryClient, parentUid, fm))) return
 
             const modalId = `create-subsystem-${parentUid}`
             const parentLevelLabel = fm({

@@ -4,16 +4,18 @@ import { useSystemCanEdit } from './useSystemCanEdit'
 export type SystemEditPermissionStatus = 'loading' | 'error' | 'allowed' | 'denied'
 
 export interface SystemEditPermission {
-    // True only when the backend confirmed edit rights. Fail-closed: false while
-    // loading and on fetch error, so an un-verifiable state never leaves editing open.
+    // True only when the backend confirmed the user is responsible for the system.
+    // Informational: editing is never blocked on it (soft lock, see confirmSystemEdit).
     canEdit: boolean
+    // Not responsible — edits ask for confirmation and are flagged in history.
+    isOutsideResponsibility: boolean
     responsibles: SystemResponsible[]
     status: SystemEditPermissionStatus
     refetch: () => void
 }
 
 /**
- * Single decision point for per-system edit permission. Every consumer (detail
+ * Single decision point for per-system responsibility. Every consumer (detail
  * tabs, header actions, sidebar image panel) calls this with its own system uid;
  * React Query dedups the underlying fetch so it stays one request per system.
  */
@@ -23,16 +25,11 @@ export const useSystemEditPermission = (uid?: string | null): SystemEditPermissi
     // No uid → the query is disabled (never loads), so treat it as a non-denied
     // "nothing to decide yet" state rather than letting the ternary fall to 'denied'.
     const status: SystemEditPermissionStatus =
-        !uid || isLoading
-            ? 'loading'
-            : isError
-              ? 'error'
-              : data?.result
-                ? 'allowed'
-                : 'denied'
+        !uid || isLoading ? 'loading' : isError ? 'error' : data?.result ? 'allowed' : 'denied'
 
     return {
         canEdit: status === 'allowed',
+        isOutsideResponsibility: status === 'denied',
         responsibles: data?.responsibles ?? [],
         status,
         refetch: () => void refetch(),

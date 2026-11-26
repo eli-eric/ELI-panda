@@ -3,17 +3,11 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import { IntlProvider } from 'react-intl'
 
-import type { SystemLeaf } from '../../../types'
 import { openSetMinimalSparesModal } from '../set-minimal-spares.modal'
 
-const mockUpdateField = jest.fn()
-jest.mock('../../../hooks/mutations/useSystemFieldUpdate', () => ({
-    useSystemFieldUpdate: () => ({ updateField: mockUpdateField, isPending: false }),
-}))
-
-const mockRecalculate = jest.fn()
-jest.mock('../../../hooks/mutations/useRecalculateSpareParts', () => ({
-    useRecalculateSpareParts: () => mockRecalculate,
+const mockPatchSystem = jest.fn()
+jest.mock('@/modules/shared/system/system-detail', () => ({
+    useSystemPatch: () => ({ patchSystem: mockPatchSystem, isPending: false }),
 }))
 
 const mockCloseModal = jest.fn()
@@ -31,13 +25,7 @@ const messages: Record<string, string> = {
     'common.buttons.ok': 'OK',
 }
 
-const system: SystemLeaf = {
-    uid: 'sys-1',
-    name: 'Test System',
-    systemCode: 'SYS-001',
-    physicalItem: null,
-    parentPath: null,
-}
+const system = { uid: 'sys-1' }
 
 let queryClient: QueryClient
 
@@ -65,8 +53,7 @@ const typeValue = (value: string) =>
 beforeEach(() => {
     jest.clearAllMocks()
     queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
-    mockUpdateField.mockResolvedValue({ updateSystems: {} })
-    mockRecalculate.mockResolvedValue(true)
+    mockPatchSystem.mockResolvedValue({})
 })
 
 describe('openSetMinimalSparesModal', () => {
@@ -83,14 +70,12 @@ describe('openSetMinimalSparesModal', () => {
         expect(screen.getByTestId('set-minimal-spares-input')).toHaveValue(3)
     })
 
-    it('saves the entered value with the previous one for the history entry', async () => {
+    it('PATCHes the entered value (the server audits and recalculates coverage)', () => {
         renderModal(2)
         typeValue('0.25')
         clickOk()
 
-        expect(mockUpdateField).toHaveBeenCalledWith('sys-1', 'minimalSpareParstCount', 0.25, {
-            previousValue: 2,
-        })
+        expect(mockPatchSystem).toHaveBeenCalledWith({ minimalSpareParstCount: 0.25 })
     })
 
     it('stores 0 as null so the system has no requirement', () => {
@@ -98,39 +83,15 @@ describe('openSetMinimalSparesModal', () => {
         typeValue('0')
         clickOk()
 
-        expect(mockUpdateField).toHaveBeenCalledWith('sys-1', 'minimalSpareParstCount', null, {
-            previousValue: 2,
-        })
+        expect(mockPatchSystem).toHaveBeenCalledWith({ minimalSpareParstCount: null })
     })
 
-    // The requirement is sp_coverage's divisor, and this save bypasses the API
-    // that maintains it — without the recalc the tab keeps showing "Available 0".
-    it('recalculates coverage after a successful save', async () => {
-        renderModal(null)
-        typeValue('1')
-        clickOk()
-        await Promise.resolve()
-
-        expect(mockRecalculate).toHaveBeenCalled()
-    })
-
-    it('skips the recalculation when the save is blocked by the edit guard', async () => {
-        mockUpdateField.mockResolvedValue(undefined)
-        renderModal(null)
-        typeValue('1')
-        clickOk()
-        await Promise.resolve()
-
-        expect(mockRecalculate).not.toHaveBeenCalled()
-    })
-
-    // Saving an untouched value would write history and trigger a graph-wide
-    // recalculation for nothing.
+    // An untouched value would only be a server-side no-op round trip.
     it('skips the save entirely when the value was not changed', () => {
         renderModal(2)
         clickOk()
 
-        expect(mockUpdateField).not.toHaveBeenCalled()
+        expect(mockPatchSystem).not.toHaveBeenCalled()
         expect(mockCloseModal).toHaveBeenCalledWith('set-minimal-spares-sys-1')
     })
 
@@ -139,7 +100,7 @@ describe('openSetMinimalSparesModal', () => {
         typeValue('0')
         clickOk()
 
-        expect(mockUpdateField).not.toHaveBeenCalled()
+        expect(mockPatchSystem).not.toHaveBeenCalled()
     })
 
     it('clamps negative input to 0 instead of saving it', () => {
@@ -147,16 +108,14 @@ describe('openSetMinimalSparesModal', () => {
         typeValue('-5')
         clickOk()
 
-        expect(mockUpdateField).toHaveBeenCalledWith('sys-1', 'minimalSpareParstCount', null, {
-            previousValue: 2,
-        })
+        expect(mockPatchSystem).toHaveBeenCalledWith({ minimalSpareParstCount: null })
     })
 
     it('closes without saving on Cancel', () => {
         renderModal(2)
         fireEvent.click(screen.getByText('Cancel'))
 
-        expect(mockUpdateField).not.toHaveBeenCalled()
+        expect(mockPatchSystem).not.toHaveBeenCalled()
         expect(mockCloseModal).toHaveBeenCalledWith('set-minimal-spares-sys-1')
     })
 })

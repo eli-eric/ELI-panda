@@ -13,6 +13,7 @@ interface ServiceItemPropertiesProps {
     serviceItem: FragmentType<typeof ServiceItemFragment> | null | undefined
 }
 
+/** @deprecated systemItem is deprecated (see modules/systemItem/DEPRECATED.md) and this has no live consumer — use modules/shared/system/system-detail. */
 export const ServiceItemProperties = ({
     serviceItem: serviceItemProp,
 }: ServiceItemPropertiesProps) => {

@@ -68,6 +68,7 @@ const HistoryModalContent = ({ uid }: { uid: string }) => {
     )
 }
 
+/** @deprecated systemItem is deprecated (see modules/systemItem/DEPRECATED.md) and this has no live consumer — use modules/shared/system/system-detail. */
 export const ShowHistoryButton = () => {
     const router = useRouter()
     const { uid } = router.query as { uid: string }

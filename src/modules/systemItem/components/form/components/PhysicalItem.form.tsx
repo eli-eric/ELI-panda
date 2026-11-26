@@ -25,6 +25,7 @@ import { OrderInformation } from './orderInfo/OrderInformation'
 
 const propertyMessage = message.systemsPage.systemDetail.form.physicalItem.general.properties
 
+/** @deprecated systemItem is deprecated (see modules/systemItem/DEPRECATED.md) and this has no live consumer — use modules/shared/system/system-detail. */
 export const PhysicalItemForm = ({ uid }: { uid: string }) => {
     const fields = useSystemFormFields()
 

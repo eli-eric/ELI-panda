@@ -11,9 +11,9 @@ import { ImageGallery } from '@/modules/shared/imageManager/ImageGallery'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { ROLE } from '@/types/constants/roles'
-import { SystemLevel } from '@/types/gql/graphql'
+import { SystemLevel } from '@/types/constants/systemLevel'
 
-import { SystemDetailSection } from '../system-edit/components/sections/system-detail.section'
+import { SystemCreateDetailSection } from './components/SystemCreateDetailSection'
 import { SystemHierarchy } from './components/SystemHierarchy.comp'
 import { useSystemCreate } from './hooks/useSystemCreate'
 import { useSystemCreateParent } from './hooks/useSystemCreateParent'
@@ -54,7 +54,7 @@ export const SystemCreateContainer: FC = () => {
                     'responsible',
                     {
                         uid: parentSystem.responsible.uid,
-                        name: parentSystem.responsible.fullName || 'N/A',
+                        name: parentSystem.responsible.name || 'N/A',
                     },
                     { shouldDirty: false },
                 )
@@ -131,7 +131,7 @@ export const SystemCreateContainer: FC = () => {
                     />
                 )}
 
-                <SystemDetailSection />
+                <SystemCreateDetailSection />
             </div>
         </Form>
     )

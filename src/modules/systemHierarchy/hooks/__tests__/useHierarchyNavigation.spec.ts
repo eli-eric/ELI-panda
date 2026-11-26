@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { act, renderHook } from '@testing-library/react'
 import React from 'react'
 
+import { useHierarchyStore } from '../../store/useHierarchyStore'
 import { useHierarchyNavigation } from '../useHierarchyNavigation'
 
 const wrapper = ({ children }: { children: React.ReactNode }) =>
@@ -13,7 +14,7 @@ let mockQuery: Record<string, string | undefined> = {}
 jest.mock('next/router', () => ({
     useRouter: () => ({
         query: mockQuery,
-        pathname: '/systems/hierarchy',
+        pathname: '/systems/explorer',
         push: mockPush,
     }),
 }))
@@ -24,6 +25,7 @@ describe('useHierarchyNavigation', () => {
     beforeEach(() => {
         mockPush.mockClear()
         mockQuery = {}
+        useHierarchyStore.setState({ lastTab: 'detail' })
     })
 
     it('selectParent in detail mode swaps detail subject and preserves tab', () => {
@@ -52,6 +54,38 @@ describe('useHierarchyNavigation', () => {
         const { result } = renderHook(() => useHierarchyNavigation(), { wrapper })
         act(() => result.current.selectLeaf('X'))
         expect(lastPushedQuery()).toEqual({ parent: 'A', leaf: 'X', tab: 'detail' })
+    })
+
+    describe('sticky tab', () => {
+        it('selectLeaf from leaves table opens the last tab the user picked', () => {
+            useHierarchyStore.setState({ lastTab: 'physical-item' })
+            mockQuery = { parent: 'A' }
+            const { result } = renderHook(() => useHierarchyNavigation(), { wrapper })
+            act(() => result.current.selectLeaf('X'))
+            expect(lastPushedQuery()).toEqual({ parent: 'A', leaf: 'X', tab: 'physical-item' })
+        })
+
+        it('falls back to the last tab when the URL has none (deep links)', () => {
+            useHierarchyStore.setState({ lastTab: 'history' })
+            mockQuery = { leaf: 'X' }
+            const { result } = renderHook(() => useHierarchyNavigation(), { wrapper })
+            expect(result.current.activeTab).toBe('history')
+        })
+
+        it('an explicit ?tab wins over the remembered one', () => {
+            useHierarchyStore.setState({ lastTab: 'history' })
+            mockQuery = { leaf: 'X', tab: 'persons' }
+            const { result } = renderHook(() => useHierarchyNavigation(), { wrapper })
+            expect(result.current.activeTab).toBe('persons')
+        })
+
+        it('setActiveTab remembers the tab', () => {
+            mockQuery = { leaf: 'X' }
+            const { result } = renderHook(() => useHierarchyNavigation(), { wrapper })
+            act(() => result.current.setActiveTab('spare-parts'))
+            expect(useHierarchyStore.getState().lastTab).toBe('spare-parts')
+            expect(lastPushedQuery()).toEqual({ leaf: 'X', tab: 'spare-parts' })
+        })
     })
 
     it('goBackToLeaves clears leaf and tab', () => {

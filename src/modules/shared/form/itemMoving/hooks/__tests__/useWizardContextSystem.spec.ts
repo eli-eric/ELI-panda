@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react'
 import { useRouter } from 'next/router'
 
-import { useSystemDetail } from '@/modules/systemHierarchy/hooks/queries/useSystemDetail'
+import { useSystemDetail } from '@/modules/shared/system/system-detail'
 
 import { useModalWizardStore } from '../../store/useModalWizardStore'
 import { useWizardContextSystem } from '../useWizardContextSystem'
@@ -10,7 +10,7 @@ jest.mock('next/router', () => ({
     useRouter: jest.fn(),
 }))
 
-jest.mock('@/modules/systemHierarchy/hooks/queries/useSystemDetail', () => ({
+jest.mock('@/modules/shared/system/system-detail', () => ({
     useSystemDetail: jest.fn(),
 }))
 
@@ -38,9 +38,10 @@ describe('useWizardContextSystem', () => {
         useModalWizardStore.setState({ contextSystem: null })
         mockUseRouter.mockReturnValue({ query: {} })
         mockUseSystemDetail.mockReturnValue({
-            system: { uid: 'fetched-1' },
-            physicalItem: { uid: 'pi-f' },
-            catalogueItem: { uid: 'ci-f' },
+            system: {
+                uid: 'fetched-1',
+                physicalItem: { uid: 'pi-f', catalogueItem: { uid: 'ci-f' } },
+            },
             isLoading: false,
         })
     })
@@ -93,8 +94,8 @@ describe('useWizardContextSystem', () => {
         const { result } = renderHook(() => useWizardContextSystem())
 
         expect(mockUseSystemDetail).toHaveBeenCalledWith('route-1')
-        expect(result.current.systemDetail).toEqual({ uid: 'fetched-1' })
-        expect(result.current.physicalItem).toEqual({ uid: 'pi-f' })
+        expect(result.current.systemDetail?.uid).toBe('fetched-1')
+        expect(result.current.physicalItem?.uid).toBe('pi-f')
         expect(result.current.catalogueItem).toEqual({ uid: 'ci-f' })
     })
 

@@ -70,6 +70,7 @@ const usePropertiesUpdate = uid => {
     })
 }
 
+/** @deprecated systemItem is deprecated (see modules/systemItem/DEPRECATED.md) and this has no live consumer — use modules/shared/system/system-detail. */
 export const useSystemUpdate = (
     imageRef?: MutableRefObject<ImageGalleryRef | undefined>,
     physicalItemUid?: string,

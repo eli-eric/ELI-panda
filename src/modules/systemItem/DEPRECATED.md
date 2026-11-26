@@ -17,6 +17,10 @@ hierarchy explorer: `/systems/hierarchy?leaf=<uid>` (build links with
 
 ## Must NOT gain new consumers
 
+Every export without a live consumer carries a `@deprecated` JSDoc tag (2026-11), so
+IDEs strike it through. The root "Create System" sheet no longer uses this module's
+GraphQL hooks — it posts to `POST /systems` (`useCreateSystem` in `shared/system/system-detail`).
+
 - `SystemItemContainer` (page-level detail UI)
 - `hooks/useSystemDetail`, `hooks/useSuspenseSystemDetail`, `hooks/useSystemCreate`
 - `store/useSystemItemStore`

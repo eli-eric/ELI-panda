@@ -11,6 +11,7 @@ import { useSystemDetail } from '../../hooks/useSystemDetail'
 import { getFontBySystemLevel } from '../../utils'
 import { useSpareForColumns } from './SpareFor.columns'
 
+/** @deprecated systemItem is deprecated (see modules/systemItem/DEPRECATED.md) and this has no live consumer — use modules/shared/system/system-detail. */
 export const SparePartsFor = () => {
     const tableId = 'sparePartFor'
     const columns = useSpareForColumns(tableId)

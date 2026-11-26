@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { SystemLevel } from '@/types/gql/graphql'
+import { SystemLevel } from '@/types/constants/systemLevel'
 
 // --- Reusable atoms ---
 export const codebookRefSchema = z.object({

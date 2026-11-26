@@ -13,6 +13,7 @@ import { AssignSparePartButton } from './AssignSparePartsButton'
 import { SetMinimalSparesButton } from './SetMinimalSparesButton'
 import { useSparePartsColumns } from './SpareParts.columns'
 
+/** @deprecated systemItem is deprecated (see modules/systemItem/DEPRECATED.md) and this has no live consumer — use modules/shared/system/system-detail. */
 export const SparePartsContainer = () => {
     const { formatMessage: fm } = useIntl()
     const columns = useSparePartsColumns()

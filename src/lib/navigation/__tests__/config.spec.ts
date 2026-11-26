@@ -34,11 +34,11 @@ describe('NAV_ITEMS', () => {
         expect(NAV_ITEMS[0].title).toBe('Dashboard')
     })
 
-    it('Systems group contains Hierarchy + Moving sub-items', () => {
+    it('Systems group contains Explorer + Moving sub-items', () => {
         const systems = NAV_ITEMS.find(i => i.title === 'Systems')
         expect(systems).toBeDefined()
         const titles = systems?.items?.map(s => s.title)
-        expect(titles).toContain('Hierarchy')
+        expect(titles).toContain('Explorer')
         expect(titles).toContain('Moving')
     })
 })

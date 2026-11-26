@@ -2,10 +2,11 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import { useCallback, useMemo } from 'react'
 
+import type { OptimisticSystemHint } from '@/modules/shared/system/system-detail'
+import { primeSystemDetailCache } from '@/modules/shared/system/system-detail'
+
+import { useHierarchyStore } from '../store/useHierarchyStore'
 import type { HierarchyTab } from '../types/constants'
-import { HIERARCHY_TABS } from '../types/constants'
-import type { OptimisticSystemHint } from './queries/useSystemDetail'
-import { primeSystemDetailCache } from './queries/useSystemDetail'
 
 export const useHierarchyNavigation = () => {
     const router = useRouter()
@@ -13,7 +14,11 @@ export const useHierarchyNavigation = () => {
 
     const selectedParentUid = (router.query.parent as string) ?? null
     const selectedLeafUid = (router.query.leaf as string) ?? null
-    const activeTab = ((router.query.tab as string) ?? HIERARCHY_TABS.DETAIL) as HierarchyTab
+    const lastTab = useHierarchyStore(state => state.lastTab)
+    const setLastTab = useHierarchyStore(state => state.setLastTab)
+    // Sticky tab: without ?tab (deep links, opening from the leaves list) the detail
+    // lands on the tab the user last picked, so walking systems keeps the same view.
+    const activeTab = ((router.query.tab as string | undefined) ?? lastTab) as HierarchyTab
     // Lives in the URL so it survives reload and deep links. Deliberately NOT reset by
     // selectParent — walking the tree level by level with the mode on is the point,
     // and ?filter/?search carry over the same way.
@@ -54,9 +59,9 @@ export const useHierarchyNavigation = () => {
         (uid: string, optimistic?: OptimisticSystemHint) => {
             if (optimistic) primeSystemDetailCache(queryClient, uid, optimistic)
             const inDetail = !!(router.query.leaf as string | undefined)
-            updateQuery(inDetail ? { leaf: uid } : { leaf: uid, tab: HIERARCHY_TABS.DETAIL })
+            updateQuery(inDetail ? { leaf: uid } : { leaf: uid, tab: lastTab })
         },
-        [queryClient, router, updateQuery],
+        [queryClient, router, updateQuery, lastTab],
     )
 
     // replace (not push) so deep-link resolution does not add a history entry
@@ -69,9 +74,10 @@ export const useHierarchyNavigation = () => {
 
     const setActiveTab = useCallback(
         (tab: HierarchyTab) => {
+            setLastTab(tab)
             updateQuery({ tab })
         },
-        [updateQuery],
+        [updateQuery, setLastTab],
     )
 
     // Page reset: the narrowed list is far shorter, so keeping ?page would land the

@@ -7,20 +7,19 @@ import { Skeleton } from '@/components/ui/skeleton'
 import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
+import type { SystemDetail } from '@/modules/shared/system/system-detail'
 import { IconCell } from '@/modules/systems/components/table/cells/IconCell'
 import type { ITEM_USAGE } from '@/modules/systems/types/constants'
 import { ROLE } from '@/types/constants/roles'
 
-import { useRelationshipItemUsage } from '../../hooks/queries/useRelationshipItemUsage'
 import type { RelationshipRow } from '../../hooks/queries/useSystemRelationships'
 import { useSystemRelationships } from '../../hooks/queries/useSystemRelationships'
 import { useHierarchyNavigation } from '../../hooks/useHierarchyNavigation'
-import type { SystemLeaf } from '../../types'
 import { getRelationshipDirectionLabel, RELATIONSHIP_COLORS } from '../../types/graph'
 import { DeleteRelationshipButton } from '../relationships/DeleteRelationshipButton.comp'
 
 interface RelationshipsTabProps {
-    system: SystemLeaf
+    system: Pick<SystemDetail, 'uid'>
     compact?: boolean
 }
 
@@ -90,9 +89,8 @@ export const RelationshipsTabContainer: FC<RelationshipsTabProps> = ({ system, c
     const { formatMessage: fm } = useIntl()
     const { selectLeaf } = useHierarchyNavigation()
     const canEdit = !!usePermission([ROLE.SYSTEM_EDIT])
-    const { inbound, outbound, relatedUids, hasRelationships, isLoading, isError, refetch } =
+    const { inbound, outbound, hasRelationships, isLoading, isError, refetch } =
         useSystemRelationships(system.uid)
-    const { itemUsageMap } = useRelationshipItemUsage(relatedUids)
 
     const containerPadding = compact ? 'p-0' : 'p-4'
     const rowIndent = compact ? 'ml-0' : 'ml-6'
@@ -143,7 +141,7 @@ export const RelationshipsTabContainer: FC<RelationshipsTabProps> = ({ system, c
                             <RelationshipRowItem
                                 key={row.edge.uid}
                                 row={row}
-                                itemUsage={itemUsageMap[row.node.uid]}
+                                itemUsage={row.node.itemUsageUid as ITEM_USAGE | undefined}
                                 onNavigate={selectLeaf}
                                 compact={compact}
                                 canEdit={canEdit}
@@ -166,7 +164,7 @@ export const RelationshipsTabContainer: FC<RelationshipsTabProps> = ({ system, c
                             <RelationshipRowItem
                                 key={row.edge.uid}
                                 row={row}
-                                itemUsage={itemUsageMap[row.node.uid]}
+                                itemUsage={row.node.itemUsageUid as ITEM_USAGE | undefined}
                                 onNavigate={selectLeaf}
                                 compact={compact}
                                 canEdit={canEdit}

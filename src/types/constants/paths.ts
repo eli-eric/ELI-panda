@@ -34,6 +34,8 @@ export enum PATH {
     SERVICE = '/service',
     CONTROL_SYSTEMS = '/control-systems/overview',
     CONTROL_SYSTEMS_CREATE = '/control-systems/system-codes-create',
+    SYSTEMS_EXPLORER = '/systems/explorer',
+    // legacy route, redirects to SYSTEMS_EXPLORER
     SYSTEMS_HIERARCHY = '/systems/hierarchy',
     ZONES = '/zones',
     NOT_FOUND = '/404',

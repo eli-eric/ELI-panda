@@ -6,14 +6,17 @@ import { toast } from 'sonner'
 import { usePermission } from '@/hooks/usePermission'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
-import { guardSystemEdit } from '@/modules/shared/system/edit-permission'
+import {
+    getOutsideResponsibilityNote,
+    markSystemEditConfirmed,
+} from '@/modules/shared/system/edit-permission'
+import { useSystemDetail } from '@/modules/shared/system/system-detail'
 import { ROLE } from '@/types/constants/roles'
 import type { AxiosError } from '@/types/http'
 import { createMessageValues } from '@/utils/formatters'
 
 import { findHierarchyPath } from '../utils/treePath'
 import { useDeleteSystem } from './mutations/useDeleteSystem'
-import { useSystemDetail } from './queries/useSystemDetail'
 import { useSystemHierarchy } from './queries/useSystemHierarchy'
 import { useHierarchyNavigation } from './useHierarchyNavigation'
 
@@ -79,11 +82,12 @@ export const useDeleteSystemAction = () => {
     const handleDeleteSystem = useCallback(
         async (uid: string, name: string) => {
             if (!canEdit || isPending) return
-            // Per-system check-on-click: role-holders who aren't responsible for
-            // this node are blocked with a toast before the confirm dialog.
-            if (!(await guardSystemEdit(queryClient, uid, fm))) return
+            // Soft lock: not being responsible doesn't block — the note is merged
+            // into the delete confirm, and confirming it counts for this system.
+            const outsideNote = await getOutsideResponsibilityNote(queryClient, uid, fm)
 
             const runDelete = () => {
+                if (outsideNote) markSystemEditConfirmed(uid)
                 toast.promise(mutateAsync({ uid }), {
                     loading: fm({ id: messages.deleting }),
                     success: () => {
@@ -100,7 +104,7 @@ export const useDeleteSystemAction = () => {
             }
 
             const confirm = fm({ id: messages.confirm }, createMessageValues({ name }))
-            withWarningModal(runDelete, confirm)()
+            withWarningModal(runDelete, outsideNote ? `${confirm} ${outsideNote}` : confirm)()
         },
         [
             canEdit,

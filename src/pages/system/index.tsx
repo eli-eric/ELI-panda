@@ -7,6 +7,7 @@ import { SystemItemContainer } from '@/modules/systemItem/SystemItem.cont'
 
 const messages = message.systemItem
 
+/** @deprecated legacy systemItem page — no navigation links here; system detail lives in the Systems Explorer. */
 const SystemItemPage: NextPage = (): React.ReactElement => {
     const intl = useIntl()
 

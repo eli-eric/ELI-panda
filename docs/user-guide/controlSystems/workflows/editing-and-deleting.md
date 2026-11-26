@@ -26,13 +26,11 @@ See [Access & Responsibilities](../README.md#access--responsibilities) for what 
 
 1. **Click the row** in the Overview table (or open the row's action menu and click *Edit System*). The system edit sheet opens over the page.
 
-2. **Make changes in the sheet.** All the tabs of the system detail are available — *Detail*, *Persons*, *Physical Item*, *Spare Parts*, *Relationships*, *Attachments*, *History*. Editing is gated **per system**: beyond the `systems-edit` role, you can change fields here only if you are **responsible** for this system (directly, via its responsible team, or via a system above it). If you are not, every field is shown but disabled, the **Save System** button is greyed out, the system-code **Generate** / **Release** buttons are disabled, and a banner at the top explains why and lets you see who is responsible. See [Understanding edit permissions](../../systemHierarchy/workflows/edit-permissions.md).
+2. **Edit fields directly in the sheet.** The sheet has the system's content on the left (description, images, physical item, spare parts, subsystems, activity) and a **Details** / **People** panel on the right (code with *Generate* / *Release*, level, type, location, zone, responsible person, team, operators, maintained by). Click a value to edit it; each field saves on its own — there is no Save button. If you are not **responsible** for this system, your first change asks for a one-time confirmation and is marked in history. See [Understanding edit permissions](../../systemHierarchy/workflows/edit-permissions.md).
 
-   `[SCREENSHOT PLACEHOLDER: system edit sheet open over the Control Systems Overview, the Detail tab active showing the system's Name, Code, Level, Type, Location, Zone, Description fields, Save button at the bottom]`
+   `[SCREENSHOT PLACEHOLDER: Edit System sheet over the Control Systems Overview — breadcrumb, inline title and "Updated 5 minutes ago" at the top, then collapsible sections: Details (System Code with Generate / Release, Level, Type, Location, Zone, Description) and People open, Subsystems and Activity collapsed]`
 
-   `[SCREENSHOT PLACEHOLDER: the same sheet for a system the user is not responsible for — all fields disabled, a restriction banner below the Save System button with an info icon listing the responsible people, Save System greyed out]`
-
-3. **Save changes** in the sheet. The Overview row reflects the updated metadata after the save. (**Save System** is only enabled when you are permitted to edit this system.)
+3. **Watch the toast.** *Saved successfully* confirms each field; the Overview row reflects the change. If someone else changed the system meanwhile, the toast asks you to repeat the change on the freshly loaded data.
 
 4. **Close the sheet.** Your Overview filters, search, sort, and scroll position are preserved.
 

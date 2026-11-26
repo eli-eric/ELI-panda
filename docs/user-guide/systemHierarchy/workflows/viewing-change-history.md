@@ -49,6 +49,17 @@ Most *General* and *Item Changes* entries describe a specific field that changed
 
 Empty values are rendered as **(empty)** in the message — useful when distinguishing "field was set to blank" from "field was unchanged".
 
+Two more kinds of entries:
+
+| Situation | Message |
+|---|---|
+| **Operators / Maintained By** changed | the whole list before and after, e.g. *changed **Authorized Operators** from **Ada** to **Ada, Grace*** |
+| A **relationship** was added / removed | *linked **<system>** (<relationship>)* / *removed the link to **<system>** (<relationship>)* — shown on both systems |
+
+### Outside responsibility
+
+Changes made by someone who is not responsible for the system carry an amber **Outside responsibility** badge next to the user name. See [Understanding edit permissions](./edit-permissions.md).
+
 ## Steps
 
 ### Browsing the timeline

@@ -16,7 +16,7 @@ import { SystemTypeComboBox } from '@/modules/shared/form/systemType/SelectSyste
 import { useCategoryItemProperties } from '@/modules/systems/hooks/useCategoryItemProperties'
 import { useCategoryProperties } from '@/modules/systems/hooks/useCategoryProperties'
 import { useMinMaxPrice } from '@/modules/systems/hooks/useMinMaxPrice'
-import { SystemLevel } from '@/types/gql/graphql'
+import { SystemLevel } from '@/types/constants/systemLevel'
 
 import { CategoryPropFilters } from '../../../../shared/form/CategoryPropFilters'
 import type { DisabledFields } from '../SystemsFilterButton.cont'

@@ -3,10 +3,13 @@ import { toast } from 'sonner'
 
 import { usePermission } from '@/hooks/usePermission'
 import useWarningModal from '@/hooks/useWarningModal'
-import { guardSystemEdit } from '@/modules/shared/system/edit-permission/utils/guardSystemEdit'
+import {
+    getOutsideResponsibilityNote,
+    markSystemEditConfirmed,
+} from '@/modules/shared/system/edit-permission'
+import { useSystemDetail } from '@/modules/shared/system/system-detail'
 
 import { useDeleteSystem } from '../mutations/useDeleteSystem'
-import { useSystemDetail } from '../queries/useSystemDetail'
 import { useSystemHierarchy } from '../queries/useSystemHierarchy'
 import { useDeleteSystemAction } from '../useDeleteSystemAction'
 import { useHierarchyNavigation } from '../useHierarchyNavigation'
@@ -14,9 +17,12 @@ import { useHierarchyNavigation } from '../useHierarchyNavigation'
 jest.mock('@tanstack/react-query', () => ({ useQueryClient: () => ({}) }))
 jest.mock('@/hooks/usePermission', () => ({ usePermission: jest.fn() }))
 jest.mock('@/hooks/useWarningModal', () => ({ __esModule: true, default: jest.fn() }))
-jest.mock('@/modules/shared/system/edit-permission/utils/guardSystemEdit', () => ({ guardSystemEdit: jest.fn() }))
+jest.mock('@/modules/shared/system/edit-permission', () => ({
+    getOutsideResponsibilityNote: jest.fn(),
+    markSystemEditConfirmed: jest.fn(),
+}))
+jest.mock('@/modules/shared/system/system-detail', () => ({ useSystemDetail: jest.fn() }))
 jest.mock('../mutations/useDeleteSystem', () => ({ useDeleteSystem: jest.fn() }))
-jest.mock('../queries/useSystemDetail', () => ({ useSystemDetail: jest.fn() }))
 jest.mock('../queries/useSystemHierarchy', () => ({ useSystemHierarchy: jest.fn() }))
 jest.mock('../useHierarchyNavigation', () => ({ useHierarchyNavigation: jest.fn() }))
 jest.mock('sonner', () => ({ toast: { promise: jest.fn() } }))
@@ -28,7 +34,8 @@ jest.mock('react-intl', () => ({
 }))
 
 const mockUsePermission = usePermission as jest.Mock
-const mockGuardSystemEdit = guardSystemEdit as jest.Mock
+const mockGetOutsideNote = getOutsideResponsibilityNote as jest.Mock
+const mockMarkConfirmed = markSystemEditConfirmed as jest.Mock
 const mockUseWarningModal = useWarningModal as unknown as jest.Mock
 const mockUseDeleteSystem = useDeleteSystem as jest.Mock
 const mockUseSystemDetail = useSystemDetail as jest.Mock
@@ -56,8 +63,8 @@ beforeEach(() => {
     lastConfirmMessage = undefined
 
     mockUsePermission.mockReturnValue(true)
-    // Per-system check passes by default; overridden per test.
-    mockGuardSystemEdit.mockResolvedValue(true)
+    // Responsible by default (no extra note); overridden per test.
+    mockGetOutsideNote.mockResolvedValue(null)
     // withWarningModal(cb, msg) → trigger that runs cb immediately (simulating confirm)
     mockUseWarningModal.mockReturnValue(
         (cb: (...args: unknown[]) => void, msg?: string) =>
@@ -213,18 +220,30 @@ describe('useDeleteSystemAction', () => {
         expect(message).toBe('systemHierarchy.delete.error|Pump A')
     })
 
-    it('checks per-system permission for the target and blocks when not responsible', async () => {
-        mockGuardSystemEdit.mockResolvedValue(false)
+    it('does not prompt separately when responsible', async () => {
         const { result } = renderHook(() => useDeleteSystemAction())
 
         await act(async () => result.current.handleDeleteSystem('sys-1', 'Pump A'))
 
-        expect(mockGuardSystemEdit).toHaveBeenCalledWith(
+        expect(lastConfirmMessage).toBe('systemHierarchy.delete.confirm|Pump A')
+        expect(mockMarkConfirmed).not.toHaveBeenCalled()
+        expect(mutateAsync).toHaveBeenCalled()
+    })
+
+    // soft lock: not being responsible never blocks — the note joins the one confirm
+    it('merges the outside-responsibility note into the delete confirm and remembers it', async () => {
+        mockGetOutsideNote.mockResolvedValue('NOT_RESPONSIBLE')
+        const { result } = renderHook(() => useDeleteSystemAction())
+
+        await act(async () => result.current.handleDeleteSystem('sys-1', 'Pump A'))
+
+        expect(mockGetOutsideNote).toHaveBeenCalledWith(
             expect.anything(),
             'sys-1',
             expect.any(Function),
         )
-        expect(mockToastPromise).not.toHaveBeenCalled()
-        expect(mutateAsync).not.toHaveBeenCalled()
+        expect(lastConfirmMessage).toBe('systemHierarchy.delete.confirm|Pump A NOT_RESPONSIBLE')
+        expect(mockMarkConfirmed).toHaveBeenCalledWith('sys-1')
+        expect(mutateAsync).toHaveBeenCalledWith({ uid: 'sys-1' })
     })
 })

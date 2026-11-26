@@ -30,6 +30,7 @@ const systemDetailQuery = gql(`
    }
 `)
 
+/** @deprecated systemItem is deprecated (see modules/systemItem/DEPRECATED.md) and this has no live consumer — use modules/shared/system/system-detail. */
 export const useSystemParent = () => {
     const router = useRouter()
     const uid = router.query.parentUid as string | undefined

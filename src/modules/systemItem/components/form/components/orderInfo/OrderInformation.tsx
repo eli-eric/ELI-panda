@@ -30,6 +30,7 @@ const safeFormatDate = (dateStr: string | null | undefined): string => {
     }
 }
 
+/** @deprecated systemItem is deprecated (see modules/systemItem/DEPRECATED.md) and this has no live consumer — use modules/shared/system/system-detail. */
 export const OrderInformation = ({ physicalItem: physicalItemProp }: OrderInformationProps) => {
     const physicalItem = useFragment(PhysicalItemFragment, physicalItemProp)
     const columns = useSystemOrderColumns()

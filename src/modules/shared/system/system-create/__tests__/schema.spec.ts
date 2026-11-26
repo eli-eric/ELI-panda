@@ -1,6 +1,6 @@
-import { SystemLevel } from '@/types/gql/graphql'
+import { SystemLevel } from '@/types/constants/systemLevel'
 
-import { systemCreateSchema, systemUpdateSchema } from '../schema'
+import { systemCreateSchema } from '../schema'
 
 const baseValid = {
     name: 'Sys',
@@ -36,37 +36,5 @@ describe('systemCreateSchema', () => {
                 responsible: null,
             }).success,
         ).toBe(true)
-    })
-})
-
-describe('systemUpdateSchema', () => {
-    it('accepts update with arrays + physicalItem', () => {
-        const r = systemUpdateSchema.safeParse({
-            ...baseValid,
-            operators: [{ uid: 'o', name: 'Op' }],
-            maintainedBy: [{ uid: 'm', name: 'M' }],
-            minimalSpareParstCount: 3,
-            physicalItem: {
-                uid: 'pi',
-                serialNumber: 'SN1',
-                conditionStatus: { uid: 'c', name: 'OK' },
-            },
-        })
-        expect(r.success).toBe(true)
-    })
-
-    it('accepts physicalItem omitted/null', () => {
-        expect(
-            systemUpdateSchema.safeParse({ ...baseValid, physicalItem: null }).success,
-        ).toBe(true)
-        expect(systemUpdateSchema.safeParse(baseValid).success).toBe(true)
-    })
-
-    it('rejects malformed operators array entry', () => {
-        const r = systemUpdateSchema.safeParse({
-            ...baseValid,
-            operators: [{ name: 'no-uid' } as any],
-        })
-        expect(r.success).toBe(false)
     })
 })

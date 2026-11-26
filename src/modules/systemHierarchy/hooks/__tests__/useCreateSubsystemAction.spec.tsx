@@ -1,10 +1,10 @@
 import { act, renderHook } from '@testing-library/react'
 
 import { usePermission } from '@/hooks/usePermission'
-import { guardSystemEdit } from '@/modules/shared/system/edit-permission/utils/guardSystemEdit'
+import { confirmSystemEdit } from '@/modules/shared/system/edit-permission'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { AllProvidersWrapper } from '@/testutils/wrappers/AllProvidersWrapper'
-import { SystemLevel } from '@/types/gql/graphql'
+import { SystemLevel } from '@/types/constants/systemLevel'
 
 import { useCreateSubsystemAction } from '../useCreateSubsystemAction'
 
@@ -20,13 +20,13 @@ jest.mock('../../components/create/CreateSubsystemDialog.comp', () => ({
     CreateSubsystemDialog: () => null,
 }))
 
-jest.mock('@/modules/shared/system/edit-permission/utils/guardSystemEdit', () => ({
-    guardSystemEdit: jest.fn(),
+jest.mock('@/modules/shared/system/edit-permission', () => ({
+    confirmSystemEdit: jest.fn(),
 }))
 
 const mockUsePermission = usePermission as jest.Mock
 const mockUseDynamicModalStore = useDynamicModalStore as unknown as jest.Mock
-const mockGuardSystemEdit = guardSystemEdit as jest.Mock
+const mockConfirmSystemEdit = confirmSystemEdit as jest.Mock
 
 let openModal: jest.Mock
 let closeModal: jest.Mock
@@ -36,26 +36,22 @@ beforeEach(() => {
     openModal = jest.fn()
     closeModal = jest.fn()
     mockUseDynamicModalStore.mockReturnValue({ openModal, closeModal })
-    // Default: the per-system check passes; overridden per test.
-    mockGuardSystemEdit.mockResolvedValue(true)
+    // Default: responsible (or already confirmed); overridden per test.
+    mockConfirmSystemEdit.mockResolvedValue(true)
 })
 
 describe('useCreateSubsystemAction', () => {
-    it('opens the create dialog with parent context when user is responsible for the parent', async () => {
+    it('opens the create dialog with parent context once the parent soft lock passes', async () => {
         mockUsePermission.mockReturnValue(true)
         const { result } = renderHook(() => useCreateSubsystemAction(), {
             wrapper: AllProvidersWrapper,
         })
 
         await act(async () => {
-            await result.current.handleCreateSubsystem(
-                'parent-1',
-                'Parent',
-                SystemLevel.KeySystems,
-            )
+            await result.current.handleCreateSubsystem('parent-1', 'Parent', SystemLevel.KeySystems)
         })
 
-        expect(mockGuardSystemEdit).toHaveBeenCalledWith(
+        expect(mockConfirmSystemEdit).toHaveBeenCalledWith(
             expect.anything(),
             'parent-1',
             expect.any(Function),
@@ -76,33 +72,25 @@ describe('useCreateSubsystemAction', () => {
         })
 
         await act(async () => {
-            await result.current.handleCreateSubsystem(
-                'parent-1',
-                'Parent',
-                SystemLevel.KeySystems,
-            )
+            await result.current.handleCreateSubsystem('parent-1', 'Parent', SystemLevel.KeySystems)
         })
 
-        expect(mockGuardSystemEdit).not.toHaveBeenCalled()
+        expect(mockConfirmSystemEdit).not.toHaveBeenCalled()
         expect(openModal).not.toHaveBeenCalled()
     })
 
-    it('does not open the dialog when user is not responsible for the parent', async () => {
+    it('does not open the dialog when the user declines the outside-responsibility prompt', async () => {
         mockUsePermission.mockReturnValue(true)
-        mockGuardSystemEdit.mockResolvedValue(false)
+        mockConfirmSystemEdit.mockResolvedValue(false)
         const { result } = renderHook(() => useCreateSubsystemAction(), {
             wrapper: AllProvidersWrapper,
         })
 
         await act(async () => {
-            await result.current.handleCreateSubsystem(
-                'parent-1',
-                'Parent',
-                SystemLevel.KeySystems,
-            )
+            await result.current.handleCreateSubsystem('parent-1', 'Parent', SystemLevel.KeySystems)
         })
 
-        expect(mockGuardSystemEdit).toHaveBeenCalled()
+        expect(mockConfirmSystemEdit).toHaveBeenCalled()
         expect(openModal).not.toHaveBeenCalled()
     })
 })

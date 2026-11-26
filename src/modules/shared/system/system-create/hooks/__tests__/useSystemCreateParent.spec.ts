@@ -1,102 +1,57 @@
 import { renderHook } from '@testing-library/react'
 
-import { useGraphQL } from '@/hooks/fetch/useGraphQL'
+import { useSystemDetail } from '@/modules/shared/system/system-detail/hooks/queries/useSystemDetail'
+import { makeSystemDetail } from '@/testutils/factories/systemDetail'
 
 import { useSystemCreateParentStore } from '../../store/useSystemCreateParentStore'
 import { useSystemCreateParent } from '../useSystemCreateParent'
 
-jest.mock('@/hooks/fetch/useGraphQL', () => ({
-    useGraphQL: jest.fn(),
-}))
+jest.mock('@/modules/shared/system/system-detail/hooks/queries/useSystemDetail', () => ({ useSystemDetail: jest.fn() }))
 
-const mockUseGraphQL = useGraphQL as jest.Mock
-
-const resetStore = () => useSystemCreateParentStore.setState({ parentUid: null })
+const mockUseSystemDetail = useSystemDetail as jest.Mock
 
 beforeEach(() => {
     jest.clearAllMocks()
-    resetStore()
-    mockUseGraphQL.mockReturnValue({
-        data: undefined,
-        error: undefined,
-        isLoading: false,
-        refetch: jest.fn(),
-    })
+    useSystemCreateParentStore.setState({ parentUid: null })
+    mockUseSystemDetail.mockReturnValue({ system: null, isLoading: false, error: null, refetch: jest.fn() })
 })
 
 describe('useSystemCreateParent', () => {
     it('prefers store parentUid over arg', () => {
         useSystemCreateParentStore.setState({ parentUid: 'from-store' })
         renderHook(() => useSystemCreateParent('from-arg'))
-        const opts = mockUseGraphQL.mock.calls[0][1]
-        expect(opts.variables.where.uid).toBe('from-store')
-        expect(opts.enabled).toBe(true)
+        expect(mockUseSystemDetail).toHaveBeenCalledWith('from-store')
     })
 
-    it('falls back to arg uid when store is empty', () => {
+    it('falls back to arg uid, and to null (disabled) without any', () => {
         renderHook(() => useSystemCreateParent('from-arg'))
-        const opts = mockUseGraphQL.mock.calls[0][1]
-        expect(opts.variables.where.uid).toBe('from-arg')
-    })
-
-    it('disables query when both are empty', () => {
+        expect(mockUseSystemDetail).toHaveBeenLastCalledWith('from-arg')
         renderHook(() => useSystemCreateParent())
-        expect(mockUseGraphQL.mock.calls[0][1].enabled).toBe(false)
+        expect(mockUseSystemDetail).toHaveBeenLastCalledWith(null)
     })
 
-    it('builds parentPath: filtered ancestors + current system as last entry', () => {
-        mockUseGraphQL.mockReturnValue({
-            data: {
-                systems: [
-                    {
-                        uid: 'self',
-                        name: 'Self',
-                        systemLevel: 'TECHNOLOGY_UNIT',
-                        parentPath: [
-                            { uid: 'r1', name: 'Root', systemLevel: 'SYSTEM_DOMAIN' },
-                            null,
-                            {},
-                            { uid: 'm1', name: 'Mid', systemLevel: 'KEY_SYSTEMS' },
-                        ],
-                    },
-                ],
-            },
-            error: undefined,
+    it('returns an empty path while the parent is not loaded', () => {
+        const { result } = renderHook(() => useSystemCreateParent('p'))
+        expect(result.current.parentPath).toEqual([])
+        expect(result.current.parentSystem).toBeNull()
+    })
+
+    it('appends the parent itself to its ancestors', () => {
+        mockUseSystemDetail.mockReturnValue({
+            system: makeSystemDetail({
+                uid: 'p',
+                name: 'Parent',
+                systemLevel: 'KEY_SYSTEMS',
+                parentPath: [{ uid: 'root', name: 'Root', systemLevel: 'SYSTEM_DOMAIN' }],
+            }),
             isLoading: false,
+            error: null,
             refetch: jest.fn(),
-        })
-        const { result } = renderHook(() => useSystemCreateParent('self'))
-        expect(result.current.parentPath).toEqual([
-            { uid: 'r1', name: 'Root', systemLevel: 'SYSTEM_DOMAIN' },
-            { uid: 'm1', name: 'Mid', systemLevel: 'KEY_SYSTEMS' },
-            { uid: 'self', name: 'Self', systemLevel: 'TECHNOLOGY_UNIT' },
-        ])
-    })
-
-    it('returns only the current system entry when parentPath is empty/missing', () => {
-        mockUseGraphQL.mockReturnValue({
-            data: { systems: [{ uid: 'only', name: 'Only', systemLevel: 'X' }] },
-            error: undefined,
-            isLoading: false,
-            refetch: jest.fn(),
-        })
-        const { result } = renderHook(() => useSystemCreateParent('only'))
-        expect(result.current.parentPath).toEqual([
-            { uid: 'only', name: 'Only', systemLevel: 'X' },
-        ])
-    })
-
-    it('aliases parentSystem, loading, refetch', () => {
-        const refetch = jest.fn()
-        mockUseGraphQL.mockReturnValue({
-            data: { systems: [{ uid: 'p', name: 'P' }] },
-            error: undefined,
-            isLoading: true,
-            refetch,
         })
         const { result } = renderHook(() => useSystemCreateParent('p'))
-        expect(result.current.parentSystem).toEqual({ uid: 'p', name: 'P' })
-        expect(result.current.loading).toBe(true)
-        expect(result.current.refetch).toBe(refetch)
+        expect(result.current.parentPath).toEqual([
+            { uid: 'root', name: 'Root', systemLevel: 'SYSTEM_DOMAIN' },
+            { uid: 'p', name: 'Parent', systemLevel: 'KEY_SYSTEMS' },
+        ])
     })
 })

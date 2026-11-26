@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { z } from 'zod'
@@ -7,7 +7,6 @@ import { z } from 'zod'
 import Combobox from '@/components/form/Combobox'
 import { Button } from '@/components/ui/button'
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
-import { useEmployee } from '@/hooks/graphql/useEmployee'
 import { message } from '@/i18n/src/messages'
 import { CODEBOOK } from '@/types/constants/codebook'
 
@@ -19,7 +18,7 @@ const nestedForm = message.roomCardsPage.nestedForm
 const messages = message.common.buttons
 
 interface EmployeeAssignmentModalProps {
-    onSubmit?: (data: EmployeeAssignmentFormData) => void
+    onSubmit?: (data: EmployeeAssignmentFormData) => void | Promise<void>
     onClose?: () => void
     existingEmployeeUids?: string[]
 }
@@ -30,9 +29,8 @@ export const EmployeeAssignmentModalContainer = ({
     existingEmployeeUids = [],
 }: EmployeeAssignmentModalProps) => {
     const { formatMessage: fm } = useIntl()
-    const [employeeUid, setEmployeeUid] = useState<string | null>(null)
-    const [loadedEmployee, setLoadedEmployee] = useState<EmployeeAssignment | null>(null)
-    const { employee, isLoading: employeeLoading } = useEmployee(employeeUid)
+    // the codebook selection already carries uid + display name — no extra lookup
+    const [selectedEmployee, setSelectedEmployee] = useState<EmployeeAssignment | null>(null)
 
     const formMethods = useForm<EmployeeAssignmentFormData>({
         resolver: zodResolver(
@@ -72,28 +70,15 @@ export const EmployeeAssignmentModalContainer = ({
         },
     })
 
-    useEffect(() => {
-        if (employee && employeeUid) {
-            setLoadedEmployee({
-                uid: employee.uid,
-                fullName: employee.fullName,
-                phone1: employee.phone1 || '',
-                phone2: employee.phone2 || '',
-            })
-        }
-    }, [employee, employeeUid])
-
-    const handleFormSubmit = handleSubmit(() => {
-        if (onSubmit && loadedEmployee) {
-            onSubmit({
-                employee: loadedEmployee,
-            })
+    // returned so RHF keeps isSubmitting true until the save settles (no double submit)
+    const handleFormSubmit = handleSubmit(async () => {
+        if (onSubmit && selectedEmployee) {
+            await onSubmit({ employee: selectedEmployee })
         }
     })
 
-    const selectedEmployee = watch('employee')
-    const isSubmitDisabled =
-        !selectedEmployee || !loadedEmployee || employeeLoading || formState.isSubmitting
+    const formEmployee = watch('employee')
+    const isSubmitDisabled = !formEmployee || !selectedEmployee || formState.isSubmitting
 
     return (
         <div className="space-y-6 min-w-0 max-w-none w-full">
@@ -101,7 +86,11 @@ export const EmployeeAssignmentModalContainer = ({
                 <div className="flex space-x-3">
                     <Combobox
                         {...fields.employee}
-                        onSelect={v => setEmployeeUid(v ? v.uid : null)}
+                        onSelect={item =>
+                            setSelectedEmployee(
+                                item ? { uid: item.uid, fullName: item.name } : null,
+                            )
+                        }
                     />
                 </div>
             </FormProvider>

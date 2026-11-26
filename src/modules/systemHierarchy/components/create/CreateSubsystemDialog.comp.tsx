@@ -21,11 +21,10 @@ import {
 import { Skeleton } from '@/components/ui/skeleton'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
-import { SystemLevel } from '@/types/gql/graphql'
+import { useCreateSubsystem, useSystemDetail } from '@/modules/shared/system/system-detail'
+import { SystemLevel } from '@/types/constants/systemLevel'
 import { getBadgeVariantBySystemLevel } from '@/utils/systemLevel'
 
-import { useCreateSubsystem } from '../../hooks/mutations/useCreateSubsystem'
-import { useSystemDetail } from '../../hooks/queries/useSystemDetail'
 import { useHierarchyNavigation } from '../../hooks/useHierarchyNavigation'
 import { getAllowedChildSystemLevels } from '../../utils/systemLevelRules'
 
@@ -62,7 +61,7 @@ export const CreateSubsystemDialog: FC<CreateSubsystemDialogProps> = ({
 }) => {
     const { formatMessage: fm } = useIntl()
     const { system: parentSystem, isLoading: parentLoading } = useSystemDetail(parentUid)
-    const { createSubsystem, isPending } = useCreateSubsystem()
+    const { createSubsystem, isPending } = useCreateSubsystem(parentUid)
     const { selectLeaf } = useHierarchyNavigation()
 
     const allowedLevels = useMemo(() => getAllowedChildSystemLevels(parentLevel), [parentLevel])
@@ -118,17 +117,10 @@ export const CreateSubsystemDialog: FC<CreateSubsystemDialogProps> = ({
         },
     ]
 
+    // The server inherits responsible / location / zone from the parent — the
+    // block below only previews what the new system will get.
     const onSubmit = handleSubmit(data => {
-        const promise = createSubsystem({
-            parentUid,
-            name: data.name,
-            systemLevel: data.systemLevel,
-            inherit: {
-                responsibleUid: inheritedResponsible?.uid,
-                locationUid: inheritedLocation?.uid,
-                zoneUid: inheritedZone?.uid,
-            },
-        })
+        const promise = createSubsystem({ name: data.name.trim(), systemLevel: data.systemLevel })
 
         toast.promise(promise, {
             loading: fm({ id: message.systemHierarchy.create.creating }),
@@ -137,6 +129,7 @@ export const CreateSubsystemDialog: FC<CreateSubsystemDialogProps> = ({
                 onClose?.()
                 return fm({ id: message.systemHierarchy.create.created })
             },
+            // the soft lock was already confirmed when the dialog opened
             error: fm({ id: message.systemHierarchy.create.saveFailed }),
         })
 
@@ -264,10 +257,7 @@ export const CreateSubsystemDialog: FC<CreateSubsystemDialogProps> = ({
                         {fm({ id: message.systemHierarchy.create.inheritedTitle })}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                        {fm(
-                            { id: message.systemHierarchy.create.inheritedHelp },
-                            { parentName },
-                        )}
+                        {fm({ id: message.systemHierarchy.create.inheritedHelp }, { parentName })}
                     </p>
                 </div>
 
@@ -289,7 +279,9 @@ export const CreateSubsystemDialog: FC<CreateSubsystemDialogProps> = ({
                                 <dt
                                     className={cn(
                                         'w-28 shrink-0',
-                                        hasValue ? 'text-muted-foreground' : 'text-muted-foreground/70',
+                                        hasValue
+                                            ? 'text-muted-foreground'
+                                            : 'text-muted-foreground/70',
                                     )}
                                 >
                                     {fm({ id: labelId })}

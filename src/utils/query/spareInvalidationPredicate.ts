@@ -1,6 +1,6 @@
 import type { Query } from '@tanstack/react-query'
 
-import { RELATIONSHIP_GRAPH_QUERY_KEY, SYSTEM_DETAIL_QUERY_KEY } from './queryKeys'
+import { RELATIONSHIP_GRAPH_QUERY_KEY } from './queryKeys'
 
 // Strict-equality walk over a nested value. Early-exits on first match.
 // Used instead of `JSON.stringify(...).includes(uid)` to avoid substring
@@ -23,22 +23,14 @@ const containsAnyString = (value: unknown, needles: ReadonlySet<string>): boolea
 }
 
 // Matches a TanStack Query whose data could be affected by a spare mutation on
-// the given uids. Covers:
-//  - explicit keys: [SYSTEM_DETAIL_QUERY_KEY, uid], [RELATIONSHIP_GRAPH_QUERY_KEY, ...]
-//  - useGraphQL default keys: [opName, variables, document] — walks `variables`
-//    structurally to find any string value equal to one of the uids.
+// the given uids: anything in the relationship graph, plus every query whose key
+// params (second slot) reference one of the uids — `[SYSTEM_DETAIL_QUERY_KEY, { uid }]`,
+// `[SYSTEM_SPARE_PARTS_QUERY_KEY, { uid }]`, and the legacy useGraphQL keys
+// `[opName, variables, document]` (variables walked structurally, document skipped).
 export const matchesSpareAffectedQuery =
     (uids: ReadonlyArray<string>) =>
     (q: Query): boolean => {
-        const key = q.queryKey as unknown[]
-        if (key[0] === RELATIONSHIP_GRAPH_QUERY_KEY) return true
-        const needles = new Set(uids)
-        if (key[0] === SYSTEM_DETAIL_QUERY_KEY) {
-            return key.some(part => typeof part === 'string' && needles.has(part))
-        }
-        const variables = key[1]
-        if (variables && typeof variables === 'object') {
-            return containsAnyString(variables, needles)
-        }
-        return false
+        const [head, params] = q.queryKey as unknown[]
+        if (head === RELATIONSHIP_GRAPH_QUERY_KEY) return true
+        return containsAnyString(params, new Set(uids))
     }

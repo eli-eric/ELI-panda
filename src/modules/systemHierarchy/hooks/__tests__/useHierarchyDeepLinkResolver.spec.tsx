@@ -16,7 +16,7 @@ let mockIsReady = true
 jest.mock('next/router', () => ({
     useRouter: () => ({
         query: mockQuery,
-        pathname: '/systems/hierarchy',
+        pathname: '/systems/explorer',
         isReady: mockIsReady,
         push: mockPush,
         replace: mockReplace,
@@ -26,7 +26,7 @@ jest.mock('next/router', () => ({
 type MockSystem = { uid: string; parentPath: { uid: string; name: string }[] | null } | null
 let mockSystem: MockSystem = null
 
-jest.mock('../queries/useSystemDetail', () => ({
+jest.mock('@/modules/shared/system/system-detail', () => ({
     useSystemDetail: () => ({ system: mockSystem }),
     primeSystemDetailCache: jest.fn(),
 }))

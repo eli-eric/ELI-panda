@@ -10,11 +10,13 @@ import { message } from '@/i18n/src/messages'
 import { createMessageValues } from '@/utils/formatters'
 
 // Helper function to get unique items by uid - used in both hooks
+/** @deprecated systemItem is deprecated (see modules/systemItem/DEPRECATED.md) and this has no live consumer — use modules/shared/system/system-detail. */
 export const getUniqueByUid = <T extends { uid: string }>(items: T[]): T[] => {
     return [...new Map(items.map(item => [item.uid, item])).values()]
 }
 
 // Helper function to create connection objects for GraphQL - used in both hooks
+/** @deprecated systemItem is deprecated (see modules/systemItem/DEPRECATED.md) and this has no live consumer — use modules/shared/system/system-detail. */
 export const createConnections = <T extends { uid: string }>(items: T[]) => {
     return items.length > 0
         ? {
@@ -60,6 +62,7 @@ export const validateSystemForm = (
 }
 
 // Common data combination logic for operators/maintainedBy
+/** @deprecated systemItem is deprecated (see modules/systemItem/DEPRECATED.md) and this has no live consumer — use modules/shared/system/system-detail. */
 export const combineAndDeduplicateUsers = <T extends { uid: string }>(
     formUsers: T[] | null | undefined = [],
     newUsers: T[] = [],

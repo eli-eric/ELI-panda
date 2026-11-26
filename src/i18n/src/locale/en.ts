@@ -1504,19 +1504,24 @@ export const messages = {
         },
     },
     systemPermission: {
-        deniedTitle: "You don't have permission to edit this system.",
+        deniedTitle: "You're not responsible for this system.",
+        deniedDescription:
+            'You can still edit it — you will be asked to confirm once, and your changes are marked in history.',
         deniedResponsiblesTooltip: 'Show who is responsible for this system',
-        deniedNoResponsibles: 'Please contact an administrator to request access.',
-        errorTitle: 'Could not verify your edit permissions.',
-        errorDescription: 'Editing is disabled until we can confirm your access.',
+        deniedNoResponsibles: 'No responsible person is set for this system.',
+        errorTitle: 'Could not verify your responsibility for this system.',
+        errorDescription: 'Editing stays available; responsibility is recorded by the server.',
         retry: 'Retry',
-        blockedToast: "You're not responsible for this system. Contact: {names}",
-        blockedToastNoResponsibles:
-            "You're not responsible for this system. Contact an administrator to request access.",
+        outsideNote: 'You are not responsible for this system (responsible: {names}).',
+        outsideNoteNoResponsibles:
+            'You are not responsible for this system and nobody is assigned to it.',
+        confirmQuestion:
+            'Your change will be recorded as made outside your responsibility. Do you want to continue?',
     },
     systemHierarchy: {
         pages: {
             hierarchy: 'System Hierarchy',
+            explorer: 'Systems Explorer',
         },
         tree: {
             title: 'System Tree',
@@ -1682,6 +1687,9 @@ export const messages = {
             codeReleased: 'System code released',
             failedToRelease: 'Failed to release system code',
             duplicateCode: 'System code "{code}" already exists',
+            duplicateCodeGeneric: 'This system code already exists',
+            staleConflict:
+                'Someone else changed this system in the meantime. The latest data was loaded — please repeat your change.',
         },
         systemCode: {
             confirmReplaceTitle: 'Replace existing system code?',
@@ -1764,7 +1772,37 @@ export const messages = {
                 set: 'set <b>{field}</b> to <b>{newValue}</b>',
                 cleared: 'cleared <b>{field}</b>',
                 emptyValue: '(empty)',
+                relationshipAdded: 'linked <b>{name}</b> ({relation})',
+                relationshipRemoved: 'removed the link to <b>{name}</b> ({relation})',
             },
+            outsideResponsibility: 'Outside responsibility',
+        },
+        orders: {
+            order: 'Order',
+            service: 'Service',
+            delivered: 'Delivered',
+            pending: 'Pending',
+        },
+        subsystems: {
+            empty: 'No subsystems',
+        },
+        sheet: {
+            title: 'Edit System',
+            details: 'Details',
+            people: 'People',
+            physicalItem: 'Physical item',
+            properties: 'Catalogue properties',
+            orders: 'Orders & services',
+            spareParts: 'Spare parts',
+            spareFor: 'Spare for',
+            subsystems: 'Subsystems',
+            activity: 'Activity',
+            images: 'Images',
+            updated: 'Updated {time}',
+            openInExplorer: 'Open in Systems Explorer',
+            notFound: 'This system does not exist or was deleted.',
+            loadError: 'Could not load the system.',
+            noSystemForCode: 'No system with code "{code}" was found.',
         },
         graph: {
             title: 'Relationship Graph',

@@ -44,7 +44,7 @@ test.describe('System hierarchy leaves deep link', () => {
         const paginations = await mockLeaves(page)
 
         await page.goto(
-            `/systems/hierarchy?parent=sys-root&page=3` +
+            `/systems/explorer?parent=sys-root&page=3` +
                 `&sortBy=${encodeURIComponent(SORTING)}` +
                 `&filter=${encodeURIComponent(FILTER)}`,
         )

@@ -1,5 +1,7 @@
-import type { SystemLeaf } from '../types'
+import type { SystemDetail } from '@/modules/shared/system/system-detail'
 
-export const hasPhysicalItem = (system: SystemLeaf) => !!system.physicalItem
-export const hasSpareParts = (system: SystemLeaf) => (system.sparesIn ?? 0) > 0
-export const hasSpareFor = (system: SystemLeaf) => (system.sparesOut ?? 0) > 0
+type SystemCounts = Pick<SystemDetail, 'physicalItem' | 'statistics'>
+
+export const hasPhysicalItem = (system: Pick<SystemDetail, 'physicalItem'>) => !!system.physicalItem
+export const hasSpareParts = (system: SystemCounts) => system.statistics.sparePartsCount > 0
+export const hasSpareFor = (system: SystemCounts) => system.statistics.sparesForCount > 0

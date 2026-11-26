@@ -22,6 +22,7 @@ interface UseRemoveSystemEmployeeAssignmentOptions {
     onSuccess?: () => void
 }
 
+/** @deprecated GraphQL write path kept only for the deprecated systemItem module — operators/maintainedBy are saved via PATCH /system/:uid (useSystemPatch). */
 export const useRemoveSystemEmployeeAssignment = (
     systemUid: string | undefined,
     employeeType: EmployeeAssignmentType,

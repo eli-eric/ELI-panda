@@ -37,13 +37,13 @@ describe('/system/[uid] redirect page', () => {
     it('replaces to the hierarchy deep link for the uid', () => {
         mockQuery = { uid: 'u-1' }
         renderPage()
-        expect(mockReplace).toHaveBeenCalledWith('/systems/hierarchy?leaf=u-1')
+        expect(mockReplace).toHaveBeenCalledWith('/systems/explorer?leaf=u-1')
     })
 
     it('normalizes an array uid param to its first value', () => {
         mockQuery = { uid: ['u-1', 'u-2'] }
         renderPage()
-        expect(mockReplace).toHaveBeenCalledWith('/systems/hierarchy?leaf=u-1')
+        expect(mockReplace).toHaveBeenCalledWith('/systems/explorer?leaf=u-1')
     })
 
     it('does nothing until the router is ready', () => {

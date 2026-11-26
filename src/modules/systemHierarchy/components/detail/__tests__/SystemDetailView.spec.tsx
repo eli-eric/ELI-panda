@@ -19,14 +19,18 @@ jest.mock('../../../hooks/useHierarchyNavigation', () => ({
 let mockSystem: { uid: string; name: string } | null = null
 let mockIsLoading = false
 let mockIsFetching = false
+let mockIsSeeded = false
+let mockIsNotFound = false
 let mockError: Error | null = null
 const mockRefetch = jest.fn()
 
-jest.mock('../../../hooks/queries/useSystemDetail', () => ({
+jest.mock('@/modules/shared/system/system-detail', () => ({
     useSystemDetail: () => ({
         system: mockSystem,
         isLoading: mockIsLoading,
         isFetching: mockIsFetching,
+        isSeeded: mockIsSeeded,
+        isNotFound: mockIsNotFound,
         error: mockError,
         refetch: mockRefetch,
     }),
@@ -38,9 +42,12 @@ jest.mock('../SystemDetailHeader.comp', () => ({
 jest.mock('../SystemDetailTabs.cont', () => ({
     SystemDetailTabsContainer: () => <div data-testid="detail-tabs-stub" />,
 }))
-jest.mock('@/modules/shared/system/edit-permission/components/SystemEditRestrictionBanner.comp', () => ({
-    SystemEditRestrictionBanner: () => <div data-testid="edit-restriction-banner-stub" />,
-}))
+jest.mock(
+    '@/modules/shared/system/edit-permission/components/SystemEditRestrictionBanner.comp',
+    () => ({
+        SystemEditRestrictionBanner: () => <div data-testid="edit-restriction-banner-stub" />,
+    }),
+)
 jest.mock('@/modules/shared/system/edit-permission/hooks/useSystemEditPermission', () => ({
     useSystemEditPermission: () => ({
         canEdit: true,
@@ -74,6 +81,8 @@ describe('SystemDetailViewContainer', () => {
         mockIsLoading = false
         mockIsFetching = false
         mockError = null
+        mockIsSeeded = false
+        mockIsNotFound = false
         mockSelectedLeafUid = 'sys-1'
         mockClearSelection.mockClear()
         mockRefetch.mockClear()
@@ -115,31 +124,27 @@ describe('SystemDetailViewContainer', () => {
         expect(screen.getByTestId('detail-tabs-stub')).toBeInTheDocument()
     })
 
-    it('does not refetch on initial mount', () => {
-        mockSystem = { uid: 'sys-1', name: 'Test System' }
+    it('renders not-found on a 404 even when a navigation seed is cached', () => {
+        mockSystem = { uid: 'sys-1', name: 'Seeded' }
+        mockIsSeeded = true
+        mockIsNotFound = true
+        mockError = new Error('404')
         renderView()
-        expect(mockRefetch).not.toHaveBeenCalled()
+        expect(screen.getByTestId('system-detail-not-found')).toBeInTheDocument()
     })
 
-    it('refetches the full detail when the selected leaf changes', () => {
-        mockSystem = { uid: 'sys-1', name: 'Test System' }
-        const { rerender } = renderView()
-        expect(mockRefetch).not.toHaveBeenCalled()
-
-        mockSelectedLeafUid = 'sys-2'
-        rerender(
-            <IntlProvider locale="en" messages={messages}>
-                <SystemDetailViewContainer />
-            </IntlProvider>,
-        )
-        expect(mockRefetch).toHaveBeenCalledTimes(1)
+    it('shows the header from the seed and a body skeleton until the real detail lands', () => {
+        mockSystem = { uid: 'sys-1', name: 'Seeded' }
+        mockIsSeeded = true
+        renderView()
+        expect(screen.getByTestId('detail-header-stub')).toBeInTheDocument()
+        expect(screen.getByTestId('system-detail-body-skeleton')).toBeInTheDocument()
+        expect(screen.queryByTestId('detail-tabs-stub')).not.toBeInTheDocument()
     })
 
-    it('does not refetch on leaf change when the query is already fetching (no-seed path)', () => {
+    it('never forces a refetch itself (the stale seed / key change fetches)', () => {
         mockSystem = { uid: 'sys-1', name: 'Test System' }
-        mockIsFetching = true
         const { rerender } = renderView()
-
         mockSelectedLeafUid = 'sys-2'
         rerender(
             <IntlProvider locale="en" messages={messages}>

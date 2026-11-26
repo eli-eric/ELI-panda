@@ -4,13 +4,13 @@ import { useIntl } from 'react-intl'
 import { Separator } from '@/components/ui/separator'
 import { useIsLargeScreen } from '@/hooks/use-large-screen'
 import { message } from '@/i18n/src/messages'
+import type { SystemDetail } from '@/modules/shared/system/system-detail'
 
-import type { SystemLeaf } from '../../types'
 import { RelationshipsTabContainer } from '../tabs/RelationshipsTab.cont'
 import { QuickInfoSidebar } from './QuickInfoSidebar.comp'
 
 interface HierarchyDetailSidebarProps {
-    system: SystemLeaf | null
+    system: SystemDetail | null
 }
 
 export const HierarchyDetailSidebar: FC<HierarchyDetailSidebarProps> = ({ system }) => {

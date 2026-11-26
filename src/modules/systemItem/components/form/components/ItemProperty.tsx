@@ -14,6 +14,7 @@ interface Props {
     index: number
 }
 
+/** @deprecated systemItem is deprecated (see modules/systemItem/DEPRECATED.md) and this has no live consumer — use modules/shared/system/system-detail. */
 export const ItemProperty = ({ detail, index }: Props) => {
     const disabled = !usePermission([ROLE.CATALOGUE_EDIT])
     const { setValue } = useFormContext()

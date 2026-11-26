@@ -13,6 +13,7 @@ import { PATH } from '@/types/constants/paths'
 
 import { PhysicalItemForm } from './PhysicalItem.form'
 
+/** @deprecated systemItem is deprecated (see modules/systemItem/DEPRECATED.md) and this has no live consumer — use modules/shared/system/system-detail. */
 export const SystemItemCard = () => {
     const { formatMessage: fm } = useIntl()
     const { control } = useFormContext()

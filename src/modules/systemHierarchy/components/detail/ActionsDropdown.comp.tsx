@@ -9,34 +9,30 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { usePermission } from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
 import { openItemAssignModal } from '@/modules/shared/form/itemAssign/item-assign.modal'
 import { openItemMoveModal } from '@/modules/shared/form/itemMoving/item-move.modal'
 import { useAssignSparesNavigation } from '@/modules/shared/hooks/useAssignSparesNavigation'
-import { useSystemEditPermission } from '@/modules/shared/system/edit-permission'
-import type { SystemLevel } from '@/types/gql/graphql'
+import type { SystemDetail } from '@/modules/shared/system/system-detail'
+import { ROLE } from '@/types/constants/roles'
 
-import type { SystemLeaf } from '../../types'
 import { openSetMinimalSparesModal } from './set-minimal-spares.modal'
 
 interface ActionsDropdownProps {
-    system: SystemLeaf
+    system: SystemDetail
 }
 
 export const ActionsDropdown: FC<ActionsDropdownProps> = ({ system }) => {
     const { formatMessage: fm } = useIntl()
-    const { canEdit } = useSystemEditPermission(system.uid)
+    // role gate only — responsibility is a soft lock confirmed inside each write
+    const canEdit = usePermission([ROLE.SYSTEM_EDIT])
     const hasPhysicalItem = !!system.physicalItem
 
     const handleAssignSpares = useAssignSparesNavigation({
         uid: system.uid,
-        parentPath:
-            (system.parentPath as Array<{
-                uid: string
-                name: string
-                systemLevel?: SystemLevel | null
-            }>) ?? null,
-        catalogueNumber: system.physicalItem?.catalogueNumber ?? null,
+        parentPath: system.parentPath,
+        catalogueNumber: system.physicalItem?.catalogueItem?.catalogueNumber ?? null,
     })
 
     return (
@@ -72,7 +68,7 @@ export const ActionsDropdown: FC<ActionsDropdownProps> = ({ system }) => {
                         openSetMinimalSparesModal({
                             system,
                             title: fm({ id: message.systemHierarchy.detail.setMinimalSpares }),
-                            currentValue: system.statistics?.minimalSpareParstCount ?? null,
+                            currentValue: system.minimalSpareParstCount,
                         })
                     }
                 >

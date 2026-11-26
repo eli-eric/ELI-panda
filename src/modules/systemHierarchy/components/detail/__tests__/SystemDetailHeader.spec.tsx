@@ -2,10 +2,11 @@ import { render, screen } from '@testing-library/react'
 import React from 'react'
 import { IntlProvider } from 'react-intl'
 
-import type { SystemLeaf } from '../../../types'
+import { makeSystemDetail } from '@/testutils/factories/systemDetail'
+
 import { SystemDetailHeader } from '../SystemDetailHeader.comp'
 
-jest.mock('../../shared/SystemBreadcrumbs.comp', () => ({
+jest.mock('@/modules/shared/system/system-detail', () => ({
     SystemBreadcrumbs: () => <div data-testid="breadcrumbs-stub" />,
 }))
 jest.mock('../ActionsDropdown.comp', () => ({
@@ -17,7 +18,7 @@ const messages: Record<string, string> = {
     'systemHierarchy.detail.updating': 'Updating…',
 }
 
-const system = { uid: 'sys-1', name: 'Test System', systemCode: 'S-1', parentPath: null } as unknown as SystemLeaf
+const system = makeSystemDetail({ uid: 'sys-1', name: 'Test System', systemCode: 'S-1' })
 
 const renderHeader = (isRefreshing?: boolean) =>
     render(
@@ -39,15 +40,11 @@ describe('SystemDetailHeader', () => {
 
     it('hides the spinner when not refreshing', () => {
         renderHeader(false)
-        expect(
-            screen.queryByTestId('system-hierarchy-detail-refreshing'),
-        ).not.toBeInTheDocument()
+        expect(screen.queryByTestId('system-hierarchy-detail-refreshing')).not.toBeInTheDocument()
     })
 
     it('hides the spinner by default (prop omitted)', () => {
         renderHeader()
-        expect(
-            screen.queryByTestId('system-hierarchy-detail-refreshing'),
-        ).not.toBeInTheDocument()
+        expect(screen.queryByTestId('system-hierarchy-detail-refreshing')).not.toBeInTheDocument()
     })
 })

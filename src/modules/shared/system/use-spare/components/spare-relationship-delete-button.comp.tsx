@@ -6,7 +6,8 @@ import { TableDeleteButton } from '@/components/Buttons'
 import { Tooltip } from '@/components/Tooltip'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
-import { useDeleteRelationship } from '@/modules/systemHierarchy/hooks/mutations/useDeleteRelationship'
+import { useDeleteSystemRelationship } from '@/modules/shared/system/system-detail/hooks/mutations/useDeleteSystemRelationship'
+import { isNotFoundError } from '@/modules/shared/system/system-detail/utils/systemErrors'
 
 interface Props {
     currentSystemUid: string
@@ -26,7 +27,7 @@ export const SpareRelationshipDeleteButton: FC<Props> = ({
     className,
 }) => {
     const { formatMessage: fm } = useIntl()
-    const { deleteRelationship, isPending } = useDeleteRelationship()
+    const { deleteRelationship, isPending } = useDeleteSystemRelationship()
 
     const copy =
         direction === 'outbound'
@@ -41,19 +42,20 @@ export const SpareRelationshipDeleteButton: FC<Props> = ({
     const handleDelete = async () => {
         const toastId = toast.loading(fm({ id: messages.remove.loading }))
         try {
-            const deletedCount = await deleteRelationship({
+            await deleteRelationship({
                 currentSystemUid,
                 relatedSystemUid,
                 relationshipType: 'IS_SPARE_FOR',
                 direction,
             })
-            if (deletedCount > 0) {
-                toast.success(fm({ id: copy.success }), { id: toastId })
-            } else {
+            toast.success(fm({ id: copy.success }), { id: toastId })
+        } catch (error) {
+            // 404: someone already removed the edge — the refetch drops the stale row
+            if (isNotFoundError(error)) {
                 toast.warning(fm({ id: messages.remove.notFound }), { id: toastId })
+            } else {
+                toast.error(fm({ id: messages.remove.error }), { id: toastId })
             }
-        } catch {
-            toast.error(fm({ id: messages.remove.error }), { id: toastId })
         }
     }
 

@@ -1,15 +1,21 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
+import type { HierarchyTab } from '../types/constants'
+import { HIERARCHY_TABS, isHierarchyTab } from '../types/constants'
+
 interface HierarchyStore {
     expandedNodes: string[]
     copiedSystemUid: string | null
+    // last detail tab the user picked; opening another system lands on it
+    lastTab: HierarchyTab
     toggleNode: (uid: string) => void
     expandNode: (uid: string) => void
     expandNodes: (uids: string[]) => void
     setExpandedNodes: (uids: string[]) => void
     collapseAll: () => void
     setCopiedSystemUid: (uid: string | null) => void
+    setLastTab: (tab: HierarchyTab) => void
 }
 
 export const useHierarchyStore = create<HierarchyStore>()(
@@ -17,6 +23,7 @@ export const useHierarchyStore = create<HierarchyStore>()(
         (set, get) => ({
             expandedNodes: [],
             copiedSystemUid: null,
+            lastTab: HIERARCHY_TABS.DETAIL as HierarchyTab,
             toggleNode: (uid: string) => {
                 const current = get().expandedNodes
                 const isExpanded = current.includes(uid)
@@ -44,12 +51,23 @@ export const useHierarchyStore = create<HierarchyStore>()(
             },
             collapseAll: () => set({ expandedNodes: [] }),
             setCopiedSystemUid: (uid: string | null) => set({ copiedSystemUid: uid }),
+            setLastTab: (tab: HierarchyTab) => set({ lastTab: tab }),
         }),
         {
             name: 'hierarchy-expanded-nodes',
             partialize: state => ({
                 expandedNodes: state.expandedNodes,
+                lastTab: state.lastTab,
             }),
+            // a stale or hand-edited tab in localStorage must not leave a blank panel
+            merge: (persisted, current) => {
+                const stored = (persisted ?? {}) as Partial<HierarchyStore>
+                return {
+                    ...current,
+                    ...stored,
+                    lastTab: isHierarchyTab(stored.lastTab) ? stored.lastTab : current.lastTab,
+                }
+            },
         },
     ),
 )

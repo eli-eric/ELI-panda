@@ -9,7 +9,7 @@ export type {
     FieldChangeEntry,
     FieldChangeType,
     HistoryResponse,
-} from '@/modules/systemHierarchy/types/history'
+} from '@/modules/shared/system/system-detail/history/types'
 
 export type SystemsForRelResponse = {
     data: SystemDetail[]

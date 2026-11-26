@@ -47,6 +47,7 @@ const debounce = (fn: Function, ms = 300) => {
 }
 
 //TODO:  split to update and create form
+/** @deprecated systemItem is deprecated (see modules/systemItem/DEPRECATED.md) and this has no live consumer — use modules/shared/system/system-detail. */
 export const SystemForm: FC<PropsWithChildren> = ({ children }) => {
     const { systemDetail, catalogueItem, physicalItem } = useSystemDetail()
     const hasEditRole = usePermission([ROLE.SYSTEM_EDIT])

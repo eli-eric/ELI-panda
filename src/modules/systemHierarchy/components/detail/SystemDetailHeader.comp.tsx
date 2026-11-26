@@ -4,14 +4,13 @@ import { useIntl } from 'react-intl'
 
 import { Button } from '@/components/ui/button'
 import { message } from '@/i18n/src/messages'
+import type { SelectAncestorHandler, SystemDetail } from '@/modules/shared/system/system-detail'
+import { SystemBreadcrumbs } from '@/modules/shared/system/system-detail'
 
-import type { SystemLeaf } from '../../types'
-import type { SelectAncestorHandler } from '../shared/SystemBreadcrumbs.comp'
-import { SystemBreadcrumbs } from '../shared/SystemBreadcrumbs.comp'
 import { ActionsDropdown } from './ActionsDropdown.comp'
 
 interface SystemDetailHeaderProps {
-    system: SystemLeaf
+    system: SystemDetail
     onBack: () => void
     onSelectAncestor: SelectAncestorHandler
     isRefreshing?: boolean

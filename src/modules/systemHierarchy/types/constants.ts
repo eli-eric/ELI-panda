@@ -1,8 +1,11 @@
-export { RELATIONSHIP_GRAPH_QUERY_KEY, SYSTEM_DETAIL_QUERY_KEY } from '@/utils/query/queryKeys'
+export {
+    HIERARCHY_QUERY_KEY,
+    LEAVES_COUNT_QUERY_KEY,
+    LEAVES_QUERY_KEY,
+    RELATIONSHIP_GRAPH_QUERY_KEY,
+    SYSTEM_DETAIL_QUERY_KEY,
+} from '@/utils/query/queryKeys'
 
-export const HIERARCHY_QUERY_KEY = 'systemsHierarchy'
-export const LEAVES_QUERY_KEY = 'systemLeaves'
-export const LEAVES_COUNT_QUERY_KEY = 'systemLeavesCount'
 export const LEAVES_TABLE_ID = 'systemLeaves'
 export const RELATIONSHIP_GRAPH_INITIAL_LIMIT = 20
 export const RELATIONSHIP_GRAPH_LOAD_MORE_LIMIT = 10
@@ -20,3 +23,6 @@ export const HIERARCHY_TABS = {
 } as const
 
 export type HierarchyTab = (typeof HIERARCHY_TABS)[keyof typeof HIERARCHY_TABS]
+
+export const isHierarchyTab = (value: unknown): value is HierarchyTab =>
+    (Object.values(HIERARCHY_TABS) as unknown[]).includes(value)

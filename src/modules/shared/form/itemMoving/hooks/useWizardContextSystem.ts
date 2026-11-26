@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 
-import { useSystemDetail } from '@/modules/systemHierarchy/hooks/queries/useSystemDetail'
+import { useSystemDetail } from '@/modules/shared/system/system-detail'
 
 import { useModalWizardStore } from '../store/useModalWizardStore'
 
@@ -42,10 +42,11 @@ export const useWizardContextSystem = () => {
         }
     }
 
+    const physicalItem = fetched.system?.physicalItem ?? null
     return {
         systemDetail: fetched.system,
-        physicalItem: fetched.physicalItem,
-        catalogueItem: fetched.catalogueItem,
+        physicalItem,
+        catalogueItem: physicalItem?.catalogueItem ?? null,
         isLoading: fetched.isLoading,
     }
 }

@@ -2,8 +2,8 @@ import { ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 
 import { cn } from '@/lib/utils'
+import { SystemLevel } from '@/types/constants/systemLevel'
 import type { Maybe } from '@/types/gql/graphql'
-import { SystemLevel } from '@/types/gql/graphql'
 import type { CodebookType } from '@/types/responses/codebook'
 
 interface Props {

@@ -13,6 +13,7 @@ import { PATH } from '@/types/constants/paths'
 
 import type { RelationshipTableRow } from './types'
 
+/** @deprecated systemItem is deprecated (see modules/systemItem/DEPRECATED.md) and this has no live consumer — use modules/shared/system/system-detail. */
 export const useRelationshipsColumns = (canEdit: boolean, currentSystemUid: string | undefined) => {
     const { formatMessage: fm } = useIntl()
 
