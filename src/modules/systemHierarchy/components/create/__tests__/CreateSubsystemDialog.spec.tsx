@@ -2,15 +2,16 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
 import { IntlProvider } from 'react-intl'
 
-import { SystemLevel } from '@/types/gql/graphql'
+import { useCreateSubsystem, useSystemDetail } from '@/modules/shared/system/system-detail'
+import { SystemLevel } from '@/types/constants/systemLevel'
 
-import { useCreateSubsystem } from '../../../hooks/mutations/useCreateSubsystem'
-import { useSystemDetail } from '../../../hooks/queries/useSystemDetail'
 import { useHierarchyNavigation } from '../../../hooks/useHierarchyNavigation'
 import { CreateSubsystemDialog } from '../CreateSubsystemDialog.comp'
 
-jest.mock('../../../hooks/mutations/useCreateSubsystem')
-jest.mock('../../../hooks/queries/useSystemDetail')
+jest.mock('@/modules/shared/system/system-detail', () => ({
+    useCreateSubsystem: jest.fn(),
+    useSystemDetail: jest.fn(),
+}))
 jest.mock('../../../hooks/useHierarchyNavigation')
 jest.mock('sonner', () => ({
     toast: {
@@ -27,9 +28,7 @@ jest.mock('sonner', () => ({
     },
 }))
 
-const mockUseCreateSubsystem = useCreateSubsystem as jest.MockedFunction<
-    typeof useCreateSubsystem
->
+const mockUseCreateSubsystem = useCreateSubsystem as jest.MockedFunction<typeof useCreateSubsystem>
 const mockUseSystemDetail = useSystemDetail as jest.MockedFunction<typeof useSystemDetail>
 const mockUseHierarchyNavigation = useHierarchyNavigation as jest.MockedFunction<
     typeof useHierarchyNavigation
@@ -84,7 +83,9 @@ const parentSystem = {
     sparesOut: 0,
 }
 
-const renderDialog = (overrides: Partial<React.ComponentProps<typeof CreateSubsystemDialog>> = {}) =>
+const renderDialog = (
+    overrides: Partial<React.ComponentProps<typeof CreateSubsystemDialog>> = {},
+) =>
     render(
         <IntlProvider locale="en" messages={messages}>
             <CreateSubsystemDialog
@@ -212,7 +213,8 @@ describe('CreateSubsystemDialog', () => {
         )
     })
 
-    it('on successful submit calls createSubsystem with inherited uids and navigates via selectLeaf', async () => {
+    // inheritance happens server-side — the body only carries name + level
+    it('on successful submit posts name + level and navigates via selectLeaf', async () => {
         mockUseSystemDetail.mockReturnValue({
             system: {
                 ...parentSystem,
@@ -242,14 +244,8 @@ describe('CreateSubsystemDialog', () => {
 
         await waitFor(() => {
             expect(createSubsystem).toHaveBeenCalledWith({
-                parentUid: 'parent-1',
                 name: 'Child',
                 systemLevel: SystemLevel.KeySystems,
-                inherit: {
-                    responsibleUid: 'u-1',
-                    locationUid: 'l-1',
-                    zoneUid: undefined,
-                },
             })
         })
         await waitFor(() => {

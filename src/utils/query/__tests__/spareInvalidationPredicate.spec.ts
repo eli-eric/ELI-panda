@@ -8,7 +8,7 @@ const SYS_B = 'sys-uid-bbbb-2222'
 const SPARE = 'spare-uid-cccc-3333'
 const UNRELATED = 'unrelated-uid-9999'
 
-const asQuery = (queryKey: unknown[]): Query => ({ queryKey } as unknown as Query)
+const asQuery = (queryKey: unknown[]): Query => ({ queryKey }) as unknown as Query
 
 describe('matchesSpareAffectedQuery', () => {
     const predicate = matchesSpareAffectedQuery([SYS_A, SPARE])
@@ -23,6 +23,12 @@ describe('matchesSpareAffectedQuery', () => {
         expect(predicate(asQuery([SYSTEM_DETAIL_QUERY_KEY, SPARE]))).toBe(true)
     })
 
+    it('matches REST param-bag keys ([key, { uid }]) for detail and spare parts', () => {
+        expect(predicate(asQuery([SYSTEM_DETAIL_QUERY_KEY, { uid: SYS_A }]))).toBe(true)
+        expect(predicate(asQuery(['systemSpareParts', { uid: SPARE }]))).toBe(true)
+        expect(predicate(asQuery([SYSTEM_DETAIL_QUERY_KEY, { uid: SYS_B }]))).toBe(false)
+    })
+
     it('skips SYSTEM_DETAIL_QUERY_KEY when the key does not contain any uid', () => {
         expect(predicate(asQuery([SYSTEM_DETAIL_QUERY_KEY, SYS_B]))).toBe(false)
         expect(predicate(asQuery([SYSTEM_DETAIL_QUERY_KEY, UNRELATED]))).toBe(false)
@@ -34,11 +40,7 @@ describe('matchesSpareAffectedQuery', () => {
     })
 
     it('matches useGraphQL default keys when variables contain a uid (nested)', () => {
-        const key = [
-            'SystemDetail',
-            { where: { physicalItem: { uid: SPARE } } },
-            {},
-        ]
+        const key = ['SystemDetail', { where: { physicalItem: { uid: SPARE } } }, {}]
         expect(predicate(asQuery(key))).toBe(true)
     })
 
@@ -55,11 +57,7 @@ describe('matchesSpareAffectedQuery', () => {
 
     it('does not collide on substring match (uid as part of an unrelated string)', () => {
         // Old JSON.stringify(...).includes(uid) would have matched these.
-        const key1 = [
-            'SystemDetail',
-            { where: { catalogueNumber: `CAT-${SYS_A}-PUMP` } },
-            {},
-        ]
+        const key1 = ['SystemDetail', { where: { catalogueNumber: `CAT-${SYS_A}-PUMP` } }, {}]
         const key2 = ['SystemDetail', { where: { search: `notes about ${SPARE} here` } }, {}]
         expect(predicate(asQuery(key1))).toBe(false)
         expect(predicate(asQuery(key2))).toBe(false)

@@ -2,12 +2,13 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import { IntlProvider } from 'react-intl'
 
+import { useSystemDetail } from '@/modules/shared/system/system-detail'
+
 import { useSystemCopy } from '../../../hooks/mutations/useSystemCopy'
-import { useSystemDetail } from '../../../hooks/queries/useSystemDetail'
 import { CopySystemDialog } from '../CopySystemDialog.comp'
 
 jest.mock('../../../hooks/mutations/useSystemCopy')
-jest.mock('../../../hooks/queries/useSystemDetail')
+jest.mock('@/modules/shared/system/system-detail', () => ({ useSystemDetail: jest.fn() }))
 jest.mock('sonner', () => ({ toast: { promise: jest.fn() } }))
 
 const mockUseSystemCopy = useSystemCopy as jest.MockedFunction<typeof useSystemCopy>

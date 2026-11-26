@@ -2,7 +2,6 @@ import { screen } from '@testing-library/react'
 
 import { renderWithProviders } from '@/testutils/wrappers/renderWithProviders'
 
-import { hasPhysicalItem } from '../../../utils/predicates'
 import { QuickInfoSidebar } from '../QuickInfoSidebar.comp'
 
 jest.mock('../MetadataSection.comp', () => ({
@@ -25,19 +24,10 @@ jest.mock('@/components/ui/separator', () => ({
     Separator: () => <hr />,
 }))
 
-jest.mock('../../physical-item/PhysicalItemPropertiesSidebar.comp', () => ({
-    PhysicalItemPropertiesSidebar: () => null,
-}))
-
-jest.mock('../SystemImagePanel.comp', () => ({
+jest.mock('@/modules/shared/system/system-detail', () => ({
+    CataloguePropertiesSection: () => null,
     SystemImagePanel: () => null,
 }))
-
-jest.mock('../../../utils/predicates', () => ({
-    hasPhysicalItem: jest.fn(),
-}))
-
-const mockHasPhysicalItem = hasPhysicalItem as jest.Mock
 
 beforeEach(() => {
     jest.clearAllMocks()
@@ -51,26 +41,24 @@ describe('QuickInfoSidebar', () => {
     })
 
     it('renders Metadata + Statistics sections when system present', () => {
-        mockHasPhysicalItem.mockReturnValue(false)
         renderWithProviders(<QuickInfoSidebar system={{ statistics: {} } as any} />)
         expect(screen.getAllByTestId('section').length).toBe(2)
     })
 
-    it('renders Physical Item section when hasPhysicalItem=true', () => {
-        mockHasPhysicalItem.mockReturnValue(true)
-        renderWithProviders(<QuickInfoSidebar system={{ statistics: {}, physicalItem: {} } as any} />)
+    it('renders Physical Item section when the system has a physical item', () => {
+        renderWithProviders(
+            <QuickInfoSidebar system={{ statistics: {}, physicalItem: { uid: 'p-1' } } as any} />,
+        )
         expect(screen.getAllByTestId('section').length).toBe(3)
     })
 
-    it('omits Physical Item section when hasPhysicalItem=false', () => {
-        mockHasPhysicalItem.mockReturnValue(false)
+    it('omits Physical Item section without a physical item', () => {
         renderWithProviders(<QuickInfoSidebar system={{ statistics: {} } as any} />)
         expect(screen.getAllByTestId('section').length).toBe(2)
     })
 
     describe('spare parts statistics', () => {
         const renderWithStatistics = (statistics: Record<string, number>) => {
-            mockHasPhysicalItem.mockReturnValue(false)
             renderWithProviders(<QuickInfoSidebar system={{ statistics } as any} />)
         }
 

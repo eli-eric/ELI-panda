@@ -1,11 +1,11 @@
 import { screen } from '@testing-library/react'
 
-import type { PropertyGroup } from '@/hooks/useItemPropertiesData'
 import { renderWithProviders } from '@/testutils/wrappers/renderWithProviders'
 
-import { PhysicalItemProperties } from '../PhysicalItemProperties.comp'
+import type { CataloguePropertyGroup } from '../../types'
+import { CataloguePropertiesList } from '../CataloguePropertiesList.comp'
 
-const groups: PropertyGroup[] = [
+const groups: CataloguePropertyGroup[] = [
     {
         key: 'electrical',
         name: 'Electrical',
@@ -19,8 +19,24 @@ const groups: PropertyGroup[] = [
                 unit: 'V',
                 type: 'Number',
             },
-            { uid: 'current', name: 'Current', value: '5', unit: 'A', type: 'Number' },
-            { uid: 'rating', name: 'Rating', value: 'N/A', type: 'Text' },
+            {
+                uid: 'current',
+                name: 'Current',
+                value: '5',
+                serviceValue: null,
+                isOverridden: false,
+                unit: 'A',
+                type: 'Number',
+            },
+            {
+                uid: 'rating',
+                name: 'Rating',
+                value: 'N/A',
+                serviceValue: null,
+                isOverridden: false,
+                unit: null,
+                type: 'Text',
+            },
         ],
     },
     {
@@ -33,33 +49,28 @@ const groups: PropertyGroup[] = [
                 value: null,
                 serviceValue: '5L/s',
                 isOverridden: false,
+                unit: null,
                 type: 'Text',
             },
         ],
     },
 ]
 
-describe('PhysicalItemProperties', () => {
+describe('CataloguePropertiesList', () => {
     it('renders group headings (and skips the General bucket)', () => {
-        renderWithProviders(
-            <PhysicalItemProperties groupedProperties={groups} hasOverriddenProperties />,
-        )
+        renderWithProviders(<CataloguePropertiesList groups={groups} hasOverriddenProperties />)
         expect(screen.getByText('Electrical')).toBeInTheDocument()
         expect(screen.queryByText('General')).not.toBeInTheDocument()
     })
 
     it('shows the catalogue original on overridden rows', () => {
-        renderWithProviders(
-            <PhysicalItemProperties groupedProperties={groups} hasOverriddenProperties />,
-        )
+        renderWithProviders(<CataloguePropertiesList groups={groups} hasOverriddenProperties />)
         expect(screen.getByText('Voltage')).toBeInTheDocument()
         expect(screen.getByText(/was 220/)).toBeInTheDocument()
     })
 
     it('renders N/A rows and service-only additions without a "was" marker', () => {
-        renderWithProviders(
-            <PhysicalItemProperties groupedProperties={groups} hasOverriddenProperties />,
-        )
+        renderWithProviders(<CataloguePropertiesList groups={groups} hasOverriddenProperties />)
         expect(screen.getByText('Rating')).toBeInTheDocument()
         expect(screen.getByText('N/A')).toBeInTheDocument()
         expect(screen.getByText('FlowRate')).toBeInTheDocument()
@@ -69,13 +80,11 @@ describe('PhysicalItemProperties', () => {
 
     it('shows the Modified badge only when overrides exist', () => {
         const { rerender } = renderWithProviders(
-            <PhysicalItemProperties groupedProperties={groups} hasOverriddenProperties />,
+            <CataloguePropertiesList groups={groups} hasOverriddenProperties />,
         )
         expect(screen.getByText('Modified')).toBeInTheDocument()
 
-        rerender(
-            <PhysicalItemProperties groupedProperties={groups} hasOverriddenProperties={false} />,
-        )
+        rerender(<CataloguePropertiesList groups={groups} hasOverriddenProperties={false} />)
         expect(screen.queryByText('Modified')).not.toBeInTheDocument()
     })
 })

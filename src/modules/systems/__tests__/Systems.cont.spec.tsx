@@ -18,10 +18,6 @@ jest.mock('../Systems.comp', () => ({
     },
 }))
 
-jest.mock('@/modules/shared/system/device-info-overlay/device-info', () => ({
-    DeviceInfoOverlay: () => <div data-testid="device-overlay" />,
-}))
-
 jest.mock('@/modules/shared/form/FilterBadges', () => ({
     FilterBadges: ({ tableId }: { tableId: string }) => (
         <div data-testid="badges" data-tableid={tableId} />
@@ -39,11 +35,6 @@ describe('SystemsContainer', () => {
         expect(c.dataset.tableid).toBe('systems')
         expect(c.dataset.global).toBe('true')
         expect(c.dataset.edit).toBe('false')
-    })
-
-    it('renders DeviceInfoOverlay', () => {
-        render(<SystemsContainer />)
-        expect(screen.getByTestId('device-overlay')).toBeInTheDocument()
     })
 
     it('SecondRowElement renders FilterBadges with tableId=systems', () => {

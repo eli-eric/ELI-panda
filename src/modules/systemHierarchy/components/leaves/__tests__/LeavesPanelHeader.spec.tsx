@@ -10,7 +10,7 @@ jest.mock('@/components/ui/skeleton', () => ({
     ),
 }))
 
-jest.mock('../../shared/SystemBreadcrumbs.comp', () => ({
+jest.mock('@/modules/shared/system/system-detail', () => ({
     SystemBreadcrumbs: ({
         parentPath,
         currentName,
@@ -76,9 +76,7 @@ describe('LeavesPanelHeader', () => {
     })
 
     it('parentSystemType falls back to default leaves title when null', () => {
-        renderWithProviders(
-            <LeavesPanelHeader {...baseProps} parentSystemType={null} />,
-        )
+        renderWithProviders(<LeavesPanelHeader {...baseProps} parentSystemType={null} />)
         // Default fallback rendered (the translated text); we just confirm parentSystemType=null path doesn't crash
         expect(screen.getByTestId('breadcrumbs')).toBeInTheDocument()
     })

@@ -4,8 +4,9 @@ import { IntlProvider } from 'react-intl'
 
 import { openItemAssignModal } from '@/modules/shared/form/itemAssign/item-assign.modal'
 import { openItemMoveModal } from '@/modules/shared/form/itemMoving/item-move.modal'
+import type { SystemDetail } from '@/modules/shared/system/system-detail'
+import { makeSystemDetail } from '@/testutils/factories/systemDetail'
 
-import type { SystemLeaf } from '../../../types'
 import { ActionsDropdown } from '../ActionsDropdown.comp'
 import { openSetMinimalSparesModal } from '../set-minimal-spares.modal'
 
@@ -24,14 +25,12 @@ jest.mock('@/modules/shared/hooks/useAssignSparesNavigation', () => ({
     useAssignSparesNavigation: () => mockAssignSpares,
 }))
 
-const mockCanEditSystem = jest.fn()
-jest.mock('@/modules/shared/system/edit-permission/hooks/useSystemEditPermission', () => ({
-    useSystemEditPermission: () => ({
-        canEdit: mockCanEditSystem(),
-        responsibles: [],
-        status: 'allowed',
-        refetch: jest.fn(),
-    }),
+// role gate only — responsibility is a soft lock and never disables actions
+const mockHasEditRole = jest.fn()
+jest.mock('@/hooks/usePermission', () => ({
+    __esModule: true,
+    usePermission: () => mockHasEditRole(),
+    default: () => mockHasEditRole(),
 }))
 
 // Mock Radix dropdown to render content directly (avoids portal/pointer issues)
@@ -62,25 +61,32 @@ const messages: Record<string, string> = {
     'systemHierarchy.detail.assignItem': 'Assign Item',
 }
 
-const baseSystem: SystemLeaf = {
-    uid: 'sys-1',
-    name: 'Test System',
-    systemCode: 'SYS-001',
-    physicalItem: null,
-    parentPath: null,
-}
+const baseSystem = makeSystemDetail({ uid: 'sys-1', name: 'Test System', systemCode: 'SYS-001' })
 
-const systemWithPhysicalItem: SystemLeaf = {
+const systemWithPhysicalItem = makeSystemDetail({
     ...baseSystem,
     physicalItem: {
         uid: 'pi-1',
         eun: 'EUN-1',
         name: 'Physical Item 1',
-        catalogueNumber: 'CAT-001',
+        serialNumber: null,
+        notes: null,
+        price: null,
+        currency: null,
+        printEUN: null,
+        itemUsage: null,
+        conditionStatus: null,
+        catalogueItem: {
+            uid: 'ci-1',
+            name: 'Catalogue Item',
+            catalogueNumber: 'CAT-001',
+            category: null,
+            supplier: null,
+        },
     },
-}
+})
 
-const renderDropdown = (system: SystemLeaf) =>
+const renderDropdown = (system: SystemDetail) =>
     render(
         <IntlProvider locale="en" messages={messages}>
             <ActionsDropdown system={system} />
@@ -90,7 +96,7 @@ const renderDropdown = (system: SystemLeaf) =>
 describe('ActionsDropdown', () => {
     beforeEach(() => {
         jest.clearAllMocks()
-        mockCanEditSystem.mockReturnValue(true)
+        mockHasEditRole.mockReturnValue(true)
     })
 
     it('renders Move Item when system has physicalItem', () => {
@@ -144,10 +150,7 @@ describe('ActionsDropdown', () => {
     })
 
     it('calls openSetMinimalSparesModal with the system and its current minimum', () => {
-        const systemWithMinimum: SystemLeaf = {
-            ...baseSystem,
-            statistics: { minimalSpareParstCount: 0.25 },
-        }
+        const systemWithMinimum = makeSystemDetail({ ...baseSystem, minimalSpareParstCount: 0.25 })
         renderDropdown(systemWithMinimum)
         fireEvent.click(screen.getByText('Set Minimal Spares'))
         expect(openSetMinimalSparesModal).toHaveBeenCalledWith({
@@ -165,8 +168,8 @@ describe('ActionsDropdown', () => {
         )
     })
 
-    it('disables the actions when the user cannot edit the system', () => {
-        mockCanEditSystem.mockReturnValue(false)
+    it('disables the actions without the SYSTEM_EDIT role', () => {
+        mockHasEditRole.mockReturnValue(false)
         renderDropdown(systemWithPhysicalItem)
         expect(screen.getByText('Move Item').closest('button')).toBeDisabled()
         expect(screen.getByText('Assign Spares').closest('button')).toBeDisabled()

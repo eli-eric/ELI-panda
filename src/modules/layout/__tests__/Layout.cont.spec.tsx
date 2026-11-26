@@ -7,6 +7,11 @@ jest.mock('../../shared/system/device-info-overlay/store/useShowDeviceStore', ()
     useShowDeviceStore: jest.fn(),
 }))
 
+const mockOpenSystemEditByCode = jest.fn()
+jest.mock('../../shared/system/system-edit/hooks/useOpenSystemEditByCode', () => ({
+    useOpenSystemEditByCode: () => mockOpenSystemEditByCode,
+}))
+
 jest.mock('../../shared/system/device-info-overlay/device-info', () => ({
     DeviceInfoOverlay: () => <div data-testid="overlay" />,
 }))
@@ -38,11 +43,11 @@ const fireMessage = (href: string) => {
 }
 
 describe('LayoutContainer', () => {
-    it('window message with getDeviceInfo sets code + opens overlay', () => {
+    it('window message with getDeviceInfo opens the Edit System sheet by code', () => {
         render(<LayoutContainer />)
         fireMessage('https://x.com?getDeviceInfo=SC-1')
-        expect(setCode).toHaveBeenCalledWith('SC-1')
-        expect(setOpenDeviceInfo).toHaveBeenCalledWith(true)
+        expect(mockOpenSystemEditByCode).toHaveBeenCalledWith('SC-1')
+        expect(setOpenDeviceInfo).not.toHaveBeenCalled()
     })
 
     it('window message with getOfficeInfo sets locationCode + opens overlay', () => {
