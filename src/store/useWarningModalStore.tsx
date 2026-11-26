@@ -18,6 +18,8 @@ type PendingExecution = {
     callback: Function
     callbackArgs: any[]
     id: string
+    // Called when the modal is dismissed without confirming (or replaced by another one).
+    onCancel?: () => void
 }
 
 type WarningModalStore = {
@@ -26,7 +28,12 @@ type WarningModalStore = {
     executionHistory: Set<string>
 
     // Modal actions
-    openModal: (message: string, callback: Function, callbackArgs?: any[]) => void
+    openModal: (
+        message: string,
+        callback: Function,
+        callbackArgs?: any[],
+        onCancel?: () => void,
+    ) => void
     closeModal: () => void
     confirmModal: () => void
 
@@ -44,8 +51,16 @@ export const useWarningModalStore = create<WarningModalStore>((set, get) => ({
     pendingExecution: undefined,
     executionHistory: new Set(),
 
-    openModal: (message: string, callback: Function, callbackArgs: any[] = []) => {
+    openModal: (
+        message: string,
+        callback: Function,
+        callbackArgs: any[] = [],
+        onCancel?: () => void,
+    ) => {
         const executionId = Date.now() + '_' + Math.random().toString(36).substr(2, 9)
+        // a replaced, never-answered prompt counts as cancelled
+        const replaced = get().pendingExecution
+        if (replaced && !get().executionHistory.has(replaced.id)) replaced.onCancel?.()
 
         set({
             params: {
@@ -58,11 +73,14 @@ export const useWarningModalStore = create<WarningModalStore>((set, get) => ({
                 callback,
                 callbackArgs,
                 id: executionId,
+                onCancel,
             },
         })
     },
 
     closeModal: () => {
+        const pending = get().pendingExecution
+        if (pending && !get().executionHistory.has(pending.id)) pending.onCancel?.()
         set({
             params: initialParams,
             pendingExecution: undefined,
@@ -120,3 +138,17 @@ export const useWarningModalStore = create<WarningModalStore>((set, get) => ({
         set({ params: initialParams })
     },
 }))
+
+/**
+ * Promise flavour of the warning modal: resolves true on confirm, false when the
+ * user dismisses it. For imperative flows (mutation guards) that must await the answer.
+ */
+export const confirmWithWarningModal = (message: string): Promise<boolean> =>
+    new Promise(resolve => {
+        useWarningModalStore.getState().openModal(
+            message,
+            () => resolve(true),
+            [],
+            () => resolve(false),
+        )
+    })

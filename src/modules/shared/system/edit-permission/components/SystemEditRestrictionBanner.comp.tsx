@@ -1,6 +1,6 @@
 'use client'
 
-import { Info, Lock } from 'lucide-react'
+import { Info, TriangleAlert, UserX } from 'lucide-react'
 import type { FC } from 'react'
 import { useIntl } from 'react-intl'
 
@@ -26,8 +26,9 @@ const buildResponsiblesTooltip = (responsibles: Props['responsibles']): string =
         .join('\n')
 
 /**
- * Explains why editing is blocked and who to contact. Shown on the system detail
- * view above the tabs. Renders nothing while permission is loading or allowed.
+ * Tells a user they are not responsible for the system (and who is). Purely
+ * informational — editing stays available behind a one-time confirmation. Renders
+ * nothing while responsibility is loading or confirmed.
  */
 export const SystemEditRestrictionBanner: FC<Props> = ({ status, responsibles, refetch }) => {
     const { formatMessage: fm } = useIntl()
@@ -40,11 +41,9 @@ export const SystemEditRestrictionBanner: FC<Props> = ({ status, responsibles, r
             // horizontal margin would push it past the container and under the
             // Quick Info sidebar.
             <div className="px-4 pt-2">
-                <Alert variant="destructive" data-testid="system-edit-verify-error">
-                    <Lock />
-                    <AlertTitle>
-                        {fm({ id: message.systemPermission.errorTitle })}
-                    </AlertTitle>
+                <Alert data-testid="system-edit-verify-error">
+                    <TriangleAlert />
+                    <AlertTitle>{fm({ id: message.systemPermission.errorTitle })}</AlertTitle>
                     <AlertDescription>
                         <p>{fm({ id: message.systemPermission.errorDescription })}</p>
                         <Button variant="outline" size="sm" className="mt-1" onClick={refetch}>
@@ -56,14 +55,13 @@ export const SystemEditRestrictionBanner: FC<Props> = ({ status, responsibles, r
         )
     }
 
-    // status === 'denied' — keep it compact: the responsibles live in the info
-    // tooltip so the banner stays a single line. Only fall back to inline text
-    // when there is no one to list.
+    // status === 'denied' — responsibles live in the info tooltip so the banner
+    // stays compact.
     const hasResponsibles = responsibles.length > 0
     return (
         <div className="px-4 pt-2">
             <Alert data-testid="system-edit-denied">
-                <Lock />
+                <UserX />
                 <AlertTitle className="flex items-center gap-1.5">
                     {fm({ id: message.systemPermission.deniedTitle })}
                     {hasResponsibles && (
@@ -80,11 +78,12 @@ export const SystemEditRestrictionBanner: FC<Props> = ({ status, responsibles, r
                         </Tooltip>
                     )}
                 </AlertTitle>
-                {!hasResponsibles && (
-                    <AlertDescription>
+                <AlertDescription>
+                    <p>{fm({ id: message.systemPermission.deniedDescription })}</p>
+                    {!hasResponsibles && (
                         <p>{fm({ id: message.systemPermission.deniedNoResponsibles })}</p>
-                    </AlertDescription>
-                )}
+                    )}
+                </AlertDescription>
             </Alert>
         </div>
     )

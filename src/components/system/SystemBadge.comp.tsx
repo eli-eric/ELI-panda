@@ -3,7 +3,7 @@ import { ChevronDown, ChevronRight } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 import { getBadgeVariantBySystemLevel } from '@/modules/systemItem/utils'
-import type { SystemLevel } from '@/types/gql/graphql'
+import type { SystemLevel } from '@/types/constants/systemLevel'
 
 interface SystemBadgeProps {
     value: string

@@ -44,8 +44,8 @@ const actionVisual = (action: string) => {
 const formatChangeValue = (value: ChangeValue | null, fm: IntlShape['formatMessage']): string => {
     if (value === null || value === undefined)
         return fm({ id: message.systemHierarchy.history.diff.emptyValue })
+    if (Array.isArray(value)) return value.map(item => item.name).join(', ')
     if (typeof value === 'object') return value.name
-    if (typeof value === 'boolean') return String(value)
     return String(value)
 }
 

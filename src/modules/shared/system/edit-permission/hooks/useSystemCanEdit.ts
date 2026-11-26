@@ -75,19 +75,17 @@ const canEditQueryFn: QueryFunction<SystemCanEditResponse, QueryFetcherKey> = as
     normalizeCanEditResponse(await queryFetcher<unknown>('systemCanEdit')(ctx))
 
 /**
- * Per-system edit permission from the backend. Authoritative source (GraphQL has
- * no canEdit/responsibles field and team-membership/ancestors can't be resolved
- * client-side). Shared cache key with {@link ensureSystemCanEdit}.
+ * Per-system responsibility from the backend (team membership and ancestors can't
+ * be resolved client-side). Shared cache key with {@link ensureSystemCanEdit}.
  */
 export const useSystemCanEdit = (uid?: string | null) =>
     useQuery<SystemCanEditResponse, AxiosError, SystemCanEditResponse, QueryFetcherKey>({
         queryKey: [SYSTEM_CAN_EDIT_QUERY_KEY, { uid }],
         queryFn: canEditQueryFn,
         enabled: !!uid,
-        // Always-fresh on purpose: this is the security gate for otherwise
-        // unguarded GraphQL patches, so we prefer a re-check over a stale allow.
-        // `ensureSystemCanEdit` still reuses this cache entry within a render pass.
-        staleTime: 0,
+        // Responsibility changes rarely; a short window keeps the soft-lock prompt
+        // and the banner on one fetch per system while the user works on it.
+        staleTime: 30 * 1000,
     })
 
 /**
@@ -99,7 +97,12 @@ export const ensureSystemCanEdit = (
     queryClient: QueryClient,
     uid: string,
 ): Promise<SystemCanEditResponse> =>
-    queryClient.ensureQueryData<SystemCanEditResponse, AxiosError, SystemCanEditResponse, QueryFetcherKey>({
+    queryClient.ensureQueryData<
+        SystemCanEditResponse,
+        AxiosError,
+        SystemCanEditResponse,
+        QueryFetcherKey
+    >({
         queryKey: [SYSTEM_CAN_EDIT_QUERY_KEY, { uid }],
         queryFn: canEditQueryFn,
     })

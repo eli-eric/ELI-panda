@@ -47,8 +47,16 @@ export const getEndpoints = ({
         systemCodeGenerate: `/system/systemCode${query}`,
         systemImage: `/system/${uid}/image`,
         catalogueCategoryCopy: `/catalogue/category/${uid}/copy`,
-        systemDetail: `/system/${uid}`,
+        systemDetail: uid ? `/system/${uid}` : null,
         systemCanEdit: uid ? `/system/${uid}/can-edit` : null,
+        systemPhysicalItem: uid ? `/system/${uid}/physical-item` : null,
+        systemSpareParts: uid ? `/system/${uid}/spare-parts` : null,
+        systemCodeSave: uid ? `/system/${uid}/system-code` : null,
+        // path = relationship type, itemUid = the other (END) system; uid is the START system
+        systemRelationshipRemove:
+            uid && path && itemUid ? `/system/${uid}/relationships/${path}/${itemUid}` : null,
+        physicalItemCatalogueProperties: uid ? `/physical-item/${uid}/catalogue-properties` : null,
+        physicalItemOrders: uid ? `/physical-item/${uid}/orders` : null,
         systemItemAdd: `/system/${uid}/item`,
         systemsDetails: `/systems${uidPart}`,
         systemRelationships: `/system/${uid}/relationships`,

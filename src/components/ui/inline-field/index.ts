@@ -1,6 +1,8 @@
 export { InlineFieldAction } from './InlineFieldAction'
 export { InlineFieldActions } from './InlineFieldActions.comp'
 export { InlineFieldCombobox } from './InlineFieldCombobox'
+export type { InlineFieldDensity } from './InlineFieldDensity'
+export { InlineFieldDensityProvider } from './InlineFieldDensity'
 export { InlineFieldInput } from './InlineFieldInput'
 export { InlineFieldList } from './InlineFieldList'
 export { InlineFieldModalSelect } from './InlineFieldModalSelect'
