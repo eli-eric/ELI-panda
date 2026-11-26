@@ -4,7 +4,7 @@ export const getVisibleByTestId = (page: Page, testId: string) =>
     page.getByTestId(testId).filter({ visible: true }).first()
 
 export async function gotoSystemHierarchyPage(page: Page) {
-    await page.goto('/systems/hierarchy')
+    await page.goto('/systems/explorer')
     await expect(getVisibleByTestId(page, 'tree-node-sys-root')).toBeVisible()
 }
 

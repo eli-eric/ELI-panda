@@ -79,7 +79,7 @@ describe('SystemActionButtons', () => {
     it('viewDetail item contains hierarchy deep link for the uid', () => {
         renderWithProviders(<SystemActionButtons {...baseProps} />)
         const link = screen.getByRole('link')
-        expect(link).toHaveAttribute('href', '/systems/hierarchy?leaf=u-1')
+        expect(link).toHaveAttribute('href', '/systems/explorer?leaf=u-1')
         expect(link).toHaveAttribute('target', '_blank')
     })
 

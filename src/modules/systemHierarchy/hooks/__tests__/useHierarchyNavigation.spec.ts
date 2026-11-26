@@ -13,7 +13,7 @@ let mockQuery: Record<string, string | undefined> = {}
 jest.mock('next/router', () => ({
     useRouter: () => ({
         query: mockQuery,
-        pathname: '/systems/hierarchy',
+        pathname: '/systems/explorer',
         push: mockPush,
     }),
 }))

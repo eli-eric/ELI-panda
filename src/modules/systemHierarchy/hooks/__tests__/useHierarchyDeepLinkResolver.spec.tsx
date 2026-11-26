@@ -16,7 +16,7 @@ let mockIsReady = true
 jest.mock('next/router', () => ({
     useRouter: () => ({
         query: mockQuery,
-        pathname: '/systems/hierarchy',
+        pathname: '/systems/explorer',
         isReady: mockIsReady,
         push: mockPush,
         replace: mockReplace,

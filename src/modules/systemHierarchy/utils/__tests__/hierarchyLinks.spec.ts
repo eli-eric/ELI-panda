@@ -5,14 +5,14 @@ import { getSystemHierarchyDetailPath } from '../hierarchyLinks'
 describe('getSystemHierarchyDetailPath', () => {
     it('builds a hierarchy detail deep link with the leaf param', () => {
         expect(getSystemHierarchyDetailPath('abc-123')).toBe(
-            `${PATH.SYSTEMS_HIERARCHY}?leaf=abc-123`,
+            `${PATH.SYSTEMS_EXPLORER}?leaf=abc-123`,
         )
     })
 
     it('encodes special characters in the uid', () => {
         const uid = 'test-123_ABC@xyz'
         expect(getSystemHierarchyDetailPath(uid)).toBe(
-            `${PATH.SYSTEMS_HIERARCHY}?leaf=${encodeURIComponent(uid)}`,
+            `${PATH.SYSTEMS_EXPLORER}?leaf=${encodeURIComponent(uid)}`,
         )
     })
 
