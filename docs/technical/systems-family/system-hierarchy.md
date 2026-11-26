@@ -239,7 +239,7 @@ A quick edit: one column, top to bottom. Each block is a collapsible `Disclosure
 | Spare parts (n) · Spare for (n) · Subsystems (n) | only when the count is > 0 | collapsed |
 | Activity | `SystemHistoryFeed` | collapsed |
 
-Collapsed sections do not mount their content, so their queries only fire when opened.
+Collapsed sections do not mount their content, so their queries only fire when opened. Open / closed state the user sets is remembered per browser (`store/useSystemEditSectionsStore`, persisted as `system-edit-sections`); untouched sections keep the defaults above.
 
 Every field saves on its own; there is no RHF form, Save button or unsaved-changes guard. The systems overview's list cache is **patched in place** after a write (`utils/patchSystemsTableCaches.ts`) and created systems are inserted into it — never invalidated — because the overview merges lazily expanded subsystems into that cache and a refetch would drop the open tree. Clicking a breadcrumb, spare or subsystem **re-targets the sheet in place** (`SystemEditContainer` keeps the current uid in state) instead of stacking sheets. The explorer tabs render the same sections, so the two surfaces cannot drift.
 

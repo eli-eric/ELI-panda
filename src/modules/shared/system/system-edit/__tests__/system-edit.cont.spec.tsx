@@ -1,9 +1,10 @@
-import { fireEvent, screen, within } from '@testing-library/react'
+import { fireEvent, screen, waitFor, within } from '@testing-library/react'
 
 import { useSystemDetail } from '@/modules/shared/system/system-detail'
 import { makeSystemDetail } from '@/testutils/factories/systemDetail'
 import { renderWithProviders } from '@/testutils/wrappers/renderWithProviders'
 
+import { useSystemEditSectionsStore } from '../store/useSystemEditSectionsStore'
 import { SystemEditContainer } from '../system-edit.cont'
 
 jest.mock('@/modules/shared/system/system-detail', () => {
@@ -68,6 +69,31 @@ const expandSection = (testId: string) =>
 describe('SystemEditContainer (Edit System sheet)', () => {
     beforeEach(() => {
         mockUseSystemDetail.mockReset()
+        useSystemEditSectionsStore.setState({ openSections: {} })
+    })
+
+    it('remembers which sections the user opened or closed', async () => {
+        const system = makeSystemDetail({
+            uid: 'sys-1',
+            statistics: { ...makeSystemDetail().statistics, directSubsystemsCount: 2 },
+        })
+        mockUseSystemDetail.mockReturnValue(detailState({ system }))
+        const { unmount } = renderWithProviders(<SystemEditContainer uid="sys-1" />)
+
+        expandSection('system-edit-subsystems')
+        expandSection('system-edit-people') // open by default -> closes
+        await waitFor(() =>
+            expect(useSystemEditSectionsStore.getState().openSections).toEqual({
+                subsystems: true,
+                people: false,
+            }),
+        )
+        unmount()
+
+        renderWithProviders(<SystemEditContainer uid="sys-1" />)
+        expect(screen.getByTestId('subsystem-stub')).toBeInTheDocument()
+        expect(screen.queryByTestId('people-stub')).not.toBeInTheDocument()
+        expect(screen.getByTestId('classification-stub')).toBeInTheDocument()
     })
 
     it('renders one column of sections, editing ones open, without a Save button', () => {

@@ -30,9 +30,15 @@ import {
 import { getSystemHierarchyDetailPath } from '@/modules/systemHierarchy/utils/hierarchyLinks'
 import { getBadgeVariantBySystemLevel } from '@/utils/systemLevel'
 
+import {
+    type SystemEditSectionId,
+    useSystemEditSectionsStore,
+} from '../store/useSystemEditSectionsStore'
+
 const sheetMessages = message.systemHierarchy.sheet
 
 interface SheetSectionProps {
+    id: SystemEditSectionId
     title: ReactNode
     children: ReactNode
     defaultOpen?: boolean
@@ -40,26 +46,34 @@ interface SheetSectionProps {
     testId?: string
 }
 
-// One collapsible quick-edit block; editing sections start open, long lists collapsed.
+// One collapsible quick-edit block; editing sections start open, long lists collapsed,
+// unless the user toggled the section before (remembered per browser).
 const SheetSection: FC<SheetSectionProps> = ({
+    id,
     title,
     children,
     defaultOpen = true,
     accentClassName,
     testId,
-}) => (
-    <div data-testid={testId}>
-        <Disclosure
-            title={title}
-            defaultOpen={defaultOpen}
-            className="w-full overflow-hidden rounded-md border shadow-sm"
-            buttonClassName={cn('rounded-none border-0 py-2 font-medium', accentClassName)}
-            panelClassName="space-y-1 px-3 py-3"
-        >
-            {children}
-        </Disclosure>
-    </div>
-)
+}) => {
+    const storedOpen = useSystemEditSectionsStore(state => state.openSections[id])
+    const setSectionOpen = useSystemEditSectionsStore(state => state.setSectionOpen)
+
+    return (
+        <div data-testid={testId}>
+            <Disclosure
+                title={title}
+                defaultOpen={storedOpen ?? defaultOpen}
+                onChange={open => setSectionOpen(id, open)}
+                className="w-full overflow-hidden rounded-md border shadow-sm"
+                buttonClassName={cn('rounded-none border-0 py-2 font-medium', accentClassName)}
+                panelClassName="space-y-1 px-3 py-3"
+            >
+                {children}
+            </Disclosure>
+        </div>
+    )
+}
 
 const SystemActivity: FC<{ uid: string }> = ({ uid }) => {
     const { data } = useSystemHistory(uid)
@@ -126,6 +140,7 @@ export const SystemEditSheet: FC<SystemEditSheetProps> = ({ system, onSelectSyst
             <SystemImagePanel systemUid={system.uid} systemName={system.name} />
 
             <SheetSection
+                id="details"
                 title={fm({ id: sheetMessages.details })}
                 accentClassName={getBadgeVariantBySystemLevel(system.systemLevel ?? undefined)}
                 testId="system-edit-details"
@@ -134,23 +149,36 @@ export const SystemEditSheet: FC<SystemEditSheetProps> = ({ system, onSelectSyst
                 <SystemDescriptionField system={system} />
             </SheetSection>
 
-            <SheetSection title={fm({ id: sheetMessages.people })} testId="system-edit-people">
+            <SheetSection
+                id="people"
+                title={fm({ id: sheetMessages.people })}
+                testId="system-edit-people"
+            >
                 <SystemPeopleFields system={system} />
             </SheetSection>
 
             {physicalItem && (
                 <>
                     <SheetSection
+                        id="physicalItem"
                         title={fm({ id: sheetMessages.physicalItem })}
                         accentClassName="bg-amber-100 text-gray-900 dark:bg-amber-600/40 dark:text-gray-100"
                         testId="system-edit-physical-item"
                     >
                         <PhysicalItemFields systemUid={system.uid} physicalItem={physicalItem} />
                     </SheetSection>
-                    <SheetSection title={fm({ id: sheetMessages.properties })} defaultOpen={false}>
+                    <SheetSection
+                        id="properties"
+                        title={fm({ id: sheetMessages.properties })}
+                        defaultOpen={false}
+                    >
                         <CataloguePropertiesSection physicalItemUid={physicalItem.uid} />
                     </SheetSection>
-                    <SheetSection title={fm({ id: sheetMessages.orders })} defaultOpen={false}>
+                    <SheetSection
+                        id="orders"
+                        title={fm({ id: sheetMessages.orders })}
+                        defaultOpen={false}
+                    >
                         <PhysicalItemOrdersSection physicalItemUid={physicalItem.uid} />
                     </SheetSection>
                 </>
@@ -158,6 +186,7 @@ export const SystemEditSheet: FC<SystemEditSheetProps> = ({ system, onSelectSyst
 
             {statistics.sparePartsCount > 0 && (
                 <SheetSection
+                    id="spareParts"
                     title={`${fm({ id: sheetMessages.spareParts })} (${statistics.sparePartsCount})`}
                     defaultOpen={false}
                     testId="system-edit-spare-parts"
@@ -173,6 +202,7 @@ export const SystemEditSheet: FC<SystemEditSheetProps> = ({ system, onSelectSyst
 
             {statistics.sparesForCount > 0 && (
                 <SheetSection
+                    id="spareFor"
                     title={`${fm({ id: sheetMessages.spareFor })} (${statistics.sparesForCount})`}
                     defaultOpen={false}
                     testId="system-edit-spare-for"
@@ -188,6 +218,7 @@ export const SystemEditSheet: FC<SystemEditSheetProps> = ({ system, onSelectSyst
 
             {statistics.directSubsystemsCount > 0 && (
                 <SheetSection
+                    id="subsystems"
                     title={`${fm({ id: sheetMessages.subsystems })} (${statistics.directSubsystemsCount})`}
                     accentClassName="bg-blue-50 dark:bg-blue-900/20"
                     defaultOpen={false}
@@ -197,7 +228,11 @@ export const SystemEditSheet: FC<SystemEditSheetProps> = ({ system, onSelectSyst
                 </SheetSection>
             )}
 
-            <SheetSection title={fm({ id: sheetMessages.activity })} defaultOpen={false}>
+            <SheetSection
+                id="activity"
+                title={fm({ id: sheetMessages.activity })}
+                defaultOpen={false}
+            >
                 <SystemActivity uid={system.uid} />
             </SheetSection>
         </div>
