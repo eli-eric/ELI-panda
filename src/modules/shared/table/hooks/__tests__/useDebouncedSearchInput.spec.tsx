@@ -7,7 +7,7 @@ const setQuerySearch = jest.fn()
 let querySearch: string | null = null
 let storeSearch: string | undefined
 
-jest.mock('next-usequerystate', () => ({
+jest.mock('nuqs', () => ({
     useQueryState: () => [querySearch, setQuerySearch],
 }))
 
@@ -56,6 +56,15 @@ describe('useDebouncedSearchInput', () => {
             useDebouncedSearchInput({ tableId: 't1', enableQueryURL: true }),
         )
         expect(result.current.defaultValue).toBe('from-store')
+    })
+
+    it('ignores querySearch when enableQueryURL is false (modal-local search)', () => {
+        querySearch = 'page-search'
+        storeSearch = undefined
+        const { result } = renderHook(() =>
+            useDebouncedSearchInput({ tableId: 't1', enableQueryURL: false }),
+        )
+        expect(result.current.defaultValue).toBe('')
     })
 
     it('defaultValue is empty when nothing set', () => {

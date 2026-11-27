@@ -3,13 +3,14 @@ import { useIntl } from 'react-intl'
 
 import { Separator } from '@/components/ui/separator'
 import { message } from '@/i18n/src/messages'
+import { formatCoverage, isUnderCovered } from '@/modules/shared/system/coverage'
+import type { SystemDetail } from '@/modules/shared/system/system-detail'
+import { CataloguePropertiesSection, SystemImagePanel } from '@/modules/shared/system/system-detail'
 
-import type { SystemLeaf } from '../../types'
-import { hasPhysicalItem } from '../../utils/predicates'
 import { MetadataSection } from './MetadataSection.comp'
 
 interface QuickInfoSidebarProps {
-    system: SystemLeaf | null
+    system: SystemDetail | null
 }
 
 export const QuickInfoSidebar: FC<QuickInfoSidebarProps> = ({ system }) => {
@@ -60,9 +61,16 @@ export const QuickInfoSidebar: FC<QuickInfoSidebarProps> = ({ system }) => {
             value: system.statistics?.sparePartsCount ?? null,
         },
         {
+            label: fm({ id: message.systemHierarchy.sidebar.spRequirement }),
+            value: system.statistics?.minimalSpareParstCount ?? null,
+        },
+        {
             label: fm({ id: message.systemHierarchy.sidebar.spareCoverage }),
-            value:
-                system.statistics?.sp_coverage != null ? `${system.statistics.sp_coverage}%` : null,
+            value: formatCoverage(system.statistics?.sp_coverage),
+            // Same red flag the systems and leaves tables raise on the row.
+            valueClassName: isUnderCovered(system.statistics)
+                ? 'text-red-500 dark:text-red-500'
+                : undefined,
         },
     ]
 
@@ -73,7 +81,7 @@ export const QuickInfoSidebar: FC<QuickInfoSidebarProps> = ({ system }) => {
         },
         {
             label: fm({ id: message.systemsPage.systemDetail.form.physicalItem.partNumber.label }),
-            value: system.physicalItem?.catalogueNumber ?? null,
+            value: system.physicalItem?.catalogueItem?.catalogueNumber ?? null,
         },
         {
             label: fm({
@@ -101,6 +109,7 @@ export const QuickInfoSidebar: FC<QuickInfoSidebarProps> = ({ system }) => {
                 </h2>
             </div>
             <div className="p-3 space-y-4">
+                <SystemImagePanel systemUid={system.uid} systemName={system.name} />
                 <MetadataSection
                     title={fm({ id: message.systemHierarchy.sidebar.metadata })}
                     items={infoItems}
@@ -110,12 +119,16 @@ export const QuickInfoSidebar: FC<QuickInfoSidebarProps> = ({ system }) => {
                     title={fm({ id: message.systemHierarchy.sidebar.statistics })}
                     items={statsItems}
                 />
-                {hasPhysicalItem(system) && (
+                {system.physicalItem && (
                     <>
                         <Separator />
                         <MetadataSection
                             title={fm({ id: message.systemHierarchy.physicalItem.title })}
                             items={physicalItemItems}
+                        />
+                        <CataloguePropertiesSection
+                            physicalItemUid={system.physicalItem.uid}
+                            variant="sidebar"
                         />
                     </>
                 )}

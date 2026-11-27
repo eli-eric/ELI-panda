@@ -25,4 +25,6 @@ export enum ROLE {
     CONTROL_SYSTEMS_EDIT = 'control-systems-edit',
     ZONES_VIEW = 'zones-view',
     ZONES_EDIT = 'zones-edit',
+    TEAMS_VIEW = 'teams-view',
+    TEAMS_EDIT = 'teams-edit',
 }

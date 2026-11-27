@@ -7,9 +7,9 @@ import { queryFetcher } from '@/utils/fetcher'
 
 import type { CatalogueItem } from '../types/responses'
 
-export const useCatalogueItem = () => {
+export const useCatalogueItem = (overrideUid?: string) => {
     const router = useRouter()
-    const catalogueUid = router.query.uid as string | undefined
+    const catalogueUid = overrideUid ?? (router.query.uid as string | undefined)
     const queryKey: QueryFetcherKey = ['catalogueItem', { uid: catalogueUid }]
 
     const {

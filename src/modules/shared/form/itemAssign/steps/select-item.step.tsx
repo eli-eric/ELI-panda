@@ -4,6 +4,7 @@ import { type FC } from 'react'
 import ModalButtonsComponent from '@/components/overlays/modal/modal.buttons'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
+import { isUnderCovered } from '@/modules/shared/system/coverage'
 import { PaginationV2 as Pagination } from '@/modules/shared/table/PaginationV2'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import { PandaTableV2 } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
@@ -71,8 +72,7 @@ export const SelectItemStep: FC = () => {
             getColorBySystemLevel(row.original?.systemLevel),
             getFontBySystemLevel(row.original?.systemLevel),
             row.original?.physicalItem && 'font-bold text-gray-700 dark:text-gray-200',
-            row.original?.statistics?.sp_coverage != null &&
-                row.original.statistics.sp_coverage < 1 &&
+            isUnderCovered(row.original?.statistics) &&
                 'text-red-500 dark:text-red-500 font-bold',
             selectedSystem?.uid === row.original.uid
                 ? 'bg-orange-200 hover:bg-orange-200 dark:bg-orange-600 dark:hover:bg-orange-600'

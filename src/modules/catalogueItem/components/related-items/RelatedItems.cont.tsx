@@ -16,26 +16,31 @@ import { useRelatedItems } from '../../hooks/useRelatedItems'
 import { useRelatedItemsFor } from '../../hooks/useRelatedItemsFor'
 import { AddRelatatedItemButton } from './AddRelatatedItemButton'
 
-export const RelatedItemsContainer = () => {
-    const { data: relatedItems, refetch, loading } = useRelatedItems()
-    const canEdit = usePermission([ROLE.CATALOGUE_EDIT])
+interface RelatedItemsContainerProps {
+    itemUid?: string
+}
+
+export const RelatedItemsContainer = ({ itemUid }: RelatedItemsContainerProps = {}) => {
     const router = useRouter()
-    const itemUid = router.query.uid as string
+    const uid = itemUid ?? (router.query.uid as string | undefined)
+    const { data: relatedItems, refetch, loading } = useRelatedItems(uid)
+    const canEdit = usePermission([ROLE.CATALOGUE_EDIT])
     const withWarn = useWarningModal('Are you sure you want to delete relation?')
     const { disconnectRelatedItem } = useDisconnectRelatedItem()
     const {
         data: relItemsFor,
         refetch: refethItemsFor,
         loading: relItemsLoading,
-    } = useRelatedItemsFor()
+    } = useRelatedItemsFor(uid)
 
     const data = relatedItems?.concat(relItemsFor || [])
 
-    const onDisconnect = (uid: string) => () => {
+    const onDisconnect = (targetUid: string) => () => {
+        if (!uid) return
         disconnectRelatedItem(
             {
                 where: {
-                    uid: itemUid,
+                    uid,
                 },
                 update: {
                     relatedCatalogueItems: [
@@ -44,7 +49,7 @@ export const RelatedItemsContainer = () => {
                                 {
                                     where: {
                                         node: {
-                                            uid: uid,
+                                            uid: targetUid,
                                         },
                                     },
                                 },
@@ -57,7 +62,7 @@ export const RelatedItemsContainer = () => {
                                 {
                                     where: {
                                         node: {
-                                            uid: uid,
+                                            uid: targetUid,
                                         },
                                     },
                                 },

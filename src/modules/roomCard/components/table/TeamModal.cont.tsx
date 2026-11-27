@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, useForm } from 'react-hook-form'
 import { FormattedMessage } from 'react-intl'
+import type { z } from 'zod'
 
 import Combobox from '@/components/form/Combobox'
 import { Button } from '@/components/ui/button'
@@ -23,7 +24,7 @@ interface TeamModalProps {
 export const TeamModalContainer = ({ onSubmit, onClose }: TeamModalProps) => {
     const { teams } = useTeams()
 
-    const formMethods = useForm<TeamFormData>({
+    const formMethods = useForm<z.input<typeof teamSchema>, unknown, TeamFormData>({
         resolver: zodResolver(teamSchema),
         defaultValues: {
             team: null,

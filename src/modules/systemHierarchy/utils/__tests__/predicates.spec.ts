@@ -1,37 +1,54 @@
-import type { SystemLeaf } from '../../types'
+import type { SystemDetail } from '@/modules/shared/system/system-detail'
+
 import { hasPhysicalItem, hasSpareFor, hasSpareParts } from '../predicates'
 
-const leaf = (overrides: Partial<SystemLeaf>): SystemLeaf => ({ ...overrides } as any)
+const statistics = (
+    overrides: Partial<SystemDetail['statistics']>,
+): SystemDetail['statistics'] => ({
+    subsystemsCount: 0,
+    directSubsystemsCount: 0,
+    sparePartsCount: 0,
+    sparesForCount: 0,
+    minimalSpareParstCount: null,
+    sparePartsCoverageSum: null,
+    sp_coverage: null,
+    ...overrides,
+})
 
 describe('hasPhysicalItem', () => {
     it('true when system.physicalItem is set', () => {
-        expect(hasPhysicalItem(leaf({ physicalItem: { uid: 'p' } as any }))).toBe(true)
+        expect(
+            hasPhysicalItem({ physicalItem: { uid: 'p' } as SystemDetail['physicalItem'] }),
+        ).toBe(true)
     })
 
-    it('false when physicalItem is null/undefined', () => {
-        expect(hasPhysicalItem(leaf({ physicalItem: undefined }))).toBe(false)
-        expect(hasPhysicalItem(leaf({ physicalItem: null as any }))).toBe(false)
+    it('false when physicalItem is null', () => {
+        expect(hasPhysicalItem({ physicalItem: null })).toBe(false)
     })
 })
 
 describe('hasSpareParts', () => {
     it.each([
-        [{ sparesIn: 1 }, true],
-        [{ sparesIn: 5 }, true],
-        [{ sparesIn: 0 }, false],
-        [{ sparesIn: undefined }, false],
-        [{}, false],
-    ])('returns expected for %p', (input, expected) => {
-        expect(hasSpareParts(leaf(input as any))).toBe(expected)
+        [1, true],
+        [5, true],
+        [0, false],
+    ])('sparePartsCount %p -> %p', (count, expected) => {
+        expect(
+            hasSpareParts({
+                physicalItem: null,
+                statistics: statistics({ sparePartsCount: count }),
+            }),
+        ).toBe(expected)
     })
 })
 
 describe('hasSpareFor', () => {
     it.each([
-        [{ sparesOut: 1 }, true],
-        [{ sparesOut: 0 }, false],
-        [{ sparesOut: undefined }, false],
-    ])('returns expected for %p', (input, expected) => {
-        expect(hasSpareFor(leaf(input as any))).toBe(expected)
+        [1, true],
+        [0, false],
+    ])('sparesForCount %p -> %p', (count, expected) => {
+        expect(
+            hasSpareFor({ physicalItem: null, statistics: statistics({ sparesForCount: count }) }),
+        ).toBe(expected)
     })
 })

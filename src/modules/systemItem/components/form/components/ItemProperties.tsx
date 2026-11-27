@@ -11,6 +11,7 @@ interface ItemPropertiesProps {
     properties: any[] | null | undefined
 }
 
+/** @deprecated systemItem is deprecated (see modules/systemItem/DEPRECATED.md) and this has no live consumer — use modules/shared/system/system-detail. */
 export const ItemProperties = ({ properties }: ItemPropertiesProps) => {
     const { formatMessage: fm } = useIntl()
 

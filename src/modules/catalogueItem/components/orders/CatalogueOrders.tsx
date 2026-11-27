@@ -8,13 +8,18 @@ import { useOrderColumns } from '@/modules/orders/components/OrderColumns'
 import type { Order } from '@/types/responses/orders'
 import { queryFetcher } from '@/utils/fetcher'
 
-export const CatalogueOrders = () => {
+interface CatalogueOrdersProps {
+    itemUid?: string
+}
+
+export const CatalogueOrders = ({ itemUid }: CatalogueOrdersProps = {}) => {
     const columns = useOrderColumns({ isReadOnly: true })
     const router = useRouter()
-    const { uid } = router.query as { uid: string }
+    const uid = itemUid ?? (router.query.uid as string | undefined)
     const { data, isLoading: loading } = useQuery({
         queryKey: ['catalogueOrders', { uid }],
         queryFn: queryFetcher<Order[]>('catalogueOrders'),
+        enabled: !!uid,
     })
 
     return (

@@ -31,6 +31,7 @@ export const FilterBadges = ({
                 <Badge key={filter.id}>
                     <span>{filter.name}</span>
                     <X
+                        data-testid={`filter-badge-remove-${filter.id}`}
                         className="h-4 w-4 ml-1 cursor-pointer hover:text-red-600 clickable"
                         onClick={() => {
                             setFilters(filters.filter(f => f.id !== filter.id))

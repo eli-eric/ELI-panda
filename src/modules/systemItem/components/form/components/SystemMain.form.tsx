@@ -23,6 +23,7 @@ interface SystemFormComponentProps {
     children?: React.ReactNode
 }
 
+/** @deprecated systemItem is deprecated (see modules/systemItem/DEPRECATED.md) and this has no live consumer — use modules/shared/system/system-detail. */
 export const SystemMainForm = ({ systemUid, children }: SystemFormComponentProps) => {
     const fields = useSystemFormFields()
     const { control } = useFormContext()

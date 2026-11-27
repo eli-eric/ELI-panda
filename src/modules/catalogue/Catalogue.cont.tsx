@@ -1,6 +1,5 @@
 import type { Table } from '@tanstack/react-table'
 import { X } from 'lucide-react'
-import { useQueryState } from 'next-usequerystate'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { useIntl } from 'react-intl'
 
@@ -8,6 +7,7 @@ import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 import { Badge } from '@/components/ui/badge'
 import { useFormFilter } from '@/hooks/form/useFormFilters'
+import { useUrlQueryState } from '@/hooks/useUrlQueryState'
 import { message } from '@/i18n/src/messages'
 import type { CodebookType } from '@/types/responses/codebook'
 
@@ -16,6 +16,7 @@ import { CatalogueTable } from '../shared/catalogue/table/CatalogueItems.table'
 import { FilterBadges } from '../shared/form/FilterBadges'
 import { ColumnVisibilityDropdown } from '../shared/table/ColumnVisibilityDropdown.comp'
 import { PaginationV2 as Pagination } from '../shared/table/PaginationV2'
+import { useVisibility } from '../shared/table/pandaTable/hooks/useVisibility'
 import type { PandaTableV2Handle } from '../shared/table/pandaTableV2/PandaTableV2'
 import { SearchBar } from '../shared/table/SearchBar'
 import { CatalogueBreadcrumbs } from './components/breadcrump/CatalogueBreadcrumbs'
@@ -29,7 +30,7 @@ const CatalogueContainer = () => {
     const tableId = 'catalogueItems'
     const { catalogueItems, error, loading } = useCatalogueItems(tableId, undefined, true)
     const { catalogueCategories } = useCategoryList()
-    const [categoryQuery, setCategoryQuery] = useQueryState('category', {
+    const [categoryQuery, setCategoryQuery] = useUrlQueryState('category', {
         history: 'push',
     })
     const tableRef = useRef<PandaTableV2Handle>(null)
@@ -47,6 +48,7 @@ const CatalogueContainer = () => {
     )
     const [open, setOpen] = useState(true)
     const [catalogueTable, setCatalogueTable] = useState<Table<any> | null>(null)
+    const [columnVisibility] = useVisibility(tableId)
 
     const filterFormMethods = useFormFilter<SystemFilterType>({
         tableId,
@@ -74,7 +76,12 @@ const CatalogueContainer = () => {
                 left={<SearchBarButtons filterFormMethods={filterFormMethods} />}
                 tableId={tableId}
                 right={
-                    catalogueTable ? <ColumnVisibilityDropdown table={catalogueTable} /> : undefined
+                    catalogueTable ? (
+                        <ColumnVisibilityDropdown
+                            table={catalogueTable}
+                            columnVisibility={columnVisibility}
+                        />
+                    ) : undefined
                 }
                 secondRow={
                     <FilterBadges

@@ -11,6 +11,7 @@ import EliLogoComponent from '@/components/eli-logo.comp'
 import ErrorPage from '@/components/error/ErrorPage'
 import LoaderComponent from '@/components/loader.comp'
 import { messages } from '@/i18n/src/locale/en'
+import { getSystemHierarchyDetailPath } from '@/modules/systemHierarchy/utils/hierarchyLinks'
 import { useSystemDetail } from '@/modules/systemItem/hooks/useSystemDetail'
 import { PATH } from '@/types/constants/paths'
 
@@ -26,7 +27,7 @@ const SystemAliasRedirectPage: NextPage = ({ alias }: Props) => {
     const { loading, error, systemDetail } = useSystemDetail({ alias }, data => {
         const uid = data?.systems[0]?.uid
         if (uid) {
-            router.push(PATH.SYSTEM + '/' + uid)
+            router.replace(getSystemHierarchyDetailPath(uid))
         }
     })
 

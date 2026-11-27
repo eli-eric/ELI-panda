@@ -6,7 +6,7 @@ import { RELATIONSHIP_TYPES } from '@/modules/systemHierarchy/types/graph'
 import { useRelationsStore } from '@/modules/systemsRelations/store/useRelationsStore'
 import useTableStateStore from '@/store/useTableStateStore'
 import { PATH } from '@/types/constants/paths'
-import { SystemLevel } from '@/types/gql/graphql'
+import { SystemLevel } from '@/types/constants/systemLevel'
 
 const ITEM_USAGE_VALUES = [
     '25c189d0-0564-43a7-90d9-65b7083bea98',

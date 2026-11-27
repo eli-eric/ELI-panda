@@ -1,4 +1,4 @@
-import { SystemLevel } from '@/types/gql/graphql'
+import { SystemLevel } from '@/types/constants/systemLevel'
 
 import {
     codebookRefSchema,

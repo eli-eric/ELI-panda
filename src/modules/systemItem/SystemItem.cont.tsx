@@ -20,6 +20,11 @@ interface Props {
     uid?: string
 }
 
+/**
+ * @deprecated The systemItem module is deprecated — system detail lives in
+ * src/modules/systemHierarchy (/systems/hierarchy?leaf=<uid>). See
+ * src/modules/systemItem/DEPRECATED.md.
+ */
 export const SystemItemContainer = ({ uid }: Props) => {
     const hasEditRole = usePermission([ROLE.SYSTEM_EDIT])
     const [errorState, setErrorState] = useState<Error | null>(null)

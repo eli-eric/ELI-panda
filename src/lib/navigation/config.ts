@@ -42,7 +42,7 @@ export const NAV_ITEMS: NavigationItem[] = [
                 url: PATH.SYSTEMS_MULTI_MOVE,
                 role: ROLE.SYSTEM_EDIT,
             },
-            { title: 'Hierarchy', url: PATH.SYSTEMS_HIERARCHY, role: ROLE.SYSTEMS_VIEW },
+            { title: 'Explorer', url: PATH.SYSTEMS_EXPLORER, role: ROLE.SYSTEMS_VIEW },
             { title: 'Zones', url: PATH.ZONES, role: ROLE.ZONES_VIEW },
         ],
     },
@@ -69,6 +69,10 @@ export const NAV_ITEMS: NavigationItem[] = [
         url: PATH.CATALOGUE,
         role: ROLE.CATALOGUE_VIEW,
         icon: Layers,
+        items: [
+            { title: 'Overview', url: PATH.CATALOGUE, role: ROLE.CATALOGUE_VIEW },
+            { title: 'Explorer', url: PATH.CATALOGUE_EXPLORER, role: ROLE.CATALOGUE_VIEW },
+        ],
     },
     {
         title: 'Orders',
@@ -125,12 +129,17 @@ export const OTHERS_NAV_ITEMS: NavigationItem[] = [
         url: PATH.ADMIN_USERS,
         role: ROLE.ADMIN,
         icon: Users,
+        items: [
+            { title: 'Users', url: PATH.ADMIN_USERS, role: ROLE.ADMIN },
+            { title: 'Teams', url: PATH.ADMIN_TEAMS, role: ROLE.ADMIN },
+        ],
     },
 ]
 
 export const PROTECTED_PATHS = [
     PATH.DASHBOARD,
     PATH.CATALOGUE,
+    PATH.CATALOGUE_EXPLORER,
     PATH.SYSTEMS,
     PATH.SYSTEM,
     PATH.REPORTS,
@@ -139,6 +148,7 @@ export const PROTECTED_PATHS = [
     PATH.ROOM_CARDS,
     PATH.ADMIN_USERS,
     PATH.ADMIN_USER,
+    PATH.ADMIN_TEAMS,
     PATH.ADMIN,
     PATH.PROFILE_GENERAL,
     PATH.PROFILE_SECURITY,
@@ -153,6 +163,7 @@ export const PROTECTED_PATHS = [
     PATH.RESEARCHERS,
     PATH.CONTROL_SYSTEMS,
     PATH.CONTROL_SYSTEMS_CREATE,
+    PATH.SYSTEMS_EXPLORER,
     PATH.SYSTEMS_HIERARCHY,
     PATH.ZONES,
 ]
@@ -160,6 +171,11 @@ export const PROTECTED_PATHS = [
 export const PATH_ROLES_CONFIG: Record<PATH, ROLE[]> = {
     [PATH.CATALOGUE]: [ROLE.CATALOGUE_CATEGORY_EDIT, ROLE.CATALOGUE_EDIT, ROLE.CATALOGUE_VIEW],
     [PATH.CATALOGUE_ITEM]: [ROLE.CATALOGUE_CATEGORY_EDIT, ROLE.CATALOGUE_EDIT, ROLE.CATALOGUE_VIEW],
+    [PATH.CATALOGUE_EXPLORER]: [
+        ROLE.CATALOGUE_CATEGORY_EDIT,
+        ROLE.CATALOGUE_EDIT,
+        ROLE.CATALOGUE_VIEW,
+    ],
     [PATH.DASHBOARD]: [ROLE.BASICS],
     [PATH.REPORTS]: [ROLE.REPORTS_VIEW],
     [PATH.SYSTEMS]: [ROLE.SYSTEM_EDIT, ROLE.SYSTEMS_VIEW],
@@ -173,6 +189,7 @@ export const PATH_ROLES_CONFIG: Record<PATH, ROLE[]> = {
     [PATH.ROOM_CARDS]: [ROLE.ROOM_CARD_VIEW, ROLE.ROOM_CARD_EDIT],
     [PATH.ADMIN_USERS]: [ROLE.ADMIN],
     [PATH.ADMIN_USER]: [ROLE.ADMIN],
+    [PATH.ADMIN_TEAMS]: [ROLE.ADMIN],
     [PATH.ADMIN]: [ROLE.ADMIN],
     [PATH.PROFILE_GENERAL]: [ROLE.BASICS],
     [PATH.PROFILE_SECURITY]: [ROLE.BASICS],
@@ -191,6 +208,7 @@ export const PATH_ROLES_CONFIG: Record<PATH, ROLE[]> = {
     [PATH.CONTROL_SYSTEMS]: [ROLE.CONTROL_SYSTEMS_VIEW, ROLE.CONTROL_SYSTEMS_EDIT],
     [PATH.GRANTS]: [ROLE.PUBLICATIONS_EDIT],
     [PATH.CONTROL_SYSTEMS_CREATE]: [ROLE.CONTROL_SYSTEMS_EDIT],
+    [PATH.SYSTEMS_EXPLORER]: [ROLE.SYSTEM_EDIT, ROLE.SYSTEMS_VIEW],
     [PATH.SYSTEMS_HIERARCHY]: [ROLE.SYSTEM_EDIT, ROLE.SYSTEMS_VIEW],
     [PATH.ZONES]: [ROLE.ZONES_VIEW, ROLE.ZONES_EDIT],
     [PATH.NOT_FOUND]: [],

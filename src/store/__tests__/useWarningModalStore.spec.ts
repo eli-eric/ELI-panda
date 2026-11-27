@@ -1,6 +1,6 @@
 import { act } from '@testing-library/react'
 
-import { useWarningModalStore } from '../useWarningModalStore'
+import { confirmWithWarningModal, useWarningModalStore } from '../useWarningModalStore'
 
 const reset = () =>
     act(() =>
@@ -54,6 +54,22 @@ describe('useWarningModalStore', () => {
         expect(error).toMatch(/nope/)
     })
 
+    it('a prompt opened from a confirmed callback survives the delayed cleanup', () => {
+        jest.useFakeTimers()
+        const second = jest.fn()
+        act(() =>
+            useWarningModalStore
+                .getState()
+                .openModal('First?', () => useWarningModalStore.getState().openModal('Second?', second)),
+        )
+        act(() => useWarningModalStore.getState().confirmModal())
+        act(() => jest.advanceTimersByTime(200))
+
+        const state = useWarningModalStore.getState()
+        expect(state.params).toMatchObject({ isOpen: true, message: 'Second?' })
+        expect(state.pendingExecution?.callback).toBe(second)
+    })
+
     it('clearExecution wipes pending state and params', () => {
         act(() => useWarningModalStore.getState().openModal('x', jest.fn()))
         act(() => useWarningModalStore.getState().clearExecution())
@@ -66,5 +82,28 @@ describe('useWarningModalStore', () => {
         expect(useWarningModalStore.getState().params.error).toBe('boom')
         act(() => useWarningModalStore.getState().resetParams())
         expect(useWarningModalStore.getState().params.error).toBe('')
+    })
+
+    describe('confirmWithWarningModal', () => {
+        it('resolves true when confirmed', async () => {
+            const answer = confirmWithWarningModal('Sure?')
+            expect(useWarningModalStore.getState().params.message).toBe('Sure?')
+            act(() => useWarningModalStore.getState().confirmModal())
+            await expect(answer).resolves.toBe(true)
+        })
+
+        it('resolves false when dismissed', async () => {
+            const answer = confirmWithWarningModal('Sure?')
+            act(() => useWarningModalStore.getState().closeModal())
+            await expect(answer).resolves.toBe(false)
+        })
+
+        it('resolves false when another prompt replaces it unanswered', async () => {
+            const first = confirmWithWarningModal('First?')
+            const second = confirmWithWarningModal('Second?')
+            await expect(first).resolves.toBe(false)
+            act(() => useWarningModalStore.getState().confirmModal())
+            await expect(second).resolves.toBe(true)
+        })
     })
 })

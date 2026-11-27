@@ -1,5 +1,5 @@
 import type { CatalogueItem } from '@/modules/catalogueItem/types/responses'
-import type { SystemLevel } from '@/types/gql/graphql'
+import type { SystemLevel } from '@/types/constants/systemLevel'
 import type { CodebookType } from '@/types/responses/codebook'
 
 export type SystemsResponse = {

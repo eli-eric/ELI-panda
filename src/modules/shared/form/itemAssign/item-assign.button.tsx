@@ -9,6 +9,8 @@ import { openItemAssignModal } from './item-assign.modal'
 export const ItemAssignButton: FC = () => {
     const { formatMessage: fm } = useIntl()
     return (
-        <Button onClick={openItemAssignModal}>{fm({ id: message.common.forms.assignItem })}</Button>
+        <Button onClick={() => openItemAssignModal()}>
+            {fm({ id: message.common.forms.assignItem })}
+        </Button>
     )
 }

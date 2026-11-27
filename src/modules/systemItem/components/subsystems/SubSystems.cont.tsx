@@ -13,6 +13,7 @@ import { getFontBySystemLevel } from '../../utils'
 import { useSubSystemsColumns } from './SubSustems.columns'
 import type { TableSystem } from './types'
 
+/** @deprecated systemItem is deprecated (see modules/systemItem/DEPRECATED.md) and this has no live consumer — use modules/shared/system/system-detail. */
 export const SubSystemsContainer = () => {
     const columns = useSubSystemsColumns()
     const { subsystems, loading } = useSystemSubsystems()

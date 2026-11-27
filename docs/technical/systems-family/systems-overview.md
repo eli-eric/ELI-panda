@@ -37,10 +37,11 @@ const SystemsContainer: FC = () => (
             isGlobalSearch={true}
             SecondRowElement={() => <FilterBadges tableId={'systems'} />}
         />
-        <DeviceInfoOverlay />
     </>
 )
 ```
+
+The avatar column opens the shared [Edit System sheet](./system-hierarchy.md#edit-system-sheet) (`useSystemEditSheet`) — it replaced the former read-only device info overlay.
 
 The heavy lifting is in `SystemsComponent` — a shared component that hosts a `PandaTableV2`, the filter sheet, and toolbar. The same component is reused by:
 
@@ -59,8 +60,8 @@ flowchart LR
     EP --> GW["PANDA API gateway"]
     GW --> H
     H --> Table["PandaTableV2"]
-    Table -->|row click| Nav["router.push(/system/<uid>)"]
-    Nav --> Item["systemItem module"]
+    Table -->|action button| Nav["getSystemHierarchyDetailPath(uid)\n/systems/explorer?leaf=<uid>"]
+    Nav --> Item["systemHierarchy detail view"]
 ```
 
 The list comes from REST (`getEndpoints.systemsList`), **not** GraphQL. Filter, sort, and pagination are query-string round-trippable when `enableQueryURL={true}` — the URL is the source of truth.

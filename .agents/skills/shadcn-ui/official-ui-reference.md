@@ -8,7 +8,7 @@ Initialize a new TanStack Start project with Tailwind CSS and shadcn/ui add-ons 
 npm create @tanstack/start@latest --tailwind --add-ons shadcn
 ```
 
---------------------------------
+---
 
 ### Install All shadcn/ui Components
 
@@ -20,7 +20,7 @@ Bulk install all available shadcn/ui components into your project at once. This 
 npx shadcn@latest add --all
 ```
 
---------------------------------
+---
 
 ### Manually Install Radix UI Select Dependency
 
@@ -32,7 +32,7 @@ This command shows how to install the core `@radix-ui/react-select` primitive pa
 npm install @radix-ui/react-select
 ```
 
---------------------------------
+---
 
 ### Install Progress Component Dependencies
 
@@ -48,7 +48,7 @@ npx shadcn@latest add progress
 npm install @radix-ui/react-progress
 ```
 
---------------------------------
+---
 
 ### Serve shadcn Registry with Next.js Development Server
 
@@ -60,7 +60,7 @@ This command starts the Next.js development server, which will serve your shadcn
 npm run dev
 ```
 
---------------------------------
+---
 
 ### Install shadcn CLI via npm
 
@@ -72,7 +72,7 @@ This command installs the latest version of the shadcn command-line interface (C
 npm install shadcn@latest
 ```
 
---------------------------------
+---
 
 ### Create New Laravel Project with React
 
@@ -84,7 +84,7 @@ Initialize a new Laravel project with Inertia and React using the Laravel instal
 laravel new my-app --react
 ```
 
---------------------------------
+---
 
 ### Install Shadcn UI Input OTP Component (CLI & Manual)
 
@@ -100,7 +100,7 @@ npx shadcn@latest add input-otp
 npm install input-otp
 ```
 
---------------------------------
+---
 
 ### Install Aspect Ratio Component via CLI
 
@@ -112,7 +112,7 @@ Installs the aspect-ratio component and its dependencies using the shadcn CLI. T
 npx shadcn@latest add aspect-ratio
 ```
 
---------------------------------
+---
 
 ### Install Dropdown Menu Component with NPM
 
@@ -124,7 +124,7 @@ Installation command for adding the dropdown menu component to a project using s
 npx shadcn@latest add dropdown-menu
 ```
 
---------------------------------
+---
 
 ### Define Universal Registry Item for Multi-File Template (shadcn/ui)
 
@@ -134,28 +134,28 @@ This JSON configuration defines a shadcn/ui registry item named 'my-custom-start
 
 ```json
 {
- "$schema": "https://ui.shadcn.com/schema/registry-item.json",
- "name": "my-custom-start-template",
- "type": "registry:item",
- "dependencies": ["better-auth"],
- "files": [
- {
- "path": "/path/to/file-01.json",
- "type": "registry:file",
- "target": "~/file-01.json",
- "content": "..."
- },
- {
- "path": "/path/to/file-02.vue",
- "type": "registry:file",
- "target": "~/pages/file-02.vue",
- "content": "..."
- }
- ]
+    "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+    "name": "my-custom-start-template",
+    "type": "registry:item",
+    "dependencies": ["better-auth"],
+    "files": [
+        {
+            "path": "/path/to/file-01.json",
+            "type": "registry:file",
+            "target": "~/file-01.json",
+            "content": "..."
+        },
+        {
+            "path": "/path/to/file-02.vue",
+            "type": "registry:file",
+            "target": "~/pages/file-02.vue",
+            "content": "..."
+        }
+    ]
 }
 ```
 
---------------------------------
+---
 
 ### Add shadcn/ui Button Component
 
@@ -167,7 +167,7 @@ Install the Button component from shadcn/ui into your TanStack Start project. Th
 npx shadcn@latest add button
 ```
 
---------------------------------
+---
 
 ### Install Form Component via Shadcn CLI
 
@@ -179,7 +179,7 @@ This command provides the recommended method for installing the Shadcn UI form c
 npx shadcn@latest add form
 ```
 
---------------------------------
+---
 
 ### Basic Navigation Menu Setup - React TSX
 
@@ -191,7 +191,7 @@ Minimal example demonstrating the basic structure of a Navigation Menu with one 
 Item OneLink
 ```
 
---------------------------------
+---
 
 ### Multiple Registry Setup with Mixed Authentication
 
@@ -201,26 +201,26 @@ Complete example showing how to configure multiple registries with different aut
 
 ```json
 {
- "registries": {
- "@shadcn": "https://ui.shadcn.com/r/{name}.json",
- "@company-ui": {
- "url": "https://registry.company.com/ui/{name}.json",
- "headers": {
- "Authorization": "Bearer ${COMPANY_TOKEN}"
- }
- },
- "@team": {
- "url": "https://team.company.com/{name}.json",
- "params": {
- "team": "frontend",
- "version": "${REGISTRY_VERSION}"
- }
- }
- }
+    "registries": {
+        "@shadcn": "https://ui.shadcn.com/r/{name}.json",
+        "@company-ui": {
+            "url": "https://registry.company.com/ui/{name}.json",
+            "headers": {
+                "Authorization": "Bearer ${COMPANY_TOKEN}"
+            }
+        },
+        "@team": {
+            "url": "https://team.company.com/{name}.json",
+            "params": {
+                "team": "frontend",
+                "version": "${REGISTRY_VERSION}"
+            }
+        }
+    }
 }
 ```
 
---------------------------------
+---
 
 ### Add Component Definition to shadcn registry.json
 
@@ -230,27 +230,27 @@ This JSON snippet shows how to register a component, like `hello-world`, within 
 
 ```json
 {
- "$schema": "https://ui.shadcn.com/schema/registry.json",
- "name": "acme",
- "homepage": "https://acme.com",
- "items": [
- {
- "name": "hello-world",
- "type": "registry:block",
- "title": "Hello World",
- "description": "A simple hello world component.",
- "files": [
- {
- "path": "registry/new-york/hello-world/hello-world.tsx",
- "type": "registry:component"
- }
- ]
- }
- ]
+    "$schema": "https://ui.shadcn.com/schema/registry.json",
+    "name": "acme",
+    "homepage": "https://acme.com",
+    "items": [
+        {
+            "name": "hello-world",
+            "type": "registry:block",
+            "title": "Hello World",
+            "description": "A simple hello world component.",
+            "files": [
+                {
+                    "path": "registry/new-york/hello-world/hello-world.tsx",
+                    "type": "registry:component"
+                }
+            ]
+        }
+    ]
 }
 ```
 
---------------------------------
+---
 
 ### Install Project Dependencies using npm
 
@@ -262,7 +262,7 @@ This bash command installs a set of essential npm packages for the project. Thes
 npm install class-variance-authority clsx tailwind-merge lucide-react tw-animate-css
 ```
 
---------------------------------
+---
 
 ### Install React Resizable Panels Dependency Manually
 
@@ -274,7 +274,7 @@ This `npm` command installs the core `react-resizable-panels` library, which the
 npm install react-resizable-panels
 ```
 
---------------------------------
+---
 
 ### Install Shadcn UI Skeleton component using CLI
 
@@ -286,7 +286,7 @@ Provides the command-line instruction to add the `Skeleton` component to your pr
 npx shadcn@latest add skeleton
 ```
 
---------------------------------
+---
 
 ### Install Dependencies with pnpm
 
@@ -298,7 +298,7 @@ Installs project dependencies using pnpm package manager. Required before starti
 pnpm install
 ```
 
---------------------------------
+---
 
 ### Install Pagination Component - Bash CLI
 
@@ -310,7 +310,7 @@ Command-line installation of the pagination component using the shadcn CLI tool.
 npx shadcn@latest add pagination
 ```
 
---------------------------------
+---
 
 ### Install Sonner Dependencies Manually
 
@@ -322,7 +322,7 @@ Manual installation command that installs Sonner and next-themes packages requir
 npm install sonner next-themes
 ```
 
---------------------------------
+---
 
 ### Install Radix UI Separator Dependency via npm
 
@@ -334,7 +334,7 @@ Install the core Radix UI React Separator dependency required for manual setup. 
 npm install @radix-ui/react-separator
 ```
 
---------------------------------
+---
 
 ### Install Checkbox Component via CLI - Bash
 
@@ -346,7 +346,7 @@ Command-line installation method for adding the checkbox component to a shadcn/u
 npx shadcn@latest add checkbox
 ```
 
---------------------------------
+---
 
 ### Install Aspect Ratio Dependencies Manually
 
@@ -358,7 +358,7 @@ Manually installs the required Radix UI aspect-ratio dependency. Use this approa
 npm install @radix-ui/react-aspect-ratio
 ```
 
---------------------------------
+---
 
 ### Install Input Component via CLI
 
@@ -370,7 +370,7 @@ Install the Input component using the shadcn CLI tool. This command downloads an
 npx shadcn@latest add input
 ```
 
---------------------------------
+---
 
 ### Create Remix Project with create-remix
 
@@ -382,7 +382,7 @@ Initialize a new Remix project using the create-remix command-line tool. This se
 npx create-remix@latest my-app
 ```
 
---------------------------------
+---
 
 ### Install Shadcn UI Context Menu component via CLI (Bash)
 
@@ -394,7 +394,7 @@ This command demonstrates how to easily add the Shadcn UI Context Menu component
 npx shadcn@latest add context-menu
 ```
 
---------------------------------
+---
 
 ### Install Vaul Dependency for Manual Setup
 
@@ -406,7 +406,7 @@ Manually install the Vaul package as a dependency when setting up the Drawer com
 npm install vaul
 ```
 
---------------------------------
+---
 
 ### Install Recharts Dependency via npm
 
@@ -418,7 +418,7 @@ Installs the Recharts library as a project dependency for manual setup. Required
 npm install recharts
 ```
 
---------------------------------
+---
 
 ### Install Shadcn UI Command Component
 
@@ -434,7 +434,7 @@ npx shadcn@latest add command
 npm install cmdk
 ```
 
---------------------------------
+---
 
 ### Install Components from Multiple Namespaced Registries
 
@@ -446,7 +446,7 @@ Use the @registry/name format to install components from different namespaced re
 npx shadcn add @acme/button @internal/auth-system
 ```
 
---------------------------------
+---
 
 ### Install Block and Override Primitives in shadcn/ui
 
@@ -456,19 +456,19 @@ Configure a registry item to install a block from shadcn/ui and override default
 
 ```json
 {
- "$schema": "https://ui.shadcn.com/schema/registry-item.json",
- "name": "custom-login",
- "type": "registry:block",
- "registryDependencies": [
- "login-01",
- "https://example.com/r/button.json",
- "https://example.com/r/input.json",
- "https://example.com/r/label.json"
- ]
+    "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+    "name": "custom-login",
+    "type": "registry:block",
+    "registryDependencies": [
+        "login-01",
+        "https://example.com/r/button.json",
+        "https://example.com/r/input.json",
+        "https://example.com/r/label.json"
+    ]
 }
 ```
 
---------------------------------
+---
 
 ### Define Initial shadcn registry.json Structure
 
@@ -478,16 +478,16 @@ This JSON snippet illustrates the basic structure for a `registry.json` file, wh
 
 ```json
 {
- "$schema": "https://ui.shadcn.com/schema/registry.json",
- "name": "acme",
- "homepage": "https://acme.com",
- "items": [
- // ...
- ]
+    "$schema": "https://ui.shadcn.com/schema/registry.json",
+    "name": "acme",
+    "homepage": "https://acme.com",
+    "items": [
+        // ...
+    ]
 }
 ```
 
---------------------------------
+---
 
 ### List All Components from a Registry
 
@@ -499,7 +499,7 @@ Display all available components from a specified namespaced registry. Useful fo
 npx shadcn list @acme
 ```
 
---------------------------------
+---
 
 ### Execute shadcn Registry Build Script
 
@@ -511,7 +511,7 @@ This command runs the `registry:build` script defined in `package.json`. Executi
 npm run registry:build
 ```
 
---------------------------------
+---
 
 ### Install Shadcn UI Select Component via CLI
 
@@ -523,7 +523,7 @@ This command illustrates the quickest way to add the Shadcn UI Select component 
 npx shadcn@latest add select
 ```
 
---------------------------------
+---
 
 ### Configure shadcn Build Script in package.json
 
@@ -533,13 +533,13 @@ This JSON snippet updates the `package.json` file by adding a `registry:build` s
 
 ```json
 {
- "scripts": {
- "registry:build": "shadcn build"
- }
+    "scripts": {
+        "registry:build": "shadcn build"
+    }
 }
 ```
 
---------------------------------
+---
 
 ### Install Resources from Namespaced Registries
 
@@ -558,7 +558,7 @@ npx shadcn@latest add @private/button
 npx shadcn@latest add @acme/header @internal/auth-utils
 ```
 
---------------------------------
+---
 
 ### Install Kbd Component via CLI (shadcn/ui)
 
@@ -570,7 +570,7 @@ Provides the command-line interface instruction to add the `Kbd` component to a 
 npx shadcn@latest add kbd
 ```
 
---------------------------------
+---
 
 ### Handle `shadcn/ui` Initialization with React 19 Peer Dependency Prompt (npm)
 
@@ -587,7 +587,7 @@ Some packages may fail to install due to peer dependency issues (see https://ui.
  Use --legacy-peer-deps
 ```
 
---------------------------------
+---
 
 ### Install shadcn/ui Label Component via CLI
 
@@ -599,7 +599,7 @@ This `bash` command uses the `shadcn/ui` CLI to quickly add the `Label` componen
 npx shadcn@latest add label
 ```
 
---------------------------------
+---
 
 ### Add Components to Monorepo Workspace
 
@@ -612,7 +612,7 @@ cd apps/web
 npx shadcn@latest add [COMPONENT]
 ```
 
---------------------------------
+---
 
 ### Install Shadcn UI Spinner Component via CLI (Bash)
 
@@ -624,7 +624,7 @@ Provides the command-line interface (CLI) instruction to add the Shadcn UI Spinn
 npx shadcn@latest add spinner
 ```
 
---------------------------------
+---
 
 ### Install Drawer Component via CLI
 
@@ -636,7 +636,7 @@ Install the shadcn Drawer component using the CLI tool. This is the recommended 
 npx shadcn@latest add drawer
 ```
 
---------------------------------
+---
 
 ### Install Navigation Menu via CLI - shadcn/ui
 
@@ -648,7 +648,7 @@ Quick installation command for adding the navigation-menu component to a shadcn/
 npx shadcn@latest add navigation-menu
 ```
 
---------------------------------
+---
 
 ### View Registry Component Before Installation
 
@@ -660,7 +660,7 @@ Preview a component from a namespaced registry without installing it. Displays c
 npx shadcn view @acme/auth-system
 ```
 
---------------------------------
+---
 
 ### Install Shadcn Hover Card Component via CLI
 
@@ -672,7 +672,7 @@ This command-line interface (CLI) snippet demonstrates how to add the Shadcn UI 
 npx shadcn@latest add hover-card
 ```
 
---------------------------------
+---
 
 ### Install Toggle Group Dependencies via npm
 
@@ -684,7 +684,7 @@ Install the required Radix UI toggle group dependency manually using npm. Requir
 npm install @radix-ui/react-toggle-group
 ```
 
---------------------------------
+---
 
 ### Import and Use Button Component in TanStack Start
 
@@ -705,7 +705,7 @@ Click me
 }
 ```
 
---------------------------------
+---
 
 ### Install Carousel Component via CLI
 
@@ -717,7 +717,7 @@ shadcn/ui CLI command to automatically install and configure the carousel compon
 npx shadcn@latest add carousel
 ```
 
---------------------------------
+---
 
 ### Install Resizable Component using Shadcn CLI
 
@@ -729,7 +729,7 @@ This command-line interface (CLI) snippet shows how to add the `resizable` compo
 npx shadcn@latest add resizable
 ```
 
---------------------------------
+---
 
 ### Install Menubar via CLI - Bash
 
@@ -741,7 +741,7 @@ Command to install the menubar component using the shadcn package manager CLI. T
 npx shadcn@latest add menubar
 ```
 
---------------------------------
+---
 
 ### Install Radio Group via CLI - Bash
 
@@ -753,7 +753,7 @@ Command-line interface installation method for adding the radio-group component 
 npx shadcn@latest add radio-group
 ```
 
---------------------------------
+---
 
 ### Define reusable registry block with components
 
@@ -763,28 +763,28 @@ Create a registry block item that bundles multiple related files (pages and comp
 
 ```json
 {
- "$schema": "https://ui.shadcn.com/schema/registry-item.json",
- "name": "login-01",
- "type": "registry:block",
- "description": "A simple login form.",
- "registryDependencies": ["button", "card", "input", "label"],
- "files": [
- {
- "path": "blocks/login-01/page.tsx",
- "content": "import { LoginForm } ...",
- "type": "registry:page",
- "target": "app/login/page.tsx"
- },
- {
- "path": "blocks/login-01/components/login-form.tsx",
- "content": "...",
- "type": "registry:component"
- }
- ]
+    "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+    "name": "login-01",
+    "type": "registry:block",
+    "description": "A simple login form.",
+    "registryDependencies": ["button", "card", "input", "label"],
+    "files": [
+        {
+            "path": "blocks/login-01/page.tsx",
+            "content": "import { LoginForm } ...",
+            "type": "registry:page",
+            "target": "app/login/page.tsx"
+        },
+        {
+            "path": "blocks/login-01/components/login-form.tsx",
+            "content": "...",
+            "type": "registry:component"
+        }
+    ]
 }
 ```
 
---------------------------------
+---
 
 ### Install Radix UI Context Menu dependency manually (Bash)
 
@@ -796,7 +796,7 @@ This command is part of the manual installation process, showing how to install 
 npm install @radix-ui/react-context-menu
 ```
 
---------------------------------
+---
 
 ### Install Native Select component via CLI
 
@@ -808,7 +808,7 @@ Use the shadcn CLI to easily add the Native Select component to your project. Th
 npx shadcn@latest add native-select
 ```
 
---------------------------------
+---
 
 ### Install Empty Component via CLI
 
@@ -820,7 +820,7 @@ Command to install the Empty component using the shadcn package manager. Automat
 npx shadcn@latest add empty
 ```
 
---------------------------------
+---
 
 ### Install shadcn Table component and TanStack React Table
 
@@ -836,7 +836,7 @@ npx shadcn@latest add table
 npm install @tanstack/react-table
 ```
 
---------------------------------
+---
 
 ### Install Switch Component via CLI
 
@@ -848,7 +848,7 @@ Command-line installation method for adding the Switch component to a shadcn/ui 
 npx shadcn@latest add switch
 ```
 
---------------------------------
+---
 
 ### Start Development Server with pnpm
 
@@ -860,7 +860,7 @@ Starts the development server for the www application at http://localhost:3333. 
 pnpm www:dev
 ```
 
---------------------------------
+---
 
 ### Install Shadcn UI Badge component via CLI (Bash)
 
@@ -872,7 +872,7 @@ This command line interface snippet demonstrates how to add the Shadcn UI Badge 
 npx shadcn@latest add badge
 ```
 
---------------------------------
+---
 
 ### Interactive Configuration Questions for shadcn init
 
@@ -891,7 +891,7 @@ Configure the import alias for utils: › @/lib/utils
 Are you using React Server Components? › no / yes
 ```
 
---------------------------------
+---
 
 ### Item Component Installation - Bash
 
@@ -903,7 +903,7 @@ CLI command to install the Item component from shadcn. Requires Node.js and npm/
 npx shadcn@latest add item
 ```
 
---------------------------------
+---
 
 ### CLI Command: Initialize Project from Local File
 
@@ -915,7 +915,7 @@ The `shadcn` CLI now supports initializing projects from local JSON files. This 
 npx shadcn init ./template.json
 ```
 
---------------------------------
+---
 
 ### Install Tailwind CSS and Autoprefixer
 
@@ -927,7 +927,7 @@ Install Tailwind CSS and Autoprefixer as development dependencies to enable styl
 npm install -D tailwindcss@latest autoprefixer@latest
 ```
 
---------------------------------
+---
 
 ### Install Tooltip Dependencies via npm
 
@@ -939,7 +939,7 @@ Manual installation of the Radix UI tooltip dependency. Required when not using 
 npm install @radix-ui/react-tooltip
 ```
 
---------------------------------
+---
 
 ### Install Shadcn UI Dialog component using CLI or npm
 
@@ -955,7 +955,7 @@ npx shadcn@latest add dialog
 npm install @radix-ui/react-dialog
 ```
 
---------------------------------
+---
 
 ### Install Toggle Component via CLI
 
@@ -967,7 +967,7 @@ Install the Toggle component using the shadcn CLI tool. This command downloads a
 npx shadcn@latest add toggle
 ```
 
---------------------------------
+---
 
 ### Install Sheet Component via CLI
 
@@ -979,7 +979,7 @@ Command to install the Sheet component and its dependencies using the shadcn CLI
 npx shadcn@latest add sheet
 ```
 
---------------------------------
+---
 
 ### Install Shadcn UI Popover component
 
@@ -995,7 +995,7 @@ npx shadcn@latest add popover
 npm install @radix-ui/react-popover
 ```
 
---------------------------------
+---
 
 ### Install Sonner via CLI
 
@@ -1007,7 +1007,7 @@ Command-line installation method using shadcn-cli to add the Sonner component to
 npx shadcn@latest add sonner
 ```
 
---------------------------------
+---
 
 ### Complete Bar Chart with XAxis Implementation
 
@@ -1051,7 +1051,7 @@ export function Component() {
 }
 ```
 
---------------------------------
+---
 
 ### Environment Variables Setup
 
@@ -1063,7 +1063,7 @@ Set registry authentication token in .env.local file. This stores the secret tok
 REGISTRY_TOKEN=your_secret_token_here
 ```
 
---------------------------------
+---
 
 ### Install Table Component via CLI
 
@@ -1075,7 +1075,7 @@ CLI command to install the shadcn/ui Table component using npx. This automatical
 npx shadcn@latest add table
 ```
 
---------------------------------
+---
 
 ### Install next-themes package
 
@@ -1087,7 +1087,7 @@ This command installs the `next-themes` package, a crucial dependency for implem
 npm install next-themes
 ```
 
---------------------------------
+---
 
 ### Install Separator Component via CLI
 
@@ -1099,7 +1099,7 @@ Install the Separator component using the shadcn CLI tool. This command automati
 npx shadcn@latest add separator
 ```
 
---------------------------------
+---
 
 ### Install Menubar Dependencies - Bash
 
@@ -1111,7 +1111,7 @@ Manual installation command for the Radix UI menubar dependency. Use this when m
 npm install @radix-ui/react-menubar
 ```
 
---------------------------------
+---
 
 ### Install Tooltip via shadcn CLI
 
@@ -1123,7 +1123,7 @@ Command-line installation method for adding the Tooltip component to a shadcn/ui
 npx shadcn@latest add tooltip
 ```
 
---------------------------------
+---
 
 ### Install Slider Component via CLI
 
@@ -1135,7 +1135,7 @@ Command-line installation method for adding the Slider component to a shadcn/ui 
 npx shadcn@latest add slider
 ```
 
---------------------------------
+---
 
 ### Install Shadcn Alert component via CLI
 
@@ -1147,7 +1147,7 @@ This command provides a quick way to add the Shadcn Alert component to your proj
 npx shadcn@latest add alert
 ```
 
---------------------------------
+---
 
 ### Create a Basic shadcn Component in TSX
 
@@ -1163,7 +1163,7 @@ export function HelloWorld() {
 }
 ```
 
---------------------------------
+---
 
 ### Install Radix UI Switch Dependency
 
@@ -1175,7 +1175,7 @@ NPM installation command for the Radix UI switch primitive dependency. Required 
 npm install @radix-ui/react-switch
 ```
 
---------------------------------
+---
 
 ### Button Size Variants Example
 
@@ -1204,7 +1204,7 @@ Large
 }
 ```
 
---------------------------------
+---
 
 ### Create custom style extending shadcn/ui
 
@@ -1214,30 +1214,26 @@ Define a custom registry style that extends shadcn/ui by installing dependencies
 
 ```json
 {
- "$schema": "https://ui.shadcn.com/schema/registry-item.json",
- "name": "example-style",
- "type": "registry:style",
- "dependencies": ["@tabler/icons-react"],
- "registryDependencies": [
- "login-01",
- "calendar",
- "https://example.com/r/editor.json"
- ],
- "cssVars": {
- "theme": {
- "font-sans": "Inter, sans-serif"
- },
- "light": {
- "brand": "20 14.3% 4.1%"
- },
- "dark": {
- "brand": "20 14.3% 4.1%"
- }
- }
+    "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+    "name": "example-style",
+    "type": "registry:style",
+    "dependencies": ["@tabler/icons-react"],
+    "registryDependencies": ["login-01", "calendar", "https://example.com/r/editor.json"],
+    "cssVars": {
+        "theme": {
+            "font-sans": "Inter, sans-serif"
+        },
+        "light": {
+            "brand": "20 14.3% 4.1%"
+        },
+        "dark": {
+            "brand": "20 14.3% 4.1%"
+        }
+    }
 }
 ```
 
---------------------------------
+---
 
 ### Example Shadcn UI Registry Configuration (JSON)
 
@@ -1247,39 +1243,39 @@ This JSON configuration demonstrates a valid structure for a Shadcn UI registry.
 
 ```json
 {
- "$schema": "https://ui.shadcn.com/schema/registry.json",
- "name": "acme",
- "homepage": "https://acme.com",
- "items": [
- {
- "name": "login-form",
- "type": "registry:component",
- "title": "Login Form",
- "description": "A login form component.",
- "files": [
- {
- "path": "registry/new-york/auth/login-form.tsx",
- "type": "registry:component"
- }
- ]
- },
- {
- "name": "example-login-form",
- "type": "registry:component",
- "title": "Example Login Form",
- "description": "An example showing how to use the login form component.",
- "files": [
- {
- "path": "registry/new-york/examples/example-login-form.tsx",
- "type": "registry:component"
- }
- ]
- }
- ]
+    "$schema": "https://ui.shadcn.com/schema/registry.json",
+    "name": "acme",
+    "homepage": "https://acme.com",
+    "items": [
+        {
+            "name": "login-form",
+            "type": "registry:component",
+            "title": "Login Form",
+            "description": "A login form component.",
+            "files": [
+                {
+                    "path": "registry/new-york/auth/login-form.tsx",
+                    "type": "registry:component"
+                }
+            ]
+        },
+        {
+            "name": "example-login-form",
+            "type": "registry:component",
+            "title": "Example Login Form",
+            "description": "An example showing how to use the login form component.",
+            "files": [
+                {
+                    "path": "registry/new-york/examples/example-login-form.tsx",
+                    "type": "registry:component"
+                }
+            ]
+        }
+    ]
 }
 ```
 
---------------------------------
+---
 
 ### Manually install Radix UI Alert Dialog dependency with npm
 
@@ -1291,7 +1287,7 @@ This `bash` command is used for manual installation of the Shadcn UI Alert Dialo
 npm install @radix-ui/react-alert-dialog
 ```
 
---------------------------------
+---
 
 ### Component Diff Output Example
 
@@ -1306,7 +1302,7 @@ const alertVariants = cva(
 )
 ```
 
---------------------------------
+---
 
 ### Install Button Dependencies via npm
 
@@ -1318,7 +1314,7 @@ Manual installation of required dependencies for the Button component. Install t
 npm install @radix-ui/react-slot
 ```
 
---------------------------------
+---
 
 ### CLI Error: Missing Registry Environment Variables
 
@@ -1333,7 +1329,7 @@ Registry "@private" requires the following environment variables:
 Set the required environment variables to your .env or .env.local file.
 ```
 
---------------------------------
+---
 
 ### Install Multiple Resources from Different Namespaces
 
@@ -1345,7 +1341,7 @@ Install multiple resources from different namespaced registries in a single comm
 npx shadcn@latest add @acme/header @lib/auth-utils @ai/chatbot-rules
 ```
 
---------------------------------
+---
 
 ### Define Universal Registry Item for ESLint Configuration (shadcn/ui)
 
@@ -1355,21 +1351,21 @@ This JSON configuration defines a shadcn/ui registry item named 'my-eslint-confi
 
 ```json
 {
- "$schema": "https://ui.shadcn.com/schema/registry-item.json",
- "name": "my-eslint-config",
- "type": "registry:item",
- "files": [
- {
- "path": "/path/to/your/registry/default/custom-eslint.json",
- "type": "registry:file",
- "target": "~/.eslintrc.json",
- "content": "..."
- }
- ]
+    "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+    "name": "my-eslint-config",
+    "type": "registry:item",
+    "files": [
+        {
+            "path": "/path/to/your/registry/default/custom-eslint.json",
+            "type": "registry:file",
+            "target": "~/.eslintrc.json",
+            "content": "..."
+        }
+    ]
 }
 ```
 
---------------------------------
+---
 
 ### Configure Plugin with NPM Dependencies in shadcn UI
 
@@ -1394,7 +1390,7 @@ Shows how to include external npm packages as dependencies when using Tailwind C
 }
 ```
 
---------------------------------
+---
 
 ### Install Shadcn Accordion Component (bash)
 
@@ -1410,7 +1406,7 @@ npx shadcn@latest add accordion
 npm install @radix-ui/react-accordion
 ```
 
---------------------------------
+---
 
 ### Install Navigation Menu Dependencies - npm
 
@@ -1422,7 +1418,7 @@ Manual installation of required Radix UI navigation menu dependency. Use this ap
 npm install @radix-ui/react-navigation-menu
 ```
 
---------------------------------
+---
 
 ### Configure Secure Custom Registry with Authorization Headers (JSON)
 
@@ -1432,17 +1428,17 @@ Provides an example of configuring a custom company registry in `components.json
 
 ```json
 {
- "@company": {
- "url": "https://registry.company.com/v1/{name}.json",
- "headers": {
- "Authorization": "Bearer ${COMPANY_TOKEN}",
- "X-Registry-Version": "1.0"
- }
- }
+    "@company": {
+        "url": "https://registry.company.com/v1/{name}.json",
+        "headers": {
+            "Authorization": "Bearer ${COMPANY_TOKEN}",
+            "X-Registry-Version": "1.0"
+        }
+    }
 }
 ```
 
---------------------------------
+---
 
 ### Create components.json Configuration File for shadcn/ui
 
@@ -1452,29 +1448,29 @@ This JSON configuration file sets up the shadcn/ui component library with New Yo
 
 ```json
 {
- "$schema": "https://ui.shadcn.com/schema.json",
- "style": "new-york",
- "rsc": false,
- "tsx": true,
- "tailwind": {
- "config": "",
- "css": "src/styles/globals.css",
- "baseColor": "neutral",
- "cssVariables": true,
- "prefix": ""
- },
- "aliases": {
- "components": "@/components",
- "utils": "@/lib/utils",
- "ui": "@/components/ui",
- "lib": "@/lib",
- "hooks": "@/hooks"
- },
- "iconLibrary": "lucide"
+    "$schema": "https://ui.shadcn.com/schema.json",
+    "style": "new-york",
+    "rsc": false,
+    "tsx": true,
+    "tailwind": {
+        "config": "",
+        "css": "src/styles/globals.css",
+        "baseColor": "neutral",
+        "cssVariables": true,
+        "prefix": ""
+    },
+    "aliases": {
+        "components": "@/components",
+        "utils": "@/lib/utils",
+        "ui": "@/components/ui",
+        "lib": "@/lib",
+        "hooks": "@/hooks"
+    },
+    "iconLibrary": "lucide"
 }
 ```
 
---------------------------------
+---
 
 ### Install Button Component via CLI
 
@@ -1486,7 +1482,7 @@ Quick installation of the Button component using the shadcn CLI tool. Automatica
 npx shadcn@latest add button
 ```
 
---------------------------------
+---
 
 ### Install Tabs Dependencies via NPM - Bash
 
@@ -1498,7 +1494,7 @@ Manual npm installation of the Radix UI Tabs dependency. Use this method when ma
 npm install @radix-ui/react-tabs
 ```
 
---------------------------------
+---
 
 ### Install Checkbox Dependencies - Bash
 
@@ -1510,7 +1506,7 @@ Manual installation command for the Radix UI checkbox dependency. Required when 
 npm install @radix-ui/react-checkbox
 ```
 
---------------------------------
+---
 
 ### Add Components with add Command
 
@@ -1544,7 +1540,7 @@ Options:
  -h, --help display help for command
 ```
 
---------------------------------
+---
 
 ### Create new React project with Vite
 
@@ -1556,7 +1552,7 @@ Initializes a new React project using Vite. This command uses the latest version
 npm create vite@latest
 ```
 
---------------------------------
+---
 
 ### Manually Install Radix UI Label npm Dependency
 
@@ -1568,7 +1564,7 @@ For manual installation of the `shadcn/ui` Label component, this `npm` command i
 npm install @radix-ui/react-label
 ```
 
---------------------------------
+---
 
 ### Install Single Resource from Namespaced Registry
 
@@ -1580,7 +1576,7 @@ Install a single resource from a configured namespace using the shadcn CLI. The 
 npx shadcn@latest add @v0/dashboard
 ```
 
---------------------------------
+---
 
 ### Add UI Components with add Command
 
@@ -1592,7 +1588,7 @@ Use the add command to install UI components from shadcn into your project. The 
 npx shadcn@latest add
 ```
 
---------------------------------
+---
 
 ### Install Button Group via CLI - Bash
 
@@ -1604,7 +1600,7 @@ Command-line installation script for the Button Group component using the shadcn
 npx shadcn@latest add button-group
 ```
 
---------------------------------
+---
 
 ### Radix UI Migration: Import Path Update Example
 
@@ -1617,7 +1613,7 @@ This `diff` example illustrates the effect of the `radix` migration command on c
 + import { AlertDialog as AlertDialogPrimitive } from "radix-ui"
 ```
 
---------------------------------
+---
 
 ### Initialize shadcn Project with init Command
 
@@ -1652,7 +1648,7 @@ Options:
  -h, --help display help for command
 ```
 
---------------------------------
+---
 
 ### Install Dropdown Menu Dependencies
 
@@ -1664,7 +1660,7 @@ NPM installation command for the Radix UI dropdown menu primitive dependency. Re
 npm install @radix-ui/react-dropdown-menu
 ```
 
---------------------------------
+---
 
 ### Install Toggle Component Dependencies Manually
 
@@ -1676,7 +1672,7 @@ Install the required Radix UI toggle dependency manually for projects that don't
 npm install @radix-ui/react-toggle
 ```
 
---------------------------------
+---
 
 ### Add Components with Shadcn CLI
 
@@ -1688,7 +1684,7 @@ This command demonstrates how to use the Shadcn CLI to add a specific component 
 npx shadcn add @ai-elements/prompt-input
 ```
 
---------------------------------
+---
 
 ### Initialize MCP Server for shadcn Registries
 
@@ -1700,7 +1696,7 @@ Set up MCP (Model Context Protocol) server for all configured registries with ze
 npx shadcn@latest mcp init
 ```
 
---------------------------------
+---
 
 ### Install Chart Component via CLI
 
@@ -1712,7 +1708,7 @@ Installs the chart.tsx component using shadcn's CLI tool. This command automatic
 npx shadcn@latest add chart
 ```
 
---------------------------------
+---
 
 ### Install Card Component via CLI - shadcn
 

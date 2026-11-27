@@ -6,7 +6,8 @@ import { NewTabLink } from '@/components/decorators'
 import { Tooltip } from '@/components/Tooltip'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import usePermission from '@/hooks/usePermission'
-import { useShowDeviceStore } from '@/modules/shared/system/device-info-overlay/store/useShowDeviceStore'
+import { formatCoverage } from '@/modules/shared/system/coverage'
+import { useSystemEditSheet } from '@/modules/shared/system/system-edit/useSystemEditSheet'
 import { FALLBACK_IMAGE } from '@/types/constants/common'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
@@ -36,7 +37,7 @@ export const useSystemsColumns = ({
     const { setUid, pending } = useSubsystems(tableId, enableQueryURL)
     const canEdit = usePermission([ROLE.SYSTEM_EDIT])
     const { queryKey } = useSystems(tableId, false, undefined, enableQueryURL)
-    const { setUID, setOpenDeviceInfo } = useShowDeviceStore()
+    const openSystemEdit = useSystemEditSheet()
 
     const columns = useMemo(
         (): ColumnDef<SystemDetail, any>[] => [
@@ -50,13 +51,10 @@ export const useSystemsColumns = ({
                 accessorFn: row => row?.miniImageUrl?.[0],
                 cell: ({ getValue, row: { original } }) => {
                     return (
-                        <Tooltip content="Show device info">
+                        <Tooltip content="Show system detail">
                             <button
                                 onClick={() => {
-                                    if (tableId === 'systems') {
-                                        setUID(original.uid)
-                                        setOpenDeviceInfo(true)
-                                    }
+                                    if (tableId === 'systems') openSystemEdit(original.uid)
                                 }}
                                 className={`group ${
                                     tableId === 'systems' ? 'cursor-pointer' : 'cursor-default'
@@ -196,10 +194,7 @@ export const useSystemsColumns = ({
             },
             {
                 header: 'SP Coverage',
-                accessorFn: row =>
-                    row.statistics?.sp_coverage &&
-                    (parseFloat(Number(row.statistics?.sp_coverage).toFixed(2)) * 100).toString() +
-                        '%',
+                accessorFn: row => formatCoverage(row.statistics?.sp_coverage) ?? undefined,
                 id: 'statistics.sp_coverage',
                 size: 200,
             },
@@ -307,16 +302,7 @@ export const useSystemsColumns = ({
                 size: 150,
             },
         ],
-        [
-            setUid,
-            canEdit,
-            hideButtons,
-            tableId,
-            enableDragAndDrop,
-            queryKey,
-            setUID,
-            setOpenDeviceInfo,
-        ],
+        [setUid, canEdit, hideButtons, tableId, enableDragAndDrop, queryKey, openSystemEdit],
     )
 
     return { columns, pending }

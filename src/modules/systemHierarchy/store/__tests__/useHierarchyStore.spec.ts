@@ -1,29 +1,21 @@
 import { act } from '@testing-library/react'
 
-import { GRAPH_LAYOUT_MODES } from '../../types/graph'
 import { useHierarchyStore } from '../useHierarchyStore'
 
 const reset = () =>
     act(() =>
         useHierarchyStore.setState({
             expandedNodes: [],
-            graphLayoutMode: GRAPH_LAYOUT_MODES.VERTICAL,
-            graphExpandedNodes: [],
-            graphExpandedEdges: [],
             copiedSystemUid: null,
         }),
     )
 
-const node = (uid: string) => ({ uid, label: uid }) as any
-const edge = (uid: string) => ({ uid, source: 'a', target: 'b' }) as any
-
 describe('useHierarchyStore', () => {
     beforeEach(reset)
 
-    it('defaults to empty expanded list and VERTICAL graph layout', () => {
+    it('defaults to empty expanded list', () => {
         const s = useHierarchyStore.getState()
         expect(s.expandedNodes).toEqual([])
-        expect(s.graphLayoutMode).toBe(GRAPH_LAYOUT_MODES.VERTICAL)
     })
 
     it('toggleNode adds, then removes', () => {
@@ -65,37 +57,25 @@ describe('useHierarchyStore', () => {
         act(() => useHierarchyStore.getState().setCopiedSystemUid(null))
         expect(useHierarchyStore.getState().copiedSystemUid).toBeNull()
     })
+})
 
-    it('addGraphExpanded de-dupes by uid', () => {
-        act(() =>
-            useHierarchyStore
-                .getState()
-                .addGraphExpanded([node('a'), node('b')], [edge('e1')]),
+describe('useHierarchyStore lastTab rehydration', () => {
+    it('ignores an unknown persisted tab', async () => {
+        localStorage.setItem(
+            'hierarchy-expanded-nodes',
+            JSON.stringify({ state: { expandedNodes: ['a'], lastTab: 'bogus' }, version: 0 }),
         )
-        act(() =>
-            useHierarchyStore
-                .getState()
-                .addGraphExpanded([node('b'), node('c')], [edge('e1'), edge('e2')]),
-        )
-        const s = useHierarchyStore.getState()
-        expect(s.graphExpandedNodes.map(n => n.uid)).toEqual(['a', 'b', 'c'])
-        expect(s.graphExpandedEdges.map(e => e.uid)).toEqual(['e1', 'e2'])
+        await useHierarchyStore.persist.rehydrate()
+        expect(useHierarchyStore.getState().lastTab).toBe('detail')
+        expect(useHierarchyStore.getState().expandedNodes).toEqual(['a'])
     })
 
-    it('setGraphExpanded replaces and resetGraphExpanded wipes', () => {
-        act(() =>
-            useHierarchyStore.getState().setGraphExpanded([node('a')], [edge('e1')]),
+    it('restores a valid persisted tab', async () => {
+        localStorage.setItem(
+            'hierarchy-expanded-nodes',
+            JSON.stringify({ state: { expandedNodes: [], lastTab: 'history' }, version: 0 }),
         )
-        expect(useHierarchyStore.getState().graphExpandedNodes).toHaveLength(1)
-        act(() => useHierarchyStore.getState().resetGraphExpanded())
-        expect(useHierarchyStore.getState().graphExpandedNodes).toEqual([])
-        expect(useHierarchyStore.getState().graphExpandedEdges).toEqual([])
-    })
-
-    it('setGraphLayoutMode flips between modes', () => {
-        act(() =>
-            useHierarchyStore.getState().setGraphLayoutMode(GRAPH_LAYOUT_MODES.HORIZONTAL),
-        )
-        expect(useHierarchyStore.getState().graphLayoutMode).toBe(GRAPH_LAYOUT_MODES.HORIZONTAL)
+        await useHierarchyStore.persist.rehydrate()
+        expect(useHierarchyStore.getState().lastTab).toBe('history')
     })
 })

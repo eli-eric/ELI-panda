@@ -1,29 +1,21 @@
 import type { NextPage } from 'next'
-import dynamic from 'next/dynamic'
-import Head from 'next/head'
-import { Fragment } from 'react'
-import { useIntl } from 'react-intl'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
-import { message } from '@/i18n/src/messages'
+import LoaderComponent from '@/components/loader.comp'
+import { PATH } from '@/types/constants/paths'
 
-const SystemHierarchyExplorerContainer = dynamic(
-    () => import('@/modules/systemHierarchy/SystemHierarchyExplorer.cont'),
-    {
-        ssr: false,
-    },
-)
+// The explorer moved to /systems/explorer — old links (bookmarks, QR codes,
+// shared deep links) are forwarded with their query string intact.
+const SystemsHierarchyRedirectPage: NextPage = () => {
+    const { isReady, query, replace } = useRouter()
 
-const SystemHierarchyPage: NextPage = () => {
-    const { formatMessage: fm } = useIntl()
+    useEffect(() => {
+        if (!isReady) return
+        void replace({ pathname: PATH.SYSTEMS_EXPLORER, query })
+    }, [isReady, query, replace])
 
-    return (
-        <Fragment>
-            <Head>
-                <title>{fm({ id: message.systemHierarchy.pages.hierarchy })}</title>
-            </Head>
-            <SystemHierarchyExplorerContainer />
-        </Fragment>
-    )
+    return <LoaderComponent />
 }
 
-export default SystemHierarchyPage
+export default SystemsHierarchyRedirectPage

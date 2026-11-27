@@ -4,7 +4,7 @@ The Systems Multi-Move module is the place to **re-parent many systems at once**
 
 Every selected source keeps its identity — UID, name, code, type, attached physical item, engineering relationships, persons, attachments, and full change history. Only each source's `HAS_SUBSYSTEM` link to its parent is replaced. The descendants of each source come along, since they are reached through their parent's edge.
 
-`[SCREENSHOT PLACEHOLDER: Systems Multi-Move landing — two side-by-side tables, left labeled implicitly with multi-select checkboxes (Systems to Move), right with a single-select destination column, the Move Systems here button visible on the destination's Name row]`
+![Systems Multi-Move landing page with its two side-by-side tables](./images/multi-move-page.png)
 
 ## Access & Responsibilities
 
@@ -60,7 +60,7 @@ For the single-system equivalent see [Systems Moving](../systemsMoving/README.md
 
 ## Data model reference
 
-> 🔧 *This section is for engineers reading the docs in the repo. The Confluence generator strips it.*
+> 🔧 *This section is for engineers reading the docs in the repo. The wiki generator strips it.*
 >
 > The bulk move is committed by a single `POST /systems/move` request (`systemsMove` API key) with payload `{ systemsToMoveUids: string[], targetParentSystemUid: string }`. The endpoint returns `text/plain` on success; client toasts are emitted client-side. Per-source `WAS_MOVED_FROM` audit edges are written server-side, mirroring the single-system flow.
 

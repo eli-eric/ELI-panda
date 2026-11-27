@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react'
 
-import useTableStateStore from '@/store/useTableStateStore'
 import useQueryManager from '@/hooks/useQueryManager'
+import useTableStateStore from '@/store/useTableStateStore'
 
 let querySearch: string | null = null
 let queryCategory: string | null = null
@@ -9,7 +9,7 @@ let queryFilter: string | null = null
 let queryPage: string | null = null
 let queryPageSize: string | null = null
 
-jest.mock('next-usequerystate', () => ({
+jest.mock('nuqs', () => ({
     useQueryState: (key: string) => {
         switch (key) {
             case 'category':

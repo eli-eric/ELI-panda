@@ -2,7 +2,9 @@ import { render, screen } from '@testing-library/react'
 import React from 'react'
 import { IntlProvider } from 'react-intl'
 
-import type { SystemLeaf } from '../../../types'
+import type { SystemDetail } from '@/modules/shared/system/system-detail'
+import { makeSystemDetail } from '@/testutils/factories/systemDetail'
+
 import { HIERARCHY_TABS } from '../../../types/constants'
 import { SystemDetailTabsContainer } from '../SystemDetailTabs.cont'
 
@@ -14,10 +16,8 @@ jest.mock('../../../hooks/useHierarchyNavigation', () => ({
         setActiveTab: jest.fn(),
         selectedParentUid: null,
         selectedLeafUid: 'sys-1',
-        activeView: 'tree',
         selectParent: jest.fn(),
         selectLeaf: jest.fn(),
-        setActiveView: jest.fn(),
         goBackToLeaves: jest.fn(),
     }),
 }))
@@ -61,7 +61,7 @@ jest.mock('../../tabs/HistoryTab.cont', () => ({
     HistoryTabContainer: () => <div data-testid="history-tab-stub" />,
 }))
 jest.mock('../../tabs/GraphTab.cont', () => ({
-    GraphTabContainer: ({ system }: { system: SystemLeaf }) => (
+    GraphTabContainer: ({ system }: { system: SystemDetail }) => (
         <div data-testid="graph-tab-stub" data-root-uid={system.uid} />
     ),
 }))
@@ -78,13 +78,7 @@ const messages: Record<string, string> = {
     'systemHierarchy.tabs.graph': 'Graph',
 }
 
-const system: SystemLeaf = {
-    uid: 'sys-1',
-    name: 'Test System',
-    systemCode: 'SYS-001',
-    physicalItem: null,
-    parentPath: null,
-} as SystemLeaf
+const system = makeSystemDetail({ uid: 'sys-1', name: 'Test System', systemCode: 'SYS-001' })
 
 const renderTabs = () =>
     render(

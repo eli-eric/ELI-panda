@@ -1,15 +1,15 @@
-import { useSystemCreateSheet } from '@/modules/shared/system/system-create/useSystemCreateSheet'
 import { SearchBarButtonsComponent } from '@/modules/shared/table/SearchBar'
 import { ROLE } from '@/types/constants/roles'
 
+import { useCreateSystemFromOverview } from '../hooks/useCreateSystemFromOverview'
 import { ExportCsvButton } from './ExportCsvButton'
 import { SystemFilterButtonContainer } from './filters/SystemsFilterButton.cont'
 
 export const SearchBarButtons = () => {
-    const openCreateSheet = useSystemCreateSheet()
+    const openCreateSystem = useCreateSystemFromOverview()
 
     const handleOpenDialog = () => {
-        openCreateSheet()
+        void openCreateSystem()
     }
 
     const handleRefresh = () => {

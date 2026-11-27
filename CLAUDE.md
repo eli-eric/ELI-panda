@@ -30,7 +30,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Architecture Overview
 
-Next.js 14 frontend for ELI PANDA - maintenance management system for scientific facilities. Uses TanStack Query + GraphQL (Neo4j), React Hook Form + Zod, Zustand, shadcn/ui, Tailwind CSS v4.
+Next.js 16 frontend for ELI PANDA - maintenance management system for scientific facilities. Uses TanStack Query + GraphQL (Neo4j), React Hook Form + Zod, Zustand, shadcn/ui, Tailwind CSS v4.
 
 For project structure and module organization, see `architecture` skill.
 
@@ -60,4 +60,3 @@ Use TanStack Query with `queryFetcher` and `queryMutate` utilities from `@/utils
 - **Small Functions**: Under 20 lines. Extract complex logic. Use early returns to reduce nesting.
 - **Type Safety**: Strict mode. Avoid `any` (use `unknown`). Use type guards and predicates. Interfaces for shapes, types for unions.
 - **Predicates for Logic**: Extract boolean conditions to named functions (`hasEditPermission`, `isResourceActive`).
-

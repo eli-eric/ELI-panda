@@ -11,6 +11,7 @@ const getItemProperties = async (uid?: string) => {
     return axiosInstance.get(BASE_URL + endpoint).then(res => res.data)
 }
 
+/** @deprecated systemItem is deprecated (see modules/systemItem/DEPRECATED.md) and this has no live consumer — use modules/shared/system/system-detail. */
 export const useItemProperties = (uid?: string) => {
     const response = useQuery<PhysicalItemProperty[]>({
         queryKey: ['physical-item', uid, 'properties'],

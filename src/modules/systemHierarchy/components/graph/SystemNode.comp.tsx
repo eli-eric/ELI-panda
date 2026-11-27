@@ -27,6 +27,7 @@ interface SystemNodeData {
     onContextMenuChange?: (open: boolean) => void
     onCopySystem?: (uid: string) => void
     onPasteSystem?: (uid: string) => void
+    onDeleteSystem?: (uid: string, name: string) => void
     copiedSystemUid?: string | null
     hiddenRelationshipsCount?: number
     [key: string]: unknown
@@ -48,6 +49,7 @@ const SystemNodeComponent = ({ id, data }: NodeProps) => {
         onContextMenuChange,
         onCopySystem,
         onPasteSystem,
+        onDeleteSystem,
         copiedSystemUid,
         hiddenRelationshipsCount,
     } = data as unknown as SystemNodeData
@@ -138,6 +140,18 @@ const SystemNodeComponent = ({ id, data }: NodeProps) => {
                     >
                         {fm({ id: message.systemHierarchy.copy.pasteSystem })}
                     </ContextMenuItem>
+                )}
+                {onDeleteSystem && (
+                    <>
+                        <ContextMenuSeparator />
+                        <ContextMenuItem
+                            onSelect={() => onDeleteSystem(id, name)}
+                            className="text-destructive focus:text-destructive"
+                            data-testid="context-delete-system"
+                        >
+                            {fm({ id: message.systemHierarchy.delete.menuItem })}
+                        </ContextMenuItem>
+                    </>
                 )}
             </ContextMenuContent>
         </ContextMenu>

@@ -1,35 +1,29 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import type { GraphLayoutMode, RelationshipGraphEdge, RelationshipGraphNode } from '../types/graph'
-import { GRAPH_LAYOUT_MODES } from '../types/graph'
+import type { HierarchyTab } from '../types/constants'
+import { HIERARCHY_TABS, isHierarchyTab } from '../types/constants'
 
 interface HierarchyStore {
     expandedNodes: string[]
-    graphLayoutMode: GraphLayoutMode
-    graphExpandedNodes: RelationshipGraphNode[]
-    graphExpandedEdges: RelationshipGraphEdge[]
     copiedSystemUid: string | null
+    // last detail tab the user picked; opening another system lands on it
+    lastTab: HierarchyTab
     toggleNode: (uid: string) => void
     expandNode: (uid: string) => void
     expandNodes: (uids: string[]) => void
     setExpandedNodes: (uids: string[]) => void
     collapseAll: () => void
     setCopiedSystemUid: (uid: string | null) => void
-    setGraphLayoutMode: (mode: GraphLayoutMode) => void
-    addGraphExpanded: (nodes: RelationshipGraphNode[], edges: RelationshipGraphEdge[]) => void
-    setGraphExpanded: (nodes: RelationshipGraphNode[], edges: RelationshipGraphEdge[]) => void
-    resetGraphExpanded: () => void
+    setLastTab: (tab: HierarchyTab) => void
 }
 
 export const useHierarchyStore = create<HierarchyStore>()(
     persist(
         (set, get) => ({
             expandedNodes: [],
-            graphLayoutMode: GRAPH_LAYOUT_MODES.VERTICAL as GraphLayoutMode,
-            graphExpandedNodes: [],
-            graphExpandedEdges: [],
             copiedSystemUid: null,
+            lastTab: HIERARCHY_TABS.DETAIL as HierarchyTab,
             toggleNode: (uid: string) => {
                 const current = get().expandedNodes
                 const isExpanded = current.includes(uid)
@@ -57,33 +51,23 @@ export const useHierarchyStore = create<HierarchyStore>()(
             },
             collapseAll: () => set({ expandedNodes: [] }),
             setCopiedSystemUid: (uid: string | null) => set({ copiedSystemUid: uid }),
-            setGraphLayoutMode: (mode: GraphLayoutMode) => set({ graphLayoutMode: mode }),
-            addGraphExpanded: (nodes, edges) => {
-                const { graphExpandedNodes, graphExpandedEdges } = get()
-                const seenNodes = new Set(graphExpandedNodes.map(n => n.uid))
-                const seenEdges = new Set(graphExpandedEdges.map(e => e.uid))
-                set({
-                    graphExpandedNodes: [
-                        ...graphExpandedNodes,
-                        ...nodes.filter(n => !seenNodes.has(n.uid)),
-                    ],
-                    graphExpandedEdges: [
-                        ...graphExpandedEdges,
-                        ...edges.filter(e => !seenEdges.has(e.uid)),
-                    ],
-                })
-            },
-            setGraphExpanded: (nodes, edges) => {
-                set({ graphExpandedNodes: nodes, graphExpandedEdges: edges })
-            },
-            resetGraphExpanded: () => set({ graphExpandedNodes: [], graphExpandedEdges: [] }),
+            setLastTab: (tab: HierarchyTab) => set({ lastTab: tab }),
         }),
         {
             name: 'hierarchy-expanded-nodes',
             partialize: state => ({
                 expandedNodes: state.expandedNodes,
-                graphLayoutMode: state.graphLayoutMode,
+                lastTab: state.lastTab,
             }),
+            // a stale or hand-edited tab in localStorage must not leave a blank panel
+            merge: (persisted, current) => {
+                const stored = (persisted ?? {}) as Partial<HierarchyStore>
+                return {
+                    ...current,
+                    ...stored,
+                    lastTab: isHierarchyTab(stored.lastTab) ? stored.lastTab : current.lastTab,
+                }
+            },
         },
     ),
 )

@@ -2,8 +2,10 @@ import type { FC } from 'react'
 
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 import { cn } from '@/lib/utils'
+import { isUnderCovered } from '@/modules/shared/system/coverage'
 
 import { SystemsTable } from './components/table/Systems.table'
+import { SYSTEMS_TABLE_ID } from './types/constants'
 
 interface Props {
     enableQueryURL?: boolean
@@ -20,7 +22,7 @@ interface Props {
 export const SystemsComponent: FC<Props> = ({
     enableQueryURL = true,
     enableDragAndDrop,
-    tableId = 'systems',
+    tableId = SYSTEMS_TABLE_ID,
     dropsettings,
     className,
     hideButtons = false,
@@ -42,8 +44,7 @@ export const SystemsComponent: FC<Props> = ({
                 getRowProps={({ original }) => ({
                     className: cn(
                         original?.physicalItem && 'font-bold',
-                        original?.statistics?.sp_coverage != null &&
-                            original.statistics.sp_coverage < 1 &&
+                        isUnderCovered(original?.statistics) &&
                             'text-red-500 dark:text-red-500 font-bold',
                     ),
                     dropsettings,

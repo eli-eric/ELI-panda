@@ -2,7 +2,7 @@
 
 ## What this is for
 
-Assign and update the people accountable for a system on the **Persons** tab: the responsible person, the responsible team, the (read-only) owner, plus the *Authorized Operators* and *Maintained By* tables. These assignments drive accountability today and — once Phase 2 ships — the technical edit permissions for the system's subtree.
+Assign and update the people accountable for a system on the **Persons** tab: the responsible person, the responsible team, the (read-only) owner, plus the *Authorized Operators* and *Maintained By* lists. The responsible person and team also decide who is **responsible** for this system and its subtree (others are asked to confirm their edits) — see [Understanding edit permissions](./edit-permissions.md).
 
 ## Who can do this
 
@@ -10,7 +10,7 @@ Assign and update the people accountable for a system on the **Persons** tab: th
 
 > 🔮 *Coming soon — Phase 1:* changes to systems at `SYSTEM_DOMAIN` and `TECHNOLOGY_UNIT` levels (where responsibility decisions are most consequential) will be admin-only.
 
-> 🔮 *Coming soon — Phase 2:* responsible-team membership will technically gate edits to a system and its subtree. **Today this is policy only — the application does not enforce it.**
+> ✅ Operators and maintainers are saved as whole lists and now appear in the system history. Editing this tab when you are not responsible asks for a one-time confirmation. See [Understanding edit permissions](./edit-permissions.md).
 
 See [Access & Responsibilities](../README.md#access--responsibilities) for what these personas mean.
 
@@ -41,25 +41,25 @@ The top of the tab shows three single-employee fields. All save on blur (toast: 
 3. **Owner is informational only.** It reflects an ownership computation and cannot be edited from this UI.
 
 > ⚠️ **Changing the responsible team is a high-impact change.**
-> The responsible team determines who *should* be allowed to edit this system and its subtree (per documented policy today, technically enforced in Phase 2). Reassigning the team can move edit-rights for the entire subtree from one team to another. Make sure the new team is aware before changing this.
+> The responsible team determines who is allowed to edit this system and its subtree (now enforced). Reassigning the team moves edit-rights for the entire subtree from one team to another — and can remove your own access if you were only editing via that team. Make sure the new team is aware before changing this.
 
-### Operators and Maintained-By tables
+### Operators and Maintained-By lists
 
-The lower portion of the tab shows two employee-list tables: **Authorized Operators** and **Maintained By**. They behave identically.
+The lower portion of the tab shows two employee lists: **Authorized Operators** and **Maintained By**, each person as a badge. They behave identically, and every change is recorded in the system history.
 
-> **Note:** these tables are only shown when the system level is **not** `SUBSYSTEMS_AND_PARTS`. At the lowest level of the hierarchy individual operator/maintainer assignments aren't tracked here — they roll up from a higher-level system.
+> **Note:** these lists are only shown when the system level is **not** `SUBSYSTEMS_AND_PARTS`. At the lowest level of the hierarchy individual operator/maintainer assignments aren't tracked here — they roll up from a higher-level system.
 
-`[SCREENSHOT PLACEHOLDER: Authorized Operators and Maintained By tables stacked, each showing 2-3 employee rows with a delete icon on the right and a "+" button in the table header]`
+`[SCREENSHOT PLACEHOLDER: Authorized Operators and Maintained By rows, each showing 2-3 employee badges with a small trash icon and a "+" add button]`
 
-4. **Add an employee to a table.** Click the **+** button in the table header. A modal opens with a searchable list of employees; employees already on the table are excluded so you cannot add duplicates.
+4. **Add an employee.** Click the **+** button next to the list. A modal opens with a searchable list of employees; employees already on the list are excluded so you cannot add duplicates.
 
-5. **Pick an employee** from the modal. The row appears in the table immediately.
+5. **Pick an employee** and click **Save**. The badge appears once the change is saved.
 
-6. **Remove an employee.** Click the delete icon at the right of a row. A confirmation appears (*Remove <employee name>?*); confirming removes the row.
+6. **Remove an employee.** Click the trash icon on the badge; the list is saved without that person.
 
-7. **The + and delete controls are hidden** for users without the `systems-edit` role. Read-only users see the assignment list but no add or remove affordances.
+7. **The add and remove controls are hidden** for users without the `systems-edit` role. Read-only users see the assignment list but no add or remove affordances.
 
-`[VIDEO PLACEHOLDER: 30s — open the Persons tab on a key system, change the Responsible Person inline, then click + on Authorized Operators, pick two employees from the modal, remove one of them via the delete icon and confirm the dialog]`
+`[VIDEO PLACEHOLDER: 30s — open the Persons tab on a key system, change the Responsible Person inline, then click + on Authorized Operators, pick two employees from the modal, remove one of them via its badge trash icon]`
 
 ## Tips & gotchas
 
@@ -67,7 +67,7 @@ The lower portion of the tab shows two employee-list tables: **Authorized Operat
 - **Each system has at most one responsible person and one responsible team.** Operators and maintained-by are multi-value lists.
 - **The Persons tab feeds the *Quick Info* sidebar** — assignment changes show up there immediately on the right.
 - **Operator and maintained-by changes are mid-impact.** They affect day-to-day operation and on-call rotas; mention any change to the affected employees.
-- **When the operator/maintained-by tables don't appear,** check the system level — they are intentionally hidden at `SUBSYSTEMS_AND_PARTS`.
+- **When the operator/maintained-by lists don't appear,** check the system level — they are intentionally hidden at `SUBSYSTEMS_AND_PARTS`.
 
 ## Related
 

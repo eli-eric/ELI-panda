@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { renderHook, waitFor } from '@testing-library/react'
-import { useQueryState } from 'next-usequerystate'
+import { useQueryState } from 'nuqs'
 import type { ReactNode } from 'react'
 import React from 'react'
 
@@ -9,7 +9,7 @@ import * as fetcher from '@/utils/fetcher'
 
 import { useSystemLeaves } from '../useSystemLeaves'
 
-jest.mock('next-usequerystate', () => ({
+jest.mock('nuqs', () => ({
     useQueryState: jest.fn(),
 }))
 

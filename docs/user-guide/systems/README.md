@@ -2,7 +2,7 @@
 
 The Systems Overview is the flat, table-only view of every system at the facility — the same entities that live in the [System Hierarchy](../systemHierarchy/README.md) tree, surfaced as a sortable, filterable, exportable list. Use the overview when you need to *answer questions across the whole population* (e.g. "all critical systems in zone B without a responsible person", "every catalogue item used in more than five systems"), or when you want a CSV snapshot for a meeting.
 
-`[SCREENSHOT PLACEHOLDER: Systems Overview landing — top action bar with Add / Refresh / Filter / Export CSV buttons, filter badge row beneath, wide PandaTable with sticky Name column and 20+ data columns visible, pagination at the bottom]`
+![Systems Overview landing page](./images/systems-overview.png)
 
 ## Access & Responsibilities
 
@@ -49,7 +49,7 @@ The columns shown by default are: **Name**, **System Code**, **System Type**, **
 - [Exporting systems to CSV](./workflows/exporting-csv.md) — export the currently filtered table to a CSV file.
 - [Opening a system from the overview](./workflows/opening-a-system.md) — row click navigation, expanding subsystems inline, jumping back to the [System Hierarchy](../systemHierarchy/README.md) tree for context.
 
-For working *inside* a system (editing details, managing physical items, relationships, history) — see the [System Hierarchy](../systemHierarchy/README.md) module; both the overview and the tree open the same detail page.
+For working *inside* a system (editing details, managing physical items, relationships, history) — see the [System Hierarchy](../systemHierarchy/README.md) module; both the overview and the tree open the same detail view inside the hierarchy explorer.
 
 ## Coming soon
 
@@ -63,7 +63,7 @@ For working *inside* a system (editing details, managing physical items, relatio
 
 ## Data model reference
 
-> 🔧 *This section is for engineers reading the docs in the repo. The Confluence generator strips it.*
+> 🔧 *This section is for engineers reading the docs in the repo. The wiki generator strips it.*
 >
 > The overview reads from the same `System` entity as the System Hierarchy. The flat list is served by the `/systems` endpoint and the CSV stream by `/systems/export-to-csv`. Filter inputs map to fields on `SystemFilter`. See `src/server/apollo/schema.graphql` for the full field shapes.
 

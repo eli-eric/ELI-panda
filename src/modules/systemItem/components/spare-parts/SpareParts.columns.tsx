@@ -10,6 +10,7 @@ import type { SystemInterfaceSparePartsRelationship } from '@/types/gql/graphql'
 
 import { SparePartsActionsCell } from './SparePartsActionsCell'
 
+/** @deprecated systemItem is deprecated (see modules/systemItem/DEPRECATED.md) and this has no live consumer — use modules/shared/system/system-detail. */
 export const useSparePartsColumns = () => {
     const columns = useMemo((): ColumnDef<SystemInterfaceSparePartsRelationship, string>[] => {
         const columns: ColumnDef<SystemInterfaceSparePartsRelationship, string>[] = [

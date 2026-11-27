@@ -111,9 +111,7 @@ export const getRelationshipDirectionLabel = (
     code: string,
     direction: 'inbound' | 'outbound',
 ): string | undefined => {
-    const def = RELATIONSHIP_DEFINITIONS[code as RelationshipType] as
-        | RelationshipDef
-        | undefined
+    const def = RELATIONSHIP_DEFINITIONS[code as RelationshipType] as RelationshipDef | undefined
     return def?.direction?.[direction]
 }
 
@@ -138,6 +136,8 @@ export const relationshipGraphNodeSchema = z.object({
     systemCode: z.string().optional().nullable(),
     systemLevel: z.string(),
     systemType: systemTypeRefSchema.optional().nullable(),
+    // ITEM_USAGE uid of the contained physical item (drives the node / row icon)
+    itemUsageUid: z.string().optional().nullable(),
 })
 
 export const relationshipGraphEdgeSchema = z.object({

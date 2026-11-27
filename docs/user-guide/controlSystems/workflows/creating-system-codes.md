@@ -33,7 +33,7 @@ The Create page is a **two-pane workbench**. The left pane is a small form; the 
 
    Each integer change re-fetches the preview after a short debounce — the right pane updates to show that many candidate rows.
 
-   `[SCREENSHOT PLACEHOLDER: form with Zone and System Type set, Batch Count spinner at 5; right pane showing five Preview rows badged grey beneath the empty Created band]`
+   ![Zone and System Type set, with the preview rows rendered in the right pane](../images/system-codes-preview.png)
 
 4. **Inspect the preview** in the right pane. Each preview row shows:
    - **Status badge** — *Preview*, in a subdued style.

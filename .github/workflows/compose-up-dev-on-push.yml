@@ -57,6 +57,17 @@ jobs:
                     -v ${{ github.workspace }}/playwright-report:/app/playwright-report \
                     -v ${{ github.workspace }}/test-results:/app/test-results \
                     panda-e2e:${{ github.sha }}
+            - name: Reset E2E artifact ownership
+              # The e2e container writes playwright-report/ and test-results/ into the
+              # shared self-hosted runner workspace as root. Traces only appear when a
+              # test retries, so this stayed invisible until one did — and then the next
+              # job's actions/checkout could not clean the workspace (EACCES) and the
+              # deploy never ran. Hand the artifacts back to the runner user.
+              if: always()
+              run: |
+                  docker run --rm -v "${{ github.workspace }}:/workspace" --entrypoint sh \
+                    panda-e2e:${{ github.sha }} -c \
+                    'chown -R "$(stat -c "%u:%g" /workspace)" /workspace/playwright-report /workspace/test-results' || true
             - name: Upload E2E report
               uses: actions/upload-artifact@v4
               if: ${{ always() && !cancelled() }}

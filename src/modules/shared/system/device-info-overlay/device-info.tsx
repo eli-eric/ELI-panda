@@ -1,58 +1,28 @@
-import { Suspense } from 'react'
+import { useIntl } from 'react-intl'
 
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
-import { Skeleton } from '@/components/ui/skeleton'
+import { message } from '@/i18n/src/messages'
 
-import LayoutDetailInfoContainer from './components/layout-detail-info.cont'
+import { LocationInfo } from './components/location-info.comp'
 import { useShowDeviceStore } from './store/useShowDeviceStore'
 
-const DeviceInfoSkeleton = () => (
-    <div className="space-y-4">
-        <div className="space-y-2">
-            <Skeleton className="h-30 w-full" />
-        </div>
-        <div className="space-y-2">
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-full" />
-        </div>
-        <div className="space-y-2">
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-full" />
-        </div>
-        <div className="space-y-2">
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-full" />
-        </div>
-    </div>
-)
-
+/**
+ * Location info overlay for the facility layout (`getOfficeInfo=<code>` links).
+ * Systems no longer have an overlay of their own — they open the Edit System sheet.
+ */
 export const DeviceInfoOverlay = () => {
-    const { uid, setOpenDeviceInfo, openDeviceInfo, locationCode, code } = useShowDeviceStore()
-
-    const getTitle = () => {
-        if (code || uid) return 'Device Info'
-        if (locationCode) return `Employees at location: ${locationCode}`
-        return 'Device Information'
-    }
+    const { formatMessage: fm } = useIntl()
+    const { setOpenDeviceInfo, openDeviceInfo, locationCode } = useShowDeviceStore()
 
     return (
-        <Sheet open={openDeviceInfo} onOpenChange={setOpenDeviceInfo}>
-            <SheetContent
-                className="w-full sm:w-[200px] lg:w-[400px] xl:w-[600px] !max-w-none overflow-y-auto px-2 sm:px-4 lg:px-6"
-                style={{ maxWidth: 'none' }}
-            >
+        <Sheet open={openDeviceInfo && !!locationCode} onOpenChange={setOpenDeviceInfo}>
+            <SheetContent className="w-full sm:w-[400px] overflow-y-auto px-2 sm:px-4">
                 <SheetHeader>
-                    <SheetTitle>{getTitle()}</SheetTitle>
+                    <SheetTitle>
+                        {fm({ id: message.common.systemOverlay.location })} {locationCode}
+                    </SheetTitle>
                 </SheetHeader>
-                <div className="mt-6">
-                    <Suspense fallback={<DeviceInfoSkeleton />}>
-                        <LayoutDetailInfoContainer
-                            uid={uid}
-                            locationCode={locationCode}
-                            systemCode={code}
-                        />
-                    </Suspense>
-                </div>
+                {locationCode && <LocationInfo locationCode={locationCode} />}
             </SheetContent>
         </Sheet>
     )

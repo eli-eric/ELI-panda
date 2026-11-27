@@ -1,11 +1,11 @@
 import { act, renderHook } from '@testing-library/react'
-import { useQueryState } from 'next-usequerystate'
+import { useQueryState } from 'nuqs'
 
 import useTableStateStore from '@/store/useTableStateStore'
 
 import { useSorting } from '../useSorting'
 
-jest.mock('next-usequerystate', () => ({
+jest.mock('nuqs', () => ({
     useQueryState: jest.fn(),
 }))
 
@@ -49,6 +49,92 @@ describe('useSorting', () => {
         })
         const { result } = renderHook(() => useSorting('t1', false))
         expect(result.current[0]).toEqual(sortByInstance)
+    })
+
+    it('applies a ?sortBy deep link even when nuqs has not seen the URL yet', () => {
+        // pages router not ready -> nuqs reports null while the param is in the URL
+        const sorting = [{ id: 'name', desc: true }]
+        window.history.replaceState(
+            {},
+            '',
+            `/systems/overview?sortBy=${encodeURIComponent(JSON.stringify(sorting))}`,
+        )
+        mockUseQueryState.mockReturnValue([null, setQueryFn])
+
+        const { result } = renderHook(() => useSorting('t1', true))
+
+        expect(result.current[0]).toEqual(sorting)
+        expect(setSortBy).toHaveBeenCalledWith('t1', sorting)
+        window.history.replaceState({}, '', '/')
+    })
+
+    it('ignores a malformed ?sortBy instead of throwing', () => {
+        mockUseQueryState.mockReturnValue(['%5B%7Bbroken', setQueryFn])
+
+        const { result } = renderHook(() => useSorting('t1', true))
+
+        expect(result.current[0]).toEqual([])
+    })
+
+    it('does not clear ?sortBy before it has been read', () => {
+        // The sync effect must not publish an empty initial sort: on a
+        // server-rendered page ?sortBy arrives after the first render, and
+        // publishing [] first would delete the deep link's own param.
+        mockUseQueryState.mockReturnValue([null, setQueryFn])
+        const { rerender } = renderHook(() => useSorting('t1', true))
+        rerender()
+
+        expect(setQueryFn).not.toHaveBeenCalled()
+    })
+
+    it('hydrates when ?sortBy arrives after the first render', () => {
+        const sorting = [{ id: 'name', desc: true }]
+        mockUseQueryState.mockReturnValue([null, setQueryFn])
+        const { result, rerender } = renderHook(() => useSorting('t1', true))
+        expect(result.current[0]).toEqual([])
+
+        mockUseQueryState.mockReturnValue([JSON.stringify(sorting), setQueryFn])
+        rerender()
+
+        expect(result.current[0]).toEqual(sorting)
+        expect(setSortBy).toHaveBeenCalledWith('t1', sorting)
+    })
+
+    it('still clears ?sortBy once the user has actually sorted', () => {
+        mockUseQueryState.mockReturnValue([null, setQueryFn])
+        const { result } = renderHook(() => useSorting('t1', true))
+
+        act(() => {
+            result.current[1]([{ id: 'name', desc: true }])
+        })
+        expect(setQueryFn).toHaveBeenCalledWith(JSON.stringify([{ id: 'name', desc: true }]))
+
+        act(() => {
+            result.current[1]([])
+        })
+        expect(setQueryFn).toHaveBeenCalledWith(null)
+    })
+
+    it('stores the canonical serialization of a hand-formatted ?sortBy', () => {
+        // PaginationV2 compares its reset baseline against the stored string, so
+        // the raw param and the republished JSON.stringify have to agree.
+        mockUseQueryState.mockReturnValue(['[{"id":"name", "desc":true}]', setQueryFn])
+
+        renderHook(() => useSorting('t1', true))
+
+        expect(setSortByQueryString).toHaveBeenCalledWith(
+            't1',
+            JSON.stringify([{ id: 'name', desc: true }]),
+        )
+    })
+
+    it('drops an empty ?sortBy instead of leaving it in every copied link', () => {
+        mockUseQueryState.mockReturnValue(['[]', setQueryFn])
+
+        renderHook(() => useSorting('t1', true))
+
+        expect(setQueryFn).toHaveBeenCalledWith(null)
+        expect(setSortByQueryString).toHaveBeenCalledWith('t1', undefined)
     })
 
     it('setSorting updates store + queryString', () => {

@@ -2,7 +2,7 @@ import type { ColumnDef } from '@tanstack/react-table'
 import { useCallback, useMemo } from 'react'
 import { useIntl } from 'react-intl'
 
-import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
+import type { Codebooktree } from '@/components/form/shared/codebookTree.types'
 import { message } from '@/i18n/src/messages'
 import type { Employee, HallContactPerson, Team } from '@/types/gql/graphql'
 import { formatPhoneNumber } from '@/utils/formatters'

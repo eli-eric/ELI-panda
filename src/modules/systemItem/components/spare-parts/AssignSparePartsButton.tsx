@@ -9,6 +9,7 @@ import { useSystemDetail } from '../../hooks/useSystemDetail'
 
 const messages = message.systemsPage.systemDetail.spareParts.buttons
 
+/** @deprecated systemItem is deprecated (see modules/systemItem/DEPRECATED.md) and this has no live consumer — use modules/shared/system/system-detail. */
 export const AssignSparePartButton = () => {
     const { systemDetail, catalogueItem } = useSystemDetail()
 

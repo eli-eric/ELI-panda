@@ -7,7 +7,7 @@ import { Tooltip } from '@/components/Tooltip'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { message } from '@/i18n/src/messages'
-import { PATH } from '@/types/constants/paths'
+import { getSystemHierarchyDetailPath } from '@/modules/systemHierarchy/utils/hierarchyLinks'
 
 import type { SystemCodeResult } from '../../types'
 
@@ -46,7 +46,11 @@ export const usePreviewTableColumns = () => {
                     if (uid) {
                         return (
                             <Button variant="link" className="h-auto p-0" asChild>
-                                <Link href={`${PATH.SYSTEM}/${uid}`} target="_blank">
+                                <Link
+                                    href={getSystemHierarchyDetailPath(uid)}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
                                     {codeElement}
                                 </Link>
                             </Button>

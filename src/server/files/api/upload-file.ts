@@ -55,6 +55,9 @@ async function uploadFile(req: NextApiRequest, res: NextApiResponse) {
         const isImage = prefix.includes('/image')
         if (isImage) {
             try {
+                // An undecodable image is swallowed inside handleMiniImages so the upload
+                // still succeeds; anything that reaches here (listing, node URL sync) is a
+                // genuine failure worth a 500.
                 await handleMiniImages({ req, id, isDelete: false })
             } catch (e) {
                 logger.error(e)

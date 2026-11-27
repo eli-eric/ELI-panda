@@ -1,14 +1,17 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import type { ColumnDef, Table } from '@tanstack/react-table'
-import { startTransition, useEffect, useMemo, useRef, useState } from 'react'
+import type { ColumnDef } from '@tanstack/react-table'
+import { useEffect, useMemo, useState } from 'react'
 import { FormattedMessage } from 'react-intl'
 
 import { Button } from '@/components/Buttons'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
-import { useFilters } from '@/modules/shared/table/pandaTable/hooks/useFilters'
-import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
+import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
+import { PandaTableV2 } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
+import { skeletonData } from '@/modules/shared/table/pandaTableV2/skeletonData'
+import { SearchBar } from '@/modules/shared/table/SearchBar'
 import useTableStateStore from '@/store/useTableStateStore'
+import { TABLE_IDS } from '@/types/constants/tableIds'
 import type { CodebookType } from '@/types/responses/codebook'
 import { queryFetcher } from '@/utils/fetcher'
 
@@ -38,25 +41,16 @@ export function CodebookTreeModalContent(
 ) {
     const { codebook, onSelect, onClose } = props
 
-    const tableId = 'codebook'
+    const tableId = TABLE_IDS.CODEBOOK
     const [item, setItem] = useState<CodebookType | undefined>(undefined)
-    const { reset } = useTableStateStore()
-    const [filterState] = useFilters(tableId, false, false)
-    const search = filterState[0]?.value as string
-    const tableRef = useRef<Table<Codebooktree>>(null)
+    const { instances, reset } = useTableStateStore()
+    const search = useMemo(() => instances[tableId]?.search || '', [instances, tableId])
 
-    useEffect(() => {
-        startTransition(() => {
-            if (tableRef.current) {
-                const filter = tableRef.current.getState().columnFilters
-                if (filter.length > 0) tableRef.current.toggleAllRowsExpanded(true)
-                if (filter.length === 0) tableRef.current.toggleAllRowsExpanded(false)
-            }
-        })
-        return () => {
-            setItem(undefined)
-        }
-    }, [search])
+    // Preserve backend contract: tree endpoint filters via ?columnFilter=[{id,value}]
+    const filterState = useMemo(
+        () => (search ? [{ id: 'name', value: search }] : []),
+        [search],
+    )
 
     const { data: response, isLoading: loading } = useQuery({
         queryKey: [
@@ -74,55 +68,71 @@ export function CodebookTreeModalContent(
                 accessorKey: 'name',
                 id: 'name',
                 size: 300,
-                meta: {
-                    filter: {
-                        enableColumnFilter: true,
-                        type: 'string',
-                    },
-                },
-                cell: ({ row, getValue, table: { getState } }) => (
-                    <ExpandableNameCell {...{ row, getValue, getState }} />
+                cell: ({ row, getValue }) => (
+                    <ExpandableNameCell {...{ row, getValue, filterName: search }} />
                 ),
             },
         ],
-        [],
+        [search],
     )
 
+    const table = usePandaTable<Codebooktree>({
+        tableId,
+        columns,
+        data: response,
+        settings: {
+            enableRowSelection: false,
+            enableFiltering: false,
+            manualFiltering: false,
+        },
+        getSubRows: row => row.children || [],
+    })
+
+    const { toggleAllRowsExpanded } = table
+
+    // Auto-expand tree while searching, collapse otherwise
+    useEffect(() => {
+        toggleAllRowsExpanded(!!search)
+        return () => {
+            setItem(undefined)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [search])
+
+    // Reset table store on unmount so search state can't leak into the next open,
+    // regardless of how the dialog is dismissed (button, ESC, overlay click).
+    useEffect(() => {
+        return () => reset(tableId)
+    }, [reset, tableId])
+
     return (
-        <div className="flex flex-col h-[300px] pt-4">
-            <PandaTable
-                ref={tableRef}
-                tableId={tableId}
-                loading={loading}
-                columns={columns}
-                data={response}
-                getSubRows={row => row.children}
-                settings={{
-                    enableRowSelection: true,
-                    enableFiltering: true,
-                    manualFiltering: true,
-                }}
-                className={'relative overflow-y-auto flex-1 border-l border-b border-gray-400'}
-                getRowProps={row => ({
-                    onClick: () => {
-                        setItem({ uid: row.original.uid, name: row.original.name })
-                    },
-                    className: cn(
-                        item?.uid === row.original.uid
-                            ? 'bg-orange-200 dark:bg-orange-500 hover:bg-orange-200 dark:hover:bg-orange-500'
-                            : '',
-                        'cursor-pointer',
-                    ),
-                })}
-            />
-            <div className="flex justify-end gap-2 mt-6 flex-shrink-0">
-                <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => {
-                        if (onClose) onClose()
+        <div className="flex flex-col gap-3">
+            <SearchBar tableId={tableId} useQuery={false} />
+            <div className="h-[300px] overflow-hidden border rounded-md">
+                <PandaTableV2<Codebooktree>
+                    tableId={tableId}
+                    table={table}
+                    data={skeletonData(response, loading)}
+                    loading={loading}
+                    settings={{
+                        enableRowSelection: false,
+                        enableFiltering: false,
+                        manualFiltering: false,
                     }}
-                >
+                    getRowProps={row => ({
+                        onClick: () => {
+                            setItem({ uid: row.original.uid, name: row.original.name })
+                        },
+                        className: cn(
+                            item?.uid === row.original.uid &&
+                                'bg-orange-200 dark:bg-orange-500 hover:bg-orange-200 dark:hover:bg-orange-500',
+                            'cursor-pointer',
+                        ),
+                    })}
+                />
+            </div>
+            <div className="flex justify-end gap-2 flex-shrink-0">
+                <Button type="button" variant="outline" onClick={onClose}>
                     <FormattedMessage id={message.common.buttons.close} />
                 </Button>
                 <Button
@@ -130,9 +140,7 @@ export function CodebookTreeModalContent(
                     disabled={!item}
                     onClick={() => {
                         onSelect?.(item)
-                        if (onClose) onClose()
-                        setItem(undefined)
-                        reset(tableId)
+                        onClose?.()
                     }}
                 >
                     <FormattedMessage id={message.common.buttons.continue} />

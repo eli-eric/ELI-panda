@@ -21,7 +21,7 @@ Add a new value to an existing codebook (a new supplier, a new department, a new
 
 2. **Click *Add value***. A modal opens — *Add value*.
 
-   `[SCREENSHOT PLACEHOLDER: Add value modal centered over the page, single "Name *" field with placeholder "Enter value name", Cancel and Save buttons at the bottom]`
+   ![Add value modal centred over the codebook table](../images/add-value-modal.png)
 
 3. **Fill the *Name*** field. It is the only required field at creation. Validation:
    - Name is required.

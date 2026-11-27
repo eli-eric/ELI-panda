@@ -6,6 +6,7 @@ import { message } from '@/i18n/src/messages'
 import { useSystemCodeClear } from '@/modules/systemItem/hooks/useSystemCodeClear'
 import { useSystemCodeGenerate } from '@/modules/systemItem/hooks/useSystemCodeGenerate'
 
+/** @deprecated systemItem is deprecated (see modules/systemItem/DEPRECATED.md) and this has no live consumer — use modules/shared/system/system-detail. */
 export const SystemCodeButton = () => {
     const { formatMessage: fm } = useIntl()
     const { loading, getSystemCode, disabled } = useSystemCodeGenerate()

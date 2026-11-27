@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 import { PATH } from '@/types/constants/paths'
 
+/** @deprecated systemItem is deprecated (see modules/systemItem/DEPRECATED.md) and this has no live consumer — use modules/shared/system/system-detail. */
 export type OrderColumns = {
     type: string
     name: string
@@ -15,6 +16,7 @@ export type OrderColumns = {
     isDelivered: boolean
 }
 
+/** @deprecated systemItem is deprecated (see modules/systemItem/DEPRECATED.md) and this has no live consumer — use modules/shared/system/system-detail. */
 export const useSystemOrderColumns = () => {
     return useMemo(
         (): ColumnDef<OrderColumns, string>[] => [

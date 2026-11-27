@@ -1,10 +1,11 @@
 import type { FC } from 'react'
 
-import type { SystemLeaf } from '../../types'
+import type { SystemDetail } from '@/modules/shared/system/system-detail'
+
 import { RelationshipGraphContainer } from '../graph/RelationshipGraph.cont'
 
 interface GraphTabProps {
-    system: SystemLeaf
+    system: Pick<SystemDetail, 'uid'>
 }
 
 export const GraphTabContainer: FC<GraphTabProps> = ({ system }) => (

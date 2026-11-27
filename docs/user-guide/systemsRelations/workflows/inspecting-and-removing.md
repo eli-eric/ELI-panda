@@ -4,7 +4,7 @@
 
 See what relationships a system already has — particularly its spares — without leaving the Systems Relations workbench, and remove a relationship when the link is no longer valid (a spare has been consumed and re-assigned elsewhere, a power source has been re-routed, a control link has been retired).
 
-Bulk *creation* is the workbench's primary purpose; bulk *removal* lives on the per-system detail page (see *Managing relationships* in the [System Hierarchy](../../systemHierarchy/README.md) module). This workflow covers the read-only inspection surfaces in the workbench and points you at the right place for deletions.
+Bulk *creation* is the workbench's primary purpose; bulk *removal* lives in the per-system detail view (see *Managing relationships* in the [System Hierarchy](../../systemHierarchy/README.md) module). This workflow covers the read-only inspection surfaces in the workbench and points you at the right place for deletions.
 
 ## Who can do this
 
@@ -42,13 +42,13 @@ See [Access & Responsibilities](../README.md#access--responsibilities) for what 
 
 For relationship types other than `IS_SPARE_FOR`, and for actual removal of any type, switch to the system's detail page:
 
-1. **Open the system detail page** — either from the workbench (click the row's name) or from the [System Hierarchy](../../systemHierarchy/README.md) module or the [Systems Overview](../../systems/README.md). The URL takes the form `/system/<uid>`.
+1. **Open the system detail view** — either from the workbench (click the row's name) or from the [System Hierarchy](../../systemHierarchy/README.md) module or the [Systems Overview](../../systems/README.md). It opens in the System Hierarchy; the URL takes the form `/systems/hierarchy?leaf=<uid>` (old `/system/<uid>` links redirect there).
 
 2. **Go to the *Relationships* tab.** It lists every relationship for that system in both directions, grouped by type, with a *Delete* affordance on each row (visible only with `systems-edit`).
 
 3. **Click *Delete* on the relationship row** you want to remove. Confirm in the modal.
 
-   `[SCREENSHOT PLACEHOLDER: Relationships tab on a system detail page, showing groups for Is Powered From / Is Spare For / Provides Data To, one row hovered with the Delete affordance visible]`
+   `[SCREENSHOT PLACEHOLDER: Relationships tab in the System Hierarchy detail view, showing groups for Is Powered From / Is Spare For / Provides Data To, one row hovered with the Delete affordance visible]`
 
 4. **Read the toast.** Success → the relationship is gone from both sides. The opposite system's *Relationships* tab updates immediately on next view.
 
@@ -70,7 +70,7 @@ For relationship types other than `IS_SPARE_FOR`, and for actual removal of any 
 
 ## Tips & gotchas
 
-- **Modals are read-only.** The *Spare Parts* and *Spare Part for Systems* modals in the workbench do not offer a delete action. Use them to verify; delete from the system detail page.
+- **Modals are read-only.** The *Spare Parts* and *Spare Part for Systems* modals in the workbench do not offer a delete action. Use them to verify; delete from the system detail view in the System Hierarchy.
 - **Mirror affordances are not symmetric in label.** *Spare Parts* lists the spares **for** this system; *Spare Part for Systems* lists the systems **this** spare covers. Confirm which side of the link you are inspecting before deleting.
 - **One link, one delete.** Each click of *Delete* removes a single directed relationship. The reverse direction does not exist as a separate link — deletion is symmetric.
 - **No undo.** Recreate the relationship via the workbench if you delete the wrong one.

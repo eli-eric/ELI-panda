@@ -6,13 +6,16 @@ import { SpareAssignmentWizardContainer } from './components/spare-assignment-wi
 interface UseSpareDialogParams {
     systemUid: string
     spareItemUid: string
+    // The spare's own system uid. Optional for back-compat, but pass it when known so the
+    // swap also invalidates the spare system's cached detail/overlay (it loses its item).
+    spareSystemUid?: string
     onSuccess?: () => void
 }
 
 export const useSpareDialog = () => {
     const { openModal } = useDynamicModalStore()
 
-    return ({ systemUid, spareItemUid, onSuccess }: UseSpareDialogParams) => {
+    return ({ systemUid, spareItemUid, spareSystemUid, onSuccess }: UseSpareDialogParams) => {
         // Feature flag check - spare parts assignment disabled in production
         if (!isFeatureEnabled('enableSparePartsAssignment')) {
             //eslint-disable-next-line
@@ -29,6 +32,7 @@ export const useSpareDialog = () => {
                 size: 'xl',
                 systemUid,
                 spareItemUid,
+                spareSystemUid,
                 onSuccess,
             },
         })

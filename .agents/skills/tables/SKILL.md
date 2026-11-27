@@ -36,6 +36,7 @@ const OrdersPage = () => (
 Located at: `src/components/layout/TableLayoutContainer.tsx`
 
 It calculates height using `calc(100vh - height)` where height is the sum of:
+
 - `#search-bar`
 - `#table-heading`
 - `#page-head`
@@ -50,6 +51,7 @@ Elements must have these IDs to be included in the calculation.
 ## When NOT to Use TableLayoutContainer
 
 **Do NOT use** `TableLayoutContainer` in nested/constrained layouts:
+
 - Inside grid cells with fixed height
 - Inside flex containers with `h-full` or `flex-1`
 - Inside sidebars or panels
@@ -97,13 +99,13 @@ const NestedTablePanel: FC = () => {
 
 ### Critical CSS Classes
 
-| Class | Purpose |
-|-------|---------|
-| `h-full` | Take full height of parent |
-| `flex-1` | Grow to fill available space |
-| `min-h-0` | **CRITICAL** - Allow flex item to shrink below content size |
-| `shrink-0` | Prevent element from shrinking (for pagination) |
-| `overflow-hidden` | On parent containers to establish scroll boundary |
+| Class             | Purpose                                                     |
+| ----------------- | ----------------------------------------------------------- |
+| `h-full`          | Take full height of parent                                  |
+| `flex-1`          | Grow to fill available space                                |
+| `min-h-0`         | **CRITICAL** - Allow flex item to shrink below content size |
+| `shrink-0`        | Prevent element from shrinking (for pagination)             |
+| `overflow-hidden` | On parent containers to establish scroll boundary           |
 
 ### Why `min-h-0` is Critical
 
@@ -196,10 +198,10 @@ viewport (100vh)
     {enableColumnHiding && <TableSettings />}
     <div
         ref={tableContainerRef}
-        className="overflow-auto relative h-full min-w-full"  // scrollable area
+        className="overflow-auto relative h-full min-w-full" // scrollable area
     >
         <table>
-            <thead className="sticky top-0 z-10">...</thead>  // sticky header
+            <thead className="sticky top-0 z-10">...</thead> // sticky header
             <tbody>...</tbody>
         </table>
     </div>
@@ -220,6 +222,7 @@ The `className` prop on `PandaTableV2` is passed to the scrollable `div`.
 ## Common Patterns
 
 ### Full-page table (use TableLayoutContainer)
+
 ```tsx
 <TableLayoutContainer>
     <PandaTableV2 ... />
@@ -228,6 +231,7 @@ The `className` prop on `PandaTableV2` is passed to the scrollable `div`.
 ```
 
 ### Nested panel table (use flex layout)
+
 ```tsx
 <div className="flex flex-col h-full">
     <div className="flex-1 min-h-0 flex flex-col">
@@ -240,6 +244,7 @@ The `className` prop on `PandaTableV2` is passed to the scrollable `div`.
 ```
 
 ### Split view with table
+
 ```tsx
 <div className="grid grid-cols-2 h-full">
     <div className="overflow-hidden">

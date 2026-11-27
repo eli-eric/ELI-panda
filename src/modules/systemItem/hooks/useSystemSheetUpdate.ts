@@ -76,6 +76,7 @@ interface UseSystemSheetUpdateProps {
     physicalItemUid?: string
 }
 
+/** @deprecated systemItem is deprecated (see modules/systemItem/DEPRECATED.md) and this has no live consumer — use modules/shared/system/system-detail. */
 export const useSystemSheetUpdate = ({
     uid,
     imageRef,

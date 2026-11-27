@@ -6,7 +6,7 @@ The module pulls double duty as both an internal catalogue *and* the upstream so
 
 Use this module when registering a new publication, maintaining researcher / grant master data, linking authors and funding to an in-flight publication, or preparing an end-of-year RIV submission.
 
-`[SCREENSHOT PLACEHOLDER: Publications overview — top toolbar with Add / Refresh buttons on the left, Export and Export to RIV buttons on the right; table beneath with columns Title, Code, Media Type, DOI, Authors, Journal, Year; one row hovered showing per-row actions]`
+![Publications overview with the publications table](./images/publications-list.png)
 
 ## Access & Responsibilities
 
@@ -80,7 +80,7 @@ The module surfaces **four pages** under the *Publications* sidebar group.
 
 ## Data model reference
 
-> 🔧 *This section is for engineers reading the docs in the repo. The Confluence generator strips it.*
+> 🔧 *This section is for engineers reading the docs in the repo. The wiki generator strips it.*
 >
 > Endpoints — Publications: `GET /publications` (list, key `publications`), `GET /publication?uid=<uid>` (detail), `POST /publication` / `PUT /publication?uid=<uid>` (create/update), `DELETE /publication?uid=<uid>`, `GET /generateUUID` (used for new-doc UID prep). RIV: `GET /publications/validate/riv` (validation, key `rivValidate`), `GET /publications/export/riv?year=<>&provider=<>&deliveryRef=<>` (XML stream). Researchers: `GET /researchers` (list), `GET /researcher?uid=<uid>` (detail), `POST /researcher` / `PUT /researcher?uid=<uid>` (create/update), `DELETE /researcher?uid=<uid>`. Grants: same shape with `/grant` and `/grants`. Linking is denormalised — `eliResearchers[]` and `grants[]` live directly inside the Publication payload. Form Zod schemas live in `src/modules/publication/form/` (`publicationPeerReviewedSchema`, `publicationOtherSchema`) and switch based on Media Type.
 

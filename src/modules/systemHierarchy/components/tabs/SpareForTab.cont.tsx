@@ -1,34 +1,23 @@
 import type { FC } from 'react'
-import { useIntl } from 'react-intl'
 
-import { message } from '@/i18n/src/messages'
+import type { SystemDetail } from '@/modules/shared/system/system-detail'
+import { SpareRelationsSection } from '@/modules/shared/system/system-detail'
 
-import type { SystemLeaf } from '../../types'
-import { hasSpareFor } from '../../utils/predicates'
+import { useHierarchyNavigation } from '../../hooks/useHierarchyNavigation'
 
 interface SpareForTabProps {
-    system: SystemLeaf
+    system: SystemDetail
 }
 
 export const SpareForTabContainer: FC<SpareForTabProps> = ({ system }) => {
-    const { formatMessage: fm } = useIntl()
-
-    if (!hasSpareFor(system)) {
-        return (
-            <div className="p-4 text-sm text-muted-foreground">
-                {fm({ id: message.systemHierarchy.spareFor.noSpareFor })}
-            </div>
-        )
-    }
-
+    const { selectLeaf } = useHierarchyNavigation()
     return (
         <div className="p-4">
-            <div className="text-sm">
-                <span className="text-muted-foreground">
-                    {fm({ id: message.systemHierarchy.columns.sparesOut })}:
-                </span>{' '}
-                <span className="font-medium">{system.sparesOut}</span>
-            </div>
+            <SpareRelationsSection
+                systemUid={system.uid}
+                mode="spareFor"
+                onSelectSystem={selectLeaf}
+            />
         </div>
     )
 }

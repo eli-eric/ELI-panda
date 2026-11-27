@@ -27,6 +27,7 @@ export {
     makeCodebook,
 } from './factories/catalogue'
 export { makeOrder, makeOrderLine, makeServiceLine } from './factories/orderItem'
+export { makeSystemDetail } from './factories/systemDetail'
 export {
     mockDynamicModalStore,
     mockNextRouter,

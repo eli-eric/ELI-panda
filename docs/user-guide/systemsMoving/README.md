@@ -4,7 +4,7 @@ The Systems Moving module is the place to **re-parent a single system** — move
 
 The move is *not* a copy. The system keeps its UID, its name, its physical item, its relationships, and its full change history; only the `HAS_SUBSYSTEM` link to its parent is replaced. A `WAS_MOVED_FROM` audit entry is added so that the previous lineage is recoverable from history.
 
-`[SCREENSHOT PLACEHOLDER: Systems Moving landing — two side-by-side trees, left pane labeled with active filters, right pane scrolled to a different branch, a row in the left pane mid-drag with its system name displayed in the drag preview]`
+![Systems Moving landing page with its two side-by-side trees](./images/moving-page.png)
 
 ## Access & Responsibilities
 
@@ -65,7 +65,7 @@ For renaming, changing the level, the type, or other system attributes — see *
 
 ## Data model reference
 
-> 🔧 *This section is for engineers reading the docs in the repo. The Confluence generator strips it.*
+> 🔧 *This section is for engineers reading the docs in the repo. The wiki generator strips it.*
 >
 > The move is implemented by a custom Neo4j resolver (`MoveSystemMutation`) that, in one transaction: disconnects any existing `HAS_SUBSYSTEM` edge into the source, creates a new `HAS_SUBSYSTEM` from the destination, and adds a `WAS_MOVED_FROM` edge to the prior parent carrying `timestamp` and `userUid`. Edits to other fields go through `UpdateSystemMovingMutation` and are committed *before* the move (the dialog runs both mutations sequentially). See `src/server/apollo/resolvers/moveSystemResolver.ts`.
 

@@ -21,6 +21,9 @@ interface EmployeeAssignmentTableProps {
     existingEmployeeUids?: string[]
     isLoading?: boolean
     className?: string
+    // Optional per-system gate ANDed with the SYSTEM_EDIT role. Defaults to
+    // role-only so existing callers are unaffected.
+    canEdit?: boolean
 }
 
 export const EmployeeAssignmentTable = memo(
@@ -32,9 +35,10 @@ export const EmployeeAssignmentTable = memo(
         existingEmployeeUids,
         isLoading = false,
         className,
+        canEdit: canEditProp = true,
     }: EmployeeAssignmentTableProps) => {
         const { formatMessage: fm } = useIntl()
-        const canEdit = usePermission([ROLE.SYSTEM_EDIT])
+        const canEdit = usePermission([ROLE.SYSTEM_EDIT]) && canEditProp
         const withWarningModal = useWarningModal()
 
         const allExistingUids = useMemo(() => {

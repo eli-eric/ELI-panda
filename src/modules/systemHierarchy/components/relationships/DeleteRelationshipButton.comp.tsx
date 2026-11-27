@@ -5,8 +5,12 @@ import { toast } from 'sonner'
 import { TableDeleteButton } from '@/components/Buttons'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
-
-import { useDeleteRelationship } from '../../hooks/mutations/useDeleteRelationship'
+import type { RemovableRelationshipType } from '@/modules/shared/system/system-detail'
+import {
+    isNotFoundError,
+    REMOVABLE_RELATIONSHIP_TYPES,
+    useDeleteSystemRelationship,
+} from '@/modules/shared/system/system-detail'
 
 interface Props {
     currentSystemUid: string
@@ -16,6 +20,11 @@ interface Props {
     className?: string
 }
 
+const isRemovableRelationship = (type: string): type is RemovableRelationshipType =>
+    (REMOVABLE_RELATIONSHIP_TYPES as readonly string[]).includes(type)
+
+const messages = message.systemHierarchy.relationships
+
 export const DeleteRelationshipButton: FC<Props> = ({
     currentSystemUid,
     relatedSystemUid,
@@ -24,36 +33,27 @@ export const DeleteRelationshipButton: FC<Props> = ({
     className,
 }) => {
     const { formatMessage: fm } = useIntl()
-    const { deleteRelationship, isPending } = useDeleteRelationship()
+    const { deleteRelationship, isPending } = useDeleteSystemRelationship()
+    const withWarningModal = useWarningModal(fm({ id: messages.deleteConfirm }))
 
-    const withWarningModal = useWarningModal(
-        fm({ id: message.systemHierarchy.relationships.deleteConfirm }),
-    )
+    // HAS_SUBSYSTEM is structural — moved / deleted through the system itself
+    if (!isRemovableRelationship(relationshipType)) return null
 
     const handleDelete = async () => {
-        const toastId = toast.loading(
-            fm({ id: message.systemHierarchy.relationships.deleteLoading }),
-        )
+        const toastId = toast.loading(fm({ id: messages.deleteLoading }))
         try {
-            const deletedCount = await deleteRelationship({
+            await deleteRelationship({
                 currentSystemUid,
                 relatedSystemUid,
                 relationshipType,
                 direction,
             })
-            if (deletedCount > 0) {
-                toast.success(fm({ id: message.systemHierarchy.relationships.deleteSuccess }), {
-                    id: toastId,
-                })
-            } else {
-                toast.warning(fm({ id: message.systemHierarchy.relationships.deleteNotFound }), {
-                    id: toastId,
-                })
-            }
-        } catch {
-            toast.error(fm({ id: message.systemHierarchy.relationships.deleteError }), {
-                id: toastId,
-            })
+            toast.success(fm({ id: messages.deleteSuccess }), { id: toastId })
+        } catch (error) {
+            const messageId = isNotFoundError(error)
+                ? messages.deleteNotFound
+                : messages.deleteError
+            toast.error(fm({ id: messageId }), { id: toastId })
         }
     }
 

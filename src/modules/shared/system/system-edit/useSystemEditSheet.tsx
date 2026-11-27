@@ -1,10 +1,8 @@
-import { lazy, useCallback, useRef } from 'react'
+import { lazy, useCallback } from 'react'
+import { useIntl } from 'react-intl'
 
-import useWarningModal from '@/hooks/useWarningModal'
+import { message } from '@/i18n/src/messages'
 import { useDynamicModalStore } from '@/store/useDynamicModalStore'
-import { useModalFormStateStore } from '@/store/useModalFormStateStore'
-
-import { useSystemStore } from '../device-info-overlay/store/useShowDeviceStore'
 
 const SystemEditContainer = lazy(() =>
     import('./system-edit.cont').then(module => ({
@@ -12,55 +10,25 @@ const SystemEditContainer = lazy(() =>
     })),
 )
 
+export const getSystemEditSheetId = (uid: string) => `system-edit-${uid}`
+
+/**
+ * Opens the Edit System sheet for a system. Every field saves on its own (inline
+ * PATCH), so there is no form state and no unsaved-changes guard on close.
+ */
 export const useSystemEditSheet = () => {
+    const { formatMessage: fm } = useIntl()
     const { openModal } = useDynamicModalStore()
-    const { uid: storeUid } = useSystemStore()
-    const { reset: resetFormState } = useModalFormStateStore()
-    const modalIdRef = useRef<string | undefined>(undefined)
-    const withWarningModal = useWarningModal(
-        'You have unsaved changes. Are you sure you want to close without saving?',
-    )
 
-    // Create dirty protection handler that doesn't violate hooks rules
-    const createCloseAttemptHandler = useCallback(
-        (modalId: string) => {
-            return () => {
-                const currentIsDirty = useModalFormStateStore.getState().isDirty
-                if (!currentIsDirty) {
-                    return true // Allow closing - form is clean
-                }
-                withWarningModal(() => {
-                    useDynamicModalStore.getState().closeModal(modalId)
-                    useModalFormStateStore.getState().reset()
-                })()
-                return false // Prevent immediate closing, let user decide via warning modal
-            }
+    return useCallback(
+        (uid?: string | null) => {
+            if (!uid) return undefined
+            return openModal('sheet', {
+                id: getSystemEditSheetId(uid),
+                component: SystemEditContainer,
+                props: { uid, size: 'l', title: fm({ id: message.systemHierarchy.sheet.title }) },
+            })
         },
-        [withWarningModal],
+        [fm, openModal],
     )
-
-    return (openUid?: string) => {
-        const uid = storeUid || openUid
-
-        if (!uid) {
-            // eslint-disable-next-line no-console
-            console.warn('useSystemEditSheet: No UID provided')
-            return
-        }
-
-        const modalId = `system-edit-${uid}`
-        const onCloseAttempt = createCloseAttemptHandler(modalId)
-
-        modalIdRef.current = openModal('sheet', {
-            id: modalId,
-            component: SystemEditContainer,
-            props: { uid, size: 'l', title: 'Edit System' },
-            onCloseAttempt,
-            onClose: () => {
-                resetFormState()
-            },
-        })
-
-        return modalIdRef.current
-    }
 }
