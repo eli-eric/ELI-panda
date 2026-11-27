@@ -1644,6 +1644,9 @@ export const messages = {
             menuItem: 'Create System',
             dialogTitle: 'Create new system',
             dialogDescription: 'Subsystem of "{parentName}" — {parentLevelLabel}',
+            dialogDescriptionNoLevel: 'Subsystem of "{parentName}"',
+            rootDialogDescription:
+                'New top-level system. Fill in the rest in the Edit System sheet.',
             inheritedTitle: 'Inherited at creation',
             inheritedHelp: 'Copied from "{parentName}". You can change these later.',
             inheritedNotSet: 'Not set on parent',

@@ -5,10 +5,10 @@ import { SystemPathTooltip } from '@/components/system/SystemPathTooltip.comp'
 import { Tooltip } from '@/components/Tooltip'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { useSystemCreateSheet } from '@/modules/shared/system/system-create/useSystemCreateSheet'
 import type { SystemDetail } from '@/types/responses/systems'
 import type { EndpointProps } from '@/utils/getEndpoints'
 
+import { useCreateSystemFromOverview } from '../../../hooks/useCreateSystemFromOverview'
 import { SystemActionButtons } from './SystemActionButtons'
 
 interface SystemNameCellContentProps {
@@ -49,7 +49,7 @@ export const SystemNameCellContent = ({
     const indentStyle = {
         paddingLeft: `${depth * 16}px`,
     }
-    const openSystemCreateSheet = useSystemCreateSheet()
+    const openCreateSystem = useCreateSystemFromOverview()
 
     return (
         <div className="flex items-center w-full group">
@@ -107,7 +107,13 @@ export const SystemNameCellContent = ({
                         <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => openSystemCreateSheet(original.uid)}
+                            onClick={() =>
+                                void openCreateSystem({
+                                    uid: original.uid,
+                                    name: original.name,
+                                    level: original.systemLevel ?? null,
+                                })
+                            }
                             className="h-8 w-8 p-0 transition-opacity duration-200 mr-1 hover:text-primary text-muted-foreground"
                         >
                             <PlusIcon className="h-4 w-4" />

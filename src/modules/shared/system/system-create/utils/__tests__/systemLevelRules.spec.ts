@@ -1,6 +1,10 @@
 import { SystemLevel } from '@/types/constants/systemLevel'
 
-import { canCreateUnder, getAllowedChildSystemLevels } from '../systemLevelRules'
+import {
+    canCreateUnder,
+    getAllowedChildSystemLevels,
+    getAllowedCreateLevels,
+} from '../systemLevelRules'
 
 describe('getAllowedChildSystemLevels', () => {
     it('SystemDomain allows only TechnologyUnit', () => {
@@ -47,5 +51,18 @@ describe('canCreateUnder', () => {
 
     it('returns false for Trash', () => {
         expect(canCreateUnder(SystemLevel.Trash)).toBe(false)
+    })
+})
+
+describe('getAllowedCreateLevels', () => {
+    it('uses the parent rules for a child', () => {
+        expect(getAllowedCreateLevels(SystemLevel.SystemDomain)).toEqual([
+            SystemLevel.TechnologyUnit,
+        ])
+    })
+
+    it('offers every level except Trash for a root (or a parent without a level)', () => {
+        expect(getAllowedCreateLevels()).not.toContain(SystemLevel.Trash)
+        expect(getAllowedCreateLevels(null)).toHaveLength(4)
     })
 })

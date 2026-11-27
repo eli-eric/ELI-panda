@@ -120,11 +120,6 @@ export interface CreateSystemBody extends SystemPatchFields {
     systemLevel: SystemLevel
 }
 
-export interface CreateSubsystemBody {
-    name: string
-    systemLevel: SystemLevel
-}
-
 export interface SpareSystemRef {
     uid: string
     name: string

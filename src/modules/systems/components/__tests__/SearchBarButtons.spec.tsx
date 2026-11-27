@@ -1,11 +1,11 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 
-import { useSystemCreateSheet } from '@/modules/shared/system/system-create/useSystemCreateSheet'
+import { useCreateSystemFromOverview } from '@/modules/systems/hooks/useCreateSystemFromOverview'
 
 import { SearchBarButtons } from '../SearchBarButtons'
 
-jest.mock('@/modules/shared/system/system-create/useSystemCreateSheet', () => ({
-    useSystemCreateSheet: jest.fn(),
+jest.mock('@/modules/systems/hooks/useCreateSystemFromOverview', () => ({
+    useCreateSystemFromOverview: jest.fn(),
 }))
 
 jest.mock('@/modules/shared/table/SearchBar', () => ({
@@ -40,14 +40,14 @@ jest.mock('../filters/SystemsFilterButton.cont', () => ({
     SystemFilterButtonContainer: () => <div data-testid="filter-btn" />,
 }))
 
-const mockUseSystemCreateSheet = useSystemCreateSheet as unknown as jest.Mock
+const mockUseCreateSystemFromOverview = useCreateSystemFromOverview as unknown as jest.Mock
 
-let openCreateSheet: jest.Mock
+let openCreateSystem: jest.Mock
 
 beforeEach(() => {
     jest.clearAllMocks()
-    openCreateSheet = jest.fn()
-    mockUseSystemCreateSheet.mockReturnValue(openCreateSheet)
+    openCreateSystem = jest.fn()
+    mockUseCreateSystemFromOverview.mockReturnValue(openCreateSystem)
 })
 
 describe('SearchBarButtons (systems)', () => {
@@ -58,10 +58,10 @@ describe('SearchBarButtons (systems)', () => {
         expect(screen.getByTestId('csv')).toBeInTheDocument()
     })
 
-    it('Add click invokes openCreateSheet', () => {
+    it('Add click invokes openCreateSystem', () => {
         render(<SearchBarButtons />)
         fireEvent.click(screen.getByTestId('add'))
-        expect(openCreateSheet).toHaveBeenCalled()
+        expect(openCreateSystem).toHaveBeenCalledWith()
     })
 
     it('Refresh button rendered (handler currently a no-op TODO)', () => {

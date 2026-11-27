@@ -6,7 +6,7 @@ import { useDynamicModalStore } from '@/store/useDynamicModalStore'
 import { AllProvidersWrapper } from '@/testutils/wrappers/AllProvidersWrapper'
 import { SystemLevel } from '@/types/constants/systemLevel'
 
-import { useCreateSubsystemAction } from '../useCreateSubsystemAction'
+import { useCreateSystemDialog } from '../useCreateSystemDialog'
 
 jest.mock('@/hooks/usePermission', () => ({
     usePermission: jest.fn(),
@@ -16,8 +16,8 @@ jest.mock('@/store/useDynamicModalStore', () => ({
     useDynamicModalStore: jest.fn(),
 }))
 
-jest.mock('../../components/create/CreateSubsystemDialog.comp', () => ({
-    CreateSubsystemDialog: () => null,
+jest.mock('../../components/CreateSystemDialog.comp', () => ({
+    CreateSystemDialog: () => null,
 }))
 
 jest.mock('@/modules/shared/system/edit-permission', () => ({
@@ -27,6 +27,9 @@ jest.mock('@/modules/shared/system/edit-permission', () => ({
 const mockUsePermission = usePermission as jest.Mock
 const mockUseDynamicModalStore = useDynamicModalStore as unknown as jest.Mock
 const mockConfirmSystemEdit = confirmSystemEdit as jest.Mock
+
+const PARENT = { uid: 'parent-1', name: 'Parent', level: SystemLevel.KeySystems }
+const onCreated = jest.fn()
 
 let openModal: jest.Mock
 let closeModal: jest.Mock
@@ -40,15 +43,15 @@ beforeEach(() => {
     mockConfirmSystemEdit.mockResolvedValue(true)
 })
 
-describe('useCreateSubsystemAction', () => {
+describe('useCreateSystemDialog', () => {
     it('opens the create dialog with parent context once the parent soft lock passes', async () => {
         mockUsePermission.mockReturnValue(true)
-        const { result } = renderHook(() => useCreateSubsystemAction(), {
+        const { result } = renderHook(() => useCreateSystemDialog({ onCreated }), {
             wrapper: AllProvidersWrapper,
         })
 
         await act(async () => {
-            await result.current.handleCreateSubsystem('parent-1', 'Parent', SystemLevel.KeySystems)
+            await result.current(PARENT)
         })
 
         expect(mockConfirmSystemEdit).toHaveBeenCalledWith(
@@ -59,20 +62,19 @@ describe('useCreateSubsystemAction', () => {
         expect(openModal).toHaveBeenCalledTimes(1)
         const [kind, config] = openModal.mock.calls[0]
         expect(kind).toBe('dialog')
-        expect(config.id).toBe('create-subsystem-parent-1')
-        expect(config.props.parentUid).toBe('parent-1')
-        expect(config.props.parentName).toBe('Parent')
-        expect(config.props.parentLevel).toBe(SystemLevel.KeySystems)
+        expect(config.id).toBe('create-system-parent-1')
+        expect(config.props.parent).toEqual(PARENT)
+        expect(config.props.onCreated).toBe(onCreated)
     })
 
     it('does not open the dialog when user lacks edit permission', async () => {
         mockUsePermission.mockReturnValue(false)
-        const { result } = renderHook(() => useCreateSubsystemAction(), {
+        const { result } = renderHook(() => useCreateSystemDialog({ onCreated }), {
             wrapper: AllProvidersWrapper,
         })
 
         await act(async () => {
-            await result.current.handleCreateSubsystem('parent-1', 'Parent', SystemLevel.KeySystems)
+            await result.current(PARENT)
         })
 
         expect(mockConfirmSystemEdit).not.toHaveBeenCalled()
@@ -82,15 +84,31 @@ describe('useCreateSubsystemAction', () => {
     it('does not open the dialog when the user declines the outside-responsibility prompt', async () => {
         mockUsePermission.mockReturnValue(true)
         mockConfirmSystemEdit.mockResolvedValue(false)
-        const { result } = renderHook(() => useCreateSubsystemAction(), {
+        const { result } = renderHook(() => useCreateSystemDialog({ onCreated }), {
             wrapper: AllProvidersWrapper,
         })
 
         await act(async () => {
-            await result.current.handleCreateSubsystem('parent-1', 'Parent', SystemLevel.KeySystems)
+            await result.current(PARENT)
         })
 
         expect(mockConfirmSystemEdit).toHaveBeenCalled()
         expect(openModal).not.toHaveBeenCalled()
+    })
+
+    it('opens a root create without a soft-lock prompt', async () => {
+        mockUsePermission.mockReturnValue(true)
+        const { result } = renderHook(() => useCreateSystemDialog(), {
+            wrapper: AllProvidersWrapper,
+        })
+
+        await act(async () => {
+            await result.current()
+        })
+
+        expect(mockConfirmSystemEdit).not.toHaveBeenCalled()
+        const [, config] = openModal.mock.calls[0]
+        expect(config.id).toBe('create-system-root')
+        expect(config.props.parent).toBeNull()
     })
 })
