@@ -21,3 +21,16 @@ export const getAllowedChildSystemLevels = (parent: SystemLevel): SystemLevel[] 
 
 export const canCreateUnder = (parent: SystemLevel): boolean =>
     getAllowedChildSystemLevels(parent).length > 0
+
+// A root system has no parent to constrain it (the API accepts any level); Trash is
+// only ever a child.
+const ROOT_LEVELS: SystemLevel[] = [
+    SystemLevel.SystemDomain,
+    SystemLevel.TechnologyUnit,
+    SystemLevel.KeySystems,
+    SystemLevel.SubsystemsAndParts,
+]
+
+/** Levels a new system may take: under `parentLevel`, or any non-Trash level for a root. */
+export const getAllowedCreateLevels = (parentLevel?: SystemLevel | null): SystemLevel[] =>
+    parentLevel ? getAllowedChildSystemLevels(parentLevel) : ROOT_LEVELS

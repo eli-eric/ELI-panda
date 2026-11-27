@@ -2,17 +2,18 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
 import { IntlProvider } from 'react-intl'
 
-import { useCreateSubsystem, useSystemDetail } from '@/modules/shared/system/system-detail'
+import { useCreateSystem } from '@/modules/shared/system/system-detail/hooks/mutations/useCreateSystem'
+import { useSystemDetail } from '@/modules/shared/system/system-detail/hooks/queries/useSystemDetail'
 import { SystemLevel } from '@/types/constants/systemLevel'
 
-import { useHierarchyNavigation } from '../../../hooks/useHierarchyNavigation'
-import { CreateSubsystemDialog } from '../CreateSubsystemDialog.comp'
+import { CreateSystemDialog } from '../CreateSystemDialog.comp'
 
-jest.mock('@/modules/shared/system/system-detail', () => ({
-    useCreateSubsystem: jest.fn(),
+jest.mock('@/modules/shared/system/system-detail/hooks/mutations/useCreateSystem', () => ({
+    useCreateSystem: jest.fn(),
+}))
+jest.mock('@/modules/shared/system/system-detail/hooks/queries/useSystemDetail', () => ({
     useSystemDetail: jest.fn(),
 }))
-jest.mock('../../../hooks/useHierarchyNavigation')
 jest.mock('sonner', () => ({
     toast: {
         promise: jest.fn((p, opts) =>
@@ -28,11 +29,8 @@ jest.mock('sonner', () => ({
     },
 }))
 
-const mockUseCreateSubsystem = useCreateSubsystem as jest.MockedFunction<typeof useCreateSubsystem>
+const mockUseCreateSystem = useCreateSystem as jest.MockedFunction<typeof useCreateSystem>
 const mockUseSystemDetail = useSystemDetail as jest.MockedFunction<typeof useSystemDetail>
-const mockUseHierarchyNavigation = useHierarchyNavigation as jest.MockedFunction<
-    typeof useHierarchyNavigation
->
 
 const messages: Record<string, string> = {
     'systemHierarchy.fields.name': 'Name',
@@ -83,31 +81,26 @@ const parentSystem = {
     sparesOut: 0,
 }
 
-const renderDialog = (
-    overrides: Partial<React.ComponentProps<typeof CreateSubsystemDialog>> = {},
-) =>
+const PARENT = { uid: 'parent-1', name: 'Parent', level: SystemLevel.KeySystems }
+
+const renderDialog = (overrides: Partial<React.ComponentProps<typeof CreateSystemDialog>> = {}) =>
     render(
         <IntlProvider locale="en" messages={messages}>
-            <CreateSubsystemDialog
-                parentUid="parent-1"
-                parentName="Parent"
-                parentLevel={SystemLevel.KeySystems}
-                onClose={jest.fn()}
-                {...overrides}
-            />
+            <CreateSystemDialog parent={PARENT} onClose={jest.fn()} {...overrides} />
         </IntlProvider>,
     )
 
-describe('CreateSubsystemDialog', () => {
-    const createSubsystem = jest.fn()
-    const selectLeaf = jest.fn()
+describe('CreateSystemDialog', () => {
+    const createSystem = jest.fn()
+    const onCreated = jest.fn()
 
     beforeEach(() => {
         jest.clearAllMocks()
-        mockUseCreateSubsystem.mockReturnValue({
-            createSubsystem,
+        mockUseCreateSystem.mockReturnValue({
+            createSystem,
+            confirmCreate: jest.fn(),
             isPending: false,
-        })
+        } as any)
         mockUseSystemDetail.mockReturnValue({
             system: parentSystem,
             isLoading: false,
@@ -115,41 +108,30 @@ describe('CreateSubsystemDialog', () => {
             physicalItem: null,
             catalogueItem: null,
         } as any)
-        mockUseHierarchyNavigation.mockReturnValue({
-            selectLeaf,
-            selectedParentUid: null,
-            selectedLeafUid: null,
-            activeTab: 'detail',
-            selectParent: jest.fn(),
-            setActiveTab: jest.fn(),
-            goBackToLeaves: jest.fn(),
-        } as any)
     })
 
     it('shows validation error and does not call mutation when name is empty', async () => {
         renderDialog()
 
-        fireEvent.click(screen.getByTestId('create-subsystem-submit'))
+        fireEvent.click(screen.getByTestId('create-system-submit'))
 
         await waitFor(() => {
-            expect(screen.getByTestId('create-subsystem-name-error')).toBeInTheDocument()
+            expect(screen.getByTestId('create-system-name-error')).toBeInTheDocument()
         })
-        expect(createSubsystem).not.toHaveBeenCalled()
+        expect(createSystem).not.toHaveBeenCalled()
     })
 
     it('preselects the first allowed level on the Select trigger', () => {
         // KeySystems allows: KeySystems, SubsystemsAndParts, Trash — first is KeySystems
         renderDialog()
-        expect(screen.getByTestId('create-subsystem-level')).toHaveTextContent('Key systems')
+        expect(screen.getByTestId('create-system-level')).toHaveTextContent('Key systems')
     })
 
     it('renders a read-only level badge (no Select) when only one level is allowed', () => {
-        renderDialog({ parentLevel: SystemLevel.SystemDomain })
+        renderDialog({ parent: { ...PARENT, level: SystemLevel.SystemDomain } })
 
-        expect(screen.queryByTestId('create-subsystem-level')).not.toBeInTheDocument()
-        expect(screen.getByTestId('create-subsystem-level-badge')).toHaveTextContent(
-            'Technology unit',
-        )
+        expect(screen.queryByTestId('create-system-level')).not.toBeInTheDocument()
+        expect(screen.getByTestId('create-system-level-badge')).toHaveTextContent('Technology unit')
     })
 
     it('disables submit while parent detail is loading', () => {
@@ -163,7 +145,7 @@ describe('CreateSubsystemDialog', () => {
 
         renderDialog()
 
-        expect(screen.getByTestId('create-subsystem-submit')).toBeDisabled()
+        expect(screen.getByTestId('create-system-submit')).toBeDisabled()
     })
 
     it('always renders all three inherited rows; shows values when set and "Not set on parent" when null', () => {
@@ -182,13 +164,9 @@ describe('CreateSubsystemDialog', () => {
         } as any)
 
         const { unmount } = renderDialog()
-        expect(screen.getByTestId('create-subsystem-inherited-responsible')).toHaveTextContent(
-            'Alice',
-        )
-        expect(screen.getByTestId('create-subsystem-inherited-location')).toHaveTextContent(
-            'Hall A',
-        )
-        expect(screen.getByTestId('create-subsystem-inherited-zone')).toHaveTextContent('Zone 1')
+        expect(screen.getByTestId('create-system-inherited-responsible')).toHaveTextContent('Alice')
+        expect(screen.getByTestId('create-system-inherited-location')).toHaveTextContent('Hall A')
+        expect(screen.getByTestId('create-system-inherited-zone')).toHaveTextContent('Zone 1')
         unmount()
 
         // Second render: parent with no inherited fields — rows still render with "Not set on parent"
@@ -201,20 +179,20 @@ describe('CreateSubsystemDialog', () => {
         } as any)
 
         renderDialog()
-        expect(screen.getByTestId('create-subsystem-inherited')).toBeInTheDocument()
-        expect(screen.getByTestId('create-subsystem-inherited-responsible')).toHaveTextContent(
+        expect(screen.getByTestId('create-system-inherited')).toBeInTheDocument()
+        expect(screen.getByTestId('create-system-inherited-responsible')).toHaveTextContent(
             'Not set on parent',
         )
-        expect(screen.getByTestId('create-subsystem-inherited-location')).toHaveTextContent(
+        expect(screen.getByTestId('create-system-inherited-location')).toHaveTextContent(
             'Not set on parent',
         )
-        expect(screen.getByTestId('create-subsystem-inherited-zone')).toHaveTextContent(
+        expect(screen.getByTestId('create-system-inherited-zone')).toHaveTextContent(
             'Not set on parent',
         )
     })
 
     // inheritance happens server-side — the body only carries name + level
-    it('on successful submit posts name + level and navigates via selectLeaf', async () => {
+    it('on successful submit posts parent + name + level and hands the result to onCreated', async () => {
         mockUseSystemDetail.mockReturnValue({
             system: {
                 ...parentSystem,
@@ -228,28 +206,29 @@ describe('CreateSubsystemDialog', () => {
             catalogueItem: null,
         } as any)
 
-        createSubsystem.mockResolvedValue({
+        createSystem.mockResolvedValue({
             uid: 'new-uid',
             name: 'Child',
             systemLevel: SystemLevel.SubsystemsAndParts,
         })
         const onClose = jest.fn()
 
-        renderDialog({ onClose })
+        renderDialog({ onClose, onCreated })
 
-        fireEvent.change(screen.getByTestId('create-subsystem-name'), {
+        fireEvent.change(screen.getByTestId('create-system-name'), {
             target: { value: 'Child' },
         })
-        fireEvent.click(screen.getByTestId('create-subsystem-submit'))
+        fireEvent.click(screen.getByTestId('create-system-submit'))
 
         await waitFor(() => {
-            expect(createSubsystem).toHaveBeenCalledWith({
+            expect(createSystem).toHaveBeenCalledWith({
+                parentUid: 'parent-1',
                 name: 'Child',
                 systemLevel: SystemLevel.KeySystems,
             })
         })
         await waitFor(() => {
-            expect(selectLeaf).toHaveBeenCalledWith('new-uid')
+            expect(onCreated).toHaveBeenCalledWith(expect.objectContaining({ uid: 'new-uid' }))
         })
         await waitFor(() => {
             expect(onClose).toHaveBeenCalled()
@@ -258,29 +237,52 @@ describe('CreateSubsystemDialog', () => {
 
     it('renders the empty state when parent has no allowed child levels (Trash)', () => {
         const onClose = jest.fn()
-        renderDialog({ parentLevel: SystemLevel.Trash, onClose })
+        renderDialog({ parent: { ...PARENT, level: SystemLevel.Trash }, onClose })
 
-        expect(screen.getByTestId('create-subsystem-empty')).toHaveTextContent(
+        expect(screen.getByTestId('create-system-empty')).toHaveTextContent(
             'No system levels can be created under this parent.',
         )
-        expect(screen.queryByTestId('create-subsystem-dialog')).not.toBeInTheDocument()
-        expect(createSubsystem).not.toHaveBeenCalled()
+        expect(screen.queryByTestId('create-system-dialog')).not.toBeInTheDocument()
+        expect(createSystem).not.toHaveBeenCalled()
     })
 
-    it('on mutation rejection does not navigate and does not close the modal', async () => {
-        createSubsystem.mockRejectedValue(new Error('boom'))
+    it('on mutation rejection does not call onCreated and does not close the modal', async () => {
+        createSystem.mockRejectedValue(new Error('boom'))
         const onClose = jest.fn()
-        renderDialog({ onClose })
+        renderDialog({ onClose, onCreated })
 
-        fireEvent.change(screen.getByTestId('create-subsystem-name'), {
+        fireEvent.change(screen.getByTestId('create-system-name'), {
             target: { value: 'X' },
         })
-        fireEvent.click(screen.getByTestId('create-subsystem-submit'))
+        fireEvent.click(screen.getByTestId('create-system-submit'))
 
         await waitFor(() => {
-            expect(createSubsystem).toHaveBeenCalled()
+            expect(createSystem).toHaveBeenCalled()
         })
-        expect(selectLeaf).not.toHaveBeenCalled()
+        expect(onCreated).not.toHaveBeenCalled()
         expect(onClose).not.toHaveBeenCalled()
+    })
+
+    it('creates a root system: no parent, root levels, no inherited block', async () => {
+        createSystem.mockResolvedValue({ uid: 'root-uid', name: 'Root' })
+        renderDialog({ parent: null, onCreated })
+
+        expect(screen.queryByTestId('create-system-inherited')).not.toBeInTheDocument()
+        expect(screen.getByTestId('create-system-level')).toHaveTextContent('System domain')
+
+        fireEvent.change(screen.getByTestId('create-system-name'), {
+            target: { value: 'Root' },
+        })
+        fireEvent.click(screen.getByTestId('create-system-submit'))
+
+        await waitFor(() => {
+            expect(createSystem).toHaveBeenCalledWith({
+                name: 'Root',
+                systemLevel: SystemLevel.SystemDomain,
+            })
+        })
+        await waitFor(() => {
+            expect(onCreated).toHaveBeenCalledWith(expect.objectContaining({ uid: 'root-uid' }))
+        })
     })
 })

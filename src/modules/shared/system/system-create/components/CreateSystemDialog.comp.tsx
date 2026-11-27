@@ -21,17 +21,27 @@ import {
 import { Skeleton } from '@/components/ui/skeleton'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
-import { useCreateSubsystem, useSystemDetail } from '@/modules/shared/system/system-detail'
+// deep imports: the system-detail barrel pulls in section components that import back
+// into the overview table (circular through SystemSelect)
+import { useCreateSystem } from '@/modules/shared/system/system-detail/hooks/mutations/useCreateSystem'
+import { useSystemDetail } from '@/modules/shared/system/system-detail/hooks/queries/useSystemDetail'
+import type { SystemDetail } from '@/modules/shared/system/system-detail/types'
 import { SystemLevel } from '@/types/constants/systemLevel'
 import { getBadgeVariantBySystemLevel } from '@/utils/systemLevel'
 
-import { useHierarchyNavigation } from '../../hooks/useHierarchyNavigation'
-import { getAllowedChildSystemLevels } from '../../utils/systemLevelRules'
+import { getAllowedCreateLevels } from '../utils/systemLevelRules'
 
-interface CreateSubsystemDialogProps {
-    parentUid: string
-    parentName: string
-    parentLevel: SystemLevel
+export interface CreateSystemParent {
+    uid: string
+    name: string
+    level: SystemLevel | null
+}
+
+interface CreateSystemDialogProps {
+    /** absent → a root system */
+    parent?: CreateSystemParent | null
+    /** the caller decides what follows (explorer selects it, overview opens the Edit sheet) */
+    onCreated?: (created: SystemDetail) => void
     onClose?: () => void
 }
 
@@ -53,18 +63,19 @@ const buildSchema = (allowedLevels: SystemLevel[], nameRequired: string) =>
         systemLevel: z.enum(allowedLevels as [SystemLevel, ...SystemLevel[]]),
     })
 
-export const CreateSubsystemDialog: FC<CreateSubsystemDialogProps> = ({
-    parentUid,
-    parentName,
-    parentLevel,
-    onClose,
-}) => {
+/**
+ * Quick create (name + level) shared by the explorer and the systems overview; every
+ * other field is filled in the Edit System sheet afterwards. A child previews what the
+ * server inherits from its parent.
+ */
+export const CreateSystemDialog: FC<CreateSystemDialogProps> = ({ parent, onCreated, onClose }) => {
     const { formatMessage: fm } = useIntl()
+    const parentUid = parent?.uid ?? null
+    const parentLevel = parent?.level ?? null
     const { system: parentSystem, isLoading: parentLoading } = useSystemDetail(parentUid)
-    const { createSubsystem, isPending } = useCreateSubsystem(parentUid)
-    const { selectLeaf } = useHierarchyNavigation()
+    const { createSystem, isPending } = useCreateSystem()
 
-    const allowedLevels = useMemo(() => getAllowedChildSystemLevels(parentLevel), [parentLevel])
+    const allowedLevels = useMemo(() => getAllowedCreateLevels(parentLevel), [parentLevel])
     const onlyOneLevel = allowedLevels.length === 1
     const hasNoAllowedLevels = allowedLevels.length === 0
     const schema = useMemo(
@@ -120,13 +131,17 @@ export const CreateSubsystemDialog: FC<CreateSubsystemDialogProps> = ({
     // The server inherits responsible / location / zone from the parent — the
     // block below only previews what the new system will get.
     const onSubmit = handleSubmit(data => {
-        const promise = createSubsystem({ name: data.name.trim(), systemLevel: data.systemLevel })
+        const promise = createSystem({
+            ...(parentUid && { parentUid }),
+            name: data.name.trim(),
+            systemLevel: data.systemLevel,
+        })
 
         toast.promise(promise, {
             loading: fm({ id: message.systemHierarchy.create.creating }),
             success: result => {
-                selectLeaf(result.uid)
                 onClose?.()
+                onCreated?.(result)
                 return fm({ id: message.systemHierarchy.create.created })
             },
             // the soft lock was already confirmed when the dialog opened
@@ -138,7 +153,7 @@ export const CreateSubsystemDialog: FC<CreateSubsystemDialogProps> = ({
 
     if (hasNoAllowedLevels) {
         return (
-            <div className="space-y-4" data-testid="create-subsystem-empty">
+            <div className="space-y-4" data-testid="create-system-empty">
                 <p className="text-sm text-muted-foreground">
                     {fm({ id: message.systemHierarchy.create.noAllowedLevels })}
                 </p>
@@ -155,59 +170,60 @@ export const CreateSubsystemDialog: FC<CreateSubsystemDialogProps> = ({
     const onlyLevelLabel = onlyOneLevel
         ? fm({ id: message.systemHierarchy.systemLevels[onlyLevel] })
         : null
-    const parentLevelLabel = fm({ id: message.systemHierarchy.systemLevels[parentLevel] })
+    const parentLevelLabel = parentLevel
+        ? fm({ id: message.systemHierarchy.systemLevels[parentLevel] })
+        : null
 
     return (
-        <form onSubmit={onSubmit} className="space-y-5" data-testid="create-subsystem-dialog">
+        <form onSubmit={onSubmit} className="space-y-5" data-testid="create-system-dialog">
             <div className="space-y-2">
-                <Label htmlFor="create-subsystem-name">
+                <Label htmlFor="create-system-name">
                     {fm({ id: message.systemHierarchy.fields.name })}
                 </Label>
                 <Input
-                    id="create-subsystem-name"
+                    id="create-system-name"
                     autoFocus
                     placeholder={fm({ id: message.systemHierarchy.create.namePlaceholder })}
-                    data-testid="create-subsystem-name"
+                    data-testid="create-system-name"
                     aria-invalid={!!errors.name}
                     {...register('name')}
                 />
                 {errors.name && (
-                    <p
-                        className="text-xs text-destructive"
-                        data-testid="create-subsystem-name-error"
-                    >
+                    <p className="text-xs text-destructive" data-testid="create-system-name-error">
                         {errors.name.message}
                     </p>
                 )}
             </div>
 
             <div className="space-y-2">
-                <Label htmlFor="create-subsystem-level">
+                <Label htmlFor="create-system-level">
                     {fm({ id: message.systemHierarchy.fields.systemLevel })}
                 </Label>
                 {onlyOneLevel ? (
                     <>
-                        <div id="create-subsystem-level">
+                        <div id="create-system-level">
                             <Badge
                                 variant="outline"
                                 className={cn(
                                     'px-3 py-1 text-sm',
                                     getBadgeVariantBySystemLevel(onlyLevel),
                                 )}
-                                data-testid="create-subsystem-level-badge"
+                                data-testid="create-system-level-badge"
                             >
                                 {onlyLevelLabel}
                             </Badge>
                         </div>
-                        <p className="text-xs text-muted-foreground">
-                            {fm(
-                                { id: message.systemHierarchy.create.onlyOneLevelHint },
-                                {
-                                    levelLabel: onlyLevelLabel,
-                                    parentLevelLabel,
-                                },
-                            )}
-                        </p>
+                        {parentLevelLabel && (
+                            <p className="text-xs text-muted-foreground">
+                                {fm(
+                                    { id: message.systemHierarchy.create.onlyOneLevelHint },
+                                    {
+                                        levelLabel: onlyLevelLabel,
+                                        parentLevelLabel,
+                                    },
+                                )}
+                            </p>
+                        )}
                     </>
                 ) : (
                     <Controller
@@ -216,8 +232,8 @@ export const CreateSubsystemDialog: FC<CreateSubsystemDialogProps> = ({
                         render={({ field }) => (
                             <Select value={field.value} onValueChange={field.onChange}>
                                 <SelectTrigger
-                                    id="create-subsystem-level"
-                                    data-testid="create-subsystem-level"
+                                    id="create-system-level"
+                                    data-testid="create-system-level"
                                     className="w-full"
                                 >
                                     <SelectValue>
@@ -234,7 +250,7 @@ export const CreateSubsystemDialog: FC<CreateSubsystemDialogProps> = ({
                                         <SelectItem
                                             key={level}
                                             value={level}
-                                            data-testid={`create-subsystem-level-option-${level}`}
+                                            data-testid={`create-system-level-option-${level}`}
                                         >
                                             {fm({
                                                 id: message.systemHierarchy.systemLevels[level],
@@ -248,63 +264,71 @@ export const CreateSubsystemDialog: FC<CreateSubsystemDialogProps> = ({
                 )}
             </div>
 
-            <div
-                className="rounded-md border bg-muted/40 p-3 space-y-3"
-                data-testid="create-subsystem-inherited"
-            >
-                <div className="space-y-1">
-                    <p className="text-sm font-medium">
-                        {fm({ id: message.systemHierarchy.create.inheritedTitle })}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                        {fm({ id: message.systemHierarchy.create.inheritedHelp }, { parentName })}
-                    </p>
-                </div>
+            {parent && (
+                <div
+                    className="rounded-md border bg-muted/40 p-3 space-y-3"
+                    data-testid="create-system-inherited"
+                >
+                    <div className="space-y-1">
+                        <p className="text-sm font-medium">
+                            {fm({ id: message.systemHierarchy.create.inheritedTitle })}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                            {fm(
+                                { id: message.systemHierarchy.create.inheritedHelp },
+                                { parentName: parent.name },
+                            )}
+                        </p>
+                    </div>
 
-                <dl className="space-y-2 text-sm">
-                    {inheritedFields.map(({ key, icon: Icon, labelId, value }) => {
-                        const hasValue = !!value
-                        return (
-                            <div
-                                key={key}
-                                className="flex items-center gap-3"
-                                data-testid={`create-subsystem-inherited-${key}`}
-                            >
-                                <Icon
-                                    className={cn(
-                                        'size-4 shrink-0',
-                                        hasValue ? 'text-foreground' : 'text-muted-foreground/60',
-                                    )}
-                                />
-                                <dt
-                                    className={cn(
-                                        'w-28 shrink-0',
-                                        hasValue
-                                            ? 'text-muted-foreground'
-                                            : 'text-muted-foreground/70',
-                                    )}
+                    <dl className="space-y-2 text-sm">
+                        {inheritedFields.map(({ key, icon: Icon, labelId, value }) => {
+                            const hasValue = !!value
+                            return (
+                                <div
+                                    key={key}
+                                    className="flex items-center gap-3"
+                                    data-testid={`create-system-inherited-${key}`}
                                 >
-                                    {fm({ id: labelId })}
-                                </dt>
-                                {parentLoading ? (
-                                    <Skeleton className="h-4 w-32" />
-                                ) : hasValue ? (
-                                    <dd className="text-foreground">{value}</dd>
-                                ) : (
-                                    <dd className="flex items-baseline gap-2 text-muted-foreground/70">
-                                        <span>—</span>
-                                        <span className="text-xs">
-                                            {fm({
-                                                id: message.systemHierarchy.create.inheritedNotSet,
-                                            })}
-                                        </span>
-                                    </dd>
-                                )}
-                            </div>
-                        )
-                    })}
-                </dl>
-            </div>
+                                    <Icon
+                                        className={cn(
+                                            'size-4 shrink-0',
+                                            hasValue
+                                                ? 'text-foreground'
+                                                : 'text-muted-foreground/60',
+                                        )}
+                                    />
+                                    <dt
+                                        className={cn(
+                                            'w-28 shrink-0',
+                                            hasValue
+                                                ? 'text-muted-foreground'
+                                                : 'text-muted-foreground/70',
+                                        )}
+                                    >
+                                        {fm({ id: labelId })}
+                                    </dt>
+                                    {parentLoading ? (
+                                        <Skeleton className="h-4 w-32" />
+                                    ) : hasValue ? (
+                                        <dd className="text-foreground">{value}</dd>
+                                    ) : (
+                                        <dd className="flex items-baseline gap-2 text-muted-foreground/70">
+                                            <span>—</span>
+                                            <span className="text-xs">
+                                                {fm({
+                                                    id: message.systemHierarchy.create
+                                                        .inheritedNotSet,
+                                                })}
+                                            </span>
+                                        </dd>
+                                    )}
+                                </div>
+                            )
+                        })}
+                    </dl>
+                </div>
+            )}
 
             <div className="flex justify-end gap-2 pt-2">
                 <Button type="button" variant="outline" onClick={onClose} disabled={isPending}>
@@ -313,7 +337,7 @@ export const CreateSubsystemDialog: FC<CreateSubsystemDialogProps> = ({
                 <Button
                     type="submit"
                     disabled={isPending || parentLoading}
-                    data-testid="create-subsystem-submit"
+                    data-testid="create-system-submit"
                 >
                     {isPending ? (
                         <Loader2 className="size-4 animate-spin mr-2" />

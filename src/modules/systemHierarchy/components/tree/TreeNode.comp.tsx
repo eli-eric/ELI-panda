@@ -13,13 +13,13 @@ import {
 } from '@/components/ui/context-menu'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
+import { canCreateUnder } from '@/modules/shared/system/system-create/utils/systemLevelRules'
 import type { SystemLevel } from '@/types/constants/systemLevel'
 import { highlightText } from '@/utils'
 import { getFontBySystemLevel } from '@/utils/systemLevel'
 
 import { useSystemLeavesCount } from '../../hooks/queries/useSystemLeavesCount'
 import type { HierarchyNode } from '../../types'
-import { canCreateUnder } from '../../utils/systemLevelRules'
 
 interface TreeNodeProps {
     node: HierarchyNode

@@ -1,11 +1,11 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 
-import { useSystemCreateSheet } from '@/modules/shared/system/system-create/useSystemCreateSheet'
+import { useCreateSystemFromOverview } from '@/modules/systems/hooks/useCreateSystemFromOverview'
 
 import { SystemNameCellContent } from '../SystemNameCellContent.comp'
 
-jest.mock('@/modules/shared/system/system-create/useSystemCreateSheet', () => ({
-    useSystemCreateSheet: jest.fn(),
+jest.mock('@/modules/systems/hooks/useCreateSystemFromOverview', () => ({
+    useCreateSystemFromOverview: jest.fn(),
 }))
 
 jest.mock('@/components/system/SystemBadge.comp', () => ({
@@ -28,19 +28,25 @@ jest.mock('../SystemActionButtons', () => ({
     SystemActionButtons: () => <div data-testid="action-buttons" />,
 }))
 
-const mockUseSystemCreateSheet = useSystemCreateSheet as jest.Mock
+const mockUseCreateSystemFromOverview = useCreateSystemFromOverview as jest.Mock
 
 let openCreate: jest.Mock
 
 beforeEach(() => {
     jest.clearAllMocks()
     openCreate = jest.fn()
-    mockUseSystemCreateSheet.mockReturnValue(openCreate)
+    mockUseCreateSystemFromOverview.mockReturnValue(openCreate)
 })
 
 const baseProps = {
     value: 'Sys A',
-    original: { uid: 'u-1', systemLevel: 'KeySystems', physicalItem: null, parentPath: [] } as any,
+    original: {
+        uid: 'u-1',
+        name: 'Pump',
+        systemLevel: 'KEY_SYSTEMS',
+        physicalItem: null,
+        parentPath: [],
+    } as any,
     hasSubsystems: false,
     isExpanded: false,
     onEdit: jest.fn(),
@@ -67,11 +73,15 @@ describe('SystemNameCellContent', () => {
         expect(onEdit).toHaveBeenCalled()
     })
 
-    it('Create Subsystem button calls useSystemCreateSheet with uid', () => {
+    it('Create Subsystem button opens the create dialog with the row as parent', () => {
         render(<SystemNameCellContent {...baseProps} />)
         const buttons = screen.getAllByRole('button')
         fireEvent.click(buttons[1])
-        expect(openCreate).toHaveBeenCalledWith('u-1')
+        expect(openCreate).toHaveBeenCalledWith({
+            uid: 'u-1',
+            name: 'Pump',
+            level: 'KEY_SYSTEMS',
+        })
     })
 
     it('hides Edit + Create Subsystem when hideButtons', () => {

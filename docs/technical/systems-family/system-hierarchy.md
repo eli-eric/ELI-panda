@@ -34,7 +34,7 @@ src/modules/systemHierarchy/
 src/modules/shared/system/system-detail/ — single-system read model + writes, shared with the Edit System sheet
 ├── types.ts                             — REST contract (`SystemDetail`, PATCH bodies, spare / property / order shapes)
 ├── hooks/queries/                       — useSystemDetail, useSystemSpareParts, useSystemSubsystems, usePhysicalItemCatalogueProperties, usePhysicalItemOrders
-├── hooks/mutations/                     — useSystemPatch, usePhysicalItemPatch, useGenerateSystemCode, useCreateSubsystem, useDeleteSystemRelationship (+ engine useSystemScopedWrite)
+├── hooks/mutations/                     — useSystemPatch, usePhysicalItemPatch, useGenerateSystemCode, useCreateSystem, useDeleteSystemRelationship (+ engine useSystemScopedWrite)
 ├── hooks/useSystemFieldSave.ts          — inline-field adapter (role gate + void-returning saves)
 ├── components/                          — inline field sections, breadcrumbs, image panel, spares, subsystems, properties, orders
 ├── history/                             — SystemHistoryFeed, useSystemHistory, history types + field labels
@@ -89,8 +89,7 @@ All single-system writes share one engine, `useSystemScopedWrite`: soft-lock con
 | `useSystemPatch(uid)` | `PATCH /system/{uid}` | Partial: absent key = unchanged, `null` = clear; codebooks as `{ uid }`, `operators` / `maintainedBy` as full-replace arrays. Returns the fresh `SystemDetail`. |
 | `usePhysicalItemPatch(uid)` | `PATCH /system/{uid}/physical-item` | serial, notes, usage, condition. Same token + scope as the system (audit lands on the System node). |
 | `useGenerateSystemCode(uid)` | `POST /system/{uid}/system-code` | generate + save in one step. Release = `useSystemPatch` `{ systemCode: null }`. |
-| `useCreateSystem()` | `POST /systems` | root "Create System" sheet (`shared/system/system-create`): PATCH field shapes + optional `parentUid`; absent responsible / location / zone inherited. `confirmCreate(parentUid)` runs the soft-lock confirm before the toast. |
-| `useCreateSubsystem(parentUid)` | `POST /system/{parentUid}/subsystems` | body `{ name, systemLevel }`; the server inherits responsible / location / zone and validates level rules. Seeds the new detail, then `refreshSystemStructure`. |
+| `useCreateSystem()` | `POST /systems` | the shared Create System dialog (`shared/system/system-create`), root or child: `{ parentUid?, name, systemLevel }`; the server inherits absent responsible / location / zone from the parent and validates level rules. Seeds the new detail, then `refreshSystemStructure`. |
 | `useDeleteSystemRelationship()` | `DELETE /system/{from}/relationships/{type}/{to}` | only the 8 engineering types (`REMOVABLE_RELATIONSHIP_TYPES`); the server re-splits spare coverage in the same transaction, so there is no client recalc. 404 also refreshes the views. |
 | `useSystemCopy` | `PUT /systems/copy` | server orchestrates the recursive copy. |
 | `useDeleteSystem` | `DELETE /system/{uid}` | soft + recursive; immediate invalidate, then background `recalculateSpareParts` + second invalidate. UX in `useDeleteSystemAction` — see [Delete System](#delete-system). |
@@ -152,13 +151,16 @@ User-facing companion: [Physical item details](../../user-guide/systemHierarchy/
 
 `CataloguePropertiesSection` (shared) renders an item's catalogue properties on the **Physical Item tab**, the **Quick-Info sidebar** (`variant="sidebar"`) and the Edit System sheet. The server resolves overrides (`GET /physical-item/{uid}/catalogue-properties`): the latest service item per property wins, `isOverridden` marks a service value that differs from the catalogue one, and service-only properties come with `value: null`. The effective value is `serviceValue ?? value`; `PropertyRow` shows the `was X` marker. The cross-module `useItemPropertiesData` engine stays for the catalogue explorer only.
 
-## Create Subsystem
+## Create System
 
 User-facing companion: [Creating systems](../../user-guide/systemHierarchy/workflows/creating-systems.md).
 
-The right-click context menu on a tree node offers **Create System** alongside Copy / Paste. The orchestrator is `hooks/useCreateSubsystemAction.ts` — gated by `usePermission([ROLE.SYSTEM_EDIT])`, then `confirmSystemEdit` against the **parent** uid (the new `HAS_SUBSYSTEM` edge — [Per-system edit permission](#per-system-edit-permission)), then opens `CreateSubsystemDialog` through `useDynamicModalStore` with a stable id `create-subsystem-${parentUid}`.
+One dialog serves the explorer and the systems overview: `shared/system/system-create/components/CreateSystemDialog.comp.tsx` (name + level, plus a preview of what a child inherits). `hooks/useCreateSystemDialog({ onCreated })` opens it — gated by `usePermission([ROLE.SYSTEM_EDIT])`, then, for a child, `confirmSystemEdit` against the **parent** uid (the new `HAS_SUBSYSTEM` edge — [Per-system edit permission](#per-system-edit-permission)); modal id `create-system-${parentUid}` / `create-system-root`. The caller decides what follows:
 
-Parent → allowed-child rules are a pure lookup table in `utils/systemLevelRules.ts`:
+- **Explorer** — tree context menu **Create System** → `hooks/useCreateSubsystemAction.ts`, `onCreated` = `selectLeaf(newUid)`.
+- **Overview** — toolbar *Add* (root) and the row "+" (child) → `systems/hooks/useCreateSystemFromOverview.ts`, `onCreated` opens the Edit System sheet. No navigation: `useCreateSystem` inserts the row into the cached tree in place, so the open tree stays open.
+
+Parent → allowed-child rules are a pure lookup table in `shared/system/system-create/utils/systemLevelRules.ts` (`getAllowedCreateLevels(null)` = every level except Trash for a root):
 
 | Parent level | Allowed child levels |
 |---|---|
@@ -170,7 +172,7 @@ Parent → allowed-child rules are a pure lookup table in `utils/systemLevelRule
 
 `TreeNode` calls `canCreateUnder(node.systemLevel)` to disable the menu item, and the dialog's *System level* `Select` is filtered by `getAllowedChildSystemLevels(parentLevel)` (preselected + read-only when only one option remains).
 
-The dialog reads the parent via `useSystemDetail(parentUid)` only to **preview** the inherited `responsible` / `location` / `zone`; the request body is just `{ name, systemLevel }` and the server applies the inheritance and the level rules (400 on violation). `useCreateSubsystem` seeds the created `SystemDetail` into the cache, so `selectLeaf(newUid)` renders every field on first paint.
+The dialog reads the parent via `useSystemDetail(parentUid)` only to **preview** the inherited `responsible` / `location` / `zone`; the request body is just `{ name, systemLevel }` and the server applies the inheritance and the level rules (400 on violation). `useCreateSystem` seeds the created `SystemDetail` into the cache, so `selectLeaf(newUid)` / the Edit sheet render every field on first paint.
 
 `TreeNode` also takes a `canEdit` prop and a `onCreateSubsystem(parentUid, parentName, parentLevel)` callback. Permission gating is now uniform — Copy, Paste, Create System, and Delete System are **always rendered** and `disabled` based on `canEdit` (plus their per-action rule: `!canPaste` for paste, `!canCreateUnder(level)` for create). The previous "hide handlers when no edit permission" behaviour in `SystemTree.cont` was dropped in favour of always-render-disabled for better discoverability.
 
@@ -215,7 +217,7 @@ The building blocks live in `src/modules/shared/system/edit-permission/` (barrel
 ### Where it runs
 
 - **Every single-system write** — `useSystemScopedWrite` (PATCH system / item, generate code) calls `confirmSystemEdit` first; a decline rejects with `SystemEditCancelledError`, so the inline field reverts and no toast is shown.
-- **Create subsystem** — against the parent, when the dialog opens (`useCreateSubsystemAction`) and again in `useCreateSubsystem` (a no-op once confirmed).
+- **Create subsystem** — against the parent, once, when the dialog opens (`useCreateSystemDialog`).
 - **Delete system** — merged into the delete confirm (see [Delete System](#delete-system)).
 - **Not prompted** — creating / deleting engineering relationships, spare assignment, images and attachments (role-gated only).
 
