@@ -7,9 +7,23 @@ jobs:
     use-secret:
         runs-on: czechia-server
         steps:
-            - name: Show secret stats
+            - name: Validate required secrets are set
+              env:
+                  NEXTAUTH_SECRET: "${{ secrets.NEXTAUTH_SECRET }}"
+                  MINIO_ACCESS_KEY_PROD: "${{ secrets.MINIO_ACCESS_KEY_PROD }}"
+                  MINIO_SECRET_KEY_PROD: "${{ secrets.MINIO_SECRET_KEY_PROD }}"
+                  NEO4J_PASSWORD: "${{ secrets.NEO4J_PASSWORD }}"
+                  AZURE_AD_BEAMLINES_CLIENT_ID: "${{ secrets.AZURE_AD_BEAMLINES_CLIENT_ID }}"
+                  AZURE_AD_BEAMLINES_CLIENT_SECRET: "${{ secrets.AZURE_AD_BEAMLINES_CLIENT_SECRET }}"
+                  AZURE_AD_BEAMLINES_TENANT_ID: "${{ secrets.AZURE_AD_BEAMLINES_TENANT_ID }}"
               run: |
-                  echo "${{ secrets.NEXTAUTH_SECRET }}" | "${{ secrets.MINIO_ACCESS_KEY_PROD }}" | "${{ secrets.MINIO_SECRET_KEY_PROD }}" | "${{ secrets.NEO4J_PASSWORD }}" | "${{ secrets.AZURE_AD_BEAMLINES_CLIENT_ID }}" | "${{ secrets.AZURE_AD_BEAMLINES_CLIENT_SECRET }}" | "${{ secrets.AZURE_AD_BEAMLINES_TENANT_ID }}" | wc | wc
+                  test -n "$NEXTAUTH_SECRET" || { echo "Error: NEXTAUTH_SECRET is not set."; exit 1; }
+                  test -n "$MINIO_ACCESS_KEY_PROD" || { echo "Error: MINIO_ACCESS_KEY_PROD is not set."; exit 1; }
+                  test -n "$MINIO_SECRET_KEY_PROD" || { echo "Error: MINIO_SECRET_KEY_PROD is not set."; exit 1; }
+                  test -n "$NEO4J_PASSWORD" || { echo "Error: NEO4J_PASSWORD is not set."; exit 1; }
+                  test -n "$AZURE_AD_BEAMLINES_CLIENT_ID" || { echo "Error: AZURE_AD_BEAMLINES_CLIENT_ID is not set."; exit 1; }
+                  test -n "$AZURE_AD_BEAMLINES_CLIENT_SECRET" || { echo "Error: AZURE_AD_BEAMLINES_CLIENT_SECRET is not set."; exit 1; }
+                  test -n "$AZURE_AD_BEAMLINES_TENANT_ID" || { echo "Error: AZURE_AD_BEAMLINES_TENANT_ID is not set."; exit 1; }
     unit-tests:
         runs-on: czechia-server
         needs: use-secret
@@ -61,8 +75,8 @@ jobs:
                   docker compose up -d --build
               env:
                   NEXTAUTH_SECRET: '${{ secrets.NEXTAUTH_SECRET }}'
-                  MINIO_ACCESS_KEY_DEV: '${{ secrets.MINIO_ACCESS_KEY_PROD }}'
-                  MINIO_SECRET_KEY_DEV: '${{ secrets.MINIO_SECRET_KEY_PROD }}'
+                  MINIO_ACCESS_KEY_PROD: '${{ secrets.MINIO_ACCESS_KEY_PROD }}'
+                  MINIO_SECRET_KEY_PROD: '${{ secrets.MINIO_SECRET_KEY_PROD }}'
                   NEO4J_PASSWORD: '${{ secrets.NEO4J_PASSWORD }}'
                   AZURE_AD_BEAMLINES_CLIENT_ID: '${{ secrets.AZURE_AD_BEAMLINES_CLIENT_ID }}'
                   AZURE_AD_BEAMLINES_CLIENT_SECRET: '${{ secrets.AZURE_AD_BEAMLINES_CLIENT_SECRET }}'

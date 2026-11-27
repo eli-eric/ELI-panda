@@ -24,18 +24,30 @@ jobs:
         runs-on: czechia-server
         steps:
             - name: Validate required secrets are set
+              env:
+                  NEXTAUTH_SECRET: "${{ secrets.NEXTAUTH_SECRET }}"
+                  MINIO_ACCESS_KEY_DEV: "${{ secrets.MINIO_ACCESS_KEY_DEV }}"
+                  MINIO_SECRET_KEY_DEV: "${{ secrets.MINIO_SECRET_KEY_DEV }}"
+                  NEO4J_PASSWORD: "${{ secrets.NEO4J_PASSWORD }}"
+                  AZURE_AD_BEAMLINES_CLIENT_ID: "${{ secrets.AZURE_AD_BEAMLINES_CLIENT_ID }}"
+                  AZURE_AD_BEAMLINES_CLIENT_SECRET: "${{ secrets.AZURE_AD_BEAMLINES_CLIENT_SECRET }}"
+                  AZURE_AD_BEAMLINES_TENANT_ID: "${{ secrets.AZURE_AD_BEAMLINES_TENANT_ID }}"
+                  AZURE_DEV_CLIENT_ID: "${{ secrets.AZURE_DEV_CLIENT_ID }}"
+                  AZURE_DEV_CONTAINER_REGISTRY_NAME: "${{ secrets.AZURE_DEV_CONTAINER_REGISTRY_NAME }}"
+                  AZURE_DEV_RESOURCE_GROUP: "${{ secrets.AZURE_DEV_RESOURCE_GROUP }}"
+                  AZURE_DEV_CONTAINER_APP_NAME_FRONTEND: "${{ secrets.AZURE_DEV_CONTAINER_APP_NAME_FRONTEND }}"
               run: |
-                  test -n "${{ secrets.NEXTAUTH_SECRET }}" || { echo "Error: NEXTAUTH_SECRET is not set."; exit 1; }
-                  test -n "${{ secrets.MINIO_ACCESS_KEY_DEV }}" || { echo "Error: MINIO_ACCESS_KEY_DEV is not set."; exit 1; }
-                  test -n "${{ secrets.MINIO_SECRET_KEY_DEV }}" || { echo "Error: MINIO_SECRET_KEY_DEV is not set."; exit 1; }
-                  test -n "${{ secrets.NEO4J_PASSWORD }}" || { echo "Error: NEO4J_PASSWORD is not set."; exit 1; }
-                  test -n "${{ secrets.AZURE_AD_BEAMLINES_CLIENT_ID }}" || { echo "Error: AZURE_AD_BEAMLINES_CLIENT_ID is not set."; exit 1; }
-                  test -n "${{ secrets.AZURE_AD_BEAMLINES_CLIENT_SECRET }}" || { echo "Error: AZURE_AD_BEAMLINES_CLIENT_SECRET is not set."; exit 1; }
-                  test -n "${{ secrets.AZURE_AD_BEAMLINES_TENANT_ID }}" || { echo "Error: AZURE_AD_BEAMLINES_TENANT_ID is not set."; exit 1; }
-                  test -n "${{ secrets.AZURE_DEV_CLIENT_ID }}" || { echo "Error: AZURE_DEV_CLIENT_ID is not set."; exit 1; }
-                  test -n "${{ secrets.AZURE_DEV_CONTAINER_REGISTRY_NAME }}" || { echo "Error: AZURE_DEV_CONTAINER_REGISTRY_NAME is not set."; exit 1; }
-                  test -n "${{ secrets.AZURE_DEV_RESOURCE_GROUP }}" || { echo "Error: AZURE_DEV_RESOURCE_GROUP is not set."; exit 1; }
-                  test -n "${{ secrets.AZURE_DEV_CONTAINER_APP_NAME_FRONTEND }}" || { echo "Error: AZURE_DEV_CONTAINER_APP_NAME_FRONTEND is not set."; exit 1; }
+                  test -n "$NEXTAUTH_SECRET" || { echo "Error: NEXTAUTH_SECRET is not set."; exit 1; }
+                  test -n "$MINIO_ACCESS_KEY_DEV" || { echo "Error: MINIO_ACCESS_KEY_DEV is not set."; exit 1; }
+                  test -n "$MINIO_SECRET_KEY_DEV" || { echo "Error: MINIO_SECRET_KEY_DEV is not set."; exit 1; }
+                  test -n "$NEO4J_PASSWORD" || { echo "Error: NEO4J_PASSWORD is not set."; exit 1; }
+                  test -n "$AZURE_AD_BEAMLINES_CLIENT_ID" || { echo "Error: AZURE_AD_BEAMLINES_CLIENT_ID is not set."; exit 1; }
+                  test -n "$AZURE_AD_BEAMLINES_CLIENT_SECRET" || { echo "Error: AZURE_AD_BEAMLINES_CLIENT_SECRET is not set."; exit 1; }
+                  test -n "$AZURE_AD_BEAMLINES_TENANT_ID" || { echo "Error: AZURE_AD_BEAMLINES_TENANT_ID is not set."; exit 1; }
+                  test -n "$AZURE_DEV_CLIENT_ID" || { echo "Error: AZURE_DEV_CLIENT_ID is not set."; exit 1; }
+                  test -n "$AZURE_DEV_CONTAINER_REGISTRY_NAME" || { echo "Error: AZURE_DEV_CONTAINER_REGISTRY_NAME is not set."; exit 1; }
+                  test -n "$AZURE_DEV_RESOURCE_GROUP" || { echo "Error: AZURE_DEV_RESOURCE_GROUP is not set."; exit 1; }
+                  test -n "$AZURE_DEV_CONTAINER_APP_NAME_FRONTEND" || { echo "Error: AZURE_DEV_CONTAINER_APP_NAME_FRONTEND is not set."; exit 1; }
     unit-tests:
         runs-on: czechia-server
         needs: validate-secrets
@@ -85,12 +97,16 @@ jobs:
               uses: actions/checkout@v4
 
             - name: Login to Azure using managed identity
+              env:
+                  AZURE_CLIENT_ID: ${{ secrets.AZURE_DEV_CLIENT_ID }}
               run: |
-                  az login --identity --client-id ${{ secrets.AZURE_DEV_CLIENT_ID }}
+                  az login --identity --client-id "$AZURE_CLIENT_ID"
 
             - name: Login to Azure Container Registry
+              env:
+                  ACR_NAME: ${{ secrets.AZURE_DEV_CONTAINER_REGISTRY_NAME }}
               run: |
-                  az acr login --name ${{ secrets.AZURE_DEV_CONTAINER_REGISTRY_NAME }}
+                  az acr login --name "$ACR_NAME"
 
             - name: Build and push Docker image
               env:
@@ -122,6 +138,13 @@ jobs:
                   RG: ${{ secrets.AZURE_DEV_RESOURCE_GROUP }}
                   APP_NAME: ${{ secrets.AZURE_DEV_CONTAINER_APP_NAME_FRONTEND }}
                   ACR_NAME: ${{ secrets.AZURE_DEV_CONTAINER_REGISTRY_NAME }}
+                  NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+                  NEO4J_PASSWORD: ${{ secrets.NEO4J_PASSWORD }}
+                  MINIO_ACCESS_KEY_DEV: ${{ secrets.MINIO_ACCESS_KEY_DEV }}
+                  MINIO_SECRET_KEY_DEV: ${{ secrets.MINIO_SECRET_KEY_DEV }}
+                  AZURE_AD_BEAMLINES_CLIENT_ID: ${{ secrets.AZURE_AD_BEAMLINES_CLIENT_ID }}
+                  AZURE_AD_BEAMLINES_CLIENT_SECRET: ${{ secrets.AZURE_AD_BEAMLINES_CLIENT_SECRET }}
+                  AZURE_AD_BEAMLINES_TENANT_ID: ${{ secrets.AZURE_AD_BEAMLINES_TENANT_ID }}
               run: |
                   set -euo pipefail
 
@@ -147,13 +170,13 @@ jobs:
                     -g "${RG}" \
                     -n "${APP_NAME}" \
                     --secrets \
-                    nextauth-secret="${{ secrets.NEXTAUTH_SECRET }}" \
-                    neo4j-password="${{ secrets.NEO4J_PASSWORD }}" \
-                    minio-access-key="${{ secrets.MINIO_ACCESS_KEY_DEV }}" \
-                    minio-secret-key="${{ secrets.MINIO_SECRET_KEY_DEV }}" \
-                    azure-ad-client-id="${{ secrets.AZURE_AD_BEAMLINES_CLIENT_ID }}" \
-                    azure-ad-client-secret="${{ secrets.AZURE_AD_BEAMLINES_CLIENT_SECRET }}" \
-                    azure-ad-tenant-id="${{ secrets.AZURE_AD_BEAMLINES_TENANT_ID }}"
+                    nextauth-secret="${NEXTAUTH_SECRET}" \
+                    neo4j-password="${NEO4J_PASSWORD}" \
+                    minio-access-key="${MINIO_ACCESS_KEY_DEV}" \
+                    minio-secret-key="${MINIO_SECRET_KEY_DEV}" \
+                    azure-ad-client-id="${AZURE_AD_BEAMLINES_CLIENT_ID}" \
+                    azure-ad-client-secret="${AZURE_AD_BEAMLINES_CLIENT_SECRET}" \
+                    azure-ad-tenant-id="${AZURE_AD_BEAMLINES_TENANT_ID}"
 
                   az containerapp update -g "${RG}" -n "${APP_NAME}" --image "${IMAGE}"
                   az containerapp update \

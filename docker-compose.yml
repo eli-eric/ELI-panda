@@ -22,8 +22,6 @@ services:
             dockerfile: Dockerfile
             labels:
                 - panda-frontend-ui-main-app
-            args:
-                - NEO4J_PASSWORD=${NEO4J_PASSWORD}
         networks:
             - panda-net
         ports:

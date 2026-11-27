@@ -6,3 +6,16 @@ npm-debug.log
 README.md
 .next
 .git
+
+# Local secrets (mirrors .gitignore) and test/tool output: `COPY . .` would
+# otherwise bake a developer's .env into the builder stage.
+.env*
+*.pem
+cypress.env.json
+playwright/.auth
+.claude/*.local.*
+coverage
+playwright-report
+test-results
+.swc
+*.tsbuildinfo
