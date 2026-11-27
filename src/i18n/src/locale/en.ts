@@ -1774,6 +1774,7 @@ export const messages = {
                 changed: 'changed <b>{field}</b> from <b>{oldValue}</b> to <b>{newValue}</b>',
                 set: 'set <b>{field}</b> to <b>{newValue}</b>',
                 cleared: 'cleared <b>{field}</b>',
+                created: 'created this system',
                 emptyValue: '(empty)',
                 relationshipAdded: 'linked <b>{name}</b> ({relation})',
                 relationshipRemoved: 'removed the link to <b>{name}</b> ({relation})',

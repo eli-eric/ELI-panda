@@ -71,4 +71,35 @@ describe('SystemHistoryFeed', () => {
         )
         expect(screen.getByText('Power Supply')).toBeInTheDocument()
     })
+
+    it('renders a create audit as "created" with the initial values set, not changed', () => {
+        renderWithProviders(
+            <SystemHistoryFeed
+                history={[
+                    entry({
+                        action: 'INSERT',
+                        changes: [
+                            { field: 'name', type: 'string', oldValue: '', newValue: 'Pump' },
+                            {
+                                field: 'location',
+                                type: 'codebook',
+                                oldValue: null,
+                                newValue: { uid: 'l-1', name: 'Hall A' },
+                            },
+                        ],
+                    }),
+                ]}
+            />,
+        )
+        expect(screen.getByTestId('history-created')).toBeInTheDocument()
+        expect(screen.getByText(/created this system/i)).toBeInTheDocument()
+        expect(screen.queryByText(/changed/i)).not.toBeInTheDocument()
+        expect(screen.getByText('Pump')).toBeInTheDocument()
+        expect(screen.getByText('Hall A')).toBeInTheDocument()
+    })
+
+    it('renders a create audit without field changes (legacy INSERT)', () => {
+        renderWithProviders(<SystemHistoryFeed history={[entry({ action: 'INSERT' })]} />)
+        expect(screen.getByTestId('history-created')).toBeInTheDocument()
+    })
 })
