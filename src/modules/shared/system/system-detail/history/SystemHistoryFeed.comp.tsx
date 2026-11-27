@@ -169,11 +169,18 @@ const RelationshipDiff: FC<FieldDiffProps> = ({ entry, fm }) => {
     )
 }
 
-const FieldDiff: FC<FieldDiffProps> = ({ entry, fm }) => {
+// '' is what older create audits stored as the "before" name — not a real value
+const hasChangeValue = (value: FieldChangeEntry['oldValue'] | undefined) =>
+    value !== null && value !== undefined && value !== ''
+
+// INSERT / CREATE audits describe the initial state, never a change from something
+const isCreateAction = (action: string) => action === 'INSERT' || action === 'CREATE'
+
+const FieldDiff: FC<FieldDiffProps & { isCreate?: boolean }> = ({ entry, fm, isCreate }) => {
     if (entry.type === 'relationship') return <RelationshipDiff entry={entry} fm={fm} />
     const field = resolveFieldLabel(entry, fm)
-    const hasOld = entry.oldValue !== null && entry.oldValue !== undefined
-    const hasNew = entry.newValue !== null && entry.newValue !== undefined
+    const hasOld = !isCreate && hasChangeValue(entry.oldValue)
+    const hasNew = hasChangeValue(entry.newValue)
 
     if (!hasNew && hasOld) {
         return (
@@ -218,12 +225,23 @@ const renderHistoryMessage = (
     fm: IntlShape['formatMessage'],
 ): ReactNode => {
     const { action, detail, historyType, changes } = historyItem
+    const isCreate = isCreateAction(action)
 
-    if (changes?.length) {
+    if (changes?.length || isCreate) {
         return (
             <span className="flex flex-col gap-0.5">
-                {changes.map((entry, idx) => (
-                    <FieldDiff key={`${entry.field}-${idx}`} entry={entry} fm={fm} />
+                {isCreate && (
+                    <span className="font-medium" data-testid="history-created">
+                        {fm({ id: message.systemHierarchy.history.diff.created })}
+                    </span>
+                )}
+                {changes?.map((entry, idx) => (
+                    <FieldDiff
+                        key={`${entry.field}-${idx}`}
+                        entry={entry}
+                        fm={fm}
+                        isCreate={isCreate}
+                    />
                 ))}
             </span>
         )
