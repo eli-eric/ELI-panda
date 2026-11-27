@@ -5,12 +5,12 @@ const SYSTEM_LEVEL = {
 } as const
 
 const codebookRef = (uid: string, name: string, code?: string) => ({
-    additionalData: null,
     code: code ?? null,
     name,
     uid,
 })
 
+// REST `GET /system/:uid` shape (SystemDetail in modules/shared/system/system-detail/types.ts)
 const createSystemDetail = (params: {
     uid: string
     name: string
@@ -18,30 +18,44 @@ const createSystemDetail = (params: {
     systemLevel: string
     systemTypeName: string
     parentPath?: Array<{ name: string; uid: string }>
-}) => ({
-    attribute: null,
-    description: `${params.name} detail description`,
-    location: codebookRef('loc-a1', 'A1 Building', 'A1'),
-    maintainedBy: [],
-    name: params.name,
-    operators: [],
-    parentPath: params.parentPath ?? [],
-    physicalItem: null,
-    responsible: {
-        fullName: 'Playwright Responsible',
-        uid: 'employee-responsible',
-    },
-    responsibleTeam: codebookRef('team-maintenance', 'Maintenance Team', 'MT'),
-    sparePartsConnection: {
-        edges: [],
-    },
-    sparePartsFor: [],
-    systemCode: params.systemCode,
-    systemLevel: params.systemLevel,
-    systemType: codebookRef('system-type-main', params.systemTypeName, 'MAIN'),
-    uid: params.uid,
-    zone: codebookRef('zone-alpha', 'Zone Alpha', 'ZA'),
-})
+}) => {
+    const parentPath = params.parentPath ?? []
+    return {
+        attribute: null,
+        description: `${params.name} detail description`,
+        importance: null,
+        lastUpdateTime: '2026-11-26T10:00:00.000+01:00',
+        location: codebookRef('loc-a1', 'A1 Building', 'A1'),
+        maintainedBy: [],
+        minimalSpareParstCount: null,
+        miniImageUrl: null,
+        name: params.name,
+        operators: [],
+        owner: null,
+        parentPath,
+        parentUid: parentPath.at(-1)?.uid ?? null,
+        physicalItem: null,
+        responsible: { name: 'Playwright Responsible', uid: 'employee-responsible' },
+        responsibleTeam: codebookRef('team-maintenance', 'Maintenance Team', 'MT'),
+        sp_coverage: null,
+        sparePartsCoverageSum: null,
+        statistics: {
+            directSubsystemsCount: 0,
+            minimalSpareParstCount: null,
+            sp_coverage: null,
+            sparePartsCount: 0,
+            sparePartsCoverageSum: null,
+            sparesForCount: 0,
+            subsystemsCount: 0,
+        },
+        systemAlias: null,
+        systemCode: params.systemCode,
+        systemLevel: params.systemLevel,
+        systemType: codebookRef('system-type-main', params.systemTypeName, 'MAIN'),
+        uid: params.uid,
+        zone: codebookRef('zone-alpha', 'Zone Alpha', 'ZA'),
+    }
+}
 
 const systemDetailsByUid = {
     'leaf-cooling-pump-a': createSystemDetail({
