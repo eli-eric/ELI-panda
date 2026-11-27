@@ -5,6 +5,7 @@ import { setupNetworkMocks } from './network'
 
 const HIERARCHY_ENDPOINT = /\/api\/mock-server\/systems\/hierarchy(?:\?.*)?$/
 const LEAVES_ENDPOINT = /\/api\/mock-server\/system\/[^/]+\/leaves(?:\?.*)?$/
+const DETAIL_ENDPOINT = /\/api\/mock-server\/system\/([^/?]+)(?:\?.*)?$/
 const HISTORY_ENDPOINT = /\/api\/mock-server\/system\/[^/]+\/history(?:\?.*)?$/
 
 const extractPathParam = (pathname: string, key: 'history' | 'leaves'): string | null => {
@@ -15,16 +16,13 @@ const extractPathParam = (pathname: string, key: 'history' | 'leaves'): string |
 
 export async function setupSystemHierarchyNetworkMocks(page: Page) {
     await setupNetworkMocks(page, {
-        graphQLHandlers: {
-            SystemHierarchyDetail: ({ variables }) => {
-                const where = variables?.where as { uid?: string } | undefined
-                const system = getSystemDetailByUid(where?.uid ?? null)
-                return {
-                    systems: system ? [system] : [],
-                }
-            },
-        },
         restHandlers: [
+            {
+                matcher: DETAIL_ENDPOINT,
+                method: 'GET',
+                resolver: ({ url }) =>
+                    getSystemDetailByUid(url.pathname.match(DETAIL_ENDPOINT)?.[1] ?? null),
+            },
             {
                 matcher: HIERARCHY_ENDPOINT,
                 method: 'GET',
